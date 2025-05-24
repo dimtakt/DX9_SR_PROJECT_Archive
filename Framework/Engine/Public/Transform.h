@@ -39,6 +39,8 @@ public:
 		memcpy(&m_WorldMatrix.m[ENUM_CLASS(eState)][0], &vState, sizeof(_float3));
 	}
 
+	void Set_FlipX(_bool isFlip) { m_bFlipX = isFlip; }
+
 public:
 	virtual HRESULT Initialize_Prototype();
 	virtual HRESULT Initialize(void* pArg);
@@ -68,6 +70,8 @@ private:
 	_float4x4					m_WorldMatrixInverse = { };
 	_float						m_fSpeedPerSec = { };
 	_float						m_fRotationPerSec = { };
+
+	_bool						m_bFlipX = false;		// 플레이어 이미지 출력 좌우 반전용
 
 	// 카메라 쉐이킹용 멤버변수
 	/*_bool						m_bIsShaking = { };

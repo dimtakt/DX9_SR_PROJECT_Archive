@@ -1,14 +1,6 @@
 #include "Animator.h"
 #include "GameInstance.h" // 이래도 되나
 
-
-// 애니메이터를 한 캐릭터에 여러개 사용할 가능성도 생각
-// 그러면 타이머를 한데서 공유하면 안될 것 같음
-// 같은 타이머 태그를 쓰면 안될텐데..
-// 
-// 그럼 애니메이터 생성시 타이머 태그로 사용할 문자열도 인자로 받아와야하나
-
-
 CAnimator::CAnimator(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CComponent{ pGraphic_Device }
 {
@@ -34,14 +26,10 @@ HRESULT CAnimator::Initialize(void* pArg)
 		return E_FAIL;
 	}
 
-
+	// 타이머 태그 Arg로부터 가져와서 반영
 	ANIMSTATE_DESC* pDesc = static_cast<ANIMSTATE_DESC*>(pArg);
-	Add_State(pDesc->strFirstStateTag, pDesc->tFirstAnimState);
 	m_strTimerTag = pDesc->strTimerTag;
 
-	m_pCurState = Find_State(pDesc->strFirstStateTag);
-	m_strCurStateTag = pDesc->strFirstStateTag;
-		
 	// 타이머 생성
 	m_pGameInstance->Add_Timer(m_strTimerTag);
 
@@ -61,7 +49,7 @@ void CAnimator::Update_State()
 	_uint iImageCurIndex = m_iStackedFrames / m_pCurState->iFramePerImage;
 	iImageCurIndex %= iImageMaxIndex;
 
-	std::cout << "[CAnimator::Update_State] " << iImageCurIndex << "/" << iImageMaxIndex << std::endl;
+	std::wcout << "[CAnimator::Update_State] Current State : \"" << m_strCurStateTag << "\" (" << iImageCurIndex + 1 << "/" << iImageMaxIndex << ")" << std::endl;
 
 	pCurTextureCom->Bind_Texture(iImageCurIndex);
 	m_iStackedFrames++;
@@ -69,7 +57,7 @@ void CAnimator::Update_State()
 
 HRESULT CAnimator::Add_State(const _wstring strStateTag, ANIMSTATE _state)
 {
-	// State가 이미 존재한다면
+	// 해당 State가 이미 존재한다면
 	if (nullptr != Find_State(strStateTag))
 	{
 		std::wcout << "[CAnimator::Add_State] Adding State Failed. \"" << strStateTag << "\" state already exist." << std::endl;
@@ -85,11 +73,23 @@ HRESULT CAnimator::Add_State(const _wstring strStateTag, ANIMSTATE _state)
 	m_pStates.emplace(strStateTag, _state);
 	std::wcout << "[CAnimator::Add_State] \"" << strStateTag << "\" State Added." << std::endl;
 
+	// 최초 삽입이면 해당 State 를 현재 State로 
+	if (m_pCurState == nullptr)
+	{
+		m_pCurState = Find_State(strStateTag);
+		m_strCurStateTag = strStateTag;
+		std::wcout << "[CAnimator::Add_State] Start state set to \"" << strStateTag << "\"." << std::endl;
+	}
+
 	return S_OK;
 }
 
 void CAnimator::Change_State(const _wstring strStateTag, _bool isChangeCurFrame)
 {
+	// 이미 해당 State라면 return
+	if (strStateTag == m_strCurStateTag)
+		return;
+
 	ANIMSTATE* pTmpState = Find_State(strStateTag);
 
 	// 즉시 전이가 가능한 State인 경우 전이,
@@ -104,11 +104,13 @@ void CAnimator::Change_State(const _wstring strStateTag, _bool isChangeCurFrame)
 	_uint iTextureMaxFrame = m_pCurState->pTextureCom->Get_NumTextures();
 
 	// ksta : 잘 되는지 확인해야함
-	if (m_iStackedFrames / m_pCurState->iFramePerImage > iTextureMaxFrame &&
+	if (!(m_iStackedFrames / m_pCurState->iFramePerImage >= iTextureMaxFrame) &&
 		!m_pCurState->isExitable)
 	{
+		// 1. 프레임이 충분히 지남 (패스)
+		// 2. 도중 전이가 가능해야 함
 		// 시간 상관없이 즉시 전이가 불가능한 State 인데 프레임이 끝나지 않은 경우
-		std::wcout << "[CAnimator::Change_State] Failed to Change State. \"" << m_strCurStateTag << "\" State Frame Elapsed : " << m_iStackedFrames << " / " << m_pCurState->pTextureCom->Get_NumTextures() << "." << std::endl;
+		//std::wcout << "[CAnimator::Change_State] Can't change State. \"" << m_strCurStateTag << "\" State Frame Elapsed : " << m_iStackedFrames / m_pCurState->iFramePerImage << " / " << m_pCurState->pTextureCom->Get_NumTextures() << "." << std::endl;
 		return;
 	}
 

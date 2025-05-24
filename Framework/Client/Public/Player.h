@@ -28,14 +28,28 @@ public:
 	virtual HRESULT Render() override;
 
 private:
-	CVIBuffer_Rect*			m_pVIBufferCom = { nullptr };
-	CTransform*				m_pTransformCom = { nullptr };
+	CVIBuffer_Rect*			m_pVIBufferCom					= { nullptr };
+	CTransform*				m_pTransformCom					= { nullptr };
 
-	CTexture*				m_pTextureCom_Roll = { nullptr };
-	CTexture*				m_pTextureCom_Lower = { nullptr };
+	CTexture*				m_pTextureCom_Roll				= { nullptr };
+	CTexture*				m_pTextureCom_Air				= { nullptr };
+	CTexture*				m_pTextureCom_Down				= { nullptr };
+	CTexture*				m_pTextureCom_Idle_Lower		= { nullptr };
+	CTexture*				m_pTextureCom_Idle_Upper		= { nullptr };
+	CTexture*				m_pTextureCom_Move_Lower		= { nullptr };
+	CTexture*				m_pTextureCom_Move_Upper		= { nullptr };
+	CTexture*				m_pTextureCom_Attack_Lower		= { nullptr };
+	CTexture*				m_pTextureCom_Attack_Upper		= { nullptr };
+	CTexture*				m_pTextureCom_GreatSwordHeavyAttack_Lower	= { nullptr };
+	CTexture*				m_pTextureCom_GreatSwordHeavyAttack_Upper	= { nullptr };
+	CTexture*				m_pTextureCom_WhirlWind_Ready	= { nullptr };
+	CTexture*				m_pTextureCom_WhirlWind_Cycle	= { nullptr };
 
-	CPlayerStats*			m_pPlayerStatsCom = { nullptr };
-	CAnimator*				m_pAnimatorCom = { nullptr };
+	CPlayerStats*			m_pPlayerStatsCom				= { nullptr };
+	CAnimator*				m_pAnimatorCom					= { nullptr };
+
+	_bool					m_isFlippedX					= false;
+
 
 private:
 	HRESULT Ready_Components();

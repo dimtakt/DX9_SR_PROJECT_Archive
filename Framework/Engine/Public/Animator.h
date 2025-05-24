@@ -21,8 +21,6 @@ public:
 	typedef struct tagStartStateDesc
 	{
 		_wstring strTimerTag; // 애니메이터 다중 사용을 고려하여 타이머 태그를 다르게 구성
-		_wstring strFirstStateTag;
-		ANIMSTATE tFirstAnimState;
 	} ANIMSTATE_DESC;
 	
 private:
@@ -41,7 +39,7 @@ public:
 	_wstring Get_CurStateTag()	{ return m_strCurStateTag; };
 
 	// bool 인자는, 큰 상태는 동일하나
-	// 플레이어가 바라보는 방향만 달라지는 경우와 같은 예외를 두기 위함
+	// 플레이어가 바라보는 방향만 달라지는 경우처럼 현재 프레임 순서의 유지 필요성이 있는 경우의 예외를 두기 위함
 	void Change_State(const _wstring strStatetag, _bool isChangeCurFrame = true);
 
 private:
@@ -49,12 +47,13 @@ private:
 
 private:
 	// ANIMSTATE m_tPrevState = {}; // 필요하면 사용?
-	ANIMSTATE* m_pCurState = { nullptr };
-	_wstring m_strCurStateTag = {};
-	_wstring m_strTimerTag = {};
+	ANIMSTATE*	m_pCurState = { nullptr };
+	_wstring	m_strCurStateTag = {};
+	_wstring	m_strTimerTag = {};
 
 	std::map<const _wstring, ANIMSTATE> m_pStates = {};
-	_uint m_iStackedFrames = {};
+
+	_uint		m_iStackedFrames = {};
 
 public:
 	static CAnimator* Create(LPDIRECT3DDEVICE9 pGraphic_Device);
