@@ -71,12 +71,6 @@ void CPlayer::Update(_float fTimeDelta)
 #endif // _DEBUG
     
     }
-
-    if (GetKeyState('D') < 0)
-    {
-        m_pTransformCom->Go_Right(fTimeDelta);
-    }
-
     /*if (GetKeyState(VK_LBUTTON) < 0)
     {
         _float3		vTmp = m_pVIBufferCom->Compute_PickedPosition(m_pTransformCom->Get_WorldMatrix_Inverse());

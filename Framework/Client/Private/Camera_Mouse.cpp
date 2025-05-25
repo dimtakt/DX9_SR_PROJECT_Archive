@@ -108,22 +108,22 @@ void CCamera_Mouse::Mouse_Move(_float fTimeDelta)
 
 void CCamera_Mouse::Key_Input(_float fTimeDelta)
 {
-	if (GetKeyState('T') < 0)
+	if (m_pGameInstance->IsKeyHold('W') < 0)
 	{
 		m_pTransformCom->Go_Straight(fTimeDelta);
 	}
 
-	if (GetKeyState('Y') < 0)
+	if (m_pGameInstance->IsKeyHold('S') < 0)
 	{
 		m_pTransformCom->Go_Backward(fTimeDelta);
 	}
 
-	if (GetKeyState('U') < 0)
+	if (m_pGameInstance->IsKeyHold('A') < 0)
 	{
 		m_pTransformCom->Go_Left(fTimeDelta);
 	}
 
-	if (GetKeyState('I') < 0)
+	if (m_pGameInstance->IsKeyHold('D') < 0)
 	{
 		m_pTransformCom->Go_Right(fTimeDelta);
 	}
