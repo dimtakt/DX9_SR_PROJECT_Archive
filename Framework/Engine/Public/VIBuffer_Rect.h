@@ -17,6 +17,9 @@ public:
 	virtual HRESULT Initialize(void* pArg) override;
 
 public:
+	void ChangeUV_FlipX(_bool isFlipped);	// UV의 X좌표 반전용
+
+public:
 	static CComponent* Create(LPDIRECT3DDEVICE9 pGraphic_Device);
 	static CComponent* Create(LPDIRECT3DDEVICE9 pGraphic_Device, D3DXCOLOR vColor);
 	virtual CComponent* Clone(void* pArg) override;

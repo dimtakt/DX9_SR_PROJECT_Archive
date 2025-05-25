@@ -42,6 +42,7 @@ public:
 public:
 	HRESULT Add_GameObject_ToLayer(_uint iLayerLevelIndex, const _wstring& strLayerTag, _uint iPrototypeLevelIndex, const _wstring strPrototypeTag, void* pArg = nullptr);
 	CComponent* Get_Component(_uint iLayerLevelIndex, const _wstring& strLayerTag, const _wstring& strComponentTag, _uint iIndex = 0);
+	class CGameObject* Get_GameObject(_uint iLayerLevelIndex, const _wstring& strLayerTag, _uint iIndex = 0);
 #pragma endregion
 
 #pragma region RENDERER
@@ -51,9 +52,9 @@ public:
 
 #pragma region TIMER_MANAGER
 public:
-	_float	Get_TimeDelta(const _wstring& strTimerTag);		// 마지막 Compute 호출로부터 경과한 시간을 반환 (초 단위)
-	HRESULT	Add_Timer(const _wstring& strTimerTag);			// 타이머 새로 추가
-	void	Compute_TimeDelta(const _wstring& strTimerTag);	// 타이머 갱신
+	_float	Get_TimeDelta(const _wstring& strTimerTag);
+	HRESULT	Add_Timer(const _wstring& strTimerTag);
+	void	Compute_TimeDelta(const _wstring& strTimerTag);
 #pragma endregion
 
 #pragma region KEY_MANAGER

@@ -15,6 +15,10 @@ public:
 	HRESULT Initialize_Prototype(TEXTURE eType, const _tchar* pTextureFilePath, _uint iNumTextures);
 	HRESULT Initialize(void* pArg);
 	HRESULT Bind_Texture(_uint iTextureIndex = 0);
+	LPDIRECT3DTEXTURE9 Get_Textures(_uint iIndex);
+
+public:
+	_uint Get_NumTextures() { return m_iNumTextures; }
 
 private:
 	_uint									m_iNumTextures = {};

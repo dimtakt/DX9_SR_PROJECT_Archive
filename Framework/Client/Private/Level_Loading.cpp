@@ -5,6 +5,7 @@
 
 #include "Level_Logo.h"
 #include "Level_GamePlay.h"
+#include "Level_MapEdit.h"
 
 CLevel_Loading::CLevel_Loading(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CLevel { pGraphic_Device }
@@ -29,7 +30,7 @@ void CLevel_Loading::Update(_float fTimeDelta)
 	if (true == m_pLoader->isFinished() && m_pGameInstance->IsKeyDown(VK_SPACE))
 	{
 		CLevel* pNewLevel = { nullptr };
-
+		
 		switch (m_eNextLevelID)
 		{
 		case LEVEL::LEVEL_LOGO:
@@ -37,6 +38,9 @@ void CLevel_Loading::Update(_float fTimeDelta)
 			break;
 		case LEVEL::LEVEL_GAMEPLAY:
 			pNewLevel = CLevel_GamePlay::Create(m_pGraphic_Device);
+			break;
+		case LEVEL::LEVEL_MAPEDIT:
+			pNewLevel = CLevel_MapEdit::Create(m_pGraphic_Device);
 			break;
 		}
 

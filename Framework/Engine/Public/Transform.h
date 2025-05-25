@@ -20,7 +20,7 @@ private:
 
 public:
 	_float3 Get_State(STATE eState) const {
-		return *reinterpret_cast<const _float3*>(&m_WorldMatrix.m[ENUM_CLASS(eState)][0]);
+ 		return *reinterpret_cast<const _float3*>(&m_WorldMatrix.m[ENUM_CLASS(eState)][0]);
 	}
 
 	_float3 Get_Scaled() const {
@@ -38,6 +38,8 @@ public:
 	void Set_State(STATE eState, const _float3& vState) {
 		memcpy(&m_WorldMatrix.m[ENUM_CLASS(eState)][0], &vState, sizeof(_float3));
 	}
+
+	void Set_FlipX(_bool isFlip) { m_bFlipX = isFlip; }
 
 public:
 	virtual HRESULT Initialize_Prototype();
@@ -68,6 +70,8 @@ private:
 	_float4x4					m_WorldMatrixInverse = { };
 	_float						m_fSpeedPerSec = { };
 	_float						m_fRotationPerSec = { };
+
+	_bool						m_bFlipX = false;		// 플레이어 이미지 출력 좌우 반전용
 
 	// 카메라 쉐이킹용 멤버변수
 	/*_bool						m_bIsShaking = { };

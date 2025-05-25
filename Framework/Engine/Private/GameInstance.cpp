@@ -13,6 +13,7 @@
 #include "Room_Manager.h"
 #include "Font_Manager.h"
 #include "Light_Manager.h"
+#include "GameObject.h"
 
 IMPLEMENT_SINGLETON(CGameInstance)
 
@@ -183,6 +184,12 @@ CComponent* CGameInstance::Get_Component(_uint iLayerLevelIndex, const _wstring&
 {
     return m_pObject_Manager->Get_Component(iLayerLevelIndex, strLayerTag, strComponentTag, iIndex);
 }
+
+CGameObject* CGameInstance::Get_GameObject(_uint iLayerLevelIndex, const _wstring& strLayerTag,_uint iIndex)
+{
+    return m_pObject_Manager->Get_GameObject(iLayerLevelIndex, strLayerTag, iIndex);
+}
+
 #pragma endregion
 
 #pragma region RENDERER

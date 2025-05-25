@@ -41,9 +41,7 @@ HRESULT CHp_Player::Initialize(void* pArg)
 
 void CHp_Player::Priority_Update(_float fTimeDelta)
 {
-	m_fSizeX;
-
- 	if (GetKeyState('Z') < 0)
+	if (GetKeyState('Z') < 0)
 	{
 		--m_iCulValue;
 	}
@@ -110,7 +108,7 @@ CHp_Player* CHp_Player::Create(LPDIRECT3DDEVICE9 pGraphic_Device)
 	return pInstance;
 }
 
-CUIObject* CHp_Player::Clone(void* pArg)
+CGameObject* CHp_Player::Clone(void* pArg)
 {
 	CHp_Player* pInstance = new CHp_Player(*this);
 

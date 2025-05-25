@@ -32,7 +32,7 @@ private:
 
 public:
 	static CHud_States_Frame*	Create(LPDIRECT3DDEVICE9 pGraphic_Device, LEVEL eLevel);
-	virtual CUIObject*			Clone(void* pArg) override;
+	virtual CGameObject*		Clone(void* pArg) override;
 	virtual void				Free() override;
 };
 END
