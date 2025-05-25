@@ -83,22 +83,22 @@ void CPlayer::Update(_float fTimeDelta)
             else
                 m_pAnimatorCom->Change_State(L"Idle_Lower", true);
         }
-    
-    
-        // 좌우반전
-        //if      (g_iWinSizeX / 2 > pt.x && !m_isFlippedX)   // 좌측
-        //{
-        //    m_pVIBufferCom->ChangeUV_FlipX(true);
-        //    m_isFlippedX = true;
-        //}
-        //else if (g_iWinSizeX / 2 < pt.x && m_isFlippedX)    // 우측
-        //{
-        //    m_pVIBufferCom->ChangeUV_FlipX(false);
-        //    m_isFlippedX = false;
-        //}
-
-
     }
+
+    // 좌우반전
+    if      (g_iWinSizeX / 2 > pt.x && !m_isFlippedX)   // 좌측
+    {
+        m_pVIBufferCom->ChangeUV_FlipX(true);
+        m_isFlippedX = true;
+        //std::cout << "[CPlayer::Update] FlippedX Changed to True." << std::endl;
+    }
+    else if (g_iWinSizeX / 2 < pt.x && m_isFlippedX)    // 우측
+    {
+        m_pVIBufferCom->ChangeUV_FlipX(false);
+        m_isFlippedX = false;
+        //std::cout << "[CPlayer::Update] FlippedX Changed to False." << std::endl;
+    }
+
 
     if (m_pGameInstance->IsKeyHold('W'))
         m_pTransformCom->Go_Straight(fTimeDelta);
@@ -143,15 +143,22 @@ void CPlayer::Late_Update(_float fTimeDelta)
 
 HRESULT CPlayer::Render()
 {
-	m_pTransformCom->Bind_Matrix();
+    m_pTransformCom->Bind_Matrix();
 
-	//if (FAILED(m_pTextureCom->Bind_Texture(0)))
-	//	return E_FAIL;
+    //if (FAILED(m_pTextureCom->Bind_Texture(0)))
+    //	return E_FAIL;
 
     m_pAnimatorCom->Update_State(); // Bind_Texture 이 포함되어, 현재 State에 맞는 이미지 출력
 
-	m_pVIBufferCom->Bind_Buffers();
-	m_pVIBufferCom->Render();
+    m_pVIBufferCom->Bind_Buffers();
+    m_pVIBufferCom->Render();
+
+    if(m_isFlippedX)
+    {
+        m_pVIBufferCom->ResetUV_FlipX();
+        m_isFlippedX = false;
+        //std::cout << "[CPlayer::Render] FlippedX Changed to False." << std::endl;
+    }
 
 	return S_OK;
 }
