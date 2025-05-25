@@ -145,6 +145,9 @@
     <Filter Include="01.Utility\03.GameObject\UIObject\Button">
       <UniqueIdentifier>{ae7c03a1-8f55-4a26-9ce8-f0e744c787de}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01.Utility\05.Component\VIBuffer\NewFilter1">
+      <UniqueIdentifier>{bf98617e-683b-42ac-893f-80c9d9d2fdfe}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Public\Engine_Macro.h">

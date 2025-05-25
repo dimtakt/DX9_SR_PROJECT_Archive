@@ -40,9 +40,6 @@
     <Filter Include="02.GameObject\Player">
       <UniqueIdentifier>{7b3755f4-11df-4fbd-b232-d5ea9b542212}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\Camera\Free">
-      <UniqueIdentifier>{926017ed-9374-426d-9e84-e28f0b80f595}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObject\Camera\Mouse">
       <UniqueIdentifier>{de3fdc61-642d-4078-bb8c-92c770f4bb49}</UniqueIdentifier>
     </Filter>
@@ -117,6 +114,30 @@
     </Filter>
     <Filter Include="02.GameObject\Object">
       <UniqueIdentifier>{5497f295-5940-4be0-8a8c-e585c1707962}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Camera\Free">
+      <UniqueIdentifier>{926017ed-9374-426d-9e84-e28f0b80f595}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\UI\Title">
+      <UniqueIdentifier>{78d7ad38-46ee-4559-adec-d257cb2bb696}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\UI\Title\BackGround">
+      <UniqueIdentifier>{068415d2-4526-4e6d-a132-6bbd61a3f909}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\UI\Title\BackGround\Logo">
+      <UniqueIdentifier>{05041990-bfe7-43ec-9c95-2641ba2ffb20}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\UI\Title\BackGround\Tree">
+      <UniqueIdentifier>{79d5cf62-c4d8-4741-8522-dd105732a144}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\UI\Title\BackGround\Star">
+      <UniqueIdentifier>{1c357a9d-91ea-4a08-966a-9365d316faef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="96. ShaderFiles">
+      <UniqueIdentifier>{c8d3c262-95d1-4d87-ab1d-775d72f463cf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\UI\Title\BackGround\Star_Wave">
+      <UniqueIdentifier>{e537c5f7-17c1-46af-96cd-4f0792ac1b67}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -264,6 +285,21 @@
     <ClInclude Include="..\Public\Level_MapEdit.h">
       <Filter>01.Levels\03. MapEdit</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\Title_BackGround.h">
+      <Filter>02.GameObject\UI\Title\BackGround</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Title_Tree.h">
+      <Filter>02.GameObject\UI\Title\BackGround\Tree</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Title_Logo.h">
+      <Filter>02.GameObject\UI\Title\BackGround\Logo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Title_Star.h">
+      <Filter>02.GameObject\UI\Title\BackGround\Star</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Title_Logo_Wave.h">
+      <Filter>02.GameObject\UI\Title\BackGround\Star_Wave</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -381,5 +417,31 @@
     <ClCompile Include="..\Private\Tree.cpp">
       <Filter>02.GameObject\Object</Filter>
     </ClCompile>
+    <ClCompile Include="..\private\Title_BackGround.cpp">
+      <Filter>02.GameObject\UI\Title\BackGround</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Title_Tree.cpp">
+      <Filter>02.GameObject\UI\Title\BackGround\Tree</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Title_Logo.cpp">
+      <Filter>02.GameObject\UI\Title\BackGround\Logo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Title_Star.cpp">
+      <Filter>02.GameObject\UI\Title\BackGround\Star</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Title_Logo_Wave.cpp">
+      <Filter>02.GameObject\UI\Title\BackGround\Star_Wave</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="..\Bin\ShaderFiles\LogoRipple.hlsl">
+      <Filter>96. ShaderFiles</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Bin\ShaderFiles\StarColor.hlsl">
+      <Filter>96. ShaderFiles</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Bin\ShaderFiles\TitleFadeIn.hlsl">
+      <Filter>96. ShaderFiles</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

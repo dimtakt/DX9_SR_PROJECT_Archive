@@ -84,6 +84,16 @@ HRESULT CAnimator::Add_State(const _wstring strStateTag, ANIMSTATE _state)
 	return S_OK;
 }
 
+_bool CAnimator::Get_IsLastFrame()
+{
+	CTexture* pCurTextureCom = m_pCurState->pTextureCom;
+
+	if (pCurTextureCom->Get_NumTextures() == m_iStackedFrames / m_pCurState->iFramePerImage)
+		return true;
+	else
+		return false;
+}
+
 void CAnimator::Change_State(const _wstring strStateTag, _bool isChangeCurFrame)
 {
 	// 이미 해당 State라면 return

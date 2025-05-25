@@ -185,6 +185,11 @@
     <ClInclude Include="..\Public\Player.h" />
     <ClInclude Include="..\public\Stats_Button.h" />
     <ClInclude Include="..\public\Terrain.h" />
+    <ClInclude Include="..\public\Title_BackGround.h" />
+    <ClInclude Include="..\Public\Title_Logo.h" />
+    <ClInclude Include="..\Public\Title_Star.h" />
+    <ClInclude Include="..\Public\Title_Logo_Wave.h" />
+    <ClInclude Include="..\Public\Title_Tree.h" />
     <ClInclude Include="..\public\UI_KeyGuide.h" />
     <ClInclude Include="..\Public\Tree.h" />
     <ClInclude Include="Client.h" />
@@ -224,6 +229,11 @@
     <ClCompile Include="..\Private\Player.cpp" />
     <ClCompile Include="..\private\Stats_Button.cpp" />
     <ClCompile Include="..\private\Terrain.cpp" />
+    <ClCompile Include="..\private\Title_BackGround.cpp" />
+    <ClCompile Include="..\Private\Title_Logo.cpp" />
+    <ClCompile Include="..\Private\Title_Star.cpp" />
+    <ClCompile Include="..\Private\Title_Logo_Wave.cpp" />
+    <ClCompile Include="..\Private\Title_Tree.cpp" />
     <ClCompile Include="..\Private\Tree.cpp" />
     <ClCompile Include="..\private\UI_KeyGuide.cpp" />
     <ClCompile Include="Client.cpp" />
@@ -234,6 +244,24 @@
   <ItemGroup>
     <Image Include="Client.ico" />
     <Image Include="small.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="..\Bin\ShaderFiles\LogoRipple.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Effect</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">main</EntryPointName>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">2.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="..\Bin\ShaderFiles\StarColor.hlsl">
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">2.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Effect</ShaderType>
+    </FxCompile>
+    <FxCompile Include="..\Bin\ShaderFiles\TitleFadeIn.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Effect</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">2.0</ShaderModel>
+    </FxCompile>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

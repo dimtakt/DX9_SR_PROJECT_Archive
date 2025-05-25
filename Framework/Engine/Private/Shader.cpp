@@ -49,6 +49,16 @@ void CShader::End()
 	m_pEffect->End();
 }
 
+HRESULT CShader::Set_Float(const char* pParamName, float fValue)
+{
+	{
+		if (nullptr == m_pEffect || nullptr == pParamName)
+			return E_FAIL;
+
+		return m_pEffect->SetFloat(pParamName, fValue);
+	}
+}
+
 CShader* CShader::Create(LPDIRECT3DDEVICE9 pGraphic_Device, const _tchar* pShaderFilePath)
 {
 	CShader* pInstance = new CShader(pGraphic_Device);

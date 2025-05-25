@@ -37,6 +37,7 @@ public:
 	HRESULT Add_State(const _wstring strStateTag, ANIMSTATE _state);
 	ANIMSTATE* Get_CurState()	{ return m_pCurState; };
 	_wstring Get_CurStateTag()	{ return m_strCurStateTag; };
+	_bool	Get_IsLastFrame();
 
 	// bool 인자는, 큰 상태는 동일하나
 	// 플레이어가 바라보는 방향만 달라지는 경우처럼 현재 프레임 순서의 유지 필요성이 있는 경우의 예외를 두기 위함
