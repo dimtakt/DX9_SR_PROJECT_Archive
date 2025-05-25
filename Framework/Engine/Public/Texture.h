@@ -16,6 +16,9 @@ public:
 	HRESULT Initialize(void* pArg);
 	HRESULT Bind_Texture(_uint iTextureIndex = 0);
 
+public:
+	_uint Get_NumTextures() { return m_iNumTextures; }
+
 private:
 	_uint									m_iNumTextures = {};
 	vector<IDirect3DBaseTexture9*>			m_Textures;

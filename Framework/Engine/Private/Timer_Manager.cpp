@@ -14,6 +14,7 @@ _float CTimer_Manager::Get_TimeDelta(const _wstring& strTimerTag)
 	return pTimer->Get_TimeDelta();
 }
 
+
 void CTimer_Manager::Compute_TimeDelta(const _wstring& strTimerTag)
 {
 	CTimer* pTimer = Find_Timer(strTimerTag);
