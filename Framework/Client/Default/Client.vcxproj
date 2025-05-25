@@ -119,8 +119,8 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>../../EngineSDK/Lib/;C:/vcpkg/installed/x64-windows/lib;../../Lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>Engine.lib;d3dx9.lib;imGuiCore.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>../../EngineSDK/Lib/;../../Lib/;C:/vcpkg/installed/x64-windows/lib;../../Lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>ImGuiCore.lib;Engine.lib;d3dx9.lib;imGuiCore.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -138,12 +138,15 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>Engine.lib;d3dx9.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>../../EngineSDK/Lib/;C:/vcpkg/installed/x64-windows/lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>ImGuiCore.lib;Engine.lib;d3dx9.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>../../EngineSDK/Lib/;../../Lib/;C:/vcpkg/installed/x64-windows/lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\Public\BackGround.h" />
+    <ClInclude Include="..\public\Buff_Fream.h" />
+    <ClInclude Include="..\public\Buff_Icon.h" />
+    <ClInclude Include="..\public\Buff_Type_Base.h" />
     <ClInclude Include="..\Public\Camera_Follow.h" />
     <ClInclude Include="..\public\Camera_Free.h" />
     <ClInclude Include="..\Public\Camera_Mouse.h" />
@@ -153,6 +156,7 @@
     <ClInclude Include="..\public\Dash_Gauge_Fream.h" />
     <ClInclude Include="..\public\Dice_Player.h" />
     <ClInclude Include="..\Public\Hp_Player.h" />
+    <ClInclude Include="..\public\Hud_Buff.h" />
     <ClInclude Include="..\public\Hud_Button.h" />
     <ClInclude Include="..\public\Hud_Dash.h" />
     <ClInclude Include="..\public\Hud_Exp.h" />
@@ -194,12 +198,16 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\BackGround.cpp" />
+    <ClCompile Include="..\private\Buff_Fream.cpp" />
+    <ClCompile Include="..\private\Buff_Icon.cpp" />
+    <ClCompile Include="..\private\Buff_Type_Base.cpp" />
     <ClCompile Include="..\Private\Camera_Follow.cpp" />
     <ClCompile Include="..\private\Camera_Free.cpp" />
     <ClCompile Include="..\Private\Camera_Mouse.cpp" />
     <ClCompile Include="..\private\Dash_Gauge.cpp" />
     <ClCompile Include="..\private\Dash_Gauge_Fream.cpp" />
     <ClCompile Include="..\private\Dice_Player.cpp" />
+    <ClCompile Include="..\private\Hud_Buff.cpp" />
     <ClCompile Include="..\private\Hud_Button.cpp" />
     <ClCompile Include="..\private\Hud_Dash.cpp" />
     <ClCompile Include="..\private\Hud_Exp.cpp" />

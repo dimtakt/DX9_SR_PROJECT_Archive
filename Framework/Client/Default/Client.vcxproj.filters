@@ -118,6 +118,18 @@
     <Filter Include="02.GameObject\Object">
       <UniqueIdentifier>{5497f295-5940-4be0-8a8c-e585c1707962}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\UI\HUD_Buff">
+      <UniqueIdentifier>{11f448e5-6b8b-4a29-953b-c352fc726237}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\UI\HUD_Buff\Buff_Type_Base">
+      <UniqueIdentifier>{2250b128-87e1-4942-a905-23c50f514c42}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\UI\HUD_Buff\Buff_Type_Base\Buff_iCon">
+      <UniqueIdentifier>{78fe4e9b-32df-4378-8338-c03430ced590}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\UI\HUD_Buff\Buff_Type_Base\Buff_Fream">
+      <UniqueIdentifier>{d9156105-5d97-4d88-b469-823aaf16bc90}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -264,6 +276,18 @@
     <ClInclude Include="..\Public\Level_MapEdit.h">
       <Filter>01.Levels\03. MapEdit</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\Hud_Buff.h">
+      <Filter>02.GameObject\UI\HUD_Buff</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Buff_Fream.h">
+      <Filter>02.GameObject\UI\HUD_Buff\Buff_Type_Base\Buff_Fream</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Buff_Icon.h">
+      <Filter>02.GameObject\UI\HUD_Buff\Buff_Type_Base\Buff_iCon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Buff_Type_Base.h">
+      <Filter>02.GameObject\UI\HUD_Buff\Buff_Type_Base</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -380,6 +404,18 @@
     </ClCompile>
     <ClCompile Include="..\Private\Tree.cpp">
       <Filter>02.GameObject\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Hud_Buff.cpp">
+      <Filter>02.GameObject\UI\HUD_Buff</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Buff_Fream.cpp">
+      <Filter>02.GameObject\UI\HUD_Buff\Buff_Type_Base\Buff_Fream</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Buff_Icon.cpp">
+      <Filter>02.GameObject\UI\HUD_Buff\Buff_Type_Base\Buff_iCon</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Buff_Type_Base.cpp">
+      <Filter>02.GameObject\UI\HUD_Buff\Buff_Type_Base</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
