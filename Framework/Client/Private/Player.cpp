@@ -33,16 +33,16 @@ void CPlayer::Priority_Update(_float fTimeDelta)
 
 void CPlayer::Update(_float fTimeDelta)
 {
-    if (m_pGameInstance->IsKeyDown('W'))
+    if (m_pGameInstance->IsKeyHold('W'))
         m_pTransformCom->Go_Straight(fTimeDelta);
 
-    if (m_pGameInstance->IsKeyDown('S'))
+    if (m_pGameInstance->IsKeyHold('S'))
         m_pTransformCom->Go_Backward(fTimeDelta);
 
-    if (m_pGameInstance->IsKeyDown('A'))
+    if (m_pGameInstance->IsKeyHold('A'))
         m_pTransformCom->Go_Left(fTimeDelta);
 
-    if (m_pGameInstance->IsKeyDown('D'))
+    if (m_pGameInstance->IsKeyHold('D'))
         m_pTransformCom->Go_Right(fTimeDelta);
 
 
@@ -71,12 +71,6 @@ void CPlayer::Update(_float fTimeDelta)
 #endif // _DEBUG
     
     }
-
-    if (GetKeyState('D') < 0)
-    {
-        m_pTransformCom->Go_Right(fTimeDelta);
-    }
-
     /*if (GetKeyState(VK_LBUTTON) < 0)
     {
         _float3		vTmp = m_pVIBufferCom->Compute_PickedPosition(m_pTransformCom->Get_WorldMatrix_Inverse());

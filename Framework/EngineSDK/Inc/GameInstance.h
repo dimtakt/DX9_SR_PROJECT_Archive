@@ -57,22 +57,70 @@ public:
 #pragma endregion
 
 #pragma region KEY_MANAGER
-	bool IsKeyDown(int key) const;   // 이번 프레임에 눌림
-	bool IsKeyUp(int key) const;     // 이번 프레임에 떼짐
-	bool IsKeyHold(int key) const;   // 계속 눌림
-	float GetKeyHoldTime(int key) const; // 눌린 시간 (선택사항)
+	void AddTrackingKey(int iKey);
+	bool IsKeyDown(int iKey) const;   // 이번 프레임에 눌림
+	bool IsKeyUp(int iKey) const;     // 이번 프레임에 떼짐
+	bool IsKeyHold(int iKey) const;   // 계속 눌림
+	float GetKeyHoldTime(int iKey) const; // 눌린 시간 (선택사항)
 #pragma endregion
 
 #pragma region NETWORK_MANAGER
 	TEST* Ping();
 	list<USER*> Get_AllUsers();
 #pragma endregion
+
+#pragma region PICKING
 	void Transform_Picking_ToLocalSpace(const _float4x4& WorldMatrixInverse);
 	_bool Picking_InWorld(_float3& vPickedPos, const _float3& vPointA, const _float3& vPointB, const _float3& vPointC);
 	_bool Picking_InLocal(_float3& vPickedPos, const _float3& vPointA, const _float3& vPointB, const _float3& vPointC);
-#pragma region PICKING
+#pragma endregion
 
+#pragma region COLLISION_MANAGER
+	// 해당 구간 추후 좀더 추가 예정
+	HRESULT Add_Collider(class CCollider* pCollider);
+#pragma endregion
 
+#pragma region ROOM_MANAGER
+	HRESULT Add_Room(class CRoom* pRoom);
+	HRESULT Enter_Room(_int iRoomID);
+	class CRoom* Get_CurrentRoom();
+	class CRoom* Get_RoomByID(_int iRoomID);
+#pragma endregion
+
+#pragma region FONT_MANAGER
+	HRESULT Ready_Font(const _wstring& strFontTag,
+		const _wstring& strFontPath,
+		const _wstring& strFontName,
+		const _uint& iWidth,
+		const _uint& iHeight,
+		const _uint& iWeight);
+
+	void Render_Font(const wstring& strFontTag,
+		const _wstring& strText,
+		const _float2* pVec2Pos,
+		D3DXCOLOR d3dxColor,
+		DWORD dwFormat = DT_NOCLIP);
+
+	//사용법
+	/*CFont_Manager::GetInstance()->Ready_Font(
+		pGraphicDev,
+		L"TitleFont",
+		L"./Fonts/NanumSquare.ttf",
+		L"NanumSquare",
+		0, 28, FW_BOLD
+	);
+
+	CFont_Manager::GetInstance()->Render_Font(
+		L"TitleFont",
+		L"스테이지 클리어!",
+		&_float2{ 400.f, 100.f },
+		D3DXCOLOR(1.f, 1.f, 1.f, 1.f),
+		DT_CENTER | DT_TOP
+	);*/
+#pragma endregion
+	
+#pragma region LIGHT_MANAGER
+	HRESULT	Ready_Light(const D3DLIGHT9* pLightInfo, const _uint& iIndex);
 #pragma endregion
 
 private:
@@ -85,6 +133,10 @@ private:
 	class CKey_Manager*			m_pKey_Manager = { nullptr };
 	class CNetwork_Manager*		m_pNetwork_Manager = { nullptr };
 	class CPicking*				m_pPicking = { nullptr };
+	class CCollision_Manager*	m_pCollision_Manager = { nullptr };
+	class CRoom_Manager*		m_pRoom_Manager = { nullptr };
+	class CFont_Manager*		m_pFont_Manager = { nullptr };
+	class CLight_Manager*		m_pLight_Manager = { nullptr };
 
 public:
 	void Release_Engine();

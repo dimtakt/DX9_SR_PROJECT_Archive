@@ -32,6 +32,7 @@ HRESULT CMainApp::Initialize()
 	if (FAILED(Start_Level(LEVEL::LEVEL_LOGO)))
 		return E_FAIL;
 
+	Ready_Key_Setting();
 
 	return S_OK;
 }
@@ -94,6 +95,29 @@ HRESULT CMainApp::Ready_Prototype_ForStatic()
 		return E_FAIL;
 
 	return S_OK;
+}
+
+void CMainApp::Ready_Key_Setting()
+{
+	m_pGameInstance->AddTrackingKey(VK_UP);
+	m_pGameInstance->AddTrackingKey(VK_DOWN);
+	m_pGameInstance->AddTrackingKey(VK_LEFT);
+	m_pGameInstance->AddTrackingKey(VK_RIGHT);
+	m_pGameInstance->AddTrackingKey(VK_SPACE);
+	m_pGameInstance->AddTrackingKey(VK_LBUTTON);
+	m_pGameInstance->AddTrackingKey(VK_RBUTTON);
+	m_pGameInstance->AddTrackingKey(VK_TAB);
+	m_pGameInstance->AddTrackingKey(VK_RETURN);
+	m_pGameInstance->AddTrackingKey(VK_ESCAPE);
+	m_pGameInstance->AddTrackingKey('W');
+	m_pGameInstance->AddTrackingKey('A');
+	m_pGameInstance->AddTrackingKey('S');
+	m_pGameInstance->AddTrackingKey('D');
+	m_pGameInstance->AddTrackingKey('V');
+	m_pGameInstance->AddTrackingKey('C');
+	m_pGameInstance->AddTrackingKey('P');
+	m_pGameInstance->AddTrackingKey('Q');
+	m_pGameInstance->AddTrackingKey('E');
 }
 
 HRESULT CMainApp::Start_Level(LEVEL eStartLevelID)

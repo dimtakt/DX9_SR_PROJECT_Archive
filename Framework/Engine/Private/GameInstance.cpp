@@ -9,6 +9,10 @@
 #include "Timer_Manager.h"
 #include "Key_Manager.h"
 #include "Picking.h"
+#include "Collision_Manager.h"
+#include "Room_Manager.h"
+#include "Font_Manager.h"
+#include "Light_Manager.h"
 
 IMPLEMENT_SINGLETON(CGameInstance)
 
@@ -56,17 +60,37 @@ HRESULT CGameInstance::Initialize_Engine(const ENGINE_DESC& EngineDesc, LPDIRECT
     if (nullptr == m_pPicking)
         return E_FAIL;
 
+    m_pCollision_Manager = CCollision_Manager::Create();
+    if (nullptr == m_pCollision_Manager)
+        return E_FAIL;
+
+    m_pRoom_Manager = CRoom_Manager::Create();
+    if (nullptr == m_pRoom_Manager)
+        return E_FAIL;
+
+    m_pFont_Manager = CFont_Manager::Create(*ppOut);
+    if (nullptr == m_pFont_Manager)
+        return E_FAIL;
+
+    m_pLight_Manager = CLight_Manager::Create(*ppOut);
+    if (nullptr == m_pLight_Manager)
+        return E_FAIL;
+
     return S_OK;
 }
 
 void CGameInstance::Update_Engine(_float fTimeDelta)
 {
     m_pObject_Manager->Priority_Update(fTimeDelta);
-    
+    m_pRoom_Manager->Priority_Update(fTimeDelta);
+
     m_pPicking->Update();
 
     m_pObject_Manager->Update(fTimeDelta);
+    m_pRoom_Manager->Update(fTimeDelta);
+
     m_pObject_Manager->Late_Update(fTimeDelta);
+    m_pRoom_Manager->Late_Update(fTimeDelta);
 
     m_pLevel_Manager->Update(fTimeDelta);
 
@@ -78,6 +102,8 @@ HRESULT CGameInstance::Clear_Resources(_uint iClearLevelID)
     m_pPrototype_Manager->Clear(iClearLevelID);
 
     m_pObject_Manager->Clear(iClearLevelID);
+
+    m_pRoom_Manager->Clear();
 
     return S_OK;
 }
@@ -187,21 +213,25 @@ void CGameInstance::Compute_TimeDelta(const _wstring& strTimerTag)
 #pragma endregion 
 
 #pragma region KEY_MANAGER
-bool CGameInstance::IsKeyDown(int key) const
+void CGameInstance::AddTrackingKey(int iKey)
 {
-    return m_pKey_Manager->IsKeyDown(key);
+    return m_pKey_Manager->AddTrackingKey(iKey);
 }
-bool CGameInstance::IsKeyUp(int key) const
+bool CGameInstance::IsKeyDown(int iKey) const
 {
-    return m_pKey_Manager->IsKeyUp(key);
+    return m_pKey_Manager->IsKeyDown(iKey);
 }
-bool CGameInstance::IsKeyHold(int key) const
+bool CGameInstance::IsKeyUp(int iKey) const
 {
-    return m_pKey_Manager->IsKeyHold(key);
+    return m_pKey_Manager->IsKeyUp(iKey);
 }
-float CGameInstance::GetKeyHoldTime(int key) const
+bool CGameInstance::IsKeyHold(int iKey) const
 {
-    return m_pKey_Manager->GetKeyHoldTime(key);
+    return m_pKey_Manager->IsKeyHold(iKey);
+}
+float CGameInstance::GetKeyHoldTime(int iKey) const
+{
+    return m_pKey_Manager->GetKeyHoldTime(iKey);
 }
 #pragma endregion
 
@@ -231,6 +261,58 @@ _bool CGameInstance::Picking_InLocal(_float3& vPickedPos, const _float3& vPointA
 }
 #pragma endregion
 
+#pragma region COLLISION_MANAGER
+HRESULT CGameInstance::Add_Collider(class CCollider* pCollider)
+{
+    return m_pCollision_Manager->Add_Collider(pCollider);
+}
+#pragma endregion
+
+#pragma region ROOM_MANAGER
+HRESULT CGameInstance::Add_Room(class CRoom* pRoom)
+{
+    return m_pRoom_Manager->Add_Room(pRoom);
+}
+HRESULT CGameInstance::Enter_Room(_int iRoomID)
+{
+    return m_pRoom_Manager->Enter_Room(iRoomID);
+}
+CRoom* CGameInstance::Get_CurrentRoom()
+{
+    return m_pRoom_Manager->Get_CurrentRoom();
+}
+CRoom* CGameInstance::Get_RoomByID(_int iRoomID)
+{
+    return m_pRoom_Manager->Get_RoomByID(iRoomID);
+}
+
+#pragma endregion
+
+#pragma region FONT_MANAGER
+HRESULT CGameInstance::Ready_Font(const _wstring& strFontTag, 
+    const _wstring& strFontPath, 
+    const _wstring& strFontName, 
+    const _uint& iWidth, 
+    const _uint& iHeight, 
+    const _uint& iWeight)
+{
+    return m_pFont_Manager->Ready_Font(strFontTag, strFontPath, strFontName, iWidth, iHeight, iWeight);
+}
+void CGameInstance::Render_Font(const wstring& strFontTag, 
+    const _wstring& strText, 
+    const _float2* pVec2Pos, 
+    D3DXCOLOR d3dxColor, 
+    DWORD dwFormat)
+{
+    m_pFont_Manager->Render_Font(strFontTag, strText, pVec2Pos, d3dxColor, dwFormat);
+}
+#pragma endregion
+
+HRESULT CGameInstance::Ready_Light(const D3DLIGHT9* pLightInfo, const _uint& iIndex)
+{
+    return m_pLight_Manager->Ready_Light(pLightInfo, iIndex);
+}
+
 void CGameInstance::Release_Engine()
 {
     Release();
@@ -244,6 +326,10 @@ void CGameInstance::Release_Engine()
     Safe_Release(m_pKey_Manager);
     Safe_Release(m_pNetwork_Manager);
     Safe_Release(m_pPicking);
+    Safe_Release(m_pCollision_Manager);
+    Safe_Release(m_pRoom_Manager);
+    Safe_Release(m_pFont_Manager);
+    Safe_Release(m_pLight_Manager);
 }
 
 void CGameInstance::Free()

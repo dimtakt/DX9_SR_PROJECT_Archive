@@ -45,7 +45,11 @@ void CTerrain::Late_Update(_float fTimeDelta)
 
 HRESULT CTerrain::Render()
 {
+	m_pGraphic_Device->SetRenderState(D3DRS_LIGHTING, TRUE);
 	m_pTransformCom->Bind_Matrix();
+
+	if (FAILED(Ready_Material()))
+		return E_FAIL;
 
 	if (FAILED(m_pTextureCom->Bind_Texture(0)))
 		return E_FAIL;
@@ -54,6 +58,7 @@ HRESULT CTerrain::Render()
 	m_pVIBufferCom->Bind_Buffers();
 
 	m_pVIBufferCom->Render();
+	m_pGraphic_Device->SetRenderState(D3DRS_LIGHTING, FALSE);
 
 	return S_OK;
 }
@@ -77,6 +82,21 @@ HRESULT CTerrain::Ready_Components()
 	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Transform"),
 		TEXT("Com_Transform"), reinterpret_cast<CComponent**>(&m_pTransformCom), &TransformDesc)))
 		return E_FAIL;
+
+	return S_OK;
+}
+
+HRESULT CTerrain::Ready_Material()
+{
+	D3DMATERIAL9		MtrlDesc{};
+
+	MtrlDesc.Diffuse = { 1.f, 1.f, 1.f, 1.f };
+	MtrlDesc.Specular = { 1.f, 1.f, 1.f, 1.f };
+	MtrlDesc.Ambient = { 1.f, 1.f, 1.f, 1.f };
+
+	MtrlDesc.Emissive = { 0.f, 0.f, 0.f, 0.f };
+	MtrlDesc.Power = 1.f;
+	m_pGraphic_Device->SetMaterial(&MtrlDesc);
 
 	return S_OK;
 }

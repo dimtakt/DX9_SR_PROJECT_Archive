@@ -5,6 +5,7 @@
 #include "BackGround.h"
 #include "Terrain.h"
 #include "Camera_Follow.h"
+#include "Camera_Mouse.h"
 #include "Player.h"
 #include "Mp_Player.h"
 #include "Hp_Player.h"

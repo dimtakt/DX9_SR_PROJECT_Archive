@@ -11,20 +11,20 @@ HRESULT CKey_Manager::Initialize()
 	m_mPrevState.clear();
 	m_mCurrState.clear();
 	m_mKeyHoldTime.clear();
+    m_vTrackingKeys.clear();
+
 	return S_OK;
 }
 
 void CKey_Manager::Update(float fDeltaTime)
 {
-    for (int vk = 0x01; vk <= 0xFE; ++vk)  // 0x01~0xFE: 가용 가능한 가상키
+    for (int vk : m_vTrackingKeys)
     {
         bool bCurr = (GetAsyncKeyState(vk) & 0x8000) != 0;
 
-        // 이전 상태 저장
         m_mPrevState[vk] = m_mCurrState[vk];
         m_mCurrState[vk] = bCurr;
 
-        // 누르고 있다면 누른 시간 누적
         if (bCurr)
             m_mKeyHoldTime[vk] += fDeltaTime;
         else
@@ -32,29 +32,36 @@ void CKey_Manager::Update(float fDeltaTime)
     }
 }
 
-bool CKey_Manager::IsKeyDown(int key) const
+void CKey_Manager::AddTrackingKey(int iKey)
 {
-    auto itPrev = m_mPrevState.find(key);
-    auto itCurr = m_mCurrState.find(key);
+    // 중복 방지
+    if (std::find(m_vTrackingKeys.begin(), m_vTrackingKeys.end(), iKey) == m_vTrackingKeys.end())
+        m_vTrackingKeys.push_back(iKey);
+}
+
+bool CKey_Manager::IsKeyDown(int iKey) const
+{
+    auto itPrev = m_mPrevState.find(iKey);
+    auto itCurr = m_mCurrState.find(iKey);
     return itCurr != m_mCurrState.end() && itCurr->second && (!itPrev->second);
 }
 
-bool CKey_Manager::IsKeyUp(int key) const
+bool CKey_Manager::IsKeyUp(int iKey) const
 {
-    auto itPrev = m_mPrevState.find(key);
-    auto itCurr = m_mCurrState.find(key);
+    auto itPrev = m_mPrevState.find(iKey);
+    auto itCurr = m_mCurrState.find(iKey);
     return itCurr != m_mCurrState.end() && !itCurr->second && itPrev->second;
 }
 
-bool CKey_Manager::IsKeyHold(int key) const
+bool CKey_Manager::IsKeyHold(int iKey) const
 {
-    auto itCurr = m_mCurrState.find(key);
+    auto itCurr = m_mCurrState.find(iKey);
     return itCurr != m_mCurrState.end() && itCurr->second;
 }
 
-float CKey_Manager::GetKeyHoldTime(int key) const
+float CKey_Manager::GetKeyHoldTime(int iKey) const
 {
-    auto it = m_mKeyHoldTime.find(key);
+    auto it = m_mKeyHoldTime.find(iKey);
     if (it != m_mKeyHoldTime.end())
         return it->second;
     return 0.0f;

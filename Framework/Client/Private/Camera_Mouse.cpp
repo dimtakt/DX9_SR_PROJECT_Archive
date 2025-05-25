@@ -18,9 +18,6 @@ HRESULT CCamera_Mouse::Initialize_Prototype()
 
 HRESULT CCamera_Mouse::Initialize(void* pArg)
 {
-	if (FAILED(Ready_Components(pArg)))
-		return E_FAIL;
-
 	CCamera::CAMERA_DESC CameraDesc{};
 
 	CameraDesc.vEye = _float3(0.f, 10.f, -10.f);
@@ -32,6 +29,9 @@ HRESULT CCamera_Mouse::Initialize(void* pArg)
 	CameraDesc.fRotationPerSec = D3DXToRadian(90.f);
 
 	m_fMouseSensor = 0.3f;
+
+	if (FAILED(Ready_Components(&CameraDesc)))
+		return E_FAIL;
 
 	if (FAILED(__super::Initialize(&CameraDesc)))
 		return E_FAIL;
@@ -45,7 +45,6 @@ void CCamera_Mouse::Priority_Update(_float fTimeDelta)
 {
 	Key_Input(fTimeDelta);
 	Mouse_Move(fTimeDelta);
-	__super::Update_VP_Matrices();
 }
 
 void CCamera_Mouse::Update(_float fTimeDelta)
@@ -102,27 +101,29 @@ void CCamera_Mouse::Mouse_Move(_float fTimeDelta)
 	{
 		m_pTransformCom->Turn(m_pTransformCom->Get_State(STATE::RIGHT), iMouseMove * fTimeDelta * m_fMouseSensor);
 	}
+
+	__super::Update_VP_Matrices();
 	m_OldPoint = ptMouse;
 }
 
 void CCamera_Mouse::Key_Input(_float fTimeDelta)
 {
-	if (m_pGameInstance->IsKeyDown('W') < 0)
+	if (m_pGameInstance->IsKeyHold('W') < 0)
 	{
 		m_pTransformCom->Go_Straight(fTimeDelta);
 	}
 
-	if (m_pGameInstance->IsKeyDown('S') < 0)
+	if (m_pGameInstance->IsKeyHold('S') < 0)
 	{
 		m_pTransformCom->Go_Backward(fTimeDelta);
 	}
 
-	if (m_pGameInstance->IsKeyDown('A') < 0)
+	if (m_pGameInstance->IsKeyHold('A') < 0)
 	{
 		m_pTransformCom->Go_Left(fTimeDelta);
 	}
 
-	if (m_pGameInstance->IsKeyDown('D') < 0)
+	if (m_pGameInstance->IsKeyHold('D') < 0)
 	{
 		m_pTransformCom->Go_Right(fTimeDelta);
 	}
