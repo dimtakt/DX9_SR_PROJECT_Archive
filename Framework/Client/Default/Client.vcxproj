@@ -119,8 +119,8 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>../../EngineSDK/Lib/;C:/vcpkg/installed/x64-windows/lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>Engine.lib;d3dx9.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>../../EngineSDK/Lib/;C:/vcpkg/installed/x64-windows/lib;../../Lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>Engine.lib;d3dx9.lib;imGuiCore.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -148,6 +148,7 @@
     <ClInclude Include="..\public\Camera_Free.h" />
     <ClInclude Include="..\Public\Camera_Mouse.h" />
     <ClInclude Include="..\Public\Client_Defines.h" />
+    <ClInclude Include="..\Public\Client_Struct.h" />
     <ClInclude Include="..\public\Dash_Gauge.h" />
     <ClInclude Include="..\public\Dash_Gauge_Fream.h" />
     <ClInclude Include="..\public\Dice_Player.h" />
@@ -159,11 +160,23 @@
     <ClInclude Include="..\public\Hud_Exp_Frame.h" />
     <ClInclude Include="..\Public\Hud_States_Frame.h" />
     <ClInclude Include="..\public\Hud_Wallet.h" />
+    <ClInclude Include="..\Public\imconfig.h" />
+    <ClInclude Include="..\Public\imgui.h" />
+    <ClInclude Include="..\Public\ImGuiFileDialog.h" />
+    <ClInclude Include="..\Public\ImGuiFileDialogConfig.h" />
+    <ClInclude Include="..\Public\imgui_impl_dx9.h" />
+    <ClInclude Include="..\Public\imgui_impl_win32.h" />
+    <ClInclude Include="..\Public\imgui_internal.h" />
+    <ClInclude Include="..\Public\Imgui_Manager.h" />
+    <ClInclude Include="..\Public\imstb_rectpack.h" />
+    <ClInclude Include="..\Public\imstb_textedit.h" />
+    <ClInclude Include="..\Public\imstb_truetype.h" />
     <ClInclude Include="..\public\Inventory.h" />
     <ClInclude Include="..\public\Inven_Button.h" />
     <ClInclude Include="..\Public\Level_GamePlay.h" />
     <ClInclude Include="..\Public\Level_Loading.h" />
     <ClInclude Include="..\Public\Level_Logo.h" />
+    <ClInclude Include="..\Public\Level_MapEdit.h" />
     <ClInclude Include="..\Public\Loader.h" />
     <ClInclude Include="..\Public\MainApp.h" />
     <ClInclude Include="..\public\Mirror_Button.h" />
@@ -173,6 +186,7 @@
     <ClInclude Include="..\public\Stats_Button.h" />
     <ClInclude Include="..\public\Terrain.h" />
     <ClInclude Include="..\public\UI_KeyGuide.h" />
+    <ClInclude Include="..\Public\Tree.h" />
     <ClInclude Include="Client.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="Resource.h" />
@@ -194,11 +208,14 @@
     <ClCompile Include="..\private\Hud_Exp_Frame.cpp" />
     <ClCompile Include="..\Private\Hud_States_Frame.cpp" />
     <ClCompile Include="..\private\Hud_Wallet.cpp" />
+    <ClCompile Include="..\Private\ImGuiFileDialog.cpp" />
+    <ClCompile Include="..\Private\Imgui_Manager.cpp" />
     <ClCompile Include="..\private\Inventory.cpp" />
     <ClCompile Include="..\private\Inven_Button.cpp" />
     <ClCompile Include="..\Private\Level_GamePlay.cpp" />
     <ClCompile Include="..\Private\Level_Loading.cpp" />
     <ClCompile Include="..\Private\Level_Logo.cpp" />
+    <ClCompile Include="..\Private\Level_MapEdit.cpp" />
     <ClCompile Include="..\Private\Loader.cpp" />
     <ClCompile Include="..\Private\MainApp.cpp" />
     <ClCompile Include="..\private\Mirror_Button.cpp" />
@@ -207,6 +224,7 @@
     <ClCompile Include="..\Private\Player.cpp" />
     <ClCompile Include="..\private\Stats_Button.cpp" />
     <ClCompile Include="..\private\Terrain.cpp" />
+    <ClCompile Include="..\Private\Tree.cpp" />
     <ClCompile Include="..\private\UI_KeyGuide.cpp" />
     <ClCompile Include="Client.cpp" />
   </ItemGroup>
