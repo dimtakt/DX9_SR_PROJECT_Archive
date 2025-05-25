@@ -11,24 +11,31 @@ CProgressBar::CProgressBar(const CProgressBar& Prototype) : CUIObject(Prototype)
 
 HRESULT CProgressBar::Initialize_Prototype()
 {
+	if (FAILED(__super::Initialize_Prototype()))
+		return E_FAIL;
 	return S_OK;
 }
 
 HRESULT CProgressBar::Initialize(void* pArg)
 {
+	if (FAILED(__super::Initialize(pArg)))
+		return E_FAIL;
 	return S_OK;
 }
 
 void CProgressBar::Priority_Update(_float fTimeDelta)
 {
+	__super::Priority_Update(fTimeDelta);
 }
 
 void CProgressBar::Update(_float fTimeDelta)
 {
+	__super::Update(fTimeDelta);
 }
 
 void CProgressBar::Late_Update(_float fTimeDelta)
 {
+	__super::Late_Update(fTimeDelta);
 }
 
 HRESULT CProgressBar::Render()

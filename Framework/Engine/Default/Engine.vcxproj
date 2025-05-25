@@ -155,6 +155,7 @@ call Copy.bat</Command>
   <ItemGroup>
     <ClInclude Include="..\public\Animator.h" />
     <ClInclude Include="..\Public\Base.h" />
+    <ClInclude Include="..\public\Button.h" />
     <ClInclude Include="..\Public\Camera.h" />
     <ClInclude Include="..\public\Collider.h" />
     <ClInclude Include="..\public\Collision_Manager.h" />
@@ -200,6 +201,7 @@ call Copy.bat</Command>
   <ItemGroup>
     <ClCompile Include="..\private\Animator.cpp" />
     <ClCompile Include="..\Private\Base.cpp" />
+    <ClCompile Include="..\private\Button.cpp" />
     <ClCompile Include="..\Private\Camera.cpp" />
     <ClCompile Include="..\private\Collision_Manager.cpp" />
     <ClCompile Include="..\private\Collider_OBB.cpp" />

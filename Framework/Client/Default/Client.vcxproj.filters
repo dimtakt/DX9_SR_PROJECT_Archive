@@ -70,6 +70,42 @@
     <Filter Include="02.GameObject\UI\HUD_Exp\Exp_checkout">
       <UniqueIdentifier>{2647e452-a999-4f97-9ed2-472179b60b0e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\UI\HUD_Wallet">
+      <UniqueIdentifier>{eb695198-ac79-49a6-b44e-407c35f67974}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\UI\HUD_Wallet\Money_Player">
+      <UniqueIdentifier>{db043b6f-82cc-4074-89e6-da775f9adaf2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\UI\HUD_Wallet\Dice_Player">
+      <UniqueIdentifier>{95f68e6e-e4c9-4966-8acd-4de8824205bc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\UI\HUD_Button">
+      <UniqueIdentifier>{59582917-865b-44e4-93f1-588b47f735b7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\UI\HUD_Button\Inven_Button">
+      <UniqueIdentifier>{d0c7fba1-3c52-4988-8b85-ef2dedc7c1a6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\UI\HUD_Button\Stats_Button">
+      <UniqueIdentifier>{60221299-c03b-480c-a14c-ed776db0d964}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\UI\HUD_Button\Mirror_Button">
+      <UniqueIdentifier>{6bff572e-518a-45b6-b70c-d61c4683d26a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\UI\UI_KeyGuide">
+      <UniqueIdentifier>{0d678967-3801-4d44-85e0-a25912f0ae23}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\UI\Inventory">
+      <UniqueIdentifier>{e5338878-65f3-47f8-bbaa-77837fbf92a1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\UI\HUD_Dash">
+      <UniqueIdentifier>{41a7f2d1-c635-4d23-b3b7-f6be68c8e4ea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\UI\HUD_Dash\Dash_Gauge_Fream">
+      <UniqueIdentifier>{bb53edc7-6ae9-473f-8429-d635a7eed492}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\UI\HUD_Dash\Dash_Gauge_Fream\Dash_Gauge">
+      <UniqueIdentifier>{1a62ac84-0e96-45f6-a4e5-3f1c3aa35153}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -137,6 +173,42 @@
     </ClInclude>
     <ClInclude Include="..\public\Hud_Exp_Checkout.h">
       <Filter>02.GameObject\UI\HUD_Exp\Exp_checkout</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Money_Player.h">
+      <Filter>02.GameObject\UI\HUD_Wallet\Money_Player</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Hud_Wallet.h">
+      <Filter>02.GameObject\UI\HUD_Wallet</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Dice_Player.h">
+      <Filter>02.GameObject\UI\HUD_Wallet\Dice_Player</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Hud_Button.h">
+      <Filter>02.GameObject\UI\HUD_Button</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Inven_Button.h">
+      <Filter>02.GameObject\UI\HUD_Button\Inven_Button</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Stats_Button.h">
+      <Filter>02.GameObject\UI\HUD_Button\Stats_Button</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Mirror_Button.h">
+      <Filter>02.GameObject\UI\HUD_Button\Mirror_Button</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\UI_KeyGuide.h">
+      <Filter>02.GameObject\UI\UI_KeyGuide</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Inventory.h">
+      <Filter>02.GameObject\UI\Inventory</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Hud_Dash.h">
+      <Filter>02.GameObject\UI\HUD_Dash</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Dash_Gauge.h">
+      <Filter>02.GameObject\UI\HUD_Dash\Dash_Gauge_Fream\Dash_Gauge</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Dash_Gauge_Fream.h">
+      <Filter>02.GameObject\UI\HUD_Dash\Dash_Gauge_Fream</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -206,6 +278,42 @@
     </ClCompile>
     <ClCompile Include="..\private\Hud_Exp_Checkout.cpp">
       <Filter>02.GameObject\UI\HUD_Exp\Exp_checkout</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Money_Player.cpp">
+      <Filter>02.GameObject\UI\HUD_Wallet\Money_Player</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Hud_Wallet.cpp">
+      <Filter>02.GameObject\UI\HUD_Wallet</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Dice_Player.cpp">
+      <Filter>02.GameObject\UI\HUD_Wallet\Dice_Player</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Hud_Button.cpp">
+      <Filter>02.GameObject\UI\HUD_Button</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Inven_Button.cpp">
+      <Filter>02.GameObject\UI\HUD_Button\Inven_Button</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Stats_Button.cpp">
+      <Filter>02.GameObject\UI\HUD_Button\Stats_Button</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Mirror_Button.cpp">
+      <Filter>02.GameObject\UI\HUD_Button\Mirror_Button</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\UI_KeyGuide.cpp">
+      <Filter>02.GameObject\UI\UI_KeyGuide</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Inventory.cpp">
+      <Filter>02.GameObject\UI\Inventory</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Hud_Dash.cpp">
+      <Filter>02.GameObject\UI\HUD_Dash</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Dash_Gauge.cpp">
+      <Filter>02.GameObject\UI\HUD_Dash\Dash_Gauge_Fream\Dash_Gauge</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Dash_Gauge_Fream.cpp">
+      <Filter>02.GameObject\UI\HUD_Dash\Dash_Gauge_Fream</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

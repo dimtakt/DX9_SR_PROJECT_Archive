@@ -18,6 +18,16 @@ CComponent* CLayer::Find_Component(const _wstring& strComponentTag, _uint iIndex
 	return (*iter)->Find_Component(strComponentTag);
 }
 
+CGameObject* CLayer::Find_GameObject(_uint iIndex)
+{
+	auto	iter = m_GameObjects.begin();
+	for (size_t i = 0; i < iIndex; i++)
+	{
+		++iter;
+	}
+	return (*iter);
+}
+
 void CLayer::Priority_Update(_float fTimeDelta)
 {
 	for (auto& pGameObject : m_GameObjects)

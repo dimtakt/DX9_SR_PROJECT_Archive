@@ -10,14 +10,14 @@ protected:
 	virtual						~CProgressBar() = default;
 
 public:
-	virtual HRESULT				Initialize_Prototype() = 0;
-	virtual HRESULT				Initialize(void* pArg) = 0;
-	virtual void				Priority_Update(_float fTimeDelta) = 0;
-	virtual void				Update(_float fTimeDelta) = 0;
-	virtual void				Late_Update(_float fTimeDelta) = 0;
-	virtual HRESULT				Render() = 0;
+	virtual HRESULT				Initialize_Prototype();
+	virtual HRESULT				Initialize(void* pArg);
+	virtual void				Priority_Update(_float fTimeDelta);
+	virtual void				Update(_float fTimeDelta);
+	virtual void				Late_Update(_float fTimeDelta);
+	virtual HRESULT				Render();
 	
-public:
+protected:
 	void						Progress_UpdateX();
 
 protected:

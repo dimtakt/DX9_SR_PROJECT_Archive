@@ -11,6 +11,10 @@
 #include "Hp_Player.h"
 #include "Hud_States_Frame.h"
 #include "Hud_Exp_Frame.h"
+#include "Hud_Wallet.h"
+#include "Hud_Button.h"
+#include "Inventory.h"
+#include "Hud_Dash.h"
 CLoader::CLoader(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: m_pGraphic_Device{ pGraphic_Device }
 	, m_pGameInstance{ CGameInstance::GetInstance() }
@@ -102,25 +106,59 @@ HRESULT CLoader::Loading_For_GamePlay_Level()
 		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Textures/Player/Player0.png"), 1))))
 		return E_FAIL;
 	
-	/* Prototype_Component_Hud_States */
-	D3DXCOLOR vRectCol = { 0.816, 0.255, 0.267, 1.f };
+	/* Prototype_Component_Texture_HUD */
+	D3DXCOLOR vRectCol = {};
+#pragma region Prototype_Component_UI_Default_Texture
+	vRectCol = { 0.f, 0.f, 0.f, 1.f };
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_GAMEPLAY), TEXT("Prototype_Component_VIBuffer_Rect_UI_BalckRect_Texture"), CVIBuffer_Rect::Create(m_pGraphic_Device, vRectCol))))
+		return E_FAIL;
+#pragma endregion
+#pragma region Prototype_Component_Hud_States_Texture
+	vRectCol = { 0.816, 0.255, 0.267, 1.f };
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_GAMEPLAY), TEXT("Prototype_Component_VIBuffer_Rect_UI_Hud_States_Hp"), CVIBuffer_Rect::Create(m_pGraphic_Device, vRectCol))))
 		return E_FAIL;
 	vRectCol = { 0.525, 0.737, 0.965, 1.f };
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_GAMEPLAY), TEXT("Prototype_Component_VIBuffer_Rect_UI_Hud_States_Mp"), CVIBuffer_Rect::Create(m_pGraphic_Device, vRectCol))))
 		return E_FAIL;
-	vRectCol = { 0.f, 0.f, 0.f, 1.f };
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_GAMEPLAY), TEXT("Prototype_Component_VIBuffer_Rect_UI_Hud_States_Fream"), CVIBuffer_Rect::Create(m_pGraphic_Device, vRectCol))))
-		return E_FAIL;
-
-	/* Prototype_Component_Hud_Exp */
+#pragma endregion
+#pragma region Prototype_Component_Hud_Exp_Texture
 	vRectCol = { 0.200, 0.184, 0.231, 1.f };
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_GAMEPLAY), TEXT("Prototype_Component_VIBuffer_Rect_UI_Hud_Exp_Fream_1"), CVIBuffer_Rect::Create(m_pGraphic_Device, vRectCol))))
 		return E_FAIL;
 	vRectCol = { 0.431, 0.412, 0.463, 1.f };
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_GAMEPLAY), TEXT("Prototype_Component_VIBuffer_Rect_UI_Hud_Exp_Fream_2"), CVIBuffer_Rect::Create(m_pGraphic_Device, vRectCol))))
 		return E_FAIL;
+	vRectCol = { 0.808, 0.957, 0.706, 0.75f };
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_GAMEPLAY), TEXT("Prototype_Component_VIBuffer_Rect_UI_Hud_Exp_Player"), CVIBuffer_Rect::Create(m_pGraphic_Device, vRectCol))))
+		return E_FAIL;
+#pragma endregion
+#pragma region Prototype_Component_Hud_States_Texture
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_GAMEPLAY), TEXT("Prototype_Component_VIBuffer_Rect_UI_Hud_Money_Symbol"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Textures/UI/HUD/HUD_Money.png"), 1))))
+		return E_FAIL;
 
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_GAMEPLAY), TEXT("Prototype_Component_VIBuffer_Rect_UI_Hud_Dice_Symbol"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Textures/UI/HUD/HUD_Dice.png"), 1))))
+		return E_FAIL;
+#pragma endregion
+#pragma region Prototype_Component_Hud_Button_Texture
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_GAMEPLAY), TEXT("Prototype_Component_VIBuffer_Rect_UI_Hud_Inven_Symbol"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Textures/UI/HUD/HUDInventory_%d.png"), 2))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_GAMEPLAY), TEXT("Prototype_Component_VIBuffer_Rect_UI_Hud_Stats_Symbol"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Textures/UI/HUD/HUDStats_%d.png"), 2))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_GAMEPLAY), TEXT("Prototype_Component_VIBuffer_Rect_UI_Hud_Mirror_Symbol"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Textures/UI/HUD/HUDMirror_%d.png"), 2))))
+		return E_FAIL;
+#pragma endregion
+#pragma region Prototype_Component_Hud_Dash_Texture
+    	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_GAMEPLAY), TEXT("Prototype_Component_VIBuffer_Rect_UI_Hud_Dash_Symbol"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Textures/UI/HUD/HUD_Dash_%d.png"), 2))))
+		return E_FAIL;
+#pragma endregion
 	lstrcpy(m_szLoadingText, TEXT("모델을 로딩중입니다."));
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_GAMEPLAY), TEXT("Prototype_Component_VIBuffer_Terrain"),
 		CVIBuffer_Terrain::Create(m_pGraphic_Device, 200, 200))))
@@ -140,13 +178,29 @@ HRESULT CLoader::Loading_For_GamePlay_Level()
 		CCamera_Follow::Create(m_pGraphic_Device))))
 		return E_FAIL;
 
-	//플레이어 스테이터스 UI
+	//HUD UI
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_GAMEPLAY), TEXT("Prototype_GameObject_UI_Hud_States"),
 		CHud_States_Frame::Create(m_pGraphic_Device, LEVEL::LEVEL_GAMEPLAY))))
 		return E_FAIL;
 
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_GAMEPLAY), TEXT("Prototype_GameObject_UI_Hud_Exp"),
 		CHud_Exp_Frame::Create(m_pGraphic_Device, LEVEL::LEVEL_GAMEPLAY))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_GAMEPLAY), TEXT("Prototype_GameObject_UI_Hud_Wallet"),
+		CHud_Wallet::Create(m_pGraphic_Device, LEVEL::LEVEL_GAMEPLAY))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_GAMEPLAY), TEXT("Prototype_GameObject_UI_Hud_Button"),
+		CHud_Button::Create(m_pGraphic_Device, LEVEL::LEVEL_GAMEPLAY))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_GAMEPLAY), TEXT("Prototype_GameObject_UI_Inventory"),
+		CInventory::Create(m_pGraphic_Device, LEVEL::LEVEL_GAMEPLAY))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_GAMEPLAY), TEXT("Prototype_GameObject_UI_Hud_Dash"),
+		CHud_Dash::Create(m_pGraphic_Device, LEVEL::LEVEL_GAMEPLAY))))
 		return E_FAIL;
 
 	lstrcpy(m_szLoadingText, TEXT("로딩이 완료되었습니다."));

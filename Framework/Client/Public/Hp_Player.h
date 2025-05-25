@@ -28,7 +28,7 @@ private:
 
 public:
 	static CHp_Player*		Create(LPDIRECT3DDEVICE9 pGraphic_Device);
-	virtual CUIObject*		Clone(void* pArg) override;
+	virtual CGameObject*	Clone(void* pArg) override;
 	virtual void			Free() override;
 };
 END
