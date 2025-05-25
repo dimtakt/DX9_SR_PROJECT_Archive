@@ -147,6 +147,7 @@
     <ClInclude Include="..\Public\Camera_Follow.h" />
     <ClInclude Include="..\public\Camera_Free.h" />
     <ClInclude Include="..\Public\Camera_Mouse.h" />
+    <ClInclude Include="..\Public\ClientObject.h" />
     <ClInclude Include="..\Public\Client_Defines.h" />
     <ClInclude Include="..\Public\Client_Struct.h" />
     <ClInclude Include="..\public\Dash_Gauge.h" />
@@ -181,6 +182,7 @@
     <ClInclude Include="..\Public\MainApp.h" />
     <ClInclude Include="..\public\Mirror_Button.h" />
     <ClInclude Include="..\public\Money_Player.h" />
+    <ClInclude Include="..\Public\Mountain.h" />
     <ClInclude Include="..\Public\Mp_Player.h" />
     <ClInclude Include="..\Public\Player.h" />
     <ClInclude Include="..\public\Stats_Button.h" />
@@ -197,6 +199,7 @@
     <ClCompile Include="..\Private\Camera_Follow.cpp" />
     <ClCompile Include="..\private\Camera_Free.cpp" />
     <ClCompile Include="..\Private\Camera_Mouse.cpp" />
+    <ClCompile Include="..\Private\ClientObject.cpp" />
     <ClCompile Include="..\private\Dash_Gauge.cpp" />
     <ClCompile Include="..\private\Dash_Gauge_Fream.cpp" />
     <ClCompile Include="..\private\Dice_Player.cpp" />
@@ -220,6 +223,7 @@
     <ClCompile Include="..\Private\MainApp.cpp" />
     <ClCompile Include="..\private\Mirror_Button.cpp" />
     <ClCompile Include="..\private\Money_Player.cpp" />
+    <ClCompile Include="..\Private\Mountain.cpp" />
     <ClCompile Include="..\Private\Mp_Player.cpp" />
     <ClCompile Include="..\Private\Player.cpp" />
     <ClCompile Include="..\private\Stats_Button.cpp" />

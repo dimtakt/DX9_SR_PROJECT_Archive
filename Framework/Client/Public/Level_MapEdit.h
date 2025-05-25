@@ -36,10 +36,12 @@ public:
 	HRESULT Ready_Layer_Camera(const _wstring& strLayerTag);
 	HRESULT Ready_Texture_Info();
 
+	HRESULT Load_ObjectMeta_Fromt_Json(const string& strMetePath);
+
 public:
 	HRESULT Delete_Tile_By_Position(D3DXVECTOR3& vTargetPos);
 private:
-	CImgui_Manager* m_pImgui_Manage;
+	CImgui_Manager* m_pImgui_Manage = { nullptr };
 private:
 	void Imgui_Render();
 	void ImGui_MenuBar_Render();
@@ -56,8 +58,8 @@ private:
 	_float3 m_Translates = { 0.f,0.f,0.f };
 
 	map<string, OBJECT_TEXTURE_INFO>	m_ObjectTextureInfo;
-	CGameObject*					m_pPreview = nullptr;
-	bool							m_bPreviewReady;
+	CGameObject*						m_pPreview = nullptr;
+	bool								m_bPreviewReady = false;
 
 public:
 	static CLevel_MapEdit* Create(LPDIRECT3DDEVICE9 pGraphic_Device);
