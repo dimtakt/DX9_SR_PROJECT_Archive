@@ -49,7 +49,7 @@ void CAnimator::Update_State()
 	_uint iImageCurIndex = m_iStackedFrames / m_pCurState->iFramePerImage;
 	iImageCurIndex %= iImageMaxIndex;
 
-	std::wcout << "[CAnimator::Update_State] Current State : \"" << m_strCurStateTag << "\" (" << iImageCurIndex + 1 << "/" << iImageMaxIndex << ")" << std::endl;
+	//std::wcout << "[CAnimator::Update_State] Current State : \"" << m_strCurStateTag << "\" (" << iImageCurIndex + 1 << "/" << iImageMaxIndex << ")" << std::endl;
 
 	pCurTextureCom->Bind_Texture(iImageCurIndex);
 	m_iStackedFrames++;
