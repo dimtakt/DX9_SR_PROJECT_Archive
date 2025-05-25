@@ -86,16 +86,16 @@ void CPlayer::Update(_float fTimeDelta)
     
     
         // 謝辦奩瞪
-        if      (g_iWinSizeX / 2 > pt.x && !m_isFlippedX)   // 謝難
-        {
-            m_pVIBufferCom->ChangeUV_FlipX(true);
-            m_isFlippedX = true;
-        }
-        else if (g_iWinSizeX / 2 < pt.x && m_isFlippedX)    // 辦難
-        {
-            m_pVIBufferCom->ChangeUV_FlipX(false);
-            m_isFlippedX = false;
-        }
+        //if      (g_iWinSizeX / 2 > pt.x && !m_isFlippedX)   // 謝難
+        //{
+        //    m_pVIBufferCom->ChangeUV_FlipX(true);
+        //    m_isFlippedX = true;
+        //}
+        //else if (g_iWinSizeX / 2 < pt.x && m_isFlippedX)    // 辦難
+        //{
+        //    m_pVIBufferCom->ChangeUV_FlipX(false);
+        //    m_isFlippedX = false;
+        //}
 
 
     }
