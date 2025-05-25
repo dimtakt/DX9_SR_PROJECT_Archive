@@ -5,6 +5,7 @@
 #include "BackGround.h"
 #include "Terrain.h"
 #include "Camera_Follow.h"
+#include "Camera_Mouse.h"
 #include "Player.h"
 #include "Mp_Player.h"
 #include "Hp_Player.h"
@@ -14,6 +15,8 @@
 #include "Hud_Button.h"
 #include "Inventory.h"
 #include "Hud_Dash.h"
+#include "Tree.h"
+
 CLoader::CLoader(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: m_pGraphic_Device{ pGraphic_Device }
 	, m_pGameInstance{ CGameInstance::GetInstance() }
@@ -58,6 +61,9 @@ HRESULT CLoader::Loading()
 		break;
 	case LEVEL::LEVEL_GAMEPLAY:
 		hr = Loading_For_GamePlay_Level();
+		break;
+	case LEVEL::LEVEL_MAPEDIT:
+		hr = Loading_For_MapEdit_Level();
 		break;
 	}
 
@@ -211,6 +217,36 @@ HRESULT CLoader::Loading_For_GamePlay_Level()
 	m_isFinished = true;
 
 	return S_OK;
+}
+
+HRESULT CLoader::Loading_For_MapEdit_Level()
+{
+	lstrcpy(m_szLoadingText, TEXT("텍스쳐를 로딩중입니다."));
+
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_SHARED), TEXT("Prototype_Component_Texture_Tree"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("C:/git/SR_PROJECT/Framework/Client/Bin/Resources/Textures/BleakSword/Object/Tree/ForestTrees_%d.png"), 15))))
+		return E_FAIL;
+
+	lstrcpy(m_szLoadingText, TEXT("모델를 로딩중입니다."));
+
+	lstrcpy(m_szLoadingText, TEXT("쉐이더를 로딩중입니다."));
+
+	lstrcpy(m_szLoadingText, TEXT("게임오브젝트를 로딩중입니다."));
+
+	// Camera
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_MAPEDIT), TEXT("Prototype_GameObject_Camera_Mouse"),
+		CCamera_Mouse::Create(m_pGraphic_Device))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_MAPEDIT), TEXT("Prototype_GameObject_Tree"),
+		CTree::Create(m_pGraphic_Device))))
+		return E_FAIL;
+
+	lstrcpy(m_szLoadingText, TEXT("로딩이 완료되었습니다."));
+	m_isFinished = true;
+	return S_OK;
+
+	return E_NOTIMPL;
 }
 
 CLoader* CLoader::Create(LPDIRECT3DDEVICE9 pGraphic_Device, LEVEL eNextLevelID)

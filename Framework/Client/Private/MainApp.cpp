@@ -32,6 +32,7 @@ HRESULT CMainApp::Initialize()
 	if (FAILED(Start_Level(LEVEL::LEVEL_LOGO)))
 		return E_FAIL;
 
+	Ready_Key_Setting();
 
 	return S_OK;
 }
@@ -78,9 +79,57 @@ HRESULT CMainApp::Ready_Prototype_ForStatic()
 		return E_FAIL;
 
 	/* Prototype_Component_Texture_Player */
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Player"),
-		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Textures/Player/Player_Basic_Roll00.png"), 1))))
+	// --- CTexture
+	// Roll
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Player_Roll"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Player/Player_Basic_Roll0%d.png"), 7))))
 		return E_FAIL;
+	// Air
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Player_Air"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Player/Player_Basic_Air0%d.png"), 3))))
+		return E_FAIL;
+	// Down
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Player_Down"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Player/Player_Basic_Down0%d.png"), 1))))
+		return E_FAIL;
+	// Idle (Lower, Upper)
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Player_Idle_Lower"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Player/Player_Basic_Idle_Lower0%d.png"), 6))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Player_Idle_Upper"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Player/Player_Basic_Idle_Upper0%d.png"), 6))))
+		return E_FAIL;
+	// Move (Lower, Upper)
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Player_Move_Lower"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Player/Player_Basic_Move_Lower0%d.png"), 8))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Player_Move_Upper"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Player/Player_Basic_Move_Upper0%d.png"), 8))))
+		return E_FAIL;
+	// Attack (Lower, Upper)
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Player_Attack_Lower"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Player/Player_Basic_Attack_Lower0%d.png"), 3))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Player_Attack_Upper"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Player/Player_Basic_Attack_Upper0%d.png"), 3))))
+		return E_FAIL;
+	// GreatSwordHeavyAttack (Lower, Upper)
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Player_GreatSwordHeavyAttack_Lower"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Player/Player_Basic_GreatSwordHeavyAttack_Lower0%d.png"), 10))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Player_GreatSwordHeavyAttack_Upper"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Player/Player_Basic_GreatSwordHeavyAttack_Upper0%d.png"), 10))))
+		return E_FAIL;
+	// WhirlWind_Ready
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Player_WhirlWind_Ready"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Player/Player_Basic_WhirlWind_Ready0%d.png"), 4))))
+		return E_FAIL;
+	// WhirlWind_Cycle
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Player_WhirlWind_Cycle"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Player/Player_Basic_WhirlWind_Cycle0%d.png"), 8))))
+		return E_FAIL;
+
+	//-------------
 
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_Player"), CPlayer::Create(m_pGraphic_Device))))
 		return E_FAIL;
@@ -94,6 +143,29 @@ HRESULT CMainApp::Ready_Prototype_ForStatic()
 		return E_FAIL;
 
 	return S_OK;
+}
+
+void CMainApp::Ready_Key_Setting()
+{
+	m_pGameInstance->AddTrackingKey(VK_UP);
+	m_pGameInstance->AddTrackingKey(VK_DOWN);
+	m_pGameInstance->AddTrackingKey(VK_LEFT);
+	m_pGameInstance->AddTrackingKey(VK_RIGHT);
+	m_pGameInstance->AddTrackingKey(VK_SPACE);
+	m_pGameInstance->AddTrackingKey(VK_LBUTTON);
+	m_pGameInstance->AddTrackingKey(VK_RBUTTON);
+	m_pGameInstance->AddTrackingKey(VK_TAB);
+	m_pGameInstance->AddTrackingKey(VK_RETURN);
+	m_pGameInstance->AddTrackingKey(VK_ESCAPE);
+	m_pGameInstance->AddTrackingKey('W');
+	m_pGameInstance->AddTrackingKey('A');
+	m_pGameInstance->AddTrackingKey('S');
+	m_pGameInstance->AddTrackingKey('D');
+	m_pGameInstance->AddTrackingKey('V');
+	m_pGameInstance->AddTrackingKey('C');
+	m_pGameInstance->AddTrackingKey('P');
+	m_pGameInstance->AddTrackingKey('Q');
+	m_pGameInstance->AddTrackingKey('E');
 }
 
 HRESULT CMainApp::Start_Level(LEVEL eStartLevelID)

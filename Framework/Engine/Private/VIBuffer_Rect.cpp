@@ -136,6 +136,32 @@ HRESULT CVIBuffer_Rect::Initialize(void* pArg)
     return S_OK;
 }
 
+
+void CVIBuffer_Rect::ChangeUV_FlipX(_bool isFlipped)
+{
+	VTXPOSTEX* pVertices = nullptr;
+	if (FAILED(m_pVB->Lock(0, 0, reinterpret_cast<void**>(&pVertices), 0)))
+		return;
+
+	if (isFlipped == false)
+	{
+		pVertices[0].vTexcoord = _float2(0.f, 0.f);
+		pVertices[1].vTexcoord = _float2(1.f, 0.f);
+		pVertices[2].vTexcoord = _float2(1.f, 1.f);
+		pVertices[3].vTexcoord = _float2(0.f, 1.f);
+	}
+	else
+	{
+		pVertices[0].vTexcoord = _float2(1.f, 0.f);
+		pVertices[1].vTexcoord = _float2(0.f, 0.f);
+		pVertices[2].vTexcoord = _float2(0.f, 1.f);
+		pVertices[3].vTexcoord = _float2(1.f, 1.f);
+	}
+
+	m_pVB->Unlock();
+}
+
+
 CComponent* CVIBuffer_Rect::Create(LPDIRECT3DDEVICE9 pGraphic_Device)
 {
 	CVIBuffer_Rect* pInstance = new CVIBuffer_Rect(pGraphic_Device);
@@ -174,9 +200,8 @@ CComponent* CVIBuffer_Rect::Clone(void* pArg)
 
 void CVIBuffer_Rect::Free()
 {
- 	__super::Free();
-	if (m_isCloned == FALSE)
-	{
+	__super::Free();
+	if (m_isCloned == FALSE) {
 		Safe_Delete(m_pIndices);
 		Safe_Delete_Array(m_pVertexPositions);
 	}

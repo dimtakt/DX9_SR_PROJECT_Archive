@@ -27,6 +27,7 @@ private:
 private:
 	HRESULT Ready_Default_Setting();
 	HRESULT Ready_Prototype_ForStatic();
+	void Ready_Key_Setting();
 	HRESULT Start_Level(LEVEL eStartLevelID);
 
 public:

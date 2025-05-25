@@ -20,7 +20,7 @@ CVIBuffer::CVIBuffer(const CVIBuffer& Prototype)
 	, m_iNumIndices{ Prototype.m_iNumIndices }
 	, m_eIndexFormat{ Prototype.m_eIndexFormat }
 	, m_pVertexPositions { Prototype.m_pVertexPositions }
-	, m_pIndices { Prototype.m_pIndices }
+	, m_pIndices{ Prototype.m_pIndices }
 {
 	Safe_AddRef(m_pIB);
 	Safe_AddRef(m_pVB);

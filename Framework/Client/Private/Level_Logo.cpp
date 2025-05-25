@@ -19,11 +19,17 @@ HRESULT CLevel_Logo::Initialize()
 
 void CLevel_Logo::Update(_float fTimeDelta)
 {
-	if (GetKeyState(VK_RETURN) & 0x8000)
+	if (m_pGameInstance->IsKeyDown(VK_RETURN))
 	{
 		if(FAILED(m_pGameInstance->Open_Level(ENUM_CLASS(LEVEL::LEVEL_LOADING), CLevel_Loading::Create(m_pGraphic_Device, LEVEL::LEVEL_GAMEPLAY))))
 			return;
 	}	
+	// MAP Editor
+	if (GetKeyState('L') & 0x8000)
+	{
+		if (FAILED(m_pGameInstance->Open_Level(static_cast<_uint>(LEVEL::LEVEL_LOADING), CLevel_Loading::Create(m_pGraphic_Device, LEVEL::LEVEL_MAPEDIT))))
+			return;
+	}
 
 	return;
 }

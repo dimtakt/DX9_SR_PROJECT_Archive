@@ -53,9 +53,17 @@ HRESULT CTexture::Initialize(void* pArg)
 HRESULT CTexture::Bind_Texture(_uint iTextureIndex)
 {
 	if (iTextureIndex >= m_iNumTextures)
-		return E_FAIL;
+		 return E_FAIL;
 
 	return m_pGraphic_Device->SetTexture(0, m_Textures[iTextureIndex]);
+}
+
+LPDIRECT3DTEXTURE9 CTexture::Get_Textures(_uint iIndex)
+{
+	if (iIndex >= m_Textures.size())
+		return nullptr;
+
+	return static_cast<LPDIRECT3DTEXTURE9>(m_Textures[iIndex]);
 }
 
 CTexture* CTexture::Create(LPDIRECT3DDEVICE9 pGraphic_Device, TEXTURE eType, const _tchar* pTextureFilePath, _uint iNumTextures)
