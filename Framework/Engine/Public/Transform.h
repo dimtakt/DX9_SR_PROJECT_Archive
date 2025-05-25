@@ -20,7 +20,7 @@ private:
 
 public:
 	_float3 Get_State(STATE eState) const {
-		return *reinterpret_cast<const _float3*>(&m_WorldMatrix.m[ENUM_CLASS(eState)][0]);
+ 		return *reinterpret_cast<const _float3*>(&m_WorldMatrix.m[ENUM_CLASS(eState)][0]);
 	}
 
 	_float3 Get_Scaled() const {

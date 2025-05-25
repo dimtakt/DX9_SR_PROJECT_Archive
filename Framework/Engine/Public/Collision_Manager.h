@@ -3,11 +3,11 @@
 #include "Base.h"
 BEGIN(Engine)
 
-class CCollisionManager final : public CBase
+class CCollision_Manager final : public CBase
 {
 private:
-	CCollisionManager() = default;
-	virtual ~CCollisionManager() = default;
+	CCollision_Manager() = default;
+	virtual ~CCollision_Manager() = default;
 
 public:
 	HRESULT Add_Collider(class CCollider* pCollider);
@@ -21,7 +21,7 @@ private:
 	vector<CCollider*> m_Colliders[ENUM_CLASS(COLLIDER_OBJ_TYPE::COL_END)];
 
 public:
-	static CCollisionManager* Create();
+	static CCollision_Manager* Create();
 	virtual void Free() override;
 };
 

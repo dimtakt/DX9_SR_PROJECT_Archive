@@ -22,12 +22,6 @@
     <Filter Include="01.Utility\00.GameInstance">
       <UniqueIdentifier>{cc985cdc-3dcd-49b3-88b0-167ce64bd35e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01.Utility\01.Level">
-      <UniqueIdentifier>{97815304-148a-40e2-ac6d-904232844081}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="01.Utility\01.Level\Manager">
-      <UniqueIdentifier>{cee517c0-9954-4a67-b86a-4ad48d44c093}</UniqueIdentifier>
-    </Filter>
     <Filter Include="01.Utility\02.ProtoType">
       <UniqueIdentifier>{3ed38813-f3e5-4ce5-a24f-2b08e3d4e63e}</UniqueIdentifier>
     </Filter>
@@ -76,18 +70,6 @@
     <Filter Include="00.System\01.Timer\Manager">
       <UniqueIdentifier>{9f519adf-b883-498a-b7e9-a6c830713eb3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="00.System\02.Key">
-      <UniqueIdentifier>{58df4144-55b8-4b8c-ab03-c7518be29efa}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="00.System\02.Key\Manager">
-      <UniqueIdentifier>{3643265f-1d1c-40b0-a857-d70ddc84c8eb}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="00.System\03.Network">
-      <UniqueIdentifier>{58475113-22c7-4e01-b0db-2729a045f8ac}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="00.System\03.Network\Manager">
-      <UniqueIdentifier>{76865f20-b6db-4748-9f45-51ad639b57a4}</UniqueIdentifier>
-    </Filter>
     <Filter Include="01.Utility\05.Component\VIBuffer\Cube">
       <UniqueIdentifier>{e5c94c5b-5013-4fa6-9902-04c726ded688}</UniqueIdentifier>
     </Filter>
@@ -120,6 +102,48 @@
     </Filter>
     <Filter Include="01.Utility\05.Component\Animator">
       <UniqueIdentifier>{860e3e5c-8c0a-4c3c-a611-bac9b6f2db6c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\03.GameObject\Room">
+      <UniqueIdentifier>{1ea77080-eead-4c49-a109-9c0cdf2debe3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\03.GameObject\Room\Manager">
+      <UniqueIdentifier>{41604ee7-c0cd-4e02-8734-8658020c1b54}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.System\05. Font">
+      <UniqueIdentifier>{3cbdcaa9-0bc8-401b-a256-a81d381958b4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\05.Component\Shader">
+      <UniqueIdentifier>{198624d9-a9f4-4424-a55d-a8d47d0c98bb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.System\05. Font\Manager">
+      <UniqueIdentifier>{7b45e3f9-0c1e-4cea-bbd0-1ad367424a80}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.System\03. Network">
+      <UniqueIdentifier>{58475113-22c7-4e01-b0db-2729a045f8ac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.System\03. Network\Manager">
+      <UniqueIdentifier>{76865f20-b6db-4748-9f45-51ad639b57a4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.System\02. Key">
+      <UniqueIdentifier>{58df4144-55b8-4b8c-ab03-c7518be29efa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.System\02. Key\Manager">
+      <UniqueIdentifier>{3643265f-1d1c-40b0-a857-d70ddc84c8eb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\01.Level">
+      <UniqueIdentifier>{97815304-148a-40e2-ac6d-904232844081}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\01.Level\Manager">
+      <UniqueIdentifier>{cee517c0-9954-4a67-b86a-4ad48d44c093}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\06.Light">
+      <UniqueIdentifier>{8d460a8c-7b50-46b1-906c-7386f6a4c7a3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\06.Light\Manager">
+      <UniqueIdentifier>{b0d7dcfb-ae27-4530-9df4-8fa8aa63c17f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\03.GameObject\UIObject\Button">
+      <UniqueIdentifier>{ae7c03a1-8f55-4a26-9ce8-f0e744c787de}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -195,14 +219,11 @@
     <ClInclude Include="..\Public\UIObject.h">
       <Filter>01.Utility\03.GameObject\UIObject</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\Key_Manager.h">
-      <Filter>00.System\02.Key\Manager</Filter>
-    </ClInclude>
     <ClInclude Include="..\Public\Camera.h">
       <Filter>01.Utility\03.GameObject\Camera</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Network_Manager.h">
-      <Filter>00.System\03.Network\Manager</Filter>
+      <Filter>00.System\03. Network\Manager</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\GameInstance.h">
       <Filter>01.Utility\00.GameInstance</Filter>
@@ -225,11 +246,38 @@
     <ClInclude Include="..\public\Collider_OBB.h">
       <Filter>01.Utility\05.Component\Collision\Collider\OBB</Filter>
     </ClInclude>
-    <ClInclude Include="..\public\CollisionManager.h">
+    <ClInclude Include="..\public\Collision_Manager.h">
       <Filter>01.Utility\05.Component\Collision\Manager</Filter>
     </ClInclude>
     <ClInclude Include="..\public\Animator.h">
       <Filter>01.Utility\05.Component\Animator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Room.h">
+      <Filter>01.Utility\03.GameObject\Room</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Room_Manager.h">
+      <Filter>01.Utility\03.GameObject\Room\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Key_Manager.h">
+      <Filter>00.System\02. Key\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Font_Manager.h">
+      <Filter>00.System\05. Font\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Font.h">
+      <Filter>00.System\05. Font</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Light.h">
+      <Filter>01.Utility\06.Light</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Light_Manager.h">
+      <Filter>01.Utility\06.Light\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Shader.h">
+      <Filter>01.Utility\05.Component\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Button.h">
+      <Filter>01.Utility\03.GameObject\UIObject\Button</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -291,13 +339,13 @@
       <Filter>01.Utility\03.GameObject\UIObject</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Key_Manager.cpp">
-      <Filter>00.System\02.Key\Manager</Filter>
+      <Filter>00.System\02. Key\Manager</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Camera.cpp">
       <Filter>01.Utility\03.GameObject\Camera</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Network_Manager.cpp">
-      <Filter>00.System\03.Network\Manager</Filter>
+      <Filter>00.System\03. Network\Manager</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\VIBuffer_Cube.cpp">
       <Filter>01.Utility\05.Component\VIBuffer\Cube</Filter>
@@ -317,11 +365,35 @@
     <ClCompile Include="..\private\Collider_OBB.cpp">
       <Filter>01.Utility\05.Component\Collision\Collider\OBB</Filter>
     </ClCompile>
-    <ClCompile Include="..\private\CCollisionManager.cpp">
+    <ClCompile Include="..\private\Collision_Manager.cpp">
       <Filter>01.Utility\05.Component\Collision\Manager</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Animator.cpp">
       <Filter>01.Utility\05.Component\Animator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Room.cpp">
+      <Filter>01.Utility\03.GameObject\Room</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Room_Manager.cpp">
+      <Filter>01.Utility\03.GameObject\Room\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Font_Manager.cpp">
+      <Filter>00.System\05. Font\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Font.cpp">
+      <Filter>00.System\05. Font</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Light.cpp">
+      <Filter>01.Utility\06.Light</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Light_Manager.cpp">
+      <Filter>01.Utility\06.Light\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Shader.cpp">
+      <Filter>01.Utility\05.Component\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Button.cpp">
+      <Filter>01.Utility\03.GameObject\UIObject\Button</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

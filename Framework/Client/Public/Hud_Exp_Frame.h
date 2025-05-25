@@ -30,7 +30,7 @@ private:
 private:
 	HRESULT						Ready_Components();
 
-	HRESULT						Ready_Prototype(LEVEL eLevel);
+	HRESULT						Ready_ChildPrototype(LEVEL eLevel);
 	HRESULT						Ready_Children();
 
 	void						Render_Buffer1();
@@ -38,7 +38,7 @@ private:
 
 public:
 	static CHud_Exp_Frame*		Create(LPDIRECT3DDEVICE9 pGraphic_Device, LEVEL eLevel);
-	virtual CUIObject*			Clone(void* pArg) override;
+	virtual CGameObject*		Clone(void* pArg) override;
 	virtual void				Free() override;
 };
 END

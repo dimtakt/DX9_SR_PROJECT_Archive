@@ -20,10 +20,10 @@ HRESULT CTransform::Initialize_Prototype()
 
 HRESULT CTransform::Initialize(void* pArg)
 {
-	if (nullptr == pArg)
-		return S_OK;
-
 	TRANSFORM_DESC* pDesc = static_cast<TRANSFORM_DESC*>(pArg);
+
+	if (pDesc == nullptr)
+		return S_OK;
 
 	m_fSpeedPerSec = pDesc->fSpeedPerSec;
 	m_fRotationPerSec = pDesc->fRotationPerSec;

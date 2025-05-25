@@ -1,12 +1,12 @@
 // CollisionManager.cpp
-#include "CollisionManager.h"
+#include "Collision_Manager.h"
 #include "Collider.h"
 #include "Collider_OBB.h"
 #include "GameObject.h"
 
 USING(Engine)
 
-HRESULT CCollisionManager::Add_Collider(CCollider* pCollider)
+HRESULT CCollision_Manager::Add_Collider(CCollider* pCollider)
 {
 	if (pCollider == nullptr)
 		return E_FAIL;
@@ -16,18 +16,18 @@ HRESULT CCollisionManager::Add_Collider(CCollider* pCollider)
 	return S_OK;
 }
 
-void CCollisionManager::Clear_Colliders()
+void CCollision_Manager::Clear_Colliders()
 {
 	for (size_t i = 0; i < ENUM_CLASS(COLLIDER_OBJ_TYPE::COL_END); ++i)
 		m_Colliders[i].clear();
 }
 
-void CCollisionManager::Check_AllCollisions()
+void CCollision_Manager::Check_AllCollisions()
 {
 	
 }
 
-bool CCollisionManager::Check_OBBtoOBB(CCollider_OBB* pColliderA, CCollider_OBB* pColliderB)
+bool CCollision_Manager::Check_OBBtoOBB(CCollider_OBB* pColliderA, CCollider_OBB* pColliderB)
 {
 	const _float fEpsilon = 1e-5f;
 
@@ -81,12 +81,13 @@ bool CCollisionManager::Check_OBBtoOBB(CCollider_OBB* pColliderA, CCollider_OBB*
 	return true;
 }
 
-CCollisionManager* CCollisionManager::Create()
+CCollision_Manager* CCollision_Manager::Create()
 {
-	return new CCollisionManager();
+	return new CCollision_Manager();
 }
 
-void CCollisionManager::Free()
+void CCollision_Manager::Free()
 {
+	__super::Free();
 	Clear_Colliders();
 }

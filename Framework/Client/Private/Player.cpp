@@ -100,9 +100,6 @@ void CPlayer::Update(_float fTimeDelta)
 
     }
 
-
-
-
     if (m_pGameInstance->IsKeyHold('W'))
         m_pTransformCom->Go_Straight(fTimeDelta);
 
@@ -129,11 +126,6 @@ void CPlayer::Update(_float fTimeDelta)
     {
         // 우클릭시 행동
     }
-
-    //if (GetKeyState('D') < 0)
-    //{
-    //    m_pTransformCom->Go_Right(fTimeDelta);
-    //}
 
     /*if (GetKeyState(VK_LBUTTON) < 0)
     {

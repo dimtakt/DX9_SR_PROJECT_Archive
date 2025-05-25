@@ -86,7 +86,7 @@ _bool CUIObject::isPick(HWND hWnd)
 	GetCursorPos(&ptMouse);
 	ScreenToClient(hWnd, &ptMouse);
 
-	RECT			rcUI = { m_fX - m_fSizeX * 0.5f, m_fY - m_fSizeY * 0.5f, m_fX + m_fSizeX * 0.5f, m_fY + m_fSizeY * 0.5f };
+	RECT			rcUI = { m_vWorldPos.x - m_fSizeX * 0.5f, m_vWorldPos.y - m_fSizeY * 0.5f, m_vWorldPos.x + m_fSizeX * 0.5f, m_vWorldPos.y + m_fSizeY * 0.5f };
 
 	return PtInRect(&rcUI, ptMouse);
 }
@@ -95,9 +95,9 @@ void CUIObject::Update_Position()
 {
     if (m_pParent)
     {
-        m_vWorldPos.x = m_pParent->m_fX + m_fX; 
-        m_vWorldPos.y = m_pParent->m_fY + m_fY;
-        m_vWorldPos.z = m_pParent->m_fZ;
+        m_vWorldPos.x = m_pParent->m_vWorldPos.x + m_fX;
+        m_vWorldPos.y = m_pParent->m_vWorldPos.y + m_fY;
+        m_vWorldPos.z = m_vWorldPos.z;
     }
     else
     {

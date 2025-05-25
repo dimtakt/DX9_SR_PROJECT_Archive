@@ -66,9 +66,10 @@ void CHud_States_Frame::Late_Update(_float fTimeDelta)
 
 HRESULT CHud_States_Frame::Render()
 {
+	m_pGraphic_Device->SetTexture(0, NULL);
+
 	m_pTransformCom->Bind_Matrix();
 	m_pVIBufferCom->Bind_Buffers();
-	m_pGraphic_Device->SetTexture(0, NULL);
 	__super::Begin();
 	m_pVIBufferCom->Render();
 	__super::End();
@@ -78,7 +79,7 @@ HRESULT CHud_States_Frame::Render()
 
 HRESULT CHud_States_Frame::Ready_Components()
 {
-	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_GAMEPLAY), TEXT("Prototype_Component_VIBuffer_Rect_UI_Hud_States_Fream"),
+	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_GAMEPLAY), TEXT("Prototype_Component_VIBuffer_Rect_UI_BalckRect_Texture"),
 		TEXT("Com_VIBuffer"), reinterpret_cast<CComponent**>(&m_pVIBufferCom))))
 		return E_FAIL;
 
@@ -95,7 +96,6 @@ HRESULT CHud_States_Frame::Ready_ChildPrototype(LEVEL eLevel)
 		CHp_Player::Create(m_pGraphic_Device))))
 		return E_FAIL;
 
-	m_eLevel = eLevel;
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(eLevel), TEXT("Prototype_GameObject_UI_Mp"),
 		CMp_Player::Create(m_pGraphic_Device))))
 		return E_FAIL;
@@ -134,7 +134,7 @@ CHud_States_Frame* CHud_States_Frame::Create(LPDIRECT3DDEVICE9 pGraphic_Device, 
 	return pInstance;
 }
 
-CUIObject* CHud_States_Frame::Clone(void* pArg)
+CGameObject* CHud_States_Frame::Clone(void* pArg)
 {
 	CHud_States_Frame* pInstance = new CHud_States_Frame(*this);
 
