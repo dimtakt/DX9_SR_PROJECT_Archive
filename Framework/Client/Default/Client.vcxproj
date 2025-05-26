@@ -144,7 +144,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\Public\BackGround.h" />
-    <ClInclude Include="..\Public\Buff_Fream.h" />
+    <ClInclude Include="..\Public\Buff_Frame.h" />
     <ClInclude Include="..\Public\Buff_Icon.h" />
     <ClInclude Include="..\Public\Buff_Type_Base.h" />
     <ClInclude Include="..\Public\Camera_Follow.h" />
@@ -153,8 +153,10 @@
     <ClInclude Include="..\Public\Client_Defines.h" />
     <ClInclude Include="..\Public\Client_Struct.h" />
     <ClInclude Include="..\public\Dash_Gauge.h" />
-    <ClInclude Include="..\public\Dash_Gauge_Fream.h" />
+    <ClInclude Include="..\public\Dash_Gauge_Frame.h" />
     <ClInclude Include="..\public\Dice_Player.h" />
+    <ClInclude Include="..\public\Field_Hp.h" />
+    <ClInclude Include="..\public\Field_Hp_Frame.h" />
     <ClInclude Include="..\Public\Hp_Player.h" />
     <ClInclude Include="..\Public\Hud_Buff.h" />
     <ClInclude Include="..\public\Hud_Button.h" />
@@ -201,21 +203,24 @@
     <ClInclude Include="..\public\UI_KeyGuide.h" />
     <ClInclude Include="..\Public\Tree.h" />
     <ClInclude Include="Client.h" />
+    <ClInclude Include="Client_Defines_Item.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\BackGround.cpp" />
-    <ClCompile Include="..\Private\Buff_Fream.cpp" />
+    <ClCompile Include="..\Private\Buff_Frame.cpp" />
     <ClCompile Include="..\Private\Buff_Icon.cpp" />
     <ClCompile Include="..\Private\Buff_Type_Base.cpp" />
     <ClCompile Include="..\Private\Camera_Follow.cpp" />
     <ClCompile Include="..\private\Camera_Free.cpp" />
     <ClCompile Include="..\Private\Camera_Mouse.cpp" />
     <ClCompile Include="..\private\Dash_Gauge.cpp" />
-    <ClCompile Include="..\private\Dash_Gauge_Fream.cpp" />
+    <ClCompile Include="..\private\Dash_Gauge_Frame.cpp" />
     <ClCompile Include="..\private\Dice_Player.cpp" />
+    <ClCompile Include="..\private\Field_Hp.cpp" />
+    <ClCompile Include="..\Private\Field_Hp_Frame.cpp" />
     <ClCompile Include="..\Private\Hud_Buff.cpp" />
     <ClCompile Include="..\private\Hud_Button.cpp" />
     <ClCompile Include="..\private\Hud_Dash.cpp" />

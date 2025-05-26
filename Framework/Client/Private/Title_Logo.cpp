@@ -18,17 +18,15 @@ HRESULT CTitle_Logo::Initialize_Prototype()
 
 HRESULT CTitle_Logo::Initialize(void* pArg)
 {
-    UIOBJECT_DESC Desc{};
+    m_fSizeX = 311.f*1.5f;
+    m_fSizeY = 100.f*1.5f;
+    m_fX = 0.f;
+    m_fY = 100.f;
+    m_fZ = 0.1f;
+    m_iWinSizeX = g_iWinSizeX;
+    m_iWinSizeY = g_iWinSizeY;
 
-    Desc.fSizeX = 311.f*1.5f;
-    Desc.fSizeY = 100.f*1.5f;
-    Desc.fX = 0.f;
-    Desc.fY = 100.f;
-    Desc.fZ = 0.1f;
-    Desc.iWinSizeX = g_iWinSizeX;
-    Desc.iWinSizeY = g_iWinSizeY;
-
-    if (FAILED(__super::Initialize(&Desc)))
+    if (FAILED(__super::Initialize()))
         return E_FAIL;
 
     if (FAILED(Ready_Components()))
@@ -58,8 +56,6 @@ void CTitle_Logo::Late_Update(_float fTimeDelta)
 HRESULT CTitle_Logo::Render()
 {
     SetUp_RenderState();
-
-    m_pTransformCom->Bind_Matrix();
 
     if (FAILED(m_pTextureCom_Title_Logo->Bind_Texture(0)))
         return E_FAIL;

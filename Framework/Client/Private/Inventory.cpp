@@ -21,17 +21,15 @@ HRESULT CInventory::Initialize_Prototype(LEVEL eLevel)
 
 HRESULT CInventory::Initialize(void* pArg)
 {
-	UIOBJECT_DESC Desc{};
+	m_fSizeX = 530.f * 2.f;
+	m_fSizeY = 500.f * 2.f;
+	m_fX = g_iWinSizeX * 0.5;
+	m_fY = g_iWinSizeY * 0.5;
+	m_fZ = 0.f;
+	m_iWinSizeX = g_iWinSizeX;
+	m_iWinSizeY = g_iWinSizeY;
 
-	Desc.fSizeX = 200.f;
-	Desc.fSizeY = 300.f;
-	Desc.fX = g_iWinSizeX * 0.5;
-	Desc.fY = g_iWinSizeY * 0.5;
-	Desc.fZ = 0.f;
-	Desc.iWinSizeX = g_iWinSizeX;
-	Desc.iWinSizeY = g_iWinSizeY;
-
-	if (FAILED(__super::Initialize(&Desc)))
+	if (FAILED(__super::Initialize()))
 		return E_FAIL;
 
 	if (FAILED(Ready_Components()))
@@ -53,6 +51,11 @@ void CInventory::Priority_Update(_float fTimeDelta)
 
 void CInventory::Update(_float fTimeDelta)
 {
+	if (m_pGameInstance->IsKeyDown('Z') && m_bIsOpen)
+		m_bIsOpen = false;
+	else if(m_pGameInstance->IsKeyDown('Z') && !m_bIsOpen)
+		m_bIsOpen = true;
+
 	__super::Update(fTimeDelta);
 }
 
@@ -67,12 +70,17 @@ void CInventory::Late_Update(_float fTimeDelta)
 
 HRESULT CInventory::Render()
 {
-	m_pTransformCom->Bind_Matrix();
+	SetUp_RenderState();
+
+	if (FAILED(m_pTextureCom->Bind_Texture(0)))
+		return E_FAIL;
 	m_pVIBufferCom->Bind_Buffers();
+
 	__super::Begin();
 	m_pVIBufferCom->Render();
 	__super::End();
 
+	Reset_RenderState();
 	return S_OK;
 }
 
@@ -87,12 +95,16 @@ void CInventory::UI_Switch()
 
 HRESULT CInventory::Ready_Components()
 {
-	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_GAMEPLAY), TEXT("Prototype_Component_Texture_Rect_UI_BalckRect"),
+	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_VIBuffer_Rect"),
 		TEXT("Com_VIBuffer"), reinterpret_cast<CComponent**>(&m_pVIBufferCom))))
 		return E_FAIL;
 
 	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Transform"),
 		TEXT("Com_Transform"), reinterpret_cast<CComponent**>(&m_pTransformCom))))
+		return E_FAIL;
+
+	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_GAMEPLAY), TEXT("Prototype_Component_Texture_Rect_Window_Inventory"),
+		TEXT("Com_Texture"), reinterpret_cast<CComponent**>(&m_pTextureCom))))
 		return E_FAIL;
 
 	return S_OK;
@@ -106,6 +118,28 @@ HRESULT CInventory::Ready_ChildPrototype(LEVEL eLevel)
 HRESULT CInventory::Ready_Children()
 {
 	return S_OK;
+}
+
+void CInventory::SetUp_RenderState()
+{
+	m_pGraphic_Device->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
+	m_pGraphic_Device->SetRenderState(D3DRS_ALPHAREF, 200);
+	m_pGraphic_Device->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER);
+
+	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_POINT);
+	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_POINT);
+	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MIPFILTER, D3DTEXF_NONE);
+}
+
+void CInventory::Reset_RenderState()
+{
+	m_pGraphic_Device->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
+
+	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_LINEAR);
+	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);
+	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MIPFILTER, D3DTEXF_LINEAR);
+
+	m_pGraphic_Device->SetTexture(0, NULL);
 }
 
 CInventory* CInventory::Create(LPDIRECT3DDEVICE9 pGraphic_Device, LEVEL eLevel)

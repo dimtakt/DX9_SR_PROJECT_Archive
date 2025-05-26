@@ -20,23 +20,19 @@ HRESULT CUIObject::Initialize(void* pArg)
 {
     D3DXMatrixIdentity(&m_ViewMatrix);
 
-    
     D3DVIEWPORT9    ViewportDesc{};
-    //현재 디바이스에 뷰포트를 가져옴
+
+    //현재 디바이스 윈도우 사이즈 가져오기
     m_pGraphic_Device->GetViewport(&ViewportDesc);
+    m_iWinSizeX = ViewportDesc.Width;
+    m_iWinSizeY = ViewportDesc.Height;
+
+    //현재 디바이스에 뷰포트를 가져오기
     
+    m_pGraphic_Device->GetViewport(&ViewportDesc);
+
     //직교 투영 행렬 생성 (저장할 행렬, 너비, 높이, 니어, 파)
     D3DXMatrixOrthoLH(&m_ProjMatrix, ViewportDesc.Width, ViewportDesc.Height, 0.f, 1.f);
-    
-    UIOBJECT_DESC* pDesc = static_cast<UIOBJECT_DESC*>(pArg);
-
-    m_fX = pDesc->fX;
-    m_fY = pDesc->fY;
-    m_fZ = pDesc->fZ;
-    m_fSizeX = pDesc->fSizeX;
-    m_fSizeY = pDesc->fSizeY;
-    m_iWinSizeX = pDesc->iWinSizeX;
-    m_iWinSizeY = pDesc->iWinSizeY;
 
     return S_OK;
 }
@@ -69,6 +65,7 @@ void CUIObject::Begin()
     m_pGraphic_Device->GetTransform(D3DTS_VIEW, &m_OldViewMatrix);
     m_pGraphic_Device->GetTransform(D3DTS_PROJECTION, &m_OldProjMatrix);
 
+    m_pTransformCom->Bind_Matrix();
     //UI 행렬 적용
     m_pGraphic_Device->SetTransform(D3DTS_VIEW, &m_ViewMatrix);
     m_pGraphic_Device->SetTransform(D3DTS_PROJECTION, &m_ProjMatrix);

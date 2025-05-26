@@ -16,15 +16,14 @@ HRESULT CDice_Player::Initialize_Prototype()
 
 HRESULT CDice_Player::Initialize(void* pArg)
 {
-	UIOBJECT_DESC Desc{};
-	Desc.fSizeX = 32;
-	Desc.fSizeY = 32;
-	Desc.fX = -32;
-	Desc.fY = 0;
-	Desc.iWinSizeX = g_iWinSizeX;
-	Desc.iWinSizeY = g_iWinSizeY;
+	m_fSizeX = 32;
+	m_fSizeY = 32;
+	m_fX = -32;
+	m_fY = 0;
+	m_iWinSizeX = g_iWinSizeX;
+	m_iWinSizeY = g_iWinSizeY;
 
-	if (FAILED(CUIObject::Initialize(&Desc)))
+	if (FAILED(CUIObject::Initialize()))
 		return E_FAIL;
 
 	if (FAILED(Ready_Components()))
@@ -53,7 +52,6 @@ HRESULT CDice_Player::Render()
 {
 	SetUp_RenderState();
 
-	m_pTransformCom->Bind_Matrix();
 	if (FAILED(m_pTextureCom->Bind_Texture(0)))
 		return E_FAIL;
 	m_pVIBufferCom->Bind_Buffers();

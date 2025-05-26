@@ -20,15 +20,14 @@ HRESULT CBuff_Icon::Initialize(void* pArg)
 
 	m_iBuff_Index = DescMy->iBuff_Index;
 
-	UIOBJECT_DESC Desc{};
-	Desc.fSizeX = 32;
-	Desc.fSizeY = 32;
-	Desc.fX = 0;
-	Desc.fY = 0;
-	Desc.iWinSizeX = g_iWinSizeX;
-	Desc.iWinSizeY = g_iWinSizeY;
+	m_fSizeX = 32;
+	m_fSizeY = 32;
+	m_fX = 0;
+	m_fY = 0;
+	m_iWinSizeX = g_iWinSizeX;
+	m_iWinSizeY = g_iWinSizeY;
 
-	if (FAILED(CUIObject::Initialize(&Desc)))
+	if (FAILED(CUIObject::Initialize()))
 		return E_FAIL;
 
 	if (FAILED(Ready_Components()))

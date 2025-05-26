@@ -148,6 +148,18 @@
     <Filter Include="01.Utility\05.Component\Animator\Controller">
       <UniqueIdentifier>{bc4e2e3e-1393-4676-a838-1fe0050d59bc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01.Utility\03.GameObject\ItemObject">
+      <UniqueIdentifier>{03deaa89-f91a-4378-ad9a-4be09b0bc23c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\03.GameObject\ItemObject\Potion">
+      <UniqueIdentifier>{9b3094f1-b08d-40db-a545-ae6609d6d22e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\03.GameObject\ItemObject\Stone">
+      <UniqueIdentifier>{19a87097-1e63-4622-b367-9633aabb8687}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\03.GameObject\ItemObject\Artefact">
+      <UniqueIdentifier>{e02917a5-e818-4f33-8f34-18b77f2f9603}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Public\Engine_Macro.h">
@@ -285,6 +297,9 @@
     <ClInclude Include="..\public\AnimatorController.h">
       <Filter>01.Utility\05.Component\Animator\Controller</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\ItemObject.h">
+      <Filter>01.Utility\03.GameObject\ItemObject</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\Base.cpp">
@@ -403,6 +418,9 @@
     </ClCompile>
     <ClCompile Include="..\private\AnimatorController.cpp">
       <Filter>01.Utility\05.Component\Animator\Controller</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\ItemObject.cpp">
+      <Filter>01.Utility\03.GameObject\ItemObject</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
