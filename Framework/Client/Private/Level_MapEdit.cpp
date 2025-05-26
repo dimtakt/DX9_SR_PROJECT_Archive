@@ -8,7 +8,9 @@
 #include "GameObject.h"
 #include "Client_Struct.h"
 
+#include "json.hpp"
 #include "Tree.h"
+#include "Mountain.h"
 
 
 
@@ -71,6 +73,8 @@ HRESULT CLevel_MapEdit::Ready_Layer_Camera(const _wstring& strLayerTag)
 
 HRESULT CLevel_MapEdit::Ready_Texture_Info()
 {
+	// 수동 제작 진행, 제작 및 기능 구현 다되고 시간되면 내부구조 개선 진행 예정
+	//나무 
 	m_pPreview = static_cast<CGameObject*>(m_pGameInstance->Clone_Prototype(
 		PROTOTYPE::GAMEOBJECT,
 		ENUM_CLASS(LEVEL::LEVEL_MAPEDIT),
@@ -80,9 +84,29 @@ HRESULT CLevel_MapEdit::Ready_Texture_Info()
 	treeInfo.strObjectType = "Tree";
 	treeInfo.iTextureCount = 16;
 	treeInfo.pTextureCom = static_cast<CTexture*>(m_pPreview->Find_Component(TEXT("Com_Texture")));
+	if (treeInfo.pTextureCom)
+		treeInfo.pTextureCom->AddRef();   //텍스처 주소 날아가면 안됨, 이미지 프리뷰를 위해 addref
 
 	m_ObjectTextureInfo["Tree"] = treeInfo;
-	// 테스트용 수동 제작, 추후 범용성 확장성 고려해서 수정할 예정
+	
+	Safe_Release(m_pPreview);
+
+	//산
+	m_pPreview = static_cast<CGameObject*>(m_pGameInstance->Clone_Prototype(
+		PROTOTYPE::GAMEOBJECT,
+		ENUM_CLASS(LEVEL::LEVEL_MAPEDIT),
+		TEXT("Prototype_GameObject_Mountain")));
+
+	OBJECT_TEXTURE_INFO MountainInfo;
+	MountainInfo.strObjectType = "Mountain";
+	MountainInfo.iTextureCount = 1;
+	MountainInfo.pTextureCom = static_cast<CTexture*>(m_pPreview->Find_Component(TEXT("Com_Texture")));
+	if (MountainInfo.pTextureCom)
+		MountainInfo.pTextureCom->AddRef();
+
+	m_ObjectTextureInfo["Mountain"] = MountainInfo;
+
+	Safe_Release(m_pPreview);
 
 	return S_OK;
 }
@@ -102,7 +126,7 @@ void CLevel_MapEdit::Imgui_Render()
 	ImGui::Begin("Test Window", nullptr, ImGuiWindowFlags_MenuBar);
 
 	static int iSelectedObjectType = 0;  //오브젝트 타입 구별
-	const char* objectList[] = { "Tree", "Rock" };
+	const char* objectList[] = { "Tree", "Mountain" ,"Rock"};
 
 	ImGui::Combo("Object Type", &iSelectedObjectType, objectList, IM_ARRAYSIZE(objectList));
 
@@ -145,12 +169,14 @@ void CLevel_MapEdit::Imgui_Render()
 				szPrototypeTag = TEXT("Prototype_GameObject_Tree");
 			else if (strSelectedType == "Rock")
 				szPrototypeTag = TEXT("Prototype_GameObject_Rock");
+			else if (strSelectedType == "Mountain")
+				szPrototypeTag = TEXT("Prototype_GameObject_Mountain");
 
 			if (szPrototypeTag != nullptr)
 			{
 				// 저장해서 오브젝트 생성
 				MAP_OBJECT_DESC tDesc{};
-				tDesc.iIndex = iSelectedIndex;
+				tDesc.iTextureIndex = iSelectedIndex;
 				tDesc.vPos = m_Translates;
 				tDesc.vRotate = m_Rotates;
 				tDesc.vScale = m_Scales;
@@ -159,7 +185,6 @@ void CLevel_MapEdit::Imgui_Render()
 					ENUM_CLASS(LEVEL::LEVEL_MAPEDIT), TEXT("Layer_MapEdit"), ENUM_CLASS(LEVEL::LEVEL_MAPEDIT),
 					szPrototypeTag, &tDesc);
 			}
-
 		}
 	}
 
@@ -223,6 +248,7 @@ void CLevel_MapEdit::ImGui_MenuBar_Render()
 			ImGui::Text("Saving to: %s", savePath.c_str());
 
 			//ofstream ofs(savePath); ofs << "data";
+
 		}
 		ImGuiFileDialog::Instance()->Close();
 	}
@@ -333,5 +359,12 @@ void CLevel_MapEdit::Free()
 
 	__super::Free();
 
-
+	for (auto& pair : m_ObjectTextureInfo)
+	{
+		if (pair.second.pTextureCom)
+		{
+			Safe_Release(pair.second.pTextureCom);
+		}
+	}
+	m_ObjectTextureInfo.clear();
 }

@@ -13,10 +13,11 @@
 #include "Hud_Exp_Frame.h"
 #include "Hud_Wallet.h"
 #include "Hud_Button.h"
+#include "Hud_Buff.h"
 #include "Inventory.h"
 #include "Hud_Dash.h"
-#include "Hud_Buff.h"
 #include "Tree.h"
+#include "Mountain.h"
 
 CLoader::CLoader(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: m_pGraphic_Device{ pGraphic_Device }
@@ -239,8 +240,14 @@ HRESULT CLoader::Loading_For_MapEdit_Level()
 {
 	lstrcpy(m_szLoadingText, TEXT("텍스쳐를 로딩중입니다."));
 
+	//나무 텍스처 추가, 15개
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_SHARED), TEXT("Prototype_Component_Texture_Tree"),
 		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("C:/git/SR_PROJECT/Framework/Client/Bin/Resources/Textures/BleakSword/Object/Tree/ForestTrees_%d.png"), 15))))
+		return E_FAIL;
+
+	//산 텍스처 추가, 1개
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_SHARED), TEXT("Prototype_Component_Texture_Mountain"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("C:/git/SR_PROJECT/Framework/Client/Bin/Resources/Textures/BleakSword/Object/Mountain/CS_MountainFar.png"), 1))))
 		return E_FAIL;
 
 	lstrcpy(m_szLoadingText, TEXT("모델를 로딩중입니다."));
@@ -254,8 +261,14 @@ HRESULT CLoader::Loading_For_MapEdit_Level()
 		CCamera_Mouse::Create(m_pGraphic_Device))))
 		return E_FAIL;
 
+	//Tree
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_MAPEDIT), TEXT("Prototype_GameObject_Tree"),
 		CTree::Create(m_pGraphic_Device))))
+		return E_FAIL;
+
+	//Mountain
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_MAPEDIT), TEXT("Prototype_GameObject_Mountain"),
+		CMountain::Create(m_pGraphic_Device))))
 		return E_FAIL;
 
 	lstrcpy(m_szLoadingText, TEXT("로딩이 완료되었습니다."));
