@@ -32,11 +32,7 @@ void CPlayer::Priority_Update(_float fTimeDelta)
 }
 
 void CPlayer::Update(_float fTimeDelta)
-{
-    //POINT pt;
-    //GetCursorPos(&pt);
-    //ScreenToClient(g_hWnd, &pt);
-    
+{    
     _float fPointY = 0.f;       // 교차 평면의 기준이 될 Y값
     _float3 vRayPoint = {};     // fPointY 값 기준 마우스 Ray와 교차하는 좌표
     m_pGameInstance->Get_IntersectAtY(fPointY, vRayPoint);
