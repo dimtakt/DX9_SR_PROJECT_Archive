@@ -18,6 +18,8 @@ public:
 	_bool Picking_InWorld(_float3& vPickedPos, const _float3& vPointA, const _float3& vPointB, const _float3& vPointC);
 	_bool Picking_InLocal(_float3& vPickedPos, const _float3& vPointA, const _float3& vPointB, const _float3& vPointC);
 
+	_bool Get_IntersectAtY(_float targetY, _float3& vIntersectPos);
+
 	void Transform_ToLocalSpace(const _float4x4& WorldMatrixInverse);
 
 private:

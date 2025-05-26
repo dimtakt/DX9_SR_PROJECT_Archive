@@ -14,7 +14,9 @@ namespace Engine
 #define			BEGIN(NAMESPACE)		namespace NAMESPACE {
 #define			END						}
 
-#define			USING(NAMESPACE)	using namespace NAMESPACE;
+#define			USING(NAMESPACE)		using namespace NAMESPACE;
+
+#define			LAMBDA_FUNC(implement)	[&](){ return implement; }
 
 #ifdef	ENGINE_EXPORTS
 #define ENGINE_DLL		_declspec(dllexport)

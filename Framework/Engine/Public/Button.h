@@ -18,7 +18,7 @@ public:
 	virtual HRESULT				Render();
 
 protected:
-	virtual _bool				Click_Check(HWND hWnd);
+	virtual _bool				Click_Check(HWND hWnd , _int iKey);
 	HRESULT						Bind_ButtonTex_Single(HWND hWnd, _uint iTextureIndex);
 	HRESULT						Bind_ButtonTex_Double(HWND hWnd, _uint iTextureIndex_Default, _uint iTextureIndex_NotDefault);
 

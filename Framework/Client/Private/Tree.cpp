@@ -47,7 +47,7 @@ HRESULT CTree::Initialize(void* pArg)
 
     m_pTransformCom->Scaling(pObject_Desc->vScale.x, pObject_Desc->vScale.y, pObject_Desc->vScale.z);
 
-    m_iTextureIndex = pObject_Desc->iIndex;
+    m_iTextureIndex = pObject_Desc->iTextureIndex;
     m_pTextureCom->Bind_Texture(m_iTextureIndex);
 
     return S_OK;
