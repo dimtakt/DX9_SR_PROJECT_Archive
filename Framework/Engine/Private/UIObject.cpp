@@ -3,6 +3,7 @@
 CUIObject::CUIObject(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CGameObject{ pGraphic_Device }
 {
+    D3DXMatrixIdentity(&m_ViewMatrix);
 }
 
 CUIObject::CUIObject(const CUIObject& Prototype)

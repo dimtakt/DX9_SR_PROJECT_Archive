@@ -22,7 +22,7 @@ HRESULT CAnimator::Initialize(void* pArg)
 {
 	if (nullptr == pArg)
 	{
-		std::cout << "[CAnimator::Initialize] Initialized Failed. Argument was nullptr." << std::endl;
+		std::cout << "[CAnimator::Initialize] Initialize Failed. Argument was nullptr." << std::endl;
 		return E_FAIL;
 	}
 
@@ -49,7 +49,7 @@ void CAnimator::Update_State()
 	_uint iImageCurIndex = m_iStackedFrames / m_pCurState->iFramePerImage;
 	iImageCurIndex %= iImageMaxIndex;
 
-	std::wcout << "[CAnimator::Update_State] Current State : \"" << m_strCurStateTag << "\" (" << iImageCurIndex + 1 << "/" << iImageMaxIndex << ")" << std::endl;
+	//std::wcout << "[CAnimator::Update_State] Current State : \"" << m_strCurStateTag << "\" (" << iImageCurIndex + 1 << "/" << iImageMaxIndex << ")" << std::endl;
 
 	pCurTextureCom->Bind_Texture(iImageCurIndex);
 	m_iStackedFrames++;
@@ -57,8 +57,7 @@ void CAnimator::Update_State()
 
 HRESULT CAnimator::Add_State(const _wstring strStateTag, ANIMSTATE _state)
 {
-	// 해당 State가 이미 존재한다면
-	if (nullptr != Find_State(strStateTag))
+	if (nullptr != Find_State(strStateTag))		// 중복 검사
 	{
 		std::wcout << "[CAnimator::Add_State] Adding State Failed. \"" << strStateTag << "\" state already exist." << std::endl;
 		return E_FAIL;

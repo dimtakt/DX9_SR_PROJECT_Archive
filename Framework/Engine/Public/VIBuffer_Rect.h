@@ -17,7 +17,8 @@ public:
 	virtual HRESULT Initialize(void* pArg) override;
 
 public:
-	void ChangeUV_FlipX(_bool isFlipped);	// UV의 X좌표 반전용
+	void ChangeUV_FlipX(_bool isFlipped);    // UV의 X좌표 반전용
+	void ResetUV_FlipX();
 
 public:
 	static CComponent* Create(LPDIRECT3DDEVICE9 pGraphic_Device);

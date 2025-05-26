@@ -32,14 +32,20 @@ void CPlayer::Priority_Update(_float fTimeDelta)
 }
 
 void CPlayer::Update(_float fTimeDelta)
-{
-    // ksta : 좌우 반전 방법 찾아서 분기 만들어줘야함
-    
-    
-    POINT pt;
-    GetCursorPos(&pt);
-    ScreenToClient(g_hWnd, &pt);
-    
+{    
+    _float fPointY = 0.f;       // 교차 평면의 기준이 될 Y값
+    _float3 vRayPoint = {};     // fPointY 값 기준 마우스 Ray와 교차하는 좌표
+    m_pGameInstance->Get_IntersectAtY(fPointY, vRayPoint);
+
+    _float3 vPlayerPos = {};    // 플레이어 좌표
+    vPlayerPos = m_pTransformCom->Get_State(STATE::POSITION);
+
+    std::cout << "[Player::Update] RayPoint  : {" << vRayPoint.x << ", " << vRayPoint.y << ", " << vRayPoint.z << "}" << std::endl;
+    std::cout << "[Player::Update] PlayerPos : {" << vPlayerPos.x << ", " << vPlayerPos.y << ", " << vPlayerPos.z << "}" << std::endl;
+
+
+
+
     if (m_pGameInstance->IsKeyHold('W') ||
         m_pGameInstance->IsKeyHold('S') ||
         m_pGameInstance->IsKeyHold('A') ||
@@ -47,7 +53,7 @@ void CPlayer::Update(_float fTimeDelta)
     {
         // 이동중
         // 이전에 Move 이었다면 프레임 초기화X
-        if (g_iWinSizeY / 2 > pt.y)                     // 상단
+        if (vRayPoint.z > vPlayerPos.z)                     // 상단
         {
             if (m_pAnimatorCom->Get_CurStateTag() == L"Move_Lower" ||
                 m_pAnimatorCom->Get_CurStateTag() == L"Move_Upper")
@@ -67,7 +73,7 @@ void CPlayer::Update(_float fTimeDelta)
     else
     {
         // 이전에 Idle 이었다면 프레임 초기화 X
-        if (g_iWinSizeY / 2 > pt.y)                     // 상단
+        if (vRayPoint.z > vPlayerPos.z)                     // 상단
         {
             if (m_pAnimatorCom->Get_CurStateTag() == L"Idle_Lower" ||
                 m_pAnimatorCom->Get_CurStateTag() == L"Idle_Upper")
@@ -83,22 +89,22 @@ void CPlayer::Update(_float fTimeDelta)
             else
                 m_pAnimatorCom->Change_State(L"Idle_Lower", true);
         }
-    
-    
-        // 좌우반전
-        if      (g_iWinSizeX / 2 > pt.x && !m_isFlippedX)   // 좌측
-        {
-            m_pVIBufferCom->ChangeUV_FlipX(true);
-            m_isFlippedX = true;
-        }
-        else if (g_iWinSizeX / 2 < pt.x && m_isFlippedX)    // 우측
-        {
-            m_pVIBufferCom->ChangeUV_FlipX(false);
-            m_isFlippedX = false;
-        }
-
-
     }
+
+    // 좌우반전
+    if      (vRayPoint.x < vPlayerPos.x && !m_isFlippedX)   // 좌측
+    {
+        m_pVIBufferCom->ChangeUV_FlipX(true);
+        m_isFlippedX = true;
+        //std::cout << "[CPlayer::Update] FlippedX Changed to True." << std::endl;
+    }
+    else if (vRayPoint.x > vPlayerPos.x && m_isFlippedX)    // 우측
+    {
+        m_pVIBufferCom->ChangeUV_FlipX(false);
+        m_isFlippedX = false;
+        //std::cout << "[CPlayer::Update] FlippedX Changed to False." << std::endl;
+    }
+
 
     if (m_pGameInstance->IsKeyHold('W'))
         m_pTransformCom->Go_Straight(fTimeDelta);
@@ -116,7 +122,7 @@ void CPlayer::Update(_float fTimeDelta)
 
     if (m_pGameInstance->IsKeyDown(VK_LBUTTON))
     {
-        if (g_iWinSizeY / 2 > pt.y)
+        if (vRayPoint.z > vPlayerPos.z)
             m_pAnimatorCom->Change_State(L"GreatSwordHeavyAttack_Upper");
         else
             m_pAnimatorCom->Change_State(L"GreatSwordHeavyAttack_Lower");
@@ -143,15 +149,22 @@ void CPlayer::Late_Update(_float fTimeDelta)
 
 HRESULT CPlayer::Render()
 {
-	m_pTransformCom->Bind_Matrix();
+    m_pTransformCom->Bind_Matrix();
 
-	//if (FAILED(m_pTextureCom->Bind_Texture(0)))
-	//	return E_FAIL;
+    //if (FAILED(m_pTextureCom->Bind_Texture(0)))
+    //	return E_FAIL;
 
     m_pAnimatorCom->Update_State(); // Bind_Texture 이 포함되어, 현재 State에 맞는 이미지 출력
 
-	m_pVIBufferCom->Bind_Buffers();
-	m_pVIBufferCom->Render();
+    m_pVIBufferCom->Bind_Buffers();
+    m_pVIBufferCom->Render();
+
+    if(m_isFlippedX)
+    {
+        m_pVIBufferCom->ResetUV_FlipX();
+        m_isFlippedX = false;
+        //std::cout << "[CPlayer::Render] FlippedX Changed to False." << std::endl;
+    }
 
 	return S_OK;
 }

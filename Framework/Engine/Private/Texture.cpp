@@ -1,5 +1,5 @@
 #include "Texture.h"
-
+#include "Shader.h"
 CTexture::CTexture(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CComponent{ pGraphic_Device }
 {
@@ -56,6 +56,14 @@ HRESULT CTexture::Bind_Texture(_uint iTextureIndex)
 		 return E_FAIL;
 
 	return m_pGraphic_Device->SetTexture(0, m_Textures[iTextureIndex]);
+}
+
+HRESULT CTexture::Bind_Texture(CShader* pShader, D3DXHANDLE hParameters, _uint iTextureIndex)
+{
+	if (iTextureIndex >= m_iNumTextures)
+		return E_FAIL;
+
+	return pShader->Bind_Texture(hParameters, m_Textures[iTextureIndex]);
 }
 
 LPDIRECT3DTEXTURE9 CTexture::Get_Textures(_uint iIndex)

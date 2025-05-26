@@ -23,6 +23,10 @@ public:
 	void End();
 
 
+public:
+	HRESULT Set_Float(const char* pParamName, float fValue);
+	
+
 private:
 	LPD3DXEFFECT				m_pEffect = { nullptr };
 
