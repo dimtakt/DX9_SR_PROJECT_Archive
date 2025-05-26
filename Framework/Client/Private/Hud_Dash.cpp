@@ -40,12 +40,15 @@ HRESULT CHud_Dash::Initialize(void* pArg)
     if (FAILED(Ready_Components()))
         return E_FAIL;
 
+    if (FAILED(Reday_SyncingObject()))
+        return E_FAIL;
+
     m_pTransformCom->Scaling(m_fSizeX, m_fSizeY, 1.f);
     __super::Update_Position();
 
     if (FAILED(Ready_Children()))
         return E_FAIL;
-
+    
     return S_OK;
 }
 
@@ -82,7 +85,6 @@ void CHud_Dash::Update(_float fTimeDelta)
     }
     else
     {
-        
         for (_int i = 0; i < m_iDashMaxValue; ++i)
             m_vecChildren[i]->Update(fTimeDelta);
     }
@@ -131,12 +133,25 @@ HRESULT CHud_Dash::Ready_Children()
     for (_int i = 0; i < 5; ++i)
     {
         Desc.fX = i;
+        Desc.iIndex = i + 1;
         pGameObject = dynamic_cast<CUIObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(m_eLevel), TEXT("Prototype_GameObject_UI_Dash_Gauge_Fream"), &Desc));
         if (nullptr == pGameObject)
             return E_FAIL;
         Add_Child(pGameObject);
     }
     
+    return S_OK;
+}
+
+HRESULT CHud_Dash::Reday_SyncingObject()
+{
+    m_pPlayerStatsCom = dynamic_cast<CPlayerStats*>(m_pGameInstance->Get_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Layer_Player"), TEXT("Com_PlayerStats"), 0));
+    if (m_pPlayerStatsCom == nullptr)
+    {
+        MSG_BOX(TEXT("Failed to Syncing : CHud_Dash"));
+        return E_FAIL;
+    }
+    Safe_AddRef(m_pPlayerStatsCom);
 
     return S_OK;
 }
@@ -168,4 +183,6 @@ CGameObject* CHud_Dash::Clone(void* pArg)
 void CHud_Dash::Free()
 {
     __super::Free();
+
+    Safe_Release(m_pPlayerStatsCom);
 }

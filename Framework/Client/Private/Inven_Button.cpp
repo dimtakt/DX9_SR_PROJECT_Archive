@@ -55,7 +55,7 @@ void CInven_Button::Priority_Update(_float fTimeDelta)
 
 void CInven_Button::Update(_float fTimeDelta)
 {
-	if (Click_Check(g_hWnd))
+	if (Click_Check(g_hWnd, VK_LEFT))
 	{
 		static_cast<CInventory*>(m_pTargetUI)->UI_Switch();
 	}
@@ -89,7 +89,7 @@ HRESULT CInven_Button::Ready_Components()
 		TEXT("Com_Transform"), reinterpret_cast<CComponent**>(&m_pTransformCom))))
 		return E_FAIL;
 
-	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_GAMEPLAY), TEXT("Prototype_Component_VIBuffer_Rect_UI_Hud_Inven_Symbol"),
+	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_GAMEPLAY), TEXT("Prototype_Component_Texture_Rect_UI_Hud_Inven_Symbol"),
 		TEXT("Com_Texture"), reinterpret_cast<CComponent**>(&m_pTextureCom))))
 		return E_FAIL;
 

@@ -12,7 +12,8 @@ class CDash_Gauge_Fream final : public CUIObject
 public:
 	typedef struct tagCDash_Gauge_Fream
 	{
-		float fX;
+		_float fX;
+		_int iIndex;
 	}UIHUD_DASH_FREAM_DESC;
 private:
 									CDash_Gauge_Fream(LPDIRECT3DDEVICE9 pGraphic_Device);
@@ -31,6 +32,7 @@ private:
 	LEVEL							m_eLevel = {};
 	CVIBuffer_Rect*					m_pVIBufferCom = { nullptr };
 	CTexture*						m_pTextureCom = { nullptr };
+	_int							m_iIndex;
 
 private:
 	HRESULT							Ready_Components();
@@ -40,6 +42,7 @@ private:
 
 	HRESULT							Ready_ChildPrototype(LEVEL eLevel);
 	HRESULT							Ready_Children();
+
 
 public:
 	static CDash_Gauge_Fream*		Create(LPDIRECT3DDEVICE9 pGraphic_Device, LEVEL eLevel);

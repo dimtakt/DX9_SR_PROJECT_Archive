@@ -5,7 +5,7 @@ CDash_Gauge_Fream::CDash_Gauge_Fream(LPDIRECT3DDEVICE9 pGraphic_Device) : CUIObj
 {
 }
 
-CDash_Gauge_Fream::CDash_Gauge_Fream(const CDash_Gauge_Fream& Prototype) : CUIObject(Prototype), m_eLevel(Prototype.m_eLevel)
+CDash_Gauge_Fream::CDash_Gauge_Fream(const CDash_Gauge_Fream& Prototype) : CUIObject(Prototype), m_eLevel(Prototype.m_eLevel), m_iIndex(Prototype.m_iIndex)
 {
 }
 
@@ -22,16 +22,19 @@ HRESULT CDash_Gauge_Fream::Initialize_Prototype(LEVEL eLevel)
 HRESULT CDash_Gauge_Fream::Initialize(void* pArg)
 {
 	UIHUD_DASH_FREAM_DESC* DescMy = static_cast<UIHUD_DASH_FREAM_DESC*>(pArg);
+	
+	m_iIndex = DescMy->iIndex;
+
 	UIOBJECT_DESC Desc{};
 
-	Desc.fSizeX = 32;
-	Desc.fSizeY = 32;
-	Desc.fX = (DescMy->fX * (1 + Desc.fSizeX));
+	Desc.fSizeX = 30;
+	Desc.fSizeY = 30;
+	Desc.fX = (DescMy->fX * (Desc.fSizeX));
 	Desc.fY = 0;
 	Desc.fZ = 0.f;
 	Desc.iWinSizeX = g_iWinSizeX;
 	Desc.iWinSizeY = g_iWinSizeY;
-
+	
 	if (FAILED(__super::Initialize(&Desc)))
 		return E_FAIL;
 
@@ -60,7 +63,6 @@ void CDash_Gauge_Fream::Update(_float fTimeDelta)
 void CDash_Gauge_Fream::Late_Update(_float fTimeDelta)
 {
 	m_pGameInstance->Add_RenderGroup(RENDERGROUP::RG_UI, this);
-
 	__super::Late_Update(fTimeDelta);
 }
 
@@ -91,7 +93,7 @@ HRESULT CDash_Gauge_Fream::Ready_Components()
 		TEXT("Com_Transform"), reinterpret_cast<CComponent**>(&m_pTransformCom))))
 		return E_FAIL;
 
-	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_GAMEPLAY), TEXT("Prototype_Component_VIBuffer_Rect_UI_Hud_Dash_Symbol"),
+	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_GAMEPLAY), TEXT("Prototype_Component_Texture_Rect_UI_Hud_Dash_Symbol"),
 		TEXT("Com_Texture"), reinterpret_cast<CComponent**>(&m_pTextureCom))))
 		return E_FAIL;
 
@@ -132,8 +134,11 @@ HRESULT CDash_Gauge_Fream::Ready_ChildPrototype(LEVEL eLevel)
 HRESULT CDash_Gauge_Fream::Ready_Children()
 {
 	CUIObject* pGameObject = nullptr;
+	
+	CDash_Gauge::UIHUD_DASH_GAUGE_DESC Desc{};
+	Desc.iIndex = m_iIndex;
 
-	pGameObject = dynamic_cast<CUIObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(m_eLevel), TEXT("Prototype_GameObject_UI_Dash_Gauge")));
+	pGameObject = dynamic_cast<CUIObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(m_eLevel), TEXT("Prototype_GameObject_UI_Dash_Gauge"),&Desc));
 	if (nullptr == pGameObject)
 		return E_FAIL;
 	Add_Child(pGameObject);

@@ -1,0 +1,16 @@
+[
+  {
+    "Type": "Tree",
+    "PrototypeKey": "Prototype_GameObject_Tree",
+    "TextureKey": "Prototype_Component_Texture_Tree",
+    "TextureCount": 16
+  },
+  {
+    "Type": "Mountain",
+    "PrototypeKey": "Prototype_GameObject_Mountain",
+    "TextureKey": "Prototype_Component_Texture_Mountain",
+    "TextureCount": 1
+  }
+]
+// 맵에디터에서 오브젝트 로드용
+
