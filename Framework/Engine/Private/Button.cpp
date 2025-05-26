@@ -43,15 +43,11 @@ HRESULT CButton::Render()
 	return S_OK;
 }
 
-_bool CButton::Click_Check(HWND hWnd)
+_bool CButton::Click_Check(HWND hWnd, _int iKey)
 {
 	if (isPick(hWnd))
-	{
-		if (GetAsyncKeyState(VK_LBUTTON) & 0x8000)
-		{
-			return true;
-		}
-		return false;
+	{	
+		return m_pGameInstance->IsKeyUp(iKey);
 	}
 	return false;
 }

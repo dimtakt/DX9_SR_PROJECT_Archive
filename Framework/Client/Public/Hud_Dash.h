@@ -1,7 +1,9 @@
 #pragma once
 #include "UIObject.h"
 #include "Client_Defines.h"
-
+BEGIN(Engine)
+	class CPlayerStats;
+END
 BEGIN(Client)
 class CHud_Dash final : public CUIObject
 {
@@ -20,12 +22,16 @@ public:
 
 private:
 	LEVEL							m_eLevel = {};
-	_int							m_iDashMaxValue = {};
+	_uint							m_iDashMaxValue = {};
+	CPlayerStats*					m_pPlayerStatsCom = { nullptr };
+
 private:
 	HRESULT							Ready_Components();
 
 	HRESULT							Ready_ChildPrototype(LEVEL eLevel);
 	HRESULT							Ready_Children();
+
+	HRESULT							Reday_SyncingObject();
 public:
 	static CHud_Dash*				Create(LPDIRECT3DDEVICE9 pGraphic_Device, LEVEL eLevel);
 	virtual CGameObject*			Clone(void* pArg) override;
