@@ -1,10 +1,9 @@
 #pragma once
 
 #include "Component.h"
+#include "Texture.h"
 
 BEGIN(Engine)
-
-class CTexture;
 
 class ENGINE_DLL CAnimator final : public CComponent
 {
@@ -32,15 +31,22 @@ public:
 	virtual HRESULT Initialize_Prototype() override;
 	virtual HRESULT Initialize(void* pArg) override;
 	void Update_State();
+	void Change_State(const _wstring strStatetag, _bool isChangeCurFrame = true); // bool 인자 : 현재 출력중인 이미지 순서 초기화 할건지
 
 public:
 	HRESULT Add_State(const _wstring strStateTag, ANIMSTATE _state);
 	ANIMSTATE* Get_CurState()	{ return m_pCurState; };
 	_wstring Get_CurStateTag()	{ return m_strCurStateTag; };
-
-	// bool 인자는, 큰 상태는 동일하나
-	// 플레이어가 바라보는 방향만 달라지는 경우처럼 현재 프레임 순서의 유지 필요성이 있는 경우의 예외를 두기 위함
-	void Change_State(const _wstring strStatetag, _bool isChangeCurFrame = true);
+	_bool Get_IsLastFrame() {	
+		// 마지막 이미지의 마지막 프레임부터 true를 반환합니다.
+		// 예) 장당 4프레임짜리 5장 이미지의 경우 딱 20번째 프레임부터 true 반환
+		return  (((m_iStackedFrames + 1) / m_pCurState->iFramePerImage - 1) >= m_pCurState->pTextureCom->Get_NumTextures());
+	}
+	
+	_bool Check_State(const _wstring& strStateTag) {
+		// 해당 State가 존재하는지 여부만 확인
+		return Find_State(strStateTag) != nullptr;
+	}
 
 private:
 	ANIMSTATE* Find_State(const _wstring& strStateTag);

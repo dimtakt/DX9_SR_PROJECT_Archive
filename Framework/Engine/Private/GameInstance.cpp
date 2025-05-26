@@ -266,6 +266,10 @@ _bool CGameInstance::Picking_InLocal(_float3& vPickedPos, const _float3& vPointA
 {
     return m_pPicking->Picking_InLocal(vPickedPos, vPointA, vPointB, vPointC);
 }
+_bool CGameInstance::Get_IntersectAtY(_float targetY, _float3& intersectPos)
+{
+    return m_pPicking->Get_IntersectAtY(targetY, intersectPos);
+}
 #pragma endregion
 
 #pragma region COLLISION_MANAGER
