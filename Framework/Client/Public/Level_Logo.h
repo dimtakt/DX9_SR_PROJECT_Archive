@@ -18,6 +18,7 @@ public:
 
 private:
 	HRESULT Ready_Layer_BackGround(const _wstring& strLayerTag);
+	HRESULT Ready_Layer_UI(const _wstring& strLayerTag);
 
 public:
 	static CLevel_Logo* Create(LPDIRECT3DDEVICE9 pGraphic_Device);

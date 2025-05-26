@@ -42,7 +42,6 @@ public:
 		// 예) 장당 4프레임짜리 5장 이미지의 경우 딱 20번째 프레임부터 true 반환
 		return  (((m_iStackedFrames + 1) / m_pCurState->iFramePerImage - 1) >= m_pCurState->pTextureCom->Get_NumTextures());
 	}
-	
 	_bool Check_State(const _wstring& strStateTag) {
 		// 해당 State가 존재하는지 여부만 확인
 		return Find_State(strStateTag) != nullptr;

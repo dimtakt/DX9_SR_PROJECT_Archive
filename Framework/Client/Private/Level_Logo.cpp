@@ -11,7 +11,7 @@ HRESULT CLevel_Logo::Initialize()
 {
 	g_hCursor = LoadCursorFromFile(L"Resources/Sephiria/UI/Cursor/Cursor_Combat.cur");
 
-	if (FAILED(Ready_Layer_BackGround(TEXT("Layer_BackGround"))))
+	if (FAILED(Ready_Layer_BackGround(TEXT("Layer_Title_BackGround"))))
 		return E_FAIL;
 
 	return S_OK;
@@ -46,9 +46,14 @@ HRESULT CLevel_Logo::Render()
 HRESULT CLevel_Logo::Ready_Layer_BackGround(const _wstring& strLayerTag)
 {
 	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_LOGO), strLayerTag,
-		ENUM_CLASS(LEVEL::LEVEL_LOGO), TEXT("Prototype_GameObject_BackGround"))))
+		ENUM_CLASS(LEVEL::LEVEL_LOGO), TEXT("Prototype_GameObject_Title_BackGround"))))
 		return E_FAIL;
 
+	return S_OK;
+}
+
+HRESULT CLevel_Logo::Ready_Layer_UI(const _wstring& strLayerTag)
+{
 	return S_OK;
 }
 
