@@ -31,12 +31,18 @@ public:
 		return _float3(D3DXVec3Length(&vRight), D3DXVec3Length(&vUp), D3DXVec3Length(&vLook));
 	}
 
+	const _float4x4* Get_WorldMatrix() {
+		return &m_WorldMatrix;
+	}
+
 	const _float4x4* Get_WorldMatrix_Inverse() {
 		return D3DXMatrixInverse(&m_WorldMatrixInverse, nullptr, &m_WorldMatrix);
 	}
 
 	void Set_State(STATE eState, const _float3& vState) {
+		int a = 1;
 		memcpy(&m_WorldMatrix.m[ENUM_CLASS(eState)][0], &vState, sizeof(_float3));
+		int b = 2;
 	}
 
 	void Set_FlipX(_bool isFlip) { m_bFlipX = isFlip; }

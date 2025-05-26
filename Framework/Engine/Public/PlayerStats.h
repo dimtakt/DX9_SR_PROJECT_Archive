@@ -11,17 +11,24 @@ public:
 	{
 		_wstring	strName;
 		_int		iLevel;
+
+		_float		fMoveSpeed;
+		_float		fAtkSpeed;
+
 		_int		iExp;
+		_int		iMaxExp;
 
 		_float		fHp;
-		_float		fMp;
-		_float		fDash;
-		_float		fAtkSpeed;
-		_float		fMoveSpeed;
-
+		_float		fMaxHp;
 		_float		fHpRegen;
+		
+		_float		fMp;
+		_float		fMaxMp;
 		_float		fMpRegen;
-		_float		fDashRegen;
+		
+		_float		fDash;		//플레이어 현재 대쉬 개수
+		_float		fMaxDash;	//캐릭터 최대 대쉬 개수
+		_float		fDashRegen; // 플레이어 대쉬 회복 속도
 
 		_float		fEvade;
 		_float		fDef;
