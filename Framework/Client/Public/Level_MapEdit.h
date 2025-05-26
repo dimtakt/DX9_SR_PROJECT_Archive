@@ -36,7 +36,7 @@ public:
 	HRESULT Ready_Layer_Camera(const _wstring& strLayerTag);
 	HRESULT Ready_Texture_Info();
 
-	HRESULT Load_ObjectMeta_Fromt_Json(const string& strMetePath);
+	//HRESULT Load_ObjectMeta_Fromt_Json(const string& strMetePath);
 
 public:
 	HRESULT Delete_Tile_By_Position(D3DXVECTOR3& vTargetPos);
@@ -50,6 +50,8 @@ private:
 	void ImGui_Transform_Render();
 	void ImGui_Rotate_Render();
 	void ImGui_Scale_Render();
+
+	void ImGui_Terrain_MenBar();
 private:
 	int m_iTexture_id = {};
 	D3DXVECTOR3 m_DeletePos = { 0.f, 0.f, 0.f };

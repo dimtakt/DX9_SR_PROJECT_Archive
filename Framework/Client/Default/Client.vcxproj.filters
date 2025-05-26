@@ -157,6 +157,9 @@
     <Filter Include="02.GameObject\UI\Title\BackGround\Star_Wave">
       <UniqueIdentifier>{e537c5f7-17c1-46af-96cd-4f0792ac1b67}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\Terrain\TerrainBox">
+      <UniqueIdentifier>{a104ef06-91be-4323-92d7-40deff8b0f8e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -333,6 +336,9 @@
     <ClInclude Include="..\Public\Title_Logo_Wave.h">
       <Filter>02.GameObject\UI\Title\BackGround\Star_Wave</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\TerrainBox.h">
+      <Filter>02.GameObject\Terrain\TerrainBox</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -479,6 +485,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\Title_Logo_Wave.cpp">
       <Filter>02.GameObject\UI\Title\BackGround\Star_Wave</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\TerrainBox.cpp">
+      <Filter>02.GameObject\Terrain\TerrainBox</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
