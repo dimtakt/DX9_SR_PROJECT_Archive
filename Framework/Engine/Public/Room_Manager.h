@@ -13,18 +13,19 @@ public:
 	HRESULT Initialize();
 
 public:
-	HRESULT Add_Room(class CRoom* pRoom);
+	HRESULT Add_Room(class CRoom* pRoom, _uint iLayerLevelIndex, const _wstring& strLayerTag);
 	HRESULT Enter_Room(_int iRoomID);
 
 	CRoom* Get_CurrentRoom();
 	CRoom* Get_RoomByID(_int iRoomID);
 
-	void Clear();
+	void Clear(_uint iLevelIndex);
 
 private:
 	class CGameInstance* m_pGameInstance = { nullptr };
-	map<_int, CRoom*> m_mRooms = { };
-	_int m_iCurrentRoomID = { };
+	map<_int, vector<CRoom*>> m_mRooms = {};
+	_uint m_iCurrentRoomID = { };
+	_uint m_iCurrentLevelID = {};
 
 public:
 	static CRoom_Manager* Create();

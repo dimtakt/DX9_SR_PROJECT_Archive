@@ -18,7 +18,6 @@ public:
 
 private:
 	class CGameInstance* m_pGameInstance = { nullptr };
-	vector<class CMonster*> m_vMonster = {};
 
 
 

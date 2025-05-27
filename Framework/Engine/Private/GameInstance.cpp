@@ -101,7 +101,7 @@ HRESULT CGameInstance::Clear_Resources(_uint iClearLevelID)
 
     m_pObject_Manager->Clear(iClearLevelID);
 
-    m_pRoom_Manager->Clear();
+    m_pRoom_Manager->Clear(iClearLevelID);
 
     return S_OK;
 }
@@ -144,7 +144,7 @@ _float CGameInstance::Compute_Random(_float fMin, _float fMax)
 #pragma region LEVEL_MANAGER
 HRESULT CGameInstance::Open_Level(_uint iLevelID, CLevel* pNewLevel)
 {
-    if (nullptr == m_pLevel_Manager)
+    if (nullptr == m_pLevel_Manager) 
         return E_FAIL;
 
     return m_pLevel_Manager->Open_Level(iLevelID, pNewLevel);
@@ -185,6 +185,16 @@ CComponent* CGameInstance::Get_Component(_uint iLayerLevelIndex, const _wstring&
 CGameObject* CGameInstance::Get_GameObject(_uint iLayerLevelIndex, const _wstring& strLayerTag,_uint iIndex)
 {
     return m_pObject_Manager->Get_GameObject(iLayerLevelIndex, strLayerTag, iIndex);
+}
+
+CLayer* CGameInstance::Find_Layer(_uint iLayerLevelIndex, const _wstring& strLayerTag)
+{
+    return m_pObject_Manager->Find_Layer(iLayerLevelIndex, strLayerTag);
+}
+
+HRESULT CGameInstance::Add_Direct_GameObject_ToLayer(_uint iLayerLevelIndex, const _wstring& strLayerTag, CGameObject* pGameObject)
+{
+    return m_pObject_Manager->Add_Direct_GameObject_ToLayer(iLayerLevelIndex, strLayerTag, pGameObject);
 }
 
 #pragma endregion
@@ -277,9 +287,9 @@ HRESULT CGameInstance::Add_Collider(class CCollider* pCollider)
 #pragma endregion
 
 #pragma region ROOM_MANAGER
-HRESULT CGameInstance::Add_Room(class CRoom* pRoom)
+HRESULT CGameInstance::Add_Room(class CRoom* pRoom, _uint iLayerLevelIndex, const _wstring& strLayerTag)
 {
-    return m_pRoom_Manager->Add_Room(pRoom);
+    return m_pRoom_Manager->Add_Room(pRoom, iLayerLevelIndex, strLayerTag);
 }
 HRESULT CGameInstance::Enter_Room(_int iRoomID)
 {

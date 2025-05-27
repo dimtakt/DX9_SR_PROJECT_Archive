@@ -22,8 +22,10 @@ HRESULT CLand::Initialize(void* pArg)
 	if (FAILED(Ready_Components(pArg)))
 		return E_FAIL;
 
-	m_pTransformCom->Scaling(5.f, 1.f, 5.f);
+	LANDOBJDESC* pDesc = static_cast<LANDOBJDESC*>(pArg);
 
+	m_pTransformCom->Scaling(pDesc->vScale.x, pDesc->vScale.y, pDesc->vScale.z);
+	m_pTransformCom->Set_State(STATE::POSITION, _float3(pDesc->vPosition.x, pDesc->vPosition.y, pDesc->vPosition.z));
 	return S_OK;
 }
 

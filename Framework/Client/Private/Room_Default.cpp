@@ -24,26 +24,27 @@ HRESULT CRoom_Default::Initialize(void* pArg)
 	if (FAILED(Ready_Components(pArg)))
 		return E_FAIL;
 
-
-	m_pGameInstance->Add_Room(this);
-
 	return S_OK;
 }
 
 void CRoom_Default::Priority_Update(_float fTimeDelta)
 {
+	__super::Priority_Update(fTimeDelta);
 }
 
 void CRoom_Default::Update(_float fTimeDelta)
 {
+	__super::Update(fTimeDelta);
 }
 
 void CRoom_Default::Late_Update(_float fTimeDelta)
 {
+	__super::Late_Update(fTimeDelta);
 }
 
 HRESULT CRoom_Default::Render()
 {
+	__super::Render();
 	return S_OK;
 }
 
@@ -53,11 +54,6 @@ HRESULT CRoom_Default::Ready_Components(void* pArg)
 }
 HRESULT CRoom_Default::Ready_Objects(void* pArg)
 {
-	CLand* pGameObject = nullptr;
-
-	/*pGameObject = dynamic_cast<CLand*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(m_eLevel), TEXT("Prototype_GameObject_UI_Title_Star")));
-	if (nullptr == pGameObject)
-		return E_FAIL;*/
 
 	return S_OK;
 }

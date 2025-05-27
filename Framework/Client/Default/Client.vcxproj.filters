@@ -202,6 +202,9 @@
     <Filter Include="02.GameObject\Player\Weapon\Dagger">
       <UniqueIdentifier>{13b902d1-9fd8-4a3b-b2aa-e85b85a79094}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01.Levels\04. Dungeon\Loader">
+      <UniqueIdentifier>{12de4255-f604-4498-84f4-a9b78c265476}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -221,9 +224,6 @@
     </ClInclude>
     <ClInclude Include="..\Public\Client_Defines.h">
       <Filter>99.Defines</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\Loader.h">
-      <Filter>01.Levels\00.Loading\Loader</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Level_Loading.h">
       <Filter>01.Levels\00.Loading</Filter>
@@ -405,6 +405,12 @@
     <ClInclude Include="..\public\Dagger.h">
       <Filter>02.GameObject\Player\Weapon\Dagger</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\Loader_Room.h">
+      <Filter>01.Levels\04. Dungeon\Loader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Loader.h">
+      <Filter>01.Levels\00.Loading\Loader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -425,9 +431,6 @@
     </ClCompile>
     <ClCompile Include="..\Private\MainApp.cpp">
       <Filter>00.MainApp</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\Loader.cpp">
-      <Filter>01.Levels\00.Loading\Loader</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Level_Loading.cpp">
       <Filter>01.Levels\00.Loading</Filter>
@@ -575,6 +578,12 @@
     </ClCompile>
     <ClCompile Include="..\private\Dagger.cpp">
       <Filter>02.GameObject\Player\Weapon\Dagger</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Loader_Room.cpp">
+      <Filter>01.Levels\04. Dungeon\Loader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Loader.cpp">
+      <Filter>01.Levels\00.Loading\Loader</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -20,4 +20,6 @@ CRoom_Factory* CRoom_Factory::Create()
 
 void CRoom_Factory::Free()
 {
+	__super::Free();
+	Safe_Release(m_pGameInstance);
 }

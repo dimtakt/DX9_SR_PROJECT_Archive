@@ -6,6 +6,13 @@ BEGIN(Client)
 
 class CLand final : public CLand_Cube
 {
+public:
+	typedef struct LandObjDesc
+	{
+		_float3		vScale{};
+		_float3		vPosition{};
+	}LANDOBJDESC;
+protected:
 private:
 	CLand(LPDIRECT3DDEVICE9 pGraphic_Device);
 	CLand(const CLand& Prototype);
