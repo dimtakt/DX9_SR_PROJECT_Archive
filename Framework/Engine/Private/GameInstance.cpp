@@ -13,7 +13,7 @@
 #include "Room_Manager.h"
 #include "Font_Manager.h"
 #include "Light_Manager.h"
-#include "GameObject.h"
+#include "Item_Manager.h"
 
 IMPLEMENT_SINGLETON(CGameInstance)
 
@@ -75,6 +75,10 @@ HRESULT CGameInstance::Initialize_Engine(const ENGINE_DESC& EngineDesc, LPDIRECT
 
     m_pLight_Manager = CLight_Manager::Create(*ppOut);
     if (nullptr == m_pLight_Manager)
+        return E_FAIL;
+
+    m_pItem_Manager = CItem_Manager::Create(*ppOut);
+    if (nullptr == m_pItem_Manager)
         return E_FAIL;
 
     return S_OK;
@@ -185,6 +189,11 @@ CComponent* CGameInstance::Get_Component(_uint iLayerLevelIndex, const _wstring&
 CGameObject* CGameInstance::Get_GameObject(_uint iLayerLevelIndex, const _wstring& strLayerTag,_uint iIndex)
 {
     return m_pObject_Manager->Get_GameObject(iLayerLevelIndex, strLayerTag, iIndex);
+}
+
+HRESULT CGameInstance::Add_ItemObject_ToLayer(_uint iLayerLevelIndex, const _wstring& strLayerTag, _uint ItemIndex, void* pArg)
+{
+    return m_pObject_Manager->Add_ItemObject_ToLayer(iLayerLevelIndex, strLayerTag, ItemIndex, pArg);
 }
 
 #pragma endregion
@@ -321,6 +330,21 @@ HRESULT CGameInstance::Ready_Light(const D3DLIGHT9* pLightInfo, const _uint& iIn
     return m_pLight_Manager->Ready_Light(pLightInfo, iIndex);
 }
 
+HRESULT CGameInstance::Setting_Item(void* pArg, _uint iMaxItemIndex, _uint iLevelIndex, const _wstring& strItemBaseTag)
+{
+    return m_pItem_Manager->Setting_Item(pArg, iMaxItemIndex, iLevelIndex, strItemBaseTag);
+}
+
+CBase* CGameInstance::find_ItemObject(_uint iIndex)
+{
+    return m_pItem_Manager->find_ItemObject(iIndex);
+}
+
+CItemObject* CGameInstance::Get_ItemObject(_uint iIndex)
+{
+    return m_pItem_Manager->Get_ItemObject(iIndex);
+}
+
 void CGameInstance::Release_Engine()
 {
     Release();
@@ -338,6 +362,7 @@ void CGameInstance::Release_Engine()
     Safe_Release(m_pRoom_Manager);
     Safe_Release(m_pFont_Manager);
     Safe_Release(m_pLight_Manager);
+    Safe_Release(m_pItem_Manager);
 }
 
 void CGameInstance::Free()

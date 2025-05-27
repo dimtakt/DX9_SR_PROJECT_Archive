@@ -173,6 +173,7 @@ call Copy.bat</Command>
     <ClInclude Include="..\Public\GameInstance.h" />
     <ClInclude Include="..\Public\GameObject.h" />
     <ClInclude Include="..\Public\Graphic_Device.h" />
+    <ClInclude Include="..\public\Item_Manager.h" />
     <ClInclude Include="..\Public\Key_Manager.h" />
     <ClInclude Include="..\Public\LandObject.h" />
     <ClInclude Include="..\Public\Land_Cube.h" />
@@ -219,6 +220,7 @@ call Copy.bat</Command>
     <ClCompile Include="..\Private\Component.cpp" />
     <ClCompile Include="..\Private\Font.cpp" />
     <ClCompile Include="..\Private\Font_Manager.cpp" />
+    <ClCompile Include="..\private\Item_Manager.cpp" />
     <ClCompile Include="..\Private\Key_Manager.cpp" />
     <ClCompile Include="..\Private\LandObject.cpp" />
     <ClCompile Include="..\Private\Land_Cube.cpp" />

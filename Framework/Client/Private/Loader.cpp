@@ -231,6 +231,10 @@ HRESULT CLoader::Loading_For_GamePlay_Level()
 		if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_GAMEPLAY), TEXT("Prototype_Component_Texture_Rect_Window_Inventory"),
 			CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/UI/Inventory/InventoryBase.png"), 1))))
 			return E_FAIL;
+
+		if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_GAMEPLAY), TEXT("Prototype_Component_Texture_Rect_Slot_Inven"),
+			CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/UI/Inventory/InventorySlot_%d.png"), 9))))
+			return E_FAIL;
 #pragma endregion
 
 	lstrcpy(m_szLoadingText, TEXT("모델을 로딩중입니다."));

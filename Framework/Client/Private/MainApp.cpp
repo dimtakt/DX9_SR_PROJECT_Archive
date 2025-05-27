@@ -4,6 +4,7 @@
 #include "Player.h"
 #include "Room_Default.h"
 #include "Dagger.h"
+#include "Item_Base.h"
 
 CMainApp::CMainApp()
 	: m_pGameInstance{ CGameInstance::GetInstance() }
@@ -28,6 +29,9 @@ HRESULT CMainApp::Initialize()
 		return E_FAIL;
 
 	if (FAILED(Ready_Prototype_ForStatic()))
+		return E_FAIL;
+
+	if(FAILED(Ready_Item_Setting()))
 		return E_FAIL;
 
 	if (FAILED(Start_Level(LEVEL::LEVEL_LOGO)))
@@ -159,6 +163,14 @@ HRESULT CMainApp::Ready_Prototype_ForStatic()
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_Room"), CRoom_Default::Create(m_pGraphic_Device))))
 		return E_FAIL;
 
+	//-------------
+	/* Prototype_GameObject_Item  */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_Item"), CItem_Base::Create(m_pGraphic_Device))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Item"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/UI/Item/Item_Icon_%d.png"), g_ItemDataBase.size()))))
+		return E_FAIL;
+
 	return S_OK;
 }
 
@@ -192,6 +204,27 @@ void CMainApp::Ready_Key_Setting()
 	m_pGameInstance->AddTrackingKey('K');
 #endif
 
+}
+
+HRESULT CMainApp::Ready_Item_Setting()
+{
+	CItemObject::ITEMOBJECT_DESC* pDesc = new CItemObject::ITEMOBJECT_DESC[g_ItemDataBase.size()];
+	for (_uint i = 0; i < g_ItemDataBase.size(); i++)
+	{
+		pDesc[i].iItemID = g_ItemDataBase[i].m_iItemID;
+		pDesc[i].iItemTextureID = g_ItemDataBase[i].m_iItemTextureID;
+		pDesc[i].iItemType = ENUM_CLASS(g_ItemDataBase[i].m_eType);
+		pDesc[i].iiValue = g_ItemDataBase[i].m_iiValue;
+		pDesc[i].iRarity = ENUM_CLASS(g_ItemDataBase[i].m_eRarity);
+		pDesc[i].szDescription = g_ItemDataBase[i].m_szDescription;
+		pDesc[i].szName = g_ItemDataBase[i].m_szName;
+	}
+
+	m_pGameInstance->Setting_Item(pDesc, g_ItemDataBase.size(), ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_Item"));
+
+	Safe_Delete_Array(pDesc);
+
+	return S_OK;
 }
 
 HRESULT CMainApp::Start_Level(LEVEL eStartLevelID)

@@ -202,6 +202,18 @@
     <Filter Include="02.GameObject\Player\Weapon\Dagger">
       <UniqueIdentifier>{13b902d1-9fd8-4a3b-b2aa-e85b85a79094}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\Item">
+      <UniqueIdentifier>{a0442a2f-455c-4da5-bb1a-a161cd6ce207}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Item\Item_Effect">
+      <UniqueIdentifier>{286956f5-0755-4a12-9e84-f1f4d3be7523}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\UI\Window\Inventory\Inven_Slot">
+      <UniqueIdentifier>{88764adf-be53-44bb-a7d2-7dbd9862d95a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\UI\Window\Inventory\Inven_Slot\Slot_Selete">
+      <UniqueIdentifier>{7a3d5675-b231-45be-9105-c871bb05a771}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -399,11 +411,20 @@
     <ClInclude Include="..\public\Field_Hp_Frame.h">
       <Filter>02.GameObject\UI\Field\Field_Hp\Field_Hp_Frame</Filter>
     </ClInclude>
-    <ClInclude Include="Client_Defines_Item.h">
-      <Filter>99.Defines</Filter>
-    </ClInclude>
     <ClInclude Include="..\public\Dagger.h">
       <Filter>02.GameObject\Player\Weapon\Dagger</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Item_Base.h">
+      <Filter>02.GameObject\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Client_Defines_Item.h">
+      <Filter>99.Defines</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Inven_Slot.h">
+      <Filter>02.GameObject\UI\Window\Inventory\Inven_Slot</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Inven_Slot_Selete.h">
+      <Filter>02.GameObject\UI\Window\Inventory\Inven_Slot\Slot_Selete</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -575,6 +596,15 @@
     </ClCompile>
     <ClCompile Include="..\private\Dagger.cpp">
       <Filter>02.GameObject\Player\Weapon\Dagger</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Item_Base.cpp">
+      <Filter>02.GameObject\Item</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Inven_Slot.cpp">
+      <Filter>02.GameObject\UI\Window\Inventory\Inven_Slot</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Inven_Slot_Selete.cpp">
+      <Filter>02.GameObject\UI\Window\Inventory\Inven_Slot\Slot_Selete</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
