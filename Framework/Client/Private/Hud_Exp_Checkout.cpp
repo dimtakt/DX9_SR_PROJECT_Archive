@@ -18,25 +18,22 @@ HRESULT CHud_Exp_Checkout::Initialize(void* pArg)
 {
     UIHUD_CHECKOUT_DESC* DescMy = static_cast<UIHUD_CHECKOUT_DESC*>(pArg);
 
-    UIOBJECT_DESC Desc {};
-
-
-    Desc.fSizeX = 3;
-    Desc.fSizeY = 9;
+    m_fSizeX = 3;
+    m_fSizeY = 9;
     
     if (DescMy->fX <= -(g_iWinSizeX * 0.5))
-        Desc.fX = (Desc.fSizeX * 0.5) - (g_iWinSizeX * 0.5);
+        m_fX = (m_fSizeX * 0.5) - (g_iWinSizeX * 0.5);
     else if (DescMy->fX >= g_iWinSizeX * 0.5)
-        Desc.fX = (g_iWinSizeX * 0.5) - (Desc.fSizeX * 0.5);
+        m_fX = (g_iWinSizeX * 0.5) - (m_fSizeX * 0.5);
     else
-        Desc.fX = DescMy->fX;
+        m_fX = DescMy->fX;
 
-    Desc.fY = 0.f;
-    Desc.fZ = 0.f;
-    Desc.iWinSizeX = g_iWinSizeX;
-    Desc.iWinSizeY = g_iWinSizeY;
+    m_fY = 0.f;
+    m_fZ = 0.f;
+    m_iWinSizeX = g_iWinSizeX;
+    m_iWinSizeY = g_iWinSizeY;
 
-    if (FAILED(__super::Initialize(&Desc)))
+    if (FAILED(__super::Initialize()))
         return E_FAIL;
 
     if (FAILED(Ready_Components()))
@@ -68,7 +65,6 @@ void CHud_Exp_Checkout::Late_Update(_float fTimeDelta)
 
 HRESULT CHud_Exp_Checkout::Render()
 {
-    m_pTransformCom->Bind_Matrix();
     m_pVIBufferCom->Bind_Buffers();
 
     __super::Begin();

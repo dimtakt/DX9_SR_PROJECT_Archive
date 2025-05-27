@@ -19,17 +19,15 @@ HRESULT CTitle_Tree::Initialize_Prototype()
 
 HRESULT CTitle_Tree::Initialize(void* pArg)
 {
-    UIOBJECT_DESC Desc{};
+    m_fSizeX = 300.f;
+    m_fSizeY = 300.f;
+    m_fX = 0.f;
+    m_fY = -120.f;
+    m_fZ = 0.0f;
+    m_iWinSizeX = g_iWinSizeX;
+    m_iWinSizeY = g_iWinSizeY;
 
-    Desc.fSizeX = 300.f;
-    Desc.fSizeY = 300.f;
-    Desc.fX = 0.f;
-    Desc.fY = -120.f;
-    Desc.fZ = 0.0f;
-    Desc.iWinSizeX = g_iWinSizeX;
-    Desc.iWinSizeY = g_iWinSizeY;
-
-    if (FAILED(__super::Initialize(&Desc)))
+    if (FAILED(__super::Initialize()))
         return E_FAIL;
 
     if (FAILED(Ready_Components()))
@@ -65,8 +63,6 @@ void CTitle_Tree::Late_Update(_float fTimeDelta)
 HRESULT CTitle_Tree::Render()
 {
     SetUp_RenderState();
-
-    m_pTransformCom->Bind_Matrix();
 
     m_pVIBufferCom->Bind_Buffers();
 

@@ -11,7 +11,7 @@ protected:
 
 public:
 	virtual HRESULT				Initialize_Prototype();
-	virtual HRESULT				Initialize(void* pArg);
+	virtual HRESULT				Initialize(void* pArg = nullptr);
 	virtual void				Priority_Update(_float fTimeDelta);
 	virtual void				Update(_float fTimeDelta);
 	virtual void				Late_Update(_float fTimeDelta);

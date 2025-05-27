@@ -23,17 +23,15 @@ HRESULT CHud_Wallet::Initialize_Prototype(LEVEL eLevel)
 
 HRESULT CHud_Wallet::Initialize(void* pArg)
 {
-	UIOBJECT_DESC Desc{};
+	m_fSizeX = 0;
+	m_fSizeY = 0;
+	m_fX = g_iWinSizeX;
+	m_fY = g_iWinSizeY - 32.f;;
+	m_fZ = 0.f;
+	m_iWinSizeX = g_iWinSizeX;
+	m_iWinSizeY = g_iWinSizeY;
 
-	Desc.fSizeX = 0;
-	Desc.fSizeY = 0;
-	Desc.fX = g_iWinSizeX;
-	Desc.fY = g_iWinSizeY - 32.f;;
-	Desc.fZ = 0.f;
-	Desc.iWinSizeX = g_iWinSizeX;
-	Desc.iWinSizeY = g_iWinSizeY;
-
-	if (FAILED(__super::Initialize(&Desc)))
+	if (FAILED(__super::Initialize()))
 		return E_FAIL;
 
 	if (FAILED(Ready_Components()))

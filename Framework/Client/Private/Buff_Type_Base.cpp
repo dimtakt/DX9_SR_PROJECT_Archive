@@ -1,7 +1,7 @@
 #include "Buff_Type_Base.h"
 #include "GameInstance.h"
 #include "Buff_Icon.h"
-#include "Buff_Fream.h"
+#include "Buff_Frame.h"
 
 CBuff_Type_Base::CBuff_Type_Base(LPDIRECT3DDEVICE9 pGraphic_Device) : CUIObject(pGraphic_Device)
 {
@@ -28,15 +28,14 @@ HRESULT CBuff_Type_Base::Initialize(void* pArg)
 	m_iBuff_Type = DescMy->iBuff_Type;
 	m_iBuff_Index = DescMy->iBuff_Index;
 
-	UIOBJECT_DESC Desc{};
-	Desc.fSizeX = 32;
-	Desc.fSizeY = 32;
-	Desc.fX = 0.f;
-	Desc.fY = 0.f;
-	Desc.iWinSizeX = g_iWinSizeX;
-	Desc.iWinSizeY = g_iWinSizeY;
+	m_fSizeX = 32;
+	m_fSizeY = 32;
+	m_fX = 0.f;
+	m_fY = 0.f;
+	m_iWinSizeX = g_iWinSizeX;
+	m_iWinSizeY = g_iWinSizeY;
 
-	if (FAILED(CUIObject::Initialize(&Desc)))
+	if (FAILED(CUIObject::Initialize()))
 		return E_FAIL;
 
 	if (FAILED(Ready_Components()))
@@ -72,7 +71,6 @@ HRESULT CBuff_Type_Base::Render()
 {
 	SetUp_RenderState();
 
-	m_pTransformCom->Bind_Matrix();
 	if (FAILED(m_pTextureCom->Bind_Texture(m_iBuff_Type)))
 		return E_FAIL;
 	m_pVIBufferCom->Bind_Buffers();
@@ -126,8 +124,8 @@ void CBuff_Type_Base::Reset_RenderState()
 
 HRESULT CBuff_Type_Base::Ready_ChildPrototype(LEVEL eLevel)
 {
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(eLevel), TEXT("Prototype_GameObject_UI_Buff_Fream"),
-		CBuff_Fream::Create(m_pGraphic_Device))))
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(eLevel), TEXT("Prototype_GameObject_UI_Buff_Frame"),
+		CBuff_Frame::Create(m_pGraphic_Device))))
 		return E_FAIL;
 
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(eLevel), TEXT("Prototype_GameObject_UI_Buff_Icon"),
@@ -143,7 +141,7 @@ HRESULT CBuff_Type_Base::Ready_Children()
 	CBuff_Icon::UI_BUFF_ICON Desc{};
 
 	//버프 프레임
-	pGameObject = dynamic_cast<CUIObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(m_eLevel), TEXT("Prototype_GameObject_UI_Buff_Fream")));
+	pGameObject = dynamic_cast<CUIObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(m_eLevel), TEXT("Prototype_GameObject_UI_Buff_Frame")));
 	if (nullptr == pGameObject)
 		return E_FAIL;
 	Add_Child(pGameObject);

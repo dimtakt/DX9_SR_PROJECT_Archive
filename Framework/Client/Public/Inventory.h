@@ -3,6 +3,7 @@
 #include "UIObject.h"
 BEGIN(Engine)
 class CVIBuffer_Rect;
+class CTexture;
 END
 
 BEGIN(Client)
@@ -24,6 +25,7 @@ public:
 	void						UI_Switch();
 private:
 	CVIBuffer_Rect*				m_pVIBufferCom = { nullptr };
+	CTexture*					m_pTextureCom = { nullptr };
 	LEVEL						m_eLevel = {};
 	_bool						m_bIsOpen = {};
 
@@ -32,6 +34,9 @@ private:
 
 	HRESULT						Ready_ChildPrototype(LEVEL eLevel);
 	HRESULT						Ready_Children();
+
+	void						SetUp_RenderState();
+	void						Reset_RenderState();
 
 public:
 	static CInventory*			Create(LPDIRECT3DDEVICE9 pGraphic_Device, LEVEL eLevel);

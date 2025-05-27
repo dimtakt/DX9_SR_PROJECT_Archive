@@ -8,6 +8,7 @@
 #include "Shader.h"
 #include "PlayerStats.h"
 #include "Animator.h"
+#include "VIBuffer_TerrainBox.h"
 
 BEGIN(Engine)
 
