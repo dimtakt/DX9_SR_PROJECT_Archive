@@ -21,11 +21,11 @@ void CPicking::Update()
     GetCursorPos(&ptMouse);
     ScreenToClient(m_hWnd, &ptMouse);
 
-    // 1. 마우스 스크린 좌표를 NDC로 변환
+    // 1. 마우스 스크린 좌표를 NDC로 변환 (윈도우 사이즈를 -1 ~ 1 사잇값으로)
     _float4 vPosition{};
     vPosition.x = ptMouse.x / (m_iWinSizeX * 0.5f) - 1.f;
     vPosition.y = ptMouse.y / (m_iWinSizeY * -0.5f) + 1.f;
-    vPosition.z = 1.0f; // 전방
+    vPosition.z = 0.f; // 1.f; // 전방..?
     vPosition.w = 1.f;
 
     // 2. 역투영 변환
@@ -82,6 +82,23 @@ _bool CPicking::Picking_InLocal(_float3& vPickedPos, const _float3& vPointA, con
     return isPicked;
 }
 
+_bool CPicking::Get_IntersectAtX(_float targetX, _float3& vIntersectPos)
+{
+    if (fabsf(m_vMouseRay.x) < 1e-6f)                       // 마우스가 X와 평행하면 계산X
+        return false;
+
+    float t = (targetX - m_vMousePos.x) / m_vMouseRay.x;    // X값과 교차하는 데까지 거리 t 찾음
+
+    if (((targetX - m_vMousePos.x) / m_vMouseRay.x) < 0.f)  // t가 음수면 레이의 반대 방향 (화면 뒤쪽)이므로 무시
+        return false;
+
+    _float3 vIntersect = m_vMousePos + m_vMouseRay * t;     // 레이 방정식: P = origin + direction * t
+
+    vIntersectPos = _float3(targetX, vIntersect.y, vIntersect.z);
+
+    return true;
+}
+
 _bool CPicking::Get_IntersectAtY(_float targetY, _float3& vIntersectPos)
 {
     if (fabsf(m_vMouseRay.y) < 1e-6f)                       // 마우스가 Y와 평행하면 계산X
@@ -95,6 +112,23 @@ _bool CPicking::Get_IntersectAtY(_float targetY, _float3& vIntersectPos)
     _float3 vIntersect = m_vMousePos + m_vMouseRay * t;     // 레이 방정식: P = origin + direction * t
 
     vIntersectPos = _float3(vIntersect.x, targetY, vIntersect.z);
+
+    return true;
+}
+
+_bool CPicking::Get_IntersectAtZ(_float targetZ, _float3& vIntersectPos)
+{
+    if (fabsf(m_vMouseRay.z) < 1e-6f)                       // 마우스가 X와 평행하면 계산X
+        return false;
+
+    float t = (targetZ - m_vMousePos.z) / m_vMouseRay.z;    // X값과 교차하는 데까지 거리 t 찾음
+
+    if (((targetZ - m_vMousePos.z) / m_vMouseRay.z) < 0.f)  // t가 음수면 레이의 반대 방향 (화면 뒤쪽)이므로 무시
+        return false;
+
+    _float3 vIntersect = m_vMousePos + m_vMouseRay * t;     // 레이 방정식: P = origin + direction * t
+
+    vIntersectPos = _float3(vIntersect.x, vIntersect.y, targetZ);
 
     return true;
 }

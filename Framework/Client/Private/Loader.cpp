@@ -25,7 +25,7 @@
 #include "Land.h"
 #include "Monster_Default.h"
 #include "TerrainBox.h"
-
+#include "Dagger.h"
 
 CLoader::CLoader(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: m_pGraphic_Device{ pGraphic_Device }

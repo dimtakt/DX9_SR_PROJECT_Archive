@@ -178,6 +178,9 @@
     <Filter Include="01.Utility\03.GameObject\ItemObject\Item_Effect">
       <UniqueIdentifier>{fc6b4298-e5ed-4154-b495-18b2009490cb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01.Utility\05.Component\Animation">
+      <UniqueIdentifier>{2cbb2f35-fea3-43c8-859c-9581c15a0055}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Public\Engine_Macro.h">
@@ -333,6 +336,9 @@
     <ClInclude Include="..\public\ItemObject.h">
       <Filter>01.Utility\03.GameObject\ItemObject</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\Animation.h">
+      <Filter>01.Utility\05.Component\Animation</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\Base.cpp">
@@ -469,6 +475,9 @@
     </ClCompile>
     <ClCompile Include="..\private\ItemObject.cpp">
       <Filter>01.Utility\03.GameObject\ItemObject</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Animation.cpp">
+      <Filter>01.Utility\05.Component\Animation</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

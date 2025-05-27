@@ -196,6 +196,12 @@
     <Filter Include="02.GameObject\UI\Window\Inventory">
       <UniqueIdentifier>{e5338878-65f3-47f8-bbaa-77837fbf92a1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\Player\Weapon">
+      <UniqueIdentifier>{697f8f4f-b9da-46c9-8a5b-d4c20b95cde1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Player\Weapon\Dagger">
+      <UniqueIdentifier>{13b902d1-9fd8-4a3b-b2aa-e85b85a79094}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -396,6 +402,9 @@
     <ClInclude Include="Client_Defines_Item.h">
       <Filter>99.Defines</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\Dagger.h">
+      <Filter>02.GameObject\Player\Weapon\Dagger</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -563,6 +572,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\Field_Hp_Frame.cpp">
       <Filter>02.GameObject\UI\Field\Field_Hp\Field_Hp_Frame</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Dagger.cpp">
+      <Filter>02.GameObject\Player\Weapon\Dagger</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

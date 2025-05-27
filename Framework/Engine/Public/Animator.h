@@ -2,6 +2,7 @@
 
 #include "Component.h"
 #include "Texture.h"
+#include "Animation.h"
 
 BEGIN(Engine)
 
@@ -14,6 +15,7 @@ public:
 		CTexture* pTextureCom;	// 텍스쳐 변화를 애니메이터 내에서 구현을 위함
 		_int iFramePerImage;	// 몇프레임 뒤에 다음 이미지로 넘어갈건지
 		_bool isExitable;		// 프레임이 끝나지 않아도 다른 State로 넘어갈 수 있는지
+		CAnimation* pAnimation = nullptr;
 	} ANIMSTATE;
 
 	// Animator 최초 생성 시 필요로 하는 정보 (pArg)
@@ -40,7 +42,11 @@ public:
 	_bool Get_IsLastFrame() {	
 		// 마지막 이미지의 마지막 프레임부터 true를 반환합니다.
 		// 예) 장당 4프레임짜리 5장 이미지의 경우 딱 20번째 프레임부터 true 반환
-		return  (((m_iStackedFrames + 1) / m_pCurState->iFramePerImage - 1) >= m_pCurState->pTextureCom->Get_NumTextures());
+		return (((m_iStackedFrames + 1) / m_pCurState->iFramePerImage - 1) >= m_pCurState->pTextureCom->Get_NumTextures());
+	}
+	_bool Get_IsReachedFrame(_uint iFrame) {
+		// 해당 번째 이미지가 지나기 직전 시점부터 true를 반환합니다.
+		return (((m_iStackedFrames + 1) / m_pCurState->iFramePerImage - 1) >= iFrame);
 	}
 	_bool Check_State(const _wstring& strStateTag) {
 		// 해당 State가 존재하는지 여부만 확인
