@@ -14,36 +14,6 @@ HRESULT CRoom_Manager::Initialize()
 	return S_OK;
 }
 
-void CRoom_Manager::Priority_Update(_float fTimeDelta)
-{
-	for (auto& iter : m_mRooms)
-	{
-		iter.second->Priority_Update(fTimeDelta);
-	}
-}
-
-void CRoom_Manager::Update(_float fTimeDelta)
-{
-	for (auto& iter : m_mRooms)
-	{
-		iter.second->Update(fTimeDelta);
-	}
-}
-
-void CRoom_Manager::Late_Update(_float fTimeDelta)
-{
-	for (auto& iter : m_mRooms)
-	{
-		iter.second->Late_Update(fTimeDelta);
-		m_pGameInstance->Add_RenderGroup(RENDERGROUP::RG_NONBLEND, iter.second);
-	}
-}
-
-HRESULT CRoom_Manager::Render()
-{
-	return S_OK;
-}
-
 HRESULT CRoom_Manager::Add_Room(CRoom* pRoom)
 {
 	auto iter = m_mRooms.find(CRoom_Manager::iRoomIndex);

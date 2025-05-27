@@ -1,8 +1,9 @@
 #include "MainApp.h"
 #include "GameInstance.h"
-
 #include "Level_Loading.h"
 #include "Player.h"
+#include "Room_Default.h"
+#include "Dagger.h"
 
 CMainApp::CMainApp()
 	: m_pGameInstance{ CGameInstance::GetInstance() }
@@ -75,6 +76,9 @@ HRESULT CMainApp::Ready_Prototype_ForStatic()
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_VIBuffer_Rect"), CVIBuffer_Rect::Create(m_pGraphic_Device))))
 		return E_FAIL;
 
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_VIBuffer_Cube"), CVIBuffer_Cube::Create(m_pGraphic_Device))))
+		return E_FAIL;
+
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Transform"), CTransform::Create(m_pGraphic_Device))))
 		return E_FAIL;
 
@@ -130,8 +134,18 @@ HRESULT CMainApp::Ready_Prototype_ForStatic()
 		return E_FAIL;
 
 	//-------------
-
+	
+	/* Prototype_GameObject_Player */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_Player"), CPlayer::Create(m_pGraphic_Device))))
+		return E_FAIL;
+
+	/* Prototype_GameObject_Weapon_Dagger */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_Weapon_Dagger"), CDagger::Create(m_pGraphic_Device))))
+		return E_FAIL;
+
+	/* Prototype_Component_Texture_Weapon_Dagger*/
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Weapon_Dagger"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Player_Weapon/Weapon_Dagger0.png"), 1))))
 		return E_FAIL;
 	
 	/* Prototype_Component_PlayerStats */
@@ -140,6 +154,9 @@ HRESULT CMainApp::Ready_Prototype_ForStatic()
 
 	/* Prototype_Component_Animator  */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Animator"), CAnimator::Create(m_pGraphic_Device))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_Room"), CRoom_Default::Create(m_pGraphic_Device))))
 		return E_FAIL;
 
 	return S_OK;
@@ -166,7 +183,15 @@ void CMainApp::Ready_Key_Setting()
 	m_pGameInstance->AddTrackingKey('P');
 	m_pGameInstance->AddTrackingKey('Q');
 	m_pGameInstance->AddTrackingKey('E');
+	m_pGameInstance->AddTrackingKey('L');
 	m_pGameInstance->AddTrackingKey('Z');
+
+	// 임시 테스트용
+#if _DEBUG
+	m_pGameInstance->AddTrackingKey('J');
+	m_pGameInstance->AddTrackingKey('K');
+#endif
+
 }
 
 HRESULT CMainApp::Start_Level(LEVEL eStartLevelID)

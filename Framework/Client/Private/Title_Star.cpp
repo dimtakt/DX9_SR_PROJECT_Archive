@@ -168,4 +168,6 @@ void CTitle_Star::Free()
     __super::Free();
 
     Safe_Release(m_pVIBufferCom);
+    Safe_Release(m_pTextureCom_Title_Star);
+    Safe_Release(m_pShaderCom_Title_Star);
 }

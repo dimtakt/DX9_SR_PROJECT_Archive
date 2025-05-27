@@ -19,11 +19,11 @@ namespace Engine
 		D3DXVECTOR2		vTexcoord;
 	}VTXPOSTEX;
 	
-	typedef struct tagVertexCube
+	typedef struct tagVertexPosCubeTex
 	{
 		D3DXVECTOR3		vPosition;
 		D3DXVECTOR3		vTexcoord;
-	}VTXCUBE;
+	}VTXCUBETEX;
 
 	typedef struct tagVertexPositionNormalTexcoord
 	{

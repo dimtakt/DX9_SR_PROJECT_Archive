@@ -14,7 +14,6 @@ CPlayer::CPlayer(const CPlayer& Prototype)
 
 HRESULT CPlayer::Initialize_Prototype()
 {
-
 	return S_OK;
 }
 
@@ -40,8 +39,8 @@ void CPlayer::Update(_float fTimeDelta)
     _float3 vPlayerPos = {};    // 플레이어 좌표
     vPlayerPos = m_pTransformCom->Get_State(STATE::POSITION);
 
-    std::cout << "[Player::Update] RayPoint  : {" << vRayPoint.x << ", " << vRayPoint.y << ", " << vRayPoint.z << "}" << std::endl;
-    std::cout << "[Player::Update] PlayerPos : {" << vPlayerPos.x << ", " << vPlayerPos.y << ", " << vPlayerPos.z << "}" << std::endl;
+    //std::cout << "[Player::Update] RayPoint  : {" << vRayPoint.x << ", " << vRayPoint.y << ", " << vRayPoint.z << "}" << std::endl;
+    //std::cout << "[Player::Update] PlayerPos : {" << vPlayerPos.x << ", " << vPlayerPos.y << ", " << vPlayerPos.z << "}" << std::endl;
 
 
 
@@ -91,19 +90,6 @@ void CPlayer::Update(_float fTimeDelta)
         }
     }
 
-    // 좌우반전
-    if      (vRayPoint.x < vPlayerPos.x && !m_isFlippedX)   // 좌측
-    {
-        m_pVIBufferCom->ChangeUV_FlipX(true);
-        m_isFlippedX = true;
-        //std::cout << "[CPlayer::Update] FlippedX Changed to True." << std::endl;
-    }
-    else if (vRayPoint.x > vPlayerPos.x && m_isFlippedX)    // 우측
-    {
-        m_pVIBufferCom->ChangeUV_FlipX(false);
-        m_isFlippedX = false;
-        //std::cout << "[CPlayer::Update] FlippedX Changed to False." << std::endl;
-    }
 
 
     if (m_pGameInstance->IsKeyHold('W'))
@@ -149,10 +135,31 @@ void CPlayer::Late_Update(_float fTimeDelta)
 
 HRESULT CPlayer::Render()
 {
-    m_pTransformCom->Bind_Matrix();
+    //SetUp_RenderState();
 
-    //if (FAILED(m_pTextureCom->Bind_Texture(0)))
-    //	return E_FAIL;
+    _float fPointY = 0.f;       // 교차 평면의 기준이 될 Y값
+    _float3 vRayPoint = {};     // fPointY 값 기준 마우스 Ray와 교차하는 좌표
+    m_pGameInstance->Get_IntersectAtY(fPointY, vRayPoint);
+
+    _float3 vPlayerPos = {};    // 플레이어 좌표
+    vPlayerPos = m_pTransformCom->Get_State(STATE::POSITION);
+
+    // 좌우반전
+    if (vRayPoint.x < vPlayerPos.x && !m_isFlippedX)   // 좌측
+    {
+        m_pVIBufferCom->ChangeUV_FlipX(true);
+        m_isFlippedX = true;
+        //std::cout << "[CPlayer::Update] FlippedX Changed to True." << std::endl;
+    }
+    else if (vRayPoint.x > vPlayerPos.x && m_isFlippedX)    // 우측
+    {
+        m_pVIBufferCom->ChangeUV_FlipX(false);
+        m_isFlippedX = false;
+        //std::cout << "[CPlayer::Update] FlippedX Changed to False." << std::endl;
+    }
+
+
+    m_pTransformCom->Bind_Matrix();
 
     m_pAnimatorCom->Update_State(); // Bind_Texture 이 포함되어, 현재 State에 맞는 이미지 출력
 
@@ -163,9 +170,9 @@ HRESULT CPlayer::Render()
     {
         m_pVIBufferCom->ResetUV_FlipX();
         m_isFlippedX = false;
-        //std::cout << "[CPlayer::Render] FlippedX Changed to False." << std::endl;
     }
 
+    //Reset_RenderState();
 	return S_OK;
 }
 
@@ -238,7 +245,9 @@ HRESULT CPlayer::Ready_Components()
         TEXT("Com_Transform"), reinterpret_cast<CComponent**>(&m_pTransformCom), &TransformDesc)))
         return E_FAIL;
 
-
+    _float3 vPlayerPos = m_pTransformCom->Get_State(STATE::POSITION);
+    m_pTransformCom->Set_State(STATE::POSITION, vPlayerPos + _float3{0, 0.5, 0});
+    m_pTransformCom->Scaling(float(18) / 19, 1, 1);
 
 
     /* For Com_PlayerStats */
@@ -295,13 +304,36 @@ HRESULT CPlayer::Ready_Components()
     return S_OK;
 }
 
+void CPlayer::SetUp_RenderState()
+{
+    m_pGraphic_Device->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
+    m_pGraphic_Device->SetRenderState(D3DRS_ALPHAREF, 200);
+    m_pGraphic_Device->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER);
+
+    m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_POINT);
+    m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_POINT);
+    m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MIPFILTER, D3DTEXF_NONE);
+}
+
+void CPlayer::Reset_RenderState()
+{
+    m_pGraphic_Device->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
+
+    m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_LINEAR);
+    m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);
+    m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MIPFILTER, D3DTEXF_LINEAR);
+
+    m_pGraphic_Device->SetTexture(0, NULL);
+}
+
+
 CPlayer* CPlayer::Create(LPDIRECT3DDEVICE9 pGraphic_Device)
 {
     CPlayer* pInstance = new CPlayer(pGraphic_Device);
 
     if (FAILED(pInstance->Initialize_Prototype()))
     {
-        MSG_BOX(TEXT("Failde to Created : CPlayer"));
+        MSG_BOX(TEXT("Failed to Created : CPlayer"));
         Safe_Release(pInstance);
     }
 
@@ -314,7 +346,7 @@ CGameObject* CPlayer::Clone(void* pArg)
 
     if (FAILED(pInstance->Initialize(pArg)))
     {
-        MSG_BOX(TEXT("Failde to Cloned : CPlayer"));
+        MSG_BOX(TEXT("Failed to Cloned : CPlayer"));
         Safe_Release(pInstance);
     }
 

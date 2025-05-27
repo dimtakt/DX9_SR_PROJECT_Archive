@@ -172,4 +172,6 @@ void CTitle_Logo_Wave::Free()
     __super::Free();
 
     Safe_Release(m_pVIBufferCom);
+    Safe_Release(m_pShaderCom_Title_Logo_Wave);
+    Safe_Release(m_pTextureCom_Title_Logo_Wave);
 }
