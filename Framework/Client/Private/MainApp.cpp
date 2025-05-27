@@ -3,6 +3,7 @@
 
 #include "Level_Loading.h"
 #include "Player.h"
+#include "Dagger.h"
 
 CMainApp::CMainApp()
 	: m_pGameInstance{ CGameInstance::GetInstance() }
@@ -130,8 +131,18 @@ HRESULT CMainApp::Ready_Prototype_ForStatic()
 		return E_FAIL;
 
 	//-------------
-
+	
+	/* Prototype_GameObject_Player */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_Player"), CPlayer::Create(m_pGraphic_Device))))
+		return E_FAIL;
+
+	/* Prototype_GameObject_Weapon_Dagger */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_Weapon_Dagger"), CDagger::Create(m_pGraphic_Device))))
+		return E_FAIL;
+
+	/* Prototype_Component_Texture_Weapon_Dagger*/
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Weapon_Dagger"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Player_Weapon/Weapon_Dagger0.png"), 1))))
 		return E_FAIL;
 	
 	/* Prototype_Component_PlayerStats */
@@ -166,6 +177,13 @@ void CMainApp::Ready_Key_Setting()
 	m_pGameInstance->AddTrackingKey('P');
 	m_pGameInstance->AddTrackingKey('Q');
 	m_pGameInstance->AddTrackingKey('E');
+
+	// 임시 테스트용
+#if _DEBUG
+	m_pGameInstance->AddTrackingKey('J');
+	m_pGameInstance->AddTrackingKey('K');
+#endif
+
 }
 
 HRESULT CMainApp::Start_Level(LEVEL eStartLevelID)

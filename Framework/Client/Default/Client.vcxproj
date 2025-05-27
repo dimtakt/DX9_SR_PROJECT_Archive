@@ -152,6 +152,7 @@
     <ClInclude Include="..\Public\Camera_Mouse.h" />
     <ClInclude Include="..\Public\Client_Defines.h" />
     <ClInclude Include="..\Public\Client_Struct.h" />
+    <ClInclude Include="..\public\Dagger.h" />
     <ClInclude Include="..\public\Dash_Gauge.h" />
     <ClInclude Include="..\public\Dash_Gauge_Fream.h" />
     <ClInclude Include="..\public\Dice_Player.h" />
@@ -213,6 +214,7 @@
     <ClCompile Include="..\Private\Camera_Follow.cpp" />
     <ClCompile Include="..\private\Camera_Free.cpp" />
     <ClCompile Include="..\Private\Camera_Mouse.cpp" />
+    <ClCompile Include="..\private\Dagger.cpp" />
     <ClCompile Include="..\private\Dash_Gauge.cpp" />
     <ClCompile Include="..\private\Dash_Gauge_Fream.cpp" />
     <ClCompile Include="..\private\Dice_Player.cpp" />

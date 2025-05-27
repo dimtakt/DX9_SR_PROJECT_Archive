@@ -153,6 +153,7 @@ call Copy.bat</Command>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\public\Animation.h" />
     <ClInclude Include="..\public\Animator.h" />
     <ClInclude Include="..\public\AnimatorController.h" />
     <ClInclude Include="..\Public\Base.h" />
@@ -200,6 +201,7 @@ call Copy.bat</Command>
     <ClInclude Include="..\public\VIBuffer_Terrain.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\private\Animation.cpp" />
     <ClCompile Include="..\private\Animator.cpp" />
     <ClCompile Include="..\private\AnimatorController.cpp" />
     <ClCompile Include="..\Private\Base.cpp" />

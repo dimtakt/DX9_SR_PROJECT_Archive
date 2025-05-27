@@ -157,6 +157,12 @@
     <Filter Include="02.GameObject\UI\Title\BackGround\Star_Wave">
       <UniqueIdentifier>{e537c5f7-17c1-46af-96cd-4f0792ac1b67}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\Player\Weapon">
+      <UniqueIdentifier>{697f8f4f-b9da-46c9-8a5b-d4c20b95cde1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Player\Weapon\Dagger">
+      <UniqueIdentifier>{13b902d1-9fd8-4a3b-b2aa-e85b85a79094}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -333,6 +339,9 @@
     <ClInclude Include="..\Public\Title_Logo_Wave.h">
       <Filter>02.GameObject\UI\Title\BackGround\Star_Wave</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\Dagger.h">
+      <Filter>02.GameObject\Player\Weapon\Dagger</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -479,6 +488,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\Title_Logo_Wave.cpp">
       <Filter>02.GameObject\UI\Title\BackGround\Star_Wave</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Dagger.cpp">
+      <Filter>02.GameObject\Player\Weapon\Dagger</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

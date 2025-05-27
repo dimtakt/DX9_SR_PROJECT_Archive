@@ -148,6 +148,9 @@
     <Filter Include="01.Utility\05.Component\Animator\Controller">
       <UniqueIdentifier>{bc4e2e3e-1393-4676-a838-1fe0050d59bc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01.Utility\05.Component\Animation">
+      <UniqueIdentifier>{2cbb2f35-fea3-43c8-859c-9581c15a0055}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Public\Engine_Macro.h">
@@ -285,6 +288,9 @@
     <ClInclude Include="..\public\AnimatorController.h">
       <Filter>01.Utility\05.Component\Animator\Controller</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\Animation.h">
+      <Filter>01.Utility\05.Component\Animation</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\Base.cpp">
@@ -403,6 +409,9 @@
     </ClCompile>
     <ClCompile Include="..\private\AnimatorController.cpp">
       <Filter>01.Utility\05.Component\Animator\Controller</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Animation.cpp">
+      <Filter>01.Utility\05.Component\Animation</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

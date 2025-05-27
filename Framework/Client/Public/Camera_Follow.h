@@ -26,6 +26,7 @@ private:
 
 private:
 	CTransform* m_pTargetTransformCom = { nullptr };
+	std::vector<CTransform*> m_vRotateObjectsTransformCom = { };
 
 private:
 	HRESULT Ready_Target();
