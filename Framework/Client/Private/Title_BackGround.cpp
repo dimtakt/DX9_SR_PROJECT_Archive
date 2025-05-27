@@ -29,17 +29,15 @@ HRESULT CTitle_BackGround::Initialize_Prototype(LEVEL eLevel)
 
 HRESULT CTitle_BackGround::Initialize(void* pArg)
 {
-    UIOBJECT_DESC Desc{};
+    m_fSizeX = g_iWinSizeX*3;
+    m_fSizeY = g_iWinSizeY*5;
+    m_fX = g_iWinSizeX >> 1;
+    m_fY = 330.f;
+    m_fZ = 0.1f;
+    m_iWinSizeX = g_iWinSizeX;
+    m_iWinSizeY = g_iWinSizeY;
 
-    Desc.fSizeX = g_iWinSizeX*3;
-    Desc.fSizeY = g_iWinSizeY*5;
-    Desc.fX = g_iWinSizeX >> 1;
-    Desc.fY = 330.f;
-    Desc.fZ = 0.1f;
-    Desc.iWinSizeX = g_iWinSizeX;
-    Desc.iWinSizeY = g_iWinSizeY;
-
-    if (FAILED(__super::Initialize(&Desc)))
+    if (FAILED(__super::Initialize()))
         return E_FAIL;
 
     if (FAILED(Ready_Components()))
@@ -76,8 +74,6 @@ HRESULT CTitle_BackGround::Render()
         return E_FAIL;
 
     m_pVIBufferCom->Bind_Buffers();
-
-    m_pTransformCom->Bind_Matrix();
 
     __super::Begin();
 
@@ -209,4 +205,5 @@ void CTitle_BackGround::Free()
     Safe_Release(m_pVIBufferCom);
     Safe_Release(m_pTextureCom_Title_Back);
     Safe_Release(m_pTextureCom_Title_ReverseTree);
+    Safe_Release(m_pShaderCom);
 }

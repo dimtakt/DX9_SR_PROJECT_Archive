@@ -17,17 +17,15 @@ HRESULT CUI_KeyGuide::Initialize_Prototype(const _wstring& strPrototypeTag)
 
 HRESULT CUI_KeyGuide::Initialize(void* pArg)
 {
-	UIOBJECT_DESC Desc{};
+	m_fSizeX = 16;
+	m_fSizeY = 16;
+	m_fX = -2 - m_fSizeX * 0.5;
+	m_fY = 2 + m_fSizeY * 0.5;
+	m_fZ = 0.f;
+	m_iWinSizeX = g_iWinSizeX;
+	m_iWinSizeY = g_iWinSizeY;
 
-	Desc.fSizeX = 16;
-	Desc.fSizeY = 16;
-	Desc.fX = -2 - Desc.fSizeX * 0.5;
-	Desc.fY = 2 + Desc.fSizeY * 0.5;
-	Desc.fZ = 0.f;
-	Desc.iWinSizeX = g_iWinSizeX;
-	Desc.iWinSizeY = g_iWinSizeY;
-
-	if (FAILED(__super::Initialize(&Desc)))
+	if (FAILED(__super::Initialize()))
 		return E_FAIL;
 
 	if (FAILED(Ready_Components()))
@@ -54,7 +52,6 @@ void CUI_KeyGuide::Late_Update(_float fTimeDelta)
 
 HRESULT CUI_KeyGuide::Render()
 {
-	m_pTransformCom->Bind_Matrix();
 	m_pVIBufferCom->Bind_Buffers();
 	__super::Begin();
 	m_pVIBufferCom->Render();

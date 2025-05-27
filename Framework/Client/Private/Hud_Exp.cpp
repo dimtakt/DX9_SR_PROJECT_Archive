@@ -19,15 +19,14 @@ HRESULT CHud_Exp::Initialize(void* pArg)
     m_iCulMaxValue = 100;
     m_iCulValue = 0;
 
-    UIOBJECT_DESC Desc{};
-    Desc.fSizeX = g_iWinSizeX;
-    Desc.fSizeY = 9;
-    Desc.fX = 0;
-    Desc.fY = 0;
-    Desc.iWinSizeX = g_iWinSizeX;
-    Desc.iWinSizeY = g_iWinSizeY;
+    m_fSizeX = g_iWinSizeX;
+    m_fSizeY = 9;
+    m_fX = 0;
+    m_fY = 0;
+    m_iWinSizeX = g_iWinSizeX;
+    m_iWinSizeY = g_iWinSizeY;
 
-    if (FAILED(CUIObject::Initialize(&Desc)))
+    if (FAILED(CUIObject::Initialize()))
         return E_FAIL;
 
     if (FAILED(Ready_Components()))
@@ -43,22 +42,7 @@ HRESULT CHud_Exp::Initialize(void* pArg)
 
 void CHud_Exp::Priority_Update(_float fTimeDelta)
 {
-    if (GetKeyState('Z') < 0)
-    {
-        --m_iCulValue;
-    }
-    if (GetKeyState('X') < 0)
-    {
-        ++m_iCulValue;
-    }
-    if (GetKeyState('O') < 0)
-    {
-        --m_iCulMaxValue;
-    }
-    if (GetKeyState('P') < 0)
-    {
-        ++m_iCulMaxValue;
-    }
+
 }
 
 void CHud_Exp::Update(_float fTimeDelta)
@@ -73,8 +57,6 @@ void CHud_Exp::Late_Update(_float fTimeDelta)
 
 HRESULT CHud_Exp::Render()
 {
-
-    m_pTransformCom->Bind_Matrix();
     m_pVIBufferCom->Bind_Buffers();
 
     SetUp_RenderState();

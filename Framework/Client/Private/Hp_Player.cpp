@@ -19,15 +19,14 @@ HRESULT CHp_Player::Initialize(void* pArg)
 	m_iCulMaxValue = 200;
 	m_iCulValue = 200;
 
-	UIOBJECT_DESC Desc{};
-	Desc.fSizeX = 180;
-	Desc.fSizeY = 20;
-	Desc.fX = 0;
-	Desc.fY = -15;
-	Desc.iWinSizeX = g_iWinSizeX;
-	Desc.iWinSizeY = g_iWinSizeY;
+	m_fSizeX = 180;
+	m_fSizeY = 20;
+	m_fX = 0;
+	m_fY = -15;
+	m_iWinSizeX = g_iWinSizeX;
+	m_iWinSizeY = g_iWinSizeY;
 
-	if (FAILED(CUIObject::Initialize(&Desc)))
+	if (FAILED(CUIObject::Initialize()))
 		return E_FAIL;
 
 	if (FAILED(Ready_Components()))
@@ -41,22 +40,7 @@ HRESULT CHp_Player::Initialize(void* pArg)
 
 void CHp_Player::Priority_Update(_float fTimeDelta)
 {
-	if (GetKeyState('Z') < 0)
-	{
-		--m_iCulValue;
-	}
-	if (GetKeyState('X') < 0)
-	{
-		++m_iCulValue;
-	}
-	if (GetKeyState('O') < 0)
-	{
-		--m_iCulMaxValue;
-	}
-	if (GetKeyState('P') < 0)
-	{
-		++m_iCulMaxValue;
-	}
+
 }
 
 void CHp_Player::Update(_float fTimeDelta)
@@ -72,7 +56,6 @@ void CHp_Player::Late_Update(_float fTimeDelta)
 
 HRESULT CHp_Player::Render()
 {
-	m_pTransformCom->Bind_Matrix();
 	m_pVIBufferCom->Bind_Buffers();
 	__super::Begin();
 	m_pVIBufferCom->Render();

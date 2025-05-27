@@ -76,7 +76,6 @@ HRESULT CButton::Bind_ButtonTex_Double(HWND hWnd, _uint iTextureIndex_Default, _
 
 HRESULT CButton::Render_Button(_uint iTextureIndex)
 {
-	m_pTransformCom->Bind_Matrix();
 	if (FAILED(m_pTextureCom->Bind_Texture(iTextureIndex)))
 		return E_FAIL;
 	m_pVIBufferCom->Bind_Buffers();

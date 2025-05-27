@@ -18,17 +18,15 @@ HRESULT CTitle_Star::Initialize_Prototype()
 
 HRESULT CTitle_Star::Initialize(void* pArg)
 {
-    UIOBJECT_DESC Desc{};
+    m_fSizeX = 640.f * 2.5f;
+    m_fSizeY = 90.f * 2.5f;
+    m_fX = 0.f;
+    m_fY = -120.f;
+    m_fZ = 0.1f;
+    m_iWinSizeX = g_iWinSizeX;
+    m_iWinSizeY = g_iWinSizeY;
 
-    Desc.fSizeX = 640.f * 2.5f;
-    Desc.fSizeY = 90.f * 2.5f;
-    Desc.fX = 0.f;
-    Desc.fY = -120.f;
-    Desc.fZ = 0.1f;
-    Desc.iWinSizeX = g_iWinSizeX;
-    Desc.iWinSizeY = g_iWinSizeY;
-
-    if (FAILED(__super::Initialize(&Desc)))
+    if (FAILED(__super::Initialize()))
         return E_FAIL;
 
     if (FAILED(Ready_Components()))
@@ -63,8 +61,6 @@ HRESULT CTitle_Star::Render()
         return E_FAIL;
 
     m_pVIBufferCom->Bind_Buffers();
-
-    m_pTransformCom->Bind_Matrix();
 
     __super::Begin();
 
@@ -172,4 +168,6 @@ void CTitle_Star::Free()
     __super::Free();
 
     Safe_Release(m_pVIBufferCom);
+    Safe_Release(m_pTextureCom_Title_Star);
+    Safe_Release(m_pShaderCom_Title_Star);
 }

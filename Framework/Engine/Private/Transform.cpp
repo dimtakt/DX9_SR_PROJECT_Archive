@@ -85,8 +85,8 @@ void CTransform::Look_At(const _float3& vTarget)
 	D3DXVec3Cross(&vUp, &vLook, &vRight);
 
 	Set_State(STATE::RIGHT, *D3DXVec3Normalize(&vRight, &vRight) * vScaled.x);
-	Set_State(STATE::UP, *D3DXVec3Normalize(&vUp, &vUp) * vScaled.y);
-	Set_State(STATE::LOOK, *D3DXVec3Normalize(&vLook, &vLook) * vScaled.z);
+	Set_State(STATE::UP,	*D3DXVec3Normalize(&vUp, &vUp) * vScaled.y);
+	Set_State(STATE::LOOK,	*D3DXVec3Normalize(&vLook, &vLook) * vScaled.z);
 }
 
 void CTransform::Move_To(const _float3& vTarget, _float fTimeDelta, _float fLimitRange)
