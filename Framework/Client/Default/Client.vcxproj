@@ -177,6 +177,7 @@
     <ClInclude Include="..\Public\imstb_truetype.h" />
     <ClInclude Include="..\public\Inventory.h" />
     <ClInclude Include="..\public\Inven_Button.h" />
+    <ClInclude Include="..\public\Land.h" />
     <ClInclude Include="..\Public\Level_GamePlay.h" />
     <ClInclude Include="..\Public\Level_Loading.h" />
     <ClInclude Include="..\Public\Level_Logo.h" />
@@ -184,13 +185,16 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
       </ExcludedFromBuild>
     </ClInclude>
+    <ClInclude Include="..\Public\Level_Stage1.h" />
     <ClInclude Include="..\Public\Loader.h" />
     <ClInclude Include="..\Public\MainApp.h" />
     <ClInclude Include="..\public\Mirror_Button.h" />
     <ClInclude Include="..\public\Money_Player.h" />
+    <ClInclude Include="..\Public\Monster_Default.h" />
     <ClInclude Include="..\Public\Mountain.h" />
     <ClInclude Include="..\Public\Mp_Player.h" />
     <ClInclude Include="..\Public\Player.h" />
+    <ClInclude Include="..\Public\Room_Default.h" />
     <ClInclude Include="..\public\Stats_Button.h" />
     <ClInclude Include="..\public\Terrain.h" />
     <ClInclude Include="..\public\Title_BackGround.h" />
@@ -229,6 +233,7 @@
     <ClCompile Include="..\Private\Imgui_Manager.cpp" />
     <ClCompile Include="..\private\Inventory.cpp" />
     <ClCompile Include="..\private\Inven_Button.cpp" />
+    <ClCompile Include="..\private\Land.cpp" />
     <ClCompile Include="..\Private\Level_GamePlay.cpp" />
     <ClCompile Include="..\Private\Level_Loading.cpp" />
     <ClCompile Include="..\Private\Level_Logo.cpp" />
@@ -236,13 +241,16 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
       </ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="..\Private\Level_Stage1.cpp" />
     <ClCompile Include="..\Private\Loader.cpp" />
     <ClCompile Include="..\Private\MainApp.cpp" />
     <ClCompile Include="..\private\Mirror_Button.cpp" />
     <ClCompile Include="..\private\Money_Player.cpp" />
+    <ClCompile Include="..\Private\Monster_Default.cpp" />
     <ClCompile Include="..\Private\Mountain.cpp" />
     <ClCompile Include="..\Private\Mp_Player.cpp" />
     <ClCompile Include="..\Private\Player.cpp" />
+    <ClCompile Include="..\Private\Room_Default.cpp" />
     <ClCompile Include="..\private\Stats_Button.cpp" />
     <ClCompile Include="..\private\Terrain.cpp" />
     <ClCompile Include="..\private\Title_BackGround.cpp" />

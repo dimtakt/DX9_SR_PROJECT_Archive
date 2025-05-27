@@ -4,6 +4,7 @@
 #include "Camera_Free.h"
 #include "Player.h"
 #include "Hud_Buff.h"
+#include "Level_Loading.h"
 CLevel_GamePlay::CLevel_GamePlay(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CLevel{ pGraphic_Device }
 {
@@ -33,6 +34,11 @@ HRESULT CLevel_GamePlay::Initialize()
 
 void CLevel_GamePlay::Update(_float fTimeDelta)
 {
+	if (m_pGameInstance->IsKeyDown(VK_RETURN))
+	{
+		if (FAILED(m_pGameInstance->Open_Level(ENUM_CLASS(LEVEL::LEVEL_LOADING), CLevel_Loading::Create(m_pGraphic_Device, LEVEL::LEVEL_STAGE1))))
+			return;
+	}
 }
 
 HRESULT CLevel_GamePlay::Render()

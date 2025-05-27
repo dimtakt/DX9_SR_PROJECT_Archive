@@ -11,10 +11,6 @@ public:
 
 public:
 	HRESULT Initialize();
-	void Priority_Update(_float fTimeDelta);
-	void Update(_float fTimeDelta);
-	void Late_Update(_float fTimeDelta);
-	HRESULT Render();
 
 public:
 	HRESULT Add_Room(class CRoom* pRoom);

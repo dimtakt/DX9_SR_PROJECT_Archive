@@ -1,34 +1,43 @@
 #include "VIBuffer_Cube.h"
 
 CVIBuffer_Cube::CVIBuffer_Cube(LPDIRECT3DDEVICE9 pGraphic_Device)
-    : CVIBuffer { pGraphic_Device }
+	: CVIBuffer{ pGraphic_Device }
 {
+
 }
 
 CVIBuffer_Cube::CVIBuffer_Cube(const CVIBuffer_Cube& Prototype)
-    : CVIBuffer { Prototype }
+	: CVIBuffer{ Prototype }
 {
+
 }
 
 HRESULT CVIBuffer_Cube::Initialize_Prototype()
 {
 	m_iNumVertices = 8;
-	m_iVertexStride = sizeof(VTXCUBE);
+	m_iVertexStride = sizeof(VTXCUBETEX);
 	m_iFVF = D3DFVF_XYZ | D3DFVF_TEX1 | D3DFVF_TEXCOORDSIZE3(0);
+	// m_iFVF = D3DFVF_XYZ | D3DFVF_TEX2 /*| D3DFVF_TEXCOORDSIZE2(0)*/ | D3DFVF_TEXCOORDSIZE3(1);
+	m_ePrimitiveType = D3DPT_TRIANGLELIST;
 	m_iNumPrimitive = 12;
-
 	m_iIndexStride = 2;
 	m_iNumIndices = 36;
 	m_eIndexFormat = D3DFMT_INDEX16;
 
+	/* 정점버퍼를 생성한다. == 정점을 배열로 할당해준다. */
+	/* 몇바이트할당해라 == 정점하나의 크기 * 정점의 갯수 */
+	/* 0(정적) or D3DUSAGE_DYNAMIC(동적) */
+	/* 정적 : 공간에 있는 값을 읽는 속도는 빠르다. 정점을 갱신한다라는 속도는굉장히 느리다. */
+	/* 동적 : */
+	/* D3DPOOL_MANAGED : 메모리할당 위치(RAM, VRAM)를 알아서 해라. */
+
+#pragma region VERTEX_BUFFER
 	if (FAILED(m_pGraphic_Device->CreateVertexBuffer(m_iVertexStride * m_iNumVertices, 0, m_iFVF, D3DPOOL_MANAGED, &m_pVB, nullptr)))
 		return E_FAIL;
 
+	VTXCUBETEX* pVertices = { nullptr };
 
-	// 버텍스 버퍼
-	VTXCUBE* pVertices = { nullptr };
-
-
+	/* 공간에 접근하기위한 포인터를 얻어오고 공간을 잠근다.  */
 	m_pVB->Lock(0, /*m_iNumVertices * m_iVertexStride*/0, reinterpret_cast<void**>(&pVertices), 0);
 
 	pVertices[0].vPosition = _float3(-0.5f, 0.5f, -0.5f);
@@ -57,8 +66,11 @@ HRESULT CVIBuffer_Cube::Initialize_Prototype()
 
 	m_pVB->Unlock();
 
+#pragma endregion 
 
-	// 인덱스 버퍼
+
+#pragma region INDEX_BUFFER
+
 	if (FAILED(m_pGraphic_Device->CreateIndexBuffer(m_iIndexStride * m_iNumIndices, 0, m_eIndexFormat, D3DPOOL_MANAGED, &m_pIB, nullptr)))
 		return E_FAIL;
 
@@ -73,7 +85,6 @@ HRESULT CVIBuffer_Cube::Initialize_Prototype()
 	/* -x */
 	pIndices[6] = 4; pIndices[7] = 0; pIndices[8] = 3;
 	pIndices[9] = 4; pIndices[10] = 3; pIndices[11] = 7;
-
 
 	/* +y */
 	pIndices[12] = 4; pIndices[13] = 5; pIndices[14] = 1;
@@ -93,15 +104,20 @@ HRESULT CVIBuffer_Cube::Initialize_Prototype()
 
 	m_pIB->Unlock();
 
-    return S_OK;
+
+#pragma endregion 
+
+	return S_OK;
 }
 
 HRESULT CVIBuffer_Cube::Initialize(void* pArg)
 {
-    return S_OK;
+
+
+	return S_OK;
 }
 
-CComponent* CVIBuffer_Cube::Create(LPDIRECT3DDEVICE9 pGraphic_Device)
+CVIBuffer_Cube* CVIBuffer_Cube::Create(LPDIRECT3DDEVICE9 pGraphic_Device)
 {
 	CVIBuffer_Cube* pInstance = new CVIBuffer_Cube(pGraphic_Device);
 
@@ -112,6 +128,7 @@ CComponent* CVIBuffer_Cube::Create(LPDIRECT3DDEVICE9 pGraphic_Device)
 	}
 	return pInstance;
 }
+
 
 CComponent* CVIBuffer_Cube::Clone(void* pArg)
 {
@@ -128,4 +145,6 @@ CComponent* CVIBuffer_Cube::Clone(void* pArg)
 void CVIBuffer_Cube::Free()
 {
 	__super::Free();
+
+
 }

@@ -60,7 +60,7 @@ void CRoom::Deactivate()
     m_bIsActive = false;
 }
 
-CRoom* CRoom::Clone(void* pArg)
+CGameObject* CRoom::Clone(void* pArg)
 {
     return nullptr;
 }
@@ -68,4 +68,18 @@ CRoom* CRoom::Clone(void* pArg)
 void CRoom::Free()
 {
     __super::Free();
+
+    Safe_Release(m_pLand);
+    Safe_Release(m_pTextureCom);
+    Safe_Release(m_pTransformCom);
+    for (auto& obj : m_vObject)
+    {
+        Safe_Release(obj);
+    }
+    m_vObject.clear();
+    for (auto& obj : m_vMonster)
+    {
+        Safe_Release(obj);
+    }
+    m_vMonster.clear();
 }

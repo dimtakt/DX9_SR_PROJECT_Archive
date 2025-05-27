@@ -157,6 +157,27 @@
     <Filter Include="02.GameObject\UI\Title\BackGround\Star_Wave">
       <UniqueIdentifier>{e537c5f7-17c1-46af-96cd-4f0792ac1b67}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01.Levels\04. Dungeon">
+      <UniqueIdentifier>{4e0547a5-20d4-4fce-ad1a-38c0f87a0263}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Levels\04. Dungeon\Stage1">
+      <UniqueIdentifier>{8c937ec2-8640-4a1c-a652-f4d52468f321}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Room">
+      <UniqueIdentifier>{f6d2f95f-05f3-469a-893b-d7822001c440}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Room\Default">
+      <UniqueIdentifier>{e1f6a6e8-7fcf-456f-ace4-cbf40d39be77}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Land">
+      <UniqueIdentifier>{255c5a27-666f-410c-b8d4-46efb9e10ba6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Monster">
+      <UniqueIdentifier>{9a997528-4ac1-4ffb-8aff-27cebcb8aab3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Monster\Default">
+      <UniqueIdentifier>{3bf1ea03-f9c1-439d-aae4-6824357cd9bc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -333,6 +354,18 @@
     <ClInclude Include="..\Public\Title_Logo_Wave.h">
       <Filter>02.GameObject\UI\Title\BackGround\Star_Wave</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Level_Stage1.h">
+      <Filter>01.Levels\04. Dungeon\Stage1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Room_Default.h">
+      <Filter>02.GameObject\Room\Default</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Land.h">
+      <Filter>02.GameObject\Land</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Monster_Default.h">
+      <Filter>02.GameObject\Monster\Default</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -479,6 +512,18 @@
     </ClCompile>
     <ClCompile Include="..\Private\Title_Logo_Wave.cpp">
       <Filter>02.GameObject\UI\Title\BackGround\Star_Wave</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Level_Stage1.cpp">
+      <Filter>01.Levels\04. Dungeon\Stage1</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Room_Default.cpp">
+      <Filter>02.GameObject\Room\Default</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Land.cpp">
+      <Filter>02.GameObject\Land</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Monster_Default.cpp">
+      <Filter>02.GameObject\Monster\Default</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

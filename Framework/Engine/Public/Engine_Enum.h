@@ -16,5 +16,7 @@ namespace Engine
 	enum class COLLIDER_OBJ_TYPE { PLAYER, MONSTER, LAND_OBJ, COL_END };
 	enum class COLLIDER_TYPE { OBB, AABB, SPHERE, RECT };
 	enum class COLLISION_EVENT { DAMAGE, EVENT_END };
+
+	enum class ROOM_STATE { INACTIVE, ACTIVE, CLEARED };
 }
 #endif

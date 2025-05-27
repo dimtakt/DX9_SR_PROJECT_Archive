@@ -17,45 +17,6 @@ HRESULT CPicking::Initialize(HWND hWnd, _uint iWinSizeX, _uint iWinSizeY)
 
 void CPicking::Update()
 {
-#pragma region old
-    /*
-
-    
-    // 1. 뷰포트 상(윈도우 공간)의 마우스 위치를 구하자
-    POINT   ptMouse{};
-    GetCursorPos(&ptMouse);
-    ScreenToClient(m_hWnd, &ptMouse);
-    
-    // 2. 투영스페이스로 옮기자. 로컬위치 * 월드행렬 * 뷰행렬 * 투영행렬 * 1/w
-    // 즉, X가 0 ~ 1280 이던걸 -1 ~ 1 로 변환
-    _float4     vPosition = {};
-    
-    vPosition.x = ptMouse.x / (m_iWinSizeX * 0.5f) - 1.f;
-    vPosition.y = ptMouse.y / (m_iWinSizeY * -0.5f) + 1.f;
-    vPosition.z = 0.0f;
-    vPosition.w = 1.f;
-    
-    // 3. 뷰스페이스로 옮기자. 로컬위치 * 월드행렬 * 뷰행렬
-    _float4x4   ProjMatrix{};
-    m_pGraphic_Device->GetTransform(D3DTS_PROJECTION, &ProjMatrix);
-    D3DXMatrixInverse(&ProjMatrix, nullptr, &ProjMatrix);
-    
-    D3DXVec4Transform(&vPosition, &vPosition, &ProjMatrix);
-    
-    m_vMousePos = _float3(0.f, 0.f, 0.f);
-    m_vMouseRay = _float3(vPosition.x, vPosition.y, vPosition.z);
-    
-    // 4. 월드 스페이스로 옮기자 로컬위치 * 월드행렬
-    _float4x4       ViewMatrix{};
-    m_pGraphic_Device->GetTransform(D3DTS_VIEW, &ViewMatrix);
-    
-    D3DXVec3TransformCoord(&m_vMousePos, &m_vMousePos, &ViewMatrix);
-    D3DXVec3TransformNormal(&m_vMouseRay, &m_vMouseRay, &ViewMatrix);
-    
-    D3DXVec3Normalize(&m_vMouseRay, &m_vMouseRay);
-
-    */
-#pragma endregion
     POINT ptMouse{};
     GetCursorPos(&ptMouse);
     ScreenToClient(m_hWnd, &ptMouse);

@@ -124,7 +124,7 @@ CGameObject* CInventory::Clone(void* pArg)
 {
 	CInventory* pInstance = new CInventory(*this);
 
-	if (FAILED(pInstance->Initialize(pArg)))
+ 	if (FAILED(pInstance->Initialize(pArg)))
 	{
 		MSG_BOX(TEXT("Failed to Clone : CInventory"));
 		Safe_Release(pInstance);
