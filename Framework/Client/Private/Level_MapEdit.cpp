@@ -147,6 +147,8 @@ void CLevel_MapEdit::Imgui_Render()
 
 	ImGui_MenuBar_Render();
 
+	ImGui_Terrain_MenBar(); //지형 전용 UI
+
 	ImGui_Scale_Render();
 
 	ImGui_Rotate_Render();
@@ -330,6 +332,34 @@ void CLevel_MapEdit::ImGui_Scale_Render()
 	ImGui::InputFloat("## Scale z", &m_Scales[2]);
 	ImGui::SameLine();
 	ImGui::Text("x y z Scale");
+}
+
+void CLevel_MapEdit::ImGui_Terrain_MenBar()
+{
+	ImGui::Begin("Terrain Editor");
+
+	static int iTerrainTexIndex = 0;
+
+	ImGui::Text("Terrain Texture Index:");
+	ImGui::SliderInt("TopTexIdx", &iTerrainTexIndex, 0, 3); // 0~3 인덱스, 추후 연동
+
+	// 위치 ( 기존과 공용으로 사용 가능 )
+	ImGui_Transform_Render();
+
+	if (ImGui::Button("Create Terrain"))     //버튼입력시 선택한 값으로 생성
+	{
+		MAP_OBJECT_DESC tDesc{};
+		tDesc.iTextureIndex = iTerrainTexIndex;
+		tDesc.vPos = m_Translates;
+
+		m_pGameInstance->Add_GameObject_ToLayer(
+			ENUM_CLASS(LEVEL::LEVEL_MAPEDIT), TEXT("Layer_MapEdit"),
+			ENUM_CLASS(LEVEL::LEVEL_MAPEDIT),
+			TEXT("Prototype_GameObject_TerrainBox"),
+			&tDesc);
+	}
+
+	ImGui::End();
 }
 
 CLevel_MapEdit* CLevel_MapEdit::Create(LPDIRECT3DDEVICE9 pGraphic_Device)

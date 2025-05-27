@@ -178,6 +178,9 @@
     <Filter Include="02.GameObject\Monster\Default">
       <UniqueIdentifier>{3bf1ea03-f9c1-439d-aae4-6824357cd9bc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\Terrain\TerrainBox">
+      <UniqueIdentifier>{a104ef06-91be-4323-92d7-40deff8b0f8e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -366,6 +369,9 @@
     <ClInclude Include="..\Public\Monster_Default.h">
       <Filter>02.GameObject\Monster\Default</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\TerrainBox.h">
+      <Filter>02.GameObject\Terrain\TerrainBox</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -524,6 +530,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\Monster_Default.cpp">
       <Filter>02.GameObject\Monster\Default</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\TerrainBox.cpp">
+      <Filter>02.GameObject\Terrain\TerrainBox</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

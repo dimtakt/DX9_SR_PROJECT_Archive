@@ -202,6 +202,7 @@ call Copy.bat</Command>
     <ClInclude Include="..\Public\VIBuffer_Cube.h" />
     <ClInclude Include="..\Public\VIBuffer_Rect.h" />
     <ClInclude Include="..\public\VIBuffer_Terrain.h" />
+    <ClInclude Include="..\Public\VIBuffer_TerrainBox.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\private\Animator.cpp" />
@@ -247,6 +248,7 @@ call Copy.bat</Command>
     <ClCompile Include="..\Private\Renderer.cpp" />
     <ClCompile Include="..\Private\VIBuffer.cpp" />
     <ClCompile Include="..\Private\VIBuffer_Rect.cpp" />
+    <ClCompile Include="..\Private\VIBuffer_TerrainBox.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
