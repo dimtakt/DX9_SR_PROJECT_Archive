@@ -148,6 +148,18 @@
     <Filter Include="01.Utility\05.Component\Animator\Controller">
       <UniqueIdentifier>{bc4e2e3e-1393-4676-a838-1fe0050d59bc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01.Utility\03.GameObject\LandObject">
+      <UniqueIdentifier>{7317a2ad-34d6-4db4-9435-4772e7c12421}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\03.GameObject\LandObject\Cube">
+      <UniqueIdentifier>{9ebab9df-b29e-425b-b3ca-d90909f975cc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\03.GameObject\Monster">
+      <UniqueIdentifier>{1dfb261a-c919-4858-bd66-2a8d7a66654d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\03.GameObject\Room\Factory">
+      <UniqueIdentifier>{e283fda4-b8ca-4c31-9dab-f89b2ec0354a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Public\Engine_Macro.h">
@@ -285,6 +297,18 @@
     <ClInclude Include="..\public\AnimatorController.h">
       <Filter>01.Utility\05.Component\Animator\Controller</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Land_Cube.h">
+      <Filter>01.Utility\03.GameObject\LandObject\Cube</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\LandObject.h">
+      <Filter>01.Utility\03.GameObject\LandObject</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Monster.h">
+      <Filter>01.Utility\03.GameObject\Monster</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Room_Factory.h">
+      <Filter>01.Utility\03.GameObject\Room\Factory</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\Base.cpp">
@@ -403,6 +427,18 @@
     </ClCompile>
     <ClCompile Include="..\private\AnimatorController.cpp">
       <Filter>01.Utility\05.Component\Animator\Controller</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Land_Cube.cpp">
+      <Filter>01.Utility\03.GameObject\LandObject\Cube</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\LandObject.cpp">
+      <Filter>01.Utility\03.GameObject\LandObject</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Monster.cpp">
+      <Filter>01.Utility\03.GameObject\Monster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Room_Factory.cpp">
+      <Filter>01.Utility\03.GameObject\Room\Factory</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

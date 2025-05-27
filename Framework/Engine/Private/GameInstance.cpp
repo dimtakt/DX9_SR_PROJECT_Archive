@@ -82,20 +82,17 @@ HRESULT CGameInstance::Initialize_Engine(const ENGINE_DESC& EngineDesc, LPDIRECT
 
 void CGameInstance::Update_Engine(_float fTimeDelta)
 {
+    m_pKey_Manager->Update(fTimeDelta);
     m_pObject_Manager->Priority_Update(fTimeDelta);
-    m_pRoom_Manager->Priority_Update(fTimeDelta);
 
     m_pPicking->Update();
 
     m_pObject_Manager->Update(fTimeDelta);
-    m_pRoom_Manager->Update(fTimeDelta);
-
     m_pObject_Manager->Late_Update(fTimeDelta);
-    m_pRoom_Manager->Late_Update(fTimeDelta);
 
     m_pLevel_Manager->Update(fTimeDelta);
 
-    m_pKey_Manager->Update(fTimeDelta);
+    
 }
 
 HRESULT CGameInstance::Clear_Resources(_uint iClearLevelID)

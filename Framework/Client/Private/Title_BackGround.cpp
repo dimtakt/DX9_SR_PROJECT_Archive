@@ -209,4 +209,5 @@ void CTitle_BackGround::Free()
     Safe_Release(m_pVIBufferCom);
     Safe_Release(m_pTextureCom_Title_Back);
     Safe_Release(m_pTextureCom_Title_ReverseTree);
+    Safe_Release(m_pShaderCom);
 }

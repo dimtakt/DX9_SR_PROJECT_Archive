@@ -153,4 +153,5 @@ void CTitle_Logo::Free()
     __super::Free();
 
     Safe_Release(m_pVIBufferCom);
+    Safe_Release(m_pTextureCom_Title_Logo);
 }
