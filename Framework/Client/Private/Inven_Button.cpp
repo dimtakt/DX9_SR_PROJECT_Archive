@@ -22,15 +22,14 @@ HRESULT CInven_Button::Initialize_Prototype(LEVEL eLevel)
 
 HRESULT CInven_Button::Initialize(void* pArg)
 {
-	UIOBJECT_DESC Desc{};
-	Desc.fSizeX = 64 ;
-	Desc.fSizeY = 64 ;
-	Desc.fX = Desc.fSizeX * 0.5;
-	Desc.fY = 0;
-	Desc.iWinSizeX = g_iWinSizeX;
-	Desc.iWinSizeY = g_iWinSizeY;
+	m_fSizeX = 64 ;
+	m_fSizeY = 64 ;
+	m_fX = m_fSizeX * 0.5;
+	m_fY = 0;
+	m_iWinSizeX = g_iWinSizeX;
+	m_iWinSizeY = g_iWinSizeY;
 
-	if (FAILED(CUIObject::Initialize(&Desc)))
+	if (FAILED(CUIObject::Initialize()))
 		return E_FAIL;
 
 	if (FAILED(Ready_Components()))

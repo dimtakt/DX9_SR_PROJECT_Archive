@@ -23,17 +23,16 @@ HRESULT CHud_Buff::Initialize_Prototype(LEVEL eLevel)
 HRESULT CHud_Buff::Initialize(void* pArg)
 {
 	UIHUD_BUFF_DESC* DescMy = static_cast<UIHUD_BUFF_DESC*>(pArg);
-	UIOBJECT_DESC Desc{};
 
-	Desc.fSizeX = 0;
-	Desc.fSizeY = 0;
-	Desc.fX = DescMy->fX;
-	Desc.fY = DescMy->fY;
-	Desc.fZ = 0.f;
-	Desc.iWinSizeX = g_iWinSizeX;
-	Desc.iWinSizeY = g_iWinSizeY;
+	m_fSizeX = 0;
+	m_fSizeY = 0;
+	m_fX = DescMy->fX;
+	m_fY = DescMy->fY;
+	m_fZ = 0.f;
+	m_iWinSizeX = g_iWinSizeX;
+	m_iWinSizeY = g_iWinSizeY;
 
-	if (FAILED(__super::Initialize(&Desc)))
+	if (FAILED(__super::Initialize()))
 		return E_FAIL;
 
 	if (FAILED(Ready_Components()))

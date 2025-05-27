@@ -1,6 +1,6 @@
 #include "Hud_Dash.h"
 #include "GameInstance.h"
-#include "Dash_Gauge_Fream.h"
+#include "Dash_Gauge_Frame.h"
 
 CHud_Dash::CHud_Dash(LPDIRECT3DDEVICE9 pGraphic_Device) : CUIObject(pGraphic_Device)
 {
@@ -24,17 +24,15 @@ HRESULT CHud_Dash::Initialize(void* pArg)
 {
     m_iDashMaxValue = 5;
 
-    UIOBJECT_DESC Desc{};
+    m_fSizeX = 0;
+    m_fSizeY = 0;
+    m_fX = 30;
+    m_fY = 100.f;
+    m_fZ = 0.f;
+    m_iWinSizeX = g_iWinSizeX;
+    m_iWinSizeY = g_iWinSizeY;
 
-    Desc.fSizeX = 0;
-    Desc.fSizeY = 0;
-    Desc.fX = 30;
-    Desc.fY = 100.f;
-    Desc.fZ = 0.f;
-    Desc.iWinSizeX = g_iWinSizeX;
-    Desc.iWinSizeY = g_iWinSizeY;
-
-    if (FAILED(__super::Initialize(&Desc)))
+    if (FAILED(__super::Initialize()))
         return E_FAIL;
 
     if (FAILED(Ready_Components()))
@@ -119,7 +117,7 @@ HRESULT CHud_Dash::Ready_Components()
 HRESULT CHud_Dash::Ready_ChildPrototype(LEVEL eLevel)
 {
     if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(eLevel), TEXT("Prototype_GameObject_UI_Dash_Gauge_Fream"),
-        CDash_Gauge_Fream::Create(m_pGraphic_Device, eLevel))))
+        CDash_Gauge_Frame::Create(m_pGraphic_Device, eLevel))))
         return E_FAIL;
 
     return S_OK;
@@ -128,7 +126,7 @@ HRESULT CHud_Dash::Ready_ChildPrototype(LEVEL eLevel)
 HRESULT CHud_Dash::Ready_Children()
 {
     CUIObject* pGameObject = nullptr;
-    CDash_Gauge_Fream::UIHUD_DASH_FREAM_DESC Desc{};
+    CDash_Gauge_Frame::UIHUD_DASH_FREAM_DESC Desc{};
 
     for (_int i = 0; i < 5; ++i)
     {

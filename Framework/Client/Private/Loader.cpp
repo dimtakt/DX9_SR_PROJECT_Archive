@@ -5,6 +5,7 @@
 #include "BackGround.h"
 #include "Title_BackGround.h"
 #include "Terrain.h"
+#include "Camera_Free.h"
 #include "Camera_Follow.h"
 #include "Camera_Mouse.h"
 #include "Player.h"
@@ -19,10 +20,12 @@
 #include "Hud_Dash.h"
 #include "Tree.h"
 #include "Mountain.h"
+#include "Field_Hp.h"
 #include "Room_Default.h"
 #include "Land.h"
 #include "Monster_Default.h"
 #include "TerrainBox.h"
+
 
 CLoader::CLoader(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: m_pGraphic_Device{ pGraphic_Device }
@@ -214,7 +217,7 @@ HRESULT CLoader::Loading_For_GamePlay_Level()
 		return E_FAIL;
 #pragma endregion
 #pragma region Prototype_Component_Hud_Buffe_Texture
-		if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_GAMEPLAY), TEXT("Prototype_Component_Texture_Rect_UI_Hud_Buff_Fream"),
+		if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_GAMEPLAY), TEXT("Prototype_Component_Texture_Rect_UI_Hud_Buff_Frame"),
 			CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/UI/HUD/HUD_Buff_Fream.png"), 1))))
 			return E_FAIL;
 		if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_GAMEPLAY), TEXT("Prototype_Component_Texture_Rect_UI_Hud_Buff_Base"),
@@ -224,6 +227,12 @@ HRESULT CLoader::Loading_For_GamePlay_Level()
 			CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/UI/Buff_Icon/Effect_Icon_0%d.png"), 50))))
 			return E_FAIL;
 #pragma endregion
+#pragma region Prototype_Component_Window_Texture
+		if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_GAMEPLAY), TEXT("Prototype_Component_Texture_Rect_Window_Inventory"),
+			CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/UI/Inventory/InventoryBase.png"), 1))))
+			return E_FAIL;
+#pragma endregion
+
 	lstrcpy(m_szLoadingText, TEXT("모델을 로딩중입니다."));
 	/* Prototype_Component_VIbuffer_TerrainBox */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_SHARED), TEXT("Prototype_Component_VIBuffer_TerrainBox"),
@@ -243,8 +252,7 @@ HRESULT CLoader::Loading_For_GamePlay_Level()
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_GAMEPLAY), TEXT("Prototype_GameObject_Camera_Follow"),
 		CCamera_Follow::Create(m_pGraphic_Device))))
 		return E_FAIL;
-
-	//HUD UI
+#pragma region Prototype_GameObject_Hud
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_GAMEPLAY), TEXT("Prototype_GameObject_UI_Hud_States"),
 		CHud_States_Frame::Create(m_pGraphic_Device, LEVEL::LEVEL_GAMEPLAY))))
 		return E_FAIL;
@@ -261,16 +269,20 @@ HRESULT CLoader::Loading_For_GamePlay_Level()
 		CHud_Button::Create(m_pGraphic_Device, LEVEL::LEVEL_GAMEPLAY))))
 		return E_FAIL;
 
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_GAMEPLAY), TEXT("Prototype_GameObject_UI_Inventory"),
-		CInventory::Create(m_pGraphic_Device, LEVEL::LEVEL_GAMEPLAY))))
-		return E_FAIL;
-
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_GAMEPLAY), TEXT("Prototype_GameObject_UI_Hud_Dash"),
 		CHud_Dash::Create(m_pGraphic_Device, LEVEL::LEVEL_GAMEPLAY))))
 		return E_FAIL;
 
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_GAMEPLAY), TEXT("Prototype_GameObject_UI_Hud_Buff"),
 		CHud_Buff::Create(m_pGraphic_Device, LEVEL::LEVEL_GAMEPLAY))))
+		return E_FAIL;
+#pragma endregion
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_GAMEPLAY), TEXT("Prototype_GameObject_UI_Field_Hp"),
+		CField_Hp::Create(m_pGraphic_Device, LEVEL::LEVEL_GAMEPLAY))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_GAMEPLAY), TEXT("Prototype_GameObject_UI_Inventory"),
+		CInventory::Create(m_pGraphic_Device, LEVEL::LEVEL_GAMEPLAY))))
 		return E_FAIL;
 
 	lstrcpy(m_szLoadingText, TEXT("로딩이 완료되었습니다."));

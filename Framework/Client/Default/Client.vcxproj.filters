@@ -49,59 +49,8 @@
     <Filter Include="02.GameObject\UI">
       <UniqueIdentifier>{e6d7c12a-d7d8-4fe3-af69-87edc5b0144e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\UI\HUD_Status">
-      <UniqueIdentifier>{f8d004cb-9406-40ee-ba0a-6af95eef93e0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\UI\HUD_Status\HP_Player">
-      <UniqueIdentifier>{9112940e-6718-4fa9-9729-3b1171dcb3cb}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\UI\HUD_Status\MP_Player">
-      <UniqueIdentifier>{59dac64d-ad42-4536-88e4-edd48c842b50}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\UI\HUD_Exp">
-      <UniqueIdentifier>{06e7049c-b27a-4a80-bf6d-783607adaf26}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\UI\HUD_Exp\EXP_Player">
-      <UniqueIdentifier>{5618c356-0846-4511-8f04-59577436dfcb}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\UI\HUD_Exp\Exp_checkout">
-      <UniqueIdentifier>{2647e452-a999-4f97-9ed2-472179b60b0e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\UI\HUD_Wallet">
-      <UniqueIdentifier>{eb695198-ac79-49a6-b44e-407c35f67974}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\UI\HUD_Wallet\Money_Player">
-      <UniqueIdentifier>{db043b6f-82cc-4074-89e6-da775f9adaf2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\UI\HUD_Wallet\Dice_Player">
-      <UniqueIdentifier>{95f68e6e-e4c9-4966-8acd-4de8824205bc}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\UI\HUD_Button">
-      <UniqueIdentifier>{59582917-865b-44e4-93f1-588b47f735b7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\UI\HUD_Button\Inven_Button">
-      <UniqueIdentifier>{d0c7fba1-3c52-4988-8b85-ef2dedc7c1a6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\UI\HUD_Button\Stats_Button">
-      <UniqueIdentifier>{60221299-c03b-480c-a14c-ed776db0d964}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\UI\HUD_Button\Mirror_Button">
-      <UniqueIdentifier>{6bff572e-518a-45b6-b70c-d61c4683d26a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObject\UI\UI_KeyGuide">
       <UniqueIdentifier>{0d678967-3801-4d44-85e0-a25912f0ae23}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\UI\Inventory">
-      <UniqueIdentifier>{e5338878-65f3-47f8-bbaa-77837fbf92a1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\UI\HUD_Dash">
-      <UniqueIdentifier>{41a7f2d1-c635-4d23-b3b7-f6be68c8e4ea}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\UI\HUD_Dash\Dash_Gauge_Fream">
-      <UniqueIdentifier>{bb53edc7-6ae9-473f-8429-d635a7eed492}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\UI\HUD_Dash\Dash_Gauge_Fream\Dash_Gauge">
-      <UniqueIdentifier>{1a62ac84-0e96-45f6-a4e5-3f1c3aa35153}</UniqueIdentifier>
     </Filter>
     <Filter Include="01.Levels\03. MapEdit">
       <UniqueIdentifier>{4b8e29b8-bfc5-4731-bed0-1f8a89a74abf}</UniqueIdentifier>
@@ -120,18 +69,6 @@
     </Filter>
     <Filter Include="02.GameObject\Object\Mountain">
       <UniqueIdentifier>{2879c6c3-314f-4553-9bb7-3bda46e4769b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\UI\HUD_Buff">
-      <UniqueIdentifier>{37041438-b6c3-4d1a-aa28-f5fdc7ec44d7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\UI\HUD_Buff\Buff_Type_Base">
-      <UniqueIdentifier>{f336b9f7-a154-4197-bbe1-5a5f2c10e8ac}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\UI\HUD_Buff\Buff_Type_Base\Buff_Frame">
-      <UniqueIdentifier>{3aa5b486-1d93-4240-8b40-3ab3aec00d66}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\UI\HUD_Buff\Buff_Type_Base\Buff_Icon">
-      <UniqueIdentifier>{895a001d-41e4-4229-949b-5307b2e41dfb}</UniqueIdentifier>
     </Filter>
     <Filter Include="02.GameObject\Camera\Free">
       <UniqueIdentifier>{926017ed-9374-426d-9e84-e28f0b80f595}</UniqueIdentifier>
@@ -180,6 +117,84 @@
     </Filter>
     <Filter Include="02.GameObject\Terrain\TerrainBox">
       <UniqueIdentifier>{a104ef06-91be-4323-92d7-40deff8b0f8e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\UI\Field">
+      <UniqueIdentifier>{9d3839c6-0795-49e6-990a-1eed3ab36edd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\UI\Field\Field_Hp">
+      <UniqueIdentifier>{d3d5626b-47ad-4e21-8719-16943a4b2cc2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\UI\Field\Field_Hp\Field_Hp_Frame">
+      <UniqueIdentifier>{4c8e0532-1083-4f5a-95fd-801ba0f7b3fc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\UI\HUD">
+      <UniqueIdentifier>{1d699379-421d-4bf2-9668-749f397d0ec6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\UI\HUD\HUD_Buff">
+      <UniqueIdentifier>{37041438-b6c3-4d1a-aa28-f5fdc7ec44d7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\UI\HUD\HUD_Buff\Buff_Type_Base">
+      <UniqueIdentifier>{f336b9f7-a154-4197-bbe1-5a5f2c10e8ac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\UI\HUD\HUD_Buff\Buff_Type_Base\Buff_Frame">
+      <UniqueIdentifier>{3aa5b486-1d93-4240-8b40-3ab3aec00d66}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\UI\HUD\HUD_Buff\Buff_Type_Base\Buff_Icon">
+      <UniqueIdentifier>{895a001d-41e4-4229-949b-5307b2e41dfb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\UI\HUD\HUD_Button">
+      <UniqueIdentifier>{59582917-865b-44e4-93f1-588b47f735b7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\UI\HUD\HUD_Button\Inven_Button">
+      <UniqueIdentifier>{d0c7fba1-3c52-4988-8b85-ef2dedc7c1a6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\UI\HUD\HUD_Button\Stats_Button">
+      <UniqueIdentifier>{60221299-c03b-480c-a14c-ed776db0d964}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\UI\HUD\HUD_Button\Mirror_Button">
+      <UniqueIdentifier>{6bff572e-518a-45b6-b70c-d61c4683d26a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\UI\HUD\HUD_Dash">
+      <UniqueIdentifier>{41a7f2d1-c635-4d23-b3b7-f6be68c8e4ea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\UI\HUD\HUD_Dash\Dash_Gauge_Fream">
+      <UniqueIdentifier>{bb53edc7-6ae9-473f-8429-d635a7eed492}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\UI\HUD\HUD_Dash\Dash_Gauge_Fream\Dash_Gauge">
+      <UniqueIdentifier>{1a62ac84-0e96-45f6-a4e5-3f1c3aa35153}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\UI\HUD\HUD_Exp">
+      <UniqueIdentifier>{06e7049c-b27a-4a80-bf6d-783607adaf26}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\UI\HUD\HUD_Exp\EXP_Player">
+      <UniqueIdentifier>{5618c356-0846-4511-8f04-59577436dfcb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\UI\HUD\HUD_Exp\Exp_checkout">
+      <UniqueIdentifier>{2647e452-a999-4f97-9ed2-472179b60b0e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\UI\HUD\HUD_Status">
+      <UniqueIdentifier>{f8d004cb-9406-40ee-ba0a-6af95eef93e0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\UI\HUD\HUD_Status\HP_Player">
+      <UniqueIdentifier>{9112940e-6718-4fa9-9729-3b1171dcb3cb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\UI\HUD\HUD_Status\MP_Player">
+      <UniqueIdentifier>{59dac64d-ad42-4536-88e4-edd48c842b50}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\UI\HUD\HUD_Wallet">
+      <UniqueIdentifier>{eb695198-ac79-49a6-b44e-407c35f67974}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\UI\HUD\HUD_Wallet\Money_Player">
+      <UniqueIdentifier>{db043b6f-82cc-4074-89e6-da775f9adaf2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\UI\HUD\HUD_Wallet\Dice_Player">
+      <UniqueIdentifier>{95f68e6e-e4c9-4966-8acd-4de8824205bc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\UI\Window">
+      <UniqueIdentifier>{bb3ac70b-ec37-4c53-ad90-ed31e60cc279}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\UI\Window\Inventory">
+      <UniqueIdentifier>{e5338878-65f3-47f8-bbaa-77837fbf92a1}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -232,58 +247,58 @@
       <Filter>02.GameObject\Camera\Follow</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Mp_Player.h">
-      <Filter>02.GameObject\UI\HUD_Status\MP_Player</Filter>
+      <Filter>02.GameObject\UI\HUD\HUD_Status\MP_Player</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Hp_Player.h">
-      <Filter>02.GameObject\UI\HUD_Status\HP_Player</Filter>
+      <Filter>02.GameObject\UI\HUD\HUD_Status\HP_Player</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Hud_States_Frame.h">
-      <Filter>02.GameObject\UI\HUD_Status</Filter>
+      <Filter>02.GameObject\UI\HUD\HUD_Status</Filter>
     </ClInclude>
     <ClInclude Include="..\public\Hud_Exp_Frame.h">
-      <Filter>02.GameObject\UI\HUD_Exp</Filter>
+      <Filter>02.GameObject\UI\HUD\HUD_Exp</Filter>
     </ClInclude>
     <ClInclude Include="..\public\Hud_Exp.h">
-      <Filter>02.GameObject\UI\HUD_Exp\EXP_Player</Filter>
+      <Filter>02.GameObject\UI\HUD\HUD_Exp\EXP_Player</Filter>
     </ClInclude>
     <ClInclude Include="..\public\Hud_Exp_Checkout.h">
-      <Filter>02.GameObject\UI\HUD_Exp\Exp_checkout</Filter>
+      <Filter>02.GameObject\UI\HUD\HUD_Exp\Exp_checkout</Filter>
     </ClInclude>
     <ClInclude Include="..\public\Money_Player.h">
-      <Filter>02.GameObject\UI\HUD_Wallet\Money_Player</Filter>
+      <Filter>02.GameObject\UI\HUD\HUD_Wallet\Money_Player</Filter>
     </ClInclude>
     <ClInclude Include="..\public\Hud_Wallet.h">
-      <Filter>02.GameObject\UI\HUD_Wallet</Filter>
+      <Filter>02.GameObject\UI\HUD\HUD_Wallet</Filter>
     </ClInclude>
     <ClInclude Include="..\public\Dice_Player.h">
-      <Filter>02.GameObject\UI\HUD_Wallet\Dice_Player</Filter>
+      <Filter>02.GameObject\UI\HUD\HUD_Wallet\Dice_Player</Filter>
     </ClInclude>
     <ClInclude Include="..\public\Hud_Button.h">
-      <Filter>02.GameObject\UI\HUD_Button</Filter>
+      <Filter>02.GameObject\UI\HUD\HUD_Button</Filter>
     </ClInclude>
     <ClInclude Include="..\public\Inven_Button.h">
-      <Filter>02.GameObject\UI\HUD_Button\Inven_Button</Filter>
+      <Filter>02.GameObject\UI\HUD\HUD_Button\Inven_Button</Filter>
     </ClInclude>
     <ClInclude Include="..\public\Stats_Button.h">
-      <Filter>02.GameObject\UI\HUD_Button\Stats_Button</Filter>
+      <Filter>02.GameObject\UI\HUD\HUD_Button\Stats_Button</Filter>
     </ClInclude>
     <ClInclude Include="..\public\Mirror_Button.h">
-      <Filter>02.GameObject\UI\HUD_Button\Mirror_Button</Filter>
+      <Filter>02.GameObject\UI\HUD\HUD_Button\Mirror_Button</Filter>
     </ClInclude>
     <ClInclude Include="..\public\UI_KeyGuide.h">
       <Filter>02.GameObject\UI\UI_KeyGuide</Filter>
     </ClInclude>
     <ClInclude Include="..\public\Inventory.h">
-      <Filter>02.GameObject\UI\Inventory</Filter>
+      <Filter>02.GameObject\UI\Window\Inventory</Filter>
     </ClInclude>
     <ClInclude Include="..\public\Hud_Dash.h">
-      <Filter>02.GameObject\UI\HUD_Dash</Filter>
+      <Filter>02.GameObject\UI\HUD\HUD_Dash</Filter>
     </ClInclude>
     <ClInclude Include="..\public\Dash_Gauge.h">
-      <Filter>02.GameObject\UI\HUD_Dash\Dash_Gauge_Fream\Dash_Gauge</Filter>
+      <Filter>02.GameObject\UI\HUD\HUD_Dash\Dash_Gauge_Fream\Dash_Gauge</Filter>
     </ClInclude>
-    <ClInclude Include="..\public\Dash_Gauge_Fream.h">
-      <Filter>02.GameObject\UI\HUD_Dash\Dash_Gauge_Fream</Filter>
+    <ClInclude Include="..\public\Dash_Gauge_Frame.h">
+      <Filter>02.GameObject\UI\HUD\HUD_Dash\Dash_Gauge_Fream</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Imgui_Manager.h">
       <Filter>97. ImGUI\Manager</Filter>
@@ -331,16 +346,16 @@
       <Filter>02.GameObject\Object\Mountain</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Hud_Buff.h">
-      <Filter>02.GameObject\UI\HUD_Buff</Filter>
+      <Filter>02.GameObject\UI\HUD\HUD_Buff</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Buff_Type_Base.h">
-      <Filter>02.GameObject\UI\HUD_Buff\Buff_Type_Base</Filter>
+      <Filter>02.GameObject\UI\HUD\HUD_Buff\Buff_Type_Base</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\Buff_Fream.h">
-      <Filter>02.GameObject\UI\HUD_Buff\Buff_Type_Base\Buff_Frame</Filter>
+    <ClInclude Include="..\Public\Buff_Frame.h">
+      <Filter>02.GameObject\UI\HUD\HUD_Buff\Buff_Type_Base\Buff_Frame</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Buff_Icon.h">
-      <Filter>02.GameObject\UI\HUD_Buff\Buff_Type_Base\Buff_Icon</Filter>
+      <Filter>02.GameObject\UI\HUD\HUD_Buff\Buff_Type_Base\Buff_Icon</Filter>
     </ClInclude>
     <ClInclude Include="..\public\Title_BackGround.h">
       <Filter>02.GameObject\UI\Title\BackGround</Filter>
@@ -371,6 +386,15 @@
     </ClInclude>
     <ClInclude Include="..\Public\TerrainBox.h">
       <Filter>02.GameObject\Terrain\TerrainBox</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Field_Hp.h">
+      <Filter>02.GameObject\UI\Field\Field_Hp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Field_Hp_Frame.h">
+      <Filter>02.GameObject\UI\Field\Field_Hp\Field_Hp_Frame</Filter>
+    </ClInclude>
+    <ClInclude Include="Client_Defines_Item.h">
+      <Filter>99.Defines</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -424,58 +448,58 @@
       <Filter>02.GameObject\Camera\Follow</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Mp_Player.cpp">
-      <Filter>02.GameObject\UI\HUD_Status\MP_Player</Filter>
+      <Filter>02.GameObject\UI\HUD\HUD_Status\MP_Player</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Hp_Player.cpp">
-      <Filter>02.GameObject\UI\HUD_Status\HP_Player</Filter>
+      <Filter>02.GameObject\UI\HUD\HUD_Status\HP_Player</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Hud_States_Frame.cpp">
-      <Filter>02.GameObject\UI\HUD_Status</Filter>
+      <Filter>02.GameObject\UI\HUD\HUD_Status</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Hud_Exp_Frame.cpp">
-      <Filter>02.GameObject\UI\HUD_Exp</Filter>
+      <Filter>02.GameObject\UI\HUD\HUD_Exp</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Hud_Exp.cpp">
-      <Filter>02.GameObject\UI\HUD_Exp\EXP_Player</Filter>
+      <Filter>02.GameObject\UI\HUD\HUD_Exp\EXP_Player</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Hud_Exp_Checkout.cpp">
-      <Filter>02.GameObject\UI\HUD_Exp\Exp_checkout</Filter>
+      <Filter>02.GameObject\UI\HUD\HUD_Exp\Exp_checkout</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Money_Player.cpp">
-      <Filter>02.GameObject\UI\HUD_Wallet\Money_Player</Filter>
+      <Filter>02.GameObject\UI\HUD\HUD_Wallet\Money_Player</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Hud_Wallet.cpp">
-      <Filter>02.GameObject\UI\HUD_Wallet</Filter>
+      <Filter>02.GameObject\UI\HUD\HUD_Wallet</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Dice_Player.cpp">
-      <Filter>02.GameObject\UI\HUD_Wallet\Dice_Player</Filter>
+      <Filter>02.GameObject\UI\HUD\HUD_Wallet\Dice_Player</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Hud_Button.cpp">
-      <Filter>02.GameObject\UI\HUD_Button</Filter>
+      <Filter>02.GameObject\UI\HUD\HUD_Button</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Inven_Button.cpp">
-      <Filter>02.GameObject\UI\HUD_Button\Inven_Button</Filter>
+      <Filter>02.GameObject\UI\HUD\HUD_Button\Inven_Button</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Stats_Button.cpp">
-      <Filter>02.GameObject\UI\HUD_Button\Stats_Button</Filter>
+      <Filter>02.GameObject\UI\HUD\HUD_Button\Stats_Button</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Mirror_Button.cpp">
-      <Filter>02.GameObject\UI\HUD_Button\Mirror_Button</Filter>
+      <Filter>02.GameObject\UI\HUD\HUD_Button\Mirror_Button</Filter>
     </ClCompile>
     <ClCompile Include="..\private\UI_KeyGuide.cpp">
       <Filter>02.GameObject\UI\UI_KeyGuide</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Inventory.cpp">
-      <Filter>02.GameObject\UI\Inventory</Filter>
+      <Filter>02.GameObject\UI\Window\Inventory</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Hud_Dash.cpp">
-      <Filter>02.GameObject\UI\HUD_Dash</Filter>
+      <Filter>02.GameObject\UI\HUD\HUD_Dash</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Dash_Gauge.cpp">
-      <Filter>02.GameObject\UI\HUD_Dash\Dash_Gauge_Fream\Dash_Gauge</Filter>
+      <Filter>02.GameObject\UI\HUD\HUD_Dash\Dash_Gauge_Fream\Dash_Gauge</Filter>
     </ClCompile>
-    <ClCompile Include="..\private\Dash_Gauge_Fream.cpp">
-      <Filter>02.GameObject\UI\HUD_Dash\Dash_Gauge_Fream</Filter>
+    <ClCompile Include="..\private\Dash_Gauge_Frame.cpp">
+      <Filter>02.GameObject\UI\HUD\HUD_Dash\Dash_Gauge_Fream</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Imgui_Manager.cpp">
       <Filter>97. ImGUI\Manager</Filter>
@@ -493,16 +517,16 @@
       <Filter>02.GameObject\Object\Mountain</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Hud_Buff.cpp">
-      <Filter>02.GameObject\UI\HUD_Buff</Filter>
+      <Filter>02.GameObject\UI\HUD\HUD_Buff</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Buff_Type_Base.cpp">
-      <Filter>02.GameObject\UI\HUD_Buff\Buff_Type_Base</Filter>
+      <Filter>02.GameObject\UI\HUD\HUD_Buff\Buff_Type_Base</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\Buff_Fream.cpp">
-      <Filter>02.GameObject\UI\HUD_Buff\Buff_Type_Base\Buff_Frame</Filter>
+    <ClCompile Include="..\Private\Buff_Frame.cpp">
+      <Filter>02.GameObject\UI\HUD\HUD_Buff\Buff_Type_Base\Buff_Frame</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Buff_Icon.cpp">
-      <Filter>02.GameObject\UI\HUD_Buff\Buff_Type_Base\Buff_Icon</Filter>
+      <Filter>02.GameObject\UI\HUD\HUD_Buff\Buff_Type_Base\Buff_Icon</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Title_BackGround.cpp">
       <Filter>02.GameObject\UI\Title\BackGround</Filter>
@@ -533,6 +557,12 @@
     </ClCompile>
     <ClCompile Include="..\Private\TerrainBox.cpp">
       <Filter>02.GameObject\Terrain\TerrainBox</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Field_Hp.cpp">
+      <Filter>02.GameObject\UI\Field\Field_Hp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Field_Hp_Frame.cpp">
+      <Filter>02.GameObject\UI\Field\Field_Hp\Field_Hp_Frame</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

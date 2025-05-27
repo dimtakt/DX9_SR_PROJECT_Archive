@@ -25,17 +25,16 @@ HRESULT CDash_Gauge::Initialize(void* pArg)
 	m_iIndex = DescMy->iIndex;
 	m_fDash = 0.f;
 	m_bIsRender = true;
-	UIOBJECT_DESC Desc{};
 
-	Desc.fSizeX = 30;
-	Desc.fSizeY = 30;
-	Desc.fX = 0;
-	Desc.fY = 0;
-	Desc.fZ = 0.f;
-	Desc.iWinSizeX = g_iWinSizeX;
-	Desc.iWinSizeY = g_iWinSizeY;
+	m_fSizeX = 30;
+	m_fSizeY = 30;
+	m_fX = 0;
+	m_fY = 0;
+	m_fZ = 0.f;
+	m_iWinSizeX = g_iWinSizeX;
+	m_iWinSizeY = g_iWinSizeY;
 
-	if (FAILED(__super::Initialize(&Desc)))
+	if (FAILED(__super::Initialize()))
 		return E_FAIL;
 
 	if (FAILED(Ready_Components()))
@@ -125,7 +124,6 @@ HRESULT CDash_Gauge::Render()
 {
 	SetUp_RenderState();
 
-	m_pTransformCom->Bind_Matrix();
 	if (FAILED(m_pTextureCom->Bind_Texture(1)))
 		return E_FAIL;
 	m_pVIBufferCom->Bind_Buffers();

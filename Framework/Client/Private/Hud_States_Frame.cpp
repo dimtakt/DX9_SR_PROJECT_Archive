@@ -22,17 +22,15 @@ HRESULT CHud_States_Frame::Initialize_Prototype(LEVEL eLevel)
 
 HRESULT CHud_States_Frame::Initialize(void* pArg)
 {
-	UIOBJECT_DESC Desc{};
+	m_fSizeX = 190.f;
+	m_fSizeY = 55.f;
+	m_fX = 20 + m_fSizeX * 0.5f;
+	m_fY = 20 + m_fSizeY * 0.5f;
+	m_fZ = 0.f;
+	m_iWinSizeX = g_iWinSizeX;
+	m_iWinSizeY = g_iWinSizeY;
 
-	Desc.fSizeX = 190.f;
-	Desc.fSizeY = 55.f;
-	Desc.fX = 20 + Desc.fSizeX * 0.5f;
-	Desc.fY = 20 + Desc.fSizeY * 0.5f;
-	Desc.fZ = 0.f;
-	Desc.iWinSizeX = g_iWinSizeX;
-	Desc.iWinSizeY = g_iWinSizeY;
-
-	if (FAILED(__super::Initialize(&Desc)))
+	if (FAILED(__super::Initialize()))
 		return E_FAIL;
 
 	if (FAILED(Ready_Components()))
@@ -67,8 +65,7 @@ void CHud_States_Frame::Late_Update(_float fTimeDelta)
 HRESULT CHud_States_Frame::Render()
 {
 	m_pGraphic_Device->SetTexture(0, NULL);
-
-	m_pTransformCom->Bind_Matrix();
+	
 	m_pVIBufferCom->Bind_Buffers();
 	__super::Begin();
 	m_pVIBufferCom->Render();

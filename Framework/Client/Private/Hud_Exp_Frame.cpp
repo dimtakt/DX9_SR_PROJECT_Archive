@@ -22,18 +22,16 @@ HRESULT CHud_Exp_Frame::Initialize_Prototype(LEVEL eLevel)
 
 HRESULT CHud_Exp_Frame::Initialize(void* pArg)
 {
-	UIOBJECT_DESC Desc{};
+	m_fSizeX = g_iWinSizeX;
+	m_fSizeY = 9.f;
+	m_fX = m_fSizeX * 0.5f;
+	m_fY = g_iWinSizeY - m_fSizeY * 0.5f;
+	m_fZ = 0.f;
+	m_iWinSizeX = g_iWinSizeX;
+	m_iWinSizeY = g_iWinSizeY;
 
-	Desc.fSizeX = g_iWinSizeX;
-	Desc.fSizeY = 9.f;
-	Desc.fX = Desc.fSizeX * 0.5f;
-	Desc.fY = g_iWinSizeY - Desc.fSizeY * 0.5f;
-	Desc.fZ = 0.f;
-	Desc.iWinSizeX = g_iWinSizeX;
-	Desc.iWinSizeY = g_iWinSizeY;
-
-	m_fSizeY2 = Desc.fSizeY * 0.5;
-	if (FAILED(__super::Initialize(&Desc)))
+	m_fSizeY2 = m_fSizeY * 0.5;
+	if (FAILED(__super::Initialize()))
 		return E_FAIL;
 
 	if (FAILED(Ready_Components()))
@@ -135,9 +133,6 @@ HRESULT CHud_Exp_Frame::Ready_Children()
 
 void CHud_Exp_Frame::Render_Buffer1()
 {
-	m_pGraphic_Device->SetTexture(0, NULL);
-
-	m_pTransformCom->Bind_Matrix();
 	m_pVIBufferCom1->Bind_Buffers();
 
 	__super::Begin();
