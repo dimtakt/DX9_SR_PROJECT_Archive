@@ -160,6 +160,9 @@
     <Filter Include="01.Utility\03.GameObject\ItemObject\Artefact">
       <UniqueIdentifier>{e02917a5-e818-4f33-8f34-18b77f2f9603}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01.Utility\03.GameObject\ItemObject\Item_Effect">
+      <UniqueIdentifier>{fc6b4298-e5ed-4154-b495-18b2009490cb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Public\Engine_Macro.h">
