@@ -9,6 +9,8 @@
 #include "PlayerStats.h"
 #include "Animator.h"
 #include "VIBuffer_TerrainBox.h"
+#include "ItemObject.h"
+#include "GameObject.h"
 
 BEGIN(Engine)
 

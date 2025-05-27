@@ -151,7 +151,11 @@
     <ClInclude Include="..\public\Camera_Free.h" />
     <ClInclude Include="..\Public\Camera_Mouse.h" />
     <ClInclude Include="..\Public\Client_Defines.h" />
+    <ClInclude Include="..\Public\Client_Defines_Item.h" />
     <ClInclude Include="..\Public\Client_Struct.h" />
+    <ClInclude Include="..\public\Inven_Slot.h" />
+    <ClInclude Include="..\public\Inven_Slot_Selete.h" />
+    <ClInclude Include="..\public\Item_Base.h" />
     <ClInclude Include="..\Public\TerrainBox.h" />
     <ClInclude Include="..\public\Dagger.h" />
     <ClInclude Include="..\public\Dash_Gauge.h" />
@@ -209,7 +213,6 @@
     <ClInclude Include="..\public\UI_KeyGuide.h" />
     <ClInclude Include="..\Public\Tree.h" />
     <ClInclude Include="Client.h" />
-    <ClInclude Include="Client_Defines_Item.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="targetver.h" />
@@ -222,6 +225,9 @@
     <ClCompile Include="..\Private\Camera_Follow.cpp" />
     <ClCompile Include="..\private\Camera_Free.cpp" />
     <ClCompile Include="..\Private\Camera_Mouse.cpp" />
+    <ClCompile Include="..\private\Inven_Slot.cpp" />
+    <ClCompile Include="..\private\Inven_Slot_Selete.cpp" />
+    <ClCompile Include="..\private\Item_Base.cpp" />
     <ClCompile Include="..\Private\TerrainBox.cpp" />
     <ClCompile Include="..\private\Dagger.cpp" />
     <ClCompile Include="..\private\Dash_Gauge.cpp" />
