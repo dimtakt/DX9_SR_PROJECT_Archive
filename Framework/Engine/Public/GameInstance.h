@@ -44,6 +44,8 @@ public:
 	CComponent* Get_Component(_uint iLayerLevelIndex, const _wstring& strLayerTag, const _wstring& strComponentTag, _uint iIndex = 0);
 	class CGameObject* Get_GameObject(_uint iLayerLevelIndex, const _wstring& strLayerTag, _uint iIndex = 0);
 	HRESULT Add_ItemObject_ToLayer(_uint iLayerLevelIndex, const _wstring& strLayerTag, _uint ItemIndex, void* pArg = nullptr);
+	class CLayer* Find_Layer(_uint iLayerLevelIndex, const _wstring& strLayerTag);
+	HRESULT Add_Direct_GameObject_ToLayer(_uint iLayerLevelIndex, const _wstring& strLayerTag, class CGameObject* pGameObject);
 #pragma endregion
 
 #pragma region RENDERER
@@ -84,7 +86,7 @@ public:
 #pragma endregion
 
 #pragma region ROOM_MANAGER
-	HRESULT Add_Room(class CRoom* pRoom);
+	HRESULT Add_Room(class CRoom* pRoom, _uint iLayerLevelIndex, const _wstring& strLayerTag);
 	HRESULT Enter_Room(_int iRoomID);
 	class CRoom* Get_CurrentRoom();
 	class CRoom* Get_RoomByID(_int iRoomID);

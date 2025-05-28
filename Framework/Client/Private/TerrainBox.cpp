@@ -85,16 +85,16 @@ HRESULT CTerrainBox::Render()
 HRESULT CTerrainBox::Ready_Components()
 {
 	///* For.Com_VIBuffer_TerrainBox*/
-	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_SHARED), TEXT("Prototype_Component_VIBuffer_TerrainBox"),
+	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_VIBuffer_TerrainBox"),
 		TEXT("Com_VIBuffer_TerrainBox"), reinterpret_cast<CComponent**>(&m_pVIBufferCom))))
 		return E_FAIL;
 
 	/* For. Com_Texture_TerrainBox_Top*/
-	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_SHARED), TEXT("Prototype_Component_Texture_TerrainBox_Top"),
+	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_TerrainBox_Top"),
 		TEXT("Com_Texture_Terrain_Top"), reinterpret_cast<CComponent**>(&m_pTextureTop))))
 		return E_FAIL;
 
-	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_SHARED), TEXT("Prototype_Component_Texture_TerrainBox_Side"),
+	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_TerrainBox_Side"),
 		TEXT("Com_Texture_Terrain_Side"), reinterpret_cast<CComponent**>(&m_pTextureSide))))
 		return E_FAIL;
 

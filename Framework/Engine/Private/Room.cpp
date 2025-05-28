@@ -24,18 +24,78 @@ HRESULT CRoom::Initialize(void* pArg)
 
 void CRoom::Priority_Update(_float fTimeDelta)
 {
+    if (m_bIsActive)
+    {
+        if(m_pTerrainBox != nullptr)
+            m_pTerrainBox->Priority_Update(fTimeDelta);
+        // 추후 지형 오브젝트 처리
+        /*for (auto& obj : m_vObject)
+        {
+            obj->
+        }*/
+     
+        for (auto& obj : m_vMonster)
+        {
+            obj->Priority_Update(fTimeDelta);
+        }
+    }
 }
 
 void CRoom::Update(_float fTimeDelta)
 {
+    if (m_bIsActive)
+    {
+        if (m_pTerrainBox != nullptr)
+            m_pTerrainBox->Update(fTimeDelta);
+        // 추후 지형 오브젝트 처리
+        /*for (auto& obj : m_vObject)
+        {
+            obj->
+        }*/
+
+        for (auto& obj : m_vMonster)
+        {
+            obj->Update(fTimeDelta);
+        }
+    }
 }
 
 void CRoom::Late_Update(_float fTimeDelta)
 {
+    if (m_bIsActive)
+    {
+        if (m_pTerrainBox != nullptr)
+            m_pTerrainBox->Late_Update(fTimeDelta);
+        // 추후 지형 오브젝트 처리
+        /*for (auto& obj : m_vObject)
+        {
+            obj->
+        }*/
+
+        for (auto& obj : m_vMonster)
+        {
+            obj->Late_Update(fTimeDelta);
+        }
+    }
 }
 
 HRESULT CRoom::Render()
 {
+    if (m_bIsActive)
+    {
+        if (m_pTerrainBox != nullptr)
+            m_pTerrainBox->Render();
+        // 추후 지형 오브젝트 처리
+        /*for (auto& obj : m_vObject)
+        {
+            obj->
+        }*/
+
+        for (auto& obj : m_vMonster)
+        {
+            obj->Render();
+        }
+    }
     return S_OK;
 }
 
@@ -69,9 +129,7 @@ void CRoom::Free()
 {
     __super::Free();
 
-    Safe_Release(m_pLand);
-    Safe_Release(m_pTextureCom);
-    Safe_Release(m_pTransformCom);
+    Safe_Release(m_pTerrainBox);
     for (auto& obj : m_vObject)
     {
         Safe_Release(obj);
