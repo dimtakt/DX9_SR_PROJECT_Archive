@@ -10,6 +10,7 @@
 
 // Animations?
 #include "../Public/Animations/Anim_Player_Idle.h"
+#include "../Public/Animations/Anim_Player_Attack.h"
 
 
 CLevel_GamePlay::CLevel_GamePlay(LPDIRECT3DDEVICE9 pGraphic_Device)
@@ -89,6 +90,8 @@ HRESULT CLevel_GamePlay::Ready_Light()
 HRESULT CLevel_GamePlay::Ready_Animations()
 {
 	if (FAILED(m_pGameInstance->Insert_Animation(L"Player_Idle", CAnim_Player_Idle::Create())))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Insert_Animation(L"Player_Attack", CAnim_Player_Attack::Create())))
 		return E_FAIL;
 
 	return S_OK;

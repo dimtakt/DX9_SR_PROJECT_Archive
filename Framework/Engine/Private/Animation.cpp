@@ -10,12 +10,13 @@ HRESULT CAnimation::Initialize()
 	return S_OK;
 }
 
-void CAnimation::Insert_KeyFrames(_int iFrame, const _float3& vScale, const _float4& qRot, const _float3& vPos)
+void CAnimation::Insert_KeyFrames(_int iFrame, const _float3& vScale, const D3DXQUATERNION& qRot, const _float3& vPos)
 {
 	_float4x4 matScale, matRot, matTrans;
 
 	D3DXMatrixScaling(&matScale, vScale.x, vScale.y, vScale.z);
-	D3DXMatrixRotationQuaternion(&matRot, reinterpret_cast<const D3DXQUATERNION*>(&qRot));
+	//D3DXMatrixRotationQuaternion(&matRot, reinterpret_cast<const D3DXQUATERNION*>(&qRot));
+	D3DXMatrixRotationQuaternion(&matRot, &qRot);
 	D3DXMatrixTranslation(&matTrans, vPos.x, vPos.y, vPos.z);
 
 	_float4x4 matTransform = matScale * matRot * matTrans;

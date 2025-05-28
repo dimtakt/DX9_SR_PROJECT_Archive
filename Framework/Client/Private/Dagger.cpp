@@ -1,4 +1,5 @@
 #include "Dagger.h"
+
 #include "GameInstance.h"
 
 CDagger::CDagger(LPDIRECT3DDEVICE9 pGraphic_Device)
@@ -33,9 +34,6 @@ void CDagger::Priority_Update(_float fTimeDelta)
 
 void CDagger::Update(_float fTimeDelta)
 {
-
-
-
 	// ksta : test
 
 	_float fAngle = 90.f;
@@ -54,38 +52,8 @@ void CDagger::Update(_float fTimeDelta)
 			m_fCurrentAngle += 360.f;
 	}
 	
-	// ----
-
-	// Q, E 시 따라서 돌아가지 않음..
-	// 이건 나중에 Transform 쪽이나 Object Manager에 따로 함수 만들어서
-	// 거기서 루프 돌리면서 2d 오브젝트 전부 다 돌려줘야 할 듯?
-	
-
-	// 기준점 옮기는 건 정점 위치를 수정하는 편이 더 쉬울듯
-
 	// 플레이어에 붙어서 이동 및 커서방향에 맞게 돌도록 처리
 	Follow_Player();
-	
-
-
-	// ksta : 임시 (좌표확인용)
-	if (m_pGameInstance->IsKeyHold(VK_UP))
-		m_pTransformCom->Go_Straight(fTimeDelta);
-
-	if (m_pGameInstance->IsKeyHold(VK_DOWN))
-		m_pTransformCom->Go_Backward(fTimeDelta);
-
-	if (m_pGameInstance->IsKeyHold(VK_LEFT))
-		m_pTransformCom->Go_Left(fTimeDelta);
-
-	if (m_pGameInstance->IsKeyHold(VK_RIGHT))
-		m_pTransformCom->Go_Right(fTimeDelta);
-
-	if (m_pGameInstance->IsKeyHold('J'))
-		m_pTransformCom->Turn({0, 1, 0}, fTimeDelta);
-
-	if (m_pGameInstance->IsKeyHold('K'))
-		m_pTransformCom->Turn({0, -1, 0}, fTimeDelta);
 	
 	_float3 vPos = {}, vRight = {}, vUp = {}, vLook = {};    // 단검 좌표
 	vPos  = m_pTransformCom->Get_State(STATE::POSITION);
@@ -93,11 +61,6 @@ void CDagger::Update(_float fTimeDelta)
 	vRight = m_pTransformCom->Get_State(STATE::RIGHT);
 	vUp = m_pTransformCom->Get_State(STATE::UP);
 	vLook = m_pTransformCom->Get_State(STATE::LOOK);
-	std::cout << "[Dagger::Update] Pos   : {" << vPos.x << ", " << vPos.y << ", " << vPos.z << "}" << std::endl;
-	std::cout << "[Dagger::Update] Right : {" << vRight.x << ", " << vRight.y << ", " << vRight.z << "}" << std::endl;
-	std::cout << "[Dagger::Update] Up    : {" << vUp.x << ", " << vUp.y << ", " << vUp.z << "}" << std::endl;
-	std::cout << "[Dagger::Update] Look  : {" << vLook.x << ", " << vLook.y << ", " << vLook.z << "}" << std::endl;
-	std::cout << "[Dagger::Update] ================================================================" << std::endl;
 
 
 
@@ -110,11 +73,15 @@ void CDagger::Late_Update(_float fTimeDelta)
 
 HRESULT CDagger::Render()
 {
+	// 커서에 맞게 각도 보정 필요
+	Look_At_Cursor();
+	// 이게 여기있으면 안되는데? ?????
+
 	SetUp_RenderState();
 
 	m_pTransformCom->Bind_Matrix();
 
-	m_pAnimatorCom->Update_State();
+	m_pAnimatorCom->Update_State(); // Bind_Texture
 
 	m_pVIBufferCom->Bind_Buffers();
 	m_pVIBufferCom->Render();
@@ -215,7 +182,7 @@ void CDagger::Follow_Player()
 	_float3 vDaggerPos = {};	// 단검 좌표
 	vDaggerPos = m_pTransformCom->Get_State(STATE::POSITION);
 
-	_float3 vRotatePoint = {};	// 회전의 기준이 될 좌표
+	_float3 vRotatePoint = {};	// 중점을 이동시킬 좌표
 
 	_float fPointY = vPlayerPos.y;       // 교차 평면의 기준이 될 Y값
 	_float3 vRayPoint = {};     // fPointY 값 기준 마우스 Ray와 교차하는 좌표
@@ -275,6 +242,33 @@ void CDagger::Follow_Player()
 	m_pTransformCom->Set_State(STATE::POSITION, *reinterpret_cast<_float3*>(&matDaggerWorld.m[3]));
 
 	m_isFlippedX = vRayPoint.x < vPlayerPos.x;
+
+	return;
+}
+
+void CDagger::Look_At_Cursor()
+{
+	// 애니메이션의 기준점이 커서를 바라보도록 재조정 필요
+	CAnimator* pTargetAnimatorCom = dynamic_cast<CAnimator*>(m_pGameInstance->Get_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Layer_Player"), TEXT("Com_Animator")));
+
+	_float3 vTargetPos = m_pTargetTransformCom->Get_State(STATE::POSITION);
+	_float fPointY = vTargetPos.y;       // 교차 평면의 기준이 될 Y값
+	_float3 vRayPoint = {};     // fPointY 값 기준 마우스 Ray와 교차하는 좌표
+
+	m_pGameInstance->Get_IntersectAtY(fPointY, vRayPoint);
+
+	_float fAngle = atan2f(vRayPoint.x - vTargetPos.x, vRayPoint.z - vTargetPos.z);
+
+	// 이는 Idle 상태가 아닐때만 실행
+	if ((pTargetAnimatorCom->Get_CurStateTag() == L"Idle_Lower" ||
+		pTargetAnimatorCom->Get_CurStateTag() == L"Idle_Upper"))
+	{
+		// 따라오는 조건이 아닐때만 각도 갱신. 애니메이션 동작중에는 각도가 변하지 않게 하기 위함
+		m_fCurCursorDeg = D3DXToDegree(-fAngle) + 90;
+		return;
+	}
+
+	m_pTransformCom->RotationByParent({ 0, 0, 1 }, m_pTargetTransformCom, D3DXToRadian(m_fCurCursorDeg));
 
 	return;
 }

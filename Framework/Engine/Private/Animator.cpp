@@ -160,7 +160,8 @@ void CAnimator::Update_Keyframes()
 		D3DXMatrixIdentity(&matTrackTarget);
 	
 	_int iMaxFrame = pAnim->Get_iMaxFrame();
-	_int iCurFrame = m_iStackedFrames % iMaxFrame;	// 스프라이트랑 프레임 안맞으면 문제생길듯
+	if (iMaxFrame == 0) return;						// 빈 애니메이션이면 리턴 
+	_int iCurFrame = m_iStackedFrames % iMaxFrame;	// 인덱스 넘기면 그냥 루프하게
 
 	_float4x4 matLocal = pAnim->Get_CurKeyFrame(iCurFrame).matTransform; // 변환용 행렬 가져옴
 

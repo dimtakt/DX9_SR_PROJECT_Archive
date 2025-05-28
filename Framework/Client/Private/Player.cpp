@@ -109,9 +109,9 @@ void CPlayer::Update(_float fTimeDelta)
     if (m_pGameInstance->IsKeyDown(VK_LBUTTON))
     {
         if (vRayPoint.z > vPlayerPos.z)
-            m_pAnimatorCom->Change_State(L"GreatSwordHeavyAttack_Upper");
+            m_pAnimatorCom->Change_State(L"Attack_Upper");
         else
-            m_pAnimatorCom->Change_State(L"GreatSwordHeavyAttack_Lower");
+            m_pAnimatorCom->Change_State(L"Attack_Lower");
     }
     
     if (m_pGameInstance->IsKeyDown(VK_RBUTTON))
@@ -289,14 +289,14 @@ HRESULT CPlayer::Ready_Components()
     m_pAnimatorCom->Add_State(L"Roll",              { m_pTextureCom_Roll, 4, true });
     m_pAnimatorCom->Add_State(L"Air",               { m_pTextureCom_Air, 4, true });
     m_pAnimatorCom->Add_State(L"Down",              { m_pTextureCom_Down, 4, true });
-    m_pAnimatorCom->Add_State(L"Idle_Lower",        { m_pTextureCom_Idle_Lower, 4, true });
-    m_pAnimatorCom->Add_State(L"Idle_Upper",        { m_pTextureCom_Idle_Upper, 4, true });
+    m_pAnimatorCom->Add_State(L"Idle_Lower",        { m_pTextureCom_Idle_Lower, 4, true, m_pGameInstance->Find_Animation(L"Player_Idle") });
+    m_pAnimatorCom->Add_State(L"Idle_Upper",        { m_pTextureCom_Idle_Upper, 4, true, m_pGameInstance->Find_Animation(L"Player_Idle") });
     m_pAnimatorCom->Add_State(L"Move_Lower",        { m_pTextureCom_Move_Lower, 4, true });
     m_pAnimatorCom->Add_State(L"Move_Upper",        { m_pTextureCom_Move_Upper, 4, true });
-    m_pAnimatorCom->Add_State(L"Attack_Lower",      { m_pTextureCom_Attack_Lower, 4, false });
-    m_pAnimatorCom->Add_State(L"Attack_Upper",      { m_pTextureCom_Attack_Upper, 4, false });
-    m_pAnimatorCom->Add_State(L"GreatSwordHeavyAttack_Lower", { m_pTextureCom_GreatSwordHeavyAttack_Lower, 4, false, m_pGameInstance->Find_Animation(L"Player_Idle")  });
-    m_pAnimatorCom->Add_State(L"GreatSwordHeavyAttack_Upper", { m_pTextureCom_GreatSwordHeavyAttack_Upper, 4, false, m_pGameInstance->Find_Animation(L"Player_Idle")  });
+    m_pAnimatorCom->Add_State(L"Attack_Lower",      { m_pTextureCom_Attack_Lower, 3, false, m_pGameInstance->Find_Animation(L"Player_Attack") });
+    m_pAnimatorCom->Add_State(L"Attack_Upper",      { m_pTextureCom_Attack_Upper, 3, false, m_pGameInstance->Find_Animation(L"Player_Attack") });
+    m_pAnimatorCom->Add_State(L"GreatSwordHeavyAttack_Lower", { m_pTextureCom_GreatSwordHeavyAttack_Lower, 4, false});
+    m_pAnimatorCom->Add_State(L"GreatSwordHeavyAttack_Upper", { m_pTextureCom_GreatSwordHeavyAttack_Upper, 4, false});
     m_pAnimatorCom->Add_State(L"WhirlWind_Ready",   { m_pTextureCom_WhirlWind_Ready, 4, false });
     m_pAnimatorCom->Add_State(L"WhirlWind_Cycle",   { m_pTextureCom_WhirlWind_Cycle, 4, false });
 

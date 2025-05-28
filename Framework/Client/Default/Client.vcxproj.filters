@@ -414,6 +414,9 @@
     <ClInclude Include="..\public\Animations\Anim_Player_Idle.h">
       <Filter>03.Animations\Player</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Animations\Anim_Player_Attack.h">
+      <Filter>03.Animations\Player</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -586,6 +589,9 @@
       <Filter>02.GameObject\Player\Weapon\Dagger</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Animations\Anim_Player_Idle.cpp">
+      <Filter>03.Animations\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Animations\Anim_Player_Attack.cpp">
       <Filter>03.Animations\Player</Filter>
     </ClCompile>
   </ItemGroup>
