@@ -13,7 +13,7 @@ public:
 	HRESULT Initialize();
 
 public:
-	HRESULT Add_Monsters(class CRoom* pRoom, list<CMonster::MONSTERDESC> tMonsterDescList);
+	HRESULT Add_Monsters(class CRoom* pRoom, list<OBJECTDESC> ObjectDescList);
 
 private:
 	class CGameInstance* m_pGameInstance = { nullptr };

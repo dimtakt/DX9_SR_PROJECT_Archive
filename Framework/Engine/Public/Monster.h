@@ -6,14 +6,6 @@ BEGIN(Engine)
 
 class ENGINE_DLL CMonster abstract : public CGameObject
 {
-public:
-	typedef struct tagMonsterDesc {
-		_uint iLayerLevelIndex;
-		_wstring strLayerTag;
-		_uint iPrototypeLevelIndex;
-		const _wstring strPrototypeTag;
-		_uint iCount;
-	}MONSTERDESC;
 protected:
 	CMonster(LPDIRECT3DDEVICE9 pGraphic_Device);
 	CMonster(const CMonster& Prototype);

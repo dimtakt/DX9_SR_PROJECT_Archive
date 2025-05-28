@@ -56,6 +56,14 @@ namespace Engine
 		string	sNickname;
 		string	sPassword;
 	}USER;
+
+	typedef struct tagObjectDesc {
+		unsigned int iLayerLevelIndex;
+		wstring strLayerTag;
+		unsigned int iPrototypeLevelIndex;
+		wstring strPrototypeTag;
+		D3DXVECTOR3 vPosition;
+	}OBJECTDESC;
 }
 
 

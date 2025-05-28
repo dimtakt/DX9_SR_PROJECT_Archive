@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Prototype_Manager.h"
-
+#include "Monster.h"
 BEGIN(Engine)
 
 class ENGINE_DLL CGameInstance final : public CBase
@@ -133,6 +133,12 @@ public:
 	CBase*						find_ItemObject(_uint iIndex);
 	CItemObject*				Get_ItemObject(_uint iIndex);
 #pragma endregion
+
+#pragma region MONSTER_FACTORY
+	HRESULT Add_Monsters(class CRoom* pRoom, list<OBJECTDESC> ObjectDescList);
+#pragma endregion
+
+
 private:
 	class CGraphic_Device*		m_pGraphic_Device = { nullptr };
 	class CLevel_Manager*		m_pLevel_Manager = { nullptr };
@@ -148,6 +154,7 @@ private:
 	class CFont_Manager*		m_pFont_Manager = { nullptr };
 	class CLight_Manager*		m_pLight_Manager = { nullptr };
 	class CItem_Manager*		m_pItem_Manager = { nullptr };
+	class CMonster_Factory*		m_pMonster_Factory = { nullptr };
 public:
 	void Release_Engine();
 	virtual void Free() override;

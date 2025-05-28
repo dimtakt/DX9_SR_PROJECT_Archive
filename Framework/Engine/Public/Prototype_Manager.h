@@ -11,6 +11,7 @@
 #include "VIBuffer_TerrainBox.h"
 #include "ItemObject.h"
 #include "GameObject.h"
+#include "Monster.h"
 
 BEGIN(Engine)
 

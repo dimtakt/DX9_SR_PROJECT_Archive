@@ -6,6 +6,7 @@
 #include "Player.h"
 #include "Hud_Buff.h"
 #include "Room_Default.h"
+#include "Monster.h"
 #include "Monster_Default.h"
 #include "TerrainBox.h"
 
@@ -133,12 +134,22 @@ HRESULT CLevel_Stage1::Ready_Layer_Room(const _wstring& strLayerTag)
 
 		// 몬스터 셋팅
 		CMonster_Default* pMonster = nullptr;
+		list<OBJECTDESC> DescList;
 		for (size_t i = 0; i < 20; i++)
 		{
-			pMonster = dynamic_cast<CMonster_Default*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::LEVEL_STAGE1), TEXT("Prototype_GameObject_ShortMonster")));
-			NULL_CHECK_RETURN(pMonster, E_FAIL);
-			pRoom->Add_Monster(pMonster);
+			OBJECTDESC tDesc = {};
+			tDesc.iLayerLevelIndex = ENUM_CLASS(LEVEL::LEVEL_STAGE1);
+			tDesc.iPrototypeLevelIndex = ENUM_CLASS(LEVEL::LEVEL_STAGE1);
+			tDesc.strLayerTag = strLayerTag;
+			tDesc.strPrototypeTag = TEXT("Prototype_GameObject_ShortMonster");
+			tDesc.vPosition = _float3(10.f * i + 10.f, 0.f, 5.f * i + 5.f);
+			//pMonster = dynamic_cast<CMonster_Default*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::LEVEL_STAGE1), TEXT("Prototype_GameObject_ShortMonster")));
+			//NULL_CHECK_RETURN(pMonster, E_FAIL);
+			//pRoom->Add_Monster(pMonster);
+			DescList.push_back(tDesc);
 		}
+		m_pGameInstance->Add_Monsters(pRoom, DescList);
+		
 
 		// 오브젝트 셋팅
 

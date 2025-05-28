@@ -14,6 +14,7 @@
 #include "Font_Manager.h"
 #include "Light_Manager.h"
 #include "Item_Manager.h"
+#include "Monster_Factory.h"
 
 IMPLEMENT_SINGLETON(CGameInstance)
 
@@ -79,6 +80,10 @@ HRESULT CGameInstance::Initialize_Engine(const ENGINE_DESC& EngineDesc, LPDIRECT
 
     m_pItem_Manager = CItem_Manager::Create(*ppOut);
     if (nullptr == m_pItem_Manager)
+        return E_FAIL;
+
+    m_pMonster_Factory = CMonster_Factory::Create();
+    if (nullptr == m_pMonster_Factory)
         return E_FAIL;
 
     return S_OK;
@@ -355,6 +360,11 @@ CItemObject* CGameInstance::Get_ItemObject(_uint iIndex)
     return m_pItem_Manager->Get_ItemObject(iIndex);
 }
 
+HRESULT CGameInstance::Add_Monsters(CRoom* pRoom, list<OBJECTDESC> ObjectDescList)
+{
+    return m_pMonster_Factory->Add_Monsters(pRoom, ObjectDescList);
+}
+
 void CGameInstance::Release_Engine()
 {
     Release();
@@ -373,6 +383,7 @@ void CGameInstance::Release_Engine()
     Safe_Release(m_pFont_Manager);
     Safe_Release(m_pLight_Manager);
     Safe_Release(m_pItem_Manager);
+    Safe_Release(m_pMonster_Factory);
 }
 
 void CGameInstance::Free()
