@@ -1,6 +1,7 @@
 #include "Player.h"
 #include "TerrainBox.h"
 #include "GameInstance.h"
+#include "Collider_OBB.h"
 
 CPlayer::CPlayer(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CGameObject{ pGraphic_Device }
@@ -22,6 +23,7 @@ HRESULT CPlayer::Initialize(void* pArg)
 	if (FAILED(Ready_Components()))
 		return E_FAIL;
 
+    m_eObjType = GAMEOBJ_TYPE::PLAYER;
     m_pTransformCom->Scaling(1.5f, 1.5f, 1.5f);
 
 	return S_OK;
@@ -34,6 +36,7 @@ void CPlayer::Priority_Update(_float fTimeDelta)
 
 void CPlayer::Update(_float fTimeDelta)
 {    
+    m_pCollider->Update_Collider(m_pTransformCom);
     if (m_pTerrainBox != nullptr) {
         m_pTerrainBox->SetUp_OnTerrainBox(m_pTransformCom, _float3(0.05f, 0.5f, 0.05f));
     }
@@ -183,6 +186,19 @@ HRESULT CPlayer::Render()
 	return S_OK;
 }
 
+void CPlayer::OnCollision(CGameObject* pGameObject)
+{
+    switch (pGameObject->Get_ObjType())
+    {
+    case GAMEOBJ_TYPE::MONSTER:
+        {
+            int a = 1;
+            break;
+        }
+        
+    }
+}
+
 HRESULT CPlayer::Ready_Components()
 {
     /* For Com_VIBuffer */
@@ -308,6 +324,17 @@ HRESULT CPlayer::Ready_Components()
     m_pAnimatorCom->Add_State(L"WhirlWind_Cycle",   { m_pTextureCom_WhirlWind_Cycle, 4, false });
 
 
+
+    // collider
+    CCollider_OBB::OBB_DESC tColliderDesc;
+    tColliderDesc.vScale = _float3(1.5f, 1.5f, 1.5f);
+    tColliderDesc.pOwner = this;
+    if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Collider_OBB"),
+        TEXT("Com_Player_Collider"), reinterpret_cast<CComponent**>(&m_pCollider), &tColliderDesc)))
+        return E_FAIL;
+
+
+    m_pGameInstance->Add_Collider(m_pCollider);
     return S_OK;
 }
 

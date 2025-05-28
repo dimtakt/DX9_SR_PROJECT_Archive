@@ -9,6 +9,7 @@ class CTransform;
 class CVIBuffer_Rect;
 class CPlayerStats;
 class CAnimator;
+class CCollider_OBB;
 END
 
 BEGIN(Client)
@@ -34,6 +35,9 @@ public:
 		m_pTerrainBox = pTerrainBox;
 	}
 
+public:
+	virtual void OnCollision(CGameObject* pGameObject) override;
+
 private:
 	CVIBuffer_Rect*			m_pVIBufferCom					= { nullptr };
 	CTransform*				m_pTransformCom					= { nullptr };
@@ -58,6 +62,7 @@ private:
 	_bool					m_isFlippedX					= false;
 
 	CTerrainBox*			m_pTerrainBox					= { nullptr };
+	CCollider_OBB*			m_pCollider						= { nullptr };
 	
 private:
 	HRESULT Ready_Components();

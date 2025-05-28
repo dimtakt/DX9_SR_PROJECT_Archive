@@ -5,6 +5,10 @@
 #include "TerrainBox.h"
 
 BEGIN(Engine)
+class CCollider_OBB;
+END
+
+BEGIN(Client)
 
 class CMonster : public CGameObject
 {
@@ -40,6 +44,7 @@ protected:
 	class CTexture* m_pTextureCom = { nullptr };
 	class CVIBuffer_Rect* m_pVIBufferCom = { nullptr };
 	CTerrainBox* m_pTerrainBox = { nullptr };
+	CCollider_OBB* m_pCollider = { nullptr };
 
 public:
 	static CMonster* Create(LPDIRECT3DDEVICE9 pGraphic_Device);

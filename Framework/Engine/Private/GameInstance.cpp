@@ -85,13 +85,11 @@ void CGameInstance::Update_Engine(_float fTimeDelta)
     m_pObject_Manager->Priority_Update(fTimeDelta);
 
     m_pPicking->Update();
-
+    m_pCollision_Manager->Check_RoomCollisions();
     m_pObject_Manager->Update(fTimeDelta);
     m_pObject_Manager->Late_Update(fTimeDelta);
 
     m_pLevel_Manager->Update(fTimeDelta);
-
-    
 }
 
 HRESULT CGameInstance::Clear_Resources(_uint iClearLevelID)
@@ -99,6 +97,8 @@ HRESULT CGameInstance::Clear_Resources(_uint iClearLevelID)
     m_pPrototype_Manager->Clear(iClearLevelID);
 
     m_pObject_Manager->Clear(iClearLevelID);
+
+    m_pCollision_Manager->Clear_Colliders();
 
     return S_OK;
 }
@@ -282,9 +282,9 @@ _bool CGameInstance::Get_IntersectAtY(_float targetY, _float3& intersectPos)
 #pragma endregion
 
 #pragma region COLLISION_MANAGER
-HRESULT CGameInstance::Add_Collider(class CCollider* pCollider)
+HRESULT CGameInstance::Add_Collider(class CCollider_OBB* pCollider)
 {
-    return m_pCollision_Manager->Add_Collider(pCollider);
+    return m_pCollision_Manager->Add_OBB_Collider(pCollider);
 }
 #pragma endregion
 
