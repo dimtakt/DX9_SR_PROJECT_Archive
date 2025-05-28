@@ -259,9 +259,11 @@ void CDagger::Look_At_Cursor()
 
 	_float fAngle = atan2f(vRayPoint.x - vTargetPos.x, vRayPoint.z - vTargetPos.z);
 
-	// 이는 Idle 상태가 아닐때만 실행
+	// 이는 단검이 커서 추적중이 아닐때만 실행
 	if ((pTargetAnimatorCom->Get_CurStateTag() == L"Idle_Lower" ||
-		pTargetAnimatorCom->Get_CurStateTag() == L"Idle_Upper"))
+		pTargetAnimatorCom->Get_CurStateTag() == L"Idle_Upper" ||
+		pTargetAnimatorCom->Get_CurStateTag() == L"Move_Lower" ||
+		pTargetAnimatorCom->Get_CurStateTag() == L"Move_Upper"))
 	{
 		// 따라오는 조건이 아닐때만 각도 갱신. 애니메이션 동작중에는 각도가 변하지 않게 하기 위함
 		m_fCurCursorDeg = D3DXToDegree(-fAngle) + 90;

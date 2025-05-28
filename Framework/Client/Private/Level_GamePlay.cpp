@@ -29,8 +29,8 @@ HRESULT CLevel_GamePlay::Initialize()
 		return E_FAIL;
 
 
-	//if (FAILED(Ready_Layer_BackGround(TEXT("Layer_BackGround"))))
-	//	return E_FAIL;
+	if (FAILED(Ready_Layer_BackGround(TEXT("Layer_BackGround"))))
+		return E_FAIL;
 
 	if (FAILED(Ready_Layer_Weapon(TEXT("Layer_Weapon"))))
 		return E_FAIL;
