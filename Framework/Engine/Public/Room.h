@@ -1,7 +1,6 @@
 #pragma once
 #include "GameObject.h"
 #include "GameInstance.h"
-#include "LandObject.h"
 #include "Monster.h"
 
 BEGIN(Engine)
@@ -33,9 +32,9 @@ public:
     _int  GetID() { return m_iID; }
 
 public:
-    void Add_Land(CLandObject* pLandObject)
+    void Add_TerrainBox(CGameObject* pTerrainBox)
     {
-        m_pLand = pLandObject;
+        m_pTerrainBox = pTerrainBox;
     }
     void Add_Monster(CMonster* pMonster)
     {
@@ -54,7 +53,7 @@ protected:
     _int m_iID = {};
     _bool m_bIsActive = false;
     _bool m_bIsVisited = false;
-    CLandObject* m_pLand = { nullptr };
+    CGameObject* m_pTerrainBox = { nullptr };
     // 맵툴 진행중이라 추후에 어떻게 처리할지 고민중
     vector<CVIBuffer_Rect*> m_vObject = {};
     vector<CMonster*> m_vMonster = {};

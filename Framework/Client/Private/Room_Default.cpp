@@ -1,6 +1,5 @@
 #include "Room_Default.h"
 #include "GameInstance.h"
-#include "Land.h"
 
 CRoom_Default::CRoom_Default(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CRoom { pGraphic_Device }
