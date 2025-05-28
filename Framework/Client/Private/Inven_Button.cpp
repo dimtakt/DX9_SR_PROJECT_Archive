@@ -54,7 +54,7 @@ void CInven_Button::Priority_Update(_float fTimeDelta)
 
 void CInven_Button::Update(_float fTimeDelta)
 {
-	if (Click_Check(g_hWnd, VK_LEFT))
+	if (Click_Check(g_hWnd, VK_LBUTTON))
 	{
 		static_cast<CInventory*>(m_pTargetUI)->UI_Switch();
 	}
@@ -140,7 +140,7 @@ HRESULT CInven_Button::Ready_Children()
 
 HRESULT CInven_Button::Setting_Target()
 {
-	m_pTargetUI = m_pGameInstance->Get_GameObject(ENUM_CLASS(LEVEL::LEVEL_GAMEPLAY), TEXT("Layer_UI"), 0);
+	m_pTargetUI = m_pGameInstance->Get_GameObject(ENUM_CLASS(LEVEL::LEVEL_GAMEPLAY), TEXT("Layer_Inventory"), 0);
 
 	if (m_pTargetUI == nullptr)
 	{
