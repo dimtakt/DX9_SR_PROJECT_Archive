@@ -10,11 +10,9 @@
 #include "Key_Manager.h"
 #include "Picking.h"
 #include "Collision_Manager.h"
-#include "Room_Manager.h"
 #include "Font_Manager.h"
 #include "Light_Manager.h"
 #include "Item_Manager.h"
-#include "Monster_Factory.h"
 
 IMPLEMENT_SINGLETON(CGameInstance)
 
@@ -66,10 +64,6 @@ HRESULT CGameInstance::Initialize_Engine(const ENGINE_DESC& EngineDesc, LPDIRECT
     if (nullptr == m_pCollision_Manager)
         return E_FAIL;
 
-    m_pRoom_Manager = CRoom_Manager::Create();
-    if (nullptr == m_pRoom_Manager)
-        return E_FAIL;
-
     m_pFont_Manager = CFont_Manager::Create(*ppOut);
     if (nullptr == m_pFont_Manager)
         return E_FAIL;
@@ -80,10 +74,6 @@ HRESULT CGameInstance::Initialize_Engine(const ENGINE_DESC& EngineDesc, LPDIRECT
 
     m_pItem_Manager = CItem_Manager::Create(*ppOut);
     if (nullptr == m_pItem_Manager)
-        return E_FAIL;
-
-    m_pMonster_Factory = CMonster_Factory::Create();
-    if (nullptr == m_pMonster_Factory)
         return E_FAIL;
 
     return S_OK;
@@ -109,8 +99,6 @@ HRESULT CGameInstance::Clear_Resources(_uint iClearLevelID)
     m_pPrototype_Manager->Clear(iClearLevelID);
 
     m_pObject_Manager->Clear(iClearLevelID);
-
-    m_pRoom_Manager->Clear(iClearLevelID);
 
     return S_OK;
 }
@@ -300,26 +288,6 @@ HRESULT CGameInstance::Add_Collider(class CCollider* pCollider)
 }
 #pragma endregion
 
-#pragma region ROOM_MANAGER
-HRESULT CGameInstance::Add_Room(class CRoom* pRoom, _uint iLayerLevelIndex, const _wstring& strLayerTag)
-{
-    return m_pRoom_Manager->Add_Room(pRoom, iLayerLevelIndex, strLayerTag);
-}
-HRESULT CGameInstance::Enter_Room(_int iRoomID)
-{
-    return m_pRoom_Manager->Enter_Room(iRoomID);
-}
-CRoom* CGameInstance::Get_CurrentRoom()
-{
-    return m_pRoom_Manager->Get_CurrentRoom();
-}
-CRoom* CGameInstance::Get_RoomByID(_int iRoomID)
-{
-    return m_pRoom_Manager->Get_RoomByID(iRoomID);
-}
-
-#pragma endregion
-
 #pragma region FONT_MANAGER
 HRESULT CGameInstance::Ready_Font(const _wstring& strFontTag, 
     const _wstring& strFontPath, 
@@ -360,11 +328,6 @@ CItemObject* CGameInstance::Get_ItemObject(_uint iIndex)
     return m_pItem_Manager->Get_ItemObject(iIndex);
 }
 
-HRESULT CGameInstance::Add_Monsters(CRoom* pRoom, list<OBJECTDESC> ObjectDescList)
-{
-    return m_pMonster_Factory->Add_Monsters(pRoom, ObjectDescList);
-}
-
 void CGameInstance::Release_Engine()
 {
     Release();
@@ -379,14 +342,12 @@ void CGameInstance::Release_Engine()
     Safe_Release(m_pNetwork_Manager);
     Safe_Release(m_pPicking);
     Safe_Release(m_pCollision_Manager);
-    Safe_Release(m_pRoom_Manager);
     Safe_Release(m_pFont_Manager);
     Safe_Release(m_pLight_Manager);
     Safe_Release(m_pItem_Manager);
-    Safe_Release(m_pMonster_Factory);
 }
 
 void CGameInstance::Free()
 {
-    __super::Free();
+    __super::Free();//
 }

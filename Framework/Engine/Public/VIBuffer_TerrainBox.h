@@ -19,6 +19,11 @@ public:
 	void Render_Subset(int iFaceIndex);
 
 public:
+	virtual _float Compute_Height(const _float3& vLocalPos) override;
+	virtual _float Compute_Right(const _float& vLocalPosX, const _float& fOffsetX) override;
+	virtual _float Compute_Look(const _float& vLocalPosZ, const _float& fOffsetZ) override;
+
+public:
 	static CComponent* Create(LPDIRECT3DDEVICE9 pGraphic_Device);
 	virtual CComponent* Clone(void* pArg) override;
 	virtual void Free() override;

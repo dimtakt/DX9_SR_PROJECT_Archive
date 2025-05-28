@@ -1,14 +1,15 @@
 #include "Level_Stage1.h"
 #include "Client_Struct.h"
-
 #include "GameInstance.h"
 #include "Camera_Free.h"
 #include "Player.h"
 #include "Hud_Buff.h"
-#include "Room_Default.h"
+#include "Room.h"
 #include "Monster.h"
-#include "Monster_Default.h"
+#include "Monster.h"
 #include "TerrainBox.h"
+#include "Room_Manager.h"
+#include "Monster_Factory.h"
 
 CLevel_Stage1::CLevel_Stage1(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CLevel{ pGraphic_Device }
@@ -31,8 +32,8 @@ HRESULT CLevel_Stage1::Initialize()
 	if (FAILED(Ready_Layer_Room(TEXT("Layer_Room"))))
 		return E_FAIL;
 
-	//if (FAILED(Ready_Layer_Player(TEXT("Layer_Player"))))
-	//	return E_FAIL;
+	if (FAILED(Ready_Layer_Player(TEXT("Layer_Player"))))
+		return E_FAIL;
 
 	
 
@@ -95,9 +96,15 @@ HRESULT CLevel_Stage1::Ready_Layer_BackGround(const _wstring& strLayerTag)
 
 HRESULT CLevel_Stage1::Ready_Layer_Player(const _wstring& strLayerTag)
 {
-	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_STATIC), strLayerTag,
+	/*if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_STATIC), strLayerTag,
 		ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_Player"))))
-		return E_FAIL;
+		return E_FAIL;*/
+
+	CPlayer* pPlayer = dynamic_cast<CPlayer*>(m_pGameInstance->Get_GameObject(ENUM_CLASS(LEVEL::LEVEL_STATIC), strLayerTag));
+	
+	CRoom* pRoom = CRoom_Manager::GetInstance()->Get_CurrentRoom();
+	
+	pPlayer->Change_TerrainBox(dynamic_cast<CTerrainBox*>(pRoom->Get_TerrainBox()));
 
 	return S_OK;
 }
@@ -110,18 +117,13 @@ HRESULT CLevel_Stage1::Ready_Layer_UI(const _wstring& strLayerTag)
 
 HRESULT CLevel_Stage1::Ready_Layer_Room(const _wstring& strLayerTag)
 {
-	CRoom_Default* pRoom = nullptr;
+	CRoom* pRoom = nullptr;
 
 	for (size_t num = 0; num < 5; num++)
 	{
 
-		pRoom = dynamic_cast<CRoom_Default*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::LEVEL_STAGE1), TEXT("Prototype_GameObject_Room")));
+		pRoom = dynamic_cast<CRoom*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::LEVEL_STAGE1), TEXT("Prototype_GameObject_Room")));
 		NULL_CHECK_RETURN(pRoom, E_FAIL);
-		pRoom->Enter();
-		/*if (num == 0)
-		{
-			pRoom->Enter();
-		}*/
 		// 지형 셋팅
 		CTerrainBox* pTerrainBox = nullptr;
 
@@ -133,28 +135,29 @@ HRESULT CLevel_Stage1::Ready_Layer_Room(const _wstring& strLayerTag)
 		pRoom->Add_TerrainBox(pTerrainBox);
 
 		// 몬스터 셋팅
-		CMonster_Default* pMonster = nullptr;
-		list<OBJECTDESC> DescList;
+		CMonster* pMonster = nullptr;
+		list<CMonster::MONSTERDESC> DescList;
 		for (size_t i = 0; i < 20; i++)
 		{
-			OBJECTDESC tDesc = {};
+			CMonster::MONSTERDESC tDesc = {};
 			tDesc.iLayerLevelIndex = ENUM_CLASS(LEVEL::LEVEL_STAGE1);
 			tDesc.iPrototypeLevelIndex = ENUM_CLASS(LEVEL::LEVEL_STAGE1);
 			tDesc.strLayerTag = strLayerTag;
 			tDesc.strPrototypeTag = TEXT("Prototype_GameObject_ShortMonster");
 			tDesc.vPosition = _float3(10.f * i + 10.f, 0.f, 5.f * i + 5.f);
+			tDesc.pTerrainBox = pTerrainBox;
 			//pMonster = dynamic_cast<CMonster_Default*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::LEVEL_STAGE1), TEXT("Prototype_GameObject_ShortMonster")));
 			//NULL_CHECK_RETURN(pMonster, E_FAIL);
 			//pRoom->Add_Monster(pMonster);
 			DescList.push_back(tDesc);
 		}
-		m_pGameInstance->Add_Monsters(pRoom, DescList);
+		CMonster_Factory::GetInstance()->Add_Monsters(pRoom, DescList);
 		
 
 		// 오브젝트 셋팅
 
 		// 룸매니저 투입
-		m_pGameInstance->Add_Room(pRoom, ENUM_CLASS(LEVEL::LEVEL_STAGE1), TEXT("Layer_Room"));
+		CRoom_Manager::GetInstance()->Add_Room(pRoom, ENUM_CLASS(LEVEL::LEVEL_STAGE1), TEXT("Layer_Room"));
 	}
 
 	return S_OK;

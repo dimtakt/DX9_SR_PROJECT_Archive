@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Prototype_Manager.h"
-#include "Monster.h"
 BEGIN(Engine)
 
 class ENGINE_DLL CGameInstance final : public CBase
@@ -85,13 +84,6 @@ public:
 	HRESULT Add_Collider(class CCollider* pCollider);
 #pragma endregion
 
-#pragma region ROOM_MANAGER
-	HRESULT Add_Room(class CRoom* pRoom, _uint iLayerLevelIndex, const _wstring& strLayerTag);
-	HRESULT Enter_Room(_int iRoomID);
-	class CRoom* Get_CurrentRoom();
-	class CRoom* Get_RoomByID(_int iRoomID);
-#pragma endregion
-
 #pragma region FONT_MANAGER
 	HRESULT Ready_Font(const _wstring& strFontTag,
 		const _wstring& strFontPath,
@@ -134,11 +126,6 @@ public:
 	CItemObject*				Get_ItemObject(_uint iIndex);
 #pragma endregion
 
-#pragma region MONSTER_FACTORY
-	HRESULT Add_Monsters(class CRoom* pRoom, list<OBJECTDESC> ObjectDescList);
-#pragma endregion
-
-
 private:
 	class CGraphic_Device*		m_pGraphic_Device = { nullptr };
 	class CLevel_Manager*		m_pLevel_Manager = { nullptr };
@@ -150,11 +137,9 @@ private:
 	class CNetwork_Manager*		m_pNetwork_Manager = { nullptr };
 	class CPicking*				m_pPicking = { nullptr };
 	class CCollision_Manager*	m_pCollision_Manager = { nullptr };
-	class CRoom_Manager*		m_pRoom_Manager = { nullptr };
 	class CFont_Manager*		m_pFont_Manager = { nullptr };
 	class CLight_Manager*		m_pLight_Manager = { nullptr };
 	class CItem_Manager*		m_pItem_Manager = { nullptr };
-	class CMonster_Factory*		m_pMonster_Factory = { nullptr };
 public:
 	void Release_Engine();
 	virtual void Free() override;

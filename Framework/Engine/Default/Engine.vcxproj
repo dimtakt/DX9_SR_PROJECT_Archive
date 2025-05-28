@@ -181,8 +181,6 @@ call Copy.bat</Command>
     <ClInclude Include="..\Public\Level_Manager.h" />
     <ClInclude Include="..\Public\Light.h" />
     <ClInclude Include="..\Public\Light_Manager.h" />
-    <ClInclude Include="..\Public\Monster.h" />
-    <ClInclude Include="..\Public\Monster_Factory.h" />
     <ClInclude Include="..\Public\Network_Manager.h" />
     <ClInclude Include="..\public\Collider_OBB.h" />
     <ClInclude Include="..\Public\Object_Manager.h" />
@@ -191,8 +189,6 @@ call Copy.bat</Command>
     <ClInclude Include="..\public\ProgressBar.h" />
     <ClInclude Include="..\Public\Prototype_Manager.h" />
     <ClInclude Include="..\Public\Renderer.h" />
-    <ClInclude Include="..\Public\Room.h" />
-    <ClInclude Include="..\Public\Room_Manager.h" />
     <ClInclude Include="..\Public\Shader.h" />
     <ClInclude Include="..\public\Texture.h" />
     <ClInclude Include="..\Public\Timer.h" />
@@ -221,16 +217,12 @@ call Copy.bat</Command>
     <ClCompile Include="..\private\Item_Manager.cpp" />
     <ClCompile Include="..\Private\Key_Manager.cpp" />
     <ClCompile Include="..\private\Light_Manager.cpp" />
-    <ClCompile Include="..\Private\Monster.cpp" />
     <ClCompile Include="..\private\ItemObject.cpp" />
     <ClCompile Include="..\Private\Light.cpp" />
-    <ClCompile Include="..\Private\Monster_Factory.cpp" />
     <ClCompile Include="..\Private\Network_Manager.cpp" />
     <ClCompile Include="..\private\Picking.cpp" />
     <ClCompile Include="..\private\PlayerStats.cpp" />
     <ClCompile Include="..\private\ProgressBar.cpp" />
-    <ClCompile Include="..\Private\Room.cpp" />
-    <ClCompile Include="..\Private\Room_Manager.cpp" />
     <ClCompile Include="..\Private\Shader.cpp" />
     <ClCompile Include="..\Private\UIObject.cpp" />
     <ClCompile Include="..\Private\VIBuffer_Cube.cpp" />

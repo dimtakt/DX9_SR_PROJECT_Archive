@@ -1,5 +1,5 @@
 #include "Player.h"
-
+#include "TerrainBox.h"
 #include "GameInstance.h"
 
 CPlayer::CPlayer(LPDIRECT3DDEVICE9 pGraphic_Device)
@@ -22,6 +22,8 @@ HRESULT CPlayer::Initialize(void* pArg)
 	if (FAILED(Ready_Components()))
 		return E_FAIL;
 
+    m_pTransformCom->Scaling(1.5f, 1.5f, 1.5f);
+
 	return S_OK;
 }
 
@@ -32,6 +34,11 @@ void CPlayer::Priority_Update(_float fTimeDelta)
 
 void CPlayer::Update(_float fTimeDelta)
 {    
+    if (m_pTerrainBox != nullptr) {
+        m_pTerrainBox->SetUp_OnTerrainBox(m_pTransformCom, _float3(0.05f, 0.5f, 0.05f));
+    }
+        
+
     _float fPointY = 0.f;       // 교차 평면의 기준이 될 Y값
     _float3 vRayPoint = {};     // fPointY 값 기준 마우스 Ray와 교차하는 좌표
     m_pGameInstance->Get_IntersectAtY(fPointY, vRayPoint);
@@ -376,4 +383,5 @@ void CPlayer::Free()
 
     Safe_Release(m_pPlayerStatsCom);
     Safe_Release(m_pAnimatorCom);
+    //Safe_Release(m_pTerrainBox);
 }

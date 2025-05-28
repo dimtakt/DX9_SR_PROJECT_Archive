@@ -31,6 +31,7 @@ private:
 	void Ready_Key_Setting();
 	HRESULT Ready_Item_Setting();
 	HRESULT Start_Level(LEVEL eStartLevelID);
+	HRESULT Ready_Manager_Setting();
 
 public:
 	static CMainApp* Create();

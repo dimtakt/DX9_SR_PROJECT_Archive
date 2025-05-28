@@ -27,21 +27,21 @@ HRESULT CVIBuffer_TerrainBox::Initialize_Prototype()
 
 	// 버텍스 버퍼
 	VTXPOSTEX* pVertices = { nullptr };
-
-
+	m_pVertexPositions = new _float3[m_iNumVertices];
+	ZeroMemory(m_pVertexPositions, sizeof(_float3) * 4);
 	m_pVB->Lock(0, /*m_iNumVertices * m_iVertexStride*/0, reinterpret_cast<void**>(&pVertices), 0);
 
 	//위
-	pVertices[0].vPosition = _float3(-0.5f, 0.5f, 0.5f);
+	pVertices[0].vPosition = m_pVertexPositions[0] = _float3(-0.5f, 0.5f, 0.5f);
 	pVertices[0].vTexcoord = _float2{ 0.f, 0.f };
 
-	pVertices[1].vPosition = _float3(0.5f, 0.5f, 0.5f);
+	pVertices[1].vPosition = m_pVertexPositions[1] = _float3(0.5f, 0.5f, 0.5f);
 	pVertices[1].vTexcoord = _float2{ 1.f, 0.f };
 
-	pVertices[2].vPosition = _float3{0.5f, 0.5f, -0.5f};
+	pVertices[2].vPosition = m_pVertexPositions[2] = _float3{0.5f, 0.5f, -0.5f};
 	pVertices[2].vTexcoord = _float2{ 1.f, 1.f };
 
-	pVertices[3].vPosition = _float3{-0.5f, 0.5f, -0.5f};
+	pVertices[3].vPosition = m_pVertexPositions[3] = _float3{-0.5f, 0.5f, -0.5f};
 	pVertices[3].vTexcoord = _float2{ 0.f, 1.f };
 
 	//아래
@@ -154,6 +154,40 @@ void CVIBuffer_TerrainBox::Render_Subset(int iFaceIndex)
 		2);
 }
 
+_float CVIBuffer_TerrainBox::Compute_Height(const _float3& vLocalPos)
+{
+	_float		fWidth = vLocalPos.x - m_pVertexPositions[0].x;
+	_float		fDepth = m_pVertexPositions[0].z - vLocalPos.z;
+
+	D3DXPLANE		Plane{};
+
+	if (fWidth >= fDepth)
+	{
+		D3DXPlaneFromPoints(&Plane, &m_pVertexPositions[0], &m_pVertexPositions[1], &m_pVertexPositions[2]);
+	}
+	else
+	{
+		D3DXPlaneFromPoints(&Plane, &m_pVertexPositions[0], &m_pVertexPositions[2], &m_pVertexPositions[3]);
+	}
+
+	return (-Plane.a * vLocalPos.x - Plane.c * vLocalPos.z - Plane.d) / Plane.b;
+}
+
+_float CVIBuffer_TerrainBox::Compute_Right(const _float& vLocalPosX, const _float& fOffsetX)
+{
+	_float fMinX = min(min(m_pVertexPositions[0].x, m_pVertexPositions[1].x), min(m_pVertexPositions[2].x, m_pVertexPositions[3].x));
+	_float fMaxX = max(max(m_pVertexPositions[0].x, m_pVertexPositions[1].x), max(m_pVertexPositions[2].x, m_pVertexPositions[3].x));
+
+	return max(fMinX + fOffsetX, min(vLocalPosX, fMaxX - fOffsetX));
+}
+
+_float CVIBuffer_TerrainBox::Compute_Look(const _float& vLocalPosZ, const _float& fOffsetZ)
+{
+	_float fMinZ = min(min(m_pVertexPositions[0].z, m_pVertexPositions[1].z), min(m_pVertexPositions[2].z, m_pVertexPositions[3].z));
+	_float fMaxZ = max(max(m_pVertexPositions[0].z, m_pVertexPositions[1].z), max(m_pVertexPositions[2].z, m_pVertexPositions[3].z));
+
+	return max(fMinZ + fOffsetZ, min(vLocalPosZ, fMaxZ - fOffsetZ));
+}
 CComponent* CVIBuffer_TerrainBox::Create(LPDIRECT3DDEVICE9 pGraphic_Device)
 {
 	CVIBuffer_TerrainBox* pInstance = new CVIBuffer_TerrainBox(pGraphic_Device);

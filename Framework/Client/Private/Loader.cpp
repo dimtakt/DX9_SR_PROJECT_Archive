@@ -21,11 +21,10 @@
 #include "Tree.h"
 #include "Mountain.h"
 #include "Field_Hp.h"
-#include "Room_Default.h"
-#include "Monster_Default.h"
+#include "Room.h"
+#include "Monster.h"
 #include "TerrainBox.h"
 #include "Dagger.h"
-#include "Loader_Room.h"
 #include "Sky.h"
 
 CLoader::CLoader(LPDIRECT3DDEVICE9 pGraphic_Device)
@@ -89,14 +88,6 @@ HRESULT CLoader::Loading()
 	return S_OK;
 }
 
-HRESULT CLoader::Ready_LoadingRoomThread()
-{
-	m_pLoader_Room = CLoader_Room::Create(m_pGraphic_Device, m_eNextLevelID);
-	if (nullptr == m_pLoader_Room)
-		return E_FAIL;
-
-	return S_OK;
-}
 
 HRESULT CLoader::Loading_For_Logo_Level()
 {
@@ -402,12 +393,12 @@ HRESULT CLoader::Loading_For_Stage1_Level()
 
 	/* Prototype_GameObject_Land*/
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STAGE1), TEXT("Prototype_GameObject_Room"),
-		CRoom_Default::Create(m_pGraphic_Device))))
+		CRoom::Create(m_pGraphic_Device))))
 		return E_FAIL;
 
 	/* Prototype_GameObject_Monster */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STAGE1), TEXT("Prototype_GameObject_ShortMonster"),
-		CMonster_Default::Create(m_pGraphic_Device))))
+		CMonster::Create(m_pGraphic_Device))))
 		return E_FAIL;
 
 	/* Prototype_GameObject_Sky */
@@ -494,5 +485,4 @@ void CLoader::Free()
 
 	Safe_Release(m_pGameInstance);
 	Safe_Release(m_pGraphic_Device);
-	Safe_Release(m_pLoader_Room);
 }
