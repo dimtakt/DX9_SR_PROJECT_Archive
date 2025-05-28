@@ -202,6 +202,12 @@
     <Filter Include="02.GameObject\Player\Weapon\Dagger">
       <UniqueIdentifier>{13b902d1-9fd8-4a3b-b2aa-e85b85a79094}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03.Animations">
+      <UniqueIdentifier>{4ee55cda-61fd-4925-ad62-989e1297d2f5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.Animations\Player">
+      <UniqueIdentifier>{89952621-bacd-4c55-81a8-42271890590d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -405,6 +411,9 @@
     <ClInclude Include="..\public\Dagger.h">
       <Filter>02.GameObject\Player\Weapon\Dagger</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\Animations\Anim_Player_Idle.h">
+      <Filter>03.Animations\Player</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -575,6 +584,9 @@
     </ClCompile>
     <ClCompile Include="..\private\Dagger.cpp">
       <Filter>02.GameObject\Player\Weapon\Dagger</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Animations\Anim_Player_Idle.cpp">
+      <Filter>03.Animations\Player</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -124,6 +124,12 @@ public:
 #pragma region LIGHT_MANAGER
 	HRESULT	Ready_Light(const D3DLIGHT9* pLightInfo, const _uint& iIndex);
 #pragma endregion
+	HRESULT Insert_Animation(const wstring& strAnimTag, CAnimation* anim);
+	CAnimation* Find_Animation(const wstring& strAnimTag);
+#pragma region ANIMATION_MANAGER
+
+#pragma endregion
+
 
 private:
 	class CGraphic_Device*		m_pGraphic_Device = { nullptr };
@@ -139,6 +145,8 @@ private:
 	class CRoom_Manager*		m_pRoom_Manager = { nullptr };
 	class CFont_Manager*		m_pFont_Manager = { nullptr };
 	class CLight_Manager*		m_pLight_Manager = { nullptr };
+	class CAnim_Manager*		m_pAnimation_Manager = { nullptr };
+
 
 public:
 	void Release_Engine();

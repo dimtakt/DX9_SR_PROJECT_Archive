@@ -41,6 +41,8 @@ private:
 	void SetUp_RenderState();
 	void Reset_RenderState();
 
+	_float m_fCurrentAngle = 0;
+
 private:
 	void Follow_Player();
 

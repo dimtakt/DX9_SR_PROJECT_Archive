@@ -26,12 +26,36 @@ HRESULT CDagger::Initialize(void* pArg)
 
 void CDagger::Priority_Update(_float fTimeDelta)
 {
+	if (m_pTargetTransformCom == nullptr)
+		m_pTargetTransformCom = dynamic_cast<CTransform*>(m_pGameInstance->Get_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Layer_Player"), TEXT("Com_Transform")));
+
 }
 
 void CDagger::Update(_float fTimeDelta)
 {
+
+
+
 	// ksta : test
+
+	_float fAngle = 90.f;
+
+	if (m_pGameInstance->IsKeyDown('Q'))
+	{
+		m_fCurrentAngle += fAngle;
+		if (m_fCurrentAngle >= 360.f)
+			m_fCurrentAngle -= 360.f;
+	}
+
+	if (m_pGameInstance->IsKeyDown('E'))
+	{
+		m_fCurrentAngle -= fAngle;
+		if (m_fCurrentAngle < 0.f)
+			m_fCurrentAngle += 360.f;
+	}
 	
+	// ----
+
 	// Q, E 시 따라서 돌아가지 않음..
 	// 이건 나중에 Transform 쪽이나 Object Manager에 따로 함수 만들어서
 	// 거기서 루프 돌리면서 2d 오브젝트 전부 다 돌려줘야 할 듯?
@@ -63,11 +87,18 @@ void CDagger::Update(_float fTimeDelta)
 	if (m_pGameInstance->IsKeyHold('K'))
 		m_pTransformCom->Turn({0, -1, 0}, fTimeDelta);
 	
-	_float3 vPos = {}, vLook = {};    // 단검 좌표
+	_float3 vPos = {}, vRight = {}, vUp = {}, vLook = {};    // 단검 좌표
 	vPos  = m_pTransformCom->Get_State(STATE::POSITION);
+
+	vRight = m_pTransformCom->Get_State(STATE::RIGHT);
+	vUp = m_pTransformCom->Get_State(STATE::UP);
 	vLook = m_pTransformCom->Get_State(STATE::LOOK);
-	std::cout << "[Dagger::Update] Pos  : {" << vPos.x << ", " << vPos.y << ", " << vPos.z << "}" << std::endl;
-	std::cout << "[Dagger::Update] Look : {" << vLook.x << ", " << vLook.y << ", " << vLook.z << "}" << std::endl;
+	std::cout << "[Dagger::Update] Pos   : {" << vPos.x << ", " << vPos.y << ", " << vPos.z << "}" << std::endl;
+	std::cout << "[Dagger::Update] Right : {" << vRight.x << ", " << vRight.y << ", " << vRight.z << "}" << std::endl;
+	std::cout << "[Dagger::Update] Up    : {" << vUp.x << ", " << vUp.y << ", " << vUp.z << "}" << std::endl;
+	std::cout << "[Dagger::Update] Look  : {" << vLook.x << ", " << vLook.y << ", " << vLook.z << "}" << std::endl;
+	std::cout << "[Dagger::Update] ================================================================" << std::endl;
+
 
 
 }
@@ -79,8 +110,7 @@ void CDagger::Late_Update(_float fTimeDelta)
 
 HRESULT CDagger::Render()
 {
-	m_pGraphic_Device->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
-	//SetUp_RenderState();
+	SetUp_RenderState();
 
 	m_pTransformCom->Bind_Matrix();
 
@@ -95,9 +125,9 @@ HRESULT CDagger::Render()
 		m_isFlippedX = false;
 	}
 
-	//Reset_RenderState();
-	m_pGraphic_Device->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);
+	Reset_RenderState();
 	return S_OK;
+
 }
 
 HRESULT	CDagger::Ready_Components()
@@ -147,6 +177,8 @@ HRESULT	CDagger::Ready_Components()
 
 void CDagger::SetUp_RenderState()
 {
+	m_pGraphic_Device->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
+
 	m_pGraphic_Device->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
 	m_pGraphic_Device->SetRenderState(D3DRS_ALPHAREF, 200);
 	m_pGraphic_Device->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER);
@@ -158,6 +190,8 @@ void CDagger::SetUp_RenderState()
 
 void CDagger::Reset_RenderState()
 {
+	m_pGraphic_Device->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);
+
 	m_pGraphic_Device->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
 
 	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_LINEAR);
@@ -170,57 +204,77 @@ void CDagger::Reset_RenderState()
 void CDagger::Follow_Player()
 {
 	_float3 vPlayerPos = {};    // 플레이어 좌표
-	_float3 vDaggerPos = {};	// 단검 좌표
 	_float3 vPlayerLook = {};	// 플레이어 바라보는방향
+	
+	_float3 vPlayerScale = {};	// 플레이어 스케일
+
 	vPlayerPos = m_pTargetTransformCom->Get_State(STATE::POSITION);
-	vDaggerPos = m_pTransformCom->Get_State(STATE::POSITION);
 	vPlayerLook = m_pTargetTransformCom->Get_State(STATE::LOOK);
+	vPlayerScale = m_pTargetTransformCom->Get_Scaled();
+
+	_float3 vDaggerPos = {};	// 단검 좌표
+	vDaggerPos = m_pTransformCom->Get_State(STATE::POSITION);
 
 	_float3 vRotatePoint = {};	// 회전의 기준이 될 좌표
 
-
 	_float fPointY = vPlayerPos.y;       // 교차 평면의 기준이 될 Y값
 	_float3 vRayPoint = {};     // fPointY 값 기준 마우스 Ray와 교차하는 좌표
+
 	m_pGameInstance->Get_IntersectAtY(fPointY, vRayPoint);
 
-	_float3 vPlayerScale = {};
-	vPlayerScale = m_pTransformCom->Get_Scaled();
 	if (vPlayerScale.x < 0)		vPlayerScale.x *= -1;
+	
+	// 마지막에 사용할 변환용 행렬 선언
+	_float4x4 matLocalScale, matLocalRot, matLocalTrans;
+	_float4x4 matLocal;
+
+	// 회전의 기준점이 될 좌표 설정
+	_float3 vOffset = {
+		vRayPoint.x < vPlayerPos.x ? -0.2f : 0.2f,
+		vRayPoint.z > vPlayerPos.z ? 0.1f : -0.1f,
+		-0.01f
+	};
 
 
+	// 변환용 행렬 (이동)
+	D3DXMatrixTranslation(&matLocalTrans, vOffset.x, vOffset.y, vOffset.z);
 
-
-
-	// 상하에 따른 Rotate 할 기준좌표 변경
-	if (vRayPoint.z > vPlayerPos.z)
-		vRotatePoint.z = 0.1f;
-	else
-		vRotatePoint.z = -0.1f;
-
-	// 좌우에 따른 Rotate 할 기준좌표 변경
-	if (vRayPoint.x < vPlayerPos.x)	// 좌측
-		vRotatePoint.x = -0.2f;		// 기준좌표변경
-	else							// 우측
-		vRotatePoint.x = 0.2f;		// 기준좌표변경
-
-	vRotatePoint.y = -0.01f;
+	// 커서위치에 따른 회전 방향 및 회전 정도 설정
+	// 변환용 행렬 (회전, 크기)
 	_float angle = atan2f(vRayPoint.x - vPlayerPos.x, vRayPoint.z - vPlayerPos.z);
-
-	m_pTransformCom->Set_State(STATE::POSITION, vPlayerPos + vRotatePoint);
-	m_pTransformCom->Set_State(STATE::LOOK, vPlayerLook);
+	angle -= D3DXToRadian(m_fCurrentAngle);
 
 	if (vRayPoint.x < vPlayerPos.x)			// 좌측
 	{
-		m_pTransformCom->Rotation({ 0, 0, -1 }, angle + D3DXToRadian(45));
-		m_pTransformCom->Scaling(-vPlayerScale.x, vPlayerScale.y, vPlayerScale.z);
+		D3DXMatrixScaling(&matLocalScale, -vPlayerScale.x * (7 / 18.f), vPlayerScale.y * (15 / 19.f), vPlayerScale.z);
+		D3DXMatrixRotationZ(&matLocalRot, -angle + D3DXToRadian(-45));
 	}
 	else									// 우측
 	{
-		m_pTransformCom->Rotation({ 0, 0, 1 }, -angle + D3DXToRadian(45));
-		m_pTransformCom->Scaling(vPlayerScale.x, vPlayerScale.y, vPlayerScale.z);
+		D3DXMatrixScaling(&matLocalScale, vPlayerScale.x * (7 / 18.f), vPlayerScale.y * (15 / 19.f), vPlayerScale.z);
+		D3DXMatrixRotationZ(&matLocalRot, -angle + D3DXToRadian(45));
 	}
+	
+	D3DXMatrixIdentity(&matLocal);
+	matLocal = matLocalScale * matLocalRot * matLocalTrans;
 
 
+	//	1. 월드 행렬 선언
+	//	2. 우선 원점 기준으로 로컬상의 변경사항 선반영하여 Transform 반영
+	//	3. 반영된 행렬에 플레이어 행렬을 곱하여 최종 Transform 완성
+	
+	_float4x4 matPlayerWorld = *m_pTargetTransformCom->Get_WorldMatrix();
+
+	_float4x4 matDaggerWorld;
+	D3DXMatrixMultiply(&matDaggerWorld, &matLocal, &matPlayerWorld);
+
+	// 최종 변환 행렬을 단검에
+	for (int i = 0; i < 3; i++)
+		m_pTransformCom->Set_State(STATE(i), *reinterpret_cast<_float3*>(&matDaggerWorld.m[i]));
+	
+	m_pTransformCom->Set_State(STATE::POSITION, *reinterpret_cast<_float3*>(&matDaggerWorld.m[3]));
+
+	m_isFlippedX = vRayPoint.x < vPlayerPos.x;
 
 	return;
 }

@@ -14,6 +14,7 @@
 #include "Font_Manager.h"
 #include "Light_Manager.h"
 #include "GameObject.h"
+#include "Anim_Manager.h"
 
 IMPLEMENT_SINGLETON(CGameInstance)
 
@@ -75,6 +76,10 @@ HRESULT CGameInstance::Initialize_Engine(const ENGINE_DESC& EngineDesc, LPDIRECT
 
     m_pLight_Manager = CLight_Manager::Create(*ppOut);
     if (nullptr == m_pLight_Manager)
+        return E_FAIL;
+
+    m_pAnimation_Manager = CAnim_Manager::Create();
+    if (nullptr == m_pAnimation_Manager)
         return E_FAIL;
 
     return S_OK;
@@ -321,6 +326,18 @@ HRESULT CGameInstance::Ready_Light(const D3DLIGHT9* pLightInfo, const _uint& iIn
     return m_pLight_Manager->Ready_Light(pLightInfo, iIndex);
 }
 
+#pragma endregion
+HRESULT CGameInstance::Insert_Animation(const wstring& strAnimTag, CAnimation* anim)
+{
+    return m_pAnimation_Manager->Insert_Animation(strAnimTag, anim);
+}
+
+CAnimation* CGameInstance::Find_Animation(const wstring& strAnimTag)
+{
+    return m_pAnimation_Manager->Find_Animation(strAnimTag);
+}
+#pragma region ANIMATION_MANAGER
+
 void CGameInstance::Release_Engine()
 {
     Release();
@@ -338,6 +355,7 @@ void CGameInstance::Release_Engine()
     Safe_Release(m_pRoom_Manager);
     Safe_Release(m_pFont_Manager);
     Safe_Release(m_pLight_Manager);
+    Safe_Release(m_pAnimation_Manager);
 }
 
 void CGameInstance::Free()

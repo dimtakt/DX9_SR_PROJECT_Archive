@@ -6,6 +6,12 @@
 #include "Hud_Buff.h"
 #include "Level_Loading.h"
 #include "Field_Hp.h"
+#include "Animation.h"
+
+// Animations?
+#include "../Public/Animations/Anim_Player_Idle.h"
+
+
 CLevel_GamePlay::CLevel_GamePlay(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CLevel{ pGraphic_Device }
 {
@@ -18,13 +24,17 @@ HRESULT CLevel_GamePlay::Initialize()
 	if (FAILED(Ready_Light()))
 		return E_FAIL;
 
-	if (FAILED(Ready_Layer_BackGround(TEXT("Layer_BackGround"))))
+	if (FAILED(Ready_Animations()))
+		return E_FAIL;
+
+
+	//if (FAILED(Ready_Layer_BackGround(TEXT("Layer_BackGround"))))
+	//	return E_FAIL;
+
+	if (FAILED(Ready_Layer_Weapon(TEXT("Layer_Weapon"))))
 		return E_FAIL;
 
 	if (FAILED(Ready_Layer_Player(TEXT("Layer_Player"))))
-		return E_FAIL;
-
-	if (FAILED(Ready_Layer_Weapon(TEXT("Layer_Weapon"))))
 		return E_FAIL;
 
 	if (FAILED(Ready_Layer_Camera(TEXT("Layer_Camera"))))
@@ -32,6 +42,7 @@ HRESULT CLevel_GamePlay::Initialize()
 
 	if (FAILED(Ready_Layer_UI(TEXT("Layer_UI"))))
 		return E_FAIL;
+
 
 	return S_OK;
 }
@@ -70,6 +81,14 @@ HRESULT CLevel_GamePlay::Ready_Light()
 
 
 	if (FAILED(m_pGameInstance->Ready_Light(&LightDesc, 0)))
+		return E_FAIL;
+
+	return S_OK;
+}
+
+HRESULT CLevel_GamePlay::Ready_Animations()
+{
+	if (FAILED(m_pGameInstance->Insert_Animation(L"Player_Idle", CAnim_Player_Idle::Create())))
 		return E_FAIL;
 
 	return S_OK;

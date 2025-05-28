@@ -33,6 +33,11 @@ HRESULT CAnimator::Initialize(void* pArg)
 	// 타이머 생성
 	m_pGameInstance->Add_Timer(m_strTimerTag);
 
+	// 애니메이션 반영할 Transform(Child) 과 기준점(Parent)이 될 객체 초기 설정
+	m_pParentTransform	= nullptr != pDesc->pParentTransform? pDesc->pParentTransform : nullptr;
+	m_pChildTransform	= nullptr != pDesc->pChildTransform? pDesc->pChildTransform : nullptr;
+	
+
 	std::cout << "[CAnimator::Initialize] Initialized!" << std::endl;
 
 	return S_OK;
@@ -48,10 +53,15 @@ void CAnimator::Update_State()
 	_uint iImageMaxIndex = pCurTextureCom->Get_NumTextures();
 	_uint iImageCurIndex = m_iStackedFrames / m_pCurState->iFramePerImage;
 	iImageCurIndex %= iImageMaxIndex;
+	pCurTextureCom->Bind_Texture(iImageCurIndex);
+
+
+	CAnimation* pAnimation = m_pCurState->pAnimation;
+	if (pAnimation != nullptr)
+		Update_Keyframes();
 
 	//std::wcout << "[CAnimator::Update_State] Current State : \"" << m_strCurStateTag << "\" (" << iImageCurIndex + 1 << "/" << iImageMaxIndex << ")" << std::endl;
 
-	pCurTextureCom->Bind_Texture(iImageCurIndex);
 	m_iStackedFrames++;
 }
 
@@ -130,6 +140,45 @@ CAnimator::ANIMSTATE* CAnimator::Find_State(const _wstring& strStateTag)
 		return nullptr;
 
 	return &(iter->second);
+}
+
+void CAnimator::Update_Keyframes()
+{
+	// 현재 상태에 애니메이션이 없거나, 움직일 객체가 없으면 실행 X
+	if (m_pCurState->pAnimation == nullptr ||
+		m_pChildTransform == nullptr)
+		return;
+
+	// 사용할 애니메이션
+	CAnimation* pAnim = m_pCurState->pAnimation;
+
+	// 객체가 움직일 애니메이션의 기준점 행렬 설정. 없으면 원점 기준.
+	_float4x4 matTrackTarget;
+	if (m_pParentTransform != nullptr)
+		matTrackTarget = *m_pParentTransform->Get_WorldMatrix();
+	else
+		D3DXMatrixIdentity(&matTrackTarget);
+	
+	_int iMaxFrame = pAnim->Get_iMaxFrame();
+	_int iCurFrame = m_iStackedFrames % iMaxFrame;	// 스프라이트랑 프레임 안맞으면 문제생길듯
+
+	_float4x4 matLocal = pAnim->Get_CurKeyFrame(iCurFrame).matTransform; // 변환용 행렬 가져옴
+
+	// 실제로 애니메이션의 움직임이 반영될 행렬 계산..
+	_float4x4 matResult = matLocal * matTrackTarget;
+
+	for (int i = 0; i < 3; i++)
+		m_pChildTransform->Set_State(STATE(i), *reinterpret_cast<_float3*>(&matResult.m[i]));
+
+	m_pChildTransform->Set_State(STATE::POSITION, *reinterpret_cast<_float3*>(&matResult.m[3]));
+
+	//m_iCurFrame++;
+	//if (m_isLoop && m_iCurFrame + 1 >= m_iMaxFrame)
+	//	m_iCurFrame = 0;
+	//if (!m_isLoop && m_iCurFrame + 1 >= m_iMaxFrame)
+	//	m_isEnd = true;
+
+	return;
 }
 
 
