@@ -22,10 +22,11 @@
 #include "Mountain.h"
 #include "Field_Hp.h"
 #include "Room_Default.h"
-#include "Land.h"
 #include "Monster_Default.h"
 #include "TerrainBox.h"
 #include "Dagger.h"
+#include "Loader_Room.h"
+#include "Sky.h"
 
 CLoader::CLoader(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: m_pGraphic_Device{ pGraphic_Device }
@@ -84,6 +85,15 @@ HRESULT CLoader::Loading()
 		return E_FAIL;
 
 	LeaveCriticalSection(&m_CriticalSection);
+
+	return S_OK;
+}
+
+HRESULT CLoader::Ready_LoadingRoomThread()
+{
+	m_pLoader_Room = CLoader_Room::Create(m_pGraphic_Device, m_eNextLevelID);
+	if (nullptr == m_pLoader_Room)
+		return E_FAIL;
 
 	return S_OK;
 }
@@ -364,13 +374,14 @@ HRESULT CLoader::Loading_For_MapEdit_Level()
 HRESULT CLoader::Loading_For_Stage1_Level()
 {
 	lstrcpy(m_szLoadingText, TEXT("텍스쳐를 로딩중입니다."));
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STAGE1), TEXT("Prototype_Component_Texture_Player"),
-		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Textures/Player/Player0.png"), 1))))
+	/* Prototype_Component_Texture_Land */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STAGE1), TEXT("Prototype_Component_Texture_Land"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/BleakSwordDX/Terrain/Basic/BlankTex16_00.png"), 1))))
 		return E_FAIL;
 
 	/* Prototype_Component_Texture_Sky */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STAGE1), TEXT("Prototype_Component_Texture_Sky"),
-		CTexture::Create(m_pGraphic_Device, TEXTURE::CUBE, TEXT("../Bin/Resources/Textures/SkyBox/Sky_%d.dds"), 4))))
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/BleakSwordDX/SkyBox/Sky.png"), 1))))
 		return E_FAIL;
 
 	/* Prototype_Component_Texture_Monster */
@@ -378,34 +389,81 @@ HRESULT CLoader::Loading_For_Stage1_Level()
 		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Textures/Player/Player0.png"), 1))))
 		return E_FAIL;
 
-	
 	lstrcpy(m_szLoadingText, TEXT("모델을 로딩중입니다."));
 
 	lstrcpy(m_szLoadingText, TEXT("쉐이더를 로딩중입니다."));
 
 	lstrcpy(m_szLoadingText, TEXT("게임오브젝트를 로딩중입니다."));
 
-	/* Prototype_GameObject_Land*/
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STAGE1), TEXT("Prototype_GameObject_Land"),
-		CLand::Create(m_pGraphic_Device))))
-		return E_FAIL;
-
-	/* Prototype_GameObject_Camera*/
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STAGE1), TEXT("Prototype_GameObject_Camera_Follow"),
+	///* Prototype_GameObject_Camera*/
+ 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STAGE1), TEXT("Prototype_GameObject_Camera_Follow"),
 		CCamera_Follow::Create(m_pGraphic_Device))))
 		return E_FAIL;
 
+	/* Prototype_GameObject_Land*/
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STAGE1), TEXT("Prototype_GameObject_Room"),
+		CRoom_Default::Create(m_pGraphic_Device))))
+		return E_FAIL;
+
 	/* Prototype_GameObject_Monster */
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STAGE1), TEXT("Prototype_GameObject_Monster"),
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STAGE1), TEXT("Prototype_GameObject_ShortMonster"),
 		CMonster_Default::Create(m_pGraphic_Device))))
 		return E_FAIL;
+
+	/* Prototype_GameObject_Sky */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STAGE1), TEXT("Prototype_GameObject_Sky"),
+		CSky::Create(m_pGraphic_Device))))
+		return E_FAIL;
+
+	/* Prototype_GameObject_TerrainBox*/
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STAGE1), TEXT("Prototype_GameObject_TerrainBox"),
+		CTerrainBox::Create(m_pGraphic_Device))))
+		return E_FAIL;
+
+	//lstrcpy(m_szLoadingText, TEXT("룸 데이터를 로딩중입니다."));
+	
+	//CRoom_Default* pRoom = nullptr;
+
+	//for (size_t num = 0; num < 5; num++)
+	//{
+
+	//	pRoom = dynamic_cast<CRoom_Default*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::LEVEL_STAGE1), TEXT("Prototype_GameObject_Room")));
+	//	NULL_CHECK_RETURN(pRoom, E_FAIL);
+	//	pRoom->Enter();
+	//	/*if (num == 0)
+	//	{
+	//		pRoom->Enter();
+	//	}*/
+	//	// 지형 셋팅
+	//	CLand* pLand = nullptr;
+	//	CLand::LANDOBJDESC pDesc{};
+	//	pDesc.vScale = _float3(10.f, 1.5f, 10.f);
+	//	pDesc.vPosition = _float3(static_cast<_float>(num) * 5.f + 2.f, 0.f, 0.f);
+	//	pLand = dynamic_cast<CLand*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::LEVEL_STAGE1), TEXT("Prototype_GameObject_Land"), &pDesc));
+	//	NULL_CHECK_RETURN(pLand, E_FAIL);
+	//	pRoom->Add_Land(pLand);
+
+
+	//	// 몬스터 셋팅
+	//	CMonster_Default* pMonster = nullptr;
+	//	for (size_t i = 0; i < 20; i++)
+	//	{
+	//		pMonster = dynamic_cast<CMonster_Default*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::LEVEL_STAGE1), TEXT("Prototype_GameObject_ShortMonster")));
+	//		NULL_CHECK_RETURN(pMonster, E_FAIL);
+	//		pRoom->Add_Monster(pMonster);
+	//	}
+
+	//	// 오브젝트 셋팅
+
+	//	// 룸매니저 투입
+	//	m_pGameInstance->Add_Room(pRoom, ENUM_CLASS(LEVEL::LEVEL_STAGE1), TEXT("Layer_Room"));
+	//}
 
 	lstrcpy(m_szLoadingText, TEXT("로딩이 완료되었습니다."));
 
 
 
 	//lstrcpy(m_szLoadingText, m_pGameInstance->Ping());
-
 	m_isFinished = true;
 
 	return S_OK;
@@ -436,4 +494,5 @@ void CLoader::Free()
 
 	Safe_Release(m_pGameInstance);
 	Safe_Release(m_pGraphic_Device);
+	Safe_Release(m_pLoader_Room);
 }
