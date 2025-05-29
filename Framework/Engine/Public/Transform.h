@@ -64,6 +64,8 @@ public:
 	void Scaling(_float fScaleX, _float fScaleY, _float fScaleZ);
 	void Add_Rotation(const _float3& vAxis, _float fRadian);
 
+	void RotationByParent(const _float3 axis, CTransform* parent, _float fRadian);
+
 	//void StartShake(_float fDuration, _float fStrength, _float fTime);
 
 

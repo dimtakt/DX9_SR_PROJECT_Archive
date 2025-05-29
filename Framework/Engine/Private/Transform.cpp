@@ -173,6 +173,47 @@ void CTransform::Scaling(_float fScaleX, _float fScaleY, _float fScaleZ)
 
 }
 
+// 특정 부모좌표와 특정 단위벡터를 이용하여 내 좌표를 평면상 회전시키는 함수
+void CTransform::RotationByParent(const _float3 axis, CTransform* parent, _float fRadian)
+{
+	// 객체가 돌아갈 때의 기준점 행렬 설정, 없으면 원점 기준.
+	_float4x4 matTrackTarget;
+	if (parent != nullptr)
+		matTrackTarget = *parent->Get_WorldMatrix();
+	else
+		D3DXMatrixIdentity(&matTrackTarget);
+
+	// 변환..
+	
+	// 원점으로 중심축 이동
+	_float4x4 matToOrigin;
+	D3DXMatrixTranslation(&matToOrigin,
+		-matTrackTarget._41,
+		-matTrackTarget._42,
+		-matTrackTarget._43);
+
+	// 축 기준 회전행렬
+	_float4x4 matRot;
+	D3DXMatrixRotationAxis(&matRot, &axis, fRadian);
+
+	// 다시 제자리로
+	_float4x4 matFromOrigin;
+	D3DXMatrixTranslation(&matFromOrigin,
+		matTrackTarget._41,
+		matTrackTarget._42,
+		matTrackTarget._43);
+
+	// 다 합치기
+	_float4x4 matRotationTotal = matToOrigin * matRot * matFromOrigin;
+
+	// 반영..
+
+	_float4x4 matResult = m_WorldMatrix * matRotationTotal;
+	m_WorldMatrix = matResult;
+
+	return;
+}
+
 void CTransform::Add_Rotation(const _float3& vAxis, _float fRadian)
 {
 	_float3			vRight = Get_State(STATE::RIGHT);

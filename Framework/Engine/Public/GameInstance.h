@@ -70,8 +70,8 @@ public:
 #pragma endregion
 
 #pragma region NETWORK_MANAGER
-	TEST* Ping();
-	list<USER*> Get_AllUsers();
+	//TEST* Ping();
+	//list<USER*> Get_AllUsers();
 #pragma endregion
 
 #pragma region PICKING
@@ -122,6 +122,12 @@ public:
 #pragma region LIGHT_MANAGER
 	HRESULT	Ready_Light(const D3DLIGHT9* pLightInfo, const _uint& iIndex);
 #pragma endregion
+	HRESULT Insert_Animation(const wstring& strAnimTag, CAnimation* anim);
+	CAnimation* Find_Animation(const wstring& strAnimTag);
+#pragma region ANIMATION_MANAGER
+
+#pragma endregion
+
 
 #pragma region ITEM_MANAGER
 	HRESULT						Setting_Item(void* pArg, _uint iMaxItemIndex, _uint iLevelIndex, const _wstring& strItemBaseTag);
@@ -137,12 +143,14 @@ private:
 	class CRenderer*			m_pRenderer = { nullptr };
 	class CTimer_Manager*		m_pTimer_Manager = { nullptr };
 	class CKey_Manager*			m_pKey_Manager = { nullptr };
-	class CNetwork_Manager*		m_pNetwork_Manager = { nullptr };
+	//class CNetwork_Manager*		m_pNetwork_Manager = { nullptr };
 	class CPicking*				m_pPicking = { nullptr };
 	class CCollision_Manager*	m_pCollision_Manager = { nullptr };
 	class CFont_Manager*		m_pFont_Manager = { nullptr };
 	class CLight_Manager*		m_pLight_Manager = { nullptr };
+	class CAnim_Manager*		m_pAnimation_Manager = { nullptr };
 	class CItem_Manager*		m_pItem_Manager = { nullptr };
+
 public:
 	void Release_Engine();
 	virtual void Free() override;

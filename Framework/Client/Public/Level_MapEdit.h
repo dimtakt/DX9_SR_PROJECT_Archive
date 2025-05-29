@@ -1,4 +1,4 @@
-ï»¿#pragma once
+#pragma once
 
 #include "Level.h"
 #include "Client_Defines.h"
@@ -20,9 +20,9 @@ class CLevel_MapEdit final : public CLevel
 public:
 	typedef struct EditorObjectInfo
 	{
-		string strObjectType;       // ì˜¤ë¸Œì íŠ¸ íƒ€ì… 
-		int iTextureCount = 0;      // í…ìŠ¤ì²˜ ê°œìˆ˜
-		CTexture* pTextureCom = nullptr; // í…ìŠ¤ì²˜ ì»´í¬ë„ŒíŠ¸ ì£¼ì†Œ ì €ì¥ìš©
+		string strObjectType;       // ¿ÀºêÁ§Æ® Å¸ÀÔ 
+		int iTextureCount = 0;      // ÅØ½ºÃ³ °³¼ö
+		CTexture* pTextureCom = nullptr; // ÅØ½ºÃ³ ÄÄÆ÷³ÍÆ® ÁÖ¼Ò ÀúÀå¿ë
 	}OBJECT_TEXTURE_INFO;
 
 private:
@@ -48,43 +48,43 @@ private:
 
 	void Picking_Check();
 
-	//ì˜¤ë¸Œì íŠ¸ ì „ìš© ë©”ë‰´
+	//¿ÀºêÁ§Æ® Àü¿ë ¸Ş´º
 	void ImGui_Object_MenBar();
 	void ImGui_Object_Texture_Redner(int iTextureIndex);
 
-	void ImGui_Transform_Render(); 
+	void ImGui_Transform_Render();
 	void ImGui_Rotate_Render();
 	void ImGui_Scale_Render();
-									
-	//ì„ íƒëœ ì˜¤ë¸Œì íŠ¸ ì „ìš©
+
+	//¼±ÅÃµÈ ¿ÀºêÁ§Æ® Àü¿ë
 	void ImGui_Picking_Object_MenBar();
 	void ImGui_Delete_Object();
 	void ImGui_Picking_Object_Translates_Option();
 	void ImGui_Rotate();
-	
-	//ì§€í˜• ì „ìš© ë©”ë‰´
+
+	//ÁöÇü Àü¿ë ¸Ş´º
 	void ImGui_Terrain_MenBar();
 	void ImGui_Terrain_Transform_Render();
 	void ImGui_Terrain_Texture_Render(int iTextureIndex);
 
 private:
-	int m_iTexture_id = {};							//ê³µìš© í…ìŠ¤ì²˜ ì¸ë±ìŠ¤
+	int m_iTexture_id = {};							//°ø¿ë ÅØ½ºÃ³ ÀÎµ¦½º
 
-	_float3 m_Scales = { 1.f,1.f,1.f };				//ì˜¤ë¸Œì íŠ¸ ì „ìš©
+	_float3 m_Scales = { 1.f,1.f,1.f };				//¿ÀºêÁ§Æ® Àü¿ë
 	_float3 m_Rotates = { 0.f,0.f, 0.f };
 	_float3 m_Translates = { 0.f,5.f,0.f };
 
 	_float3 m_OldTranslates = { 0.f, 0.f, 0.f };
 
-	_float3 m_TrrainTranslate = { 0.f, 0.f, 0.f };	//ì§€í˜• ì „ìš©
+	_float3 m_TrrainTranslate = { 0.f, 0.f, 0.f };	//ÁöÇü Àü¿ë
 
-	map<string, OBJECT_TEXTURE_INFO>			m_ObjectTextureInfo = {};		//ì´ë¯¸ì§€ë·° ë„ìš°ê¸°, string "Object", "TerrainBox"
-	CGameObject*						m_pPreview = nullptr;					//í…ìŠ¤ì²˜ ê°€ì ¸ì˜¤ê³ ì ë§Œë“  ì„ì‹œë³€ìˆ˜
-	CTransform*							m_pObjectTransform = nullptr;			// í•˜ë‚˜ì˜ ì˜¤ë¸Œì íŠ¸ ì„ íƒë˜ë©´ íŠ¸ëœìŠ¤í¼ ì„¤ì •í•˜ê³ ì í•¨
-	CGameObject*						m_pPickingObject = nullptr;				// í”¼í‚¹ëœ ì–˜ ì €ì¥ìš©
-	vector<CGameObject*>				m_pObject = {};							// ë§Œë“  ì–˜ë“¤ ì£¼ì†Œ ì €ì¥
-	list<MAP_OBJECT_DESC*>				m_pObject_Desc = {};					// ë§Œë“  ì–˜ë“¤ êµ¬ì¡°ì²´ ì €ì¥?
-	_bool								m_bPicking = false;						// í”¼í‚¹ ëœ ê°ì²´ ìˆìœ¼ë©´ í™œì„±í™”
+	map<string, OBJECT_TEXTURE_INFO>			m_ObjectTextureInfo = {};		//ÀÌ¹ÌÁöºä ¶ç¿ì±â, string "Object", "TerrainBox"
+	CGameObject* m_pPreview = nullptr;					//ÅØ½ºÃ³ °¡Á®¿À°íÀÚ ¸¸µç ÀÓ½Ãº¯¼ö
+	CTransform* m_pObjectTransform = nullptr;			// ÇÏ³ªÀÇ ¿ÀºêÁ§Æ® ¼±ÅÃµÇ¸é Æ®·£½ºÆû ¼³Á¤ÇÏ°íÀÚ ÇÔ
+	CGameObject* m_pPickingObject = nullptr;				// ÇÇÅ·µÈ ¾ê ÀúÀå¿ë
+	vector<CGameObject*>				m_pObject = {};							// ¸¸µç ¾êµé ÁÖ¼Ò ÀúÀå
+	list<MAP_OBJECT_DESC*>				m_pObject_Desc = {};					// ¸¸µç ¾êµé ±¸Á¶Ã¼ ÀúÀå?
+	_bool								m_bPicking = false;						// ÇÇÅ· µÈ °´Ã¼ ÀÖÀ¸¸é È°¼ºÈ­
 
 public:
 	static CLevel_MapEdit* Create(LPDIRECT3DDEVICE9 pGraphic_Device);

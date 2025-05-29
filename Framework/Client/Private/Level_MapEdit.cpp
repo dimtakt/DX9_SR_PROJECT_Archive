@@ -1,4 +1,4 @@
-ï»¿#include "Level_MapEdit.h"
+#include "Level_MapEdit.h"
 #include "Imgui_Manager.h"
 #include "ImGuiFileDialog.h"
 #include "ImGuiFileDialogConfig.h"
@@ -43,16 +43,16 @@ void CLevel_MapEdit::Update(_float fTimeDelta)
 
 HRESULT CLevel_MapEdit::Render()
 {
-	SetWindowText(g_hWnd, TEXT("ë§µ ì—ë””í„° ë ˆë²¨ ì…ë‹ˆë‹¤"));
+	SetWindowText(g_hWnd, TEXT("¸Ê ¿¡µğÅÍ ·¹º§ ÀÔ´Ï´Ù"));
 	//m_pImgui_Manage->Render();
 	this->Imgui_Render();
 
 	return S_OK;
 }
- 
+
 HRESULT CLevel_MapEdit::Ready_ImGui(HWND hWnd, LPDIRECT3DDEVICE9 pOut)
 {
-	MessageBox(0, TEXT("Ready_ImGui ì‹œì‘"), TEXT("Debug"), MB_OK);
+	MessageBox(0, TEXT("Ready_ImGui ½ÃÀÛ"), TEXT("Debug"), MB_OK);
 
 
 	m_pImgui_Manage = CImgui_Manager::Create(hWnd, pOut);
@@ -61,7 +61,7 @@ HRESULT CLevel_MapEdit::Ready_ImGui(HWND hWnd, LPDIRECT3DDEVICE9 pOut)
 		MSG_BOX(TEXT("Failed to Created : CImgui_Manager"));
 		return E_FAIL;
 	}
-	MessageBox(0, TEXT("Imgui ë§¤ë‹ˆì € ìƒì„± ì„±ê³µ"), TEXT("Debug"), MB_OK);
+	MessageBox(0, TEXT("Imgui ¸Å´ÏÀú »ı¼º ¼º°ø"), TEXT("Debug"), MB_OK);
 	return S_OK;
 }
 
@@ -69,7 +69,7 @@ HRESULT CLevel_MapEdit::Ready_Layer_Camera(const _wstring& strLayerTag)
 {
 	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_MAPEDIT), strLayerTag,
 		ENUM_CLASS(LEVEL::LEVEL_MAPEDIT), TEXT("Prototype_GameObject_Camera_Mouse"))))
-		return E_FAIL;	
+		return E_FAIL;
 
 	return S_OK;
 }
@@ -89,14 +89,14 @@ HRESULT CLevel_MapEdit::Ready_Texture_Info()
 
 	m_ObjectTextureInfo["Object"] = ObjectInfo;
 
-	Safe_Release(m_pPreview);  // í…ìŠ¤ì²˜ë§Œ ê°€ì ¸ì™€ì„œ ì €ì¥í•˜ê³  ì‚­ì œ
+	Safe_Release(m_pPreview);  // ÅØ½ºÃ³¸¸ °¡Á®¿Í¼­ ÀúÀåÇÏ°í »èÁ¦
 
 	return S_OK;
 }
 
 HRESULT CLevel_MapEdit::Ready_Terrain_Texture_Info()
 {
-	//ì§€í˜•
+	//ÁöÇü
 	m_pPreview = static_cast<CGameObject*>(m_pGameInstance->Clone_Prototype(
 		PROTOTYPE::GAMEOBJECT,
 		ENUM_CLASS(LEVEL::LEVEL_MAPEDIT),
@@ -110,7 +110,7 @@ HRESULT CLevel_MapEdit::Ready_Terrain_Texture_Info()
 
 	m_ObjectTextureInfo["TerrainBox"] = TerrainBoxInfo;
 
-	Safe_Release(m_pPreview); // í…ìŠ¤ì²˜ë§Œ ê°€ì ¸ì™€ì„œ ì €ì¥í•˜ê³  ì‚­ì œ
+	Safe_Release(m_pPreview); // ÅØ½ºÃ³¸¸ °¡Á®¿Í¼­ ÀúÀåÇÏ°í »èÁ¦
 
 	return S_OK;
 }
@@ -121,18 +121,18 @@ void CLevel_MapEdit::Imgui_Render()
 
 	ImGui::Begin("Object Editer", nullptr, ImGuiWindowFlags_MenuBar);
 
-	ImGui_MenuBar_Render();	//ì €ì¥ìš© ë²„íŠ¼
+	ImGui_MenuBar_Render();	//ÀúÀå¿ë ¹öÆ°
 
-	ImGui_Object_MenBar();	//ì˜¤ë¸Œì íŠ¸ ì „ìš© ì„¤ì •ê°’
+	ImGui_Object_MenBar();	//¿ÀºêÁ§Æ® Àü¿ë ¼³Á¤°ª
 
-	if(m_bPicking)
+	if (m_bPicking)
 	{
-		ImGui_Picking_Object_MenBar();	//ì„ íƒëœ ì˜¤ë¸Œì íŠ¸ ì „ìš© ì„¤ì • ê°’
+		ImGui_Picking_Object_MenBar();	//¼±ÅÃµÈ ¿ÀºêÁ§Æ® Àü¿ë ¼³Á¤ °ª
 	}
 
 	ImGui::End();
 
-	ImGui_Terrain_MenBar();  //ì§€í˜• ì „ìš© UI
+	ImGui_Terrain_MenBar();  //ÁöÇü Àü¿ë UI
 
 	m_pImgui_Manage->Render_End();
 }
@@ -149,7 +149,7 @@ void CLevel_MapEdit::ImGui_MenuBar_Render()
 				config.path = "../SaveFile/";
 				config.flags = ImGuiFileDialogFlags_ReadOnlyFileNameField;
 
-				// íŒŒì¼ ë‹¤ì´ì–¼ë¡œê·¸ ì—´ê¸°
+				// ÆÄÀÏ ´ÙÀÌ¾ó·Î±× ¿­±â
 				// ImGuiFileDialog::Instance()->OpenDialog("ChooseFileDlgKey", "Choose File", config);
 				ImGuiFileDialog::Instance()->OpenDialog("ChooseFileDlgKey", "Choose File", ".txt,.cpp,.h", config);
 			}
@@ -167,7 +167,7 @@ void CLevel_MapEdit::ImGui_MenuBar_Render()
 		ImGui::EndMenuBar();
 	}
 
-	// ì½ê¸°ìš© ë¡œì§
+	// ÀĞ±â¿ë ·ÎÁ÷
 	if (ImGuiFileDialog::Instance()->Display("ChooseFileDlgKey")) {
 		if (ImGuiFileDialog::Instance()->IsOk()) {
 			std::string filePath = ImGuiFileDialog::Instance()->GetFilePathName();
@@ -176,7 +176,7 @@ void CLevel_MapEdit::ImGui_MenuBar_Render()
 		ImGuiFileDialog::Instance()->Close();
 	}
 
-	// ì €ì¥ìš© ë¡œì§
+	// ÀúÀå¿ë ·ÎÁ÷
 	if (ImGuiFileDialog::Instance()->Display("SaveFileDlgKey"))
 	{
 		if (ImGuiFileDialog::Instance()->IsOk())
@@ -214,7 +214,7 @@ void CLevel_MapEdit::Picking_Check()
 void CLevel_MapEdit::ImGui_Object_MenBar()
 {
 
-	if (ImGui::CollapsingHeader("Object Settings", ImGuiTreeNodeFlags_DefaultOpen))   //ì „ì²´ ì„¹ì…˜
+	if (ImGui::CollapsingHeader("Object Settings", ImGuiTreeNodeFlags_DefaultOpen))   //ÀüÃ¼ ¼½¼Ç
 	{
 		ImGui_Transform_Render();
 
@@ -226,7 +226,7 @@ void CLevel_MapEdit::ImGui_Object_MenBar()
 
 		ImGui::Text("Object Texture Index:");
 		ImGui::SetNextItemWidth(250);
-		ImGui::SliderInt ("Texture", &iObjectTexIndex, 0, 15); // 0~15 ì¸ë±ìŠ¤
+		ImGui::SliderInt("Texture", &iObjectTexIndex, 0, 15); // 0~15 ÀÎµ¦½º
 		ImGui::SameLine();
 		if (ImGui::Button("-"))
 			iObjectTexIndex -= 1;
@@ -238,7 +238,7 @@ void CLevel_MapEdit::ImGui_Object_MenBar()
 		ImGui_Object_Texture_Redner(iObjectTexIndex);
 
 
-		if (ImGui::Button("Create Object"))   //ë²„íŠ¼ì…ë ¥ì‹œ ì„ íƒí•œ ê°’ìœ¼ë¡œ ìƒì„±
+		if (ImGui::Button("Create Object"))   //¹öÆ°ÀÔ·Â½Ã ¼±ÅÃÇÑ °ªÀ¸·Î »ı¼º
 		{
 			MAP_OBJECT_DESC  tSrc{};
 			tSrc.iTextureIndex = iObjectTexIndex;
@@ -322,7 +322,7 @@ void CLevel_MapEdit::ImGui_Picking_Object_MenBar()
 {
 	ImGui_Delete_Object();
 
-	if (ImGui::CollapsingHeader("Object Option", ImGuiTreeNodeFlags_DefaultOpen))   //ì „ì²´ ì„¹ì…˜
+	if (ImGui::CollapsingHeader("Object Option", ImGuiTreeNodeFlags_DefaultOpen))   //ÀüÃ¼ ¼½¼Ç
 	{
 		ImGui_Picking_Object_Translates_Option();
 
@@ -337,7 +337,7 @@ void CLevel_MapEdit::ImGui_Picking_Object_MenBar()
 			ImGui::SameLine();
 			if (ImGui::Button("+##Rotate.x"))
 				m_Rotates.x += 1.f;
-			
+
 			ImGui::SetNextItemWidth(200.f);
 			ImGui::SliderFloat("Rotate.y", &m_Rotates.y, -300.f, 300.f);
 			ImGui::SameLine();
@@ -358,7 +358,7 @@ void CLevel_MapEdit::ImGui_Picking_Object_MenBar()
 			if (ImGui::Button("+##Rotate.z"))
 				m_Rotates.z += 1.f;
 
-			if(m_pObjectTransform)
+			if (m_pObjectTransform)
 				m_pObjectTransform->Rotation(_float3{ 1.f, 0.f, 0.f }, D3DXToRadian(m_Rotates.x));
 
 
@@ -433,7 +433,7 @@ void CLevel_MapEdit::ImGui_Picking_Object_Translates_Option()
 		if (ImGui::Button("+##Translate.z"))
 			m_Translates[2] += 0.1f;
 
-		if(m_pObjectTransform)
+		if (m_pObjectTransform)
 			m_pObjectTransform->Set_State(STATE::POSITION, m_Translates);
 
 		ImGui::TreePop();
@@ -448,15 +448,15 @@ void CLevel_MapEdit::ImGui_Terrain_MenBar()
 	static int iTerrainTexIndex = 0;
 
 	ImGui::Text("Terrain Texture Index:");
-	ImGui::SliderInt("TopTexIdx", &iTerrainTexIndex, 0, 25); // 0~3 ì¸ë±ìŠ¤, ì¶”í›„ ì—°ë™
+	ImGui::SliderInt("TopTexIdx", &iTerrainTexIndex, 0, 25); // 0~3 ÀÎµ¦½º, ÃßÈÄ ¿¬µ¿
 
-	// ìœ„ì¹˜ 
+	// À§Ä¡ 
 	ImGui_Terrain_Transform_Render();
 
 	ImGui_Terrain_Texture_Render(iTerrainTexIndex);
 
 
-	if (ImGui::Button("Create Terrain"))     //ë²„íŠ¼ì…ë ¥ì‹œ ì„ íƒí•œ ê°’ìœ¼ë¡œ ìƒì„±
+	if (ImGui::Button("Create Terrain"))     //¹öÆ°ÀÔ·Â½Ã ¼±ÅÃÇÑ °ªÀ¸·Î »ı¼º
 	{
 		MAP_OBJECT_DESC tDesc{};
 		tDesc.iTextureIndex = iTerrainTexIndex;
@@ -468,8 +468,8 @@ void CLevel_MapEdit::ImGui_Terrain_MenBar()
 			TEXT("Prototype_GameObject_TerrainBox"),
 			&tDesc);
 
-	/*	CGameObject* pGameObject = m_pGameInstance->Get_LastGameObject(ENUM_CLASS(LEVEL::LEVEL_MAPEDIT), TEXT("Layer_MapEdit"));
-		m_pObject.push_back(pGameObject);*/ // ì§€í˜•ë„ ì €ì¥í•´ì•¼í•¨
+		/*	CGameObject* pGameObject = m_pGameInstance->Get_LastGameObject(ENUM_CLASS(LEVEL::LEVEL_MAPEDIT), TEXT("Layer_MapEdit"));
+			m_pObject.push_back(pGameObject);*/ // ÁöÇüµµ ÀúÀåÇØ¾ßÇÔ
 	}
 
 	ImGui::End();
@@ -513,7 +513,7 @@ void CLevel_MapEdit::ImGui_Terrain_Texture_Render(int iTextureIndex)
 CLevel_MapEdit* CLevel_MapEdit::Create(LPDIRECT3DDEVICE9 pGraphic_Device)
 {
 
-	MessageBox(0, TEXT("ë§µ ì—ë””í„° ìƒì„± ì‹œì‘"), TEXT("Debug"), MB_OK);
+	MessageBox(0, TEXT("¸Ê ¿¡µğÅÍ »ı¼º ½ÃÀÛ"), TEXT("Debug"), MB_OK);
 
 	CLevel_MapEdit* pInstance = new CLevel_MapEdit(pGraphic_Device);
 	if (FAILED(pInstance->Initialize()))
@@ -522,7 +522,7 @@ CLevel_MapEdit* CLevel_MapEdit::Create(LPDIRECT3DDEVICE9 pGraphic_Device)
 		Safe_Release(pInstance);
 	}
 
-	MessageBox(0, TEXT("ë§µ ì—ë””í„° ìƒì„± ì„±ê³µ"), TEXT("Debug"), MB_OK);
+	MessageBox(0, TEXT("¸Ê ¿¡µğÅÍ »ı¼º ¼º°ø"), TEXT("Debug"), MB_OK);
 
 	return pInstance;
 }

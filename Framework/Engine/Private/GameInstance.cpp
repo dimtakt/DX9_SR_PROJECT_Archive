@@ -1,4 +1,4 @@
-#include "Network_Manager.h"
+//#include "Network_Manager.h"
 #include "GameInstance.h"
 
 #include "Graphic_Device.h"
@@ -12,6 +12,8 @@
 #include "Collision_Manager.h"
 #include "Font_Manager.h"
 #include "Light_Manager.h"
+#include "GameObject.h"
+#include "Anim_Manager.h"
 #include "Item_Manager.h"
 
 IMPLEMENT_SINGLETON(CGameInstance)
@@ -52,9 +54,9 @@ HRESULT CGameInstance::Initialize_Engine(const ENGINE_DESC& EngineDesc, LPDIRECT
     if (nullptr == m_pKey_Manager)
         return E_FAIL;
 
-    m_pNetwork_Manager = CNetwork_Manager::Create();
-    if (nullptr == m_pNetwork_Manager)
-        return E_FAIL;
+    //m_pNetwork_Manager = CNetwork_Manager::Create();
+    //if (nullptr == m_pNetwork_Manager)
+    //    return E_FAIL;
 
     m_pPicking = CPicking::Create(*ppOut, EngineDesc.hWnd, EngineDesc.iWinSizeX, EngineDesc.iWinSizeY);
     if (nullptr == m_pPicking)
@@ -72,6 +74,10 @@ HRESULT CGameInstance::Initialize_Engine(const ENGINE_DESC& EngineDesc, LPDIRECT
     if (nullptr == m_pLight_Manager)
         return E_FAIL;
 
+    m_pAnimation_Manager = CAnim_Manager::Create();
+    if (nullptr == m_pAnimation_Manager)
+        return E_FAIL;
+    
     m_pItem_Manager = CItem_Manager::Create(*ppOut);
     if (nullptr == m_pItem_Manager)
         return E_FAIL;
@@ -259,14 +265,14 @@ float CGameInstance::GetKeyHoldTime(int iKey) const
 #pragma endregion
 
 #pragma region NETWORK_MANAGER
-TEST* CGameInstance::Ping()
-{
-    return m_pNetwork_Manager->Ping();
-}
-list<USER*> CGameInstance::Get_AllUsers()
-{
-    return m_pNetwork_Manager->Get_AllUsers();
-}
+//TEST* CGameInstance::Ping()
+//{
+//    return m_pNetwork_Manager->Ping();
+//}
+//list<USER*> CGameInstance::Get_AllUsers()
+//{
+//    return m_pNetwork_Manager->Get_AllUsers();
+//}
 #pragma endregion
 
 #pragma region PICKING
@@ -325,6 +331,18 @@ HRESULT CGameInstance::Ready_Light(const D3DLIGHT9* pLightInfo, const _uint& iIn
     return m_pLight_Manager->Ready_Light(pLightInfo, iIndex);
 }
 
+#pragma endregion
+HRESULT CGameInstance::Insert_Animation(const wstring& strAnimTag, CAnimation* anim)
+{
+    return m_pAnimation_Manager->Insert_Animation(strAnimTag, anim);
+}
+
+CAnimation* CGameInstance::Find_Animation(const wstring& strAnimTag)
+{
+    return m_pAnimation_Manager->Find_Animation(strAnimTag);
+}
+
+#pragma region ANIMATION_MANAGER
 HRESULT CGameInstance::Setting_Item(void* pArg, _uint iMaxItemIndex, _uint iLevelIndex, const _wstring& strItemBaseTag)
 {
     return m_pItem_Manager->Setting_Item(pArg, iMaxItemIndex, iLevelIndex, strItemBaseTag);
@@ -351,10 +369,11 @@ void CGameInstance::Release_Engine()
     Safe_Release(m_pObject_Manager);
     Safe_Release(m_pRenderer);
     Safe_Release(m_pKey_Manager);
-    Safe_Release(m_pNetwork_Manager);
+    //Safe_Release(m_pNetwork_Manager);
     Safe_Release(m_pPicking);
     Safe_Release(m_pFont_Manager);
     Safe_Release(m_pLight_Manager);
+    Safe_Release(m_pAnimation_Manager);
     Safe_Release(m_pItem_Manager);
 }
 

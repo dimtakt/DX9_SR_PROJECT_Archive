@@ -214,6 +214,12 @@
     <Filter Include="02.GameObject\Room\Manager">
       <UniqueIdentifier>{a476ec5e-5e7d-44f0-b461-78fbcc19d7c8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03.Animations">
+      <UniqueIdentifier>{4ee55cda-61fd-4925-ad62-989e1297d2f5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.Animations\Player">
+      <UniqueIdentifier>{89952621-bacd-4c55-81a8-42271890590d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -351,9 +357,6 @@
     <ClInclude Include="..\Public\Client_Struct.h">
       <Filter>99.Defines</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\Level_MapEdit.h">
-      <Filter>01.Levels\03. MapEdit</Filter>
-    </ClInclude>
     <ClInclude Include="..\Public\Tree.h">
       <Filter>02.GameObject\Object\Tree</Filter>
     </ClInclude>
@@ -405,6 +408,12 @@
     <ClInclude Include="..\public\Item_Base.h">
       <Filter>02.GameObject\Item</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\Animations\Anim_Player_Idle.h">
+      <Filter>03.Animations\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Animations\Anim_Player_Attack.h">
+      <Filter>03.Animations\Player</Filter>
+    </ClInclude>
     <ClInclude Include="..\Public\Client_Defines_Item.h">
       <Filter>99.Defines</Filter>
     </ClInclude>
@@ -431,6 +440,9 @@
     </ClInclude>
     <ClInclude Include="..\Public\Room_Manager.h">
       <Filter>02.GameObject\Room\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Level_MapEdit.h">
+      <Filter>01.Levels\03. MapEdit</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -540,9 +552,6 @@
     <ClCompile Include="..\Private\ImGuiFileDialog.cpp">
       <Filter>97. ImGUI</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\Level_MapEdit.cpp">
-      <Filter>01.Levels\03. MapEdit</Filter>
-    </ClCompile>
     <ClCompile Include="..\Private\Tree.cpp">
       <Filter>02.GameObject\Object\Tree</Filter>
     </ClCompile>
@@ -606,6 +615,12 @@
     <ClCompile Include="..\private\Sky.cpp">
       <Filter>02.GameObject\Sky</Filter>
     </ClCompile>
+    <ClCompile Include="..\private\Animations\Anim_Player_Idle.cpp">
+      <Filter>03.Animations\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Animations\Anim_Player_Attack.cpp">
+      <Filter>03.Animations\Player</Filter>
+    </ClCompile>
     <ClCompile Include="..\Private\Room.cpp">
       <Filter>02.GameObject\Room</Filter>
     </ClCompile>
@@ -617,6 +632,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\Room_Manager.cpp">
       <Filter>02.GameObject\Room\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Level_MapEdit.cpp">
+      <Filter>01.Levels\03. MapEdit</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
