@@ -20,10 +20,12 @@ public:
 
 public:
 	_uint Get_NumTextures() { return m_iNumTextures; }
+	_uint Get_NumBindTexture() { return m_iNumBindTexture; }
 
 private:
 	_uint									m_iNumTextures = {};
 	vector<IDirect3DBaseTexture9*>			m_Textures;
+	_uint									m_iNumBindTexture = {};
 
 public:
 	static CTexture* Create(LPDIRECT3DDEVICE9 pGraphic_Device, TEXTURE eType, const _tchar* pTextureFilePath, _uint iNumTextures);

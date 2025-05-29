@@ -4,11 +4,11 @@
 BEGIN(Client)
 typedef struct tagMAPObjectDesc
 {
-	string szType[32];
-	_int iTextureIndex = { 0 };
+	GAMEOBJ_TYPE eType;
 	_float3 vScale = { 1.f, 1.f, 1.f };
 	_float3 vRotate = { 0.f, 0.f, 0.f };
 	_float3 vPos = { 0.f, 0.f, 0.f };
+	_int iTextureIndex = { 0 };
 }MAP_OBJECT_DESC;
 
 

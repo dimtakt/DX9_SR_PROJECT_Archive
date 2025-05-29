@@ -78,6 +78,8 @@ _bool CPicking::Picking_InLocal(_float3& vPickedPos, const _float3& vPointA, con
 
 void CPicking::Transform_ToLocalSpace(const _float4x4& WorldMatrixInverse)
 {
+    if (WorldMatrixInverse == nullptr)
+        return;
 
     D3DXVec3TransformCoord(&m_vLocalMousePos, &m_vMousePos, &WorldMatrixInverse);
     D3DXVec3TransformNormal(&m_vLocalMouseRay, &m_vMouseRay, &WorldMatrixInverse);

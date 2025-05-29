@@ -123,7 +123,9 @@ void CLevel_MapEdit::Imgui_Render()
 
 	ImGui_MenuBar_Render();	//¿˙¿ÂøÎ πˆ∆∞
 
-	ImGui_Object_MenBar();	//ø¿∫Í¡ß∆Æ ¿¸øÎ º≥¡§∞™
+	ImGui_Option_Button_Reset();
+
+	ImGui_Object_MenBar();	
 
 	if (m_bPicking)
 	{
@@ -146,7 +148,7 @@ void CLevel_MapEdit::ImGui_MenuBar_Render()
 			if (ImGui::MenuItem("Open"))
 			{
 				IGFD::FileDialogConfig config;
-				config.path = "../SaveFile/";
+				config.path = "../../data/";
 				config.flags = ImGuiFileDialogFlags_ReadOnlyFileNameField;
 
 				// ∆ƒ¿œ ¥Ÿ¿ÃæÛ∑Œ±◊ ø≠±‚
@@ -156,7 +158,7 @@ void CLevel_MapEdit::ImGui_MenuBar_Render()
 			if (ImGui::MenuItem("Save"))
 			{
 				IGFD::FileDialogConfig config;
-				config.path = "../SaveFile/";
+				config.path = "../../data/";
 				config.flags = ImGuiFileDialogFlags_ConfirmOverwrite;
 
 				ImGuiFileDialog::Instance()->OpenDialog("SaveFileDlgKey", "Choose File", ".txt,.cpp,.h", config);
@@ -171,7 +173,75 @@ void CLevel_MapEdit::ImGui_MenuBar_Render()
 	if (ImGuiFileDialog::Instance()->Display("ChooseFileDlgKey")) {
 		if (ImGuiFileDialog::Instance()->IsOk()) {
 			std::string filePath = ImGuiFileDialog::Instance()->GetFilePathName();
-			ImGui::Text("Selected file: %s", filePath.c_str());
+			ifstream ifs(filePath, ios::binary);
+
+			if (ifs.is_open())
+			{
+				if (!m_pObject.empty())
+				{
+					for (auto pObj : m_pObject)
+					{
+						CGameObject* pGameObject = pObj;
+
+						m_pGameInstance->Remove_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_MAPEDIT), TEXT("Layer_MapEdit"), pGameObject);
+
+						Safe_Release(pGameObject);
+					}
+
+					m_pPickingObject = nullptr;
+					m_pObjectTransform = nullptr;
+					m_bPicking = false;
+					m_pObject.clear();
+				}
+
+				while (!ifs.eof())
+				{
+					MAP_OBJECT_DESC Desc = {};
+
+					ifs.read(reinterpret_cast<char*>(&Desc), sizeof(MAP_OBJECT_DESC));	//Íµ¨Ï°∞Ï≤??¨Í∏∞ÎßåÌÅº ?åÏùº ?¥Î? ?ΩÏùå
+					
+					if (ifs.gcount() == sizeof(MAP_OBJECT_DESC))		//ÎßåÏïΩ Íµ¨Ï°∞Ï≤??¨Í∏∞ÎßåÌÅº ?ΩÏ?Í≤??ÑÎãà?ºÎ©¥ ?Ä?•Ïïà??
+						m_pObject_Desc.push_back(Desc);
+				}
+			}
+
+			ifs.close();
+
+			for (auto& pDesc : m_pObject_Desc)
+			{
+				if (pDesc.eType == GAMEOBJ_TYPE::OBJECT)			//?§Î∏å?ùÌä∏??Í≤ΩÏö∞ ?§Î∏å?ùÌä∏ ?ùÏÑ±
+				{
+					MAP_OBJECT_DESC  tSrc{};
+					tSrc.iTextureIndex = pDesc.iTextureIndex;
+					tSrc.vPos = pDesc.vPos;
+					tSrc.vScale = pDesc.vScale;
+					tSrc.vRotate = pDesc.vRotate;
+
+					m_pGameInstance->Add_GameObject_ToLayer(
+						ENUM_CLASS(LEVEL::LEVEL_MAPEDIT), TEXT("Layer_MapEdit"),
+						ENUM_CLASS(LEVEL::LEVEL_MAPEDIT),
+						TEXT("Prototype_GameObject_Tree"),
+						&tSrc);
+
+					CGameObject* pGameObject = m_pGameInstance->Get_LastGameObject(ENUM_CLASS(LEVEL::LEVEL_MAPEDIT), TEXT("Layer_MapEdit"));
+					m_pObject.push_back(pGameObject);
+				}
+				else												//ÏßÄ?ïÏùº Í≤ΩÏö∞ ÏßÄ???ùÏÑ±
+				{
+					MAP_OBJECT_DESC tSrc{};
+					tSrc.iTextureIndex = pDesc.iTextureIndex;
+					tSrc.vPos = pDesc.vPos;
+
+					m_pGameInstance->Add_GameObject_ToLayer(
+						ENUM_CLASS(LEVEL::LEVEL_MAPEDIT), TEXT("Layer_MapEdit"),
+						ENUM_CLASS(LEVEL::LEVEL_MAPEDIT),
+						TEXT("Prototype_GameObject_TerrainBox"),
+						&tSrc);
+
+					CGameObject* pGameObject = m_pGameInstance->Get_LastGameObject(ENUM_CLASS(LEVEL::LEVEL_MAPEDIT), TEXT("Layer_MapEdit"));
+					m_pObject.push_back(pGameObject);
+				}
+			}
 		}
 		ImGuiFileDialog::Instance()->Close();
 	}
@@ -182,9 +252,46 @@ void CLevel_MapEdit::ImGui_MenuBar_Render()
 		if (ImGuiFileDialog::Instance()->IsOk())
 		{
 			std::string savePath = ImGuiFileDialog::Instance()->GetFilePathName();
-			ImGui::Text("Saving to: %s", savePath.c_str());
+			
+			ofstream ofs(savePath, ios::binary);
 
-			//ofstream ofs(savePath); ofs << "data";
+			if (ofs.is_open())
+			{
+				for (auto& pObj : m_pObject)
+				{
+					MAP_OBJECT_DESC Desc = {};
+
+					Desc.eType = pObj->Get_ObjType();	//TYPE ?Ä??
+					if (Desc.eType == GAMEOBJ_TYPE::OBJECT)	//?§Î∏å?ùÌä∏ ?Ä?•Ïö©
+					{
+						CTransform* pTransform = static_cast<CTransform*>(pObj->Find_Component(TEXT("Com_Transform")));
+						Desc.vPos = pTransform->Get_State(STATE::POSITION); // POSITION ?Ä??
+						Desc.vScale = pTransform->Get_Scaled(); //SCALE ?Ä??
+
+						CTexture* pTexture = static_cast<CTexture*>(pObj->Find_Component(TEXT("Com_Texture")));
+						Desc.iTextureIndex = pTexture->Get_NumBindTexture(); //TEXTURE ?Ä??
+					}
+					else //ÏßÄ???Ä?•Ïö©
+					{
+						CTransform* pTransform = static_cast<CTransform*>(pObj->Find_Component(TEXT("Com_Transform_TerrainBox")));
+						Desc.vPos = pTransform->Get_State(STATE::POSITION); // POSITION ?Ä??
+						Desc.vScale = pTransform->Get_Scaled(); //SCALE ?Ä??
+
+						CTexture* pTexture = static_cast<CTexture*>(pObj->Find_Component(TEXT("Com_Texture_Terrain_Top")));
+						Desc.iTextureIndex = pTexture->Get_NumBindTexture(); //TEXTURE ?Ä??
+					}
+
+					m_pObject_Desc.push_back(Desc);
+				}
+
+				for (auto& Desc : m_pObject_Desc)
+				{
+					ofs.write(reinterpret_cast<char*>(&Desc), sizeof(MAP_OBJECT_DESC));
+				}
+
+
+				ofs.close();
+			}
 
 		}
 		ImGuiFileDialog::Instance()->Close();
@@ -196,6 +303,9 @@ void CLevel_MapEdit::Picking_Check()
 	if (!m_pObject.empty() && m_pGameInstance->IsKeyDown(VK_LBUTTON))
 		for (CGameObject* pObj : m_pObject)
 		{
+			if (pObj->Get_ObjType() == GAMEOBJ_TYPE::TERRAIN)
+				continue;
+
 			CTransform* pTransform = static_cast<CTransform*>(pObj->Find_Component(TEXT("Com_Transform")));
 			CVIBuffer* pVIBuffer = static_cast<CVIBuffer*>(pObj->Find_Component(TEXT("Com_VIBuffer")));
 
@@ -213,8 +323,7 @@ void CLevel_MapEdit::Picking_Check()
 
 void CLevel_MapEdit::ImGui_Object_MenBar()
 {
-
-	if (ImGui::CollapsingHeader("Object Settings", ImGuiTreeNodeFlags_DefaultOpen))   //¿¸√º ºΩº«
+	if (ImGui::CollapsingHeader("Object Settings", ImGuiTreeNodeFlags_DefaultOpen))   //?ÑÏ≤¥ ?πÏÖò
 	{
 		ImGui_Transform_Render();
 
@@ -283,6 +392,39 @@ void CLevel_MapEdit::ImGui_Object_Texture_Redner(int iTextureIndex)
 
 }
 
+void CLevel_MapEdit::ImGui_Option_Button_Reset()
+{
+	if (!m_bPicking)
+	{
+		if (ImGui::Button("Option Reset"))
+		{
+			m_iTexture_id = 0;
+			m_Scales = { 1.f,1.f, 1.f };
+			m_Translates = { 0.f,0.f,0.f };
+		}
+
+		ImGui::SameLine(120.f);
+
+		if (ImGui::Button("All Reset"))
+		{
+			if (!m_pObject.empty())
+			{
+				for (auto pObj : m_pObject)
+				{
+					m_pGameInstance->Remove_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_MAPEDIT), TEXT("Layer_MapEdit"), pObj);
+
+					Safe_Release(pObj);
+				}
+
+				m_pPickingObject = nullptr;
+				m_pObjectTransform = nullptr;
+				m_bPicking = false;
+				m_pObject.clear();
+			}
+		}
+	}
+}
+
 void CLevel_MapEdit::ImGui_Transform_Render()
 {
 	ImGui::PushItemWidth(45);
@@ -322,49 +464,17 @@ void CLevel_MapEdit::ImGui_Picking_Object_MenBar()
 {
 	ImGui_Delete_Object();
 
-	if (ImGui::CollapsingHeader("Object Option", ImGuiTreeNodeFlags_DefaultOpen))   //¿¸√º ºΩº«
+	ImGui::SameLine(70.f,0.f);
+
+	ImGui_Picking_UnCheck();
+
+	if (ImGui::CollapsingHeader("Object Option", ImGuiTreeNodeFlags_DefaultOpen))   //?ÑÏ≤¥ ?πÏÖò
 	{
 		ImGui_Picking_Object_Translates_Option();
 
-		if (ImGui::TreeNode("Rotates Option"))
-		{
-			ImGui::SetNextItemWidth(200.0f);
-			ImGui::SliderFloat("Rotate.x", &m_Rotates.x, -300.f, 300.f);
-			ImGui::SameLine();
-			if (ImGui::Button("-##Rotate.x"))
-				m_Rotates.x -= 1.f;
+		ImGui_Picking_Object_Rotate();
 
-			ImGui::SameLine();
-			if (ImGui::Button("+##Rotate.x"))
-				m_Rotates.x += 1.f;
-
-			ImGui::SetNextItemWidth(200.f);
-			ImGui::SliderFloat("Rotate.y", &m_Rotates.y, -300.f, 300.f);
-			ImGui::SameLine();
-			if (ImGui::Button("-##Rotate.y"))
-				m_Rotates.y -= 1.f;
-
-			ImGui::SameLine();
-			if (ImGui::Button("+##Rotate.y"))
-				m_Rotates.y += 1.f;
-
-			ImGui::SetNextItemWidth(200.f);
-			ImGui::SliderFloat("Rotate.z", &m_Rotates.z, -300.f, 300.f);
-			ImGui::SameLine();
-			if (ImGui::Button("-##Rotate.z"))
-				m_Rotates.z -= 1.f;
-
-			ImGui::SameLine();
-			if (ImGui::Button("+##Rotate.z"))
-				m_Rotates.z += 1.f;
-
-			if (m_pObjectTransform)
-				m_pObjectTransform->Rotation(_float3{ 1.f, 0.f, 0.f }, D3DXToRadian(m_Rotates.x));
-
-
-			ImGui::TreePop();
-		}
-
+		ImGui_Picking_Object_Scale();
 	}
 
 }
@@ -441,6 +551,120 @@ void CLevel_MapEdit::ImGui_Picking_Object_Translates_Option()
 
 }
 
+void CLevel_MapEdit::ImGui_Picking_Object_Rotate()
+{
+	if (ImGui::TreeNode("Rotates Option"))
+	{
+
+		_float fx = m_Rotates.x;
+		_float fy = m_Rotates.y;
+		_float fz = m_Rotates.z;
+
+		ImGui::SetNextItemWidth(200.0f);
+		ImGui::SliderFloat("Rotate.x", &m_Rotates.x, -300.f, 300.f);
+		ImGui::SameLine();
+		if (ImGui::Button("-##Rotate.x")) 
+			m_Rotates.x -= 1.f;
+
+		ImGui::SameLine();
+		if (ImGui::Button("+##Rotate.x"))
+			m_Rotates.x += 1.f;
+
+		ImGui::SetNextItemWidth(200.f);
+		ImGui::SliderFloat("Rotate.y", &m_Rotates.y, -300.f, 300.f);
+		ImGui::SameLine();
+		if (ImGui::Button("-##Rotate.y"))
+			m_Rotates.y -= 1.f;
+
+		ImGui::SameLine();
+		if (ImGui::Button("+##Rotate.y"))
+			m_Rotates.y += 1.f;
+
+		ImGui::SetNextItemWidth(200.f);
+		ImGui::SliderFloat("Rotate.z", &m_Rotates.z, -300.f, 300.f);
+		ImGui::SameLine();
+		if (ImGui::Button("-##Rotate.z"))
+			m_Rotates.z -= 1.f;
+
+		ImGui::SameLine();
+		if (ImGui::Button("+##Rotate.z"))
+			m_Rotates.z += 1.f;
+
+		if (m_pObjectTransform)
+		{
+			if (fx > m_Rotates.x || fx < m_Rotates.x)
+			{
+				_float fNewX = fx - m_Rotates.x;
+				m_pObjectTransform->Add_Rotation(_float3{ 1.f, 0.f, 0.f }, D3DXToRadian(fNewX));
+			}
+			if (fy > m_Rotates.y || fy < m_Rotates.y)
+			{
+				_float fNewY = fy - m_Rotates.y;
+				m_pObjectTransform->Add_Rotation(_float3{ 0.f, 1.f, 0.f }, D3DXToRadian(fNewY));
+			}
+			if (fz > m_Rotates.z || fx < m_Rotates.z)
+			{
+				_float fNewZ = fz - m_Rotates.z;
+				m_pObjectTransform->Add_Rotation(_float3{ 0.f, 0.f, 1.f }, D3DXToRadian(fNewZ));
+			}
+		}
+		ImGui::TreePop();
+	}
+}
+
+void CLevel_MapEdit::ImGui_Picking_Object_Scale()
+{
+	if (ImGui::TreeNode("Scale Option"))
+	{
+		ImGui::SetNextItemWidth(200.0f);
+		ImGui::SliderFloat("Scale X", &m_Scales.x, 0.f, 100.f);
+		ImGui::SameLine();
+		if (ImGui::Button("-##Scale X"))
+			m_Scales.x -= 0.5f;
+
+		ImGui::SameLine();
+		if (ImGui::Button("+##Scale X"))
+			m_Scales.x += 0.5f;
+
+		ImGui::SetNextItemWidth(200.f);
+		ImGui::SliderFloat("Scale Y", &m_Scales.y, 0.f, 100.f);
+		ImGui::SameLine();
+		if (ImGui::Button("-##Scale Y"))
+			m_Scales.y -= 0.5f;
+
+		ImGui::SameLine();
+		if (ImGui::Button("+##Scale Y"))
+			m_Scales.y += 0.5f;
+
+		ImGui::SetNextItemWidth(200.f);
+		ImGui::SliderFloat("Scale Z", &m_Scales.z, 0.f, 100.f);
+		ImGui::SameLine();
+		if (ImGui::Button("-##Scale Z"))
+			m_Scales.z -= 0.5f;
+
+		ImGui::SameLine();
+		if (ImGui::Button("+##Scale Z"))
+			m_Scales.z += 0.5f;
+
+		if (m_pObjectTransform)
+		{
+			m_pObjectTransform->Scaling(m_Scales.x, m_Scales.y, m_Scales.z);
+		}
+
+		ImGui::TreePop();
+	}
+}
+
+void CLevel_MapEdit::ImGui_Picking_UnCheck()
+{
+	if (ImGui::Button("UnCheck"))
+	{
+		m_pPickingObject = nullptr;
+		m_pObjectTransform = nullptr;
+		m_bPicking = false;
+	}
+}
+
 void CLevel_MapEdit::ImGui_Terrain_MenBar()
 {
 	ImGui::Begin("Terrain Editor");
@@ -459,6 +683,7 @@ void CLevel_MapEdit::ImGui_Terrain_MenBar()
 	if (ImGui::Button("Create Terrain"))     //πˆ∆∞¿‘∑¬Ω√ º±≈√«— ∞™¿∏∑Œ ª˝º∫
 	{
 		MAP_OBJECT_DESC tDesc{};
+		tDesc.eType = GAMEOBJ_TYPE::TERRAIN;
 		tDesc.iTextureIndex = iTerrainTexIndex;
 		tDesc.vPos = m_TrrainTranslate;
 
@@ -468,8 +693,8 @@ void CLevel_MapEdit::ImGui_Terrain_MenBar()
 			TEXT("Prototype_GameObject_TerrainBox"),
 			&tDesc);
 
-		/*	CGameObject* pGameObject = m_pGameInstance->Get_LastGameObject(ENUM_CLASS(LEVEL::LEVEL_MAPEDIT), TEXT("Layer_MapEdit"));
-			m_pObject.push_back(pGameObject);*/ // ¡ˆ«¸µµ ¿˙¿Â«ÿæﬂ«‘
+		CGameObject* pGameObject = m_pGameInstance->Get_LastGameObject(ENUM_CLASS(LEVEL::LEVEL_MAPEDIT), TEXT("Layer_MapEdit"));
+		m_pObject.push_back(pGameObject);
 	}
 
 	ImGui::End();
