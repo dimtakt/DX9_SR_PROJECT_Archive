@@ -43,7 +43,7 @@ HRESULT CMainApp::Initialize()
 		return E_FAIL;
 
 	Ready_Key_Setting();
-
+	Ready_Font_Setting();
 	return S_OK;
 }
 
@@ -225,6 +225,18 @@ void CMainApp::Ready_Key_Setting()
 	m_pGameInstance->AddTrackingKey('K');
 #endif
 
+}
+
+void CMainApp::Ready_Font_Setting()
+{
+	if (FAILED(m_pGameInstance->Ready_Font(TEXT("UI_Font_18"), TEXT("../Bin/Resources/Font/Galmuri9.ttf"), TEXT("Galmuri9 Regular"), 0, 18, 900)))
+		MSG_BOX(TEXT("FAILED to Font"));
+	if (FAILED(m_pGameInstance->Ready_Font(TEXT("UI_Font_16"), TEXT("../Bin/Resources/Font/Galmuri9.ttf"), TEXT("Galmuri9 Regular"), 0, 16, 900)))
+		MSG_BOX(TEXT("FAILED to Font"));
+	if (FAILED(m_pGameInstance->Ready_Font(TEXT("UI_Font_14"), TEXT("../Bin/Resources/Font/Galmuri9.ttf"), TEXT("Galmuri9 Regular"), 0, 14, 900)))
+		MSG_BOX(TEXT("FAILED to Font"));
+	if (FAILED(m_pGameInstance->Ready_Font(TEXT("UI_Font_12"), TEXT("../Bin/Resources/Font/Galmuri9.ttf"), TEXT("Galmuri9 Regular"), 14, 13, 700)))
+		MSG_BOX(TEXT("FAILED to Font"));
 }
 
 HRESULT CMainApp::Ready_Item_Setting()

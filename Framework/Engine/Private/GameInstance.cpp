@@ -318,11 +318,11 @@ HRESULT CGameInstance::Ready_Font(const _wstring& strFontTag,
 }
 void CGameInstance::Render_Font(const wstring& strFontTag, 
     const _wstring& strText, 
-    const _float2* pVec2Pos, 
+    const RECT& TexRect,
     D3DXCOLOR d3dxColor, 
     DWORD dwFormat)
 {
-    m_pFont_Manager->Render_Font(strFontTag, strText, pVec2Pos, d3dxColor, dwFormat);
+    m_pFont_Manager->Render_Font(strFontTag, strText, TexRect, d3dxColor, dwFormat);
 }
 #pragma endregion
 

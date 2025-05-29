@@ -56,7 +56,8 @@ HRESULT CTexture::Bind_Texture(_uint iTextureIndex)
 		 return E_FAIL;
 
 	return m_pGraphic_Device->SetTexture(0, m_Textures[iTextureIndex]);
-}
+ 
+ }
 
 HRESULT CTexture::Bind_Texture(CShader* pShader, D3DXHANDLE hParameters, _uint iTextureIndex)
 {

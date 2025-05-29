@@ -33,7 +33,7 @@ public:
 	_bool							IsKey_Down_Check();
 	_bool							IsKey_Up_Check();
 
-	CItem_Base* Pop_Item();
+	CItem_Base*						Pop_Item();
 	void							Push_Item(CItem_Base* pItem);
 
 	void							ItemRender();
@@ -45,7 +45,7 @@ private:
 	_bool							m_bIsOver = {};
 
 	_uint							m_iSlotIndex = {};
-	CItem_Base* m_pSlotItem = { nullptr };
+	CItem_Base*						m_pSlotItem = { nullptr };
 
 	_uint							m_iSlotItem_Tex = {};		//아이템 텍스처
 	_int							m_iSlotItem_MaxGrade = {};	//아이템 최대 강화 수치
@@ -65,6 +65,8 @@ private:
 
 	HRESULT							Ready_ChildPrototype(LEVEL eLevel);
 	HRESULT							Ready_Children();
+
+	void							Render_Font();
 public:
 	static CInven_Slot* Create(LPDIRECT3DDEVICE9 pGraphic_Device, LEVEL eLevel);
 	virtual CGameObject* Clone(void* pArg) override;

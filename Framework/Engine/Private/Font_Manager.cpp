@@ -27,14 +27,14 @@ HRESULT CFont_Manager::Ready_Font(const _wstring& strFontTag,
 
 void CFont_Manager::Render_Font(const wstring& strFontTag,
     const _wstring& strText,
-    const _float2* pVec2Pos,
+    const RECT& TexRect,
     D3DXCOLOR d3dxColor,
     DWORD dwFormat)
 {
     CFont* pFont = Find_Font(strFontTag);
     NULL_CHECK(pFont);
 
-    pFont->Render_Font(strText, pVec2Pos, d3dxColor, dwFormat);
+    pFont->Render_Font(strText, TexRect, d3dxColor, dwFormat);
 }
 
 CFont* CFont_Manager::Find_Font(const wstring& strFontTag)
