@@ -156,6 +156,7 @@ call Copy.bat</Command>
     <ClInclude Include="..\public\Animation.h" />
     <ClInclude Include="..\public\Animator.h" />
     <ClInclude Include="..\public\AnimatorController.h" />
+    <ClInclude Include="..\public\Anim_Manager.h" />
     <ClInclude Include="..\Public\Base.h" />
     <ClInclude Include="..\public\Button.h" />
     <ClInclude Include="..\Public\Camera.h" />
@@ -205,6 +206,7 @@ call Copy.bat</Command>
     <ClCompile Include="..\private\Animation.cpp" />
     <ClCompile Include="..\private\Animator.cpp" />
     <ClCompile Include="..\private\AnimatorController.cpp" />
+    <ClCompile Include="..\private\Anim_Manager.cpp" />
     <ClCompile Include="..\Private\Base.cpp" />
     <ClCompile Include="..\private\Button.cpp" />
     <ClCompile Include="..\Private\Camera.cpp" />
