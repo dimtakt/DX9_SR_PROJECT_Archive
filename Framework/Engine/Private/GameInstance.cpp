@@ -1,4 +1,4 @@
-#include "Network_Manager.h"
+//#include "Network_Manager.h"
 #include "GameInstance.h"
 
 #include "Graphic_Device.h"
@@ -12,6 +12,8 @@
 #include "Collision_Manager.h"
 #include "Font_Manager.h"
 #include "Light_Manager.h"
+#include "GameObject.h"
+#include "Anim_Manager.h"
 #include "Item_Manager.h"
 
 IMPLEMENT_SINGLETON(CGameInstance)
@@ -52,9 +54,9 @@ HRESULT CGameInstance::Initialize_Engine(const ENGINE_DESC& EngineDesc, LPDIRECT
     if (nullptr == m_pKey_Manager)
         return E_FAIL;
 
-    m_pNetwork_Manager = CNetwork_Manager::Create();
-    if (nullptr == m_pNetwork_Manager)
-        return E_FAIL;
+    //m_pNetwork_Manager = CNetwork_Manager::Create();
+    //if (nullptr == m_pNetwork_Manager)
+    //    return E_FAIL;
 
     m_pPicking = CPicking::Create(*ppOut, EngineDesc.hWnd, EngineDesc.iWinSizeX, EngineDesc.iWinSizeY);
     if (nullptr == m_pPicking)
@@ -72,6 +74,10 @@ HRESULT CGameInstance::Initialize_Engine(const ENGINE_DESC& EngineDesc, LPDIRECT
     if (nullptr == m_pLight_Manager)
         return E_FAIL;
 
+    m_pAnimation_Manager = CAnim_Manager::Create();
+    if (nullptr == m_pAnimation_Manager)
+        return E_FAIL;
+    
     m_pItem_Manager = CItem_Manager::Create(*ppOut);
     if (nullptr == m_pItem_Manager)
         return E_FAIL;
@@ -97,8 +103,6 @@ HRESULT CGameInstance::Clear_Resources(_uint iClearLevelID)
     m_pPrototype_Manager->Clear(iClearLevelID);
 
     m_pObject_Manager->Clear(iClearLevelID);
-
-    m_pCollision_Manager->Clear_Colliders();
 
     return S_OK;
 }
@@ -184,6 +188,15 @@ CGameObject* CGameInstance::Get_GameObject(_uint iLayerLevelIndex, const _wstrin
     return m_pObject_Manager->Get_GameObject(iLayerLevelIndex, strLayerTag, iIndex);
 }
 
+CGameObject* CGameInstance::Get_LastGameObject(_uint iLayerLevelIndex, const _wstring& strLayerTag)
+{
+    return m_pObject_Manager->Get_LastGameObject(iLayerLevelIndex, strLayerTag);
+}
+void CGameInstance::Remove_GameObject_ToLayer(_uint iLayerLevelIndex, const _wstring& strLayerTag, class CGameObject* pGameObject)
+{
+    m_pObject_Manager->Remove_GameObject_ToLayer(iLayerLevelIndex, strLayerTag, pGameObject);
+}
+
 HRESULT CGameInstance::Add_ItemObject_ToLayer(_uint iLayerLevelIndex, const _wstring& strLayerTag, _uint ItemIndex, void* pArg)
 {
     return m_pObject_Manager->Add_ItemObject_ToLayer(iLayerLevelIndex, strLayerTag, ItemIndex, pArg);
@@ -252,14 +265,14 @@ float CGameInstance::GetKeyHoldTime(int iKey) const
 #pragma endregion
 
 #pragma region NETWORK_MANAGER
-TEST* CGameInstance::Ping()
-{
-    return m_pNetwork_Manager->Ping();
-}
-list<USER*> CGameInstance::Get_AllUsers()
-{
-    return m_pNetwork_Manager->Get_AllUsers();
-}
+//TEST* CGameInstance::Ping()
+//{
+//    return m_pNetwork_Manager->Ping();
+//}
+//list<USER*> CGameInstance::Get_AllUsers()
+//{
+//    return m_pNetwork_Manager->Get_AllUsers();
+//}
 #pragma endregion
 
 #pragma region PICKING
@@ -285,6 +298,11 @@ _bool CGameInstance::Get_IntersectAtY(_float targetY, _float3& intersectPos)
 HRESULT CGameInstance::Add_Collider(class CCollider_OBB* pCollider)
 {
     return m_pCollision_Manager->Add_OBB_Collider(pCollider);
+}
+
+void CGameInstance::Clear_Colliders()
+{
+    m_pCollision_Manager->Clear_Colliders();
 }
 #pragma endregion
 
@@ -313,6 +331,18 @@ HRESULT CGameInstance::Ready_Light(const D3DLIGHT9* pLightInfo, const _uint& iIn
     return m_pLight_Manager->Ready_Light(pLightInfo, iIndex);
 }
 
+#pragma endregion
+HRESULT CGameInstance::Insert_Animation(const wstring& strAnimTag, CAnimation* anim)
+{
+    return m_pAnimation_Manager->Insert_Animation(strAnimTag, anim);
+}
+
+CAnimation* CGameInstance::Find_Animation(const wstring& strAnimTag)
+{
+    return m_pAnimation_Manager->Find_Animation(strAnimTag);
+}
+
+#pragma region ANIMATION_MANAGER
 HRESULT CGameInstance::Setting_Item(void* pArg, _uint iMaxItemIndex, _uint iLevelIndex, const _wstring& strItemBaseTag)
 {
     return m_pItem_Manager->Setting_Item(pArg, iMaxItemIndex, iLevelIndex, strItemBaseTag);
@@ -331,7 +361,7 @@ CItemObject* CGameInstance::Get_ItemObject(_uint iIndex)
 void CGameInstance::Release_Engine()
 {
     Release();
-    
+    Safe_Release(m_pCollision_Manager);
     Safe_Release(m_pTimer_Manager);
     Safe_Release(m_pLevel_Manager);
     Safe_Release(m_pGraphic_Device);
@@ -339,11 +369,11 @@ void CGameInstance::Release_Engine()
     Safe_Release(m_pObject_Manager);
     Safe_Release(m_pRenderer);
     Safe_Release(m_pKey_Manager);
-    Safe_Release(m_pNetwork_Manager);
+    //Safe_Release(m_pNetwork_Manager);
     Safe_Release(m_pPicking);
-    Safe_Release(m_pCollision_Manager);
     Safe_Release(m_pFont_Manager);
     Safe_Release(m_pLight_Manager);
+    Safe_Release(m_pAnimation_Manager);
     Safe_Release(m_pItem_Manager);
 }
 

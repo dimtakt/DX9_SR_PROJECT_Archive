@@ -30,6 +30,8 @@ void CLevel_Loading::Update(_float fTimeDelta)
 {
 	if (true == m_pLoader->isFinished() && m_pGameInstance->IsKeyDown(VK_SPACE))
 	{
+		m_pGameInstance->Clear_Colliders();
+
 		CLevel* pNewLevel = { nullptr };
 		
 		switch (m_eNextLevelID)

@@ -81,8 +81,6 @@ HRESULT CMainApp::Ready_Default_Setting()
 
 HRESULT CMainApp::Ready_Prototype_ForStatic()
 {
-
-
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_VIBuffer_Rect"), CVIBuffer_Rect::Create(m_pGraphic_Device))))
 		return E_FAIL;
 
@@ -96,7 +94,7 @@ HRESULT CMainApp::Ready_Prototype_ForStatic()
 		return E_FAIL;
 
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_TerrainBox_Top"),
-		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/BleakSwordDX/Terrain/Basic/BlankTex16_00.png"), 1))))
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/BleakSwordDX/Terrain/Forest/ArenaTex_%d.png"), 25))))
 		return E_FAIL;
 	/* Prototype_Component_Texture_TerrainBox_Side */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_TerrainBox_Side"),
@@ -104,7 +102,7 @@ HRESULT CMainApp::Ready_Prototype_ForStatic()
 		return E_FAIL;
 
 
-	/* Prototype_Component_Texture_Player */
+	// Prototype_Component_Texture_Player Bin\Resources\BleakSwordDX\Terrain\Forest
 	// --- CTexture
 	// Roll
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Player_Roll"),
@@ -282,9 +280,7 @@ void CMainApp::Free()
 
 	Safe_Release(m_pGraphic_Device);
 	CRoom_Manager::GetInstance()->Free();
-	//CRoom_Manager::DestroyInstance();
 	CMonster_Factory::GetInstance()->Free();
-	//CMonster_Factory::DestroyInstance();
 	m_pGameInstance->Release_Engine();
 	Safe_Release(m_pGameInstance);
 

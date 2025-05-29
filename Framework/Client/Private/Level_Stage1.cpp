@@ -88,7 +88,7 @@ HRESULT CLevel_Stage1::Ready_Layer_Camera(const _wstring& strLayerTag)
 
 HRESULT CLevel_Stage1::Ready_Layer_BackGround(const _wstring& strLayerTag)
 {
-	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_STAGE1), strLayerTag,
+  	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_STAGE1), strLayerTag,
 		ENUM_CLASS(LEVEL::LEVEL_STAGE1), TEXT("Prototype_GameObject_Sky"))))
 		return E_FAIL;
 	return S_OK;

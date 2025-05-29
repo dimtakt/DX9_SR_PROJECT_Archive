@@ -101,9 +101,9 @@ void CCamera_Follow::Move_Angle(_float fAngle, _float fTimeDelta)
 			m_fCurrentAngle -= 360.f;
 
 		m_pTargetTransformCom->RotationAccumulate(_float3{ 0.f, 1.f, 0.f }, D3DXToRadian(fAngle));
-		for (auto* component : m_vRotateObjectsTransformCom) {
-			component->RotationAccumulate(_float3{ 0.f, 1.f, 0.f }, D3DXToRadian(fAngle));
-		}
+		//for (auto* component : m_vRotateObjectsTransformCom) {
+		//	component->RotationAccumulate(_float3{ 0.f, 1.f, 0.f }, D3DXToRadian(fAngle));
+		//}
 	}
 
 	if (m_pGameInstance->IsKeyDown('E'))
@@ -113,9 +113,9 @@ void CCamera_Follow::Move_Angle(_float fAngle, _float fTimeDelta)
 			m_fCurrentAngle += 360.f;
 
 		m_pTargetTransformCom->RotationAccumulate(_float3{ 0.f, 1.f, 0.f }, D3DXToRadian(fAngle) * -1.f);
-		for (auto* component : m_vRotateObjectsTransformCom) {
-			component->RotationAccumulate(_float3{ 0.f, 1.f, 0.f }, D3DXToRadian(fAngle) * -1.f);
-		}
+		//for (auto* component : m_vRotateObjectsTransformCom) {
+		//	component->RotationAccumulate(_float3{ 0.f, 1.f, 0.f }, D3DXToRadian(fAngle) * -1.f);
+		//}
 	}
 }
 

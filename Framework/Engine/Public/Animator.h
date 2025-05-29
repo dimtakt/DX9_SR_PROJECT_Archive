@@ -22,6 +22,8 @@ public:
 	typedef struct tagStartStateDesc
 	{
 		_wstring strTimerTag; // 애니메이터 다중 사용을 고려하여 타이머 태그를 다르게 구성
+		CTransform* pParentTransform = nullptr;
+		CTransform* pChildTransform = nullptr;
 	} ANIMSTATE_DESC;
 	
 private:
@@ -53,8 +55,13 @@ public:
 		return Find_State(strStateTag) != nullptr;
 	}
 
+	void Set_ParentTransform(CTransform* pParentTransform) { m_pParentTransform = pParentTransform; };
+	void Set_ChildTransform(CTransform* pChildTransform) { m_pChildTransform = pChildTransform; };
+
+
 private:
 	ANIMSTATE* Find_State(const _wstring& strStateTag);
+	void Update_Keyframes();
 
 private:
 	// ANIMSTATE m_tPrevState = {}; // 필요하면 사용?
@@ -65,6 +72,9 @@ private:
 	std::map<const _wstring, ANIMSTATE> m_pStates = {};
 
 	_uint		m_iStackedFrames = {};
+
+	CTransform* m_pParentTransform = { nullptr };	// 애니메이션 - 기준점이 될 트랜스폼 (플레이어같은)
+	CTransform* m_pChildTransform = { nullptr };	// 애니메이션 - 실제 움직일 것의 트랜스폼 (무기같은)
 
 public:
 	static CAnimator* Create(LPDIRECT3DDEVICE9 pGraphic_Device);

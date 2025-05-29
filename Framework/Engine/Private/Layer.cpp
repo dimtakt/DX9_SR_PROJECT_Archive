@@ -28,6 +28,16 @@ CGameObject* CLayer::Find_GameObject(_uint iIndex)
 	return (*iter);
 }
 
+CGameObject* CLayer::Get_LastGameObject()
+{
+	if (!m_GameObjects.empty())
+	{
+		return m_GameObjects.back();
+	}
+
+	return nullptr;
+}
+
 void CLayer::Priority_Update(_float fTimeDelta)
 {
 	for (auto& pGameObject : m_GameObjects)
