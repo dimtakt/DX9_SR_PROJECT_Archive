@@ -4,7 +4,7 @@
 BEGIN(Client)
 typedef struct tagMAPObjectDesc
 {
-	char szType[32];
+	string szType[32];
 	_int iTextureIndex = { 0 };
 	_float3 vScale = { 1.f, 1.f, 1.f };
 	_float3 vRotate = { 0.f, 0.f, 0.f };

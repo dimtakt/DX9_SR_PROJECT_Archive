@@ -19,6 +19,7 @@ public:
 
 public:
 	_float3 Compute_PickedPosition(const _float4x4* pWorldMatrixInverse);
+	_bool Compute_PickedObjectPosition(const _float4x4* pWorldMatrixInverse);
 
 protected:
 	LPDIRECT3DVERTEXBUFFER9			m_pVB = { nullptr };
