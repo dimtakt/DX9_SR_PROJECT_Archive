@@ -129,7 +129,7 @@ void CCamera_Follow::Follow_Target()
 
 	_float3 vRotatedOffset;
 	D3DXVec3TransformCoord(&vRotatedOffset, &m_vOffset, &matRotY);
-
+	 
 	_float3 vCameraPos = vPlayerPosition + vRotatedOffset;
 	m_pTransformCom->Set_State(STATE::POSITION, vCameraPos);
 	m_pTransformCom->Look_At(vPlayerPosition);

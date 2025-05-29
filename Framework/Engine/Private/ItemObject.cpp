@@ -1,15 +1,19 @@
 #include "ItemObject.h"
+#include "GameInstance.h"
 
-CItemObject::CItemObject(LPDIRECT3DDEVICE9 pGraphic_Device) : CGameObject(pGraphic_Device)
+CItemObject::CItemObject(LPDIRECT3DDEVICE9 pGraphic_Device) : CUIObject(pGraphic_Device)
 {
 }
 
-CItemObject::CItemObject(const CItemObject& Prototype) : CGameObject(Prototype)
-{
-}
+CItemObject::CItemObject(const CItemObject& Prototype) : CUIObject(Prototype), m_iItemID { Prototype.m_iItemID}, m_iItemType { Prototype.m_iItemType }, m_iRarity { Prototype.m_iRarity }, m_szName {Prototype.m_szName}, m_szDescription{Prototype.m_szDescription}
+{																				
 
-HRESULT CItemObject::Initialize(void* pArg)
+}
+HRESULT CItemObject::Initialize(void* pArg)										
 {
+	
+
+
 	return S_OK;
 }
 
@@ -38,4 +42,9 @@ HRESULT CItemObject::Render()
 void CItemObject::Free()
 {
 	__super::Free();
+
+	Safe_Release(m_pTransformCom);
+	Safe_Release(m_pTextureCom);
+	Safe_Release(m_pVIBufferCom);
+
 }

@@ -47,7 +47,7 @@ _bool CButton::Click_Check(HWND hWnd, _int iKey)
 {
 	if (isPick(hWnd))
 	{	
-		return m_pGameInstance->IsKeyUp(iKey);
+		return m_pGameInstance->IsKeyDown(iKey);
 	}
 	return false;
 }

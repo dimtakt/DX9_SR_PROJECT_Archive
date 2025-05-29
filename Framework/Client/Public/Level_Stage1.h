@@ -22,8 +22,7 @@ private:
 	HRESULT Ready_Layer_BackGround(const _wstring& strLayerTag);
 	HRESULT Ready_Layer_Player(const _wstring& strLayerTag);
 	HRESULT Ready_Layer_UI(const _wstring& strLayerTag);
-	HRESULT Ready_Layer_Monster(const _wstring& strLayerTag);
-	HRESULT Ready_Room();
+	HRESULT Ready_Layer_Room(const _wstring& strLayerTag);
 public:
 	static CLevel_Stage1* Create(LPDIRECT3DDEVICE9 pGraphic_Device);
 	virtual void Free() override;

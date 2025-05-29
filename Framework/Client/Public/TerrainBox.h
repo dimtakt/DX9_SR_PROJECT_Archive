@@ -10,6 +10,12 @@ END
 
 class CTerrainBox final : public CGameObject
 {
+public:
+	typedef struct TerrainBoxDesc
+	{
+		_float3		vScale{};
+		_float3		vPosition{};
+	}TERBOXDESC;
 private:
 	CTerrainBox(LPDIRECT3DDEVICE9 pGraphic_Device);
 	CTerrainBox(const CTerrainBox& Prototype);

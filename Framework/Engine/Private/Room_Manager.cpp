@@ -1,6 +1,7 @@
 #include "Room_Manager.h"
 #include "Room.h"
 #include "GameInstance.h"
+#include "Layer.h"
 _uint CRoom_Manager::iRoomIndex = 0;
 
 CRoom_Manager::CRoom_Manager()
@@ -14,33 +15,47 @@ HRESULT CRoom_Manager::Initialize()
 	return S_OK;
 }
 
-HRESULT CRoom_Manager::Add_Room(CRoom* pRoom)
+HRESULT CRoom_Manager::Add_Room(CRoom* pRoom, _uint iLayerLevelIndex, const _wstring& strLayerTag)
 {
-	auto iter = m_mRooms.find(CRoom_Manager::iRoomIndex);
-	if (iter != m_mRooms.end())
-		m_mRooms.insert(pair<int, CRoom*>(CRoom_Manager::iRoomIndex, pRoom));
-	else
+	pRoom->Insert_ID(CRoom_Manager::iRoomIndex);
+	m_mRooms[iLayerLevelIndex].push_back(pRoom);
+	if (FAILED(m_pGameInstance->Add_Direct_GameObject_ToLayer(iLayerLevelIndex, strLayerTag, pRoom)))
 		return E_FAIL;
-
 	Safe_AddRef(pRoom);
+
 	return S_OK;
 }
 
 HRESULT CRoom_Manager::Enter_Room(_int iRoomID)
 {
-	auto iter = m_mRooms.find(iRoomID);
-	if (iter != m_mRooms.end())
-		iter->second->Enter();
+	auto pair = m_mRooms.find(m_iCurrentLevelID);
+	if (pair != m_mRooms.end())
+	{
+		for (auto& pRoom : pair->second)
+		{
+			if (pRoom->GetID() == iRoomID)
+			{
+				pRoom->Enter();
+			}
+		}
+	}
+		
 
 	return S_OK;
 }
 
 CRoom* CRoom_Manager::Get_CurrentRoom()
 {
-	for (auto& iter : m_mRooms)
+	auto pair = m_mRooms.find(m_iCurrentLevelID);
+	if (pair != m_mRooms.end())
 	{
-		if (iter.second->GetIsActive())
-			return iter.second;
+		for (auto& pRoom : pair->second)
+		{
+			if (pRoom->GetIsActive())
+			{
+				return pRoom;
+			}
+		}
 	}
 
 	return nullptr;
@@ -48,23 +63,34 @@ CRoom* CRoom_Manager::Get_CurrentRoom()
 
 CRoom* CRoom_Manager::Get_RoomByID(_int iRoomID)
 {
-	auto iter = m_mRooms.find(iRoomID);
+	auto pair = m_mRooms.find(m_iCurrentLevelID);
 
-	if (iter == m_mRooms.end())
+	if (pair != m_mRooms.end())
 	{
-		return nullptr;
+		for (auto& pRoom : pair->second)
+		{
+			if (pRoom->GetID() == iRoomID)
+			{
+				return pRoom;
+			}
+		}
 	}
 
-	return iter->second;
+	return nullptr;
 }
 
-void CRoom_Manager::Clear()
+void CRoom_Manager::Clear(_uint iLevelIndex)
 {
-	for (auto& iter : m_mRooms)
+	auto pair = m_mRooms.find(iLevelIndex);
+
+	if (pair != m_mRooms.end())
 	{
-		Safe_Release(iter.second);
+		for(auto& pRoom : pair->second)
+		{
+			Safe_Release(pRoom);
+		}
 	}
-	m_mRooms.clear();
+	m_mRooms[iLevelIndex].clear();
 	CRoom_Manager::RoomIndexReset();
 }
 
@@ -84,9 +110,19 @@ CRoom_Manager* CRoom_Manager::Create()
 void CRoom_Manager::Free()
 {
 	__super::Free();
-	Clear();
-	Safe_Release(m_pGameInstance);
+	for (auto& pair : m_mRooms)
+	{
+		_int iKey = pair.first;
+		vector<CRoom*>& vRooms = pair.second;
 
+		for (CRoom* pRoom : vRooms)
+		{
+			Safe_Release(pRoom);
+		}
+		vRooms.clear();
+	}
+	m_mRooms.clear();
+	Safe_Release(m_pGameInstance);
 }
 
 void CRoom_Manager::RoomIndexAdd()
