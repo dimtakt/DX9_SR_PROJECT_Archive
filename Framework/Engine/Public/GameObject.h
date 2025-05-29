@@ -24,14 +24,13 @@ public:
 
 
 public:
-	BOOL Get_IsCollision() { return m_bCollision; }
-	COLLISION_EVENT Get_CollosionEvent() { return m_eCollisionEvent; }
 	BOOL Get_IsDead() { return m_bDead; }
+	GAMEOBJ_TYPE Get_ObjType() { return m_eObjType; }
+public:
+	void Set_IsDead(BOOL bDead) { m_bDead = bDead; }
 
 public:
-	void Set_IsCollision(BOOL bCollision) { m_bCollision = bCollision; }
-	void Set_CollisionEvent(COLLISION_EVENT eCollisionEvent) { m_eCollisionEvent = eCollisionEvent; }
-	void Set_IsDead(BOOL bDead) { m_bDead = bDead; }
+	virtual void OnCollision(CGameObject* pGameObject);
 
 protected:
 	LPDIRECT3DDEVICE9			m_pGraphic_Device = { nullptr };
@@ -39,9 +38,8 @@ protected:
 
 	map<const _wstring, class CComponent*>		m_Components;
 
-	BOOL						m_bCollision = {};
-	COLLISION_EVENT				m_eCollisionEvent = {};
 	BOOL						m_bDead = {};
+	GAMEOBJ_TYPE				m_eObjType = {};
 
 protected:
 	HRESULT Add_Component(_uint iPrototypeLevelIndex, const _wstring& strPrototypeTag,

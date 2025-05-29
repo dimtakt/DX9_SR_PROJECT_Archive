@@ -2,10 +2,12 @@
 #include "GameInstance.h"
 #include "Level_Loading.h"
 #include "Player.h"
-#include "Room_Default.h"
+#include "Room.h"
 #include "Dagger.h"
 #include "Item_Base.h"
-
+#include "Room_Manager.h"
+#include "Monster_Factory.h"
+#include "Collider_OBB.h"
 CMainApp::CMainApp()
 	: m_pGameInstance{ CGameInstance::GetInstance() }
 {
@@ -35,6 +37,9 @@ HRESULT CMainApp::Initialize()
 		return E_FAIL;
 
 	if (FAILED(Start_Level(LEVEL::LEVEL_LOGO)))
+		return E_FAIL;
+
+	if (FAILED(Ready_Manager_Setting()))
 		return E_FAIL;
 
 	Ready_Key_Setting();
@@ -173,7 +178,12 @@ HRESULT CMainApp::Ready_Prototype_ForStatic()
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Animator"), CAnimator::Create(m_pGraphic_Device))))
 		return E_FAIL;
 
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_Room"), CRoom_Default::Create(m_pGraphic_Device))))
+	/* Prototype_GameObject_Room */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_Room"), CRoom::Create(m_pGraphic_Device))))
+		return E_FAIL;
+
+	/* Prototype_Component_Collider_OBB */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Collider_OBB"), CCollider_OBB::Create(m_pGraphic_Device))))
 		return E_FAIL;
 
 	//-------------
@@ -248,6 +258,11 @@ HRESULT CMainApp::Start_Level(LEVEL eStartLevelID)
 	return S_OK;
 }
 
+HRESULT CMainApp::Ready_Manager_Setting()
+{
+	return S_OK;
+}
+
 CMainApp* CMainApp::Create()
 {
 	CMainApp* pInstance = new CMainApp();
@@ -266,6 +281,10 @@ void CMainApp::Free()
 	__super::Free();
 
 	Safe_Release(m_pGraphic_Device);
+	CRoom_Manager::GetInstance()->Free();
+	//CRoom_Manager::DestroyInstance();
+	CMonster_Factory::GetInstance()->Free();
+	//CMonster_Factory::DestroyInstance();
 	m_pGameInstance->Release_Engine();
 	Safe_Release(m_pGameInstance);
 
