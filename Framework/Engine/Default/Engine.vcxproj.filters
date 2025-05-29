@@ -103,12 +103,6 @@
     <Filter Include="01.Utility\05.Component\Animator">
       <UniqueIdentifier>{860e3e5c-8c0a-4c3c-a611-bac9b6f2db6c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01.Utility\03.GameObject\Room">
-      <UniqueIdentifier>{1ea77080-eead-4c49-a109-9c0cdf2debe3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="01.Utility\03.GameObject\Room\Manager">
-      <UniqueIdentifier>{41604ee7-c0cd-4e02-8734-8658020c1b54}</UniqueIdentifier>
-    </Filter>
     <Filter Include="00.System\05. Font">
       <UniqueIdentifier>{3cbdcaa9-0bc8-401b-a256-a81d381958b4}</UniqueIdentifier>
     </Filter>
@@ -148,38 +142,29 @@
     <Filter Include="01.Utility\05.Component\Animator\Controller">
       <UniqueIdentifier>{bc4e2e3e-1393-4676-a838-1fe0050d59bc}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01.Utility\03.GameObject\LandObject">
-      <UniqueIdentifier>{7317a2ad-34d6-4db4-9435-4772e7c12421}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="01.Utility\03.GameObject\LandObject\Cube">
-      <UniqueIdentifier>{9ebab9df-b29e-425b-b3ca-d90909f975cc}</UniqueIdentifier>
-    </Filter>
     <Filter Include="01.Utility\03.GameObject\Monster">
       <UniqueIdentifier>{1dfb261a-c919-4858-bd66-2a8d7a66654d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="01.Utility\03.GameObject\Room\Factory">
-      <UniqueIdentifier>{e283fda4-b8ca-4c31-9dab-f89b2ec0354a}</UniqueIdentifier>
     </Filter>
     <Filter Include="01.Utility\05.Component\VIBuffer\TerrainBox">
       <UniqueIdentifier>{fbb10ce6-d85d-40fc-8cb1-2b6f0e624bf7}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01.Utility\03.GameObject\ItemObject">
-      <UniqueIdentifier>{03deaa89-f91a-4378-ad9a-4be09b0bc23c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="01.Utility\03.GameObject\ItemObject\Potion">
-      <UniqueIdentifier>{9b3094f1-b08d-40db-a545-ae6609d6d22e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="01.Utility\03.GameObject\ItemObject\Stone">
-      <UniqueIdentifier>{19a87097-1e63-4622-b367-9633aabb8687}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="01.Utility\03.GameObject\ItemObject\Artefact">
-      <UniqueIdentifier>{e02917a5-e818-4f33-8f34-18b77f2f9603}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="01.Utility\03.GameObject\ItemObject\Item_Effect">
-      <UniqueIdentifier>{fc6b4298-e5ed-4154-b495-18b2009490cb}</UniqueIdentifier>
-    </Filter>
     <Filter Include="01.Utility\05.Component\Animation">
       <UniqueIdentifier>{2cbb2f35-fea3-43c8-859c-9581c15a0055}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\03.GameObject\UIObject\ItemObject">
+      <UniqueIdentifier>{03deaa89-f91a-4378-ad9a-4be09b0bc23c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\03.GameObject\UIObject\ItemObject\Manager">
+      <UniqueIdentifier>{4952152d-59be-44a7-b464-9253c3e6c8a6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\03.GameObject\Monster\Factory">
+      <UniqueIdentifier>{ca643395-de9a-42c3-ab55-14defc815c53}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\03.GameObject\Room">
+      <UniqueIdentifier>{1ea77080-eead-4c49-a109-9c0cdf2debe3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\03.GameObject\Room\Manager">
+      <UniqueIdentifier>{41604ee7-c0cd-4e02-8734-8658020c1b54}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -318,26 +303,23 @@
     <ClInclude Include="..\public\AnimatorController.h">
       <Filter>01.Utility\05.Component\Animator\Controller</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\Land_Cube.h">
-      <Filter>01.Utility\03.GameObject\LandObject\Cube</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\LandObject.h">
-      <Filter>01.Utility\03.GameObject\LandObject</Filter>
-    </ClInclude>
     <ClInclude Include="..\Public\Monster.h">
       <Filter>01.Utility\03.GameObject\Monster</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\Room_Factory.h">
-      <Filter>01.Utility\03.GameObject\Room\Factory</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\VIBuffer_TerrainBox.h">
       <Filter>01.Utility\05.Component\VIBuffer\TerrainBox</Filter>
     </ClInclude>
     <ClInclude Include="..\public\ItemObject.h">
-      <Filter>01.Utility\03.GameObject\ItemObject</Filter>
+      <Filter>01.Utility\03.GameObject\UIObject\ItemObject</Filter>
     </ClInclude>
     <ClInclude Include="..\public\Animation.h">
       <Filter>01.Utility\05.Component\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Item_Manager.h">
+      <Filter>01.Utility\03.GameObject\UIObject\ItemObject\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Monster_Factory.h">
+      <Filter>01.Utility\03.GameObject\Monster\Factory</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -458,26 +440,23 @@
     <ClCompile Include="..\private\AnimatorController.cpp">
       <Filter>01.Utility\05.Component\Animator\Controller</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\Land_Cube.cpp">
-      <Filter>01.Utility\03.GameObject\LandObject\Cube</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\LandObject.cpp">
-      <Filter>01.Utility\03.GameObject\LandObject</Filter>
-    </ClCompile>
     <ClCompile Include="..\Private\Monster.cpp">
       <Filter>01.Utility\03.GameObject\Monster</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\Room_Factory.cpp">
-      <Filter>01.Utility\03.GameObject\Room\Factory</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\VIBuffer_TerrainBox.cpp">
       <Filter>01.Utility\05.Component\VIBuffer\TerrainBox</Filter>
     </ClCompile>
     <ClCompile Include="..\private\ItemObject.cpp">
-      <Filter>01.Utility\03.GameObject\ItemObject</Filter>
+      <Filter>01.Utility\03.GameObject\UIObject\ItemObject</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Animation.cpp">
       <Filter>01.Utility\05.Component\Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Item_Manager.cpp">
+      <Filter>01.Utility\03.GameObject\UIObject\ItemObject\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Monster_Factory.cpp">
+      <Filter>01.Utility\03.GameObject\Monster\Factory</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

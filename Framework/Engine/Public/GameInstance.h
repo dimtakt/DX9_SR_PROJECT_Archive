@@ -45,6 +45,9 @@ public:
 	class CGameObject* Get_GameObject(_uint iLayerLevelIndex, const _wstring& strLayerTag, _uint iIndex = 0);
 	class CGameObject* Get_LastGameObject(_uint iLayerLevelIndex, const _wstring& strLayerTag);
 	void Remove_GameObject_ToLayer(_uint iLayerLevelIndex, const _wstring& strLayerTag, class CGameObject* pGameObject);
+	HRESULT Add_ItemObject_ToLayer(_uint iLayerLevelIndex, const _wstring& strLayerTag, _uint ItemIndex, void* pArg = nullptr);
+	class CLayer* Find_Layer(_uint iLayerLevelIndex, const _wstring& strLayerTag);
+	HRESULT Add_Direct_GameObject_ToLayer(_uint iLayerLevelIndex, const _wstring& strLayerTag, class CGameObject* pGameObject);
 #pragma endregion
 
 #pragma region RENDERER
@@ -85,7 +88,7 @@ public:
 #pragma endregion
 
 #pragma region ROOM_MANAGER
-	HRESULT Add_Room(class CRoom* pRoom);
+	HRESULT Add_Room(class CRoom* pRoom, _uint iLayerLevelIndex, const _wstring& strLayerTag);
 	HRESULT Enter_Room(_int iRoomID);
 	class CRoom* Get_CurrentRoom();
 	class CRoom* Get_RoomByID(_int iRoomID);
@@ -127,6 +130,11 @@ public:
 	HRESULT	Ready_Light(const D3DLIGHT9* pLightInfo, const _uint& iIndex);
 #pragma endregion
 
+#pragma region ITEM_MANAGER
+	HRESULT						Setting_Item(void* pArg, _uint iMaxItemIndex, _uint iLevelIndex, const _wstring& strItemBaseTag);
+	CBase*						find_ItemObject(_uint iIndex);
+	CItemObject*				Get_ItemObject(_uint iIndex);
+#pragma endregion
 private:
 	class CGraphic_Device*		m_pGraphic_Device = { nullptr };
 	class CLevel_Manager*		m_pLevel_Manager = { nullptr };
@@ -141,7 +149,7 @@ private:
 	class CRoom_Manager*		m_pRoom_Manager = { nullptr };
 	class CFont_Manager*		m_pFont_Manager = { nullptr };
 	class CLight_Manager*		m_pLight_Manager = { nullptr };
-
+	class CItem_Manager*		m_pItem_Manager = { nullptr };
 public:
 	void Release_Engine();
 	virtual void Free() override;

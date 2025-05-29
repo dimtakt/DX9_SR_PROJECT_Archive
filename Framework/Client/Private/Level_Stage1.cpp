@@ -1,9 +1,14 @@
 #include "Level_Stage1.h"
+#include "Client_Struct.h"
 
 #include "GameInstance.h"
 #include "Camera_Free.h"
 #include "Player.h"
 #include "Hud_Buff.h"
+#include "Room_Default.h"
+#include "Monster_Default.h"
+#include "TerrainBox.h"
+
 CLevel_Stage1::CLevel_Stage1(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CLevel{ pGraphic_Device }
 {
@@ -13,24 +18,25 @@ HRESULT CLevel_Stage1::Initialize()
 {
 	g_hCursor = LoadCursorFromFile(L"Resources/Sephiria/UI/Cursor/Cursor_Combat.cur");
 
-	if (FAILED(Ready_Light()))
+	/*if (FAILED(Ready_Light()))
+		return E_FAIL;*/
+
+	if (FAILED(Ready_Layer_Camera(TEXT("Layer_Camera"))))
 		return E_FAIL;
 
 	if (FAILED(Ready_Layer_BackGround(TEXT("Layer_BackGround"))))
 		return E_FAIL;
 
+	if (FAILED(Ready_Layer_Room(TEXT("Layer_Room"))))
+		return E_FAIL;
 
 	//if (FAILED(Ready_Layer_Player(TEXT("Layer_Player"))))
 	//	return E_FAIL;
 
-	if (FAILED(Ready_Layer_Camera(TEXT("Layer_Camera"))))
-		return E_FAIL;
+	
 
 	/*if (FAILED(Ready_Layer_UI(TEXT("Layer_UI"))))
 		return E_FAIL;*/
-
-	if (FAILED(Ready_Layer_Monster(TEXT("Layer_Monster"))))
-		return E_FAIL;
 
 	return S_OK;
 }
@@ -81,9 +87,8 @@ HRESULT CLevel_Stage1::Ready_Layer_Camera(const _wstring& strLayerTag)
 HRESULT CLevel_Stage1::Ready_Layer_BackGround(const _wstring& strLayerTag)
 {
 	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_STAGE1), strLayerTag,
-		ENUM_CLASS(LEVEL::LEVEL_STAGE1), TEXT("Prototype_GameObject_Land"))))
+		ENUM_CLASS(LEVEL::LEVEL_STAGE1), TEXT("Prototype_GameObject_Sky"))))
 		return E_FAIL;
-
 	return S_OK;
 }
 
@@ -102,20 +107,45 @@ HRESULT CLevel_Stage1::Ready_Layer_UI(const _wstring& strLayerTag)
 	return S_OK;
 }
 
-HRESULT CLevel_Stage1::Ready_Layer_Monster(const _wstring& strLayerTag)
+HRESULT CLevel_Stage1::Ready_Layer_Room(const _wstring& strLayerTag)
 {
-	for (size_t i = 0; i < 20; i++)
+	CRoom_Default* pRoom = nullptr;
+
+	for (size_t num = 0; num < 5; num++)
 	{
-		if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_STAGE1), strLayerTag,
-			ENUM_CLASS(LEVEL::LEVEL_STAGE1), TEXT("Prototype_GameObject_Monster"))))
-			return E_FAIL;
+
+		pRoom = dynamic_cast<CRoom_Default*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::LEVEL_STAGE1), TEXT("Prototype_GameObject_Room")));
+		NULL_CHECK_RETURN(pRoom, E_FAIL);
+		pRoom->Enter();
+		/*if (num == 0)
+		{
+			pRoom->Enter();
+		}*/
+		// 지형 셋팅
+		CTerrainBox* pTerrainBox = nullptr;
+
+		MAP_OBJECT_DESC tDesc{};
+		tDesc.iTextureIndex = 0;
+		tDesc.vPos = _float3(static_cast<_float>(num) * 20.f + 2.f, 0.f, 0.f);
+		pTerrainBox = dynamic_cast<CTerrainBox*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::LEVEL_STAGE1), TEXT("Prototype_GameObject_TerrainBox"), &tDesc));
+		NULL_CHECK_RETURN(pTerrainBox, E_FAIL);
+		pRoom->Add_TerrainBox(pTerrainBox);
+
+		// 몬스터 셋팅
+		CMonster_Default* pMonster = nullptr;
+		for (size_t i = 0; i < 20; i++)
+		{
+			pMonster = dynamic_cast<CMonster_Default*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::LEVEL_STAGE1), TEXT("Prototype_GameObject_ShortMonster")));
+			NULL_CHECK_RETURN(pMonster, E_FAIL);
+			pRoom->Add_Monster(pMonster);
+		}
+
+		// 오브젝트 셋팅
+
+		// 룸매니저 투입
+		m_pGameInstance->Add_Room(pRoom, ENUM_CLASS(LEVEL::LEVEL_STAGE1), TEXT("Layer_Room"));
 	}
 
-	return S_OK;
-}
-
-HRESULT CLevel_Stage1::Ready_Room()
-{
 	return S_OK;
 }
 

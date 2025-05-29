@@ -69,15 +69,46 @@ HRESULT CObject_Manager::Add_GameObject_ToLayer(_uint iLayerLevelIndex, const _w
     return S_OK;
 }
 
-HRESULT CObject_Manager::Remove_GameObject_ToLayer(_uint iLayerLevelIndex, const _wstring& strLayerTag, CGameObject* pGameObject)
+
+HRESULT CObject_Manager::Remove_GameObject_ToLayer(_uint iLayerLevelIndex, const _wstring & strLayerTag, CGameObject * pGameObject)
 {
     CLayer* pLayer = Find_Layer(iLayerLevelIndex, strLayerTag);
-    if(nullptr != pLayer)
+    if (nullptr != pLayer)
     {
         pLayer->Remove_GameObject(pGameObject);
         return S_OK;
     }
     return E_NOTIMPL;
+}
+HRESULT CObject_Manager::Add_ItemObject_ToLayer(_uint iLayerLevelIndex, const _wstring& strLayerTag, _uint iItemIndex, void* pArg)
+{
+    CGameObject* pGameObject = static_cast<CGameObject*>(m_pGameInstance->find_ItemObject(iItemIndex));
+
+    CLayer* pLayer = Find_Layer(iLayerLevelIndex, strLayerTag);
+    if (nullptr == pLayer)
+    {
+        pLayer = CLayer::Create();
+        pLayer->Add_GameObject(pGameObject);
+        m_pLayers[iLayerLevelIndex].emplace(strLayerTag, pLayer);
+    }
+    else
+        pLayer->Add_GameObject(pGameObject);
+    return S_OK;
+}
+
+HRESULT CObject_Manager::Add_Direct_GameObject_ToLayer(_uint iLayerLevelIndex, const _wstring& strLayerTag, CGameObject* pGameObject)
+{
+    CLayer* pLayer = Find_Layer(iLayerLevelIndex, strLayerTag);
+    if (nullptr == pLayer)
+    {
+        pLayer = CLayer::Create();
+        pLayer->Add_GameObject(pGameObject);
+        m_pLayers[iLayerLevelIndex].emplace(strLayerTag, pLayer);
+    }
+    else
+        pLayer->Add_GameObject(pGameObject);
+
+    return S_OK;
 }
 
 void CObject_Manager::Priority_Update(_float fTimeDelta)

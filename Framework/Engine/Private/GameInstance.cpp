@@ -13,7 +13,7 @@
 #include "Room_Manager.h"
 #include "Font_Manager.h"
 #include "Light_Manager.h"
-#include "GameObject.h"
+#include "Item_Manager.h"
 
 IMPLEMENT_SINGLETON(CGameInstance)
 
@@ -77,6 +77,10 @@ HRESULT CGameInstance::Initialize_Engine(const ENGINE_DESC& EngineDesc, LPDIRECT
     if (nullptr == m_pLight_Manager)
         return E_FAIL;
 
+    m_pItem_Manager = CItem_Manager::Create(*ppOut);
+    if (nullptr == m_pItem_Manager)
+        return E_FAIL;
+
     return S_OK;
 }
 
@@ -101,7 +105,7 @@ HRESULT CGameInstance::Clear_Resources(_uint iClearLevelID)
 
     m_pObject_Manager->Clear(iClearLevelID);
 
-    m_pRoom_Manager->Clear();
+    m_pRoom_Manager->Clear(iClearLevelID);
 
     return S_OK;
 }
@@ -144,7 +148,7 @@ _float CGameInstance::Compute_Random(_float fMin, _float fMax)
 #pragma region LEVEL_MANAGER
 HRESULT CGameInstance::Open_Level(_uint iLevelID, CLevel* pNewLevel)
 {
-    if (nullptr == m_pLevel_Manager)
+    if (nullptr == m_pLevel_Manager) 
         return E_FAIL;
 
     return m_pLevel_Manager->Open_Level(iLevelID, pNewLevel);
@@ -195,6 +199,22 @@ void CGameInstance::Remove_GameObject_ToLayer(_uint iLayerLevelIndex, const _wst
 {
     m_pObject_Manager->Remove_GameObject_ToLayer(iLayerLevelIndex, strLayerTag, pGameObject);
 }
+
+HRESULT CGameInstance::Add_ItemObject_ToLayer(_uint iLayerLevelIndex, const _wstring& strLayerTag, _uint ItemIndex, void* pArg)
+{
+    return m_pObject_Manager->Add_ItemObject_ToLayer(iLayerLevelIndex, strLayerTag, ItemIndex, pArg);
+}
+
+CLayer* CGameInstance::Find_Layer(_uint iLayerLevelIndex, const _wstring& strLayerTag)
+{
+    return m_pObject_Manager->Find_Layer(iLayerLevelIndex, strLayerTag);
+}
+
+HRESULT CGameInstance::Add_Direct_GameObject_ToLayer(_uint iLayerLevelIndex, const _wstring& strLayerTag, CGameObject* pGameObject)
+{
+    return m_pObject_Manager->Add_Direct_GameObject_ToLayer(iLayerLevelIndex, strLayerTag, pGameObject);
+}
+
 #pragma endregion
 
 #pragma region RENDERER
@@ -285,9 +305,9 @@ HRESULT CGameInstance::Add_Collider(class CCollider* pCollider)
 #pragma endregion
 
 #pragma region ROOM_MANAGER
-HRESULT CGameInstance::Add_Room(class CRoom* pRoom)
+HRESULT CGameInstance::Add_Room(class CRoom* pRoom, _uint iLayerLevelIndex, const _wstring& strLayerTag)
 {
-    return m_pRoom_Manager->Add_Room(pRoom);
+    return m_pRoom_Manager->Add_Room(pRoom, iLayerLevelIndex, strLayerTag);
 }
 HRESULT CGameInstance::Enter_Room(_int iRoomID)
 {
@@ -329,6 +349,21 @@ HRESULT CGameInstance::Ready_Light(const D3DLIGHT9* pLightInfo, const _uint& iIn
     return m_pLight_Manager->Ready_Light(pLightInfo, iIndex);
 }
 
+HRESULT CGameInstance::Setting_Item(void* pArg, _uint iMaxItemIndex, _uint iLevelIndex, const _wstring& strItemBaseTag)
+{
+    return m_pItem_Manager->Setting_Item(pArg, iMaxItemIndex, iLevelIndex, strItemBaseTag);
+}
+
+CBase* CGameInstance::find_ItemObject(_uint iIndex)
+{
+    return m_pItem_Manager->find_ItemObject(iIndex);
+}
+
+CItemObject* CGameInstance::Get_ItemObject(_uint iIndex)
+{
+    return m_pItem_Manager->Get_ItemObject(iIndex);
+}
+
 void CGameInstance::Release_Engine()
 {
     Release();
@@ -346,6 +381,7 @@ void CGameInstance::Release_Engine()
     Safe_Release(m_pRoom_Manager);
     Safe_Release(m_pFont_Manager);
     Safe_Release(m_pLight_Manager);
+    Safe_Release(m_pItem_Manager);
 }
 
 void CGameInstance::Free()

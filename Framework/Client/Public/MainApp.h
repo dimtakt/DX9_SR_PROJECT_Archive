@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Client_Defines.h"
+#include "Client_Defines_Item.h"
 #include "Base.h"
 
 BEGIN(Engine)
@@ -28,6 +29,7 @@ private:
 	HRESULT Ready_Default_Setting();
 	HRESULT Ready_Prototype_ForStatic();
 	void Ready_Key_Setting();
+	HRESULT Ready_Item_Setting();
 	HRESULT Start_Level(LEVEL eStartLevelID);
 
 public:

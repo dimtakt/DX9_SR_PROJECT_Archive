@@ -33,6 +33,7 @@ HRESULT CField_Hp::Initialize(void* pArg)
 	m_fSizeY = 10.f;
 	m_fX = 0;
 	m_fY = Desc->fY;
+	m_fZ = 0.2;
 	m_iWinSizeX = g_iWinSizeX;
 	m_iWinSizeY = g_iWinSizeY;
 
@@ -145,11 +146,11 @@ void CField_Hp::Target_Pos()
 	_float4x4 vVPMatrix = m_OldViewMatrix * m_OldProjMatrix;
 	D3DXVec3TransformCoord(&vWinPos, &Target_Pos, &vVPMatrix);
 
-	_int WinPosX = (vWinPos.x + 1.f) * 0.5 * g_iWinSizeX;
-	_int WinPosY = (-vWinPos.y + 1.f) * 0.5 * g_iWinSizeY;
+	_float fWinPosX = (vWinPos.x + 1.f) * 0.5 * g_iWinSizeX;
+	_float fWinPosY = (-vWinPos.y + 1.f) * 0.5 * g_iWinSizeY;
 
-	m_vWorldPos.x = WinPosX - m_iWinSizeX * 0.5f;
-	m_vWorldPos.y = -WinPosY + m_iWinSizeY * 0.5f;
+	m_vWorldPos.x = fWinPosX - m_iWinSizeX * 0.5f;
+	m_vWorldPos.y = -fWinPosY + m_iWinSizeY * 0.5f;
 
 	m_pTransformCom->Set_State(STATE::POSITION, m_vWorldPos);
 }

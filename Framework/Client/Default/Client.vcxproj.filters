@@ -106,9 +106,6 @@
     <Filter Include="02.GameObject\Room\Default">
       <UniqueIdentifier>{e1f6a6e8-7fcf-456f-ace4-cbf40d39be77}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\Land">
-      <UniqueIdentifier>{255c5a27-666f-410c-b8d4-46efb9e10ba6}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObject\Monster">
       <UniqueIdentifier>{9a997528-4ac1-4ffb-8aff-27cebcb8aab3}</UniqueIdentifier>
     </Filter>
@@ -202,6 +199,27 @@
     <Filter Include="02.GameObject\Player\Weapon\Dagger">
       <UniqueIdentifier>{13b902d1-9fd8-4a3b-b2aa-e85b85a79094}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\Item">
+      <UniqueIdentifier>{a0442a2f-455c-4da5-bb1a-a161cd6ce207}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Item\Item_Effect">
+      <UniqueIdentifier>{286956f5-0755-4a12-9e84-f1f4d3be7523}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\UI\Window\Inventory\Inven_Slot">
+      <UniqueIdentifier>{88764adf-be53-44bb-a7d2-7dbd9862d95a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\UI\Window\Inventory\Inven_Slot\Slot_Selete">
+      <UniqueIdentifier>{7a3d5675-b231-45be-9105-c871bb05a771}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Levels\04. Dungeon\Loader">
+      <UniqueIdentifier>{12de4255-f604-4498-84f4-a9b78c265476}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Sky">
+      <UniqueIdentifier>{b97a6319-f172-42fe-aa3e-bed9cdd5bd4a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Monster\Factory">
+      <UniqueIdentifier>{6d60bd53-5de2-4d8e-ba27-c554138dc5e5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -221,9 +239,6 @@
     </ClInclude>
     <ClInclude Include="..\Public\Client_Defines.h">
       <Filter>99.Defines</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\Loader.h">
-      <Filter>01.Levels\00.Loading\Loader</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Level_Loading.h">
       <Filter>01.Levels\00.Loading</Filter>
@@ -384,9 +399,6 @@
     <ClInclude Include="..\Public\Room_Default.h">
       <Filter>02.GameObject\Room\Default</Filter>
     </ClInclude>
-    <ClInclude Include="..\public\Land.h">
-      <Filter>02.GameObject\Land</Filter>
-    </ClInclude>
     <ClInclude Include="..\Public\Monster_Default.h">
       <Filter>02.GameObject\Monster\Default</Filter>
     </ClInclude>
@@ -399,11 +411,29 @@
     <ClInclude Include="..\public\Field_Hp_Frame.h">
       <Filter>02.GameObject\UI\Field\Field_Hp\Field_Hp_Frame</Filter>
     </ClInclude>
-    <ClInclude Include="Client_Defines_Item.h">
-      <Filter>99.Defines</Filter>
-    </ClInclude>
     <ClInclude Include="..\public\Dagger.h">
       <Filter>02.GameObject\Player\Weapon\Dagger</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Item_Base.h">
+      <Filter>02.GameObject\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Client_Defines_Item.h">
+      <Filter>99.Defines</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Inven_Slot.h">
+      <Filter>02.GameObject\UI\Window\Inventory\Inven_Slot</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Inven_Slot_Selete.h">
+      <Filter>02.GameObject\UI\Window\Inventory\Inven_Slot\Slot_Selete</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Loader_Room.h">
+      <Filter>01.Levels\04. Dungeon\Loader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Loader.h">
+      <Filter>01.Levels\00.Loading\Loader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Sky.h">
+      <Filter>02.GameObject\Sky</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -425,9 +455,6 @@
     </ClCompile>
     <ClCompile Include="..\Private\MainApp.cpp">
       <Filter>00.MainApp</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\Loader.cpp">
-      <Filter>01.Levels\00.Loading\Loader</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Level_Loading.cpp">
       <Filter>01.Levels\00.Loading</Filter>
@@ -558,9 +585,6 @@
     <ClCompile Include="..\Private\Room_Default.cpp">
       <Filter>02.GameObject\Room\Default</Filter>
     </ClCompile>
-    <ClCompile Include="..\private\Land.cpp">
-      <Filter>02.GameObject\Land</Filter>
-    </ClCompile>
     <ClCompile Include="..\Private\Monster_Default.cpp">
       <Filter>02.GameObject\Monster\Default</Filter>
     </ClCompile>
@@ -575,6 +599,24 @@
     </ClCompile>
     <ClCompile Include="..\private\Dagger.cpp">
       <Filter>02.GameObject\Player\Weapon\Dagger</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Item_Base.cpp">
+      <Filter>02.GameObject\Item</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Inven_Slot.cpp">
+      <Filter>02.GameObject\UI\Window\Inventory\Inven_Slot</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Inven_Slot_Selete.cpp">
+      <Filter>02.GameObject\UI\Window\Inventory\Inven_Slot\Slot_Selete</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Loader_Room.cpp">
+      <Filter>01.Levels\04. Dungeon\Loader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Loader.cpp">
+      <Filter>01.Levels\00.Loading\Loader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Sky.cpp">
+      <Filter>02.GameObject\Sky</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

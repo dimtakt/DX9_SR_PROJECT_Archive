@@ -1,5 +1,6 @@
 #include "Inventory.h"
 #include "GameInstance.h"
+#include "Inven_Slot.h"
 
 CInventory::CInventory(LPDIRECT3DDEVICE9 pGraphic_Device) : CUIObject(pGraphic_Device)
 {
@@ -21,8 +22,8 @@ HRESULT CInventory::Initialize_Prototype(LEVEL eLevel)
 
 HRESULT CInventory::Initialize(void* pArg)
 {
-	m_fSizeX = 530.f * 2.f;
-	m_fSizeY = 500.f * 2.f;
+	m_fSizeX = 1033.f;
+	m_fSizeY = 1215.f;
 	m_fX = g_iWinSizeX * 0.5;
 	m_fY = g_iWinSizeY * 0.5;
 	m_fZ = 0.f;
@@ -112,11 +113,35 @@ HRESULT CInventory::Ready_Components()
 
 HRESULT CInventory::Ready_ChildPrototype(LEVEL eLevel)
 {
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(eLevel), TEXT("Prototype_GameObject_UI_Inven_Slot"),
+		CInven_Slot::Create(m_pGraphic_Device, eLevel))))
+		return E_FAIL;
+
 	return S_OK;
 }
 
 HRESULT CInventory::Ready_Children()
 {
+	CUIObject* pGameObject = nullptr;
+
+	CUIObject::UIOBJECT_DESC Desc{};
+
+	for (int i = 0; i < 5; ++i)
+	{
+		for (int j = 0; j < 6; ++j)
+		{
+			Desc.fX = j;
+			Desc.fY = i;
+
+			pGameObject = dynamic_cast<CUIObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(m_eLevel), TEXT("Prototype_GameObject_UI_Inven_Slot"), &Desc));
+			if (nullptr == pGameObject)
+				return E_FAIL;
+			Add_Child(pGameObject);
+		}
+	}
+
+
+
 	return S_OK;
 }
 
@@ -170,5 +195,6 @@ void CInventory::Free()
 {
 	__super::Free();
 	Safe_Release(m_pVIBufferCom);
+	Safe_Release(m_pTextureCom);
 }
 
