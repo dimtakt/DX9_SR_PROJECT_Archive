@@ -621,6 +621,9 @@
     <ClCompile Include="..\Private\Animations\Anim_Player_Attack.cpp">
       <Filter>03.Animations\Player</Filter>
     </ClCompile>
+    <ClCompile Include="..\Private\Animations\Anim_Player_Attack2.cpp">
+      <Filter>03.Animations\Player</Filter>
+    </ClCompile>
     <ClCompile Include="..\Private\Room.cpp">
       <Filter>02.GameObject\Room</Filter>
     </ClCompile>

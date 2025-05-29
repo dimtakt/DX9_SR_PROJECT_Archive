@@ -40,6 +40,7 @@ public:
 public:
 	HRESULT Add_State(const _wstring strStateTag, ANIMSTATE _state);
 	ANIMSTATE* Get_CurState()	{ return m_pCurState; };
+	_wstring Get_PrevStateTag()	{ return m_strPrevStateTag; };
 	_wstring Get_CurStateTag()	{ return m_strCurStateTag; };
 	_bool Get_IsLastFrame() {	
 		// 마지막 이미지의 마지막 프레임부터 true를 반환합니다.
@@ -54,6 +55,7 @@ public:
 		// 해당 State가 존재하는지 여부만 확인
 		return Find_State(strStateTag) != nullptr;
 	}
+	//_bool Get_isChangedState() { return (m_strPrevStateTag == m_strCurStateTag); }
 
 	void Set_ParentTransform(CTransform* pParentTransform) { m_pParentTransform = pParentTransform; };
 	void Set_ChildTransform(CTransform* pChildTransform) { m_pChildTransform = pChildTransform; };
@@ -64,8 +66,9 @@ private:
 	void Update_Keyframes();
 
 private:
-	// ANIMSTATE m_tPrevState = {}; // 필요하면 사용?
+	ANIMSTATE*	m_pPrevState = { nullptr };
 	ANIMSTATE*	m_pCurState = { nullptr };
+	_wstring	m_strPrevStateTag = {};
 	_wstring	m_strCurStateTag = {};
 	_wstring	m_strTimerTag = {};
 

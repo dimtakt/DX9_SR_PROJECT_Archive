@@ -1,10 +1,10 @@
-#include "Animations/Anim_Player_Attack.h"
+#include "Animations/Anim_Player_Attack2.h"
 
-CAnim_Player_Attack::CAnim_Player_Attack()
+CAnim_Player_Attack2::CAnim_Player_Attack2()
 {
 }
 
-HRESULT CAnim_Player_Attack::Initialize()
+HRESULT CAnim_Player_Attack2::Initialize()
 {
 	// Setting : 변환용 행렬 선언 및 초기화
 	_float4x4 matTrans, matRot, matScale, matResult;
@@ -23,7 +23,7 @@ HRESULT CAnim_Player_Attack::Initialize()
 	// End Setting *********
 
 
-	// desmos : https://www.desmos.com/calculator/y5idpmfzbi
+	// desmos : https://www.desmos.com/calculator/kp6l7cgke8
 	// keyStart (0~7) *********
 	for (size_t i = 0; i < 8; i++)
 	{
@@ -31,13 +31,13 @@ HRESULT CAnim_Player_Attack::Initialize()
 		vecTrans = {
 			static_cast<_float>(-0.1 * pow((iKeyFrame - 4), 2) + 1.8),
 			//static_cast<_float>((iKeyFrame - 4) * -0.05),
-			static_cast<_float>(sinf(iKeyFrame / 1.5) * 0.5),
+			static_cast<_float>(-sinf(iKeyFrame / 1.5) * 0.5),
 			0
 		};
 		
 		// rotation
 		_float3 vAxis = { 0, 0, 1 };
-		D3DXQuaternionRotationAxis(&quatRot, &vAxis, D3DXToRadian(iKeyFrame * -20));
+		D3DXQuaternionRotationAxis(&quatRot, &vAxis, D3DXToRadian(iKeyFrame * 20 + 200 ));
 		
 		// scale
 		vecScale = {
@@ -58,20 +58,20 @@ HRESULT CAnim_Player_Attack::Initialize()
 	return S_OK;
 }
 
-CAnim_Player_Attack* CAnim_Player_Attack::Create()
+CAnim_Player_Attack2* CAnim_Player_Attack2::Create()
 {
-	CAnim_Player_Attack* pInstance = new CAnim_Player_Attack();
+	CAnim_Player_Attack2* pInstance = new CAnim_Player_Attack2();
 
 	if (FAILED(pInstance->Initialize()))
 	{
-		MSG_BOX(TEXT("Failed to Created : CAnim_Player_Attack"));
+		MSG_BOX(TEXT("Failed to Created : CAnim_Player_Attack2"));
 		Safe_Release(pInstance);
 	}
 
 	return pInstance;
 }
 
-void CAnim_Player_Attack::Free()
+void CAnim_Player_Attack2::Free()
 {
 	__super::Free();
 }
