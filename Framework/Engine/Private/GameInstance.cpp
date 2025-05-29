@@ -182,6 +182,15 @@ CGameObject* CGameInstance::Get_GameObject(_uint iLayerLevelIndex, const _wstrin
     return m_pObject_Manager->Get_GameObject(iLayerLevelIndex, strLayerTag, iIndex);
 }
 
+CGameObject* CGameInstance::Get_LastGameObject(_uint iLayerLevelIndex, const _wstring& strLayerTag)
+{
+    return m_pObject_Manager->Get_LastGameObject(iLayerLevelIndex, strLayerTag);
+}
+void CGameInstance::Remove_GameObject_ToLayer(_uint iLayerLevelIndex, const _wstring& strLayerTag, class CGameObject* pGameObject)
+{
+    m_pObject_Manager->Remove_GameObject_ToLayer(iLayerLevelIndex, strLayerTag, pGameObject);
+}
+
 HRESULT CGameInstance::Add_ItemObject_ToLayer(_uint iLayerLevelIndex, const _wstring& strLayerTag, _uint ItemIndex, void* pArg)
 {
     return m_pObject_Manager->Add_ItemObject_ToLayer(iLayerLevelIndex, strLayerTag, ItemIndex, pArg);

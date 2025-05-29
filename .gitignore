@@ -1,13 +1,20 @@
 .vs/
 x64/
 
-Client.exe
-Client.pdb
+*.exe
+*.pdb
+*.dll
+*.lib
+*.exp
 
-Engine.dll
-Engine.lib
-Engine.exp
-Engine.pdb
+# Framework/Client/Bin/Client.exe
+# Framework/Client/Bin/Client.pdb
+# Framework/Client/Bin/Engine.dll
+
+# Framework/Engine/Bin/Engine.dll
+# Framework/Engine/Bin/Engine.lib
+# Framework/Engine/Bin/Engine.exp
+# Framework/Engine/Bin/Engine.pdb
 Inc/
 Lib/
 

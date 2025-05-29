@@ -40,9 +40,7 @@ public:
 	}
 
 	void Set_State(STATE eState, const _float3& vState) {
-		int a = 1;
 		memcpy(&m_WorldMatrix.m[ENUM_CLASS(eState)][0], &vState, sizeof(_float3));
-		int b = 2;
 	}
 
 	void Set_FlipX(_bool isFlip) { m_bFlipX = isFlip; }
@@ -64,6 +62,7 @@ public:
 	void RotationAccumulate(const _float3& vAxis, _float fRadian);
 	void Turn(const _float3& vAxis, _float fTimeDelta);
 	void Scaling(_float fScaleX, _float fScaleY, _float fScaleZ);
+	void Add_Rotation(const _float3& vAxis, _float fRadian);
 
 	//void StartShake(_float fDuration, _float fStrength, _float fTime);
 

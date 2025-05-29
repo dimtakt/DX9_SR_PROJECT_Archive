@@ -20,7 +20,7 @@ HRESULT CPlayer::Initialize_Prototype()
 
 HRESULT CPlayer::Initialize(void* pArg)
 {
-	if (FAILED(Ready_Components()))
+ 	if (FAILED(Ready_Components()))
 		return E_FAIL;
 
     m_eObjType = GAMEOBJ_TYPE::PLAYER;
