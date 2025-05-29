@@ -26,7 +26,7 @@ HRESULT CField_Hp_Frame::Initialize(void* pArg)
 	m_fSizeY = Desc->fSizeY;
 	m_fX = Desc->fX;
 	m_fY = Desc->fY;
-	m_fZ = 0.3f;
+	m_fZ = 0.4f;
 	m_iWinSizeX = g_iWinSizeX;
 	m_iWinSizeY = g_iWinSizeY;
 
@@ -48,7 +48,7 @@ void CField_Hp_Frame::Priority_Update(_float fTimeDelta)
 
 void CField_Hp_Frame::Update(_float fTimeDelta)
 {
-	
+
 }
 
 void CField_Hp_Frame::Late_Update(_float fTimeDelta)
@@ -97,7 +97,7 @@ void CField_Hp_Frame::Target_Pos()
 	m_vWorldPos.x = fWinPosX - m_iWinSizeX * 0.5f;
 	m_vWorldPos.y = -fWinPosY + m_iWinSizeY * 0.5f;
 
-	
+
 	m_pTransformCom->Set_State(STATE::POSITION, _float3{ m_vWorldPos.x, m_vWorldPos.y + m_fY, m_vWorldPos.z });
 }
 
