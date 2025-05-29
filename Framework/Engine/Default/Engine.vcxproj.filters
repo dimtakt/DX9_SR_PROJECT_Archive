@@ -154,6 +154,18 @@
     <Filter Include="01.Utility\03.GameObject\UIObject\ItemObject\Manager">
       <UniqueIdentifier>{4952152d-59be-44a7-b464-9253c3e6c8a6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01.Utility\03.GameObject\Room">
+      <UniqueIdentifier>{1ea77080-eead-4c49-a109-9c0cdf2debe3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\03.GameObject\Room\Manager">
+      <UniqueIdentifier>{41604ee7-c0cd-4e02-8734-8658020c1b54}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\05.Component\Animator\Animation">
+      <UniqueIdentifier>{a2b3e8b3-9054-42b4-9d65-cdfc0ea5a43b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\05.Component\Animator\Animation\Manager">
+      <UniqueIdentifier>{ef7d0001-84b7-436e-988d-cd23a1a1e530}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Public\Engine_Macro.h">
@@ -291,8 +303,11 @@
     <ClInclude Include="..\public\ItemObject.h">
       <Filter>01.Utility\03.GameObject\UIObject\ItemObject</Filter>
     </ClInclude>
-    <ClInclude Include="..\public\Animation.h">
-      <Filter>01.Utility\05.Component\Animation</Filter>
+    <ClInclude Include="..\Public\Animation.h">
+      <Filter>01.Utility\05.Component\Animator\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Anim_Manager.h">
+      <Filter>01.Utility\05.Component\Animator\Animation\Manager</Filter>
     </ClInclude>
     <ClInclude Include="..\public\Item_Manager.h">
       <Filter>01.Utility\03.GameObject\UIObject\ItemObject\Manager</Filter>
@@ -388,6 +403,9 @@
     </ClCompile>
     <ClCompile Include="..\private\Animator.cpp">
       <Filter>01.Utility\05.Component\Animator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Anim_Manager.cpp">
+      <Filter>01.Utility\05.Component\Animator\Animation\Manager</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Font_Manager.cpp">
       <Filter>00.System\05. Font\Manager</Filter>

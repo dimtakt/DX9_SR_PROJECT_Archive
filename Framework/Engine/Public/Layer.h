@@ -13,9 +13,16 @@ private:
 public:
 	class CComponent* Find_Component(const _wstring& strComponentTag, _uint iIndex);
 	class CGameObject* Find_GameObject(_uint iIndex);
+	class CGameObject* Get_LastGameObject();
+
 public:
 	HRESULT Add_GameObject(class CGameObject* pGameObject) {
 		m_GameObjects.push_back(pGameObject);
+		return S_OK;
+	}
+
+	HRESULT Remove_GameObject(class CGameObject* pGameObject) {
+		m_GameObjects.remove(pGameObject);
 		return S_OK;
 	}
 

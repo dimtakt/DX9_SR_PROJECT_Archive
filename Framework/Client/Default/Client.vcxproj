@@ -143,6 +143,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\Public\Animations\Anim_Player_Attack.h" />
+    <ClInclude Include="..\public\Animations\Anim_Player_Idle.h" />
     <ClInclude Include="..\Public\BackGround.h" />
     <ClInclude Include="..\Public\Buff_Frame.h" />
     <ClInclude Include="..\Public\Buff_Icon.h" />
@@ -156,6 +158,7 @@
     <ClInclude Include="..\public\Inven_Slot.h" />
     <ClInclude Include="..\public\Inven_Slot_Selete.h" />
     <ClInclude Include="..\public\Item_Base.h" />
+    <ClInclude Include="..\Public\Level_MapEdit.h" />
     <ClInclude Include="..\Public\Monster.h" />
     <ClInclude Include="..\Public\Monster_Factory.h" />
     <ClInclude Include="..\Public\Room_Manager.h" />
@@ -192,10 +195,6 @@
     <ClInclude Include="..\Public\Level_GamePlay.h" />
     <ClInclude Include="..\Public\Level_Loading.h" />
     <ClInclude Include="..\Public\Level_Logo.h" />
-    <ClInclude Include="..\Public\Level_MapEdit.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-      </ExcludedFromBuild>
-    </ClInclude>
     <ClInclude Include="..\Public\Level_Stage1.h" />
     <ClInclude Include="..\Public\Loader.h" />
     <ClInclude Include="..\Public\MainApp.h" />
@@ -220,6 +219,8 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\Private\Animations\Anim_Player_Attack.cpp" />
+    <ClCompile Include="..\private\Animations\Anim_Player_Idle.cpp" />
     <ClCompile Include="..\Private\BackGround.cpp" />
     <ClCompile Include="..\Private\Buff_Frame.cpp" />
     <ClCompile Include="..\Private\Buff_Icon.cpp" />
@@ -230,6 +231,7 @@
     <ClCompile Include="..\private\Inven_Slot.cpp" />
     <ClCompile Include="..\private\Inven_Slot_Selete.cpp" />
     <ClCompile Include="..\private\Item_Base.cpp" />
+    <ClCompile Include="..\Private\Level_MapEdit.cpp" />
     <ClCompile Include="..\Private\Monster.cpp" />
     <ClCompile Include="..\Private\Monster_Factory.cpp" />
     <ClCompile Include="..\Private\Room_Manager.cpp" />
@@ -257,10 +259,6 @@
     <ClCompile Include="..\Private\Level_GamePlay.cpp" />
     <ClCompile Include="..\Private\Level_Loading.cpp" />
     <ClCompile Include="..\Private\Level_Logo.cpp" />
-    <ClCompile Include="..\Private\Level_MapEdit.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-      </ExcludedFromBuild>
-    </ClCompile>
     <ClCompile Include="..\Private\Level_Stage1.cpp" />
     <ClCompile Include="..\Private\Loader.cpp" />
     <ClCompile Include="..\Private\MainApp.cpp" />

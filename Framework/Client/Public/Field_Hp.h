@@ -50,3 +50,4 @@ public:
 	virtual void			Free() override;
 };
 END
+

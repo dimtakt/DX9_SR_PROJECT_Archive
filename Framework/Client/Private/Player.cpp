@@ -20,7 +20,7 @@ HRESULT CPlayer::Initialize_Prototype()
 
 HRESULT CPlayer::Initialize(void* pArg)
 {
-	if (FAILED(Ready_Components()))
+ 	if (FAILED(Ready_Components()))
 		return E_FAIL;
 
     m_eObjType = GAMEOBJ_TYPE::PLAYER;
@@ -50,7 +50,7 @@ void CPlayer::Update(_float fTimeDelta)
     vPlayerPos = m_pTransformCom->Get_State(STATE::POSITION);
 
     //std::cout << "[Player::Update] RayPoint  : {" << vRayPoint.x << ", " << vRayPoint.y << ", " << vRayPoint.z << "}" << std::endl;
-    //std::cout << "[Player::Update] PlayerPos : {" << vPlayerPos.x << ", " << vPlayerPos.y << ", " << vPlayerPos.z << "}" << std::endl;
+    std::cout << "[Player::Update] PlayerPos : {" << vPlayerPos.x << ", " << vPlayerPos.y << ", " << vPlayerPos.z << "}" << std::endl;
 
 
 
@@ -119,9 +119,9 @@ void CPlayer::Update(_float fTimeDelta)
     if (m_pGameInstance->IsKeyDown(VK_LBUTTON))
     {
         if (vRayPoint.z > vPlayerPos.z)
-            m_pAnimatorCom->Change_State(L"GreatSwordHeavyAttack_Upper");
+            m_pAnimatorCom->Change_State(L"Attack_Upper");
         else
-            m_pAnimatorCom->Change_State(L"GreatSwordHeavyAttack_Lower");
+            m_pAnimatorCom->Change_State(L"Attack_Lower");
     }
     
     if (m_pGameInstance->IsKeyDown(VK_RBUTTON))
@@ -129,14 +129,9 @@ void CPlayer::Update(_float fTimeDelta)
         // 우클릭시 행동
     }
 
-    /*if (GetKeyState(VK_LBUTTON) < 0)
-    {
-        _float3		vTmp = m_pVIBufferCom->Compute_PickedPosition(m_pTransformCom->Get_WorldMatrix_Inverse());
-        int a = 10;
-    }*/
-
-
 }
+
+
 
 void CPlayer::Late_Update(_float fTimeDelta)
 {
@@ -303,25 +298,32 @@ HRESULT CPlayer::Ready_Components()
     /* For Com_Animator */
     CAnimator::ANIMSTATE_DESC StartAnimStateDesc{};
     StartAnimStateDesc.strTimerTag = L"Animator_Player_Main";   // 해당 애니메이터가 타이머에서 사용할 태그 key값
-    
+    StartAnimStateDesc.pParentTransform = m_pTransformCom;
+    StartAnimStateDesc.pChildTransform = static_cast<CTransform*>(m_pGameInstance->Get_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), L"Layer_Weapon", L"Com_Transform"));
+
     if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Animator"),
         TEXT("Com_Animator"), reinterpret_cast<CComponent**>(&m_pAnimatorCom), &StartAnimStateDesc)))
         return E_FAIL;
 
-    // m_pAnimatorCom->Add_State(L"태그명", { m_pTextureCom_상태명, 프레임단위 이미지전환간격, 도중 나갈수있는지});
+    // 요소 삽입 : m_pAnimatorCom->Add_State(L"태그명", { m_pTextureCom_상태명, 프레임단위 이미지전환간격, 도중 나갈수있는지});
+    // 애니메이션 찾기 :  m_pGameInstance->Find_Animation(L"태그명");
+    // 애니메이션은 Level_GamePlay.cpp 에서 Create 함.
+    
     m_pAnimatorCom->Add_State(L"Roll",              { m_pTextureCom_Roll, 4, true });
     m_pAnimatorCom->Add_State(L"Air",               { m_pTextureCom_Air, 4, true });
     m_pAnimatorCom->Add_State(L"Down",              { m_pTextureCom_Down, 4, true });
-    m_pAnimatorCom->Add_State(L"Idle_Lower",        { m_pTextureCom_Idle_Lower, 4, true });
-    m_pAnimatorCom->Add_State(L"Idle_Upper",        { m_pTextureCom_Idle_Upper, 4, true });
+    m_pAnimatorCom->Add_State(L"Idle_Lower",        { m_pTextureCom_Idle_Lower, 4, true, m_pGameInstance->Find_Animation(L"Player_Idle") });
+    m_pAnimatorCom->Add_State(L"Idle_Upper",        { m_pTextureCom_Idle_Upper, 4, true, m_pGameInstance->Find_Animation(L"Player_Idle") });
     m_pAnimatorCom->Add_State(L"Move_Lower",        { m_pTextureCom_Move_Lower, 4, true });
     m_pAnimatorCom->Add_State(L"Move_Upper",        { m_pTextureCom_Move_Upper, 4, true });
-    m_pAnimatorCom->Add_State(L"Attack_Lower",      { m_pTextureCom_Attack_Lower, 4, false });
-    m_pAnimatorCom->Add_State(L"Attack_Upper",      { m_pTextureCom_Attack_Upper, 4, false });
-    m_pAnimatorCom->Add_State(L"GreatSwordHeavyAttack_Lower", { m_pTextureCom_GreatSwordHeavyAttack_Lower, 4, false });
-    m_pAnimatorCom->Add_State(L"GreatSwordHeavyAttack_Upper", { m_pTextureCom_GreatSwordHeavyAttack_Upper, 4, false });
+    m_pAnimatorCom->Add_State(L"Attack_Lower",      { m_pTextureCom_Attack_Lower, 3, false, m_pGameInstance->Find_Animation(L"Player_Attack") });
+    m_pAnimatorCom->Add_State(L"Attack_Upper",      { m_pTextureCom_Attack_Upper, 3, false, m_pGameInstance->Find_Animation(L"Player_Attack") });
+    m_pAnimatorCom->Add_State(L"GreatSwordHeavyAttack_Lower", { m_pTextureCom_GreatSwordHeavyAttack_Lower, 4, false});
+    m_pAnimatorCom->Add_State(L"GreatSwordHeavyAttack_Upper", { m_pTextureCom_GreatSwordHeavyAttack_Upper, 4, false});
     m_pAnimatorCom->Add_State(L"WhirlWind_Ready",   { m_pTextureCom_WhirlWind_Ready, 4, false });
     m_pAnimatorCom->Add_State(L"WhirlWind_Cycle",   { m_pTextureCom_WhirlWind_Cycle, 4, false });
+
+    
 
 
 

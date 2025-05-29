@@ -1,12 +1,15 @@
-ï»¿#pragma once
+#pragma once
 
 #include "Level.h"
 #include "Client_Defines.h"
 #include <array>
+#include "Client_Struct.h"
+
 BEGIN(Engine)
 class CGameInstance;
 class CGameObject;
 class CTexture;
+class CTransform;
 END
 
 BEGIN(Client)
@@ -17,9 +20,9 @@ class CLevel_MapEdit final : public CLevel
 public:
 	typedef struct EditorObjectInfo
 	{
-		string strObjectType;       // ì˜¤ë¸Œì íŠ¸ íƒ€ì… 
-		int iTextureCount = 0;      // í…ìŠ¤ì²˜ ê°œìˆ˜
-		CTexture* pTextureCom = nullptr; // í…ìŠ¤ì²˜ ì»´í¬ë„ŒíŠ¸ ì£¼ì†Œ ì €ì¥ìš©
+		string strObjectType;       // ¿ÀºêÁ§Æ® Å¸ÀÔ 
+		int iTextureCount = 0;      // ÅØ½ºÃ³ °³¼ö
+		CTexture* pTextureCom = nullptr; // ÅØ½ºÃ³ ÄÄÆ÷³ÍÆ® ÁÖ¼Ò ÀúÀå¿ë
 	}OBJECT_TEXTURE_INFO;
 
 private:
@@ -35,33 +38,53 @@ public:
 	HRESULT Ready_ImGui(HWND hWnd, LPDIRECT3DDEVICE9 pOut);
 	HRESULT Ready_Layer_Camera(const _wstring& strLayerTag);
 	HRESULT Ready_Texture_Info();
+	HRESULT Ready_Terrain_Texture_Info();
 
-	//HRESULT Load_ObjectMeta_Fromt_Json(const string& strMetePath);
-
-public:
-	HRESULT Delete_Tile_By_Position(D3DXVECTOR3& vTargetPos);
 private:
 	CImgui_Manager* m_pImgui_Manage = { nullptr };
 private:
 	void Imgui_Render();
 	void ImGui_MenuBar_Render();
-	bool ImGui_TextureSelector_Render(string& strSelectedType, int& iTextureIndex);
-	void ImGui_TextureId_Render();
+
+	void Picking_Check();
+
+	//¿ÀºêÁ§Æ® Àü¿ë ¸Ş´º
+	void ImGui_Object_MenBar();
+	void ImGui_Object_Texture_Redner(int iTextureIndex);
+
 	void ImGui_Transform_Render();
 	void ImGui_Rotate_Render();
 	void ImGui_Scale_Render();
 
-	void ImGui_Terrain_MenBar();
-private:
-	int m_iTexture_id = {};
-	D3DXVECTOR3 m_DeletePos = { 0.f, 0.f, 0.f };
-	_float3 m_Scales = { 1.f,1.f,1.f };
-	_float3 m_Rotates = { 0.f,0.f, 0.f };
-	_float3 m_Translates = { 0.f,0.f,0.f };
+	//¼±ÅÃµÈ ¿ÀºêÁ§Æ® Àü¿ë
+	void ImGui_Picking_Object_MenBar();
+	void ImGui_Delete_Object();
+	void ImGui_Picking_Object_Translates_Option();
+	void ImGui_Rotate();
 
-	map<string, OBJECT_TEXTURE_INFO>	m_ObjectTextureInfo;
-	CGameObject*						m_pPreview = nullptr;
-	bool								m_bPreviewReady = false;
+	//ÁöÇü Àü¿ë ¸Ş´º
+	void ImGui_Terrain_MenBar();
+	void ImGui_Terrain_Transform_Render();
+	void ImGui_Terrain_Texture_Render(int iTextureIndex);
+
+private:
+	int m_iTexture_id = {};							//°ø¿ë ÅØ½ºÃ³ ÀÎµ¦½º
+
+	_float3 m_Scales = { 1.f,1.f,1.f };				//¿ÀºêÁ§Æ® Àü¿ë
+	_float3 m_Rotates = { 0.f,0.f, 0.f };
+	_float3 m_Translates = { 0.f,5.f,0.f };
+
+	_float3 m_OldTranslates = { 0.f, 0.f, 0.f };
+
+	_float3 m_TrrainTranslate = { 0.f, 0.f, 0.f };	//ÁöÇü Àü¿ë
+
+	map<string, OBJECT_TEXTURE_INFO>			m_ObjectTextureInfo = {};		//ÀÌ¹ÌÁöºä ¶ç¿ì±â, string "Object", "TerrainBox"
+	CGameObject* m_pPreview = nullptr;					//ÅØ½ºÃ³ °¡Á®¿À°íÀÚ ¸¸µç ÀÓ½Ãº¯¼ö
+	CTransform* m_pObjectTransform = nullptr;			// ÇÏ³ªÀÇ ¿ÀºêÁ§Æ® ¼±ÅÃµÇ¸é Æ®·£½ºÆû ¼³Á¤ÇÏ°íÀÚ ÇÔ
+	CGameObject* m_pPickingObject = nullptr;				// ÇÇÅ·µÈ ¾ê ÀúÀå¿ë
+	vector<CGameObject*>				m_pObject = {};							// ¸¸µç ¾êµé ÁÖ¼Ò ÀúÀå
+	list<MAP_OBJECT_DESC*>				m_pObject_Desc = {};					// ¸¸µç ¾êµé ±¸Á¶Ã¼ ÀúÀå?
+	_bool								m_bPicking = false;						// ÇÇÅ· µÈ °´Ã¼ ÀÖÀ¸¸é È°¼ºÈ­
 
 public:
 	static CLevel_MapEdit* Create(LPDIRECT3DDEVICE9 pGraphic_Device);

@@ -41,8 +41,12 @@ private:
 	void SetUp_RenderState();
 	void Reset_RenderState();
 
+	_float m_fCurrentAngle = 0;
+	_float m_fCurCursorDeg = 0;
+
 private:
 	void Follow_Player();
+	void Look_At_Cursor();
 
 public:
 	static CDagger* Create(LPDIRECT3DDEVICE9 pGraphic_Device);
