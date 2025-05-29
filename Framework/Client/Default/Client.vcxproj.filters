@@ -103,14 +103,8 @@
     <Filter Include="02.GameObject\Room">
       <UniqueIdentifier>{f6d2f95f-05f3-469a-893b-d7822001c440}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\Room\Default">
-      <UniqueIdentifier>{e1f6a6e8-7fcf-456f-ace4-cbf40d39be77}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObject\Monster">
       <UniqueIdentifier>{9a997528-4ac1-4ffb-8aff-27cebcb8aab3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\Monster\Default">
-      <UniqueIdentifier>{3bf1ea03-f9c1-439d-aae4-6824357cd9bc}</UniqueIdentifier>
     </Filter>
     <Filter Include="02.GameObject\Terrain\TerrainBox">
       <UniqueIdentifier>{a104ef06-91be-4323-92d7-40deff8b0f8e}</UniqueIdentifier>
@@ -211,14 +205,14 @@
     <Filter Include="02.GameObject\UI\Window\Inventory\Inven_Slot\Slot_Selete">
       <UniqueIdentifier>{7a3d5675-b231-45be-9105-c871bb05a771}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01.Levels\04. Dungeon\Loader">
-      <UniqueIdentifier>{12de4255-f604-4498-84f4-a9b78c265476}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObject\Sky">
       <UniqueIdentifier>{b97a6319-f172-42fe-aa3e-bed9cdd5bd4a}</UniqueIdentifier>
     </Filter>
     <Filter Include="02.GameObject\Monster\Factory">
       <UniqueIdentifier>{6d60bd53-5de2-4d8e-ba27-c554138dc5e5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Room\Manager">
+      <UniqueIdentifier>{a476ec5e-5e7d-44f0-b461-78fbcc19d7c8}</UniqueIdentifier>
     </Filter>
     <Filter Include="03.Animations">
       <UniqueIdentifier>{4ee55cda-61fd-4925-ad62-989e1297d2f5}</UniqueIdentifier>
@@ -245,9 +239,6 @@
     </ClInclude>
     <ClInclude Include="..\Public\Client_Defines.h">
       <Filter>99.Defines</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\Loader.h">
-      <Filter>01.Levels\00.Loading\Loader</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Level_Loading.h">
       <Filter>01.Levels\00.Loading</Filter>
@@ -366,9 +357,6 @@
     <ClInclude Include="..\Public\Client_Struct.h">
       <Filter>99.Defines</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\Level_MapEdit.h">
-      <Filter>01.Levels\03. MapEdit</Filter>
-    </ClInclude>
     <ClInclude Include="..\Public\Tree.h">
       <Filter>02.GameObject\Object\Tree</Filter>
     </ClInclude>
@@ -405,12 +393,6 @@
     <ClInclude Include="..\Public\Level_Stage1.h">
       <Filter>01.Levels\04. Dungeon\Stage1</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\Room_Default.h">
-      <Filter>02.GameObject\Room\Default</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\Monster_Default.h">
-      <Filter>02.GameObject\Monster\Default</Filter>
-    </ClInclude>
     <ClInclude Include="..\Public\TerrainBox.h">
       <Filter>02.GameObject\Terrain\TerrainBox</Filter>
     </ClInclude>
@@ -441,14 +423,26 @@
     <ClInclude Include="..\public\Inven_Slot_Selete.h">
       <Filter>02.GameObject\UI\Window\Inventory\Inven_Slot\Slot_Selete</Filter>
     </ClInclude>
-    <ClInclude Include="..\public\Loader_Room.h">
-      <Filter>01.Levels\04. Dungeon\Loader</Filter>
-    </ClInclude>
     <ClInclude Include="..\Public\Loader.h">
       <Filter>01.Levels\00.Loading\Loader</Filter>
     </ClInclude>
     <ClInclude Include="..\public\Sky.h">
       <Filter>02.GameObject\Sky</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Room.h">
+      <Filter>02.GameObject\Room</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Monster.h">
+      <Filter>02.GameObject\Monster</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Monster_Factory.h">
+      <Filter>02.GameObject\Monster\Factory</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Room_Manager.h">
+      <Filter>02.GameObject\Room\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Level_MapEdit.h">
+      <Filter>01.Levels\03. MapEdit</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -470,9 +464,6 @@
     </ClCompile>
     <ClCompile Include="..\Private\MainApp.cpp">
       <Filter>00.MainApp</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\Loader.cpp">
-      <Filter>01.Levels\00.Loading\Loader</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Level_Loading.cpp">
       <Filter>01.Levels\00.Loading</Filter>
@@ -561,9 +552,6 @@
     <ClCompile Include="..\Private\ImGuiFileDialog.cpp">
       <Filter>97. ImGUI</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\Level_MapEdit.cpp">
-      <Filter>01.Levels\03. MapEdit</Filter>
-    </ClCompile>
     <ClCompile Include="..\Private\Tree.cpp">
       <Filter>02.GameObject\Object\Tree</Filter>
     </ClCompile>
@@ -600,12 +588,6 @@
     <ClCompile Include="..\Private\Level_Stage1.cpp">
       <Filter>01.Levels\04. Dungeon\Stage1</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\Room_Default.cpp">
-      <Filter>02.GameObject\Room\Default</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\Monster_Default.cpp">
-      <Filter>02.GameObject\Monster\Default</Filter>
-    </ClCompile>
     <ClCompile Include="..\Private\TerrainBox.cpp">
       <Filter>02.GameObject\Terrain\TerrainBox</Filter>
     </ClCompile>
@@ -627,9 +609,6 @@
     <ClCompile Include="..\private\Inven_Slot_Selete.cpp">
       <Filter>02.GameObject\UI\Window\Inventory\Inven_Slot\Slot_Selete</Filter>
     </ClCompile>
-    <ClCompile Include="..\private\Loader_Room.cpp">
-      <Filter>01.Levels\04. Dungeon\Loader</Filter>
-    </ClCompile>
     <ClCompile Include="..\Private\Loader.cpp">
       <Filter>01.Levels\00.Loading\Loader</Filter>
     </ClCompile>
@@ -641,6 +620,21 @@
     </ClCompile>
     <ClCompile Include="..\Private\Animations\Anim_Player_Attack.cpp">
       <Filter>03.Animations\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Room.cpp">
+      <Filter>02.GameObject\Room</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Monster.cpp">
+      <Filter>02.GameObject\Monster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Monster_Factory.cpp">
+      <Filter>02.GameObject\Monster\Factory</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Room_Manager.cpp">
+      <Filter>02.GameObject\Room\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Level_MapEdit.cpp">
+      <Filter>01.Levels\03. MapEdit</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

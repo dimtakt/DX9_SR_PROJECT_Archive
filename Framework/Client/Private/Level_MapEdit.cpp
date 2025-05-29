@@ -1,4 +1,4 @@
-ï»¿#include "Level_MapEdit.h"
+#include "Level_MapEdit.h"
 #include "Imgui_Manager.h"
 #include "ImGuiFileDialog.h"
 #include "ImGuiFileDialogConfig.h"
@@ -10,7 +10,7 @@
 
 #include "json.hpp"
 #include "Tree.h"
-#include "Mountain.h"
+#include "TerrainBox.h"
 
 
 
@@ -27,20 +27,23 @@ HRESULT CLevel_MapEdit::Initialize()
 	if (FAILED(Ready_Layer_Camera(TEXT("Layer_Camera"))))
 		return E_FAIL;
 
-	/*if (FAILED(Ready_Texture_Info()))
-		return E_FAIL;*/
+	if (FAILED(Ready_Terrain_Texture_Info()))
+		return E_FAIL;
+
+	if (FAILED(Ready_Texture_Info()))
+		return E_FAIL;
 
 	return S_OK;
 }
 
 void CLevel_MapEdit::Update(_float fTimeDelta)
 {
-	
+	Picking_Check();
 }
 
 HRESULT CLevel_MapEdit::Render()
 {
-	SetWindowText(g_hWnd, TEXT("ë§µ ì—ë””í„° ë ˆë²¨ ì…ë‹ˆë‹¤"));
+	SetWindowText(g_hWnd, TEXT("¸Ê ¿¡µğÅÍ ·¹º§ ÀÔ´Ï´Ù"));
 	//m_pImgui_Manage->Render();
 	this->Imgui_Render();
 
@@ -49,7 +52,7 @@ HRESULT CLevel_MapEdit::Render()
 
 HRESULT CLevel_MapEdit::Ready_ImGui(HWND hWnd, LPDIRECT3DDEVICE9 pOut)
 {
-	MessageBox(0, TEXT("Ready_ImGui ì‹œì‘"), TEXT("Debug"), MB_OK);
+	MessageBox(0, TEXT("Ready_ImGui ½ÃÀÛ"), TEXT("Debug"), MB_OK);
 
 
 	m_pImgui_Manage = CImgui_Manager::Create(hWnd, pOut);
@@ -58,7 +61,7 @@ HRESULT CLevel_MapEdit::Ready_ImGui(HWND hWnd, LPDIRECT3DDEVICE9 pOut)
 		MSG_BOX(TEXT("Failed to Created : CImgui_Manager"));
 		return E_FAIL;
 	}
-	MessageBox(0, TEXT("Imgui ë§¤ë‹ˆì € ìƒì„± ì„±ê³µ"), TEXT("Debug"), MB_OK);
+	MessageBox(0, TEXT("Imgui ¸Å´ÏÀú »ı¼º ¼º°ø"), TEXT("Debug"), MB_OK);
 	return S_OK;
 }
 
@@ -73,49 +76,42 @@ HRESULT CLevel_MapEdit::Ready_Layer_Camera(const _wstring& strLayerTag)
 
 HRESULT CLevel_MapEdit::Ready_Texture_Info()
 {
-	// ìˆ˜ë™ ì œì‘ ì§„í–‰, ì œì‘ ë° ê¸°ëŠ¥ êµ¬í˜„ ë‹¤ë˜ê³  ì‹œê°„ë˜ë©´ ë‚´ë¶€êµ¬ì¡° ê°œì„  ì§„í–‰ ì˜ˆì •
-	//ë‚˜ë¬´ 
 	m_pPreview = static_cast<CGameObject*>(m_pGameInstance->Clone_Prototype(
 		PROTOTYPE::GAMEOBJECT,
 		ENUM_CLASS(LEVEL::LEVEL_MAPEDIT),
 		TEXT("Prototype_GameObject_Tree")));
 
-	OBJECT_TEXTURE_INFO treeInfo;
-	treeInfo.strObjectType = "Tree";
-	treeInfo.iTextureCount = 16;
-	treeInfo.pTextureCom = static_cast<CTexture*>(m_pPreview->Find_Component(TEXT("Com_Texture")));
-	if (treeInfo.pTextureCom)
-		treeInfo.pTextureCom->AddRef();   //í…ìŠ¤ì²˜ ì£¼ì†Œ ë‚ ì•„ê°€ë©´ ì•ˆë¨, ì´ë¯¸ì§€ í”„ë¦¬ë·°ë¥¼ ìœ„í•´ addref
+	OBJECT_TEXTURE_INFO ObjectInfo;
+	ObjectInfo.iTextureCount = 15;
+	ObjectInfo.pTextureCom = static_cast<CTexture*>(m_pPreview->Find_Component(TEXT("Com_Texture")));
+	if (ObjectInfo.pTextureCom)
+		ObjectInfo.pTextureCom->AddRef();
 
-	m_ObjectTextureInfo["Tree"] = treeInfo;
-	
-	Safe_Release(m_pPreview);
+	m_ObjectTextureInfo["Object"] = ObjectInfo;
 
-	//ì‚°
-	m_pPreview = static_cast<CGameObject*>(m_pGameInstance->Clone_Prototype(
-		PROTOTYPE::GAMEOBJECT,
-		ENUM_CLASS(LEVEL::LEVEL_MAPEDIT),
-		TEXT("Prototype_GameObject_Mountain")));
-
-	OBJECT_TEXTURE_INFO MountainInfo;
-	MountainInfo.strObjectType = "Mountain";
-	MountainInfo.iTextureCount = 1;
-	MountainInfo.pTextureCom = static_cast<CTexture*>(m_pPreview->Find_Component(TEXT("Com_Texture")));
-	if (MountainInfo.pTextureCom)
-		MountainInfo.pTextureCom->AddRef();
-
-	m_ObjectTextureInfo["Mountain"] = MountainInfo;
-
-	Safe_Release(m_pPreview);
+	Safe_Release(m_pPreview);  // ÅØ½ºÃ³¸¸ °¡Á®¿Í¼­ ÀúÀåÇÏ°í »èÁ¦
 
 	return S_OK;
 }
 
-
-HRESULT CLevel_MapEdit::Delete_Tile_By_Position(D3DXVECTOR3& vTargetPos)
+HRESULT CLevel_MapEdit::Ready_Terrain_Texture_Info()
 {
-	/*CLayer* pLayer = m_pGameInstance->Find_Layer(m_iTile_id, TEXT("Prototype_GameObject_Static_Tile"));*/
-	// ì˜¤ë¸Œì íŠ¸ ì‚­ì œ ì²˜ë¦¬ êµ¬ì¡°ì¡°ì •ì¤‘
+	//ÁöÇü
+	m_pPreview = static_cast<CGameObject*>(m_pGameInstance->Clone_Prototype(
+		PROTOTYPE::GAMEOBJECT,
+		ENUM_CLASS(LEVEL::LEVEL_MAPEDIT),
+		TEXT("Prototype_GameObject_TerrainBox")));
+
+	OBJECT_TEXTURE_INFO TerrainBoxInfo;
+	TerrainBoxInfo.iTextureCount = 25;
+	TerrainBoxInfo.pTextureCom = static_cast<CTexture*>(m_pPreview->Find_Component(TEXT("Com_Texture_Terrain_Top")));
+	if (TerrainBoxInfo.pTextureCom)
+		TerrainBoxInfo.pTextureCom->AddRef();
+
+	m_ObjectTextureInfo["TerrainBox"] = TerrainBoxInfo;
+
+	Safe_Release(m_pPreview); // ÅØ½ºÃ³¸¸ °¡Á®¿Í¼­ ÀúÀåÇÏ°í »èÁ¦
+
 	return S_OK;
 }
 
@@ -123,82 +119,21 @@ void CLevel_MapEdit::Imgui_Render()
 {
 	m_pImgui_Manage->Render_Begin();
 
-	ImGui::Begin("Test Window", nullptr, ImGuiWindowFlags_MenuBar);
+	ImGui::Begin("Object Editer", nullptr, ImGuiWindowFlags_MenuBar);
 
-	static int iSelectedObjectType = 0;  //ì˜¤ë¸Œì íŠ¸ íƒ€ì… êµ¬ë³„
-	const char* objectList[] = { "Tree", "Mountain" ,"Rock"};
+	ImGui_MenuBar_Render();	//ÀúÀå¿ë ¹öÆ°
 
-	ImGui::Combo("Object Type", &iSelectedObjectType, objectList, IM_ARRAYSIZE(objectList));
+	ImGui_Object_MenBar();	//¿ÀºêÁ§Æ® Àü¿ë ¼³Á¤°ª
 
-	if (ImGui::Button("Preview"))    //í”„ë¦¬ë·° ë²„íŠ¼ ëˆŒëŸ¬ì•¼ í”„ë¦¬ë·° ì „ìš© ì˜¤ë¸Œì íŠ¸ ë§Œë“¦
+	if (m_bPicking)
 	{
-		if (!m_bPreviewReady)
-		{
-			if (FAILED(Ready_Texture_Info()))
-			{
-				MessageBox(nullptr, L"Preview false", L"MapEdit", MB_OK);
-			}
-			else
-			{
-				m_bPreviewReady = true;
-			}
-		}
-	}
-
-	ImGui_MenuBar_Render();
-
-	ImGui_Terrain_MenBar(); //ì§€í˜• ì „ìš© UI
-
-	ImGui_Scale_Render();
-
-	ImGui_Rotate_Render();
-
-	ImGui_Transform_Render();  //UI ëœë” ë° ê°ë³€ìˆ˜ì— ê°’ ì €ì¥
-
-
-	if (m_bPreviewReady) // í”„ë¦¬ë·° ì¼œì ¸ì•¼ì§€ë§Œ ì‘ë™
-	{
-
-		string strSelectedType = objectList[iSelectedObjectType];     //ì˜¤ë¸Œì íŠ¸ íƒ€ì…ì— ë”°ë¼ í…ìŠ¤ì²˜ ê°œìˆ˜ ì²˜ë¦¬
-		int iSelectedIndex; //í…ìŠ¤ì²˜ ì¸ë±ìŠ¤
-
-		if (ImGui_TextureSelector_Render(strSelectedType, iSelectedIndex))  
-		{
-			const _tchar* szPrototypeTag = nullptr;
-			
-			//íƒ€ì…ì— ë”°ë¼ íƒœê·¸ê°’ ì„¤ì •
-			if (strSelectedType == "Tree")
-				szPrototypeTag = TEXT("Prototype_GameObject_Tree");
-			else if (strSelectedType == "Rock")
-				szPrototypeTag = TEXT("Prototype_GameObject_Rock");
-			else if (strSelectedType == "Mountain")
-				szPrototypeTag = TEXT("Prototype_GameObject_Mountain");
-
-			if (szPrototypeTag != nullptr)
-			{
-				// ì €ì¥í•´ì„œ ì˜¤ë¸Œì íŠ¸ ìƒì„±
-				MAP_OBJECT_DESC tDesc{};
-				tDesc.iTextureIndex = iSelectedIndex;
-				tDesc.vPos = m_Translates;
-				tDesc.vRotate = m_Rotates;
-				tDesc.vScale = m_Scales;
-
-				m_pGameInstance->Add_GameObject_ToLayer(
-					ENUM_CLASS(LEVEL::LEVEL_MAPEDIT), TEXT("Layer_MapEdit"), ENUM_CLASS(LEVEL::LEVEL_MAPEDIT),
-					szPrototypeTag, &tDesc);
-			}
-		}
-	}
-
-
-	ImGui::SameLine(0.0f, 10.0f);
-
-	if (ImGui::Button("Delete"))
-	{
-		/*Delete_Tile_By_Position(m_DeletePos);*/
+		ImGui_Picking_Object_MenBar();	//¼±ÅÃµÈ ¿ÀºêÁ§Æ® Àü¿ë ¼³Á¤ °ª
 	}
 
 	ImGui::End();
+
+	ImGui_Terrain_MenBar();  //ÁöÇü Àü¿ë UI
+
 	m_pImgui_Manage->Render_End();
 }
 
@@ -214,7 +149,7 @@ void CLevel_MapEdit::ImGui_MenuBar_Render()
 				config.path = "../SaveFile/";
 				config.flags = ImGuiFileDialogFlags_ReadOnlyFileNameField;
 
-				// íŒŒì¼ ë‹¤ì´ì–¼ë¡œê·¸ ì—´ê¸°
+				// ÆÄÀÏ ´ÙÀÌ¾ó·Î±× ¿­±â
 				// ImGuiFileDialog::Instance()->OpenDialog("ChooseFileDlgKey", "Choose File", config);
 				ImGuiFileDialog::Instance()->OpenDialog("ChooseFileDlgKey", "Choose File", ".txt,.cpp,.h", config);
 			}
@@ -232,7 +167,7 @@ void CLevel_MapEdit::ImGui_MenuBar_Render()
 		ImGui::EndMenuBar();
 	}
 
-	// ì½ê¸°ìš© ë¡œì§
+	// ÀĞ±â¿ë ·ÎÁ÷
 	if (ImGuiFileDialog::Instance()->Display("ChooseFileDlgKey")) {
 		if (ImGuiFileDialog::Instance()->IsOk()) {
 			std::string filePath = ImGuiFileDialog::Instance()->GetFilePathName();
@@ -241,7 +176,7 @@ void CLevel_MapEdit::ImGui_MenuBar_Render()
 		ImGuiFileDialog::Instance()->Close();
 	}
 
-	// ì €ì¥ìš© ë¡œì§
+	// ÀúÀå¿ë ·ÎÁ÷
 	if (ImGuiFileDialog::Instance()->Display("SaveFileDlgKey"))
 	{
 		if (ImGuiFileDialog::Instance()->IsOk())
@@ -256,47 +191,96 @@ void CLevel_MapEdit::ImGui_MenuBar_Render()
 	}
 }
 
-bool CLevel_MapEdit::ImGui_TextureSelector_Render(string& strSelectedType, int& iTextureIndex)
+void CLevel_MapEdit::Picking_Check()
 {
-	static int iSelectedTexIndex = 0; //í…ìŠ¤ì²˜ ì¸ë±ìŠ¤ ì €ì¥ìš©
+	if (!m_pObject.empty() && m_pGameInstance->IsKeyDown(VK_LBUTTON))
+		for (CGameObject* pObj : m_pObject)
+		{
+			CTransform* pTransform = static_cast<CTransform*>(pObj->Find_Component(TEXT("Com_Transform")));
+			CVIBuffer* pVIBuffer = static_cast<CVIBuffer*>(pObj->Find_Component(TEXT("Com_VIBuffer")));
 
-	auto iter = m_ObjectTextureInfo.find(strSelectedType);
-	if (iter == m_ObjectTextureInfo.end())
-		return false;
-
-	OBJECT_TEXTURE_INFO& info = iter->second; //êµ¬ì¡°ì²´ ì €ì¥
-
-	if (info.pTextureCom == nullptr)
-	{
-		ImGui::Text("TextureCom is null!");
-		return false;
-	}
-
-	ImGui::Text("Texture Index:");
-	ImGui::SameLine();
-	ImGui::SetNextItemWidth(100);
-	ImGui::SliderInt("##TextureIndex", &iSelectedTexIndex, 0, info.iTextureCount - 1);
-
-	LPDIRECT3DTEXTURE9 pTex = info.pTextureCom->Get_Textures(iSelectedTexIndex); // 
-	if (pTex)
-	{
-		ImGui::SameLine();
-		ImTextureID texID = reinterpret_cast<ImTextureID>(pTex); //IMGUI ì´ë¯¸ì§€ ë„ìš°ê¸° ìš©ë„
-		ImGui::Image(texID, ImVec2(64, 64));
-	}
-
-	if (ImGui::Button("Create"))
-	{
-		iTextureIndex = iSelectedTexIndex;  //ë²„íŠ¼ í´ë¦­ë ì‹œ ì™¸ë¶€ì— ê°’ ì „ë‹¬ 
-		return true;
-	}
-	return false;
+			if (pVIBuffer->Compute_PickedObjectPosition(pTransform->Get_WorldMatrix_Inverse()))
+			{
+				m_pPickingObject = pObj;
+				m_pObjectTransform = pTransform;
+				m_bPicking = true;
+				m_Scales = m_pObjectTransform->Get_Scaled();
+				m_Translates = m_pObjectTransform->Get_State(STATE::POSITION);
+				break;
+			}
+		}
 }
 
-void CLevel_MapEdit::ImGui_TextureId_Render()
+void CLevel_MapEdit::ImGui_Object_MenBar()
 {
-	ImGui::SameLine();
-	ImGui::InputInt("Texture Id", &m_iTexture_id);
+
+	if (ImGui::CollapsingHeader("Object Settings", ImGuiTreeNodeFlags_DefaultOpen))   //ÀüÃ¼ ¼½¼Ç
+	{
+		ImGui_Transform_Render();
+
+		ImGui_Rotate_Render();
+
+		ImGui_Scale_Render();
+
+		static int iObjectTexIndex = 0;
+
+		ImGui::Text("Object Texture Index:");
+		ImGui::SetNextItemWidth(250);
+		ImGui::SliderInt("Texture", &iObjectTexIndex, 0, 15); // 0~15 ÀÎµ¦½º
+		ImGui::SameLine();
+		if (ImGui::Button("-"))
+			iObjectTexIndex -= 1;
+
+		ImGui::SameLine();
+		if (ImGui::Button("+"))
+			iObjectTexIndex += 1;
+
+		ImGui_Object_Texture_Redner(iObjectTexIndex);
+
+
+		if (ImGui::Button("Create Object"))   //¹öÆ°ÀÔ·Â½Ã ¼±ÅÃÇÑ °ªÀ¸·Î »ı¼º
+		{
+			MAP_OBJECT_DESC  tSrc{};
+			tSrc.iTextureIndex = iObjectTexIndex;
+			tSrc.vPos = m_Translates;
+			tSrc.vScale = m_Scales;
+			tSrc.vRotate = m_Rotates;
+
+			m_pGameInstance->Add_GameObject_ToLayer(
+				ENUM_CLASS(LEVEL::LEVEL_MAPEDIT), TEXT("Layer_MapEdit"),
+				ENUM_CLASS(LEVEL::LEVEL_MAPEDIT),
+				TEXT("Prototype_GameObject_Tree"),
+				&tSrc);
+
+			CGameObject* pGameObject = m_pGameInstance->Get_LastGameObject(ENUM_CLASS(LEVEL::LEVEL_MAPEDIT), TEXT("Layer_MapEdit"));
+			m_pObject.push_back(pGameObject);
+		}
+	}
+}
+
+void CLevel_MapEdit::ImGui_Object_Texture_Redner(int iTextureIndex)
+{
+	auto iter = m_ObjectTextureInfo.find("Object");
+	if (iter != m_ObjectTextureInfo.end())
+	{
+		OBJECT_TEXTURE_INFO& info = iter->second;
+
+		if (info.pTextureCom)
+		{
+			LPDIRECT3DTEXTURE9 pTex = info.pTextureCom->Get_Textures(iTextureIndex);
+			ImGui::Text("Preview:");
+			ImGui::SameLine();
+
+
+			ImTextureID texID = reinterpret_cast<ImTextureID>(pTex);
+			ImGui::Image(texID, ImVec2(100, 100));
+		}
+		else
+		{
+			ImGui::Text("Texture Component Missing");
+		}
+	}
+
 }
 
 void CLevel_MapEdit::ImGui_Transform_Render()
@@ -334,6 +318,129 @@ void CLevel_MapEdit::ImGui_Scale_Render()
 	ImGui::Text("x y z Scale");
 }
 
+void CLevel_MapEdit::ImGui_Picking_Object_MenBar()
+{
+	ImGui_Delete_Object();
+
+	if (ImGui::CollapsingHeader("Object Option", ImGuiTreeNodeFlags_DefaultOpen))   //ÀüÃ¼ ¼½¼Ç
+	{
+		ImGui_Picking_Object_Translates_Option();
+
+		if (ImGui::TreeNode("Rotates Option"))
+		{
+			ImGui::SetNextItemWidth(200.0f);
+			ImGui::SliderFloat("Rotate.x", &m_Rotates.x, -300.f, 300.f);
+			ImGui::SameLine();
+			if (ImGui::Button("-##Rotate.x"))
+				m_Rotates.x -= 1.f;
+
+			ImGui::SameLine();
+			if (ImGui::Button("+##Rotate.x"))
+				m_Rotates.x += 1.f;
+
+			ImGui::SetNextItemWidth(200.f);
+			ImGui::SliderFloat("Rotate.y", &m_Rotates.y, -300.f, 300.f);
+			ImGui::SameLine();
+			if (ImGui::Button("-##Rotate.y"))
+				m_Rotates.y -= 1.f;
+
+			ImGui::SameLine();
+			if (ImGui::Button("+##Rotate.y"))
+				m_Rotates.y += 1.f;
+
+			ImGui::SetNextItemWidth(200.f);
+			ImGui::SliderFloat("Rotate.z", &m_Rotates.z, -300.f, 300.f);
+			ImGui::SameLine();
+			if (ImGui::Button("-##Rotate.z"))
+				m_Rotates.z -= 1.f;
+
+			ImGui::SameLine();
+			if (ImGui::Button("+##Rotate.z"))
+				m_Rotates.z += 1.f;
+
+			if (m_pObjectTransform)
+				m_pObjectTransform->Rotation(_float3{ 1.f, 0.f, 0.f }, D3DXToRadian(m_Rotates.x));
+
+
+			ImGui::TreePop();
+		}
+
+	}
+
+}
+
+void CLevel_MapEdit::ImGui_Delete_Object()
+{
+	if (ImGui::Button("Delete"))
+	{
+		if (m_pPickingObject)
+		{
+			auto objIter = m_pObject.begin();
+			while (objIter != m_pObject.end())
+			{
+				if (*objIter == m_pPickingObject)
+				{
+					Safe_Release(*objIter);
+
+					objIter = m_pObject.erase(objIter);
+					m_pGameInstance->Remove_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_MAPEDIT), TEXT("Layer_MapEdit"), m_pPickingObject);
+					break;
+				}
+				else
+				{
+					++objIter;
+				}
+			}
+
+			m_pPickingObject = nullptr;
+			m_pObjectTransform = nullptr;
+			m_bPicking = false;
+		}
+	}
+}
+
+void CLevel_MapEdit::ImGui_Picking_Object_Translates_Option()
+{
+	if (ImGui::TreeNode("Translate Option"))
+	{
+		ImGui::SetNextItemWidth(200.0f);
+		ImGui::SliderFloat("Translate.x", &m_Translates[0], -100.f, 100.f);
+		ImGui::SameLine();
+		if (ImGui::Button("-##Translate.x"))
+			m_Translates[0] -= 0.1f;
+
+		ImGui::SameLine();
+		if (ImGui::Button("+##Translate.x"))
+			m_Translates[0] += 0.1f;
+
+		ImGui::SetNextItemWidth(200.f);
+		ImGui::SliderFloat("Translate.y", &m_Translates[1], -100.f, 100.f);
+		ImGui::SameLine();
+		if (ImGui::Button("-##Translate.y"))
+			m_Translates[1] -= 0.1f;
+
+		ImGui::SameLine();
+		if (ImGui::Button("+##Translate.y"))
+			m_Translates[1] += 0.1f;
+
+		ImGui::SetNextItemWidth(200.f);
+		ImGui::SliderFloat("Translate.z", &m_Translates[2], -100.f, 100.f);
+		ImGui::SameLine();
+		if (ImGui::Button("-##Translate.z"))
+			m_Translates[2] -= 0.1f;
+
+		ImGui::SameLine();
+		if (ImGui::Button("+##Translate.z"))
+			m_Translates[2] += 0.1f;
+
+		if (m_pObjectTransform)
+			m_pObjectTransform->Set_State(STATE::POSITION, m_Translates);
+
+		ImGui::TreePop();
+	}
+
+}
+
 void CLevel_MapEdit::ImGui_Terrain_MenBar()
 {
 	ImGui::Begin("Terrain Editor");
@@ -341,31 +448,72 @@ void CLevel_MapEdit::ImGui_Terrain_MenBar()
 	static int iTerrainTexIndex = 0;
 
 	ImGui::Text("Terrain Texture Index:");
-	ImGui::SliderInt("TopTexIdx", &iTerrainTexIndex, 0, 3); // 0~3 ì¸ë±ìŠ¤, ì¶”í›„ ì—°ë™
+	ImGui::SliderInt("TopTexIdx", &iTerrainTexIndex, 0, 25); // 0~3 ÀÎµ¦½º, ÃßÈÄ ¿¬µ¿
 
-	// ìœ„ì¹˜ ( ê¸°ì¡´ê³¼ ê³µìš©ìœ¼ë¡œ ì‚¬ìš© ê°€ëŠ¥ )
-	ImGui_Transform_Render();
+	// À§Ä¡ 
+	ImGui_Terrain_Transform_Render();
 
-	if (ImGui::Button("Create Terrain"))     //ë²„íŠ¼ì…ë ¥ì‹œ ì„ íƒí•œ ê°’ìœ¼ë¡œ ìƒì„±
+	ImGui_Terrain_Texture_Render(iTerrainTexIndex);
+
+
+	if (ImGui::Button("Create Terrain"))     //¹öÆ°ÀÔ·Â½Ã ¼±ÅÃÇÑ °ªÀ¸·Î »ı¼º
 	{
 		MAP_OBJECT_DESC tDesc{};
 		tDesc.iTextureIndex = iTerrainTexIndex;
-		tDesc.vPos = m_Translates;
+		tDesc.vPos = m_TrrainTranslate;
 
 		m_pGameInstance->Add_GameObject_ToLayer(
 			ENUM_CLASS(LEVEL::LEVEL_MAPEDIT), TEXT("Layer_MapEdit"),
 			ENUM_CLASS(LEVEL::LEVEL_MAPEDIT),
 			TEXT("Prototype_GameObject_TerrainBox"),
 			&tDesc);
+
+		/*	CGameObject* pGameObject = m_pGameInstance->Get_LastGameObject(ENUM_CLASS(LEVEL::LEVEL_MAPEDIT), TEXT("Layer_MapEdit"));
+			m_pObject.push_back(pGameObject);*/ // ÁöÇüµµ ÀúÀåÇØ¾ßÇÔ
 	}
 
 	ImGui::End();
 }
 
+void CLevel_MapEdit::ImGui_Terrain_Transform_Render()
+{
+	ImGui::PushItemWidth(45);
+	ImGui::InputFloat("## Translate x", &m_TrrainTranslate[0]);
+	ImGui::SameLine();
+	ImGui::InputFloat("## Translate y", &m_TrrainTranslate[1]);
+	ImGui::SameLine();
+	ImGui::InputFloat("## Translate z", &m_TrrainTranslate[2]);
+	ImGui::SameLine();
+	ImGui::Text("x y z Translate");
+}
+
+void CLevel_MapEdit::ImGui_Terrain_Texture_Render(int iTextureIndex)
+{
+	auto iter = m_ObjectTextureInfo.find("TerrainBox");
+	if (iter != m_ObjectTextureInfo.end())
+	{
+		OBJECT_TEXTURE_INFO& info = iter->second;
+
+		if (info.pTextureCom)
+		{
+			LPDIRECT3DTEXTURE9 pTex = info.pTextureCom->Get_Textures(iTextureIndex);
+			ImGui::Text("Preview:");
+			ImGui::SameLine();
+
+			ImTextureID texID = reinterpret_cast<ImTextureID>(pTex);
+			ImGui::Image(texID, ImVec2(86, 86));
+		}
+		else
+		{
+			ImGui::Text("Texture Component Missing");
+		}
+	}
+}
+
 CLevel_MapEdit* CLevel_MapEdit::Create(LPDIRECT3DDEVICE9 pGraphic_Device)
 {
 
-	MessageBox(0, TEXT("ë§µ ì—ë””í„° ìƒì„± ì‹œì‘"), TEXT("Debug"), MB_OK);
+	MessageBox(0, TEXT("¸Ê ¿¡µğÅÍ »ı¼º ½ÃÀÛ"), TEXT("Debug"), MB_OK);
 
 	CLevel_MapEdit* pInstance = new CLevel_MapEdit(pGraphic_Device);
 	if (FAILED(pInstance->Initialize()))
@@ -374,7 +522,7 @@ CLevel_MapEdit* CLevel_MapEdit::Create(LPDIRECT3DDEVICE9 pGraphic_Device)
 		Safe_Release(pInstance);
 	}
 
-	MessageBox(0, TEXT("ë§µ ì—ë””í„° ìƒì„± ì„±ê³µ"), TEXT("Debug"), MB_OK);
+	MessageBox(0, TEXT("¸Ê ¿¡µğÅÍ »ı¼º ¼º°ø"), TEXT("Debug"), MB_OK);
 
 	return pInstance;
 }

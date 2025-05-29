@@ -1,6 +1,7 @@
 #pragma once
 #include "Client_Defines.h"
 #include "GameObject.h"
+#include "TerrainBox.h"
 
 BEGIN(Engine)
 class CTexture;
@@ -8,6 +9,7 @@ class CTransform;
 class CVIBuffer_Rect;
 class CPlayerStats;
 class CAnimator;
+class CCollider_OBB;
 END
 
 BEGIN(Client)
@@ -26,6 +28,15 @@ public:
 	virtual void Update(_float fTimeDelta) override;
 	virtual void Late_Update(_float fTimeDelta) override;
 	virtual HRESULT Render() override;
+
+public:
+	void Change_TerrainBox(CTerrainBox* pTerrainBox)
+	{
+		m_pTerrainBox = pTerrainBox;
+	}
+
+public:
+	virtual void OnCollision(CGameObject* pGameObject) override;
 
 private:
 	CVIBuffer_Rect*			m_pVIBufferCom					= { nullptr };
@@ -50,13 +61,13 @@ private:
 
 	_bool					m_isFlippedX					= false;
 
-
+	CTerrainBox*			m_pTerrainBox					= { nullptr };
+	CCollider_OBB*			m_pCollider						= { nullptr };
+	
 private:
 	HRESULT Ready_Components();
 	void SetUp_RenderState();
 	void Reset_RenderState();
-	
-
 
 public:
 	static CPlayer* Create(LPDIRECT3DDEVICE9 pGraphic_Device);

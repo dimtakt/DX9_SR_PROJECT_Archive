@@ -10,7 +10,6 @@
 #include "Key_Manager.h"
 #include "Picking.h"
 #include "Collision_Manager.h"
-#include "Room_Manager.h"
 #include "Font_Manager.h"
 #include "Light_Manager.h"
 #include "GameObject.h"
@@ -67,10 +66,6 @@ HRESULT CGameInstance::Initialize_Engine(const ENGINE_DESC& EngineDesc, LPDIRECT
     if (nullptr == m_pCollision_Manager)
         return E_FAIL;
 
-    m_pRoom_Manager = CRoom_Manager::Create();
-    if (nullptr == m_pRoom_Manager)
-        return E_FAIL;
-
     m_pFont_Manager = CFont_Manager::Create(*ppOut);
     if (nullptr == m_pFont_Manager)
         return E_FAIL;
@@ -96,13 +91,11 @@ void CGameInstance::Update_Engine(_float fTimeDelta)
     m_pObject_Manager->Priority_Update(fTimeDelta);
 
     m_pPicking->Update();
-
+    m_pCollision_Manager->Check_RoomCollisions();
     m_pObject_Manager->Update(fTimeDelta);
     m_pObject_Manager->Late_Update(fTimeDelta);
 
     m_pLevel_Manager->Update(fTimeDelta);
-
-    
 }
 
 HRESULT CGameInstance::Clear_Resources(_uint iClearLevelID)
@@ -110,8 +103,6 @@ HRESULT CGameInstance::Clear_Resources(_uint iClearLevelID)
     m_pPrototype_Manager->Clear(iClearLevelID);
 
     m_pObject_Manager->Clear(iClearLevelID);
-
-    m_pRoom_Manager->Clear(iClearLevelID);
 
     return S_OK;
 }
@@ -195,6 +186,15 @@ CComponent* CGameInstance::Get_Component(_uint iLayerLevelIndex, const _wstring&
 CGameObject* CGameInstance::Get_GameObject(_uint iLayerLevelIndex, const _wstring& strLayerTag,_uint iIndex)
 {
     return m_pObject_Manager->Get_GameObject(iLayerLevelIndex, strLayerTag, iIndex);
+}
+
+CGameObject* CGameInstance::Get_LastGameObject(_uint iLayerLevelIndex, const _wstring& strLayerTag)
+{
+    return m_pObject_Manager->Get_LastGameObject(iLayerLevelIndex, strLayerTag);
+}
+void CGameInstance::Remove_GameObject_ToLayer(_uint iLayerLevelIndex, const _wstring& strLayerTag, class CGameObject* pGameObject)
+{
+    m_pObject_Manager->Remove_GameObject_ToLayer(iLayerLevelIndex, strLayerTag, pGameObject);
 }
 
 HRESULT CGameInstance::Add_ItemObject_ToLayer(_uint iLayerLevelIndex, const _wstring& strLayerTag, _uint ItemIndex, void* pArg)
@@ -295,30 +295,15 @@ _bool CGameInstance::Get_IntersectAtY(_float targetY, _float3& intersectPos)
 #pragma endregion
 
 #pragma region COLLISION_MANAGER
-HRESULT CGameInstance::Add_Collider(class CCollider* pCollider)
+HRESULT CGameInstance::Add_Collider(class CCollider_OBB* pCollider)
 {
-    return m_pCollision_Manager->Add_Collider(pCollider);
-}
-#pragma endregion
-
-#pragma region ROOM_MANAGER
-HRESULT CGameInstance::Add_Room(class CRoom* pRoom, _uint iLayerLevelIndex, const _wstring& strLayerTag)
-{
-    return m_pRoom_Manager->Add_Room(pRoom, iLayerLevelIndex, strLayerTag);
-}
-HRESULT CGameInstance::Enter_Room(_int iRoomID)
-{
-    return m_pRoom_Manager->Enter_Room(iRoomID);
-}
-CRoom* CGameInstance::Get_CurrentRoom()
-{
-    return m_pRoom_Manager->Get_CurrentRoom();
-}
-CRoom* CGameInstance::Get_RoomByID(_int iRoomID)
-{
-    return m_pRoom_Manager->Get_RoomByID(iRoomID);
+    return m_pCollision_Manager->Add_OBB_Collider(pCollider);
 }
 
+void CGameInstance::Clear_Colliders()
+{
+    m_pCollision_Manager->Clear_Colliders();
+}
 #pragma endregion
 
 #pragma region FONT_MANAGER
@@ -376,7 +361,7 @@ CItemObject* CGameInstance::Get_ItemObject(_uint iIndex)
 void CGameInstance::Release_Engine()
 {
     Release();
-    
+    Safe_Release(m_pCollision_Manager);
     Safe_Release(m_pTimer_Manager);
     Safe_Release(m_pLevel_Manager);
     Safe_Release(m_pGraphic_Device);
@@ -386,8 +371,6 @@ void CGameInstance::Release_Engine()
     Safe_Release(m_pKey_Manager);
     Safe_Release(m_pNetwork_Manager);
     Safe_Release(m_pPicking);
-    Safe_Release(m_pCollision_Manager);
-    Safe_Release(m_pRoom_Manager);
     Safe_Release(m_pFont_Manager);
     Safe_Release(m_pLight_Manager);
     Safe_Release(m_pAnimation_Manager);
@@ -396,5 +379,5 @@ void CGameInstance::Release_Engine()
 
 void CGameInstance::Free()
 {
-    __super::Free();
+    __super::Free();//
 }

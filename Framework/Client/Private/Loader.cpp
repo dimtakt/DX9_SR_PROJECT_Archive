@@ -21,11 +21,10 @@
 #include "Tree.h"
 #include "Mountain.h"
 #include "Field_Hp.h"
-#include "Room_Default.h"
-#include "Monster_Default.h"
+#include "Room.h"
+#include "Monster.h"
 #include "TerrainBox.h"
 #include "Dagger.h"
-#include "Loader_Room.h"
 #include "Sky.h"
 
 CLoader::CLoader(LPDIRECT3DDEVICE9 pGraphic_Device)
@@ -81,7 +80,7 @@ HRESULT CLoader::Loading()
 		break;
 	}
 
-	if (FAILED(hr))
+	if(FAILED(hr))
 		return E_FAIL;
 
 	LeaveCriticalSection(&m_CriticalSection);
@@ -89,14 +88,6 @@ HRESULT CLoader::Loading()
 	return S_OK;
 }
 
-HRESULT CLoader::Ready_LoadingRoomThread()
-{
-	m_pLoader_Room = CLoader_Room::Create(m_pGraphic_Device, m_eNextLevelID);
-	if (nullptr == m_pLoader_Room)
-		return E_FAIL;
-
-	return S_OK;
-}
 
 HRESULT CLoader::Loading_For_Logo_Level()
 {
@@ -320,25 +311,20 @@ HRESULT CLoader::Loading_For_MapEdit_Level()
 		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/BleakSwordDX/Object/Tree/ForestTrees_%d.png"), 16))))
 		return E_FAIL;
 
-	//산 텍스처 추가, 1개
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_SHARED), TEXT("Prototype_Component_Texture_Mountain"),
-		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/BleakSwordDX/Object/Mountain/CS_MountainFar.png"), 1))))
-		return E_FAIL;
-
-	/* Prototype_Component_Texture_TerrainBox_Top */
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_SHARED), TEXT("Prototype_Component_Texture_TerrainBox_Top"),
-		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/BleakSwordDX/Terrain/Basic/BlankTex16_00.png"), 1))))
-		return E_FAIL;
-	/* Prototype_Component_Texture_TerrainBox_Side */
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_SHARED), TEXT("Prototype_Component_Texture_TerrainBox_Side"),
-		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/BleakSwordDX/Terrain/Basic/BaseArenaTex.png"), 1))))
-		return E_FAIL;
+	///* Prototype_Component_Texture_TerrainBox_Top */
+	//if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_SHARED), TEXT("Prototype_Component_Texture_TerrainBox_Top"),
+	//	CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/BleakSwordDX/Terrain/Forest/ArenaTex_%d.png"), 25))))
+	//	return E_FAIL;
+	///* Prototype_Component_Texture_TerrainBox_Side */
+	//if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_SHARED), TEXT("Prototype_Component_Texture_TerrainBox_Side"),
+	//	CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/BleakSwordDX/Terrain/Basic/BaseArenaTex.png"), 1))))
+	//	return E_FAIL;
 
 	lstrcpy(m_szLoadingText, TEXT("모델를 로딩중입니다."));
-	/* Prototype_Component_VIbuffer_TerrainBox */
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_SHARED), TEXT("Prototype_Component_VIBuffer_TerrainBox"),
-		CVIBuffer_TerrainBox::Create(m_pGraphic_Device))))
-		return E_FAIL;
+	///* Prototype_Component_VIbuffer_TerrainBox */
+	//if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_SHARED), TEXT("Prototype_Component_VIBuffer_TerrainBox"),
+	//	CVIBuffer_TerrainBox::Create(m_pGraphic_Device))))
+	//	return E_FAIL;
 
 	lstrcpy(m_szLoadingText, TEXT("쉐이더를 로딩중입니다."));
 
@@ -352,11 +338,6 @@ HRESULT CLoader::Loading_For_MapEdit_Level()
 	//Tree
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_MAPEDIT), TEXT("Prototype_GameObject_Tree"),
 		CTree::Create(m_pGraphic_Device))))
-		return E_FAIL;
-
-	//Mountain
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_MAPEDIT), TEXT("Prototype_GameObject_Mountain"),
-		CMountain::Create(m_pGraphic_Device))))
 		return E_FAIL;
 
 	/* Prototype_GameObject_TerrainBox*/
@@ -374,15 +355,13 @@ HRESULT CLoader::Loading_For_MapEdit_Level()
 HRESULT CLoader::Loading_For_Stage1_Level()
 {
 	lstrcpy(m_szLoadingText, TEXT("텍스쳐를 로딩중입니다."));
-
-	
 	/* Prototype_Component_Texture_Land */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STAGE1), TEXT("Prototype_Component_Texture_Land"),
 		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/BleakSwordDX/Terrain/Basic/BlankTex16_00.png"), 1))))
 		return E_FAIL;
 
 	/* Prototype_Component_Texture_Sky */
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STAGE1), TEXT("Prototype_Component_Texture_Sky"),
+  	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STAGE1), TEXT("Prototype_Component_Texture_Sky"),
 		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/BleakSwordDX/SkyBox/Sky.png"), 1))))
 		return E_FAIL;
 
@@ -404,12 +383,12 @@ HRESULT CLoader::Loading_For_Stage1_Level()
 
 	/* Prototype_GameObject_Land*/
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STAGE1), TEXT("Prototype_GameObject_Room"),
-		CRoom_Default::Create(m_pGraphic_Device))))
+		CRoom::Create(m_pGraphic_Device))))
 		return E_FAIL;
 
 	/* Prototype_GameObject_Monster */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STAGE1), TEXT("Prototype_GameObject_ShortMonster"),
-		CMonster_Default::Create(m_pGraphic_Device))))
+		CMonster::Create(m_pGraphic_Device))))
 		return E_FAIL;
 
 	/* Prototype_GameObject_Sky */
@@ -496,5 +475,4 @@ void CLoader::Free()
 
 	Safe_Release(m_pGameInstance);
 	Safe_Release(m_pGraphic_Device);
-	Safe_Release(m_pLoader_Room);
 }

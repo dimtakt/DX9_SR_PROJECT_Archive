@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Prototype_Manager.h"
-
 BEGIN(Engine)
 
 class ENGINE_DLL CGameInstance final : public CBase
@@ -43,6 +42,8 @@ public:
 	HRESULT Add_GameObject_ToLayer(_uint iLayerLevelIndex, const _wstring& strLayerTag, _uint iPrototypeLevelIndex, const _wstring strPrototypeTag, void* pArg = nullptr);
 	CComponent* Get_Component(_uint iLayerLevelIndex, const _wstring& strLayerTag, const _wstring& strComponentTag, _uint iIndex = 0);
 	class CGameObject* Get_GameObject(_uint iLayerLevelIndex, const _wstring& strLayerTag, _uint iIndex = 0);
+	class CGameObject* Get_LastGameObject(_uint iLayerLevelIndex, const _wstring& strLayerTag);
+	void Remove_GameObject_ToLayer(_uint iLayerLevelIndex, const _wstring& strLayerTag, class CGameObject* pGameObject);
 	HRESULT Add_ItemObject_ToLayer(_uint iLayerLevelIndex, const _wstring& strLayerTag, _uint ItemIndex, void* pArg = nullptr);
 	class CLayer* Find_Layer(_uint iLayerLevelIndex, const _wstring& strLayerTag);
 	HRESULT Add_Direct_GameObject_ToLayer(_uint iLayerLevelIndex, const _wstring& strLayerTag, class CGameObject* pGameObject);
@@ -82,14 +83,8 @@ public:
 
 #pragma region COLLISION_MANAGER
 	// 해당 구간 추후 좀더 추가 예정
-	HRESULT Add_Collider(class CCollider* pCollider);
-#pragma endregion
-
-#pragma region ROOM_MANAGER
-	HRESULT Add_Room(class CRoom* pRoom, _uint iLayerLevelIndex, const _wstring& strLayerTag);
-	HRESULT Enter_Room(_int iRoomID);
-	class CRoom* Get_CurrentRoom();
-	class CRoom* Get_RoomByID(_int iRoomID);
+	HRESULT Add_Collider(class CCollider_OBB* pCollider);
+	void Clear_Colliders();
 #pragma endregion
 
 #pragma region FONT_MANAGER
@@ -139,6 +134,7 @@ public:
 	CBase*						find_ItemObject(_uint iIndex);
 	CItemObject*				Get_ItemObject(_uint iIndex);
 #pragma endregion
+
 private:
 	class CGraphic_Device*		m_pGraphic_Device = { nullptr };
 	class CLevel_Manager*		m_pLevel_Manager = { nullptr };
@@ -150,7 +146,6 @@ private:
 	class CNetwork_Manager*		m_pNetwork_Manager = { nullptr };
 	class CPicking*				m_pPicking = { nullptr };
 	class CCollision_Manager*	m_pCollision_Manager = { nullptr };
-	class CRoom_Manager*		m_pRoom_Manager = { nullptr };
 	class CFont_Manager*		m_pFont_Manager = { nullptr };
 	class CLight_Manager*		m_pLight_Manager = { nullptr };
 	class CAnim_Manager*		m_pAnimation_Manager = { nullptr };

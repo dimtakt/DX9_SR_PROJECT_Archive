@@ -22,8 +22,8 @@ HRESULT CInven_Button::Initialize_Prototype(LEVEL eLevel)
 
 HRESULT CInven_Button::Initialize(void* pArg)
 {
-	m_fSizeX = 64 ;
-	m_fSizeY = 64 ;
+	m_fSizeX = 64;
+	m_fSizeY = 64;
 	m_fX = m_fSizeX * 0.5;
 	m_fY = 0;
 	m_iWinSizeX = g_iWinSizeX;
@@ -54,11 +54,11 @@ void CInven_Button::Priority_Update(_float fTimeDelta)
 
 void CInven_Button::Update(_float fTimeDelta)
 {
-	if (Click_Check(g_hWnd, VK_LBUTTON))
+	if (Check_Key_Down(g_hWnd, VK_LBUTTON))
 	{
 		static_cast<CInventory*>(m_pTargetUI)->UI_Switch();
 	}
-	
+
 	__super::Update(fTimeDelta);
 }
 
@@ -73,7 +73,7 @@ HRESULT CInven_Button::Render()
 	SetUp_RenderState();
 	if (FAILED(CButton::Bind_ButtonTex_Double(g_hWnd, 0, 1)))
 		return E_FAIL;
-	
+
 	Reset_RenderState();
 	return S_OK;
 }

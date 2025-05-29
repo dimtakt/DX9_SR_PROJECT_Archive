@@ -1,7 +1,8 @@
 #pragma once
 
 #include "Component.h"
-
+#include "Transform.h"
+#include "GameObject.h"
 BEGIN(Engine)
 
 class ENGINE_DLL CCollider abstract : public CComponent
@@ -14,15 +15,18 @@ protected:
 public:
 	HRESULT Initialize_Prototype();
 	HRESULT Initialize(void* pArg);
-
+	virtual HRESULT Render();
 public:
-	virtual void Update_Collider(const _float4x4* pWorldMatrix) = 0;
-	virtual COLLIDER_TYPE Get_ColliderType() { return m_eType; }
-	virtual COLLIDER_OBJ_TYPE Get_ColliderObjType() { return m_eObjType; }
-
+	virtual void Update_Collider(const CTransform* pTransform); 
+	void Set_Owner(CGameObject* pOwner) {
+		m_pOwner = pOwner;
+	}
+	CGameObject* Get_Owner() { 
+		return m_pOwner;
+	}
 protected:
-	COLLIDER_OBJ_TYPE m_eObjType = {};
-	COLLIDER_TYPE m_eType = {};
+	CGameObject* m_pOwner = { nullptr };
+
 public:
 	virtual CComponent* Clone(void* pArg) = 0;
 	virtual void Free() override;

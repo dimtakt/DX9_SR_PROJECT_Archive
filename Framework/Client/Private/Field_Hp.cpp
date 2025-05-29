@@ -22,7 +22,7 @@ HRESULT CField_Hp::Initialize(void* pArg)
 	UI_FIELD_HP_DESC* Desc = static_cast<UI_FIELD_HP_DESC*>(pArg);
 
 	m_iTarget_Index = Desc->iTarget_Index;
-	
+
 	if (FAILED(Reday_SyncingObject()))
 		return E_FAIL;
 
@@ -33,7 +33,7 @@ HRESULT CField_Hp::Initialize(void* pArg)
 	m_fSizeY = 10.f;
 	m_fX = 0;
 	m_fY = Desc->fY;
-	m_fZ = 0.2;
+	m_fZ = 0.3;
 	m_iWinSizeX = g_iWinSizeX;
 	m_iWinSizeY = g_iWinSizeY;
 
@@ -48,7 +48,7 @@ HRESULT CField_Hp::Initialize(void* pArg)
 
 	if (FAILED(Ready_Children()))
 		return E_FAIL;
-	
+
 	return S_OK;
 }
 
@@ -58,7 +58,7 @@ void CField_Hp::Priority_Update(_float fTimeDelta)
 }
 
 void CField_Hp::Update(_float fTimeDelta)
-{	
+{
 	__super::Update(fTimeDelta);
 }
 

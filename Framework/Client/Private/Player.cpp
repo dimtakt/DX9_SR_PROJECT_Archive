@@ -1,6 +1,7 @@
 #include "Player.h"
-
+#include "TerrainBox.h"
 #include "GameInstance.h"
+#include "Collider_OBB.h"
 
 CPlayer::CPlayer(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CGameObject{ pGraphic_Device }
@@ -19,8 +20,11 @@ HRESULT CPlayer::Initialize_Prototype()
 
 HRESULT CPlayer::Initialize(void* pArg)
 {
-	if (FAILED(Ready_Components()))
+ 	if (FAILED(Ready_Components()))
 		return E_FAIL;
+
+    m_eObjType = GAMEOBJ_TYPE::PLAYER;
+    m_pTransformCom->Scaling(1.5f, 1.5f, 1.5f);
 
 	return S_OK;
 }
@@ -32,6 +36,12 @@ void CPlayer::Priority_Update(_float fTimeDelta)
 
 void CPlayer::Update(_float fTimeDelta)
 {    
+    m_pCollider->Update_Collider(m_pTransformCom);
+    if (m_pTerrainBox != nullptr) {
+        m_pTerrainBox->SetUp_OnTerrainBox(m_pTransformCom, _float3(0.05f, 0.5f, 0.05f));
+    }
+        
+
     _float fPointY = 0.f;       // 교차 평면의 기준이 될 Y값
     _float3 vRayPoint = {};     // fPointY 값 기준 마우스 Ray와 교차하는 좌표
     m_pGameInstance->Get_IntersectAtY(fPointY, vRayPoint);
@@ -171,6 +181,19 @@ HRESULT CPlayer::Render()
 	return S_OK;
 }
 
+void CPlayer::OnCollision(CGameObject* pGameObject)
+{
+    switch (pGameObject->Get_ObjType())
+    {
+    case GAMEOBJ_TYPE::MONSTER:
+        {
+            int a = 1;
+            break;
+        }
+        
+    }
+}
+
 HRESULT CPlayer::Ready_Components()
 {
     /* For Com_VIBuffer */
@@ -303,6 +326,17 @@ HRESULT CPlayer::Ready_Components()
     
 
 
+
+    // collider
+    CCollider_OBB::OBB_DESC tColliderDesc;
+    tColliderDesc.vScale = _float3(1.5f, 1.5f, 1.5f);
+    tColliderDesc.pOwner = this;
+    if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Collider_OBB"),
+        TEXT("Com_Player_Collider"), reinterpret_cast<CComponent**>(&m_pCollider), &tColliderDesc)))
+        return E_FAIL;
+
+
+    m_pGameInstance->Add_Collider(m_pCollider);
     return S_OK;
 }
 
@@ -378,4 +412,12 @@ void CPlayer::Free()
 
     Safe_Release(m_pPlayerStatsCom);
     Safe_Release(m_pAnimatorCom);
+    Safe_Release(m_pTerrainBox);
+    
+    if (m_pCollider)
+    {
+        m_pCollider->Set_Owner(nullptr);
+        Safe_Release(m_pCollider);
+    }
+    
 }

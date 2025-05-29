@@ -7,8 +7,6 @@ CCollider::CCollider(LPDIRECT3DDEVICE9 pGraphic_Device)
 
 CCollider::CCollider(const CCollider& Prototype)
 	: CComponent { Prototype }
-	, m_eObjType { Prototype.m_eObjType }
-	, m_eType { Prototype.m_eType }
 {
 }
 
@@ -22,7 +20,17 @@ HRESULT CCollider::Initialize(void* pArg)
 	return S_OK;
 }
 
+HRESULT CCollider::Render()
+{
+	return S_OK;
+}
+
+void CCollider::Update_Collider(const CTransform* pTransform)
+{
+}
+
 void CCollider::Free()
 {
 	__super::Free();
+	m_pOwner = nullptr;
 }
