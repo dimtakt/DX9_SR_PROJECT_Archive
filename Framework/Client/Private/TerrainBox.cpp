@@ -28,12 +28,12 @@ HRESULT CTerrainBox::Initialize(void* pArg)
 	{
 		MAP_OBJECT_DESC* desc = static_cast<MAP_OBJECT_DESC*>(pArg);
 		m_pTransformCom->Set_State(STATE::POSITION, desc->vPos);
-		m_pTransformCom->Scaling(15.f, 1.f, 15.f);  // 크기고정
+		m_pTransformCom->Scaling(20.f, 5.f, 20.f);  // 크기고정
 		m_iTopTextureIndex = desc->iTextureIndex;
 	}
 	else
 	{
-		m_pTransformCom->Scaling(15.f, 1.f, 15.f);
+		m_pTransformCom->Scaling(20.f, 5.f, 20.f);
 		m_iTopTextureIndex = 0;   // 인덱스 설정 없으면 기본 베이스
 		m_iSideTextureIndex = 0;
 	}
@@ -124,6 +124,22 @@ HRESULT CTerrainBox::Ready_Material()
 	m_pGraphic_Device->SetMaterial(&MtrlDesc);
 
 	return S_OK;
+}
+
+void CTerrainBox::SetUp_OnTerrainBox(CTransform* pTransformCom, _float3 vOffset)
+{
+	_float3     vWorldPos = pTransformCom->Get_State(STATE::POSITION);
+
+	_float3     vLocalPos{};
+	D3DXVec3TransformCoord(&vLocalPos, &vWorldPos, m_pTransformCom->Get_WorldMatrix_Inverse());
+
+	vLocalPos.x = m_pVIBufferCom->Compute_Right(vLocalPos.x, vOffset.x);
+	vLocalPos.y = m_pVIBufferCom->Compute_Height(vLocalPos) + vOffset.y;
+	vLocalPos.z = m_pVIBufferCom->Compute_Look(vLocalPos.z, vOffset.z);
+
+	D3DXVec3TransformCoord(&vWorldPos, &vLocalPos, m_pTransformCom->Get_WorldMatrix());
+
+	pTransformCom->Set_State(STATE::POSITION, vWorldPos);
 }
 
 CTerrainBox* CTerrainBox::Create(LPDIRECT3DDEVICE9 pGraphic_Device)

@@ -142,9 +142,6 @@
     <Filter Include="01.Utility\05.Component\Animator\Controller">
       <UniqueIdentifier>{bc4e2e3e-1393-4676-a838-1fe0050d59bc}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01.Utility\03.GameObject\Monster">
-      <UniqueIdentifier>{1dfb261a-c919-4858-bd66-2a8d7a66654d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="01.Utility\05.Component\VIBuffer\TerrainBox">
       <UniqueIdentifier>{fbb10ce6-d85d-40fc-8cb1-2b6f0e624bf7}</UniqueIdentifier>
     </Filter>
@@ -156,15 +153,6 @@
     </Filter>
     <Filter Include="01.Utility\03.GameObject\UIObject\ItemObject\Manager">
       <UniqueIdentifier>{4952152d-59be-44a7-b464-9253c3e6c8a6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="01.Utility\03.GameObject\Monster\Factory">
-      <UniqueIdentifier>{ca643395-de9a-42c3-ab55-14defc815c53}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="01.Utility\03.GameObject\Room">
-      <UniqueIdentifier>{1ea77080-eead-4c49-a109-9c0cdf2debe3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="01.Utility\03.GameObject\Room\Manager">
-      <UniqueIdentifier>{41604ee7-c0cd-4e02-8734-8658020c1b54}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -273,12 +261,6 @@
     <ClInclude Include="..\public\Animator.h">
       <Filter>01.Utility\05.Component\Animator</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\Room.h">
-      <Filter>01.Utility\03.GameObject\Room</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\Room_Manager.h">
-      <Filter>01.Utility\03.GameObject\Room\Manager</Filter>
-    </ClInclude>
     <ClInclude Include="..\Public\Key_Manager.h">
       <Filter>00.System\02. Key\Manager</Filter>
     </ClInclude>
@@ -303,9 +285,6 @@
     <ClInclude Include="..\public\AnimatorController.h">
       <Filter>01.Utility\05.Component\Animator\Controller</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\Monster.h">
-      <Filter>01.Utility\03.GameObject\Monster</Filter>
-    </ClInclude>
     <ClInclude Include="..\Public\VIBuffer_TerrainBox.h">
       <Filter>01.Utility\05.Component\VIBuffer\TerrainBox</Filter>
     </ClInclude>
@@ -317,9 +296,6 @@
     </ClInclude>
     <ClInclude Include="..\public\Item_Manager.h">
       <Filter>01.Utility\03.GameObject\UIObject\ItemObject\Manager</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\Monster_Factory.h">
-      <Filter>01.Utility\03.GameObject\Monster\Factory</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -413,12 +389,6 @@
     <ClCompile Include="..\private\Animator.cpp">
       <Filter>01.Utility\05.Component\Animator</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\Room.cpp">
-      <Filter>01.Utility\03.GameObject\Room</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\Room_Manager.cpp">
-      <Filter>01.Utility\03.GameObject\Room\Manager</Filter>
-    </ClCompile>
     <ClCompile Include="..\Private\Font_Manager.cpp">
       <Filter>00.System\05. Font\Manager</Filter>
     </ClCompile>
@@ -440,9 +410,6 @@
     <ClCompile Include="..\private\AnimatorController.cpp">
       <Filter>01.Utility\05.Component\Animator\Controller</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\Monster.cpp">
-      <Filter>01.Utility\03.GameObject\Monster</Filter>
-    </ClCompile>
     <ClCompile Include="..\Private\VIBuffer_TerrainBox.cpp">
       <Filter>01.Utility\05.Component\VIBuffer\TerrainBox</Filter>
     </ClCompile>
@@ -454,9 +421,6 @@
     </ClCompile>
     <ClCompile Include="..\private\Item_Manager.cpp">
       <Filter>01.Utility\03.GameObject\UIObject\ItemObject\Manager</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\Monster_Factory.cpp">
-      <Filter>01.Utility\03.GameObject\Monster\Factory</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

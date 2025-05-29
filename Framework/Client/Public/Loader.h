@@ -18,7 +18,6 @@ private:
 public:
 	HRESULT Initialize(LEVEL eNextLevelID);
 	HRESULT Loading();
-	HRESULT Ready_LoadingRoomThread();
 
 	_bool isFinished() {
 		return m_isFinished;
@@ -37,7 +36,6 @@ private:
 	_bool							m_isFinished = { false };
 	CGameInstance*					m_pGameInstance = { nullptr };
 	CRITICAL_SECTION				m_CriticalSection = {};
-	class CLoader_Room*				m_pLoader_Room = { nullptr };
 
 private:
 	HRESULT Loading_For_Logo_Level();
