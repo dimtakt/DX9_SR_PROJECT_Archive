@@ -444,6 +444,9 @@
     <ClInclude Include="..\Public\Level_MapEdit.h">
       <Filter>01.Levels\03. MapEdit</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Animations\Anim_Player_Attack2.h">
+      <Filter>03.Animations\Player</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
