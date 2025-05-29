@@ -33,7 +33,7 @@ HRESULT CMainApp::Initialize()
 	if (FAILED(Ready_Prototype_ForStatic()))
 		return E_FAIL;
 
-	if(FAILED(Ready_Item_Setting()))
+	if (FAILED(Ready_Item_Setting()))
 		return E_FAIL;
 
 	if (FAILED(Start_Level(LEVEL::LEVEL_LOGO)))
@@ -81,7 +81,7 @@ HRESULT CMainApp::Ready_Default_Setting()
 
 HRESULT CMainApp::Ready_Prototype_ForStatic()
 {
-	
+
 
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_VIBuffer_Rect"), CVIBuffer_Rect::Create(m_pGraphic_Device))))
 		return E_FAIL;
@@ -156,7 +156,7 @@ HRESULT CMainApp::Ready_Prototype_ForStatic()
 		return E_FAIL;
 
 	//-------------
-	
+
 	/* Prototype_GameObject_Player */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_Player"), CPlayer::Create(m_pGraphic_Device))))
 		return E_FAIL;
@@ -169,7 +169,7 @@ HRESULT CMainApp::Ready_Prototype_ForStatic()
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Weapon_Dagger"),
 		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Player_Weapon/Weapon_Dagger0.png"), 1))))
 		return E_FAIL;
-	
+
 	/* Prototype_Component_PlayerStats */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_PlayerStats"), CPlayerStats::Create(m_pGraphic_Device))))
 		return E_FAIL;
@@ -191,7 +191,7 @@ HRESULT CMainApp::Ready_Prototype_ForStatic()
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_Item"), CItem_Base::Create(m_pGraphic_Device))))
 		return E_FAIL;
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Item"),
-		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Player_Weapon/Weapon_Dagger0.png"), 1))))
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/UI/Item/Item_Icon_%d.png"), g_ItemDataBase.size()))))
 		return E_FAIL;
 
 	return S_OK;
@@ -220,7 +220,7 @@ void CMainApp::Ready_Key_Setting()
 	m_pGameInstance->AddTrackingKey('E');
 	m_pGameInstance->AddTrackingKey('L');
 	m_pGameInstance->AddTrackingKey('Z');
-
+	m_pGameInstance->AddTrackingKey('F');
 	// 임시 테스트용
 #if _DEBUG
 	m_pGameInstance->AddTrackingKey('J');
@@ -237,10 +237,10 @@ HRESULT CMainApp::Ready_Item_Setting()
 		pDesc[i].iItemID = g_ItemDataBase[i].m_iItemID;
 		pDesc[i].iItemTextureID = g_ItemDataBase[i].m_iItemTextureID;
 		pDesc[i].iItemType = ENUM_CLASS(g_ItemDataBase[i].m_eType);
-		pDesc[i].iiValue = g_ItemDataBase[i].m_iiValue;
 		pDesc[i].iRarity = ENUM_CLASS(g_ItemDataBase[i].m_eRarity);
 		pDesc[i].szDescription = g_ItemDataBase[i].m_szDescription;
 		pDesc[i].szName = g_ItemDataBase[i].m_szName;
+		pDesc[i].iItemValue = g_ItemDataBase[i].m_iItemValue;
 	}
 
 	m_pGameInstance->Setting_Item(pDesc, g_ItemDataBase.size(), ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_Item"));
