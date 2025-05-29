@@ -280,9 +280,7 @@ void CMainApp::Free()
 
 	Safe_Release(m_pGraphic_Device);
 	CRoom_Manager::GetInstance()->Free();
-	//CRoom_Manager::DestroyInstance();
 	CMonster_Factory::GetInstance()->Free();
-	//CMonster_Factory::DestroyInstance();
 	m_pGameInstance->Release_Engine();
 	Safe_Release(m_pGameInstance);
 
