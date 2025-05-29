@@ -98,8 +98,6 @@ HRESULT CGameInstance::Clear_Resources(_uint iClearLevelID)
 
     m_pObject_Manager->Clear(iClearLevelID);
 
-    m_pCollision_Manager->Clear_Colliders();
-
     return S_OK;
 }
 
@@ -286,6 +284,11 @@ HRESULT CGameInstance::Add_Collider(class CCollider_OBB* pCollider)
 {
     return m_pCollision_Manager->Add_OBB_Collider(pCollider);
 }
+
+void CGameInstance::Clear_Colliders()
+{
+    m_pCollision_Manager->Clear_Colliders();
+}
 #pragma endregion
 
 #pragma region FONT_MANAGER
@@ -331,7 +334,7 @@ CItemObject* CGameInstance::Get_ItemObject(_uint iIndex)
 void CGameInstance::Release_Engine()
 {
     Release();
-    
+    Safe_Release(m_pCollision_Manager);
     Safe_Release(m_pTimer_Manager);
     Safe_Release(m_pLevel_Manager);
     Safe_Release(m_pGraphic_Device);
@@ -341,7 +344,6 @@ void CGameInstance::Release_Engine()
     Safe_Release(m_pKey_Manager);
     Safe_Release(m_pNetwork_Manager);
     Safe_Release(m_pPicking);
-    Safe_Release(m_pCollision_Manager);
     Safe_Release(m_pFont_Manager);
     Safe_Release(m_pLight_Manager);
     Safe_Release(m_pItem_Manager);

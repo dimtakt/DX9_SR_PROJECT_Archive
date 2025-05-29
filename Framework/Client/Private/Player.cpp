@@ -410,5 +410,12 @@ void CPlayer::Free()
 
     Safe_Release(m_pPlayerStatsCom);
     Safe_Release(m_pAnimatorCom);
-    //Safe_Release(m_pTerrainBox);
+    Safe_Release(m_pTerrainBox);
+    
+    if (m_pCollider)
+    {
+        m_pCollider->Set_Owner(nullptr);
+        Safe_Release(m_pCollider);
+    }
+    
 }

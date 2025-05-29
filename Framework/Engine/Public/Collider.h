@@ -18,7 +18,12 @@ public:
 	virtual HRESULT Render();
 public:
 	virtual void Update_Collider(const CTransform* pTransform); 
-	CGameObject* Get_Owner() { return m_pOwner; }
+	void Set_Owner(CGameObject* pOwner) {
+		m_pOwner = pOwner;
+	}
+	CGameObject* Get_Owner() { 
+		return m_pOwner;
+	}
 protected:
 	CGameObject* m_pOwner = { nullptr };
 

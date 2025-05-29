@@ -69,9 +69,10 @@ HRESULT CMonster::Render()
 
 	m_pVIBufferCom->Render();
 
+	m_pTerrainBox->Render();
+
 	Reset_RenderState();
 
-	return S_OK;
 	return S_OK;
 }
 
@@ -80,12 +81,12 @@ HRESULT CMonster::Ready_Components()
 	
 	/* For.Com_VIBuffer*/
 	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_VIBuffer_Rect"),
-		TEXT("Com_VIBuffer"), reinterpret_cast<CComponent**>(&m_pVIBufferCom))))
+		TEXT("Com_VIBuffer_Monster"), reinterpret_cast<CComponent**>(&m_pVIBufferCom))))
 		return E_FAIL;
 
 	/* For.Com_Texture */
 	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STAGE1), TEXT("Prototype_Component_Texture_Monster"),
-		TEXT("Com_Texture"), reinterpret_cast<CComponent**>(&m_pTextureCom))))
+		TEXT("Com_Texture_Monster"), reinterpret_cast<CComponent**>(&m_pTextureCom))))
 		return E_FAIL;
 
 	/* For.Com_Transform */
@@ -94,7 +95,7 @@ HRESULT CMonster::Ready_Components()
 	TransformDesc.fRotationPerSec = D3DXToRadian(90.0f);
 
 	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Transform"),
-		TEXT("Com_Transform"), reinterpret_cast<CComponent**>(&m_pTransformCom), &TransformDesc)))
+		TEXT("Com_Transform_Monster"), reinterpret_cast<CComponent**>(&m_pTransformCom), &TransformDesc)))
 		return E_FAIL;
 
 	// collider
@@ -163,4 +164,11 @@ void CMonster::Free()
 	Safe_Release(m_pTransformCom);
 	Safe_Release(m_pTextureCom);
 	Safe_Release(m_pVIBufferCom);
+	Safe_Release(m_pTerrainBox);
+
+	if (m_pCollider)
+	{
+		m_pCollider->Set_Owner(nullptr);
+		Safe_Release(m_pCollider);
+	}
 }
