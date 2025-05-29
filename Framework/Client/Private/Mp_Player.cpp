@@ -83,6 +83,17 @@ void CMp_Player::Render_Font()
 
 	TCHAR szText[64];
 	_stprintf_s(szText, TEXT("%d/%d"), m_iCulValue, m_iCulMaxValue);
+
+	m_vTexRect.left += 2;
+	m_vTexRect.top += 2;
+	m_vTexRect.right += 2;
+	m_vTexRect.bottom += 2;
+	m_pGameInstance->Render_Font(TEXT("UI_Font_14"), szText, m_vTexRect, D3DXCOLOR(0.f, 0.f, 0.f, 1.f), DT_CENTER | DT_VCENTER | DT_SINGLELINE);
+
+	m_vTexRect.left -= 2;
+	m_vTexRect.top -= 2;
+	m_vTexRect.right -= 2;
+	m_vTexRect.bottom -= 2;
 	m_pGameInstance->Render_Font(TEXT("UI_Font_14"), szText, m_vTexRect, D3DXCOLOR(1.f, 1.f, 1.f, 1.f), DT_CENTER | DT_VCENTER | DT_SINGLELINE);
 
 }

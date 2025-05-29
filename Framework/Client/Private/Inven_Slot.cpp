@@ -51,6 +51,9 @@ HRESULT CInven_Slot::Initialize(void* pArg)
 
 void CInven_Slot::Priority_Update(_float fTimeDelta)
 {
+	if (m_pSlotItem == nullptr)
+		m_iItemCount = 0;
+
 	m_iSlotGradeCount = 0;
 	__super::Priority_Update(fTimeDelta);
 }
@@ -127,6 +130,8 @@ _int CInven_Slot::Slot_Info(ITEM_INFO eInfo)
 		return static_cast<_int>(m_eItemType);
 	case Client::ITEM_INFO::ITEM_VALUE:
 		return m_iItemValue;
+	case ITEM_INFO::ITEM_COUNT:
+		return m_iItemCount;
 	}
 }
 
@@ -191,6 +196,7 @@ void CInven_Slot::Setting_Item()
 		m_iSlotItem_Tex = 6;
 		break;
 	case ITEM_TYPE::POTION:
+		m_iSlotItem_MaxGrade = g_PotionDataBase[m_iItemValue].m_iMaxPotion;
 		m_iSlotItem_Tex = 0;
 		break;
 	}
@@ -303,8 +309,12 @@ void CInven_Slot::Render_Font()
 	case Client::ITEM_TYPE::STONE:
 		break;
 	case Client::ITEM_TYPE::POTION:
-		_stprintf_s(szText, TEXT("%d/%d"),m_iSlotGradeCount, m_iSlotItem_MaxGrade);
-		m_pGameInstance->Render_Font(TEXT("UI_Font_12"), szText, m_vTexRect, D3DXCOLOR(1.f, 1.f, 1.f, 1.f), DT_RIGHT | DT_BOTTOM);
+		if(m_iItemCount >= m_iSlotItem_MaxGrade)
+			TexColor = D3DXCOLOR(0.f, 1.f, 0.f, 1.f);
+		else
+			TexColor = D3DXCOLOR(1.f, 1.f, 1.f, 1.f);
+		_stprintf_s(szText, TEXT("%d/%d"),m_iItemCount, m_iSlotItem_MaxGrade);
+		m_pGameInstance->Render_Font(TEXT("UI_Font_12"), szText, m_vTexRect, TexColor, DT_RIGHT | DT_BOTTOM);
 		break;
 	case Client::ITEM_TYPE::SKILLBOOK:
 		if (m_iSlotGradeCount < 0)

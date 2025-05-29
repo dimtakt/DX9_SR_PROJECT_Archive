@@ -7,7 +7,7 @@ namespace Client
 
 	enum class ITEM_RARITY { NORMAL, RARE, EPIC, LEGENDARY, ITEM_RARITY_END };
 
-	enum class ITEM_INFO { ITEM_TYPE, ITEM_VALUE, ITEM_INFO_END };
+	enum class ITEM_INFO { ITEM_TYPE, ITEM_VALUE, ITEM_COUNT, ITEM_INFO_END };
 
 	struct ItemData
 	{
@@ -36,6 +36,7 @@ namespace Client
 		_int m_iValue;
 		_int m_iPos;
 	};
+
 	struct Slate
 	{
 		_int				m_iSlateIndex;				//석판 번호
@@ -50,6 +51,17 @@ namespace Client
 		};
 	};
 
+	struct Potion
+	{
+		_int			m_iPotionIndex;
+		_int			m_iPotionType;
+		_int			m_iValue;
+		_uint			m_iMaxPotion;
+		
+	public:
+		Potion(_int m_iPotionIndex, _int m_iPotionType, _int m_iValue, _int m_iMaxPotion) :
+			m_iPotionIndex(m_iPotionIndex), m_iPotionType(m_iPotionType), m_iValue(m_iValue), m_iMaxPotion(m_iMaxPotion) {};
+	};
 	const vector<ItemData> g_ItemDataBase
 	{
 		ItemData(0, 0, ITEM_TYPE::ARTEFACT, ITEM_RARITY::RARE, TEXT("말라버린 꽃"), TEXT("어디서든 씩씩하게 자라는 꽃을 정갈하게 말린 것"), 3),
@@ -58,9 +70,9 @@ namespace Client
 		ItemData(3, 3, ITEM_TYPE::STONE, ITEM_RARITY::NORMAL,TEXT("건조"), TEXT(" "), 0),
 		ItemData(4, 4,ITEM_TYPE::STONE, ITEM_RARITY::NORMAL,TEXT("근사"), TEXT(""), 1),
 		ItemData(5, 5,ITEM_TYPE::STONE, ITEM_RARITY::EPIC,TEXT("비석"), TEXT(""), 2),
-		ItemData(6, 6,ITEM_TYPE::POTION, ITEM_RARITY::NORMAL,TEXT("재생의 포션"), TEXT("HP 20% 회복"), 20),
-		ItemData(7, 7,ITEM_TYPE::POTION, ITEM_RARITY::RARE,TEXT("큰 재샙의 포션"), TEXT("HP 50% 회복"), 50),
-		ItemData(8, 8,ITEM_TYPE::POTION, ITEM_RARITY::RARE,TEXT("마나 재생의 포션"), TEXT("MP 20% 회복"), 50),
+		ItemData(6, 6,ITEM_TYPE::POTION, ITEM_RARITY::NORMAL,TEXT("재생의 포션"), TEXT("HP 20% 회복"), 0),
+		ItemData(7, 7,ITEM_TYPE::POTION, ITEM_RARITY::RARE,TEXT("큰 재샙의 포션"), TEXT("HP 50% 회복"), 1),
+		ItemData(8, 8,ITEM_TYPE::POTION, ITEM_RARITY::RARE,TEXT("마나 재생의 포션"), TEXT("MP 30% 회복"), 2),
 		ItemData(9, 9,ITEM_TYPE::SKILLBOOK, ITEM_RARITY::NORMAL,TEXT("스킬북1"), TEXT("스킬북1"), 5),
 		ItemData(10, 10,ITEM_TYPE::SKILLBOOK, ITEM_RARITY::RARE,TEXT("스킬북2"), TEXT("스킬북2"), 5)
 
@@ -78,5 +90,12 @@ namespace Client
 		Slate(0, true, true, {{-1,-1,1,0},{1, -1,1,0}, {1,1,1,0}, {-1, 1, 1,0}}),
 		Slate(1, false, false, {{0,0,-3,24},{0,0,5,25},{0,0,2,26}, {0,0,1,27},{0,0,1,28},{0,0,1,29} }),
 		Slate(2, true, true, {{-1,-1,1,0},{-2, -2,1,0}})
+	};
+
+	const vector<Potion> g_PotionDataBase
+	{
+		Potion(0, 1, 50, 5),	//HP 20퍼 회복 최대 5개
+		Potion(1, 1, 20, 5),	//HP 50퍼 회복 최대 5개
+		Potion(2, 2, 30, 5)		//MP 30퍼 회복 최대 3개
 	};
 }

@@ -14,8 +14,8 @@ public:
 
 	}INVEN_SLOT_DESC;
 private:
-	CInven_Slot(LPDIRECT3DDEVICE9 pGraphic_Device);
-	CInven_Slot(const CInven_Slot& Prototype);
+									CInven_Slot(LPDIRECT3DDEVICE9 pGraphic_Device);
+									CInven_Slot(const CInven_Slot& Prototype);
 	virtual							~CInven_Slot() = default;
 
 public:
@@ -27,7 +27,7 @@ public:
 	virtual HRESULT					Render() override;
 
 public:
-	void							Add_Item(CItem_Base* pItem) { m_pSlotItem = pItem; }
+	void							Add_Item(CItem_Base* pItem) { m_pSlotItem = pItem, m_iItemCount += 1; }
 	void							Release_Item() { m_pSlotItem = nullptr; }
 
 	_bool							IsKey_Down_Check();
@@ -35,7 +35,8 @@ public:
 
 	CItem_Base*						Pop_Item();
 	void							Push_Item(CItem_Base* pItem);
-
+	_uint							Pop_Item_Count() { return m_iItemCount; }
+	void							Push_Item_Count(_uint iItemCount) { m_iItemCount = iItemCount; }
 	void							ItemRender();
 	_int							Slot_Info(ITEM_INFO eInfo);
 	void							Add_GradeCount(_int iValue);
@@ -55,6 +56,7 @@ private:
 	_int							m_iItemValue = {};			//현재 슬롯 아이템이 가진 값
 
 	_float							m_fItem_Angle = {};
+	_uint							m_iItemCount = {};
 private:
 	void							Setting_Item();
 
