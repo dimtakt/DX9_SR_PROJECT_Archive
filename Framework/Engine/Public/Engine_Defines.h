@@ -9,8 +9,8 @@
 #include <d3d9.h>
 #include <d3dx9.h>
 
-#include "nlohmann/json.hpp"
-using json = nlohmann::json;
+//#include "nlohmann/json.hpp"
+//using json = nlohmann::json;
 
 #include <vector>
 #include <list>
