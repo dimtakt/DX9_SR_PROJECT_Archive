@@ -1,4 +1,4 @@
-#include "Network_Manager.h"
+//#include "Network_Manager.h"
 #include "GameInstance.h"
 
 #include "Graphic_Device.h"
@@ -54,9 +54,9 @@ HRESULT CGameInstance::Initialize_Engine(const ENGINE_DESC& EngineDesc, LPDIRECT
     if (nullptr == m_pKey_Manager)
         return E_FAIL;
 
-    m_pNetwork_Manager = CNetwork_Manager::Create();
-    if (nullptr == m_pNetwork_Manager)
-        return E_FAIL;
+    //m_pNetwork_Manager = CNetwork_Manager::Create();
+    //if (nullptr == m_pNetwork_Manager)
+    //    return E_FAIL;
 
     m_pPicking = CPicking::Create(*ppOut, EngineDesc.hWnd, EngineDesc.iWinSizeX, EngineDesc.iWinSizeY);
     if (nullptr == m_pPicking)
@@ -265,14 +265,14 @@ float CGameInstance::GetKeyHoldTime(int iKey) const
 #pragma endregion
 
 #pragma region NETWORK_MANAGER
-TEST* CGameInstance::Ping()
-{
-    return m_pNetwork_Manager->Ping();
-}
-list<USER*> CGameInstance::Get_AllUsers()
-{
-    return m_pNetwork_Manager->Get_AllUsers();
-}
+//TEST* CGameInstance::Ping()
+//{
+//    return m_pNetwork_Manager->Ping();
+//}
+//list<USER*> CGameInstance::Get_AllUsers()
+//{
+//    return m_pNetwork_Manager->Get_AllUsers();
+//}
 #pragma endregion
 
 #pragma region PICKING
@@ -369,7 +369,7 @@ void CGameInstance::Release_Engine()
     Safe_Release(m_pObject_Manager);
     Safe_Release(m_pRenderer);
     Safe_Release(m_pKey_Manager);
-    Safe_Release(m_pNetwork_Manager);
+    //Safe_Release(m_pNetwork_Manager);
     Safe_Release(m_pPicking);
     Safe_Release(m_pFont_Manager);
     Safe_Release(m_pLight_Manager);

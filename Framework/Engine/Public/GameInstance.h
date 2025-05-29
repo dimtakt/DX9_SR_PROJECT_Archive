@@ -70,8 +70,8 @@ public:
 #pragma endregion
 
 #pragma region NETWORK_MANAGER
-	TEST* Ping();
-	list<USER*> Get_AllUsers();
+	//TEST* Ping();
+	//list<USER*> Get_AllUsers();
 #pragma endregion
 
 #pragma region PICKING
@@ -143,7 +143,7 @@ private:
 	class CRenderer*			m_pRenderer = { nullptr };
 	class CTimer_Manager*		m_pTimer_Manager = { nullptr };
 	class CKey_Manager*			m_pKey_Manager = { nullptr };
-	class CNetwork_Manager*		m_pNetwork_Manager = { nullptr };
+	//class CNetwork_Manager*		m_pNetwork_Manager = { nullptr };
 	class CPicking*				m_pPicking = { nullptr };
 	class CCollision_Manager*	m_pCollision_Manager = { nullptr };
 	class CFont_Manager*		m_pFont_Manager = { nullptr };
