@@ -42,20 +42,20 @@ protected:
 	_float4x4				m_OldViewMatrix = {};
 	_float4x4				m_OldProjMatrix = {};
 
-	CUIObject*				m_pParent = { nullptr };
+	CUIObject* m_pParent = { nullptr };
 	vector<CUIObject*>		m_vecChildren = {};
 
-	class CTransform*		m_pTransformCom = { nullptr };
+	class CTransform* m_pTransformCom = { nullptr };
 protected:
 	void					Begin();
 	void					End();
 	_bool					isPick(HWND hWnd);
 
 	void					Update_Position();
-	void					Add_Child(CUIObject* pChildUI );
+	void					Add_Child(CUIObject* pChildUI);
 
 public:
-	virtual CGameObject*	Clone(void* pArg) = 0;
+	virtual CGameObject* Clone(void* pArg) = 0;
 	virtual void			Free();
 };
 

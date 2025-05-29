@@ -1,6 +1,8 @@
 #include "Inven_Slot.h"
 #include "GameInstance.h"
 #include "Inven_Slot_Selete.h"
+#include "Client_Defines_Item.h"
+
 CInven_Slot::CInven_Slot(LPDIRECT3DDEVICE9 pGraphic_Device) : CButton{ pGraphic_Device }
 {
 }
@@ -21,12 +23,14 @@ HRESULT CInven_Slot::Initialize_Prototype(LEVEL eLevel)
 
 HRESULT CInven_Slot::Initialize(void* pArg)
 {
-	CUIObject::UIOBJECT_DESC* Desc = static_cast<UIOBJECT_DESC*>(pArg);
+	INVEN_SLOT_DESC* Desc = static_cast<INVEN_SLOT_DESC*>(pArg);
+	m_iSlotIndex = Desc->iSlotInedx;
 
 	m_fSizeX = 76;
 	m_fSizeY = 76;
 	m_fX = -203 + Desc->fX * (m_fSizeX + 5);
 	m_fY = -151 + Desc->fY * (m_fSizeY + 5);
+	m_fZ = 0.2f;
 	m_iWinSizeX = g_iWinSizeX;
 	m_iWinSizeY = g_iWinSizeY;
 
@@ -47,11 +51,15 @@ HRESULT CInven_Slot::Initialize(void* pArg)
 
 void CInven_Slot::Priority_Update(_float fTimeDelta)
 {
+	m_iSlotGradeCount = 0;
 	__super::Priority_Update(fTimeDelta);
 }
 
 void CInven_Slot::Update(_float fTimeDelta)
 {
+	if (CUIObject::isPick(g_hWnd) && m_pGameInstance->IsKeyDown('F') && m_pSlotItem != nullptr)
+		m_pSlotItem->IsRotation_Slate();
+
 	__super::Update(fTimeDelta);
 }
 
@@ -62,20 +70,125 @@ void CInven_Slot::Late_Update(_float fTimeDelta)
 	else
 		m_bIsOver = false;
 
+	Setting_Item();
 	m_pGameInstance->Add_RenderGroup(RENDERGROUP::RG_UI, this);
 
-
-	if(m_bIsOver)
+	if (m_bIsOver)
 		__super::Late_Update(fTimeDelta);
+
+	if (m_pSlotItem != nullptr)
+	{
+		m_pSlotItem->Late_Update(fTimeDelta, m_pTransformCom->Get_State(STATE::POSITION));
+	}
 }
 
 HRESULT CInven_Slot::Render()
 {
 	SetUp_RenderState();
-	if (FAILED(CButton::Bind_ButtonTex_Single(g_hWnd, 0)))
+	if (FAILED(CButton::Bind_ButtonTex_Single(g_hWnd, m_iSlotItem_Tex)))
 		return E_FAIL;
 	Reset_RenderState();
 	return S_OK;
+}
+
+_bool CInven_Slot::IsKey_Down_Check()
+{
+	return 	Check_Key_Down(g_hWnd, VK_LBUTTON);
+}
+
+_bool CInven_Slot::IsKey_Up_Check()
+{
+	return 	Check_Key_UP(g_hWnd, VK_LBUTTON);
+}
+
+CItem_Base* CInven_Slot::Pop_Item()
+{
+	return m_pSlotItem;
+}
+
+void CInven_Slot::Push_Item(CItem_Base* pItem)
+{
+	m_pSlotItem = pItem;;
+}
+
+void CInven_Slot::ItemRender()
+{
+
+	m_pSlotItem->IsSelete();
+}
+
+_int CInven_Slot::Slot_Info(ITEM_INFO eInfo)
+{
+	switch (eInfo)
+	{
+	case Client::ITEM_INFO::ITEM_TYPE:
+		return static_cast<_int>(m_eItemType);
+	case Client::ITEM_INFO::ITEM_VALUE:
+		return m_iItemValue;
+	}
+}
+
+void CInven_Slot::Add_GradeCount(_int iValue)
+{
+	m_iSlotGradeCount += iValue;
+}
+
+void CInven_Slot::Setting_Item()
+{
+	if (m_pSlotItem == nullptr)
+	{
+		m_iSlotItem_Tex = 0;
+		m_iItemValue = 0;
+		m_eItemType = ITEM_TYPE::ITEM_TYPE_END;
+		return;
+	}
+
+	m_eItemType = static_cast<ITEM_TYPE>(m_pSlotItem->Item_Info()->iItemType);
+	m_iItemValue = m_pSlotItem->Item_Info()->iItemValue;
+
+	switch (m_eItemType)
+	{
+	case ITEM_TYPE::ARTEFACT:
+		switch (m_pSlotItem->Item_Info()->iRarity)
+		{
+		case ENUM_CLASS(ITEM_RARITY::NORMAL):
+			m_iSlotItem_Tex = 2;
+			break;
+		case ENUM_CLASS(ITEM_RARITY::RARE):
+			m_iSlotItem_Tex = 3;
+			break;
+		case ENUM_CLASS(ITEM_RARITY::EPIC):
+			m_iSlotItem_Tex = 4;
+			break;
+		case ENUM_CLASS(ITEM_RARITY::LEGENDARY):
+			m_iSlotItem_Tex = 5;
+			break;
+		}
+		break;
+	case ITEM_TYPE::SKILLBOOK:
+		switch (m_pSlotItem->Item_Info()->iRarity)
+		{
+		case ENUM_CLASS(ITEM_RARITY::NORMAL):
+			m_iSlotItem_Tex = 2;
+			break;
+		case ENUM_CLASS(ITEM_RARITY::RARE):
+			m_iSlotItem_Tex = 3;
+			break;
+		case ENUM_CLASS(ITEM_RARITY::EPIC):
+			m_iSlotItem_Tex = 4;
+			break;
+		case ENUM_CLASS(ITEM_RARITY::LEGENDARY):
+			m_iSlotItem_Tex = 5;
+			break;
+		}
+		break;
+	case ITEM_TYPE::STONE:
+		m_iSlotItem_Tex = 6;
+		break;
+	case ITEM_TYPE::POTION:
+		m_iSlotItem_Tex = 0;
+		break;
+	}
 }
 
 HRESULT CInven_Slot::Ready_Components()

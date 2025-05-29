@@ -1,15 +1,15 @@
 #pragma once
 
 #include "Collider.h"
-
+#include "Transform.h"
 BEGIN(Engine)
 
 class ENGINE_DLL CCollider_OBB final : public CCollider
 {
 public:
 	typedef struct tagOBB_Desc {
-		_float3		vLocalCenter;
-		_float3		vLocalExtents;
+		CGameObject* pOwner;
+		_float3		vScale;
 	}OBB_DESC;
 
 private:
@@ -20,9 +20,10 @@ private:
 public:
 	virtual HRESULT Initialize_Prototype() override;
 	virtual HRESULT Initialize(void* pArg) override;
+	virtual HRESULT Render() override;
 
 public:
-	virtual void Update_Collider(const _float4x4* pWorldMatrix) override;
+	virtual void Update_Collider(const CTransform* pTransform);
 
 public:
 	void Get_MatrixData(_float3& vCenter, _float3& vExtent, _float3* vAxis)
@@ -33,11 +34,12 @@ public:
 	}
 
 private:
-	_float3		m_vLocalCenter = { 0.f, 0.f, 0.f };
-	_float3		m_vLocalExtents = { 0.5f, 0.5f, 0.5f };
-	_float3		m_vWorldCenter = {};
-	_float3		m_vAxis[3] = {};
-	_float3		m_vWorldExtents = {};
+	_float3 m_vWorldCenter = {};
+	_float3 m_vWorldExtents = {};
+	_float3 m_vAxis[3] = {};
+	_float3 m_vScale = {};
+
+	LPD3DXMESH m_pBoxMesh = { nullptr };
 
 public:
 	static CCollider_OBB* Create(LPDIRECT3DDEVICE9 pGraphic_Device);

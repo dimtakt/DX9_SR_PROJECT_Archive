@@ -12,7 +12,8 @@ public:
 		_wstring				szName;
 		_wstring				szDescription;
 		_int					iItemTextureID;
-		_int					iiValue;
+		_int					iItemValue;		//0이면 등급 없음
+		_float					fAngle;
 	}ITEMOBJECT_DESC;
 
 protected:
@@ -28,18 +29,25 @@ public:
 	virtual void			Late_Update(_float fTimeDelta);
 	virtual HRESULT			Render();
 
+public:
+	const tagItemObjectDesc* Item_Info();
+
 protected:
 	_uint					m_iItemID = {};
 	_uint					m_iItemType = {};
 	_uint					m_iRarity = {};
+	_uint					m_iItemTextureID = {};
+	_uint					m_iItemValue = {};
 	_wstring				m_szName = {};
 	_wstring				m_szDescription = {};
-	
-	class CVIBuffer_Rect*	m_pVIBufferCom = { nullptr };
-	class CTexture*			m_pTextureCom = { nullptr };
+
+	_float					m_fAngle = {};
+
+	class CVIBuffer_Rect* m_pVIBufferCom = { nullptr };
+	class CTexture* m_pTextureCom = { nullptr };
 
 public:
-	virtual CGameObject*	Clone(void* pArg) = 0;
+	virtual CGameObject* Clone(void* pArg) = 0;
 	virtual void			Free();
 };
 END

@@ -10,4 +10,6 @@ typedef struct tagMAPObjectDesc
 	_float3 vRotate = { 0.f, 0.f, 0.f };
 	_float3 vPos = { 0.f, 0.f, 0.f };
 }MAP_OBJECT_DESC;
+
+
 END

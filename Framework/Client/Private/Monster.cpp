@@ -1,29 +1,23 @@
-#include "Monster_Default.h"
+#include "Monster.h"
 #include "GameInstance.h"
 
-CMonster_Default::CMonster_Default(LPDIRECT3DDEVICE9 pGraphic_Device)
-	: CMonster{ pGraphic_Device }
+CMonster::CMonster(LPDIRECT3DDEVICE9 pGraphic_Device)
+	: CGameObject{ pGraphic_Device }
 {
 }
 
-CMonster_Default::CMonster_Default(const CMonster_Default& Prototype)
-	: CMonster{ Prototype }
+CMonster::CMonster(const CMonster& Prototype)
+	: CGameObject{ Prototype }
 {
 }
 
-HRESULT CMonster_Default::Initialize_Prototype()
+HRESULT CMonster::Initialize_Prototype()
 {
 	return S_OK;
 }
 
-HRESULT CMonster_Default::Initialize(void* pArg)
+HRESULT CMonster::Initialize(void* pArg)
 {
-	/*MONSTER_DESC* pDesc = static_cast<MONSTER_DESC*>(pArg);
-
-	m_iData = pDesc->iData;*/
-
-	if (FAILED(__super::Initialize(pArg)))
-		return E_FAIL;
 
 	if (FAILED(Ready_Components()))
 		return E_FAIL;
@@ -33,27 +27,35 @@ HRESULT CMonster_Default::Initialize(void* pArg)
 		0.f,
 		m_pGameInstance->Compute_Random(0.f, 50.f)));
 
+	MONSTERDESC* desc = static_cast<MONSTERDESC*>(pArg);
+
+	//m_pTransformCom->Set_State(STATE::POSITION, desc->vPosition);
+	m_pTerrainBox = desc->pTerrainBox;
+
+	m_eObjType = GAMEOBJ_TYPE::MONSTER;
 	return S_OK;
 }
 
-void CMonster_Default::Priority_Update(_float fTimeDelta)
+void CMonster::Priority_Update(_float fTimeDelta)
 {
-
-
-	int a = 10;
 }
 
-void CMonster_Default::Update(_float fTimeDelta)
+void CMonster::Update(_float fTimeDelta)
 {
-	
+	if (m_pTerrainBox != nullptr) {
+		m_pTerrainBox->SetUp_OnTerrainBox(m_pTransformCom, _float3(0.05f, 0.1f, 0.05f));
+	}
+
+	m_pCollider->Update_Collider(m_pTransformCom);
+
 }
 
-void CMonster_Default::Late_Update(_float fTimeDelta)
+void CMonster::Late_Update(_float fTimeDelta)
 {
 	m_pGameInstance->Add_RenderGroup(RENDERGROUP::RG_NONBLEND, this);
 }
 
-HRESULT CMonster_Default::Render()
+HRESULT CMonster::Render()
 {
 	m_pTransformCom->Bind_Matrix();
 
@@ -70,10 +72,12 @@ HRESULT CMonster_Default::Render()
 	Reset_RenderState();
 
 	return S_OK;
+	return S_OK;
 }
 
-HRESULT CMonster_Default::Ready_Components()
+HRESULT CMonster::Ready_Components()
 {
+	
 	/* For.Com_VIBuffer*/
 	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_VIBuffer_Rect"),
 		TEXT("Com_VIBuffer"), reinterpret_cast<CComponent**>(&m_pVIBufferCom))))
@@ -93,10 +97,18 @@ HRESULT CMonster_Default::Ready_Components()
 		TEXT("Com_Transform"), reinterpret_cast<CComponent**>(&m_pTransformCom), &TransformDesc)))
 		return E_FAIL;
 
+	// collider
+	CCollider_OBB::OBB_DESC tColliderDesc;
+	tColliderDesc.vScale = _float3(1.5f, 1.5f, 1.5f);
+	tColliderDesc.pOwner = this;
+	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Collider_OBB"),
+		TEXT("Com_Monster_Collider"), reinterpret_cast<CComponent**>(&m_pCollider), &tColliderDesc)))
+		return E_FAIL;
+	m_pGameInstance->Add_Collider(m_pCollider);
 	return S_OK;
 }
 
-void CMonster_Default::SetUp_RenderState()
+void CMonster::SetUp_RenderState()
 {
 	m_pGraphic_Device->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
 
@@ -111,16 +123,16 @@ void CMonster_Default::SetUp_RenderState()
 	m_pGraphic_Device->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER);
 }
 
-void CMonster_Default::Reset_RenderState()
+void CMonster::Reset_RenderState()
 {
 	m_pGraphic_Device->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);
 	m_pGraphic_Device->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
 
 }
 
-CMonster_Default* CMonster_Default::Create(LPDIRECT3DDEVICE9 pGraphic_Device)
+CMonster* CMonster::Create(LPDIRECT3DDEVICE9 pGraphic_Device)
 {
-	CMonster_Default* pInstance = new CMonster_Default(pGraphic_Device);
+	CMonster* pInstance = new CMonster(pGraphic_Device);
 
 	if (FAILED(pInstance->Initialize_Prototype()))
 	{
@@ -131,10 +143,9 @@ CMonster_Default* CMonster_Default::Create(LPDIRECT3DDEVICE9 pGraphic_Device)
 	return pInstance;
 }
 
-
-CGameObject* CMonster_Default::Clone(void* pArg)
+CGameObject* CMonster::Clone(void* pArg)
 {
-	CMonster_Default* pInstance = new CMonster_Default(*this);
+	CMonster* pInstance = new CMonster(*this);
 
 	if (FAILED(pInstance->Initialize(pArg)))
 	{
@@ -144,12 +155,12 @@ CGameObject* CMonster_Default::Clone(void* pArg)
 
 	return pInstance;
 }
-void CMonster_Default::Free()
+
+void CMonster::Free()
 {
 	__super::Free();
 
 	Safe_Release(m_pTransformCom);
-	Safe_Release(m_pVIBufferCom);
 	Safe_Release(m_pTextureCom);
-
+	Safe_Release(m_pVIBufferCom);
 }

@@ -1,17 +1,20 @@
 #pragma once
 #include "Client_Defines.h"
 #include "UIObject.h"
+#include "Inven_Slot.h"
+
 BEGIN(Engine)
 class CVIBuffer_Rect;
 class CTexture;
+class CItemObject;
 END
 
 BEGIN(Client)
 class CInventory final : public CUIObject
 {
 private:
-								CInventory(LPDIRECT3DDEVICE9 pGraphic_Device);
-								CInventory(const CInventory& Prototype);
+	CInventory(LPDIRECT3DDEVICE9 pGraphic_Device);
+	CInventory(const CInventory& Prototype);
 	virtual						~CInventory() = default;
 public:
 	virtual HRESULT				Initialize_Prototype(LEVEL eLevel);
@@ -23,11 +26,19 @@ public:
 
 public:
 	void						UI_Switch();
+	void						Add_Item_Inven(_uint ItemIndex);
 private:
-	CVIBuffer_Rect*				m_pVIBufferCom = { nullptr };
-	CTexture*					m_pTextureCom = { nullptr };
+	CVIBuffer_Rect* m_pVIBufferCom = { nullptr };
+	CTexture* m_pTextureCom = { nullptr };
 	LEVEL						m_eLevel = {};
 	_bool						m_bIsOpen = {};
+	vector<CInven_Slot*>		m_vecInventory = {};
+
+	CInven_Slot* m_pPickSlot = { nullptr };
+
+private:
+	void						Selete_Slot();
+	void						Set_Grade();
 
 private:
 	HRESULT						Ready_Components();
@@ -39,8 +50,8 @@ private:
 	void						Reset_RenderState();
 
 public:
-	static CInventory*			Create(LPDIRECT3DDEVICE9 pGraphic_Device, LEVEL eLevel);
-	virtual CGameObject*		Clone(void* pArg) override;
+	static CInventory* Create(LPDIRECT3DDEVICE9 pGraphic_Device, LEVEL eLevel);
+	virtual CGameObject* Clone(void* pArg) override;
 	virtual void				Free() override;
 
 };

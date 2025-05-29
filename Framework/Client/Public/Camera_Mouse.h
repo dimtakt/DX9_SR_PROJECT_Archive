@@ -25,7 +25,6 @@ private:
 	_float			m_fMouseSensor = {};
 
 	_bool			m_bMouseMove = false;
-
 private:
 	void Ready_Mouse();
 	HRESULT Ready_Components(void* pArg);

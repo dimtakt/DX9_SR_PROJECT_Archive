@@ -1,10 +1,11 @@
 #pragma once
 #include "Base.h"
 #include "Monster.h"
-BEGIN(Engine)
+BEGIN(Client)
 
-class ENGINE_DLL CMonster_Factory final : public CBase
+class CMonster_Factory final : public CBase
 {
+	DECLARE_SINGLETON(CMonster_Factory)
 public:
 	CMonster_Factory();
 	~CMonster_Factory() = default;
@@ -13,7 +14,7 @@ public:
 	HRESULT Initialize();
 
 public:
-	HRESULT Add_Monsters(class CRoom* pRoom, list<CMonster::MONSTERDESC> tMonsterDescList);
+	HRESULT Add_Monsters(class CRoom* pRoom, list<CMonster::MONSTERDESC> ObjectDescList);
 
 private:
 	class CGameInstance* m_pGameInstance = { nullptr };

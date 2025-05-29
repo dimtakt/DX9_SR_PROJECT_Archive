@@ -6,8 +6,6 @@
 CGameObject::CGameObject(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: m_pGraphic_Device { pGraphic_Device }
 	, m_pGameInstance { CGameInstance::GetInstance() }
-	, m_bCollision { false }
-	, m_eCollisionEvent { COLLISION_EVENT::EVENT_END }
 	, m_bDead { false }
 {
 	Safe_AddRef(m_pGraphic_Device);
@@ -56,6 +54,10 @@ void CGameObject::Late_Update(_float fTimeDelta)
 HRESULT CGameObject::Render()
 {
 	return S_OK;
+}
+
+void CGameObject::OnCollision(CGameObject* pGameObject)
+{
 }
 
 HRESULT CGameObject::Add_Component(_uint iPrototypeLevelIndex, const _wstring& strPrototypeTag, const _wstring& strComponentTag, CComponent** ppOut, void* pArg)

@@ -1,18 +1,25 @@
 #pragma once
 #include "GameObject.h"
 #include "GameInstance.h"
+#include "Client_Defines.h"
+#include "TerrainBox.h"
 
 BEGIN(Engine)
+class CCollider_OBB;
+END
 
-class ENGINE_DLL CMonster abstract : public CGameObject
+BEGIN(Client)
+
+class CMonster : public CGameObject
 {
 public:
 	typedef struct tagMonsterDesc {
 		_uint iLayerLevelIndex;
 		_wstring strLayerTag;
 		_uint iPrototypeLevelIndex;
-		const _wstring strPrototypeTag;
-		_uint iCount;
+		_wstring strPrototypeTag;
+		_float3 vPosition;
+		CTerrainBox* pTerrainBox;
 	}MONSTERDESC;
 protected:
 	CMonster(LPDIRECT3DDEVICE9 pGraphic_Device);
@@ -27,12 +34,20 @@ public:
 	virtual void Late_Update(_float fTimeDelta) override;
 	virtual HRESULT Render() override;
 
+public:
+	HRESULT Ready_Components();
+	void SetUp_RenderState();
+	void Reset_RenderState();
+
 protected:
 	class CTransform* m_pTransformCom = { nullptr };
 	class CTexture* m_pTextureCom = { nullptr };
 	class CVIBuffer_Rect* m_pVIBufferCom = { nullptr };
+	CTerrainBox* m_pTerrainBox = { nullptr };
+	CCollider_OBB* m_pCollider = { nullptr };
 
 public:
+	static CMonster* Create(LPDIRECT3DDEVICE9 pGraphic_Device);
 	virtual CGameObject* Clone(void* pArg) override;
 	virtual void Free() override;
 };

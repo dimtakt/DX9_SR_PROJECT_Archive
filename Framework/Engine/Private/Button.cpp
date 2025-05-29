@@ -43,11 +43,20 @@ HRESULT CButton::Render()
 	return S_OK;
 }
 
-_bool CButton::Click_Check(HWND hWnd, _int iKey)
+_bool CButton::Check_Key_Down(HWND hWnd, _int iKey)
 {
 	if (isPick(hWnd))
-	{	
+	{
 		return m_pGameInstance->IsKeyDown(iKey);
+	}
+	return false;
+}
+
+_bool CButton::Check_Key_UP(HWND hWnd, _int iKey)
+{
+	if (isPick(hWnd))
+	{
+		return m_pGameInstance->IsKeyUp(iKey);
 	}
 	return false;
 }

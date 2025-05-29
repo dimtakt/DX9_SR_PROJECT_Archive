@@ -1,6 +1,6 @@
 #include "Inventory.h"
 #include "GameInstance.h"
-#include "Inven_Slot.h"
+#include "Item_Base.h"
 
 CInventory::CInventory(LPDIRECT3DDEVICE9 pGraphic_Device) : CUIObject(pGraphic_Device)
 {
@@ -26,7 +26,7 @@ HRESULT CInventory::Initialize(void* pArg)
 	m_fSizeY = 1215.f;
 	m_fX = g_iWinSizeX * 0.5;
 	m_fY = g_iWinSizeY * 0.5;
-	m_fZ = 0.f;
+	m_fZ = 0.2f;
 	m_iWinSizeX = g_iWinSizeX;
 	m_iWinSizeY = g_iWinSizeY;
 
@@ -42,11 +42,38 @@ HRESULT CInventory::Initialize(void* pArg)
 	if (FAILED(Ready_Children()))
 		return E_FAIL;
 
+	CItemObject* pItem = m_pGameInstance->Get_ItemObject(0);
+	m_vecInventory[0]->Add_Item(static_cast<CItem_Base*>(pItem));
+
+	pItem = m_pGameInstance->Get_ItemObject(1);
+	m_vecInventory[1]->Add_Item(static_cast<CItem_Base*>(pItem));
+
+	pItem = m_pGameInstance->Get_ItemObject(2);
+	m_vecInventory[2]->Add_Item(static_cast<CItem_Base*>(pItem));
+
+	pItem = m_pGameInstance->Get_ItemObject(3);
+	m_vecInventory[3]->Add_Item(static_cast<CItem_Base*>(pItem));
+
+	pItem = m_pGameInstance->Get_ItemObject(4);
+	m_vecInventory[4]->Add_Item(static_cast<CItem_Base*>(pItem));
+
+	pItem = m_pGameInstance->Get_ItemObject(5);
+	m_vecInventory[5]->Add_Item(static_cast<CItem_Base*>(pItem));
+
+	pItem = m_pGameInstance->Get_ItemObject(6);
+	m_vecInventory[6]->Add_Item(static_cast<CItem_Base*>(pItem));
+
+	pItem = m_pGameInstance->Get_ItemObject(7);
+	m_vecInventory[7]->Add_Item(static_cast<CItem_Base*>(pItem));
+
+	pItem = m_pGameInstance->Get_ItemObject(8);
+	m_vecInventory[8]->Add_Item(static_cast<CItem_Base*>(pItem));
 	return S_OK;
 }
 
 void CInventory::Priority_Update(_float fTimeDelta)
 {
+
 	__super::Priority_Update(fTimeDelta);
 }
 
@@ -54,19 +81,28 @@ void CInventory::Update(_float fTimeDelta)
 {
 	if (m_pGameInstance->IsKeyDown('Z') && m_bIsOpen)
 		m_bIsOpen = false;
-	else if(m_pGameInstance->IsKeyDown('Z') && !m_bIsOpen)
+	else if (m_pGameInstance->IsKeyDown('Z') && !m_bIsOpen)
 		m_bIsOpen = true;
+
+
+	Selete_Slot();
+	Set_Grade();
 
 	__super::Update(fTimeDelta);
 }
 
 void CInventory::Late_Update(_float fTimeDelta)
 {
+
 	if (m_bIsOpen == true)
 	{
 		m_pGameInstance->Add_RenderGroup(RENDERGROUP::RG_UI, this);
 		__super::Late_Update(fTimeDelta);
 	}
+
+
+	if (m_pPickSlot != nullptr)
+		m_pPickSlot->ItemRender();
 }
 
 HRESULT CInventory::Render()
@@ -92,6 +128,122 @@ void CInventory::UI_Switch()
 	else
 		m_bIsOpen = true;
 
+}
+
+void CInventory::Add_Item_Inven(_uint ItemIndex)
+{
+	CItemObject* pItem = m_pGameInstance->Get_ItemObject(ItemIndex);
+
+	for (size_t i = 0; i < m_vecInventory.size(); ++i)
+	{
+		if (m_vecInventory[i]->Pop_Item() == nullptr)
+			m_vecInventory[i]->Add_Item(static_cast<CItem_Base*>(pItem));
+	}
+}
+
+
+void CInventory::Selete_Slot()
+{
+	CItem_Base* pPopItem = { nullptr };
+
+	for (size_t i = 0; i < m_vecInventory.size(); ++i)
+	{
+		if (m_vecInventory[i]->IsKey_Down_Check())
+		{
+			pPopItem = m_vecInventory[i]->Pop_Item();
+
+			if (pPopItem != nullptr)
+				m_pPickSlot = m_vecInventory[i];
+		}
+
+		if (m_vecInventory[i]->IsKey_Up_Check() && m_pPickSlot != nullptr)
+		{
+			pPopItem = m_vecInventory[i]->Pop_Item();
+
+			if (pPopItem)
+			{
+				m_vecInventory[i]->Push_Item(m_pPickSlot->Pop_Item());
+				m_pPickSlot->Release_Item();
+				m_pPickSlot->Push_Item(pPopItem);
+			}
+			else
+			{
+				m_vecInventory[i]->Push_Item(m_pPickSlot->Pop_Item());
+				m_pPickSlot->Push_Item(pPopItem);
+			}
+		}
+	}
+
+	if (m_pGameInstance->IsKeyUp(VK_LBUTTON))
+		m_pPickSlot = nullptr;
+}
+
+void CInventory::Set_Grade()
+{
+	for (size_t i = 0; i < m_vecInventory.size(); ++i)
+	{
+		if (m_vecInventory[i]->Pop_Item() == nullptr)
+			continue;
+		if (m_vecInventory[i]->Slot_Info(ITEM_INFO::ITEM_TYPE) != ENUM_CLASS(ITEM_TYPE::STONE))
+			continue;
+
+		//석판 효과 번호
+		_int iIndex = m_vecInventory[i]->Slot_Info(ITEM_INFO::ITEM_VALUE);		//석판 인덱스 가져오기
+
+		//석판 효과 번호 돌림
+
+		for (size_t j = 0; j < g_SlateDataBase[iIndex].m_vecGardeValue.size(); ++j)	//석판에 입력된 좌표만큼 값넣기
+		{
+			_int MyX = i % 6;
+			_int MyY = i / 6;
+
+			_int YouIndex = 0;
+
+			if (g_SlateDataBase[iIndex].m_bRelative)								//석판 좌표 타입 체크
+			{
+				_int iX = 0;
+				_int iY = 0;
+				_int iAngle = m_vecInventory[i]->Pop_Item()->Item_Info()->fAngle;
+				_int iValue = g_SlateDataBase[iIndex].m_vecGardeValue[j].m_iValue;
+
+				switch (iAngle)
+				{
+				case 0:
+					iX = g_SlateDataBase[iIndex].m_vecGardeValue[j].m_iX;
+					iY = g_SlateDataBase[iIndex].m_vecGardeValue[j].m_iY;
+					break;
+				case 90:
+					iX = -g_SlateDataBase[iIndex].m_vecGardeValue[j].m_iY;
+					iY = (g_SlateDataBase[iIndex].m_vecGardeValue[j].m_iX);
+					break;
+				case 180:
+					iX = -g_SlateDataBase[iIndex].m_vecGardeValue[j].m_iX;
+					iY = -g_SlateDataBase[iIndex].m_vecGardeValue[j].m_iY;
+					break;
+				case 270:
+					iX = g_SlateDataBase[iIndex].m_vecGardeValue[j].m_iY;
+					iY = -g_SlateDataBase[iIndex].m_vecGardeValue[j].m_iX;
+					break;
+				}
+				_int youX = MyX + iX;
+				_int youY = MyY + iY;
+
+				if (youX < 0 || youX >= 6 || youY < 0 || youY >= 5)
+					continue;
+				YouIndex = youX + youY * 6;
+				if (YouIndex >= 30 || YouIndex < 0)
+					continue;
+				m_vecInventory[YouIndex]->Add_GradeCount(iValue);
+			}
+			else
+			{
+				_int iValue = g_SlateDataBase[iIndex].m_vecGardeValue[j].m_iValue;
+				_int iPos = g_SlateDataBase[iIndex].m_vecGardeValue[j].m_iPos;
+				m_vecInventory[iPos]->Add_GradeCount(iValue);
+			}
+
+		}
+	}
 }
 
 HRESULT CInventory::Ready_Components()
@@ -124,7 +276,7 @@ HRESULT CInventory::Ready_Children()
 {
 	CUIObject* pGameObject = nullptr;
 
-	CUIObject::UIOBJECT_DESC Desc{};
+	CInven_Slot::INVEN_SLOT_DESC Desc{};
 
 	for (int i = 0; i < 5; ++i)
 	{
@@ -132,15 +284,15 @@ HRESULT CInventory::Ready_Children()
 		{
 			Desc.fX = j;
 			Desc.fY = i;
-
+			Desc.iSlotInedx = j + (i * 6);
 			pGameObject = dynamic_cast<CUIObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(m_eLevel), TEXT("Prototype_GameObject_UI_Inven_Slot"), &Desc));
 			if (nullptr == pGameObject)
 				return E_FAIL;
 			Add_Child(pGameObject);
+			m_vecInventory.push_back(dynamic_cast<CInven_Slot*>(pGameObject));
+			Safe_AddRef(m_vecInventory[Desc.iSlotInedx]);
 		}
 	}
-
-
 
 	return S_OK;
 }
@@ -193,6 +345,12 @@ CGameObject* CInventory::Clone(void* pArg)
 
 void CInventory::Free()
 {
+	for (auto& pItemObject : m_vecInventory)
+		Safe_Release(pItemObject);
+	m_vecInventory.clear();
+
+	m_pPickSlot = nullptr;
+
 	__super::Free();
 	Safe_Release(m_pVIBufferCom);
 	Safe_Release(m_pTextureCom);
