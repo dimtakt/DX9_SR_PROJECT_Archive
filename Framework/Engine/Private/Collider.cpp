@@ -32,4 +32,5 @@ void CCollider::Update_Collider(const CTransform* pTransform)
 void CCollider::Free()
 {
 	__super::Free();
+	m_pOwner = nullptr;
 }

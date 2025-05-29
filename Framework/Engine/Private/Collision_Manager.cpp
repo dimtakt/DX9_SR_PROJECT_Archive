@@ -11,15 +11,21 @@ HRESULT CCollision_Manager::Add_OBB_Collider(CCollider_OBB* pCollider)
 	if (pCollider == nullptr)
 		return E_FAIL;
     m_vColliders.push_back(pCollider);
-	m_vColliders.push_back(pCollider);
-	return S_OK;
+    Safe_AddRef(pCollider);
+
+    return S_OK;
 }
 
 void CCollision_Manager::Clear_Colliders()
 {
-	for (size_t i = 0; i < m_vColliders.size(); ++i)
-        Safe_Release(m_vColliders[i]);
-    m_vColliders.clear();
+    for (size_t i = 0; i < m_vColliders.size(); ++i)
+    {
+        if (m_vColliders[i]->Get_Owner()->Get_ObjType() != GAMEOBJ_TYPE::PLAYER)
+        {
+            Safe_Release(m_vColliders[i]);
+        }
+        
+    }
 }
 
 void CCollision_Manager::Check_RoomCollisions()
@@ -95,5 +101,9 @@ CCollision_Manager* CCollision_Manager::Create()
 void CCollision_Manager::Free()
 {
 	__super::Free();
-	Clear_Colliders();
+    for (size_t i = 0; i < m_vColliders.size(); ++i)
+    {
+        Safe_Release(m_vColliders[i]);
+    }
+    m_vColliders.clear();
 }

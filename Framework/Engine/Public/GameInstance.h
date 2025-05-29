@@ -82,6 +82,7 @@ public:
 #pragma region COLLISION_MANAGER
 	// 해당 구간 추후 좀더 추가 예정
 	HRESULT Add_Collider(class CCollider_OBB* pCollider);
+	void Clear_Colliders();
 #pragma endregion
 
 #pragma region FONT_MANAGER

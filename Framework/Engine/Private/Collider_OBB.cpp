@@ -28,6 +28,7 @@ HRESULT CCollider_OBB::Initialize(void* pArg)
 		m_vScale = desc->vScale;
 		m_pOwner = desc->pOwner;
 	}
+
 	return S_OK;
 }
 
@@ -108,4 +109,5 @@ CComponent* CCollider_OBB::Clone(void* pArg)
 void CCollider_OBB::Free()
 {
 	__super::Free();
+	Safe_Release(m_pBoxMesh);
 }
