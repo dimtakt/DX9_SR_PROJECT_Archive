@@ -18,6 +18,7 @@ public:
 
 public:
 	void Create_Effect(const _wstring& strEffectTag, _float3 vPos, D3DXQUATERNION qRot, _float3 vScale);
+	void Create_Effect(const _wstring& strEffectTag, _float4x4 matWorld);
 
 private:
 	CGameInstance* m_pGameInstance = { nullptr };

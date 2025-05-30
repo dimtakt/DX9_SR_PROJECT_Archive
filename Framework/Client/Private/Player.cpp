@@ -67,15 +67,15 @@ void CPlayer::Update(_float fTimeDelta)
     if (m_pGameInstance->IsKeyDown(VK_LBUTTON))
     {
         // ksta : 테스트, 확인 후 삭제
-		CEffect_Factory::GetInstance()->Create_Effect(L"Prototype_Component_Texture_Effect_Blade0_Swing0",
-            {0, 0, 0}, {0, 0, 0, 1}, {1, 1, 1});
+        CEffect_Factory::GetInstance()->Create_Effect(L"Prototype_Component_Texture_Effect_Blade0_Swing0",
+            *m_pTransformCom->Get_WorldMatrix());
         // ******
 
 
-        // 이전 상태 공격 + 현재 상태 비공격 + 1번째 공격한 지 0.1f초 이하
+        // 이전 상태 공격 + 현재 상태 비공격 + 1번째 공격한 지 0.3f초 이하
         if (!   (strCurStateTag == L"Attack_Upper" ||
                 strCurStateTag == L"Attack_Lower"   ) &&
-                m_fStackedTime <= 0.1f)
+                m_fStackedTime <= 0.3f)
         {
             // 2번째 공격으로.
             strStateTag = (vRayPoint.z > vPlayerPos.z)?     L"Attack_Upper2" :

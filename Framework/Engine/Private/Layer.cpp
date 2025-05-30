@@ -49,10 +49,24 @@ void CLayer::Priority_Update(_float fTimeDelta)
 
 void CLayer::Update(_float fTimeDelta)
 {
+	std::vector<CGameObject*> vStandbyRemove;
+
 	for (auto& pGameObject : m_GameObjects)
 	{
-		if (nullptr != pGameObject)
+		if (nullptr != pGameObject && !pGameObject->Get_IsDead())
 			pGameObject->Update(fTimeDelta);
+		else if (nullptr != pGameObject && pGameObject->Get_IsDead())
+			vStandbyRemove.push_back(pGameObject);
+	}
+
+	for (auto& pGameObject : vStandbyRemove)
+	{
+		auto iter = std::find(m_GameObjects.begin(), m_GameObjects.end(), pGameObject);
+		if (iter != m_GameObjects.end())
+		{
+			m_GameObjects.erase(iter);
+			Safe_Release(pGameObject);
+		}
 	}
 }
 

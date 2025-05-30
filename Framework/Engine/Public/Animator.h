@@ -42,10 +42,13 @@ public:
 	ANIMSTATE* Get_CurState()	{ return m_pCurState; };
 	_wstring Get_PrevStateTag()	{ return m_strPrevStateTag; };
 	_wstring Get_CurStateTag()	{ return m_strCurStateTag; };
-	_bool Get_IsLastFrame() {	
-		// 마지막 이미지의 마지막 프레임부터 true를 반환합니다.
-		// 예) 장당 4프레임짜리 5장 이미지의 경우 딱 20번째 프레임부터 true 반환
-		return (((m_iStackedFrames + 1) / m_pCurState->iFramePerImage - 1) >= m_pCurState->pTextureCom->Get_NumTextures());
+	_bool Get_IsLastFrame() {
+		float result1 = (m_iStackedFrames + 1) / m_pCurState->iFramePerImage;
+		float result2 = m_pCurState->pTextureCom->Get_NumTextures();
+		bool result = (result1 >= result2);
+		return result;
+
+		//return (((m_iStackedFrames + 1.0f) / m_pCurState->iFramePerImage - 1.0f) >= m_pCurState->pTextureCom->Get_NumTextures());
 	}
 	_bool Get_IsReachedFrame(_uint iFrame) {
 		// 해당 번째 이미지가 지나기 직전 시점부터 true를 반환합니다.
