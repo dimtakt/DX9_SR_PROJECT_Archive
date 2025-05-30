@@ -49,6 +49,7 @@ HRESULT CTree::Initialize(void* pArg)
 
     m_iTextureIndex = pObject_Desc->iTextureIndex;
     m_pTextureCom->Bind_Texture(m_iTextureIndex);
+    m_eObjType = GAMEOBJ_TYPE::OBJECT;
 
     return S_OK;
 }

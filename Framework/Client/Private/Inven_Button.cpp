@@ -55,9 +55,10 @@ void CInven_Button::Priority_Update(_float fTimeDelta)
 void CInven_Button::Update(_float fTimeDelta)
 {
 	if (Check_Key_Down(g_hWnd, VK_LBUTTON))
-	{
 		static_cast<CInventory*>(m_pTargetUI)->UI_Switch();
-	}
+	
+	if (m_pGameInstance->IsKeyDown('Z'))
+		static_cast<CInventory*>(m_pTargetUI)->UI_Switch();
 
 	__super::Update(fTimeDelta);
 }

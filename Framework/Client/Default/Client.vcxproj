@@ -144,6 +144,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\Public\Animations\Anim_Player_Attack.h" />
+    <ClInclude Include="..\Public\Animations\Anim_Player_Attack2.h" />
     <ClInclude Include="..\public\Animations\Anim_Player_Idle.h" />
     <ClInclude Include="..\Public\BackGround.h" />
     <ClInclude Include="..\Public\Buff_Frame.h" />
@@ -152,15 +153,18 @@
     <ClInclude Include="..\Public\Camera_Follow.h" />
     <ClInclude Include="..\public\Camera_Free.h" />
     <ClInclude Include="..\Public\Camera_Mouse.h" />
+    <ClInclude Include="..\public\ChaterMap.h" />
     <ClInclude Include="..\Public\Client_Defines.h" />
     <ClInclude Include="..\Public\Client_Defines_Item.h" />
     <ClInclude Include="..\Public\Client_Struct.h" />
+    <ClInclude Include="..\Public\Effect_Factory.h" />
     <ClInclude Include="..\public\Inven_Slot.h" />
     <ClInclude Include="..\public\Inven_Slot_Selete.h" />
     <ClInclude Include="..\public\Item_Base.h" />
     <ClInclude Include="..\Public\Level_MapEdit.h" />
     <ClInclude Include="..\Public\Monster.h" />
     <ClInclude Include="..\Public\Monster_Factory.h" />
+    <ClInclude Include="..\Public\PlayerEffect.h" />
     <ClInclude Include="..\Public\Room_Manager.h" />
     <ClInclude Include="..\public\Sky.h" />
     <ClInclude Include="..\Public\TerrainBox.h" />
@@ -220,6 +224,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\Animations\Anim_Player_Attack.cpp" />
+    <ClCompile Include="..\Private\Animations\Anim_Player_Attack2.cpp" />
     <ClCompile Include="..\private\Animations\Anim_Player_Idle.cpp" />
     <ClCompile Include="..\Private\BackGround.cpp" />
     <ClCompile Include="..\Private\Buff_Frame.cpp" />
@@ -228,12 +233,15 @@
     <ClCompile Include="..\Private\Camera_Follow.cpp" />
     <ClCompile Include="..\private\Camera_Free.cpp" />
     <ClCompile Include="..\Private\Camera_Mouse.cpp" />
+    <ClCompile Include="..\private\ChaterMap.cpp" />
+    <ClCompile Include="..\Private\Effect_Factory.cpp" />
     <ClCompile Include="..\private\Inven_Slot.cpp" />
     <ClCompile Include="..\private\Inven_Slot_Selete.cpp" />
     <ClCompile Include="..\private\Item_Base.cpp" />
     <ClCompile Include="..\Private\Level_MapEdit.cpp" />
     <ClCompile Include="..\Private\Monster.cpp" />
     <ClCompile Include="..\Private\Monster_Factory.cpp" />
+    <ClCompile Include="..\Private\PlayerEffect.cpp" />
     <ClCompile Include="..\Private\Room_Manager.cpp" />
     <ClCompile Include="..\private\Sky.cpp" />
     <ClCompile Include="..\Private\TerrainBox.cpp" />

@@ -3,6 +3,8 @@
 #include "GameInstance.h"
 #include "Collider_OBB.h"
 
+#include "Effect_Factory.h"
+
 CPlayer::CPlayer(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CGameObject{ pGraphic_Device }
 {
@@ -25,6 +27,10 @@ HRESULT CPlayer::Initialize(void* pArg)
 
     m_eObjType = GAMEOBJ_TYPE::PLAYER;
     m_pTransformCom->Scaling(1.5f, 1.5f, 1.5f);
+    m_strTimerTag = L"GameObject_Player_StateDeltaTime";
+    
+    m_pGameInstance->Add_Timer(m_strTimerTag);      // 마지막으로 상태가 바뀐지 지난 시간을 측정할 타이머
+    m_pGameInstance->Compute_TimeDelta(m_strTimerTag);
 
 	return S_OK;
 }
@@ -49,31 +55,62 @@ void CPlayer::Update(_float fTimeDelta)
     _float3 vPlayerPos = {};    // 플레이어 좌표
     vPlayerPos = m_pTransformCom->Get_State(STATE::POSITION);
 
-    //std::cout << "[Player::Update] RayPoint  : {" << vRayPoint.x << ", " << vRayPoint.y << ", " << vRayPoint.z << "}" << std::endl;
-    std::cout << "[Player::Update] PlayerPos : {" << vPlayerPos.x << ", " << vPlayerPos.y << ", " << vPlayerPos.z << "}" << std::endl;
+    _wstring strCurStateTag = m_pAnimatorCom->Get_CurStateTag();
 
 
+    // ******** 상태 변화 분기들
+
+    wstring strStateTag = {};
 
 
+    // 공격 키를 누르면
+    if (m_pGameInstance->IsKeyDown(VK_LBUTTON))
+    {
+        // ksta : 테스트, 확인 후 삭제
+		CEffect_Factory::GetInstance()->Create_Effect(L"Prototype_Component_Texture_Effect_Blade0_Swing0",
+            {0, 0, 0}, {0, 0, 0, 1}, {1, 1, 1});
+        // ******
+
+
+        // 이전 상태 공격 + 현재 상태 비공격 + 1번째 공격한 지 0.1f초 이하
+        if (!   (strCurStateTag == L"Attack_Upper" ||
+                strCurStateTag == L"Attack_Lower"   ) &&
+                m_fStackedTime <= 0.1f)
+        {
+            // 2번째 공격으로.
+            strStateTag = (vRayPoint.z > vPlayerPos.z)?     L"Attack_Upper2" :
+                                                            L"Attack_Lower2";
+            m_pAnimatorCom->Change_State(strStateTag, true);
+        }
+
+
+        // 1번째 공격으로.
+        strStateTag = (vRayPoint.z > vPlayerPos.z) ?    L"Attack_Upper" :
+                                                        L"Attack_Lower";
+        m_pAnimatorCom->Change_State(strStateTag, true);
+
+    }
+
+
+    // 이동중
     if (m_pGameInstance->IsKeyHold('W') ||
         m_pGameInstance->IsKeyHold('S') ||
         m_pGameInstance->IsKeyHold('A') ||
         m_pGameInstance->IsKeyHold('D'))
     {
-        // 이동중
         // 이전에 Move 이었다면 프레임 초기화X
-        if (vRayPoint.z > vPlayerPos.z)                     // 상단
+        if (vRayPoint.z > vPlayerPos.z)                 // 상단
         {
-            if (m_pAnimatorCom->Get_CurStateTag() == L"Move_Lower" ||
-                m_pAnimatorCom->Get_CurStateTag() == L"Move_Upper")
+            if (strCurStateTag == L"Move_Lower" ||
+                strCurStateTag == L"Move_Upper")
                 m_pAnimatorCom->Change_State(L"Move_Upper", false);
             else
                 m_pAnimatorCom->Change_State(L"Move_Upper", true);
         }
         else                                            // 하단
         {
-            if (m_pAnimatorCom->Get_CurStateTag() == L"Move_Lower" ||
-                m_pAnimatorCom->Get_CurStateTag() == L"Move_Upper")
+            if (strCurStateTag == L"Move_Lower" ||
+                strCurStateTag == L"Move_Upper")
                 m_pAnimatorCom->Change_State(L"Move_Lower", false);
             else
                 m_pAnimatorCom->Change_State(L"Move_Lower", true);
@@ -82,18 +119,18 @@ void CPlayer::Update(_float fTimeDelta)
     else
     {
         // 이전에 Idle 이었다면 프레임 초기화 X
-        if (vRayPoint.z > vPlayerPos.z)                     // 상단
+        if (vRayPoint.z > vPlayerPos.z)                 // 상단
         {
-            if (m_pAnimatorCom->Get_CurStateTag() == L"Idle_Lower" ||
-                m_pAnimatorCom->Get_CurStateTag() == L"Idle_Upper")
+            if (strCurStateTag == L"Idle_Lower" ||
+                strCurStateTag == L"Idle_Upper")
                 m_pAnimatorCom->Change_State(L"Idle_Upper", false);
             else
                 m_pAnimatorCom->Change_State(L"Idle_Upper", true);
         }
         else                                            // 하단
         {
-            if (m_pAnimatorCom->Get_CurStateTag() == L"Idle_Lower" ||
-                m_pAnimatorCom->Get_CurStateTag() == L"Idle_Upper")
+            if (strCurStateTag == L"Idle_Lower" ||
+                strCurStateTag == L"Idle_Upper")
                 m_pAnimatorCom->Change_State(L"Idle_Lower", false);
             else
                 m_pAnimatorCom->Change_State(L"Idle_Lower", true);
@@ -101,34 +138,32 @@ void CPlayer::Update(_float fTimeDelta)
     }
 
 
-
+    // 이동
     if (m_pGameInstance->IsKeyHold('W'))
         m_pTransformCom->Go_Straight(fTimeDelta);
-
     if (m_pGameInstance->IsKeyHold('S'))
         m_pTransformCom->Go_Backward(fTimeDelta);
-
     if (m_pGameInstance->IsKeyHold('A'))
         m_pTransformCom->Go_Left(fTimeDelta);
-
     if (m_pGameInstance->IsKeyHold('D'))
         m_pTransformCom->Go_Right(fTimeDelta);
 
     
-
-    if (m_pGameInstance->IsKeyDown(VK_LBUTTON))
-    {
-        if (vRayPoint.z > vPlayerPos.z)
-            m_pAnimatorCom->Change_State(L"Attack_Upper");
-        else
-            m_pAnimatorCom->Change_State(L"Attack_Lower");
-    }
     
     if (m_pGameInstance->IsKeyDown(VK_RBUTTON))
     {
         // 우클릭시 행동
     }
 
+
+    // 상태가 바뀌었다면, 타이머 초기화
+    if (strCurStateTag == L"Attack_Upper" ||
+        strCurStateTag == L"Attack_Lower" )
+        m_fStackedTime = 0.f;
+
+
+    m_pGameInstance->Compute_TimeDelta(m_strTimerTag);
+    m_fStackedTime += m_pGameInstance->Get_TimeDelta(m_strTimerTag);
 }
 
 
@@ -319,6 +354,8 @@ HRESULT CPlayer::Ready_Components()
     m_pAnimatorCom->Add_State(L"Move_Upper",        { m_pTextureCom_Move_Upper, 4, true });
     m_pAnimatorCom->Add_State(L"Attack_Lower",      { m_pTextureCom_Attack_Lower, 3, false, m_pGameInstance->Find_Animation(L"Player_Attack") });
     m_pAnimatorCom->Add_State(L"Attack_Upper",      { m_pTextureCom_Attack_Upper, 3, false, m_pGameInstance->Find_Animation(L"Player_Attack") });
+    m_pAnimatorCom->Add_State(L"Attack_Lower2",     { m_pTextureCom_Attack_Lower, 3, false, m_pGameInstance->Find_Animation(L"Player_Attack2") });
+    m_pAnimatorCom->Add_State(L"Attack_Upper2",     { m_pTextureCom_Attack_Upper, 3, false, m_pGameInstance->Find_Animation(L"Player_Attack2") });
     m_pAnimatorCom->Add_State(L"GreatSwordHeavyAttack_Lower", { m_pTextureCom_GreatSwordHeavyAttack_Lower, 4, false});
     m_pAnimatorCom->Add_State(L"GreatSwordHeavyAttack_Upper", { m_pTextureCom_GreatSwordHeavyAttack_Upper, 4, false});
     m_pAnimatorCom->Add_State(L"WhirlWind_Ready",   { m_pTextureCom_WhirlWind_Ready, 4, false });
@@ -418,5 +455,7 @@ void CPlayer::Free()
         m_pCollider->Set_Owner(nullptr);
         Safe_Release(m_pCollider);
     }
+
+    CEffect_Factory::GetInstance()->Free();
     
 }

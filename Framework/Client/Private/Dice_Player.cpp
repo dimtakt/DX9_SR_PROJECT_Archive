@@ -16,10 +16,12 @@ HRESULT CDice_Player::Initialize_Prototype()
 
 HRESULT CDice_Player::Initialize(void* pArg)
 {
+	m_iValue = 1000;
+
 	m_fSizeX = 32;
 	m_fSizeY = 32;
 	m_fX = -32;
-	m_fY = 0;
+	m_fY = -32;
 	m_iWinSizeX = g_iWinSizeX;
 	m_iWinSizeY = g_iWinSizeY;
 
@@ -58,6 +60,8 @@ HRESULT CDice_Player::Render()
 
 	__super::Begin();
 	m_pVIBufferCom->Render();
+
+	Render_Font();
 	__super::End();
 
 	Reset_RenderState();
@@ -101,6 +105,16 @@ void CDice_Player::Reset_RenderState()
 	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MIPFILTER, D3DTEXF_LINEAR);
 
 	m_pGraphic_Device->SetTexture(0, NULL);
+}
+
+void CDice_Player::Render_Font()
+{
+	Font_Rect_Update();
+	TCHAR szText[64];
+	m_vTexRect.left -= 400;
+	m_vTexRect.right -= m_fSizeX;
+	_stprintf_s(szText, TEXT("%d"), m_iValue);
+	m_pGameInstance->Render_Font(TEXT("UI_Font_18"), szText, m_vTexRect, D3DXCOLOR(1.f, 1.f, 1.f, 1.f), DT_RIGHT | DT_VCENTER | DT_SINGLELINE);
 }
 
 CDice_Player* CDice_Player::Create(LPDIRECT3DDEVICE9 pGraphic_Device)

@@ -18,6 +18,9 @@ protected:
 	virtual ~CUIObject() = default;
 
 public:
+	const _float3	Get_WoldPos() { return m_vWorldPos; }
+
+public:
 	virtual HRESULT Initialize_Prototype();
 	virtual HRESULT Initialize(void* pArg = nullptr);
 	virtual void Priority_Update(_float fTimeDelta);
@@ -42,10 +45,11 @@ protected:
 	_float4x4				m_OldViewMatrix = {};
 	_float4x4				m_OldProjMatrix = {};
 
-	CUIObject* m_pParent = { nullptr };
+	CUIObject*				m_pParent = { nullptr };
 	vector<CUIObject*>		m_vecChildren = {};
 
-	class CTransform* m_pTransformCom = { nullptr };
+	class CTransform*		m_pTransformCom = { nullptr };
+	RECT					m_vTexRect = {};
 protected:
 	void					Begin();
 	void					End();
@@ -54,9 +58,11 @@ protected:
 	void					Update_Position();
 	void					Add_Child(CUIObject* pChildUI);
 
+	void					Font_Rect_Update();
 public:
 	virtual CGameObject* Clone(void* pArg) = 0;
 	virtual void			Free();
 };
+
 
 END

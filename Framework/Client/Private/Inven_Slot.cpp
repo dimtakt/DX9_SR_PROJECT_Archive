@@ -51,13 +51,16 @@ HRESULT CInven_Slot::Initialize(void* pArg)
 
 void CInven_Slot::Priority_Update(_float fTimeDelta)
 {
+	if (m_pSlotItem == nullptr)
+		m_iItemCount = 0;
+
 	m_iSlotGradeCount = 0;
 	__super::Priority_Update(fTimeDelta);
 }
 
 void CInven_Slot::Update(_float fTimeDelta)
 {
-	if (CUIObject::isPick(g_hWnd) && m_pGameInstance->IsKeyDown('F') && m_pSlotItem != nullptr)
+	if (CUIObject::isPick(g_hWnd) && m_pGameInstance->IsKeyDown('R') && m_pSlotItem != nullptr)
 		m_pSlotItem->IsRotation_Slate();
 
 	__super::Update(fTimeDelta);
@@ -71,6 +74,7 @@ void CInven_Slot::Late_Update(_float fTimeDelta)
 		m_bIsOver = false;
 
 	Setting_Item();
+
 	m_pGameInstance->Add_RenderGroup(RENDERGROUP::RG_UI, this);
 
 	if (m_bIsOver)
@@ -88,6 +92,7 @@ HRESULT CInven_Slot::Render()
 	if (FAILED(CButton::Bind_ButtonTex_Single(g_hWnd, m_iSlotItem_Tex)))
 		return E_FAIL;
 	Reset_RenderState();
+	Render_Font();
 	return S_OK;
 }
 
@@ -125,6 +130,8 @@ _int CInven_Slot::Slot_Info(ITEM_INFO eInfo)
 		return static_cast<_int>(m_eItemType);
 	case Client::ITEM_INFO::ITEM_VALUE:
 		return m_iItemValue;
+	case ITEM_INFO::ITEM_COUNT:
+		return m_iItemCount;
 	}
 }
 
@@ -137,6 +144,7 @@ void CInven_Slot::Setting_Item()
 {
 	if (m_pSlotItem == nullptr)
 	{
+		m_iSlotItem_MaxGrade = 0;
 		m_iSlotItem_Tex = 0;
 		m_iItemValue = 0;
 		m_eItemType = ITEM_TYPE::ITEM_TYPE_END;
@@ -149,6 +157,7 @@ void CInven_Slot::Setting_Item()
 	switch (m_eItemType)
 	{
 	case ITEM_TYPE::ARTEFACT:
+		m_iSlotItem_MaxGrade = m_iItemValue;
 		switch (m_pSlotItem->Item_Info()->iRarity)
 		{
 		case ENUM_CLASS(ITEM_RARITY::NORMAL):
@@ -166,6 +175,7 @@ void CInven_Slot::Setting_Item()
 		}
 		break;
 	case ITEM_TYPE::SKILLBOOK:
+		m_iSlotItem_MaxGrade = m_iItemValue;
 		switch (m_pSlotItem->Item_Info()->iRarity)
 		{
 		case ENUM_CLASS(ITEM_RARITY::NORMAL):
@@ -186,6 +196,7 @@ void CInven_Slot::Setting_Item()
 		m_iSlotItem_Tex = 6;
 		break;
 	case ITEM_TYPE::POTION:
+		m_iSlotItem_MaxGrade = g_PotionDataBase[m_iItemValue].m_iMaxPotion;
 		m_iSlotItem_Tex = 0;
 		break;
 	}
@@ -249,6 +260,77 @@ HRESULT CInven_Slot::Ready_Children()
 	Add_Child(pGameObject);
 
 	return S_OK;
+}
+
+void CInven_Slot::Render_Font()
+{
+	Font_Rect_Update();
+	m_vTexRect.left += 11;
+	m_vTexRect.top += 11;
+	m_vTexRect.right -= 11;
+	m_vTexRect.bottom -= 11;
+	TCHAR szText[64];
+	D3DXCOLOR TexColor{};
+	if (m_pSlotItem == nullptr)
+	{
+		if (m_iSlotGradeCount == 0)
+			return;
+		if (m_bIsOver)
+			return;
+		if (m_iSlotGradeCount > 0)
+		{
+			_stprintf_s(szText, TEXT("+%d"),m_iSlotGradeCount);
+			m_pGameInstance->Render_Font(TEXT("UI_Font_12"), szText, m_vTexRect, D3DXCOLOR(1.f, 1.f, 1.f, 1.f), DT_TOP | DT_LEFT);
+			return;
+		}
+		else
+		{
+			_stprintf_s(szText, TEXT("%d"),m_iSlotGradeCount);
+			m_pGameInstance->Render_Font(TEXT("UI_Font_12"), szText, m_vTexRect, D3DXCOLOR(1.f, 1.f, 1.f, 1.f), DT_TOP | DT_LEFT);
+			return;
+		}
+	}
+	
+	switch (m_eItemType)
+	{
+	case Client::ITEM_TYPE::ARTEFACT:
+		if (m_iSlotGradeCount < 0)
+			TexColor = D3DXCOLOR(1.f, 0.f, 0.f, 1.f);
+		else if (m_iSlotGradeCount > m_iSlotItem_MaxGrade)
+			TexColor = D3DXCOLOR(1.f, 0.647f, 0.f, 1.f);
+		else if(m_iSlotGradeCount == m_iSlotItem_MaxGrade)
+			TexColor = D3DXCOLOR(0.f, 1.f, 0.f, 1.f);
+		else
+			TexColor = D3DXCOLOR(1.f, 1.f, 1.f, 1.f);
+		
+		_stprintf_s(szText, TEXT("%d/%d"), m_iSlotGradeCount, m_iSlotItem_MaxGrade);
+		m_pGameInstance->Render_Font(TEXT("UI_Font_12"), szText, m_vTexRect, TexColor, DT_TOP | DT_LEFT);
+		break;
+	case Client::ITEM_TYPE::STONE:
+		break;
+	case Client::ITEM_TYPE::POTION:
+		if(m_iItemCount >= m_iSlotItem_MaxGrade)
+			TexColor = D3DXCOLOR(0.f, 1.f, 0.f, 1.f);
+		else
+			TexColor = D3DXCOLOR(1.f, 1.f, 1.f, 1.f);
+		_stprintf_s(szText, TEXT("%d/%d"),m_iItemCount, m_iSlotItem_MaxGrade);
+		m_pGameInstance->Render_Font(TEXT("UI_Font_12"), szText, m_vTexRect, TexColor, DT_RIGHT | DT_BOTTOM);
+		break;
+	case Client::ITEM_TYPE::SKILLBOOK:
+		if (m_iSlotGradeCount < 0)
+			TexColor = D3DXCOLOR(1.f, 0.f, 0.f, 1.f);
+		else if (m_iSlotGradeCount > m_iSlotItem_MaxGrade)
+			TexColor = D3DXCOLOR(1.f, 0.647f, 0.f, 1.f);
+		else if (m_iSlotGradeCount == m_iSlotItem_MaxGrade)
+			TexColor = D3DXCOLOR(0.f, 1.f, 0.f, 1.f);
+		else
+			TexColor = D3DXCOLOR(1.f, 1.f, 1.f, 1.f);
+
+		_stprintf_s(szText, TEXT("%d/%d"),m_iSlotGradeCount, m_iSlotItem_MaxGrade);
+		m_pGameInstance->Render_Font(TEXT("UI_Font_12"), szText, m_vTexRect, TexColor, DT_TOP | DT_LEFT);
+		break;
+	}
+
 }
 
 

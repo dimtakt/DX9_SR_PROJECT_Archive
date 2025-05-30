@@ -35,6 +35,8 @@ HRESULT CHp_Player::Initialize(void* pArg)
 	m_pTransformCom->Scaling(m_fSizeX, m_fSizeY, 1.f);
 	__super::Update_Position();
 
+
+
 	return S_OK;
 }
 
@@ -49,7 +51,8 @@ void CHp_Player::Update(_float fTimeDelta)
 }
 
 void CHp_Player::Late_Update(_float fTimeDelta)
-{
+{ 
+
 	Progress_UpdateX();
 	m_pGameInstance->Add_RenderGroup(RENDERGROUP::RG_UI, this);
 }
@@ -59,8 +62,9 @@ HRESULT CHp_Player::Render()
 	m_pVIBufferCom->Bind_Buffers();
 	__super::Begin();
 	m_pVIBufferCom->Render();
+	Render_Font();
 	__super::End();
-
+	
 	return S_OK;
 }
 
@@ -76,6 +80,28 @@ HRESULT CHp_Player::Ready_Components()
 		return E_FAIL;
 
 	return S_OK;
+}
+
+void CHp_Player::Render_Font()
+{
+
+	TCHAR szText[64];
+	_stprintf_s(szText, TEXT("%d/%d"), m_iCulValue, m_iCulMaxValue);
+	
+	Font_Rect_Update();
+
+	m_vTexRect.left += 2;
+	m_vTexRect.top += 2;
+	m_vTexRect.right += 2;
+	m_vTexRect.bottom += 2;
+	m_pGameInstance->Render_Font(TEXT("UI_Font_18"), szText, m_vTexRect, D3DXCOLOR(0.f, 0.f, 0.f, 1.f), DT_CENTER | DT_VCENTER | DT_SINGLELINE);
+
+	m_vTexRect.left -= 2;
+	m_vTexRect.top -= 2;
+	m_vTexRect.right -= 2;
+	m_vTexRect.bottom -= 2;
+	m_pGameInstance->Render_Font(TEXT("UI_Font_18"), szText, m_vTexRect, D3DXCOLOR(1.f, 1.f, 1.f, 1.f), DT_CENTER | DT_VCENTER | DT_SINGLELINE);
+
 }
 
 

@@ -97,7 +97,7 @@ public:
 
 	void Render_Font(const wstring& strFontTag,
 		const _wstring& strText,
-		const _float2* pVec2Pos,
+		const RECT& TexRect,
 		D3DXCOLOR d3dxColor,
 		DWORD dwFormat = DT_NOCLIP);
 
@@ -122,10 +122,10 @@ public:
 #pragma region LIGHT_MANAGER
 	HRESULT	Ready_Light(const D3DLIGHT9* pLightInfo, const _uint& iIndex);
 #pragma endregion
+
+#pragma region ANIMATION_MANAGER
 	HRESULT Insert_Animation(const wstring& strAnimTag, CAnimation* anim);
 	CAnimation* Find_Animation(const wstring& strAnimTag);
-#pragma region ANIMATION_MANAGER
-
 #pragma endregion
 
 
