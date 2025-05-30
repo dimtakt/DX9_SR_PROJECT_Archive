@@ -49,6 +49,7 @@ protected:
 	class CVIBuffer_Rect* m_pVIBufferCom = { nullptr };
 	CTerrainBox* m_pTerrainBox = { nullptr };
 	CCollider_OBB* m_pCollider = { nullptr };
+	_bool m_isTracking = false;
 
 public:
 	static CMonster* Create(LPDIRECT3DDEVICE9 pGraphic_Device);

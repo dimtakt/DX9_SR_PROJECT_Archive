@@ -155,7 +155,9 @@ call Copy.bat</Command>
   <ItemGroup>
     <ClInclude Include="..\public\Animation.h" />
     <ClInclude Include="..\public\Animator.h" />
-    <ClInclude Include="..\public\AnimatorController.h" />
+    <ClInclude Include="..\public\AnimatorController.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="..\public\Anim_Manager.h" />
     <ClInclude Include="..\Public\Base.h" />
     <ClInclude Include="..\public\Button.h" />
@@ -206,7 +208,9 @@ call Copy.bat</Command>
   <ItemGroup>
     <ClCompile Include="..\private\Animation.cpp" />
     <ClCompile Include="..\private\Animator.cpp" />
-    <ClCompile Include="..\private\AnimatorController.cpp" />
+    <ClCompile Include="..\private\AnimatorController.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="..\private\Anim_Manager.cpp" />
     <ClCompile Include="..\Private\Base.cpp" />
     <ClCompile Include="..\private\Button.cpp" />

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -162,8 +162,10 @@
     <ClInclude Include="..\public\Inven_Slot_Selete.h" />
     <ClInclude Include="..\public\Item_Base.h" />
     <ClInclude Include="..\Public\Level_MapEdit.h" />
+    <ClInclude Include="..\public\Mole_A.h" />
     <ClInclude Include="..\Public\Monster.h" />
     <ClInclude Include="..\Public\Monster_Factory.h" />
+    <ClInclude Include="..\public\Oink_A.h" />
     <ClInclude Include="..\Public\PlayerEffect.h" />
     <ClInclude Include="..\Public\Room_Manager.h" />
     <ClInclude Include="..\public\Sky.h" />
@@ -239,8 +241,10 @@
     <ClCompile Include="..\private\Inven_Slot_Selete.cpp" />
     <ClCompile Include="..\private\Item_Base.cpp" />
     <ClCompile Include="..\Private\Level_MapEdit.cpp" />
+    <ClCompile Include="..\private\Mole_A.cpp" />
     <ClCompile Include="..\Private\Monster.cpp" />
     <ClCompile Include="..\Private\Monster_Factory.cpp" />
+    <ClCompile Include="..\private\Oink_A.cpp" />
     <ClCompile Include="..\Private\PlayerEffect.cpp" />
     <ClCompile Include="..\Private\Room_Manager.cpp" />
     <ClCompile Include="..\private\Sky.cpp" />
