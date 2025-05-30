@@ -60,7 +60,7 @@ void CInven_Slot::Priority_Update(_float fTimeDelta)
 
 void CInven_Slot::Update(_float fTimeDelta)
 {
-	if (CUIObject::isPick(g_hWnd) && m_pGameInstance->IsKeyDown('F') && m_pSlotItem != nullptr)
+	if (CUIObject::isPick(g_hWnd) && m_pGameInstance->IsKeyDown('R') && m_pSlotItem != nullptr)
 		m_pSlotItem->IsRotation_Slate();
 
 	__super::Update(fTimeDelta);

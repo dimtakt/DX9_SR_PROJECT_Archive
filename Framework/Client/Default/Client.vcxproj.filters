@@ -220,6 +220,9 @@
     <Filter Include="03.Animations\Player">
       <UniqueIdentifier>{89952621-bacd-4c55-81a8-42271890590d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\UI\Window\ChaterMap">
+      <UniqueIdentifier>{760b2ee7-af5e-4919-a8a5-727898a63bcf}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -444,6 +447,9 @@
     <ClInclude Include="..\Public\Level_MapEdit.h">
       <Filter>01.Levels\03. MapEdit</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\ChaterMap.h">
+      <Filter>02.GameObject\UI\Window\ChaterMap</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -635,6 +641,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\Level_MapEdit.cpp">
       <Filter>01.Levels\03. MapEdit</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\ChaterMap.cpp">
+      <Filter>02.GameObject\UI\Window\ChaterMap</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
