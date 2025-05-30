@@ -331,7 +331,8 @@ HRESULT CGameInstance::Ready_Light(const D3DLIGHT9* pLightInfo, const _uint& iIn
     return m_pLight_Manager->Ready_Light(pLightInfo, iIndex);
 }
 
-#pragma endregion
+
+#pragma region ANIMATION_MANAGER
 HRESULT CGameInstance::Insert_Animation(const wstring& strAnimTag, CAnimation* anim)
 {
     return m_pAnimation_Manager->Insert_Animation(strAnimTag, anim);
@@ -340,9 +341,8 @@ HRESULT CGameInstance::Insert_Animation(const wstring& strAnimTag, CAnimation* a
 CAnimation* CGameInstance::Find_Animation(const wstring& strAnimTag)
 {
     return m_pAnimation_Manager->Find_Animation(strAnimTag);
+#pragma endregion
 }
-
-#pragma region ANIMATION_MANAGER
 HRESULT CGameInstance::Setting_Item(void* pArg, _uint iMaxItemIndex, _uint iLevelIndex, const _wstring& strItemBaseTag)
 {
     return m_pItem_Manager->Setting_Item(pArg, iMaxItemIndex, iLevelIndex, strItemBaseTag);
