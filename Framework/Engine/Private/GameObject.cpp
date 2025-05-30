@@ -84,6 +84,7 @@ void CGameObject::Free()
 	__super::Free();
 
 	for (auto& Pair : m_Components)
+
 		Safe_Release(Pair.second);
 	m_Components.clear();
 
