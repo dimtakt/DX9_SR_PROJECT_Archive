@@ -118,6 +118,16 @@ void CUIObject::Add_Child(CUIObject* pChildUI)
    
 }
 
+void CUIObject::Font_Rect_Update()
+{
+    if (m_pParent != nullptr) {
+        m_vTexRect.left = (m_pParent->Get_WoldPos().x + m_fX) - m_fSizeX * 0.5;
+        m_vTexRect.top = (m_pParent->Get_WoldPos().y + m_fY) - m_fSizeX * 0.5;
+        m_vTexRect.right = (m_pParent->Get_WoldPos().x + m_fX) + m_fSizeX * 0.5;
+        m_vTexRect.bottom = (m_pParent->Get_WoldPos().y + m_fY) + m_fSizeX * 0.5;
+    }
+}
+
 void CUIObject::Free()
 {
     for (auto& pChildren : m_vecChildren)

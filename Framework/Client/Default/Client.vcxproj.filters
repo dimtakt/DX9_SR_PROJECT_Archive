@@ -226,6 +226,9 @@
     <Filter Include="02.GameObject\Effect\Factory">
       <UniqueIdentifier>{d997d599-ee4f-4751-a9f7-4a16c5d505db}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\UI\Window\ChaterMap">
+      <UniqueIdentifier>{760b2ee7-af5e-4919-a8a5-727898a63bcf}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -459,6 +462,9 @@
     <ClInclude Include="..\Public\PlayerEffect.h">
       <Filter>02.GameObject\Effect</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\ChaterMap.h">
+      <Filter>02.GameObject\UI\Window\ChaterMap</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -659,6 +665,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\Effect_Factory.cpp">
       <Filter>02.GameObject\Effect\Factory</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\ChaterMap.cpp">
+      <Filter>02.GameObject\UI\Window\ChaterMap</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
