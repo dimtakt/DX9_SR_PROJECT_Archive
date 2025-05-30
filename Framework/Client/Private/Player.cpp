@@ -36,7 +36,7 @@ void CPlayer::Priority_Update(_float fTimeDelta)
 
 void CPlayer::Update(_float fTimeDelta)
 {    
-    m_pCollider->Update_Collider(m_pTransformCom);
+    m_pCollider->Update_Collider();
     if (m_pTerrainBox != nullptr) {
         m_pTerrainBox->SetUp_OnTerrainBox(m_pTransformCom, _float3(0.05f, 0.5f, 0.05f));
     }
@@ -169,8 +169,9 @@ HRESULT CPlayer::Render()
     m_pAnimatorCom->Update_State(); // Bind_Texture 이 포함되어, 현재 State에 맞는 이미지 출력
 
     m_pVIBufferCom->Bind_Buffers();
+    
     m_pVIBufferCom->Render();
-
+    m_pCollider->Render();
     if(m_isFlippedX)
     {
         m_pVIBufferCom->ResetUV_FlipX();
@@ -324,13 +325,11 @@ HRESULT CPlayer::Ready_Components()
     m_pAnimatorCom->Add_State(L"WhirlWind_Cycle",   { m_pTextureCom_WhirlWind_Cycle, 4, false });
 
     
-
-
-
     // collider
     CCollider_OBB::OBB_DESC tColliderDesc;
-    tColliderDesc.vScale = _float3(1.5f, 1.5f, 1.5f);
+    tColliderDesc.vScale = _float3(1.f, 1.f, 1.f);
     tColliderDesc.pOwner = this;
+    tColliderDesc.pTransform = m_pTransformCom;
     if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Collider_OBB"),
         TEXT("Com_Player_Collider"), reinterpret_cast<CComponent**>(&m_pCollider), &tColliderDesc)))
         return E_FAIL;
