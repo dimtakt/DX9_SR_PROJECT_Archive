@@ -4,7 +4,7 @@
 
 BEGIN(Engine)
 
-class CObject_Manager final : public CBase
+class ENGINE_DLL CObject_Manager final : public CBase
 {
 private:
 	CObject_Manager();

@@ -55,6 +55,7 @@ HRESULT CTexture::Bind_Texture(_uint iTextureIndex)
 	if (iTextureIndex >= m_iNumTextures)
 		 return E_FAIL;
 
+	m_iNumBindTexture = iTextureIndex;
 	return m_pGraphic_Device->SetTexture(0, m_Textures[iTextureIndex]);
  
  }

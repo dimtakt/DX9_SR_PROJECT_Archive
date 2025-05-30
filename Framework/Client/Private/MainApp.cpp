@@ -8,6 +8,8 @@
 #include "Room_Manager.h"
 #include "Monster_Factory.h"
 #include "Collider_OBB.h"
+#include "PlayerEffect.h"
+
 CMainApp::CMainApp()
 	: m_pGameInstance{ CGameInstance::GetInstance() }
 {
@@ -152,6 +154,19 @@ HRESULT CMainApp::Ready_Prototype_ForStatic()
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Player_WhirlWind_Cycle"),
 		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Player/Player_Basic_WhirlWind_Cycle0%d.png"), 8))))
 		return E_FAIL;
+	
+
+	// Prototype_Componrnt_Texture_Effect
+	// --- CTexture
+	// Blade0_Swing0
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Effect_Blade0_Swing0"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Effect/Blade0_Swing0_%d.png"), 3))))
+		return E_FAIL;
+	// Blade0_Swing1
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Effect_Blade0_Swing_1"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Effect/Blade0_Swing1_%d.png"), 3))))
+		return E_FAIL;
+
 
 	//-------------
 
@@ -190,6 +205,11 @@ HRESULT CMainApp::Ready_Prototype_ForStatic()
 		return E_FAIL;
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Item"),
 		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/UI/Item/Item_Icon_%d.png"), g_ItemDataBase.size()))))
+		return E_FAIL;
+
+	/* Prototype_GameObject_PlayerEffect */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_PlayerEffect"),
+		CPlayerEffect::Create(m_pGraphic_Device))))
 		return E_FAIL;
 
 	return S_OK;

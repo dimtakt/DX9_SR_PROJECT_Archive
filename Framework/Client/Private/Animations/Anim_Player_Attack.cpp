@@ -23,6 +23,7 @@ HRESULT CAnim_Player_Attack::Initialize()
 	// End Setting *********
 
 
+	// desmos : https://www.desmos.com/calculator/y5idpmfzbi
 	// keyStart (0~7) *********
 	for (size_t i = 0; i < 8; i++)
 	{

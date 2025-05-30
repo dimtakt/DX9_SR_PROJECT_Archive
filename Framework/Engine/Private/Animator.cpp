@@ -123,8 +123,12 @@ void CAnimator::Change_State(const _wstring strStateTag, _bool isChangeCurFrame)
 		return;
 	}
 
+	m_pPrevState = m_pCurState;
+	m_strPrevStateTag = m_strCurStateTag;
+
 	m_pCurState = pTmpState;
 	m_strCurStateTag = strStateTag;
+
 	std::wcout << "[CAnimator::Change_State] State Changed to \""<< strStateTag << "\"." << std::endl;
 	
 	// 프레임 순서 유지 불필요시에만 갱신

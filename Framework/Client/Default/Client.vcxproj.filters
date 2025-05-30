@@ -220,6 +220,12 @@
     <Filter Include="03.Animations\Player">
       <UniqueIdentifier>{89952621-bacd-4c55-81a8-42271890590d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\Effect">
+      <UniqueIdentifier>{f23c713d-5b4e-4b50-b339-bc7a31cc0b05}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Effect\Factory">
+      <UniqueIdentifier>{d997d599-ee4f-4751-a9f7-4a16c5d505db}</UniqueIdentifier>
+    </Filter>
     <Filter Include="02.GameObject\UI\Window\ChaterMap">
       <UniqueIdentifier>{760b2ee7-af5e-4919-a8a5-727898a63bcf}</UniqueIdentifier>
     </Filter>
@@ -447,6 +453,15 @@
     <ClInclude Include="..\Public\Level_MapEdit.h">
       <Filter>01.Levels\03. MapEdit</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Animations\Anim_Player_Attack2.h">
+      <Filter>03.Animations\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Effect_Factory.h">
+      <Filter>02.GameObject\Effect\Factory</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\PlayerEffect.h">
+      <Filter>02.GameObject\Effect</Filter>
+    </ClInclude>
     <ClInclude Include="..\public\ChaterMap.h">
       <Filter>02.GameObject\UI\Window\ChaterMap</Filter>
     </ClInclude>
@@ -627,6 +642,9 @@
     <ClCompile Include="..\Private\Animations\Anim_Player_Attack.cpp">
       <Filter>03.Animations\Player</Filter>
     </ClCompile>
+    <ClCompile Include="..\Private\Animations\Anim_Player_Attack2.cpp">
+      <Filter>03.Animations\Player</Filter>
+    </ClCompile>
     <ClCompile Include="..\Private\Room.cpp">
       <Filter>02.GameObject\Room</Filter>
     </ClCompile>
@@ -641,6 +659,12 @@
     </ClCompile>
     <ClCompile Include="..\Private\Level_MapEdit.cpp">
       <Filter>01.Levels\03. MapEdit</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\PlayerEffect.cpp">
+      <Filter>02.GameObject\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Effect_Factory.cpp">
+      <Filter>02.GameObject\Effect\Factory</Filter>
     </ClCompile>
     <ClCompile Include="..\private\ChaterMap.cpp">
       <Filter>02.GameObject\UI\Window\ChaterMap</Filter>
