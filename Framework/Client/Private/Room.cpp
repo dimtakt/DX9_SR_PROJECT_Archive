@@ -120,6 +120,11 @@ void CRoom::Enter()
 {
 	m_bIsActive = true;
 	m_bIsVisited = true;
+
+	for (auto& pMonster : m_vMonster)
+	{
+		m_pGameInstance->Add_Collider(pMonster->Get_Collider());
+	}
 }
 
 void CRoom::Exit()
