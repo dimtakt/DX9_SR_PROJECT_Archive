@@ -37,6 +37,7 @@ public:
     _bool GetIsVisited() { return m_bIsVisited; }
     _int  GetID() { return m_iID; }
     CTerrainBox* Get_TerrainBox(){ return m_pTerrainBox; }
+    vector<CMonster*> Get_MonsterList() { return m_vMonster; }
 
 public:
     void Add_TerrainBox(class CTerrainBox* pTerrainBox){m_pTerrainBox = pTerrainBox;}

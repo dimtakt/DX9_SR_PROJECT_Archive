@@ -41,12 +41,12 @@ HRESULT CFont::Ready_Font(const _wstring& strFontPath, const _wstring& strFontNa
     return S_OK;
 }
 
-void CFont::Render_Font(const _wstring& strText, const _float2* pVec2Pos,
+void CFont::Render_Font(const _wstring& strText, const RECT& TexRect,
     D3DXCOLOR d3dxColor, DWORD dwFormat)
 {
-    RECT tRect = { (_long)pVec2Pos->x, (_long)pVec2Pos->y, 0, 0 };
-
-    m_pSprite->Begin(D3DXSPRITE_ALPHABLEND);
+    RECT tRect = TexRect;
+    
+    m_pSprite->Begin(D3DXSPRITE_ALPHABLEND | D3DXSPRITE_SORT_TEXTURE);
     m_pFont->DrawTextW(m_pSprite, strText.c_str(), -1, &tRect, dwFormat, d3dxColor);
     m_pSprite->End();
 }

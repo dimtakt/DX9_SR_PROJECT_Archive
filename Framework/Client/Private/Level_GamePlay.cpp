@@ -9,8 +9,12 @@
 #include "Animation.h"
 
 // Animations?
-#include "../Public/Animations/Anim_Player_Idle.h"
-#include "../Public/Animations/Anim_Player_Attack.h"
+#pragma region Animations Include
+#include "Animations/Anim_Player_Idle.h"
+#include "Animations/Anim_Player_Attack.h"
+#include "Animations/Anim_Player_Attack2.h"
+#pragma endregion
+
 
 
 CLevel_GamePlay::CLevel_GamePlay(LPDIRECT3DDEVICE9 pGraphic_Device)
@@ -43,6 +47,9 @@ HRESULT CLevel_GamePlay::Initialize()
 
 	if (FAILED(Ready_Layer_UI(TEXT("Layer_UI"))))
 		return E_FAIL;
+
+
+
 
 
 	return S_OK;
@@ -92,6 +99,8 @@ HRESULT CLevel_GamePlay::Ready_Animations()
 	if (FAILED(m_pGameInstance->Insert_Animation(L"Player_Idle", CAnim_Player_Idle::Create())))
 		return E_FAIL;
 	if (FAILED(m_pGameInstance->Insert_Animation(L"Player_Attack", CAnim_Player_Attack::Create())))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Insert_Animation(L"Player_Attack2", CAnim_Player_Attack2::Create())))
 		return E_FAIL;
 
 	return S_OK;
@@ -188,6 +197,7 @@ HRESULT CLevel_GamePlay::Ready_Layer_UI(const _wstring& strLayerTag)
 
 	return S_OK;
 }
+
 
 CLevel_GamePlay* CLevel_GamePlay::Create(LPDIRECT3DDEVICE9 pGraphic_Device)
 {

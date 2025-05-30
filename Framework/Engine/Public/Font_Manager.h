@@ -20,7 +20,7 @@ public:
 
     void Render_Font(const wstring& strFontTag,
         const _wstring& strText,
-        const _float2* pVec2Pos,
+        const RECT& TexRect,
         D3DXCOLOR d3dxColor,
         DWORD dwFormat = DT_NOCLIP);
 

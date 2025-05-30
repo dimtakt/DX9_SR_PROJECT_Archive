@@ -70,7 +70,7 @@ HRESULT CTerrainBox::Render()
 		return E_FAIL;*/
 	m_pVIBufferCom->Bind_Buffers();
 
-	m_pTextureTop->Bind_Texture(m_iTopTextureIndex); // À§
+ 	m_pTextureTop->Bind_Texture(m_iTopTextureIndex); // À§
 	m_pVIBufferCom->Render_Subset(0);
 
 	m_pTextureSide->Bind_Texture(m_iSideTextureIndex);

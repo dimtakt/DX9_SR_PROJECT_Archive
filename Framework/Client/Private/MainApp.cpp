@@ -8,6 +8,8 @@
 #include "Room_Manager.h"
 #include "Monster_Factory.h"
 #include "Collider_OBB.h"
+#include "PlayerEffect.h"
+
 CMainApp::CMainApp()
 	: m_pGameInstance{ CGameInstance::GetInstance() }
 {
@@ -43,7 +45,7 @@ HRESULT CMainApp::Initialize()
 		return E_FAIL;
 
 	Ready_Key_Setting();
-
+	Ready_Font_Setting();
 	return S_OK;
 }
 
@@ -152,6 +154,19 @@ HRESULT CMainApp::Ready_Prototype_ForStatic()
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Player_WhirlWind_Cycle"),
 		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Player/Player_Basic_WhirlWind_Cycle0%d.png"), 8))))
 		return E_FAIL;
+	
+
+	// Prototype_Componrnt_Texture_Effect
+	// --- CTexture
+	// Blade0_Swing0
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Effect_Blade0_Swing0"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Effect/Blade0_Swing0_%d.png"), 3))))
+		return E_FAIL;
+	// Blade0_Swing1
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Effect_Blade0_Swing_1"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Effect/Blade0_Swing1_%d.png"), 3))))
+		return E_FAIL;
+
 
 	//-------------
 
@@ -192,6 +207,11 @@ HRESULT CMainApp::Ready_Prototype_ForStatic()
 		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/UI/Item/Item_Icon_%d.png"), g_ItemDataBase.size()))))
 		return E_FAIL;
 
+	/* Prototype_GameObject_PlayerEffect */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_PlayerEffect"),
+		CPlayerEffect::Create(m_pGraphic_Device))))
+		return E_FAIL;
+
 	return S_OK;
 }
 
@@ -218,13 +238,25 @@ void CMainApp::Ready_Key_Setting()
 	m_pGameInstance->AddTrackingKey('E');
 	m_pGameInstance->AddTrackingKey('L');
 	m_pGameInstance->AddTrackingKey('Z');
-	m_pGameInstance->AddTrackingKey('F');
+	m_pGameInstance->AddTrackingKey('R');
 	// 임시 테스트용
 #if _DEBUG
 	m_pGameInstance->AddTrackingKey('J');
 	m_pGameInstance->AddTrackingKey('K');
 #endif
 
+}
+
+void CMainApp::Ready_Font_Setting()
+{
+	if (FAILED(m_pGameInstance->Ready_Font(TEXT("UI_Font_18"), TEXT("../Bin/Resources/Font/Galmuri9.ttf"), TEXT("Galmuri9 Regular"), 0, 18, 900)))
+		MSG_BOX(TEXT("FAILED to Font"));
+	if (FAILED(m_pGameInstance->Ready_Font(TEXT("UI_Font_16"), TEXT("../Bin/Resources/Font/Galmuri9.ttf"), TEXT("Galmuri9 Regular"), 0, 16, 900)))
+		MSG_BOX(TEXT("FAILED to Font"));
+	if (FAILED(m_pGameInstance->Ready_Font(TEXT("UI_Font_14"), TEXT("../Bin/Resources/Font/Galmuri9.ttf"), TEXT("Galmuri9 Regular"), 0, 14, 900)))
+		MSG_BOX(TEXT("FAILED to Font"));
+	if (FAILED(m_pGameInstance->Ready_Font(TEXT("UI_Font_12"), TEXT("../Bin/Resources/Font/Galmuri9.ttf"), TEXT("Galmuri9 Regular"), 14, 13, 700)))
+		MSG_BOX(TEXT("FAILED to Font"));
 }
 
 HRESULT CMainApp::Ready_Item_Setting()

@@ -163,6 +163,7 @@ call Copy.bat</Command>
     <ClInclude Include="..\public\Collider.h" />
     <ClInclude Include="..\public\Collision_Manager.h" />
     <ClInclude Include="..\Public\Component.h" />
+    <ClInclude Include="..\Public\Effect.h" />
     <ClInclude Include="..\Public\Engine_Defines.h" />
     <ClInclude Include="..\Public\Engine_Enum.h" />
     <ClInclude Include="..\Public\Engine_Function.h" />
@@ -214,6 +215,7 @@ call Copy.bat</Command>
     <ClCompile Include="..\private\Collider_OBB.cpp" />
     <ClCompile Include="..\private\Collider.cpp" />
     <ClCompile Include="..\Private\Component.cpp" />
+    <ClCompile Include="..\Private\Effect.cpp" />
     <ClCompile Include="..\Private\Font.cpp" />
     <ClCompile Include="..\Private\Font_Manager.cpp" />
     <ClCompile Include="..\private\Item_Manager.cpp" />

@@ -64,6 +64,10 @@ private:
 	CTerrainBox*			m_pTerrainBox					= { nullptr };
 	CCollider_OBB*			m_pCollider						= { nullptr };
 	
+	_wstring				m_strTimerTag					= {};
+
+	_float					m_fStackedTime					= 0;
+
 private:
 	HRESULT Ready_Components();
 	void SetUp_RenderState();

@@ -45,7 +45,7 @@ void CTerrain::Late_Update(_float fTimeDelta)
 
 HRESULT CTerrain::Render()
 {
-	m_pGraphic_Device->SetRenderState(D3DRS_LIGHTING, TRUE);
+	m_pGraphic_Device->SetRenderState(D3DRS_LIGHTING, FALSE);
 	m_pTransformCom->Bind_Matrix();
 
 	if (FAILED(Ready_Material()))
