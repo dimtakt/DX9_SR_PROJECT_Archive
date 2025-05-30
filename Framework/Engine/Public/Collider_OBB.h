@@ -10,7 +10,7 @@ class ENGINE_DLL CCollider_OBB final : public CCollider
 public:
     typedef struct tagOBB_Desc {
         CGameObject* pOwner;
-        const CTransform* pTransform; // 게임오브젝트의 Transform 참조
+        CTransform* pTransform; // 게임오브젝트의 Transform 참조
         _float3 vScale;
     } OBB_DESC;
 
@@ -24,6 +24,14 @@ public:
     virtual HRESULT Initialize(void* pArg) override;
     virtual HRESULT Render() override;
 
+private:
+    void Render_AttachedDebugBox(LPDIRECT3DDEVICE9 pDevice,
+        const _float3& vCenter,
+        const _float3& vRight,
+        const _float3& vLook,
+        const _float3& vScale,      // OBB 크기
+        D3DCOLOR color = D3DCOLOR_ARGB(255, 255, 0, 0)); // 기본 빨간색;
+
 public:
     virtual void Update_Collider();
 
@@ -33,12 +41,13 @@ public:
     const _float3& Get_Extents()const { return m_vWorldExtents; }
 
 private:
-    const CTransform* m_pTransformRef = nullptr; 
+    CTransform* m_pTransformRef = nullptr; 
 
     _float3 m_vWorldCenter = {};
     _float3 m_vWorldExtents = {};
     _float3 m_vAxis[3] = {};
     _float3 m_vScale = {};
+
 
 public:
     static CCollider_OBB* Create(LPDIRECT3DDEVICE9 pGraphic_Device);

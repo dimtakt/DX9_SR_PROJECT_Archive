@@ -34,6 +34,11 @@ void CCollision_Manager::Check_RoomCollisions()
     {
         for (size_t j = i + 1; j < m_vColliders.size(); ++j)
         {
+            if (i == 0)
+            {
+                int a = 1;
+            }
+
             if (m_vColliders[i]->Get_Owner()->Get_ObjType() != m_vColliders[j]->Get_Owner()->Get_ObjType() 
                 && Check_OBBtoOBB(m_vColliders[i], m_vColliders[j])
                 && Check_Y_Overlap(m_vColliders[i], m_vColliders[j]))
@@ -93,6 +98,22 @@ _bool CCollision_Manager::Check_Y_Overlap(CCollider_OBB* pA, CCollider_OBB* pB)
     float maxB = vCenterB.y + vExtentB.y;
 
     return !(maxA < minB || maxB < minA);
+}
+
+void CCollision_Manager::Render()
+{
+    for (auto& Col : m_vColliders)
+    {
+        Col->Render();
+    }
+}
+
+void CCollision_Manager::Update()
+{
+    for (auto& Col : m_vColliders)
+    {
+        Col->Update_Collider();
+    }
 }
 
 CCollision_Manager* CCollision_Manager::Create()

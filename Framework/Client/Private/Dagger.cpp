@@ -138,7 +138,17 @@ HRESULT	CDagger::Ready_Components()
 	/* Get Player Transform to m_pTargetTransformCom */
 	m_pTargetTransformCom = dynamic_cast<CTransform*>(m_pGameInstance->Get_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Layer_Player"), TEXT("Com_Transform")));
 
+	// collider
+	CCollider_OBB::OBB_DESC tColliderDesc;
+	tColliderDesc.vScale = _float3(1.f, 0.001f, 1.f);
+	tColliderDesc.pOwner = this;
+	tColliderDesc.pTransform = m_pTransformCom;
+	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Collider_OBB"),
+		TEXT("Com_Dagger_Collider"), reinterpret_cast<CComponent**>(&m_pCollider), &tColliderDesc)))
+		return E_FAIL;
 
+
+	m_pGameInstance->Add_Collider(m_pCollider);
 
 	return S_OK;
 }
@@ -310,4 +320,9 @@ void CDagger::Free()
 	Safe_Release(m_pTransformCom);
 	Safe_Release(m_pTextureCom);
 	Safe_Release(m_pAnimatorCom);
+	if (m_pCollider)
+	{
+		m_pCollider->Set_Owner(nullptr);
+		Safe_Release(m_pCollider);
+	}
 }

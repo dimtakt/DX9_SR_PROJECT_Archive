@@ -1,7 +1,7 @@
 #pragma once
 #include "Client_Defines.h"
 #include "GameObject.h"
-
+#include "Collider_OBB.h"
 BEGIN(Engine)
 class CTexture;
 class CTransform;
@@ -35,6 +35,7 @@ private:
 	_bool					m_isFlippedX					= false;
 
 	CTransform*				m_pTargetTransformCom			= { nullptr };
+	CCollider_OBB*			m_pCollider = { nullptr };
 
 private:
 	HRESULT	Ready_Components();

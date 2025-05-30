@@ -19,6 +19,10 @@ private:
 	_bool Check_OBBtoOBB(CCollider_OBB* pA, CCollider_OBB* pB);
 	_bool Check_Y_Overlap(CCollider_OBB* pA, CCollider_OBB* pB);
 
+public:
+	void Render();
+	void Update();
+
 private:
 	std::vector<CCollider_OBB*> m_vColliders;
 public:

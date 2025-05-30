@@ -46,9 +46,6 @@ void CMonster::Update(_float fTimeDelta)
 	if (m_pTerrainBox != nullptr) {
 		m_pTerrainBox->SetUp_OnTerrainBox(m_pTransformCom, _float3(0.05f, 0.1f, 0.05f));
 	}
-
-	m_pCollider->Update_Collider();
-
 }
 
 void CMonster::Late_Update(_float fTimeDelta)
@@ -70,8 +67,9 @@ HRESULT CMonster::Render()
 
 	m_pVIBufferCom->Render();
 
-	m_pTerrainBox->Render();
-
+	//m_pTerrainBox->Render();
+	m_pGraphic_Device->SetRenderState(D3DRS_ZENABLE, FALSE);
+	m_pGraphic_Device->SetRenderState(D3DRS_ZENABLE, TRUE);
 	Reset_RenderState();
 
 	return S_OK;
@@ -101,7 +99,7 @@ HRESULT CMonster::Ready_Components()
 
 	// collider
 	CCollider_OBB::OBB_DESC tColliderDesc;
-	tColliderDesc.vScale = _float3(1.5f, 1.5f, 1.5f);
+	tColliderDesc.vScale = _float3(1.f, 4.f, 1.f);
 	tColliderDesc.pOwner = this;
 	tColliderDesc.pTransform = m_pTransformCom;
 	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Collider_OBB"),
@@ -141,7 +139,7 @@ void CMonster::OnCollision(CGameObject* pGameObject)
 	case GAMEOBJ_TYPE::PLAYER:
 		{
 			/*_float3 vDir = m_pTransformCom->Get_State(STATE::POSITION) - pTransform->Get_State(STATE::POSITION);*/
-			m_pTransformCom->Look_At(pTransform->Get_State(STATE::POSITION));
+			//m_pTransformCom->Look_At(pTransform->Get_State(STATE::POSITION));
 			m_pTransformCom->Move_To(pTransform->Get_State(STATE::POSITION), 0.01f, 0.05f);
 			break;
 		}
