@@ -75,6 +75,7 @@ HRESULT CDagger::Render()
 {
 	// 커서에 맞게 각도 보정 필요
 	Look_At_Cursor();
+	m_pTransformCom->RotationByParent({1, 0, 0}, m_pTargetTransformCom, D3DXToRadian(90));
 	// 이게 여기있으면 안되는데? ?????
 
 	SetUp_RenderState();

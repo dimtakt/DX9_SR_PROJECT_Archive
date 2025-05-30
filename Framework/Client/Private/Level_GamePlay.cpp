@@ -49,6 +49,9 @@ HRESULT CLevel_GamePlay::Initialize()
 		return E_FAIL;
 
 
+
+
+
 	return S_OK;
 }
 
@@ -194,6 +197,7 @@ HRESULT CLevel_GamePlay::Ready_Layer_UI(const _wstring& strLayerTag)
 
 	return S_OK;
 }
+
 
 CLevel_GamePlay* CLevel_GamePlay::Create(LPDIRECT3DDEVICE9 pGraphic_Device)
 {

@@ -145,9 +145,6 @@
     <Filter Include="01.Utility\05.Component\VIBuffer\TerrainBox">
       <UniqueIdentifier>{fbb10ce6-d85d-40fc-8cb1-2b6f0e624bf7}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01.Utility\05.Component\Animation">
-      <UniqueIdentifier>{2cbb2f35-fea3-43c8-859c-9581c15a0055}</UniqueIdentifier>
-    </Filter>
     <Filter Include="01.Utility\03.GameObject\UIObject\ItemObject">
       <UniqueIdentifier>{03deaa89-f91a-4378-ad9a-4be09b0bc23c}</UniqueIdentifier>
     </Filter>
@@ -165,6 +162,9 @@
     </Filter>
     <Filter Include="01.Utility\05.Component\Animator\Animation\Manager">
       <UniqueIdentifier>{ef7d0001-84b7-436e-988d-cd23a1a1e530}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\03.GameObject\Effect">
+      <UniqueIdentifier>{7ec15ec4-67c3-4da0-bbd5-c50210de51ea}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -312,6 +312,9 @@
     <ClInclude Include="..\public\Item_Manager.h">
       <Filter>01.Utility\03.GameObject\UIObject\ItemObject\Manager</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Effect.h">
+      <Filter>01.Utility\03.GameObject\Effect</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\Base.cpp">
@@ -434,11 +437,14 @@
     <ClCompile Include="..\private\ItemObject.cpp">
       <Filter>01.Utility\03.GameObject\UIObject\ItemObject</Filter>
     </ClCompile>
-    <ClCompile Include="..\private\Animation.cpp">
-      <Filter>01.Utility\05.Component\Animation</Filter>
-    </ClCompile>
     <ClCompile Include="..\private\Item_Manager.cpp">
       <Filter>01.Utility\03.GameObject\UIObject\ItemObject\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Animation.cpp">
+      <Filter>01.Utility\05.Component\Animator\Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Effect.cpp">
+      <Filter>01.Utility\03.GameObject\Effect</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
