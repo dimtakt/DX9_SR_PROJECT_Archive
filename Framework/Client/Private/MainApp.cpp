@@ -239,6 +239,7 @@ void CMainApp::Ready_Key_Setting()
 	m_pGameInstance->AddTrackingKey('L');
 	m_pGameInstance->AddTrackingKey('Z');
 	m_pGameInstance->AddTrackingKey('R');
+	m_pGameInstance->AddTrackingKey('F');
 	// 임시 테스트용
 #if _DEBUG
 	m_pGameInstance->AddTrackingKey('J');

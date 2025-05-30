@@ -26,7 +26,7 @@ HRESULT CInventory::Initialize(void* pArg)
 	m_fSizeY = 1215.f;
 	m_fX = g_iWinSizeX * 0.5;
 	m_fY = g_iWinSizeY * 0.5;
-	m_fZ = 0.2f;
+	m_fZ = UI_DEPTH::INVENTORY;
 	m_iWinSizeX = g_iWinSizeX;
 	m_iWinSizeY = g_iWinSizeY;
 
@@ -131,6 +131,14 @@ void CInventory::Add_Item_Inven(_uint ItemIndex)
 		if (m_vecInventory[i]->Pop_Item() == nullptr)
 			m_vecInventory[i]->Add_Item(static_cast<CItem_Base*>(pItem));
 	}
+}
+
+_bool CInventory::Pick_Slot()
+{
+	if (m_pPickSlot != nullptr)
+		return true;
+	
+	return false;
 }
 
 

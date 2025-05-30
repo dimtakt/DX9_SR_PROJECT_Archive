@@ -29,7 +29,7 @@ HRESULT CDash_Gauge_Frame::Initialize(void* pArg)
 	m_fSizeY = 30;
 	m_fX = (DescMy->fX * (m_fSizeX));
 	m_fY = 0;
-	m_fZ = 0.f;
+	m_fZ = UI_DEPTH::HUD_DASH;;
 	m_iWinSizeX = g_iWinSizeX;
 	m_iWinSizeY = g_iWinSizeY;
 	

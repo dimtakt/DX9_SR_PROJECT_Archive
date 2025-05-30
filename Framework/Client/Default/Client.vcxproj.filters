@@ -226,8 +226,23 @@
     <Filter Include="02.GameObject\Effect\Factory">
       <UniqueIdentifier>{d997d599-ee4f-4751-a9f7-4a16c5d505db}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\UI\Window\ChaterMap">
+    <Filter Include="02.GameObject\UI\Window\ChapMap">
       <UniqueIdentifier>{760b2ee7-af5e-4919-a8a5-727898a63bcf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\UI\Window\ChapMap\ChapMap_Frame">
+      <UniqueIdentifier>{149c35eb-aa83-4ef7-a237-5ee34d8824ad}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\UI\Window\ChapMap\ChapMap_Button">
+      <UniqueIdentifier>{25f627bd-bd4b-4bf3-8f16-4aa29e25f1da}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\UI\Window\ChapMap\ChapMap_Button\ChapMap_MapSymbol">
+      <UniqueIdentifier>{54a933e3-f117-4133-9914-a5cf8914d1a9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\UI\Window\ChapMap\ChapMap_Player">
+      <UniqueIdentifier>{e09888a8-a3d2-43e3-a9f1-db62f03906c0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\UI\Window\ChapMap\ChapMap_Button\ChapMap_BossSymbol">
+      <UniqueIdentifier>{46427139-e135-46d7-a8b5-16f708b5db62}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -462,8 +477,26 @@
     <ClInclude Include="..\Public\PlayerEffect.h">
       <Filter>02.GameObject\Effect</Filter>
     </ClInclude>
-    <ClInclude Include="..\public\ChaterMap.h">
-      <Filter>02.GameObject\UI\Window\ChaterMap</Filter>
+    <ClInclude Include="..\public\ChapMap.h">
+      <Filter>02.GameObject\UI\Window\ChapMap</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\ChapMap_Frame.h">
+      <Filter>02.GameObject\UI\Window\ChapMap\ChapMap_Frame</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\ChapMap_Button.h">
+      <Filter>02.GameObject\UI\Window\ChapMap\ChapMap_Button</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\ChapMap_MapSymbol.h">
+      <Filter>02.GameObject\UI\Window\ChapMap\ChapMap_Button\ChapMap_MapSymbol</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\ChapMap_PlayerSymbol.h">
+      <Filter>02.GameObject\UI\Window\ChapMap\ChapMap_Player</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Client_Defines_Map.h">
+      <Filter>99.Defines</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Chapmap_Boss.h">
+      <Filter>02.GameObject\UI\Window\ChapMap\ChapMap_Button\ChapMap_BossSymbol</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -666,8 +699,23 @@
     <ClCompile Include="..\Private\Effect_Factory.cpp">
       <Filter>02.GameObject\Effect\Factory</Filter>
     </ClCompile>
-    <ClCompile Include="..\private\ChaterMap.cpp">
-      <Filter>02.GameObject\UI\Window\ChaterMap</Filter>
+    <ClCompile Include="..\private\ChapMap.cpp">
+      <Filter>02.GameObject\UI\Window\ChapMap</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\ChapMap_Frame.cpp">
+      <Filter>02.GameObject\UI\Window\ChapMap\ChapMap_Frame</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\ChapMap_Button.cpp">
+      <Filter>02.GameObject\UI\Window\ChapMap\ChapMap_Button</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\ChapMap_MapSymbol.cpp">
+      <Filter>02.GameObject\UI\Window\ChapMap\ChapMap_Button\ChapMap_MapSymbol</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\ChapMap_PlayerSymbol.cpp">
+      <Filter>02.GameObject\UI\Window\ChapMap\ChapMap_Player</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Chapmap_Boss.cpp">
+      <Filter>02.GameObject\UI\Window\ChapMap\ChapMap_Button\ChapMap_BossSymbol</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

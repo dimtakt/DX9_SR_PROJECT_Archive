@@ -24,6 +24,7 @@ HRESULT CBuff_Icon::Initialize(void* pArg)
 	m_fSizeY = 32;
 	m_fX = 0;
 	m_fY = 0;
+	m_fZ = UI_DEPTH::HUD_BUFF;
 	m_iWinSizeX = g_iWinSizeX;
 	m_iWinSizeY = g_iWinSizeY;
 
