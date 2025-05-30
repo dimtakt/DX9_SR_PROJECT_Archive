@@ -79,12 +79,6 @@ void CInventory::Priority_Update(_float fTimeDelta)
 
 void CInventory::Update(_float fTimeDelta)
 {
-	if (m_pGameInstance->IsKeyDown('Z') && m_bIsOpen)
-		m_bIsOpen = false;
-	else if (m_pGameInstance->IsKeyDown('Z') && !m_bIsOpen)
-		m_bIsOpen = true;
-
-
 	Selete_Slot();
 	Set_Grade();
 
@@ -93,13 +87,11 @@ void CInventory::Update(_float fTimeDelta)
 
 void CInventory::Late_Update(_float fTimeDelta)
 {
-
 	if (m_bIsOpen == true)
 	{
 		m_pGameInstance->Add_RenderGroup(RENDERGROUP::RG_UI, this);
 		__super::Late_Update(fTimeDelta);
 	}
-
 
 	if (m_pPickSlot != nullptr)
 		m_pPickSlot->ItemRender();
@@ -163,12 +155,14 @@ void CInventory::Selete_Slot()
 			if (pPopItem)
 			{
 				m_vecInventory[i]->Push_Item(m_pPickSlot->Pop_Item());
+				m_vecInventory[i]->Push_Item_Count(m_pPickSlot->Pop_Item_Count());
 				m_pPickSlot->Release_Item();
 				m_pPickSlot->Push_Item(pPopItem);
 			}
 			else
 			{
 				m_vecInventory[i]->Push_Item(m_pPickSlot->Pop_Item());
+				m_vecInventory[i]->Push_Item_Count(m_pPickSlot->Pop_Item_Count());
 				m_pPickSlot->Push_Item(pPopItem);
 			}
 		}

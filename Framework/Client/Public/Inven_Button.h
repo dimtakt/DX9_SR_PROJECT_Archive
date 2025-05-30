@@ -20,7 +20,7 @@ public:
 
 private:
 	LEVEL							m_eLevel = {};
-	CGameObject* m_pTargetUI = { nullptr };
+	CGameObject*					m_pTargetUI = { nullptr };
 private:
 	HRESULT							Ready_Components();
 	void							SetUp_RenderState();

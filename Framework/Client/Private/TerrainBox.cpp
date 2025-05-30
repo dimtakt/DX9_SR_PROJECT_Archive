@@ -30,12 +30,14 @@ HRESULT CTerrainBox::Initialize(void* pArg)
 		m_pTransformCom->Set_State(STATE::POSITION, desc->vPos);
 		m_pTransformCom->Scaling(20.f, 5.f, 20.f);  // 크기고정
 		m_iTopTextureIndex = desc->iTextureIndex;
+		m_eObjType = GAMEOBJ_TYPE::TERRAIN;
 	}
 	else
 	{
 		m_pTransformCom->Scaling(20.f, 5.f, 20.f);
 		m_iTopTextureIndex = 0;   // 인덱스 설정 없으면 기본 베이스
 		m_iSideTextureIndex = 0;
+		m_eObjType = GAMEOBJ_TYPE::TERRAIN;
 	}
 
 	return S_OK;
@@ -68,7 +70,7 @@ HRESULT CTerrainBox::Render()
 		return E_FAIL;*/
 	m_pVIBufferCom->Bind_Buffers();
 
-	m_pTextureTop->Bind_Texture(m_iTopTextureIndex); // 위
+ 	m_pTextureTop->Bind_Texture(m_iTopTextureIndex); // 위
 	m_pVIBufferCom->Render_Subset(0);
 
 	m_pTextureSide->Bind_Texture(m_iSideTextureIndex);

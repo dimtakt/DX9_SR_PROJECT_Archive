@@ -26,10 +26,13 @@ private:
 	CVIBuffer_Rect*					m_pVIBufferCom = { nullptr };
 	CTexture*						m_pTextureCom = { nullptr };
 
+	_uint							m_iValue = {};
 private:
 	HRESULT							Ready_Components();
 	void							SetUp_RenderState();
 	void							Reset_RenderState();
+
+	void							Render_Font();
 public:
 	static CMoney_Player*			Create(LPDIRECT3DDEVICE9 pGraphic_Device);
 	virtual CGameObject*			Clone(void* pArg) override;

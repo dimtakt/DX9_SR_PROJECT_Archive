@@ -33,6 +33,7 @@ HRESULT CMonster::Initialize(void* pArg)
 	m_pTerrainBox = desc->pTerrainBox;
 
 	m_eObjType = GAMEOBJ_TYPE::MONSTER;
+
 	return S_OK;
 }
 
@@ -46,7 +47,7 @@ void CMonster::Update(_float fTimeDelta)
 		m_pTerrainBox->SetUp_OnTerrainBox(m_pTransformCom, _float3(0.05f, 0.1f, 0.05f));
 	}
 
-	m_pCollider->Update_Collider(m_pTransformCom);
+	m_pCollider->Update_Collider();
 
 }
 
@@ -102,10 +103,11 @@ HRESULT CMonster::Ready_Components()
 	CCollider_OBB::OBB_DESC tColliderDesc;
 	tColliderDesc.vScale = _float3(1.5f, 1.5f, 1.5f);
 	tColliderDesc.pOwner = this;
+	tColliderDesc.pTransform = m_pTransformCom;
 	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Collider_OBB"),
 		TEXT("Com_Monster_Collider"), reinterpret_cast<CComponent**>(&m_pCollider), &tColliderDesc)))
 		return E_FAIL;
-	m_pGameInstance->Add_Collider(m_pCollider);
+
 	return S_OK;
 }
 
@@ -129,6 +131,21 @@ void CMonster::Reset_RenderState()
 	m_pGraphic_Device->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);
 	m_pGraphic_Device->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
 
+}
+
+void CMonster::OnCollision(CGameObject* pGameObject)
+{
+	CTransform* pTransform = dynamic_cast<CTransform*>(pGameObject->Find_Component(TEXT("Com_Transform")));
+	switch (pGameObject->Get_ObjType())
+	{
+	case GAMEOBJ_TYPE::PLAYER:
+		{
+			/*_float3 vDir = m_pTransformCom->Get_State(STATE::POSITION) - pTransform->Get_State(STATE::POSITION);*/
+			m_pTransformCom->Look_At(pTransform->Get_State(STATE::POSITION));
+			m_pTransformCom->Move_To(pTransform->Get_State(STATE::POSITION), 0.01f, 0.05f);
+			break;
+		}
+	}
 }
 
 CMonster* CMonster::Create(LPDIRECT3DDEVICE9 pGraphic_Device)

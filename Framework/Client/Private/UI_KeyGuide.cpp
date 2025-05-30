@@ -17,10 +17,10 @@ HRESULT CUI_KeyGuide::Initialize_Prototype(const _wstring& strPrototypeTag)
 
 HRESULT CUI_KeyGuide::Initialize(void* pArg)
 {
-	m_fSizeX = 16;
-	m_fSizeY = 16;
-	m_fX = -2 - m_fSizeX * 0.5;
-	m_fY = 2 + m_fSizeY * 0.5;
+	m_fSizeX = 28;
+	m_fSizeY = 28;
+	m_fX = -m_fSizeX * 0.5;
+	m_fY = m_fSizeY * 0.5;
 	m_fZ = 0.f;
 	m_iWinSizeX = g_iWinSizeX;
 	m_iWinSizeY = g_iWinSizeY;
@@ -55,6 +55,9 @@ HRESULT CUI_KeyGuide::Render()
 	m_pVIBufferCom->Bind_Buffers();
 	__super::Begin();
 	m_pVIBufferCom->Render();
+	Font_Rect_Update();
+	m_pGameInstance->Render_Font(TEXT("UI_Font_18"), m_strKey, m_vTexRect, D3DXCOLOR(1.f, 1.f, 1.f, 1.f), DT_CENTER | DT_VCENTER | DT_SINGLELINE);
+
 	__super::End();
 
 	return S_OK;
