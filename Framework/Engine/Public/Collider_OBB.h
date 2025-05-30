@@ -28,8 +28,9 @@ public:
     virtual void Update_Collider();
 
 public:
-    void Get_MatrixData(_float3& vCenter, _float3& vExtent, _float3* vAxis);
-   
+    const _float3& Get_Center() const { return m_vWorldCenter; }
+    const _float3* Get_Axis()   const { return m_vAxis; }      // RIGHT, LOOK, UP
+    const _float3& Get_Extents()const { return m_vWorldExtents; }
 
 private:
     const CTransform* m_pTransformRef = nullptr; 

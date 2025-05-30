@@ -16,7 +16,8 @@ public:
 	void Check_RoomCollisions();
 
 private:
-	bool Check_OBBtoOBB( CCollider_OBB* pA, CCollider_OBB* pB);
+	_bool Check_OBBtoOBB(CCollider_OBB* pA, CCollider_OBB* pB);
+	_bool Check_Y_Overlap(CCollider_OBB* pA, CCollider_OBB* pB);
 
 private:
 	std::vector<CCollider_OBB*> m_vColliders;

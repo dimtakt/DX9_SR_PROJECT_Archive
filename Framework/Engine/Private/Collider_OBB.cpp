@@ -39,69 +39,34 @@ void CCollider_OBB::Update_Collider()
 	if (!m_pTransformRef)
 		return;
 
-	m_vAxis[0] = m_pTransformRef->Get_State(STATE::RIGHT);
-	m_vAxis[1] = m_pTransformRef->Get_State(STATE::UP);
-	m_vAxis[2] = m_pTransformRef->Get_State(STATE::LOOK);
-
-	for (int i = 0; i < 3; ++i)
-		D3DXVec3Normalize(&m_vAxis[i], &m_vAxis[i]);
-
+	// 중심 좌표
 	m_vWorldCenter = m_pTransformRef->Get_State(STATE::POSITION);
 
-	_float3 vRight = m_pTransformRef->Get_State(STATE::RIGHT);
-	_float3 vUp = m_pTransformRef->Get_State(STATE::UP);
-	_float3 vLook = m_pTransformRef->Get_State(STATE::LOOK);
+	// 축 방향 (스케일 반영된 상태)
+	m_vAxis[0] = m_pTransformRef->Get_State(STATE::RIGHT); // X
+	m_vAxis[1] = m_pTransformRef->Get_State(STATE::LOOK);  // Z
+	m_vAxis[2] = m_pTransformRef->Get_State(STATE::UP);    // Y
 
-	m_vWorldExtents.x = D3DXVec3Length(&vRight) * m_vScale.x;
-	m_vWorldExtents.y = D3DXVec3Length(&vUp) * m_vScale.y;
-	m_vWorldExtents.z = D3DXVec3Length(&vLook) * m_vScale.z;
+	// 각 축의 반길이
+	m_vWorldExtents.x = D3DXVec3Length(&m_vAxis[0]) * m_vScale.x * 0.5f;
+	m_vWorldExtents.z = D3DXVec3Length(&m_vAxis[1]) * m_vScale.y * 0.5f;
+	m_vWorldExtents.y = D3DXVec3Length(&m_vAxis[2]) * m_vScale.z * 0.5f;
+
+	// 방향 벡터 정규화 (SAT 충돌 판정 시 사용)
+	D3DXVec3Normalize(&m_vAxis[0], &m_vAxis[0]);
+	D3DXVec3Normalize(&m_vAxis[1], &m_vAxis[1]);
+	D3DXVec3Normalize(&m_vAxis[2], &m_vAxis[2]);
 }
 
-void CCollider_OBB::Get_MatrixData(_float3& vCenter, _float3& vExtent, _float3* vAxis)
-{
-	vCenter = m_vWorldCenter;
-	vExtent = m_vWorldExtents;
-	memcpy(vAxis, m_vAxis, sizeof(_float3) * 3);
-}
+//void CCollider_OBB::Get_MatrixData(_float3& vCenter, _float3& vExtent, _float3* vAxis)
+//{
+//	vCenter = m_vWorldCenter;
+//	vExtent = m_vWorldExtents;
+//	memcpy(vAxis, m_vAxis, sizeof(_float3) * 3);
+//}
 
 HRESULT CCollider_OBB::Render()
 {
-	if(!m_pTransformRef)
-		return E_FAIL;
-
-	// 꼭짓점 계산
-	_float3 vCorner[8];
-	for (int i = 0; i < 8; ++i)
-	{
-		vCorner[i] = m_vWorldCenter
-			+ m_vAxis[0] * m_vWorldExtents.x * ((i & 1) ? 1.f : -1.f)
-			+ m_vAxis[1] * m_vWorldExtents.y * ((i & 2) ? 1.f : -1.f)
-			+ m_vAxis[2] * m_vWorldExtents.z * ((i & 4) ? 1.f : -1.f);
-	}
-
-	struct VTX_LINE { D3DXVECTOR3 vPos; D3DCOLOR dwColor; };
-	VTX_LINE vLines[24] = {
-		{vCorner[0], D3DCOLOR_ARGB(255, 255, 0, 0)}, {vCorner[1], D3DCOLOR_ARGB(255, 255, 0, 0)},
-		{vCorner[1], D3DCOLOR_ARGB(255, 255, 0, 0)}, {vCorner[3], D3DCOLOR_ARGB(255, 255, 0, 0)},
-		{vCorner[3], D3DCOLOR_ARGB(255, 255, 0, 0)}, {vCorner[2], D3DCOLOR_ARGB(255, 255, 0, 0)},
-		{vCorner[2], D3DCOLOR_ARGB(255, 255, 0, 0)}, {vCorner[0], D3DCOLOR_ARGB(255, 255, 0, 0)},
-
-		{vCorner[4], D3DCOLOR_ARGB(255, 255, 0, 0)}, {vCorner[5], D3DCOLOR_ARGB(255, 255, 0, 0)},
-		{vCorner[5], D3DCOLOR_ARGB(255, 255, 0, 0)}, {vCorner[7], D3DCOLOR_ARGB(255, 255, 0, 0)},
-		{vCorner[7], D3DCOLOR_ARGB(255, 255, 0, 0)}, {vCorner[6], D3DCOLOR_ARGB(255, 255, 0, 0)},
-		{vCorner[6], D3DCOLOR_ARGB(255, 255, 0, 0)}, {vCorner[4], D3DCOLOR_ARGB(255, 255, 0, 0)},
-
-		{vCorner[0], D3DCOLOR_ARGB(255, 255, 0, 0)}, {vCorner[4], D3DCOLOR_ARGB(255, 255, 0, 0)},
-		{vCorner[1], D3DCOLOR_ARGB(255, 255, 0, 0)}, {vCorner[5], D3DCOLOR_ARGB(255, 255, 0, 0)},
-		{vCorner[2], D3DCOLOR_ARGB(255, 255, 0, 0)}, {vCorner[6], D3DCOLOR_ARGB(255, 255, 0, 0)},
-		{vCorner[3], D3DCOLOR_ARGB(255, 255, 0, 0)}, {vCorner[7], D3DCOLOR_ARGB(255, 255, 0, 0)}
-	};
-
-	m_pGraphic_Device->SetRenderState(D3DRS_LIGHTING, FALSE);
-	m_pGraphic_Device->SetFVF(D3DFVF_XYZ | D3DFVF_DIFFUSE);
-	m_pGraphic_Device->DrawPrimitiveUP(D3DPT_LINELIST, 12, vLines, sizeof(VTX_LINE));
-
-
 	return S_OK;
 }
 
