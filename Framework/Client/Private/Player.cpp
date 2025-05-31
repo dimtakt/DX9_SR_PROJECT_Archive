@@ -173,7 +173,6 @@ void CPlayer::Update(_float fTimeDelta)
 void CPlayer::Late_Update(_float fTimeDelta)
 {
     m_pGameInstance->Add_RenderGroup(RENDERGROUP::RG_BLEND, this);
-    ChangeStat(STAT_INFO::CULHP, m_test);
 }
 
 HRESULT CPlayer::Render()
@@ -234,23 +233,23 @@ void CPlayer::OnCollision(CGameObject* pGameObject)
 
 void CPlayer::ChangeStat(STAT_INFO eStat, float fValue)
 {
-    STATCHANGE tEvent{};
-    tEvent.eStatType = eStat;
-    tEvent.fValue = fValue;
+    //STATCHANGE tEvent{};
+    //tEvent.eStatType = eStat;
+    //tEvent.fValue = fValue;
 
-    m_pGameInstance->Broadcast(ENUM_CLASS(EVENT_TYPE::PLAYERTSTATCHANGE), &tEvent);
+    //m_pGameInstance->Broadcast(ENUM_CLASS(EVENT_TYPE::PLAYERTSTATCHANGE), &tEvent);
 }
 
 void CPlayer::OnEvent(_uint iTypeindex, const EVENTDATA* pData)
 {
-    if (static_cast<EVENT_TYPE>(iTypeindex) == EVENT_TYPE::UICHANGE) {
-        auto pStat = static_cast<const STATCHANGE*>(pData);
-        if (pStat->eStatType == STAT_INFO::CULDAMAGE)
-        {
-            //单固瘤 贸府
+    //if (static_cast<EVENT_TYPE>(iTypeindex) == EVENT_TYPE::UICHANGE) {
+    //    auto pStat = static_cast<const STATCHANGE*>(pData);
+    //    if (pStat->eStatType == STAT_INFO::CULDAMAGE)
+    //    {
+    //        //单固瘤 贸府
 
-        }
-    }
+    //    }
+    //}
 }
 
 

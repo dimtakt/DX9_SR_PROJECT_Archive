@@ -176,6 +176,7 @@
     <ClInclude Include="..\Public\PlayerEffect.h" />
     <ClInclude Include="..\Public\Room_Manager.h" />
     <ClInclude Include="..\public\Sky.h" />
+    <ClInclude Include="..\Public\Stat_Manager.h" />
     <ClInclude Include="..\Public\TerrainBox.h" />
     <ClInclude Include="..\public\Dagger.h" />
     <ClInclude Include="..\public\Dash_Gauge.h" />
@@ -261,6 +262,7 @@
     <ClCompile Include="..\Private\PlayerEffect.cpp" />
     <ClCompile Include="..\Private\Room_Manager.cpp" />
     <ClCompile Include="..\private\Sky.cpp" />
+    <ClCompile Include="..\Private\Stat_Manager.cpp" />
     <ClCompile Include="..\Private\TerrainBox.cpp" />
     <ClCompile Include="..\private\Dagger.cpp" />
     <ClCompile Include="..\private\Dash_Gauge.cpp" />

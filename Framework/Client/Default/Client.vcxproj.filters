@@ -253,6 +253,12 @@
     <Filter Include="02.GameObject\Monster\Oink_A">
       <UniqueIdentifier>{0ce5164f-acee-43e2-bfa8-b1707eb0ad59}</UniqueIdentifier>
     </Filter>
+    <Filter Include="04. Stat">
+      <UniqueIdentifier>{1df166a7-cfad-422f-9f36-0f6709d3be12}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04. Stat\Manager">
+      <UniqueIdentifier>{9c1b982d-9b20-4170-bf36-d3f1502ac038}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -516,6 +522,9 @@
     <ClInclude Include="..\Public\Level_Stage2.h">
       <Filter>01.Levels\04. Dungeon\Stage2</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Stat_Manager.h">
+      <Filter>04. Stat\Manager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -743,6 +752,9 @@
     </ClCompile>
     <ClCompile Include="..\private\Oink_A.cpp">
       <Filter>02.GameObject\Monster\Oink_A</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Stat_Manager.cpp">
+      <Filter>04. Stat\Manager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

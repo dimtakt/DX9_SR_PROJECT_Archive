@@ -73,8 +73,6 @@ private:
 
 	_float					m_fStackedTime					= 0;
 
-	_uint					m_test = 200;
-
 private:
 	HRESULT Ready_Components();
 	void SetUp_RenderState();

@@ -9,6 +9,7 @@
 #include "Monster_Factory.h"
 #include "Collider_OBB.h"
 #include "PlayerEffect.h"
+#include "Stat_Manager.h"
 
 CMainApp::CMainApp()
 	: m_pGameInstance{ CGameInstance::GetInstance() }
@@ -319,6 +320,7 @@ void CMainApp::Free()
 	Safe_Release(m_pGraphic_Device);
 	CRoom_Manager::GetInstance()->Free();
 	CMonster_Factory::GetInstance()->Free();
+	CStat_Manager::GetInstance()->Free();
 	m_pGameInstance->Release_Engine();
 	Safe_Release(m_pGameInstance);
 
