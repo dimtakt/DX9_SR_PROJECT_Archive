@@ -30,8 +30,20 @@ void CEffect_Factory::Create_Effect(const _wstring& strEffectTag, _float3 vPos, 
 	EffectDesc.vScale = vScale;
 
 	m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_STATIC), L"Layer_Effect",
-		ENUM_CLASS(LEVEL::LEVEL_STATIC), L"Prototype_GameObject_Effect", &EffectDesc);
+		ENUM_CLASS(LEVEL::LEVEL_STATIC), L"Prototype_GameObject_PlayerEffect", &EffectDesc);
 
+	return;
+}
+
+void CEffect_Factory::Create_Effect(const _wstring& strEffectTag, _float4x4 matWorld)
+{
+	CEffect::EFFECT_DESC EffectDesc;
+	EffectDesc.strEffectTag = strEffectTag;
+	EffectDesc.matWorld = matWorld;
+	EffectDesc.isMatWorld = true;
+
+	m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_STATIC), L"Layer_Effect",
+		ENUM_CLASS(LEVEL::LEVEL_STATIC), L"Prototype_GameObject_PlayerEffect", &EffectDesc);
 	return;
 }
 

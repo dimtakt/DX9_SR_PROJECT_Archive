@@ -50,6 +50,7 @@ protected:
 	class CTexture* m_pTextureCom = { nullptr };
 	class CVIBuffer_Rect* m_pVIBufferCom = { nullptr };
 	CTerrainBox* m_pTerrainBox = { nullptr };
+	_bool m_isTracking = false;
 
 public:
 	static CMonster* Create(LPDIRECT3DDEVICE9 pGraphic_Device);

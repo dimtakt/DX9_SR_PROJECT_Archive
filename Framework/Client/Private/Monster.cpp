@@ -144,7 +144,7 @@ CMonster* CMonster::Create(LPDIRECT3DDEVICE9 pGraphic_Device)
 
 	if (FAILED(pInstance->Initialize_Prototype()))
 	{
-		MSG_BOX(TEXT("Failed to Created : CTerrain"));
+		MSG_BOX(TEXT("Failed to Created : CMonster"));
 		Safe_Release(pInstance);
 	}
 
@@ -157,7 +157,7 @@ CGameObject* CMonster::Clone(void* pArg)
 
 	if (FAILED(pInstance->Initialize(pArg)))
 	{
-		MSG_BOX(TEXT("Failed to Cloned : CTerrain"));
+		MSG_BOX(TEXT("Failed to Cloned : CMonster"));
 		Safe_Release(pInstance);
 	}
 

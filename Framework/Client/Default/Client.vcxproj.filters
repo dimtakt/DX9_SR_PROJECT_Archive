@@ -232,6 +232,12 @@
     <Filter Include="02.GameObject\UI\Window\ChaterMap">
       <UniqueIdentifier>{760b2ee7-af5e-4919-a8a5-727898a63bcf}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\Monster\Mole_A">
+      <UniqueIdentifier>{c0167521-3b25-49ce-8c9c-b92a860c0cb2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Monster\Oink_A">
+      <UniqueIdentifier>{0ce5164f-acee-43e2-bfa8-b1707eb0ad59}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -468,6 +474,12 @@
     <ClInclude Include="..\public\ChaterMap.h">
       <Filter>02.GameObject\UI\Window\ChaterMap</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\Mole_A.h">
+      <Filter>02.GameObject\Monster\Mole_A</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Oink_A.h">
+      <Filter>02.GameObject\Monster\Oink_A</Filter>
+    </ClInclude>
     <ClInclude Include="..\Public\Level_Stage2.h">
       <Filter>01.Levels\04. Dungeon\Stage2</Filter>
     </ClInclude>
@@ -677,6 +689,12 @@
     </ClCompile>
     <ClCompile Include="..\private\ChaterMap.cpp">
       <Filter>02.GameObject\UI\Window\ChaterMap</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Mole_A.cpp">
+      <Filter>02.GameObject\Monster\Mole_A</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Oink_A.cpp">
+      <Filter>02.GameObject\Monster\Oink_A</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
