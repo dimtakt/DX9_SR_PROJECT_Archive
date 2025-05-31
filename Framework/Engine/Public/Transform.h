@@ -45,6 +45,9 @@ public:
 
 	void Set_FlipX(_bool isFlip) { m_bFlipX = isFlip; }
 
+	void Set_RotationEuler(_float3 vRotates) { m_vRotationEuler = vRotates; }
+	_float3 Get_RotationEuler() { return m_vRotationEuler; }
+
 public:
 	virtual HRESULT Initialize_Prototype();
 	virtual HRESULT Initialize(void* pArg);
@@ -77,6 +80,7 @@ private:
 	_float4x4					m_WorldMatrixInverse = { };
 	_float						m_fSpeedPerSec = { };
 	_float						m_fRotationPerSec = { };
+	_float3						m_vRotationEuler = {};
 
 	_bool						m_bFlipX = false;		// 플레이어 이미지 출력 좌우 반전용
 

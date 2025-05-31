@@ -103,6 +103,11 @@ HRESULT CMainApp::Ready_Prototype_ForStatic()
 		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/BleakSwordDX/Terrain/Basic/BaseArenaTex.png"), 1))))
 		return E_FAIL;
 
+	//나무 텍스처 추가, 15개
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_SHARED), TEXT("Prototype_Component_Texture_Tree"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/BleakSwordDX/Object/Tree/ForestTrees_%d.png"), 16))))
+		return E_FAIL;
+
 
 	// Prototype_Component_Texture_Player Bin\Resources\BleakSwordDX\Terrain\Forest
 	// --- CTexture

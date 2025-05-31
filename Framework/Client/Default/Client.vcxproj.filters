@@ -220,6 +220,9 @@
     <Filter Include="03.Animations\Player">
       <UniqueIdentifier>{89952621-bacd-4c55-81a8-42271890590d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01.Levels\04. Dungeon\Stage2">
+      <UniqueIdentifier>{ee486fd6-c2f0-46be-ace0-c71a1efa864a}</UniqueIdentifier>
+    </Filter>
     <Filter Include="02.GameObject\Effect">
       <UniqueIdentifier>{f23c713d-5b4e-4b50-b339-bc7a31cc0b05}</UniqueIdentifier>
     </Filter>
@@ -465,6 +468,9 @@
     <ClInclude Include="..\public\ChaterMap.h">
       <Filter>02.GameObject\UI\Window\ChaterMap</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Level_Stage2.h">
+      <Filter>01.Levels\04. Dungeon\Stage2</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -659,6 +665,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\Level_MapEdit.cpp">
       <Filter>01.Levels\03. MapEdit</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Level_Stage2.cpp">
+      <Filter>01.Levels\04. Dungeon\Stage2</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\PlayerEffect.cpp">
       <Filter>02.GameObject\Effect</Filter>

@@ -78,6 +78,10 @@ HRESULT CLoader::Loading()
 	case LEVEL::LEVEL_STAGE1:
 		hr = Loading_For_Stage1_Level();
 		break;
+
+	case LEVEL::LEVEL_STAGE2:
+		hr = Loading_For_Stage2_Level();
+		break;
 	}
 
 	if(FAILED(hr))
@@ -306,25 +310,7 @@ HRESULT CLoader::Loading_For_MapEdit_Level()
 {
 	lstrcpy(m_szLoadingText, TEXT("텍스쳐를 로딩중입니다."));
 
-	//나무 텍스처 추가, 15개
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_SHARED), TEXT("Prototype_Component_Texture_Tree"),
-		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/BleakSwordDX/Object/Tree/ForestTrees_%d.png"), 16))))
-		return E_FAIL;
-
-	///* Prototype_Component_Texture_TerrainBox_Top */
-	//if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_SHARED), TEXT("Prototype_Component_Texture_TerrainBox_Top"),
-	//	CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/BleakSwordDX/Terrain/Forest/ArenaTex_%d.png"), 25))))
-	//	return E_FAIL;
-	///* Prototype_Component_Texture_TerrainBox_Side */
-	//if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_SHARED), TEXT("Prototype_Component_Texture_TerrainBox_Side"),
-	//	CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/BleakSwordDX/Terrain/Basic/BaseArenaTex.png"), 1))))
-	//	return E_FAIL;
-
 	lstrcpy(m_szLoadingText, TEXT("모델를 로딩중입니다."));
-	///* Prototype_Component_VIbuffer_TerrainBox */
-	//if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_SHARED), TEXT("Prototype_Component_VIBuffer_TerrainBox"),
-	//	CVIBuffer_TerrainBox::Create(m_pGraphic_Device))))
-	//	return E_FAIL;
 
 	lstrcpy(m_szLoadingText, TEXT("쉐이더를 로딩중입니다."));
 
@@ -361,7 +347,7 @@ HRESULT CLoader::Loading_For_Stage1_Level()
 		return E_FAIL;
 
 	/* Prototype_Component_Texture_Sky */
-  	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STAGE1), TEXT("Prototype_Component_Texture_Sky"),
+  	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_SHARED), TEXT("Prototype_Component_Texture_Sky"),
 		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/BleakSwordDX/SkyBox/Sky.png"), 1))))
 		return E_FAIL;
 
@@ -450,6 +436,54 @@ HRESULT CLoader::Loading_For_Stage1_Level()
 	return S_OK;
 }
 
+HRESULT CLoader::Loading_For_Stage2_Level()
+{
+	lstrcpy(m_szLoadingText, TEXT("텍스쳐를 로딩중입니다."));
+	
+	lstrcpy(m_szLoadingText, TEXT("모델을 로딩중입니다."));
+
+	lstrcpy(m_szLoadingText, TEXT("쉐이더를 로딩중입니다."));
+
+	lstrcpy(m_szLoadingText, TEXT("게임오브젝트를 로딩중입니다."));
+
+	///* Prototype_GameObject_Camera*/
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STAGE2), TEXT("Prototype_GameObject_Camera_Follow"),
+		CCamera_Follow::Create(m_pGraphic_Device))))
+		return E_FAIL;
+
+	/* Prototype_GameObject_Land*/
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STAGE2), TEXT("Prototype_GameObject_Room"),
+		CRoom::Create(m_pGraphic_Device))))
+		return E_FAIL;
+
+	/* Prototype_GameObject_Sky */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STAGE2), TEXT("Prototype_GameObject_Sky"),
+		CSky::Create(m_pGraphic_Device))))
+		return E_FAIL;
+
+	/* Prototype_GameObject_TerrainBox*/
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STAGE2), TEXT("Prototype_GameObject_TerrainBox"),
+		CTerrainBox::Create(m_pGraphic_Device))))
+		return E_FAIL;
+
+	//Tree
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STAGE2), TEXT("Prototype_GameObject_Tree"),
+		CTree::Create(m_pGraphic_Device))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STAGE2), TEXT("Prototype_GameObject_Camera_Mouse"),
+		CCamera_Mouse::Create(m_pGraphic_Device))))
+		return E_FAIL;
+
+
+	lstrcpy(m_szLoadingText, TEXT("로딩이 완료되었습니다."));
+
+	//lstrcpy(m_szLoadingText, m_pGameInstance->Ping());
+	m_isFinished = true;
+
+	return S_OK;
+}
+
 CLoader* CLoader::Create(LPDIRECT3DDEVICE9 pGraphic_Device, LEVEL eNextLevelID)
 {
 	CLoader* pInstance = new CLoader(pGraphic_Device);
@@ -464,7 +498,7 @@ CLoader* CLoader::Create(LPDIRECT3DDEVICE9 pGraphic_Device, LEVEL eNextLevelID)
 }
 
 void CLoader::Free()
-{
+{  
 	__super::Free();
 
 	WaitForSingleObject(m_hThread, INFINITE);
