@@ -11,7 +11,6 @@ HRESULT CCollision_Manager::Add_OBB_Collider(CCollider_OBB* pCollider)
 	if (pCollider == nullptr)
 		return E_FAIL;
     m_vColliders.push_back(pCollider);
-    Safe_AddRef(pCollider);
 
     return S_OK;
 }
