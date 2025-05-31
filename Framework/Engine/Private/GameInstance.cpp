@@ -107,6 +107,8 @@ HRESULT CGameInstance::Clear_Resources(_uint iClearLevelID)
 
     m_pObject_Manager->Clear(iClearLevelID);
 
+    m_pCollision_Manager->Clear_Colliders();
+
     return S_OK;
 }
 
@@ -160,6 +162,10 @@ HRESULT CGameInstance::Open_Level(_uint iLevelID, CLevel* pNewLevel)
         return E_FAIL;
 
     return m_pLevel_Manager->Open_Level(iLevelID, pNewLevel);
+}
+_uint CGameInstance::Get_CurrentLevel()
+{
+    return m_pLevel_Manager->Get_CurrentLevel();
 }
 #pragma endregion
 

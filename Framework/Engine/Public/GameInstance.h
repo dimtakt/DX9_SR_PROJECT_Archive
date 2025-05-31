@@ -30,6 +30,7 @@ public:
 #pragma region LEVEL_MANAGER
 public:
 	HRESULT Open_Level(_uint iLevelID, class CLevel* pNewLevel);
+	_uint Get_CurrentLevel();
 #pragma endregion
 
 #pragma region PROTOTYPE_MANAGER
