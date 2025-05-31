@@ -137,6 +137,12 @@ public:
 	CItemObject*				Get_ItemObject(_uint iIndex);
 #pragma endregion
 
+#pragma region EVENT_MANAGER
+	void Subscribe(_uint iTypeIndex, class IEventListener* pListener);
+	void Unsubscribe(_uint iTypeIndex, class IEventListener* pListener);
+	void Broadcast(_uint iTypeIndex, const EVENTDATA* pData);
+#pragma endregion
+
 private:
 	class CGraphic_Device*		m_pGraphic_Device = { nullptr };
 	class CLevel_Manager*		m_pLevel_Manager = { nullptr };
@@ -152,6 +158,7 @@ private:
 	class CLight_Manager*		m_pLight_Manager = { nullptr };
 	class CAnim_Manager*		m_pAnimation_Manager = { nullptr };
 	class CItem_Manager*		m_pItem_Manager = { nullptr };
+	class CEvent_Manager*		m_pEvent_Manager = { nullptr };
 
 public:
 	void Release_Engine();

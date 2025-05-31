@@ -39,6 +39,13 @@ namespace Engine
 	}VTXPOSCOL;
 
 
+	//////////////////////
+	// Event
+	typedef struct tagEventData
+	{
+		virtual ~tagEventData() = default;
+	}EVENTDATA;
+
 
 	//////////////////////
 	// Network Struct

@@ -50,7 +50,6 @@ unsigned int APIENTRY LoadingMain(void* pArg)
 
 HRESULT CLoader::Initialize(LEVEL eNextLevelID)
 {
-
 	CRoom_Manager::GetInstance()->Clear(m_pGameInstance->Get_CurrentLevel());
 
 	m_eNextLevelID = eNextLevelID;

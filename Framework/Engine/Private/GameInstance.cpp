@@ -15,6 +15,7 @@
 #include "GameObject.h"
 #include "Anim_Manager.h"
 #include "Item_Manager.h"
+#include "Event_Manager.h"
 
 IMPLEMENT_SINGLETON(CGameInstance)
 
@@ -80,6 +81,10 @@ HRESULT CGameInstance::Initialize_Engine(const ENGINE_DESC& EngineDesc, LPDIRECT
     
     m_pItem_Manager = CItem_Manager::Create(*ppOut);
     if (nullptr == m_pItem_Manager)
+        return E_FAIL;
+
+    m_pEvent_Manager = CEvent_Manager::Create();
+    if (nullptr == m_pEvent_Manager)
         return E_FAIL;
 
     return S_OK;
@@ -360,6 +365,8 @@ CAnimation* CGameInstance::Find_Animation(const wstring& strAnimTag)
     return m_pAnimation_Manager->Find_Animation(strAnimTag);
 #pragma endregion
 }
+
+#pragma region ITEM_MANAGER
 HRESULT CGameInstance::Setting_Item(void* pArg, _uint iMaxItemIndex, _uint iLevelIndex, const _wstring& strItemBaseTag)
 {
     return m_pItem_Manager->Setting_Item(pArg, iMaxItemIndex, iLevelIndex, strItemBaseTag);
@@ -374,9 +381,28 @@ CItemObject* CGameInstance::Get_ItemObject(_uint iIndex)
 {
     return m_pItem_Manager->Get_ItemObject(iIndex);
 }
+#pragma endregion
+
+#pragma region EVENT_MANAGER
+void CGameInstance::Subscribe(_uint iTypeIndex, class IEventListener* pListener)
+{
+    m_pEvent_Manager->Subscribe(iTypeIndex, pListener);
+}
+
+void CGameInstance::Unsubscribe(_uint iTypeIndex, class IEventListener* pListener)
+{
+    m_pEvent_Manager->Unsubscribe(iTypeIndex, pListener);
+}
+
+void CGameInstance::Broadcast(_uint iTypeIndex, const EVENTDATA* pData)
+{
+    m_pEvent_Manager->Broadcast(iTypeIndex, pData);
+}
+#pragma endregion
 
 void CGameInstance::Release_Engine()
 {
+    
     Release();
     Safe_Release(m_pCollision_Manager);
     Safe_Release(m_pTimer_Manager);
@@ -385,13 +411,15 @@ void CGameInstance::Release_Engine()
     Safe_Release(m_pPrototype_Manager);
     Safe_Release(m_pObject_Manager);
     Safe_Release(m_pRenderer);
+    Safe_Release(m_pEvent_Manager);
     Safe_Release(m_pKey_Manager);
     //Safe_Release(m_pNetwork_Manager);
     Safe_Release(m_pPicking);
     Safe_Release(m_pFont_Manager);
     Safe_Release(m_pLight_Manager);
     Safe_Release(m_pAnimation_Manager);
-    Safe_Release(m_pItem_Manager);
+    Safe_Release(m_pItem_Manager);//
+    
 }
 
 void CGameInstance::Free()

@@ -1,5 +1,7 @@
 #pragma once
-
+#include "Client_Defines_Item.h"
+#include "Client_Defines_Map.h"
+#include "Client_Struct.h"
 #include "../Default/framework.h"
 #include <process.h>
 
@@ -10,6 +12,8 @@ namespace Client
 
 	enum class LEVEL { LEVEL_STATIC, LEVEL_LOADING, LEVEL_LOGO, LEVEL_GAMEPLAY, LEVEL_STAGE1,LEVEL_STAGE2, LEVEL_MAPEDIT, LEVEL_SHARED, LEVEL_END };
 	enum class OBJECT_TYPE { TREE, ROCK, TYPE_END };
+	enum class STAT_INFO { MAXHP, CULHP, MAXMP, CULMP, CULDEF, CULDAMAGE, CULCRITICAL, CRITICALDAMAGE, MAXDASH, CULDASH, REGENDASH, EXP, MAXSTATPOINT, CULSTATPOINT, LEVEL, GOLD, DICE };
+	enum class EVENT_TYPE { PLAYERTSTATCHANGE, UICHANGE, EVENT_END };
 
 	struct UI_DEPTH {
 		//키 가이드
@@ -36,6 +40,17 @@ namespace Client
 		static constexpr float CHATERMAP = 0.26f;
 		static constexpr float CHATERMAP_UP = 0.25f;
 		static constexpr float CHATERMAP_Player = 0.24f;
+	};
+
+	typedef struct tagStatChangeEvent : public EVENTDATA
+	{
+		STAT_INFO	eStatType;
+		float		fValue;
+	}STATCHANGE;
+
+	typedef struct tagActionEvent : public EVENTDATA
+	{
+		_wstring strActionName;
 	};
 
 };
