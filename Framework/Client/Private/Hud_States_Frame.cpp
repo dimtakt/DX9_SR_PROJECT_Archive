@@ -26,7 +26,7 @@ HRESULT CHud_States_Frame::Initialize(void* pArg)
 	m_fSizeY = 55.f;
 	m_fX = 20 + m_fSizeX * 0.5f;
 	m_fY = 20 + m_fSizeY * 0.5f;
-	m_fZ = 0.f;
+	m_fZ = UI_DEPTH::HUD_STATUS;
 	m_iWinSizeX = g_iWinSizeX;
 	m_iWinSizeY = g_iWinSizeY;
 

@@ -17,11 +17,12 @@ HRESULT CDice_Player::Initialize_Prototype()
 HRESULT CDice_Player::Initialize(void* pArg)
 {
 	m_iValue = 1000;
-
+	
 	m_fSizeX = 32;
 	m_fSizeY = 32;
 	m_fX = -32;
 	m_fY = -32;
+	m_fZ = UI_DEPTH::HUD_WALLET;
 	m_iWinSizeX = g_iWinSizeX;
 	m_iWinSizeY = g_iWinSizeY;
 

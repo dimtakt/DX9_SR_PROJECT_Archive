@@ -6,10 +6,12 @@
 #include "Hud_Buff.h"
 #include "Room.h"
 #include "Monster.h"
-#include "Monster.h"
 #include "TerrainBox.h"
 #include "Room_Manager.h"
 #include "Monster_Factory.h"
+#include "Level_Loading.h"
+
+#include "Mole_A.h"
 
 CLevel_Stage1::CLevel_Stage1(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CLevel{ pGraphic_Device }
@@ -45,6 +47,11 @@ HRESULT CLevel_Stage1::Initialize()
 
 void CLevel_Stage1::Update(_float fTimeDelta)
 {
+	if (m_pGameInstance->IsKeyDown(VK_RETURN))
+	{
+ 		if(FAILED(m_pGameInstance->Open_Level(ENUM_CLASS(LEVEL::LEVEL_LOADING), CLevel_Loading::Create(m_pGraphic_Device, LEVEL::LEVEL_STAGE2))))
+			return;
+	}
 }
 
 HRESULT CLevel_Stage1::Render()
@@ -134,11 +141,13 @@ HRESULT CLevel_Stage1::Ready_Layer_Room(const _wstring& strLayerTag)
 		MAP_OBJECT_DESC tDesc{};
 		tDesc.iTextureIndex = 0;
 		tDesc.vPos = _float3(static_cast<_float>(num) * 20.f + 2.f, 0.f, 0.f);
+		tDesc.vScale = _float3(20.f, 2.f, 20.f);
 		pTerrainBox = dynamic_cast<CTerrainBox*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::LEVEL_STAGE1), TEXT("Prototype_GameObject_TerrainBox"), &tDesc));
 		NULL_CHECK_RETURN(pTerrainBox, E_FAIL);
 		pRoom->Add_TerrainBox(pTerrainBox);
-
 		// 몬스터 셋팅
+#pragma region old monster spawn
+		/*
 		CMonster* pMonster = nullptr;
 		list<CMonster::MONSTERDESC> DescList;
 		for (size_t i = 0; i < 20; i++)
@@ -155,7 +164,29 @@ HRESULT CLevel_Stage1::Ready_Layer_Room(const _wstring& strLayerTag)
 			//pRoom->Add_Monster(pMonster);
 			DescList.push_back(tDesc);
 		}
-		CMonster_Factory::GetInstance()->Add_Monsters(pRoom, DescList);
+		*/
+#pragma endregion
+		CMole_A* pMonster = nullptr;
+		list<CMonster::MONSTERDESC> DescList;
+		for (size_t i = 0; i < 20; i++)
+		{
+			CMonster::MONSTERDESC tDesc = {};
+			tDesc.iLayerLevelIndex = ENUM_CLASS(LEVEL::LEVEL_STAGE1);
+			tDesc.iPrototypeLevelIndex = ENUM_CLASS(LEVEL::LEVEL_STAGE1);
+			tDesc.strLayerTag = strLayerTag;
+			//tDesc.strPrototypeTag = TEXT("Prototype_GameObject_ShortMonster");
+			//tDesc.strPrototypeTag = TEXT("Prototype_GameObject_Monster_Mole_A");
+			tDesc.strPrototypeTag = TEXT("Prototype_GameObject_Monster_Oink_A");
+			tDesc.vPosition = _float3(10.f * i + 10.f, 0.f, 5.f * i + 5.f);
+			tDesc.pTerrainBox = pTerrainBox;
+			//pMonster = dynamic_cast<CMonster_Default*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::LEVEL_STAGE1), TEXT("Prototype_GameObject_ShortMonster")));
+			//NULL_CHECK_RETURN(pMonster, E_FAIL);
+			//pRoom->Add_Monster(pMonster);
+			DescList.push_back(tDesc);
+		}
+		//CMonster_Factory::GetInstance()->Add_Monsters(pRoom, DescList);
+		//CMonster_Factory::GetInstance()->Add_Monsters(pRoom, DescList, CMonster_Factory::MONSTER_TYPE::MONSTER_MOLE_A);
+		CMonster_Factory::GetInstance()->Add_Monsters(pRoom, DescList, CMonster_Factory::MONSTER_TYPE::MONSTER_OINK_A);
 		
 
 		// 오브젝트 셋팅

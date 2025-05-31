@@ -18,7 +18,7 @@ protected:
 	virtual ~CUIObject() = default;
 
 public:
-	const _float3	Get_WoldPos() { return m_vWorldPos; }
+	const _float3	Get_WorldPos() { return m_vWorldPos; }
 
 public:
 	virtual HRESULT Initialize_Prototype();
@@ -61,7 +61,7 @@ protected:
 	void					Font_Rect_Update();
 public:
 	virtual CGameObject* Clone(void* pArg) = 0;
-	virtual void			Free();
+	virtual void			Free() override;
 };
 
 

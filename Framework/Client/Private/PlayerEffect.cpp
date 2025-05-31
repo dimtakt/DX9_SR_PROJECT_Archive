@@ -1,8 +1,6 @@
 #include "PlayerEffect.h"
 #include "GameInstance.h"
 
-BEGIN(Client)
-
 CPlayerEffect::CPlayerEffect(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CEffect(pGraphic_Device)
 {
@@ -21,38 +19,41 @@ HRESULT CPlayerEffect::Initialize_Prototype()
 
 HRESULT CPlayerEffect::Initialize(void* pArg)
 {
-	if (FAILED(Ready_Components()))
-		return E_FAIL;
-
-
 	// 이펙트 태그 반영
 
 	EFFECT_DESC* pDesc = reinterpret_cast<EFFECT_DESC*>(pArg);
 	m_strEffectTag = pDesc->strEffectTag;
 
 
+	if (FAILED(Ready_Components()))
+		return E_FAIL;
+
+
 	// 위치 반영
 
-	_float4x4 matScale, matRot, matTrans;
+	_float4x4 matTransform;
 
-	_float3 vPos = pDesc->vPos;
-	D3DXQUATERNION qRot = pDesc->qRot;
-	_float3 vScale = pDesc->vScale;
+	if (pDesc->isMatWorld)			// 월드 행렬이 주어진 경우
+		matTransform = pDesc->matWorld;
+	else							// 월드 행렬이 주어지지 않은 경우
+	{
+		_float4x4 matScale, matRot, matTrans;
 
-	D3DXMatrixScaling(&matScale, vScale.x, vScale.y, vScale.z);
-	D3DXMatrixRotationQuaternion(&matRot, &qRot);
-	D3DXMatrixTranslation(&matTrans, vPos.x, vPos.y, vPos.z);
+		_float3 vPos = pDesc->vPos;
+		D3DXQUATERNION qRot = pDesc->qRot;
+		_float3 vScale = pDesc->vScale;
 
-	_float4x4 matTransform = matScale * matRot * matTrans;
+		D3DXMatrixScaling(&matScale, vScale.x, vScale.y, vScale.z);
+		D3DXMatrixRotationQuaternion(&matRot, &qRot);
+		D3DXMatrixTranslation(&matTrans, vPos.x, vPos.y, vPos.z);
+		
+		matTransform = matScale * matRot * matTrans;
+	}
+
 
 	for (int i = 0; i < 3; i++)
 		m_pTransformCom->Set_State(STATE(i), *reinterpret_cast<_float3*>(&matTransform.m[i]));
 	m_pTransformCom->Set_State(STATE::POSITION, *reinterpret_cast<_float3*>(&matTransform.m[3]));
-
-
-	// 장당 프레임 수 지정
-	//m_iImagePerFrame = pDesc->iFramePerImage;
-
 
 	return S_OK;
 }
@@ -98,14 +99,19 @@ HRESULT CPlayerEffect::Ready_Components()
 		return E_FAIL;
 
 	/* For.Com_Texture */
-	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture"),
-		m_strEffectTag, reinterpret_cast<CComponent**>(&m_pTextureCom))))
+	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), m_strEffectTag,
+		TEXT("Com_Texture"), reinterpret_cast<CComponent**>(&m_pTextureCom))))
 		return E_FAIL;
 
 	/* For Com_Animator */
-	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Effect"),
-		TEXT("Com_Animator"), reinterpret_cast<CComponent**>(&m_pAnimatorCom))))
-		return E_FAIL;
+	CAnimator::ANIMSTATE_DESC StartAnimStateDesc{};
+	StartAnimStateDesc.strTimerTag = L"Animator_Effect_Main";   // 해당 애니메이터가 타이머에서 사용할 태그 key값
+
+	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Animator"),
+		TEXT("Com_Animator"), reinterpret_cast<CComponent**>(&m_pAnimatorCom), &StartAnimStateDesc)))
+		return E_FAIL; 
+
+	m_pAnimatorCom->Add_State(L"Effect", { m_pTextureCom, 5, false });
 
 	return S_OK;
 }
@@ -145,5 +151,3 @@ void CPlayerEffect::Free()
 	Safe_Release(m_pTextureCom);
 	Safe_Release(m_pAnimatorCom);
 }
-
-END

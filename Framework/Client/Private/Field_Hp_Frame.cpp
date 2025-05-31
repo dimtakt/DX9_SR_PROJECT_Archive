@@ -26,7 +26,7 @@ HRESULT CField_Hp_Frame::Initialize(void* pArg)
 	m_fSizeY = Desc->fSizeY;
 	m_fX = Desc->fX;
 	m_fY = Desc->fY;
-	m_fZ = 0.4f;
+	m_fZ = UI_DEPTH::FILED_HP_FRAME;
 	m_iWinSizeX = g_iWinSizeX;
 	m_iWinSizeY = g_iWinSizeY;
 
