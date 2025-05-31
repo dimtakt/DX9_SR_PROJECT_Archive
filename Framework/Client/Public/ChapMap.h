@@ -20,12 +20,18 @@ public:
 	virtual void					Late_Update(_float fTimeDelta) override;
 	virtual HRESULT					Render() override;
 
+public:
+	void							Player_Offset(_float fX, _float fY, _uint iLineIndex);
+	const _uint						Get_Player_Line() { return m_iPlayerLineIndex; };
 private:
 	LEVEL							m_eLevel = {};
 	_bool							m_bRender = {};
 
 	_int							m_iScrollValue = {};
 	_int							m_iMouseY = {};
+
+	class CChapMap_PlayerSymbol*	m_pPlayerSymbol = { nullptr};
+	_uint							m_iPlayerLineIndex = {};
 
 private:
 	void							Scroll_Map();

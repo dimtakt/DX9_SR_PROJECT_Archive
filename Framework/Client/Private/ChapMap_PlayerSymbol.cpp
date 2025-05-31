@@ -17,11 +17,11 @@ HRESULT CChapMap_PlayerSymbol::Initialize(void* pArg)
 {
     m_fRotSpeed = 90.f;
 
-    m_fSizeX = 64;
-    m_fSizeY = 64;
+    m_fSizeX = 100;
+    m_fSizeY = 100;
     m_fX = 0.f;
     m_fY = 0.f;
-    m_fZ = UI_DEPTH::CHATERMAP;
+    m_fZ = UI_DEPTH::CHATERMAP_Player;
     m_iWinSizeX = g_iWinSizeX;
     m_iWinSizeY = g_iWinSizeY;
 
@@ -57,7 +57,7 @@ HRESULT CChapMap_PlayerSymbol::Render()
 {
     SetUp_RenderState();
 
-    if (FAILED(m_pTextureCom->Bind_Texture(1)))
+    if (FAILED(m_pTextureCom->Bind_Texture(0)))
         return E_FAIL;
     m_pVIBufferCom->Bind_Buffers();
 
@@ -72,8 +72,7 @@ HRESULT CChapMap_PlayerSymbol::Render()
 void CChapMap_PlayerSymbol::Player_Move(_float fX, _float fY)
 {
     m_fX = fX;
-    m_fX = fY;
-
+    m_fY = fY;
 }
 
 HRESULT CChapMap_PlayerSymbol::Ready_Components()
@@ -83,7 +82,7 @@ HRESULT CChapMap_PlayerSymbol::Ready_Components()
         TEXT("Com_Transform"), reinterpret_cast<CComponent**>(&m_pTransformCom))))
         return E_FAIL;
 
-    if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_GAMEPLAY), TEXT("Prototype_Component_Texture_Rect_ChapMap_Node_Symbol"),
+    if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_GAMEPLAY), TEXT("Prototype_Component_Texture_Rect_ChapMap_Node_Player"),
         TEXT("Com_Texture"), reinterpret_cast<CComponent**>(&m_pTextureCom))))
         return E_FAIL;
 

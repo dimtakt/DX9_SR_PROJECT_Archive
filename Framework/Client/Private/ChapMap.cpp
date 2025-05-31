@@ -52,8 +52,11 @@ void CChapMap::Priority_Update(_float fTimeDelta)
 		if(m_bRender)
 			m_bRender = false;
 		else
+		{
 			m_bRender = true;
-
+			/*m_fY = m_pPlayerSymbol->Player_OffsetPos();
+			__super::Update_Position();*/
+		}
 	__super::Priority_Update(fTimeDelta);
 }
 
@@ -80,6 +83,13 @@ HRESULT CChapMap::Render()
 	return S_OK;
 }
 
+void CChapMap::Player_Offset(_float fX, _float fY, _uint iLineIndex)
+{
+	m_pPlayerSymbol->Player_Move(fX, fY);
+	m_iPlayerLineIndex = iLineIndex;
+	//m_bRender = false;
+}
+
 void CChapMap::Scroll_Map()
 {
 	POINT	ptMouse{};
@@ -97,19 +107,28 @@ void CChapMap::Scroll_Map()
 
 	if (m_pGameInstance->IsKeyHold(VK_LBUTTON))
 	{
-		m_fY += ptMouse.y - m_iMouseY;
-		m_iMouseY = ptMouse.y;
+		if (m_fY >= _float(g_iWinSizeX) * -3 * 0.25 && m_fY <= 160 + g_iWinSizeX * 0.28)
+		{
+			m_fY += ptMouse.y - m_iMouseY;
+			m_iMouseY = ptMouse.y;
+		}
+		
 	}
+
+	if (m_fY < _float(g_iWinSizeX) * -3 * 0.25)
+		m_fY = _int(_float(g_iWinSizeX) * -3 * 0.25);
+	else if (m_fY > 160 + g_iWinSizeX * 0.28)
+		m_fY = _int(160 + g_iWinSizeX * 0.28);
 
 	if (g_ScrollValue > 0 || g_ScrollValue < 0)
 		m_iScrollValue = g_ScrollValue;
 
-	if (m_iScrollValue > 0)
+	if (m_iScrollValue > 0 && m_fY <= 160 + g_iWinSizeX * 0.28)
 	{
 		m_fY += m_iScrollValue * 0.25 + 15;
 		m_iScrollValue -= 10;
 	}
-	else if (m_iScrollValue < 0)
+	else if (m_iScrollValue < 0 && m_fY >= _float(g_iWinSizeX) * -3 * 0.25)
 	{
 		m_fY += m_iScrollValue * 0.25 - 15;
 		m_iScrollValue += 10;
@@ -173,7 +192,11 @@ HRESULT CChapMap::Ready_Children()
 	if (nullptr == pGameObject)
 		return E_FAIL;
 	Add_Child(pGameObject);
+	m_pPlayerSymbol = dynamic_cast<CChapMap_PlayerSymbol*>(pGameObject);
+	Safe_AddRef(m_pPlayerSymbol);
 
+	m_pPlayerSymbol->Player_Move(0, -100);
+	m_iPlayerLineIndex = 0;
 	return S_OK;
 }
 
@@ -204,5 +227,5 @@ CGameObject* CChapMap::Clone(void* pArg)
 void CChapMap::Free()
 {
 	__super::Free();
-
+	Safe_Release(m_pPlayerSymbol);
 }

@@ -23,16 +23,23 @@ HRESULT CChapMap_Frame::Initialize(void* pArg)
 {
 	UIOBJECT_DESC* Desc = static_cast<UIOBJECT_DESC*>(pArg);
 	
-	if (Desc->fY >= 0)
-		m_TexIndex = 1;
-	else
-		m_TexIndex = 0;
-
 	m_fSizeX = g_iWinSizeX;
-	m_fSizeY = g_iWinSizeY;
+	m_fSizeY = g_iWinSizeX;
 	m_fX = 0.f;
-	m_fY = Desc->fY * m_fSizeY;
-	m_fZ = UI_DEPTH::CHATERMAP;
+
+	if (Desc->fY >= 0)
+	{
+		m_TexIndex = 1;
+		m_fY = Desc->fY * m_fSizeY * 0.45;
+		m_fZ = UI_DEPTH::CHATERMAP;
+	}
+	else
+	{
+		m_TexIndex = 0;
+		m_fY = Desc->fY * m_fSizeY * 0.45 + 160;
+		m_fZ = UI_DEPTH::CHATERMAP_UP;
+	}
+	
 	m_iWinSizeX = g_iWinSizeX;
 	m_iWinSizeY = g_iWinSizeY;
 
@@ -71,6 +78,7 @@ void CChapMap_Frame::Late_Update(_float fTimeDelta)
 
 HRESULT CChapMap_Frame::Render()
 {
+	SetUp_RenderState();
 	if (FAILED(m_pTextureCom->Bind_Texture(m_TexIndex)))
 		return E_FAIL;
 	m_pVIBufferCom->Bind_Buffers();
@@ -78,7 +86,7 @@ HRESULT CChapMap_Frame::Render()
 	__super::Begin();
 	m_pVIBufferCom->Render();
 	__super::End();
-
+	Reset_RenderState();
 	return S_OK;
 }
 
@@ -107,6 +115,29 @@ HRESULT CChapMap_Frame::Ready_ChildPrototype(LEVEL eLevel)
 HRESULT CChapMap_Frame::Ready_Children()
 {
 	return S_OK;
+}
+
+void CChapMap_Frame::SetUp_RenderState()
+{
+	m_pGraphic_Device->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
+	m_pGraphic_Device->SetRenderState(D3DRS_ALPHAREF, 200);
+	m_pGraphic_Device->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER);
+
+	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_POINT);
+	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_POINT);
+	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MIPFILTER, D3DTEXF_NONE);
+
+}
+
+void CChapMap_Frame::Reset_RenderState()
+{
+	m_pGraphic_Device->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
+
+	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_LINEAR);
+	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);
+	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MIPFILTER, D3DTEXF_LINEAR);
+
+	m_pGraphic_Device->SetTexture(0, NULL);
 }
 
 CChapMap_Frame* CChapMap_Frame::Create(LPDIRECT3DDEVICE9 pGraphic_Device, LEVEL eLevel)

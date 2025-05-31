@@ -19,17 +19,17 @@ HRESULT CChapMap_MapSymbol::Initialize(void* pArg)
     MAP_EVENT_DESC* Desc = static_cast<MAP_EVENT_DESC*>(pArg);
 
     m_iMapTex = ENUM_CLASS(Desc->eMap_EVENT);
-    m_fSizeX = 64;
-    m_fSizeY = 64;
+    m_fSizeX = 100;
+    m_fSizeY = 100;
 
     if (Desc->iMax_Event_Count == 1)
         m_fX = 0.f;
     else if(Desc->iEvent_Count % 2 == 1)
-        m_fX = -m_fSizeX * 0.5;
+        m_fX = -m_fSizeX * 0.3;
     else
-        m_fX = m_fSizeX * 0.5;
+        m_fX = m_fSizeX * 0.3;
 
-    m_fY = -70.f;
+    m_fY = -40.f;
     m_fZ = UI_DEPTH::CHATERMAP;
     m_iWinSizeX = g_iWinSizeX;
     m_iWinSizeY = g_iWinSizeY;

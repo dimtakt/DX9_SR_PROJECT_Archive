@@ -25,6 +25,7 @@ public:
 
 public:
 	void							Player_Move(_float fX, _float fY);
+	const _float					Player_OffsetPos() { return m_fY; };
 
 private:
 	CVIBuffer_Rect*					m_pVIBufferCom = { nullptr };
@@ -32,7 +33,6 @@ private:
 
 	_float							m_fAngle = {};
 	_float							m_fRotSpeed = {};
-
 
 private:
 	HRESULT							Ready_Components();

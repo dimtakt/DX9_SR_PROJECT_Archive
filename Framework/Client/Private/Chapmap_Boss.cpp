@@ -19,12 +19,12 @@ HRESULT CChapmap_Boss::Initialize(void* pArg)
 	MAP_BOSS_DESC* Desc = static_cast<MAP_BOSS_DESC*>(pArg);
 
 	m_iMapTex = ENUM_CLASS(Desc->eMap_Boss);
-	m_fSizeX = 64;
-	m_fSizeY = 64;
+	m_fSizeX = 150;
+	m_fSizeY = 150;
 
 
 	m_fX = 0.f;
-	m_fY = 70.f;
+	m_fY = 50.f;
 	m_fZ = UI_DEPTH::CHATERMAP;
 	m_iWinSizeX = g_iWinSizeX;
 	m_iWinSizeY = g_iWinSizeY;
@@ -76,7 +76,7 @@ HRESULT CChapmap_Boss::Ready_Components()
 		TEXT("Com_Transform"), reinterpret_cast<CComponent**>(&m_pTransformCom))))
 		return E_FAIL;
 
-	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_GAMEPLAY), TEXT("Prototype_Component_Texture_Rect_ChapMap_Node_Symbol"),
+	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_GAMEPLAY), TEXT("Prototype_Component_Texture_Rect_ChapMap_Node_Boss"),
 		TEXT("Com_Texture"), reinterpret_cast<CComponent**>(&m_pTextureCom))))
 		return E_FAIL;
 

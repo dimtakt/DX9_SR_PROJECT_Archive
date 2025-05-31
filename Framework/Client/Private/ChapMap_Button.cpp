@@ -2,6 +2,7 @@
 #include "GameInstance.h"
 #include "ChapMap_MapSymbol.h"
 #include "Chapmap_Boss.h"
+#include "ChapMap.h"
 CChapMap_Button::CChapMap_Button(LPDIRECT3DDEVICE9 pGraphic_Device) : CButton{ pGraphic_Device }
 {
 }
@@ -24,8 +25,8 @@ HRESULT CChapMap_Button::Initialize(void* pArg)
 {
 	UIOBJECT_DESC* Desc = static_cast<UIOBJECT_DESC*>(pArg);
 
-	m_fSizeX = 200;
-	m_fSizeY = 200;
+	m_fSizeX = 230;
+	m_fSizeY = 230;
 	
 	m_iMapIndex = g_MapDB[Desc->fX].m_iMapID;
 	m_iMapTex = g_MapDB[Desc->fX].m_iImage;
@@ -37,7 +38,7 @@ HRESULT CChapMap_Button::Initialize(void* pArg)
 	else
 		m_fX = m_fSizeX;
 
-	m_fY = -100 + g_MapDB[Desc->fX].m_iLine * (m_fSizeY * 2);
+	m_fY = -100 + g_MapDB[Desc->fX].m_iLine * (m_fSizeY * 1.8);
 
 	m_fZ = UI_DEPTH::CHATERMAP;
 	m_iWinSizeX = g_iWinSizeX;
@@ -60,11 +61,18 @@ HRESULT CChapMap_Button::Initialize(void* pArg)
 
 void CChapMap_Button::Priority_Update(_float fTimeDelta)
 {
+	
 	__super::Priority_Update(fTimeDelta);
+
 }
 
 void CChapMap_Button::Update(_float fTimeDelta)
 {
+	m_iPlayerLine = static_cast<CChapMap*>(m_pParent)->Get_Player_Line();
+	
+	if(m_iPlayerLine + 1 == g_MapDB[m_iMapIndex].m_iLine)
+		Click_Event();
+
 	__super::Update(fTimeDelta);
 }
 
@@ -77,11 +85,30 @@ void CChapMap_Button::Late_Update(_float fTimeDelta)
 HRESULT CChapMap_Button::Render()
 {
 	SetUp_RenderState();
-	if (FAILED(CButton::Bind_ButtonTex_Double(g_hWnd, 0, 1)))
-		return E_FAIL;
-
+	
+	if (m_iPlayerLine + 1 == g_MapDB[m_iMapIndex].m_iLine)
+	{
+		if (FAILED(CButton::Bind_ButtonTex_Double(g_hWnd, 0, 1)))
+			return E_FAIL;
+	}
+	else if (m_iPlayerLine  == g_MapDB[m_iMapIndex].m_iLine)
+	{
+		if (FAILED(CButton::Bind_ButtonTex_Single(g_hWnd, 0)))
+			return E_FAIL;
+	}
+	else
+	{
+		if (FAILED(CButton::Bind_ButtonTex_Single(g_hWnd, 2)))
+			return E_FAIL;
+	}
 	Reset_RenderState();
 	return S_OK;
+}
+
+void CChapMap_Button::Click_Event()
+{
+	if (Check_Key_Down(g_hWnd, VK_LBUTTON))
+		static_cast<CChapMap*>(m_pParent)->Player_Offset(m_fX, m_fY, g_MapDB[m_iMapIndex].m_iLine);
 }
 
 HRESULT CChapMap_Button::Ready_Components()
@@ -93,7 +120,6 @@ HRESULT CChapMap_Button::Ready_Components()
 	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Transform"),
 		TEXT("Com_Transform"), reinterpret_cast<CComponent**>(&m_pTransformCom))))
 		return E_FAIL;
-	m_iMapTex;
 
 	_tchar szTemp[128] = {};
 	wsprintf(szTemp, TEXT("Prototype_Component_Texture_Rect_ChapMap_Node_%d"), m_iMapTex);

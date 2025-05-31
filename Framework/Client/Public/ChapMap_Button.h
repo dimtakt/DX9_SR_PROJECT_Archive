@@ -23,6 +23,9 @@ private:
 	LEVEL							m_eLevel = {};
 	_uint							m_iMapIndex = {};
 	_uint							m_iMapTex = {};
+	_uint							m_iPlayerLine = {};
+private:
+	void							Click_Event();
 private:
 	HRESULT							Ready_Components();
 	void							SetUp_RenderState();
