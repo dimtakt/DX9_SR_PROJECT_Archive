@@ -26,6 +26,9 @@ public:
 	virtual void Late_Update(_float fTimeDelta) override;
 	virtual HRESULT Render() override;
 
+public:
+	virtual void OnCollision(CGameObject* pGameObject) override;
+
 private:
 	CVIBuffer_Rect*			m_pVIBufferCom					= { nullptr };
 	CTransform*				m_pTransformCom					= { nullptr };
@@ -35,7 +38,6 @@ private:
 	_bool					m_isFlippedX					= false;
 
 	CTransform*				m_pTargetTransformCom			= { nullptr };
-	CCollider_OBB*			m_pCollider = { nullptr };
 
 private:
 	HRESULT	Ready_Components();

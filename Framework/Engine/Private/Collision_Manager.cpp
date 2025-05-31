@@ -20,7 +20,7 @@ void CCollision_Manager::Clear_Colliders()
 {
     for (size_t i = 0; i < m_vColliders.size(); ++i)
     {
-        if (m_vColliders[i]->Get_Owner()->Get_ObjType() != GAMEOBJ_TYPE::PLAYER)
+        if (m_vColliders[i]->Get_Owner()->Get_IsDead())
         {
             Safe_Release(m_vColliders[i]);
         }
@@ -30,15 +30,10 @@ void CCollision_Manager::Clear_Colliders()
 
 void CCollision_Manager::Check_RoomCollisions()
 {
-    for (size_t i = 0; i < m_vColliders.size(); ++i)
+      for (size_t i = 0; i < m_vColliders.size(); ++i)
     {
         for (size_t j = i + 1; j < m_vColliders.size(); ++j)
         {
-            if (i == 0)
-            {
-                int a = 1;
-            }
-
             if (m_vColliders[i]->Get_Owner()->Get_ObjType() != m_vColliders[j]->Get_Owner()->Get_ObjType() 
                 && Check_OBBtoOBB(m_vColliders[i], m_vColliders[j])
                 && Check_Y_Overlap(m_vColliders[i], m_vColliders[j]))
@@ -110,9 +105,17 @@ void CCollision_Manager::Render()
 
 void CCollision_Manager::Update()
 {
-    for (auto& Col : m_vColliders)
-    {
-        Col->Update_Collider();
+    for (auto it = m_vColliders.begin(); it != m_vColliders.end();) {
+        if ((*it)->Get_Owner()->Get_IsDead())
+        {
+            Safe_Release(*it);
+            it = m_vColliders.erase(it);
+        }
+        else
+        {
+            (*it)->Update_Collider();
+            ++it;
+        }
     }
 }
 

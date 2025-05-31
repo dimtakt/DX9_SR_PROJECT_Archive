@@ -40,15 +40,16 @@ public:
 	void Reset_RenderState();
 
 public:
-	CCollider_OBB* Get_Collider() { return m_pCollider; }
 	virtual void OnCollision(CGameObject* pGameObject) override;
+
+public:
+	class CTransform* Get_Transform() { return m_pTransformCom; }
 
 protected:
 	class CTransform* m_pTransformCom = { nullptr };
 	class CTexture* m_pTextureCom = { nullptr };
 	class CVIBuffer_Rect* m_pVIBufferCom = { nullptr };
 	CTerrainBox* m_pTerrainBox = { nullptr };
-	CCollider_OBB* m_pCollider = { nullptr };
 
 public:
 	static CMonster* Create(LPDIRECT3DDEVICE9 pGraphic_Device);

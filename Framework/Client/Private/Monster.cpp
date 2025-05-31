@@ -31,7 +31,7 @@ HRESULT CMonster::Initialize(void* pArg)
 
 	//m_pTransformCom->Set_State(STATE::POSITION, desc->vPosition);
 	m_pTerrainBox = desc->pTerrainBox;
-
+	Safe_AddRef(m_pTerrainBox);
 	m_eObjType = GAMEOBJ_TYPE::MONSTER;
 
 	return S_OK;
@@ -43,6 +43,7 @@ void CMonster::Priority_Update(_float fTimeDelta)
 
 void CMonster::Update(_float fTimeDelta)
 {
+
 	if (m_pTerrainBox != nullptr) {
 		m_pTerrainBox->SetUp_OnTerrainBox(m_pTransformCom, _float3(0.05f, 0.1f, 0.05f));
 	}
@@ -50,6 +51,7 @@ void CMonster::Update(_float fTimeDelta)
 
 void CMonster::Late_Update(_float fTimeDelta)
 {
+
 	m_pGameInstance->Add_RenderGroup(RENDERGROUP::RG_NONBLEND, this);
 }
 
@@ -96,16 +98,6 @@ HRESULT CMonster::Ready_Components()
 	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Transform"),
 		TEXT("Com_Transform_Monster"), reinterpret_cast<CComponent**>(&m_pTransformCom), &TransformDesc)))
 		return E_FAIL;
-
-	// collider
-	CCollider_OBB::OBB_DESC tColliderDesc;
-	tColliderDesc.vScale = _float3(1.f, 4.f, 1.f);
-	tColliderDesc.pOwner = this;
-	tColliderDesc.pTransform = m_pTransformCom;
-	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Collider_OBB"),
-		TEXT("Com_Monster_Collider"), reinterpret_cast<CComponent**>(&m_pCollider), &tColliderDesc)))
-		return E_FAIL;
-
 	return S_OK;
 }
 
@@ -180,10 +172,4 @@ void CMonster::Free()
 	Safe_Release(m_pTextureCom);
 	Safe_Release(m_pVIBufferCom);
 	Safe_Release(m_pTerrainBox);
-
-	if (m_pCollider)
-	{
-		m_pCollider->Set_Owner(nullptr);
-		Safe_Release(m_pCollider);
-	}
 }

@@ -39,6 +39,11 @@ void CCollider_OBB::Update_Collider()
 	if (!m_pTransformRef)
 		return;
 
+	if (m_pOwner->Get_IsDead())
+	{
+		return;
+	}
+
 	// 1. 방향 벡터 추출
 	m_vAxis[0] = m_pTransformRef->Get_State(STATE::RIGHT);
 	m_vAxis[1] = m_pTransformRef->Get_State(STATE::UP);

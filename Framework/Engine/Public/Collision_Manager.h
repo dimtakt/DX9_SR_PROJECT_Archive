@@ -24,7 +24,7 @@ public:
 	void Update();
 
 private:
-	std::vector<CCollider_OBB*> m_vColliders;
+	vector<CCollider_OBB*> m_vColliders = {};
 public:
 	static CCollision_Manager* Create();
 	virtual void Free() override;
