@@ -192,6 +192,7 @@ void CLevel_MapEdit::ImGui_MenuBar_Render()
 					m_pObjectTransform = nullptr;
 					m_bPicking = false;
 					m_pObject.clear();
+					m_pObject_Desc.clear();
 				}
 
 				while (!ifs.eof())
@@ -277,7 +278,7 @@ void CLevel_MapEdit::ImGui_MenuBar_Render()
 					{
 						CTransform* pTransform = static_cast<CTransform*>(pObj->Find_Component(TEXT("Com_Transform_TerrainBox")));
 						Desc.vPos = pTransform->Get_State(STATE::POSITION); // POSITION 
-						Desc.vScale = pTransform->Get_Scaled(); //SCALE 
+						Desc.vScale =  pTransform->Get_Scaled(); //SCALE 
 
 						CTexture* pTexture = static_cast<CTexture*>(pObj->Find_Component(TEXT("Com_Texture_Terrain_Top")));
 						Desc.iTextureIndex = pTexture->Get_NumBindTexture(); //TEXTURE 
@@ -318,6 +319,7 @@ void CLevel_MapEdit::Picking_Check()
 				m_bPicking = true;
 				m_Scales = m_pObjectTransform->Get_Scaled();
 				m_Translates = m_pObjectTransform->Get_State(STATE::POSITION);
+				m_Rotates = m_pObjectTransform->Get_RotationEuler();
 				break;
 			}
 		}
@@ -423,6 +425,7 @@ void CLevel_MapEdit::ImGui_Option_Button_Reset()
 				m_pObjectTransform = nullptr;
 				m_bPicking = false;
 				m_pObject.clear();
+				m_pObject_Desc.clear();
 			}
 		}
 	}
@@ -567,49 +570,48 @@ void CLevel_MapEdit::ImGui_Picking_Object_Rotate()
 		ImGui::SliderFloat("Rotate.x", &m_Rotates.x, -300.f, 300.f);
 		ImGui::SameLine();
 		if (ImGui::Button("-##Rotate.x")) 
-			m_Rotates.x -= 1.f;
+			m_Rotates.x -= 2.f;
 
 		ImGui::SameLine();
 		if (ImGui::Button("+##Rotate.x"))
-			m_Rotates.x += 1.f;
+			m_Rotates.x += 2.f;
 
 		ImGui::SetNextItemWidth(200.f);
 		ImGui::SliderFloat("Rotate.y", &m_Rotates.y, -300.f, 300.f);
 		ImGui::SameLine();
 		if (ImGui::Button("-##Rotate.y"))
-			m_Rotates.y -= 1.f;
+			m_Rotates.y -= 2.f;
 
 		ImGui::SameLine();
 		if (ImGui::Button("+##Rotate.y"))
-			m_Rotates.y += 1.f;
+			m_Rotates.y += 2.f;
 
 		ImGui::SetNextItemWidth(200.f);
 		ImGui::SliderFloat("Rotate.z", &m_Rotates.z, -300.f, 300.f);
 		ImGui::SameLine();
 		if (ImGui::Button("-##Rotate.z"))
-			m_Rotates.z -= 1.f;
+			m_Rotates.z -= 2.f;
 
 		ImGui::SameLine();
 		if (ImGui::Button("+##Rotate.z"))
-			m_Rotates.z += 1.f;
+			m_Rotates.z += 2.f;
 
 		if (m_pObjectTransform)
 		{
 			if (fx > m_Rotates.x || fx < m_Rotates.x)
 			{
-				m_pObjectTransform->Add_Rotation(_float3{ 1.f, 0.f, 0.f }, D3DXToRadian(m_Rotates.x));
-				m_pObjectTransform->Set_RotationEuler(m_Rotates);
+				m_pObjectTransform->ApplyEulerRotation(m_Rotates);
 			}
 			if (fy > m_Rotates.y || fy < m_Rotates.y)
 			{
-				m_pObjectTransform->Add_Rotation(_float3{ 0.f, 1.f, 0.f }, D3DXToRadian(m_Rotates.y));
-				m_pObjectTransform->Set_RotationEuler(m_Rotates);
+				m_pObjectTransform->ApplyEulerRotation(m_Rotates);
 			}
 			if (fz > m_Rotates.z || fz < m_Rotates.z)
 			{
-				m_pObjectTransform->Add_Rotation(_float3{ 0.f, 0.f, 1.f }, D3DXToRadian(m_Rotates.z));
-				m_pObjectTransform->Set_RotationEuler(m_Rotates);
+				m_pObjectTransform->ApplyEulerRotation(m_Rotates);
 			}
+
+			m_pObjectTransform->Set_RotationEuler(m_Rotates.x, m_Rotates.y, m_Rotates.z);
 		}
 		ImGui::TreePop();
 	}

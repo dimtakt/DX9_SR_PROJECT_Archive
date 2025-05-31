@@ -253,6 +253,9 @@
     <Filter Include="02.GameObject\Monster\Oink_A">
       <UniqueIdentifier>{0ce5164f-acee-43e2-bfa8-b1707eb0ad59}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\Object\Potal">
+      <UniqueIdentifier>{b6666f70-5fbb-48b5-96c9-b8966dda1b33}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -516,6 +519,9 @@
     <ClInclude Include="..\Public\Level_Stage2.h">
       <Filter>01.Levels\04. Dungeon\Stage2</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Potal.h">
+      <Filter>02.GameObject\Object\Potal</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -743,6 +749,9 @@
     </ClCompile>
     <ClCompile Include="..\private\Oink_A.cpp">
       <Filter>02.GameObject\Monster\Oink_A</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Potal.cpp">
+      <Filter>02.GameObject\Object\Potal</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

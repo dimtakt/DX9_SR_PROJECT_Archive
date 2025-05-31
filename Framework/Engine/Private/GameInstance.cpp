@@ -184,6 +184,7 @@ CBase* CGameInstance::Clone_Prototype(PROTOTYPE ePrototype, _uint iPrototypeLeve
 #pragma region OBJECT_MANAGER
 HRESULT CGameInstance::Add_GameObject_ToLayer(_uint iLayerLevelIndex, const _wstring& strLayerTag, _uint iPrototypeLevelIndex, const _wstring strPrototypeTag, void* pArg)
 {
+
     if (nullptr == m_pObject_Manager)
         return E_FAIL;
 

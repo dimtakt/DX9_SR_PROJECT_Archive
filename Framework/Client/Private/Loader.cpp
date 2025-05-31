@@ -29,6 +29,8 @@
 #include "Dagger.h"
 #include "Sky.h"
 #include "ChapMap.h"
+#include "Potal.h"
+
 CLoader::CLoader(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: m_pGraphic_Device{ pGraphic_Device }
 	, m_pGameInstance{ CGameInstance::GetInstance() }
@@ -563,6 +565,11 @@ HRESULT CLoader::Loading_For_Stage1_Level()
 HRESULT CLoader::Loading_For_Stage2_Level()
 {
 	lstrcpy(m_szLoadingText, TEXT("텍스쳐를 로딩중입니다."));
+
+	//포탈 임시용 텍스처 세팅
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_SHARED), TEXT("Prototype_Component_Texture_Potal"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/BleakSwordDX/Object/Potal/Potal.png"), 1))))
+		return E_FAIL;
 	
 	lstrcpy(m_szLoadingText, TEXT("모델을 로딩중입니다."));
 
@@ -597,6 +604,10 @@ HRESULT CLoader::Loading_For_Stage2_Level()
 
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STAGE2), TEXT("Prototype_GameObject_Camera_Mouse"),
 		CCamera_Mouse::Create(m_pGraphic_Device))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STAGE2), TEXT("Prototype_GameObject_Potal"),
+		CPotal::Create(m_pGraphic_Device))))
 		return E_FAIL;
 
 

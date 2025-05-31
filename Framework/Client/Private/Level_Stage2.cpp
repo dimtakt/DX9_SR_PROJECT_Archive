@@ -18,6 +18,7 @@ CLevel_Stage2::CLevel_Stage2(LPDIRECT3DDEVICE9 pGraphic_Device)
 
 HRESULT CLevel_Stage2::Initialize()
 {
+	CRoom_Manager::GetInstance()->Clear(ENUM_CLASS(LEVEL::LEVEL_STAGE1));
 	g_hCursor = LoadCursorFromFile(L"Resources/Sephiria/UI/Cursor/Cursor_Combat.cur");
 
 	/*if (FAILED(Ready_Light()))
@@ -143,7 +144,11 @@ HRESULT CLevel_Stage2::Ready_Layer_Room(const _wstring& strLayerTag)
 		_int RoomX = RoomIndex[num].first;
 		_int RoomZ = RoomIndex[num].second;
 
+		//현재 정해진 ID값의 룸에 지형, 오브젝트 세팅 내부에서 지형 위치 자동 배치
 		pRoom->Load_From_File(ENUM_CLASS(LEVEL::LEVEL_STAGE2), TEXT("Layer_Room"), TEXT("../../data/Stage2_Map%d.txt"), num, RoomX, RoomZ);
+
+		//현재 정해진 ID값의 룸에 포탈 설치 , 내부에서 인접한 지형 체크 후 포탈 위치 자동 조정
+	
 
 		//// 지형 셋팅
 		//CTerrainBox* pTerrainBox = nullptr;
@@ -180,6 +185,11 @@ HRESULT CLevel_Stage2::Ready_Layer_Room(const _wstring& strLayerTag)
 
 		// 룸매니저 투입
  	CRoom_Manager::GetInstance()->Add_Room(pRoom, ENUM_CLASS(LEVEL::LEVEL_STAGE2), TEXT("Layer_Room"));
+	}
+
+	for (size_t num = 0; num < 5; num++)
+	{
+		CRoom_Manager::GetInstance()->Check_Room(ENUM_CLASS(LEVEL::LEVEL_STAGE2), TEXT("Layer_Room"), num);
 	}
 
 	return S_OK;
