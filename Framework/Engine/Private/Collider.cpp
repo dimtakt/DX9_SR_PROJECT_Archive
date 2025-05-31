@@ -25,8 +25,9 @@ HRESULT CCollider::Render()
 	return S_OK;
 }
 
-void CCollider::Update_Collider(const CTransform* pTransform)
+void CCollider::Update_Collider()
 {
+	
 }
 
 void CCollider::Free()

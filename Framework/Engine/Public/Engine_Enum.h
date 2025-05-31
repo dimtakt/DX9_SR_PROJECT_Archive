@@ -15,7 +15,7 @@ namespace Engine
 
 	enum class ROOM_STATE { INACTIVE, ACTIVE, CLEARED };
 
-	enum class GAMEOBJ_TYPE { PLAYER, MONSTER, OBJECT,TERRAIN, END };
+	enum class GAMEOBJ_TYPE { PLAYER, MONSTER, OBJECT,TERRAIN, WEAPON, END };
 }
 #endif
 
