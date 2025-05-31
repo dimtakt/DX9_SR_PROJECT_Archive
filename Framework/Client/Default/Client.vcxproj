@@ -157,6 +157,7 @@
     <ClInclude Include="..\public\Chapmap_Boss.h" />
     <ClInclude Include="..\public\ChapMap_Button.h" />
     <ClInclude Include="..\public\ChapMap_Frame.h" />
+    <ClInclude Include="..\public\ChapMap_Line.h" />
     <ClInclude Include="..\public\ChapMap_PlayerSymbol.h" />
     <ClInclude Include="..\Public\Client_Defines.h" />
     <ClInclude Include="..\Public\Client_Defines_Item.h" />
@@ -168,7 +169,7 @@
     <ClInclude Include="..\public\Inven_Slot_Selete.h" />
     <ClInclude Include="..\public\Item_Base.h" />
     <ClInclude Include="..\Public\Level_MapEdit.h" />
-     <ClInclude Include="..\Public\Level_Stage2.h" />
+    <ClInclude Include="..\Public\Level_Stage2.h" />
     <ClInclude Include="..\public\Mole_A.h" />
     <ClInclude Include="..\Public\Monster.h" />
     <ClInclude Include="..\Public\Monster_Factory.h" />
@@ -246,6 +247,7 @@
     <ClCompile Include="..\private\Chapmap_Boss.cpp" />
     <ClCompile Include="..\private\ChapMap_Button.cpp" />
     <ClCompile Include="..\private\ChapMap_Frame.cpp" />
+    <ClCompile Include="..\private\ChapMap_Line.cpp" />
     <ClCompile Include="..\private\ChapMap_MapSymbol.cpp" />
     <ClCompile Include="..\private\ChapMap_PlayerSymbol.cpp" />
     <ClCompile Include="..\Private\Effect_Factory.cpp" />

@@ -15,6 +15,7 @@ HRESULT CChapMap_PlayerSymbol::Initialize_Prototype()
 
 HRESULT CChapMap_PlayerSymbol::Initialize(void* pArg)
 {
+
     m_fRotSpeed = 90.f;
 
     m_fSizeX = 100;

@@ -253,6 +253,9 @@
     <Filter Include="02.GameObject\Monster\Oink_A">
       <UniqueIdentifier>{0ce5164f-acee-43e2-bfa8-b1707eb0ad59}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\UI\Window\ChapMap\ChapMap_Line">
+      <UniqueIdentifier>{158d2a62-f001-4702-82e3-1e0f71406a06}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -516,6 +519,9 @@
     <ClInclude Include="..\Public\Level_Stage2.h">
       <Filter>01.Levels\04. Dungeon\Stage2</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\ChapMap_Line.h">
+      <Filter>02.GameObject\UI\Window\ChapMap\ChapMap_Line</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -743,6 +749,9 @@
     </ClCompile>
     <ClCompile Include="..\private\Oink_A.cpp">
       <Filter>02.GameObject\Monster\Oink_A</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\ChapMap_Line.cpp">
+      <Filter>02.GameObject\UI\Window\ChapMap\ChapMap_Line</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

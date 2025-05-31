@@ -34,8 +34,10 @@ namespace Client
 
 		//Ã©ÅÍ Áöµµ
 		static constexpr float CHATERMAP = 0.26f;
-		static constexpr float CHATERMAP_UP = 0.25f;
-		static constexpr float CHATERMAP_Player = 0.24f;
+		static constexpr float CHATERMAP_BUTTON = 0.24f;
+		static constexpr float CHATERMAP_UP = 0.245f;
+		static constexpr float CHATERMAP_Player = 0.235f;
+		static constexpr float CHATERMAP_LINE = 0.242f;
 	};
 
 };
