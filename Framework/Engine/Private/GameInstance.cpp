@@ -138,6 +138,11 @@ void CGameInstance::Render_End(HWND hWnd)
     if (nullptr != m_pGraphic_Device)
         m_pGraphic_Device->Render_End();
 }
+void CGameInstance::Seed_Random()
+{
+    srand(static_cast<unsigned int>(time(NULL)));
+}
+
 _float CGameInstance::Compute_Random_Normal()
 {
     return rand() / static_cast<_float>(RAND_MAX);
@@ -169,7 +174,7 @@ HRESULT CGameInstance::Add_Prototype(_uint iPrototypeLevelIndex, const _wstring&
 
 CBase* CGameInstance::Clone_Prototype(PROTOTYPE ePrototype, _uint iPrototypeLevelIndex, const _wstring& strPrototypeTag, void* pArg)
 {
-    if (nullptr == m_pPrototype_Manager)
+     if (nullptr == m_pPrototype_Manager)
         return nullptr;
 
     return m_pPrototype_Manager->Clone_Prototype(ePrototype, iPrototypeLevelIndex, strPrototypeTag, pArg);

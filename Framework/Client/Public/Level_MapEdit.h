@@ -59,15 +59,15 @@ private:
 	void ImGui_Picking_Object_MenBar();
 	void ImGui_Delete_Object();
 	void ImGui_Picking_Object_Translates_Option();
-
-	//지형 전용 메뉴
 	void ImGui_Picking_Object_Rotate();
 	void ImGui_Picking_Object_Scale();
 	void ImGui_Picking_UnCheck();
 	
+	//지형 전용
 	void ImGui_Terrain_MenBar();
 	void ImGui_Terrain_Transform_Render();
 	void ImGui_Terrain_Texture_Render(int iTextureIndex);
+	void ImGui_Terrain_Scale_Render();
 
 private:
 	int m_iTexture_id = {};							//공용 텍스처 인덱스
@@ -77,6 +77,7 @@ private:
 	_float3 m_Translates = { 0.f,0.f,0.f };
 
 	_float3 m_TrrainTranslate = { 0.f, 0.f, 0.f };	//지형 전용
+	_float3 m_TrrainScales = { 20.f, 2.f, 20.f };
 
 	map<string, OBJECT_TEXTURE_INFO>			m_ObjectTextureInfo = {};			//이미지뷰 띄우기, string "Object", "TerrainBox"
 	CGameObject*								m_pPreview = nullptr;				//텍스처 가져오고자 만든 임시변수
