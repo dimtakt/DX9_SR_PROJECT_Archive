@@ -28,7 +28,7 @@
 #include "TerrainBox.h"
 #include "Dagger.h"
 #include "Sky.h"
-
+#include "ChapMap.h"
 CLoader::CLoader(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: m_pGraphic_Device{ pGraphic_Device }
 	, m_pGameInstance{ CGameInstance::GetInstance() }
@@ -234,13 +234,50 @@ HRESULT CLoader::Loading_For_GamePlay_Level()
 			CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/UI/Buff_Icon/Effect_Icon_0%d.png"), 50))))
 			return E_FAIL;
 #pragma endregion
-#pragma region Prototype_Component_Window_Texture
+#pragma region Prototype_Component_Window_Inventory_Texture
 		if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_GAMEPLAY), TEXT("Prototype_Component_Texture_Rect_Window_Inventory"),
 			CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/UI/Inventory/InventoryBase.png"), 1))))
 			return E_FAIL;
 
 		if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_GAMEPLAY), TEXT("Prototype_Component_Texture_Rect_Slot_Inven"),
 			CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/UI/Inventory/InventorySlot_%d.png"), 9))))
+			return E_FAIL;
+#pragma endregion
+#pragma region Prototype_Component_Window_ChapterMap_Texture
+		if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_GAMEPLAY), TEXT("Prototype_Component_Texture_Rect_ChapMap"),
+			CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/UI/ChapMap/ChapMapBG_%d.png"), 2))))
+			return E_FAIL;
+
+		if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_GAMEPLAY), TEXT("Prototype_Component_Texture_Rect_ChapMap_Node_0"),
+			CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/UI/ChapMap/Cave_Node0_%d.png"), 3))))
+			return E_FAIL;
+
+		if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_GAMEPLAY), TEXT("Prototype_Component_Texture_Rect_ChapMap_Node_1"),
+			CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/UI/ChapMap/Cave_Node1_%d.png"), 3))))
+			return E_FAIL;
+
+		if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_GAMEPLAY), TEXT("Prototype_Component_Texture_Rect_ChapMap_Node_2"),
+			CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/UI/ChapMap/Cave_Node2_%d.png"), 3))))
+			return E_FAIL;
+
+		if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_GAMEPLAY), TEXT("Prototype_Component_Texture_Rect_ChapMap_Node_3"),
+			CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/UI/ChapMap/Cave_Node3_%d.png"), 3))))
+			return E_FAIL;
+
+		if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_GAMEPLAY), TEXT("Prototype_Component_Texture_Rect_ChapMap_Node_4"),
+			CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/UI/ChapMap/Cave_Node4_%d.png"), 3))))
+			return E_FAIL;
+
+		if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_GAMEPLAY), TEXT("Prototype_Component_Texture_Rect_ChapMap_Node_Symbol"),
+			CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/UI/ChapMap/Node_Icon%d.png"), 6))))
+			return E_FAIL;
+
+		if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_GAMEPLAY), TEXT("Prototype_Component_Texture_Rect_ChapMap_Node_Boss"),
+			CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/UI/ChapMap/Node_Boss_%d.png"), 2))))
+			return E_FAIL;
+
+		if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_GAMEPLAY), TEXT("Prototype_Component_Texture_Rect_ChapMap_Node_Player"),
+			CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/UI/ChapMap/Node_Player.png"), 1))))
 			return E_FAIL;
 #pragma endregion
 
@@ -288,6 +325,8 @@ HRESULT CLoader::Loading_For_GamePlay_Level()
 		CHud_Buff::Create(m_pGraphic_Device, LEVEL::LEVEL_GAMEPLAY))))
 		return E_FAIL;
 #pragma endregion
+
+#pragma region Prototype_GameObject_Window
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_GAMEPLAY), TEXT("Prototype_GameObject_UI_Field_Hp"),
 		CField_Hp::Create(m_pGraphic_Device, LEVEL::LEVEL_GAMEPLAY))))
 		return E_FAIL;
@@ -296,6 +335,11 @@ HRESULT CLoader::Loading_For_GamePlay_Level()
 		CInventory::Create(m_pGraphic_Device, LEVEL::LEVEL_GAMEPLAY))))
 		return E_FAIL;
 
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_GAMEPLAY), TEXT("Prototype_GameObject_UI_ChapMap"),
+		CChapMap::Create(m_pGraphic_Device, LEVEL::LEVEL_GAMEPLAY))))
+		return E_FAIL;
+
+#pragma endregion
 	lstrcpy(m_szLoadingText, TEXT("로딩이 완료되었습니다."));
 
 

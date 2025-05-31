@@ -15,6 +15,7 @@
 HWND g_hWnd;
 HCURSOR g_hCursor;
 HINSTANCE hInst;                                // 현재 인스턴스입니다.
+short g_ScrollValue;
 
 WCHAR szTitle[MAX_LOADSTRING];                  // 제목 표시줄 텍스트입니다.
 WCHAR szWindowClass[MAX_LOADSTRING];            // 기본 창 클래스 이름입니다.
@@ -59,7 +60,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     UNREFERENCED_PARAMETER(lpCmdLine);
 
     // TODO: 여기에 코드를 입력합니다.
-
+   
     // 전역 문자열을 초기화합니다.
     LoadStringW(hInstance, IDS_APP_TITLE, szTitle, MAX_LOADSTRING);
     LoadStringW(hInstance, IDC_CLIENT, szWindowClass, MAX_LOADSTRING);
@@ -88,6 +89,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
         return E_FAIL;
 
     _float      fTimeAcc = {};
+    g_ScrollValue = {};
 
     while (true)
     {
@@ -95,6 +97,12 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
         {
             if (WM_QUIT == msg.message)
                 break;
+
+            if (WM_MOUSEWHEEL == msg.message)
+            {
+                _short Delta = GET_WHEEL_DELTA_WPARAM(msg.wParam);
+                g_ScrollValue = Delta;
+            }
 
             if (!TranslateAccelerator(msg.hwnd, hAccelTable, &msg))
             {
@@ -116,6 +124,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
                 break;
 
             fTimeAcc = 0.f;
+            g_ScrollValue = 0;
         }
     }
     Safe_Release(pGameInstance);

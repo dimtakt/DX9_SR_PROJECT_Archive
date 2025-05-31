@@ -20,7 +20,7 @@ public:
 
 private:
 	LEVEL							m_eLevel = {};
-	class CTexture* m_pSelete_TextureCom = { nullptr };
+	class CTexture*					m_pSelete_TextureCom = { nullptr };
 	_bool							m_bIsOver = {};
 
 private:
@@ -31,8 +31,8 @@ private:
 	HRESULT							Ready_ChildPrototype(LEVEL eLevel);
 	HRESULT							Ready_Children();
 public:
-	static CInven_Slot_Selete* Create(LPDIRECT3DDEVICE9 pGraphic_Device, LEVEL eLevel);
-	virtual CGameObject* Clone(void* pArg) override;
+	static CInven_Slot_Selete*		Create(LPDIRECT3DDEVICE9 pGraphic_Device, LEVEL eLevel);
+	virtual CGameObject*			Clone(void* pArg) override;
 	virtual void					Free() override;
 };
 

@@ -32,6 +32,7 @@ HRESULT CBuff_Type_Base::Initialize(void* pArg)
 	m_fSizeY = 32;
 	m_fX = 0.f;
 	m_fY = 0.f;
+	m_fZ = UI_DEPTH::HUD_BUFF;
 	m_iWinSizeX = g_iWinSizeX;
 	m_iWinSizeY = g_iWinSizeY;
 
