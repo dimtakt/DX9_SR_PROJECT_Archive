@@ -26,7 +26,7 @@ HRESULT CInven_Slot_Selete::Initialize(void* pArg)
     m_fSizeY = 76;
     m_fX = 0.f;
     m_fY = 0.f;
-    m_fZ = 0.01f;
+    m_fZ = UI_DEPTH::INVEN_SLOT_SELETE;
     m_iWinSizeX = g_iWinSizeX;
     m_iWinSizeY = g_iWinSizeY;
 

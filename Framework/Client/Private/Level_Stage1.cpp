@@ -9,6 +9,7 @@
 #include "TerrainBox.h"
 #include "Room_Manager.h"
 #include "Monster_Factory.h"
+#include "Level_Loading.h"
 
 #include "Mole_A.h"
 
@@ -46,6 +47,11 @@ HRESULT CLevel_Stage1::Initialize()
 
 void CLevel_Stage1::Update(_float fTimeDelta)
 {
+	if (m_pGameInstance->IsKeyDown(VK_RETURN))
+	{
+ 		if(FAILED(m_pGameInstance->Open_Level(ENUM_CLASS(LEVEL::LEVEL_LOADING), CLevel_Loading::Create(m_pGraphic_Device, LEVEL::LEVEL_STAGE2))))
+			return;
+	}
 }
 
 HRESULT CLevel_Stage1::Render()
@@ -80,8 +86,12 @@ HRESULT CLevel_Stage1::Ready_Light()
 
 HRESULT CLevel_Stage1::Ready_Layer_Camera(const _wstring& strLayerTag)
 {
-	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_STAGE1), strLayerTag,
+	/*if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_STAGE1), strLayerTag,
 		ENUM_CLASS(LEVEL::LEVEL_STAGE1), TEXT("Prototype_GameObject_Camera_Follow"))))
+		return E_FAIL;*/
+
+	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_STAGE1), strLayerTag,
+		ENUM_CLASS(LEVEL::LEVEL_STAGE1), TEXT("Prototype_GameObject_Camera_Mouse"))))
 		return E_FAIL;
 
 	return S_OK;
@@ -131,10 +141,10 @@ HRESULT CLevel_Stage1::Ready_Layer_Room(const _wstring& strLayerTag)
 		MAP_OBJECT_DESC tDesc{};
 		tDesc.iTextureIndex = 0;
 		tDesc.vPos = _float3(static_cast<_float>(num) * 20.f + 2.f, 0.f, 0.f);
+		tDesc.vScale = _float3(20.f, 2.f, 20.f);
 		pTerrainBox = dynamic_cast<CTerrainBox*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::LEVEL_STAGE1), TEXT("Prototype_GameObject_TerrainBox"), &tDesc));
 		NULL_CHECK_RETURN(pTerrainBox, E_FAIL);
 		pRoom->Add_TerrainBox(pTerrainBox);
-
 		// 몬스터 셋팅
 #pragma region old monster spawn
 		/*

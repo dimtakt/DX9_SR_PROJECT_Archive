@@ -21,7 +21,7 @@ HRESULT CUI_KeyGuide::Initialize(void* pArg)
 	m_fSizeY = 28;
 	m_fX = -m_fSizeX * 0.5;
 	m_fY = m_fSizeY * 0.5;
-	m_fZ = 0.f;
+	m_fZ = UI_DEPTH::KEY_GUIDE;
 	m_iWinSizeX = g_iWinSizeX;
 	m_iWinSizeY = g_iWinSizeY;
 

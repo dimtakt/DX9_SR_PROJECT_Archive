@@ -133,7 +133,7 @@ CGameObject* CTree::Clone(void* pArg)
 
     if (FAILED(pInstance->Initialize(pArg)))
     {
-        MSG_BOX(TEXT("Failde to Cloned : CBackGround"));
+        MSG_BOX(TEXT("Failde to Cloned : CTree"));
         Safe_Release(pInstance);
     }
 

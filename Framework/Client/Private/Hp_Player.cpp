@@ -23,6 +23,7 @@ HRESULT CHp_Player::Initialize(void* pArg)
 	m_fSizeY = 20;
 	m_fX = 0;
 	m_fY = -15;
+	m_fZ = UI_DEPTH::HUD_STATUS;
 	m_iWinSizeX = g_iWinSizeX;
 	m_iWinSizeY = g_iWinSizeY;
 

@@ -19,6 +19,7 @@ HRESULT CMoney_Player::Initialize(void* pArg)
 	m_fSizeY = 32;
 	m_fX = -32;
 	m_fY = 0;
+	m_fZ = UI_DEPTH::HUD_WALLET;
 	m_iWinSizeX = g_iWinSizeX;
 	m_iWinSizeY = g_iWinSizeY;
 

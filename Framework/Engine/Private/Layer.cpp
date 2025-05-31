@@ -40,10 +40,16 @@ CGameObject* CLayer::Get_LastGameObject()
 
 void CLayer::Priority_Update(_float fTimeDelta)
 {
-	for (auto& pGameObject : m_GameObjects)
-	{
-		if (nullptr != pGameObject)
-			pGameObject->Priority_Update(fTimeDelta);
+	for (auto it = m_GameObjects.begin(); it != m_GameObjects.end(); ) {
+		if ((*it)->Get_IsDead()) {
+			Safe_Release(*it);
+			it = m_GameObjects.erase(it); 
+		}
+		else {
+			if (nullptr != *it)
+				(*it)->Priority_Update(fTimeDelta);
+			++it;
+		}
 	}
 }
 

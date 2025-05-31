@@ -29,7 +29,7 @@ HRESULT CHud_Exp_Checkout::Initialize(void* pArg)
         m_fX = DescMy->fX;
 
     m_fY = 0.f;
-    m_fZ = 0.f;
+    m_fZ = UI_DEPTH::HUD_EXP;
     m_iWinSizeX = g_iWinSizeX;
     m_iWinSizeY = g_iWinSizeY;
 

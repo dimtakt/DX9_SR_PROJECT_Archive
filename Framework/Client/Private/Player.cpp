@@ -26,7 +26,7 @@ HRESULT CPlayer::Initialize(void* pArg)
 		return E_FAIL;
 
     m_eObjType = GAMEOBJ_TYPE::PLAYER;
-    m_pTransformCom->Scaling(1.5f, 1.5f, 1.5f);
+    //m_pTransformCom->Scaling(1.5f, 1.5f, 1.5f);
     m_strTimerTag = L"GameObject_Player_StateDeltaTime";
     
     m_pGameInstance->Add_Timer(m_strTimerTag);      // 마지막으로 상태가 바뀐지 지난 시간을 측정할 타이머
@@ -42,9 +42,9 @@ void CPlayer::Priority_Update(_float fTimeDelta)
 
 void CPlayer::Update(_float fTimeDelta)
 {    
-    m_pCollider->Update_Collider();
+    
     if (m_pTerrainBox != nullptr) {
-        m_pTerrainBox->SetUp_OnTerrainBox(m_pTransformCom, _float3(0.05f, 0.5f, 0.05f));
+        m_pTerrainBox->SetUp_OnTerrainBox(m_pTransformCom, _float3(0.f, 0.1f, 0.f));
     }
         
 
@@ -206,7 +206,6 @@ HRESULT CPlayer::Render()
     m_pVIBufferCom->Bind_Buffers();
     
     m_pVIBufferCom->Render();
-    m_pCollider->Render();
     if(m_isFlippedX)
     {
         m_pVIBufferCom->ResetUV_FlipX();
@@ -223,7 +222,7 @@ void CPlayer::OnCollision(CGameObject* pGameObject)
     {
     case GAMEOBJ_TYPE::MONSTER:
         {
-            int a = 1;
+            //pGameObject->Set_IsDead(true);
             break;
         }
         
@@ -364,15 +363,11 @@ HRESULT CPlayer::Ready_Components()
     
     // collider
     CCollider_OBB::OBB_DESC tColliderDesc;
-    tColliderDesc.vScale = _float3(1.f, 1.f, 1.f);
+    tColliderDesc.vScale = _float3(1.f, 0.001f, 1.f);
     tColliderDesc.pOwner = this;
     tColliderDesc.pTransform = m_pTransformCom;
-    if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Collider_OBB"),
-        TEXT("Com_Player_Collider"), reinterpret_cast<CComponent**>(&m_pCollider), &tColliderDesc)))
-        return E_FAIL;
-
-
-    m_pGameInstance->Add_Collider(m_pCollider);
+    CCollider_OBB* pCol = dynamic_cast<CCollider_OBB*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::COMPONENT, ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Collider_OBB"), &tColliderDesc));
+    m_pGameInstance->Add_Collider(pCol);
     return S_OK;
 }
 
@@ -450,11 +445,11 @@ void CPlayer::Free()
     Safe_Release(m_pAnimatorCom);
     Safe_Release(m_pTerrainBox);
     
-    if (m_pCollider)
+    /*if (m_pCollider)
     {
         m_pCollider->Set_Owner(nullptr);
         Safe_Release(m_pCollider);
-    }
+    }*/
 
     CEffect_Factory::GetInstance()->Free();
     

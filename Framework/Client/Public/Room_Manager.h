@@ -1,5 +1,6 @@
 #pragma once
 #include "GameInstance.h"
+
 BEGIN(Client)
 
 class CRoom_Manager final : public CBase
@@ -14,6 +15,8 @@ public:
 public:
 	HRESULT Add_Room(class CRoom* pRoom, _uint iLayerLevelIndex, const _wstring& strLayerTag);
 	HRESULT Enter_Room(_int iRoomID);
+	vector<pair<_int, _int>> Create_RandomRooms(_int iRoomMax);
+
 
 	CRoom* Get_CurrentRoom();
 	CRoom* Get_RoomByID(_int iRoomID);
@@ -25,6 +28,9 @@ private:
 	map<_int, vector<CRoom*>> m_mRooms = {};
 	_uint m_iCurrentRoomID = { };
 	_uint m_iCurrentLevelID = {};
+
+	vector<pair<_int, _int>> m_RoomIndex = {};
+
 
 public:
 	virtual void Free() override;

@@ -33,7 +33,7 @@ HRESULT CField_Hp::Initialize(void* pArg)
 	m_fSizeY = 10.f;
 	m_fX = 0;
 	m_fY = Desc->fY;
-	m_fZ = 0.3;
+	m_fZ = UI_DEPTH::FILED_HP;
 	m_iWinSizeX = g_iWinSizeX;
 	m_iWinSizeY = g_iWinSizeY;
 

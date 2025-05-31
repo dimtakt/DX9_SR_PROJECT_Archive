@@ -91,6 +91,9 @@ void CGameInstance::Update_Engine(_float fTimeDelta)
     m_pObject_Manager->Priority_Update(fTimeDelta);
 
     m_pPicking->Update();
+    // 콜리전 동기화
+    m_pCollision_Manager->Update();
+    // 콜리전 충돌확인
     m_pCollision_Manager->Check_RoomCollisions();
     m_pObject_Manager->Update(fTimeDelta);
     m_pObject_Manager->Late_Update(fTimeDelta);
@@ -121,6 +124,9 @@ HRESULT CGameInstance::Draw()
     if (FAILED(m_pRenderer->Draw()))
         return E_FAIL;
 
+    // 충돌체 시각화
+    m_pCollision_Manager->Render();
+
     if (FAILED(m_pLevel_Manager->Render()))
         return E_FAIL;
 
@@ -132,6 +138,11 @@ void CGameInstance::Render_End(HWND hWnd)
     if (nullptr != m_pGraphic_Device)
         m_pGraphic_Device->Render_End();
 }
+void CGameInstance::Seed_Random()
+{
+    srand(static_cast<unsigned int>(time(NULL)));
+}
+
 _float CGameInstance::Compute_Random_Normal()
 {
     return rand() / static_cast<_float>(RAND_MAX);
@@ -163,7 +174,7 @@ HRESULT CGameInstance::Add_Prototype(_uint iPrototypeLevelIndex, const _wstring&
 
 CBase* CGameInstance::Clone_Prototype(PROTOTYPE ePrototype, _uint iPrototypeLevelIndex, const _wstring& strPrototypeTag, void* pArg)
 {
-    if (nullptr == m_pPrototype_Manager)
+     if (nullptr == m_pPrototype_Manager)
         return nullptr;
 
     return m_pPrototype_Manager->Clone_Prototype(ePrototype, iPrototypeLevelIndex, strPrototypeTag, pArg);
