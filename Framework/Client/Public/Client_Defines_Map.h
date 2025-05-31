@@ -11,8 +11,8 @@ namespace Client
 	struct MapData
 	{
 	public:
-		_uint				m_iMapID;		//맵 ID
-		_uint				m_iMapIndex;	//맵 레벨 인덱스 (0번 부터 시작)
+		_uint				m_iMapID;		
+		_uint				m_iMapIndex;	//맵 스테이지 레벨 인덱스 (0번 부터 시작)
 		_uint				m_iLine;		//맵 열 번호 (같은 열은 최대 2개)
 											//플레이어 시작 지점: 0, 보스방: 4
 											//똑같은 열 번호 입력 시 옆으로 추가 됨 									
