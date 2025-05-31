@@ -198,9 +198,9 @@ void CLevel_MapEdit::ImGui_MenuBar_Render()
 				{
 					MAP_OBJECT_DESC Desc = {};
 
-					ifs.read(reinterpret_cast<char*>(&Desc), sizeof(MAP_OBJECT_DESC));	//Íµ¨Ï°∞Ï≤??¨Í∏∞ÎßåÌÅº ?åÏùº ?¥Î? ?ΩÏùå
+					ifs.read(reinterpret_cast<char*>(&Desc), sizeof(MAP_OBJECT_DESC));	
 					
-					if (ifs.gcount() == sizeof(MAP_OBJECT_DESC))		//ÎßåÏïΩ Íµ¨Ï°∞Ï≤??¨Í∏∞ÎßåÌÅº ?ΩÏ?Í≤??ÑÎãà?ºÎ©¥ ?Ä?•Ïïà??
+					if (ifs.gcount() == sizeof(MAP_OBJECT_DESC))		
 						m_pObject_Desc.push_back(Desc);
 				}
 			}
@@ -209,7 +209,7 @@ void CLevel_MapEdit::ImGui_MenuBar_Render()
 
 			for (auto& pDesc : m_pObject_Desc)
 			{
-				if (pDesc.eType == GAMEOBJ_TYPE::OBJECT)			//?§Î∏å?ùÌä∏??Í≤ΩÏö∞ ?§Î∏å?ùÌä∏ ?ùÏÑ±
+				if (pDesc.eType == GAMEOBJ_TYPE::OBJECT)			
 				{
 					MAP_OBJECT_DESC  tSrc{};
 					tSrc.iTextureIndex = pDesc.iTextureIndex;
@@ -226,11 +226,12 @@ void CLevel_MapEdit::ImGui_MenuBar_Render()
 					CGameObject* pGameObject = m_pGameInstance->Get_LastGameObject(ENUM_CLASS(LEVEL::LEVEL_MAPEDIT), TEXT("Layer_MapEdit"));
 					m_pObject.push_back(pGameObject);
 				}
-				else												//ÏßÄ?ïÏùº Í≤ΩÏö∞ ÏßÄ???ùÏÑ±
+				else												
 				{
 					MAP_OBJECT_DESC tSrc{};
 					tSrc.iTextureIndex = pDesc.iTextureIndex;
 					tSrc.vPos = pDesc.vPos;
+					tSrc.vScale = pDesc.vScale;
 
 					m_pGameInstance->Add_GameObject_ToLayer(
 						ENUM_CLASS(LEVEL::LEVEL_MAPEDIT), TEXT("Layer_MapEdit"),
@@ -261,24 +262,25 @@ void CLevel_MapEdit::ImGui_MenuBar_Render()
 				{
 					MAP_OBJECT_DESC Desc = {};
 
-					Desc.eType = pObj->Get_ObjType();	//TYPE ?Ä??
-					if (Desc.eType == GAMEOBJ_TYPE::OBJECT)	//?§Î∏å?ùÌä∏ ?Ä?•Ïö©
+					Desc.eType = pObj->Get_ObjType();	//TYPE 
+					if (Desc.eType == GAMEOBJ_TYPE::OBJECT)
 					{
 						CTransform* pTransform = static_cast<CTransform*>(pObj->Find_Component(TEXT("Com_Transform")));
-						Desc.vPos = pTransform->Get_State(STATE::POSITION); // POSITION ?Ä??
-						Desc.vScale = pTransform->Get_Scaled(); //SCALE ?Ä??
+						Desc.vPos = pTransform->Get_State(STATE::POSITION); // POSITION 
+						Desc.vScale = pTransform->Get_Scaled(); //SCALE 
+						Desc.vRotate = pTransform->Get_RotationEuler(); //Rotate
 
 						CTexture* pTexture = static_cast<CTexture*>(pObj->Find_Component(TEXT("Com_Texture")));
-						Desc.iTextureIndex = pTexture->Get_NumBindTexture(); //TEXTURE ?Ä??
+						Desc.iTextureIndex = pTexture->Get_NumBindTexture(); //TEXTURE 
 					}
-					else //ÏßÄ???Ä?•Ïö©
+					else //¡ˆ«¸
 					{
 						CTransform* pTransform = static_cast<CTransform*>(pObj->Find_Component(TEXT("Com_Transform_TerrainBox")));
-						Desc.vPos = pTransform->Get_State(STATE::POSITION); // POSITION ?Ä??
-						Desc.vScale = pTransform->Get_Scaled(); //SCALE ?Ä??
+						Desc.vPos = pTransform->Get_State(STATE::POSITION); // POSITION 
+						Desc.vScale = pTransform->Get_Scaled(); //SCALE 
 
 						CTexture* pTexture = static_cast<CTexture*>(pObj->Find_Component(TEXT("Com_Texture_Terrain_Top")));
-						Desc.iTextureIndex = pTexture->Get_NumBindTexture(); //TEXTURE ?Ä??
+						Desc.iTextureIndex = pTexture->Get_NumBindTexture(); //TEXTURE 
 					}
 
 					m_pObject_Desc.push_back(Desc);
@@ -401,6 +403,7 @@ void CLevel_MapEdit::ImGui_Option_Button_Reset()
 			m_iTexture_id = 0;
 			m_Scales = { 1.f,1.f, 1.f };
 			m_Translates = { 0.f,0.f,0.f };
+			m_Rotates = { 0.f, 0.f, 0.f };
 		}
 
 		ImGui::SameLine(120.f);
@@ -594,18 +597,18 @@ void CLevel_MapEdit::ImGui_Picking_Object_Rotate()
 		{
 			if (fx > m_Rotates.x || fx < m_Rotates.x)
 			{
-				_float fNewX = fx - m_Rotates.x;
-				m_pObjectTransform->Add_Rotation(_float3{ 1.f, 0.f, 0.f }, D3DXToRadian(fNewX));
+				m_pObjectTransform->Add_Rotation(_float3{ 1.f, 0.f, 0.f }, D3DXToRadian(m_Rotates.x));
+				m_pObjectTransform->Set_RotationEuler(m_Rotates);
 			}
 			if (fy > m_Rotates.y || fy < m_Rotates.y)
 			{
-				_float fNewY = fy - m_Rotates.y;
-				m_pObjectTransform->Add_Rotation(_float3{ 0.f, 1.f, 0.f }, D3DXToRadian(fNewY));
+				m_pObjectTransform->Add_Rotation(_float3{ 0.f, 1.f, 0.f }, D3DXToRadian(m_Rotates.y));
+				m_pObjectTransform->Set_RotationEuler(m_Rotates);
 			}
-			if (fz > m_Rotates.z || fx < m_Rotates.z)
+			if (fz > m_Rotates.z || fz < m_Rotates.z)
 			{
-				_float fNewZ = fz - m_Rotates.z;
-				m_pObjectTransform->Add_Rotation(_float3{ 0.f, 0.f, 1.f }, D3DXToRadian(fNewZ));
+				m_pObjectTransform->Add_Rotation(_float3{ 0.f, 0.f, 1.f }, D3DXToRadian(m_Rotates.z));
+				m_pObjectTransform->Set_RotationEuler(m_Rotates);
 			}
 		}
 		ImGui::TreePop();
@@ -677,6 +680,9 @@ void CLevel_MapEdit::ImGui_Terrain_MenBar()
 	// ¿ßƒ° 
 	ImGui_Terrain_Transform_Render();
 
+	//≈©±‚
+	ImGui_Terrain_Scale_Render();
+
 	ImGui_Terrain_Texture_Render(iTerrainTexIndex);
 
 
@@ -686,6 +692,7 @@ void CLevel_MapEdit::ImGui_Terrain_MenBar()
 		tDesc.eType = GAMEOBJ_TYPE::TERRAIN;
 		tDesc.iTextureIndex = iTerrainTexIndex;
 		tDesc.vPos = m_TrrainTranslate;
+		tDesc.vScale = m_TrrainScales;
 
 		m_pGameInstance->Add_GameObject_ToLayer(
 			ENUM_CLASS(LEVEL::LEVEL_MAPEDIT), TEXT("Layer_MapEdit"),
@@ -733,6 +740,18 @@ void CLevel_MapEdit::ImGui_Terrain_Texture_Render(int iTextureIndex)
 			ImGui::Text("Texture Component Missing");
 		}
 	}
+}
+
+void CLevel_MapEdit::ImGui_Terrain_Scale_Render()
+{
+	ImGui::PushItemWidth(45);
+	ImGui::InputFloat("## TScale x", &m_TrrainScales[0]);
+	ImGui::SameLine();
+	ImGui::InputFloat("## TScale y", &m_TrrainScales[1]);
+	ImGui::SameLine();
+	ImGui::InputFloat("## TScale z", &m_TrrainScales[2]);
+	ImGui::SameLine();
+	ImGui::Text("x y z Scale");
 }
 
 CLevel_MapEdit* CLevel_MapEdit::Create(LPDIRECT3DDEVICE9 pGraphic_Device)

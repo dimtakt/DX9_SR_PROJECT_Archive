@@ -220,6 +220,9 @@
     <Filter Include="03.Animations\Player">
       <UniqueIdentifier>{89952621-bacd-4c55-81a8-42271890590d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01.Levels\04. Dungeon\Stage2">
+      <UniqueIdentifier>{ee486fd6-c2f0-46be-ace0-c71a1efa864a}</UniqueIdentifier>
+    </Filter>
     <Filter Include="02.GameObject\Effect">
       <UniqueIdentifier>{f23c713d-5b4e-4b50-b339-bc7a31cc0b05}</UniqueIdentifier>
     </Filter>
@@ -243,6 +246,12 @@
     </Filter>
     <Filter Include="02.GameObject\UI\Window\ChapMap\ChapMap_Button\ChapMap_BossSymbol">
       <UniqueIdentifier>{46427139-e135-46d7-a8b5-16f708b5db62}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Monster\Mole_A">
+      <UniqueIdentifier>{c0167521-3b25-49ce-8c9c-b92a860c0cb2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Monster\Oink_A">
+      <UniqueIdentifier>{0ce5164f-acee-43e2-bfa8-b1707eb0ad59}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -498,6 +507,15 @@
     <ClInclude Include="..\public\Chapmap_Boss.h">
       <Filter>02.GameObject\UI\Window\ChapMap\ChapMap_Button\ChapMap_BossSymbol</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\Mole_A.h">
+      <Filter>02.GameObject\Monster\Mole_A</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Oink_A.h">
+      <Filter>02.GameObject\Monster\Oink_A</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Level_Stage2.h">
+      <Filter>01.Levels\04. Dungeon\Stage2</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -693,6 +711,9 @@
     <ClCompile Include="..\Private\Level_MapEdit.cpp">
       <Filter>01.Levels\03. MapEdit</Filter>
     </ClCompile>
+    <ClCompile Include="..\Private\Level_Stage2.cpp">
+      <Filter>01.Levels\04. Dungeon\Stage2</Filter>
+    </ClCompile>
     <ClCompile Include="..\Private\PlayerEffect.cpp">
       <Filter>02.GameObject\Effect</Filter>
     </ClCompile>
@@ -716,6 +737,12 @@
     </ClCompile>
     <ClCompile Include="..\private\Chapmap_Boss.cpp">
       <Filter>02.GameObject\UI\Window\ChapMap\ChapMap_Button\ChapMap_BossSymbol</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Mole_A.cpp">
+      <Filter>02.GameObject\Monster\Mole_A</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Oink_A.cpp">
+      <Filter>02.GameObject\Monster\Oink_A</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

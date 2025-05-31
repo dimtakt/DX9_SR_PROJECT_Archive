@@ -1,7 +1,7 @@
 #pragma once
 #include "Client_Defines.h"
 #include "GameObject.h"
-
+#include "Collider_OBB.h"
 BEGIN(Engine)
 class CTexture;
 class CTransform;
@@ -25,6 +25,9 @@ public:
 	virtual void Update(_float fTimeDelta) override;
 	virtual void Late_Update(_float fTimeDelta) override;
 	virtual HRESULT Render() override;
+
+public:
+	virtual void OnCollision(CGameObject* pGameObject) override;
 
 private:
 	CVIBuffer_Rect*			m_pVIBufferCom					= { nullptr };

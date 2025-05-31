@@ -22,6 +22,8 @@ HRESULT CDagger::Initialize(void* pArg)
 	if (FAILED(Ready_Components()))
 		return E_FAIL;
 
+	m_eObjType = GAMEOBJ_TYPE::WEAPON;
+
 	return S_OK;
 }
 
@@ -98,6 +100,19 @@ HRESULT CDagger::Render()
 
 }
 
+void CDagger::OnCollision(CGameObject* pGameObject)
+{
+	switch (pGameObject->Get_ObjType())
+	{
+	case GAMEOBJ_TYPE::MONSTER:
+	{
+		pGameObject->Set_IsDead(true);
+		break;
+	}
+
+	}
+}
+
 HRESULT	CDagger::Ready_Components()
 {
 	/* For Com_VIBuffer */
@@ -138,7 +153,13 @@ HRESULT	CDagger::Ready_Components()
 	/* Get Player Transform to m_pTargetTransformCom */
 	m_pTargetTransformCom = dynamic_cast<CTransform*>(m_pGameInstance->Get_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Layer_Player"), TEXT("Com_Transform")));
 
-
+	// collider
+	CCollider_OBB::OBB_DESC tColliderDesc;
+	tColliderDesc.vScale = _float3(1.f, 0.001f, 1.f);
+	tColliderDesc.pOwner = this;
+	tColliderDesc.pTransform = m_pTransformCom;
+	CCollider_OBB* pCol = dynamic_cast<CCollider_OBB*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::COMPONENT, ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Collider_OBB"), &tColliderDesc));
+	m_pGameInstance->Add_Collider(pCol);
 
 	return S_OK;
 }

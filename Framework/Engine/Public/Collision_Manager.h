@@ -16,10 +16,15 @@ public:
 	void Check_RoomCollisions();
 
 private:
-	bool Check_OBBtoOBB( CCollider_OBB* pA, CCollider_OBB* pB);
+	_bool Check_OBBtoOBB(CCollider_OBB* pA, CCollider_OBB* pB);
+	_bool Check_Y_Overlap(CCollider_OBB* pA, CCollider_OBB* pB);
+
+public:
+	void Render();
+	void Update();
 
 private:
-	std::vector<CCollider_OBB*> m_vColliders;
+	vector<CCollider_OBB*> m_vColliders = {};
 public:
 	static CCollision_Manager* Create();
 	virtual void Free() override;

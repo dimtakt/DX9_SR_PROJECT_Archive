@@ -4,6 +4,8 @@
 #include "GameObject.h"
 #include "TerrainBox.h"
 #include "Monster.h"
+#include <fstream>
+#include "Client_Struct.h"
 
 BEGIN(Client)
 
@@ -31,6 +33,7 @@ public:
     virtual void Exit();
     virtual void Activate();
     virtual void Deactivate();
+    HRESULT Load_From_File(_uint iLayerLevelIndex, const _wstring& strLayerTag, const _tchar* pLoadFileTag, _int iIndex, _int RoomX, _int RoomZ);
 
 public:
     _bool GetIsActive() { return m_bIsActive; }
@@ -42,8 +45,9 @@ public:
 public:
     void Add_TerrainBox(class CTerrainBox* pTerrainBox){m_pTerrainBox = pTerrainBox;}
     void Add_Monster(class CMonster* pMonster){m_vMonster.push_back(pMonster);}
-    void Add_Object(class CVIBuffer_Rect* pVIBuffer){m_vObject.push_back(pVIBuffer);}
+    void Add_Object(class CGameObject* pVIBuffer){m_vObject.push_back(pVIBuffer);}
     void Insert_ID(_int iID){m_iID = iID;}
+    void Compute_ObjectOffset(_int x, _int z);
 
 protected:
     _int m_iID = {};
@@ -51,9 +55,15 @@ protected:
     _bool m_bIsVisited = false;
     CTerrainBox* m_pTerrainBox = { nullptr };
     // 맵툴 진행중이라 추후에 어떻게 처리할지 고민중
-    vector<CVIBuffer_Rect*> m_vObject = {};
+    vector<CGameObject*> m_vObject = {};
     vector<CMonster*> m_vMonster = {};
     ROOM_STATE m_eRoomState = {};
+    list<MAP_OBJECT_DESC> m_Object_Desc = {};
+
+    _int iRoomX = {};
+    _int iRoomZ = {};
+
+    _float3 m_ObjectOffset = {};
 
 public:
     static CRoom* Create(LPDIRECT3DDEVICE9 pGraphic_Device);

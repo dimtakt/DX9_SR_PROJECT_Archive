@@ -40,10 +40,17 @@ void CRoom::Priority_Update(_float fTimeDelta)
 			obj->
 		}*/
 
-		for (auto& obj : m_vMonster)
-		{
-			obj->Priority_Update(fTimeDelta);
+		for (auto it = m_vMonster.begin(); it != m_vMonster.end(); ) {
+			if ((*it)->Get_IsDead()) {
+				Safe_Release(*it);
+				it = m_vMonster.erase(it); 
+			}
+			else {
+				(*it)->Priority_Update(fTimeDelta);
+				++it;
+			}
 		}
+
 	}
 }
 
@@ -59,9 +66,11 @@ void CRoom::Update(_float fTimeDelta)
 			obj->
 		}*/
 
+
 		for (auto& obj : m_vMonster)
 		{
-			obj->Update(fTimeDelta);
+			if(nullptr != obj)
+				obj->Update(fTimeDelta);
 		}
 	}
 
@@ -81,7 +90,8 @@ void CRoom::Late_Update(_float fTimeDelta)
 
 		for (auto& obj : m_vMonster)
 		{
-			obj->Late_Update(fTimeDelta);
+			if (nullptr != obj)
+				obj->Late_Update(fTimeDelta);
 		}
 	}
 }
@@ -112,8 +122,88 @@ HRESULT CRoom::Ready_Components(void* pArg)
 }
 HRESULT CRoom::Ready_Objects(void* pArg)
 {
+	  
+	return S_OK;
+}
+
+HRESULT CRoom::Load_From_File(_uint iLayerLevelIndex, const _wstring& strLayerTag, const _tchar* pLoadFileTag, _int iIndex, _int RoomX , _int RoomZ)
+{
+	Compute_ObjectOffset(RoomX, RoomZ);
+
+	_tchar szFileName[MAX_PATH] = {};
+	
+	wsprintf(szFileName, pLoadFileTag, iIndex);
+
+	std::ifstream ifile(szFileName, std::ios::binary);
+	if (!ifile.is_open())
+	{ 
+		 
+		MessageBox(NULL, szFileName, L"파일 열기 실패!", MB_OK);
+		return E_FAIL;
+	}
+
+	if (ifile.is_open())
+	{
+	
+		while (!ifile.eof())
+		{
+			MAP_OBJECT_DESC Desc = {};
+
+			ifile.read(reinterpret_cast<char*>(&Desc), sizeof(MAP_OBJECT_DESC));
+
+			if (ifile.gcount() == sizeof(MAP_OBJECT_DESC))
+				m_Object_Desc.push_back(Desc);
+		}
+	}
+	ifile.close();
+
+	for (auto& pDesc : m_Object_Desc)
+	{
+		if (pDesc.eType == GAMEOBJ_TYPE::OBJECT)
+		{
+			MAP_OBJECT_DESC  tSrc{};
+			tSrc.iTextureIndex = pDesc.iTextureIndex;
+			tSrc.vPos = pDesc.vPos + m_ObjectOffset;
+			tSrc.vScale = pDesc.vScale;
+			tSrc.vRotate = pDesc.vRotate;
+
+			m_pGameInstance->Add_GameObject_ToLayer(
+				iLayerLevelIndex, strLayerTag,
+				iLayerLevelIndex,
+				TEXT("Prototype_GameObject_Tree"),
+				&tSrc);
+
+			CGameObject* pGameObject = m_pGameInstance->Get_LastGameObject(iLayerLevelIndex, strLayerTag);
+			m_vObject.push_back(pGameObject);
+		}
+		else
+		{
+			MAP_OBJECT_DESC tSrc{};
+			tSrc.iTextureIndex = pDesc.iTextureIndex;
+			tSrc.vPos = pDesc.vPos + m_ObjectOffset;
+			tSrc.vScale = pDesc.vScale;
+
+			m_pGameInstance->Add_GameObject_ToLayer(
+				iLayerLevelIndex, strLayerTag,
+				iLayerLevelIndex,
+				TEXT("Prototype_GameObject_TerrainBox"),
+				&tSrc);
+
+			CGameObject* pGameObject = m_pGameInstance->Get_LastGameObject(iLayerLevelIndex, strLayerTag);
+			m_pTerrainBox = dynamic_cast<CTerrainBox*>(pGameObject);
+		}
+	}
+
 
 	return S_OK;
+}
+
+void CRoom::Compute_ObjectOffset(_int x, _int z)
+{
+	_float fX = 50 * x;
+	_float fZ = 50 * z;
+
+	m_ObjectOffset = { fX, 0.f, fZ };
 }
 
 void CRoom::Enter()
@@ -123,7 +213,13 @@ void CRoom::Enter()
 
 	for (auto& pMonster : m_vMonster)
 	{
-		m_pGameInstance->Add_Collider(pMonster->Get_Collider());
+		// collider
+		CCollider_OBB::OBB_DESC tColliderDesc;
+		tColliderDesc.vScale = _float3(1.f, 4.f, 1.f);
+		tColliderDesc.pOwner = pMonster;
+		tColliderDesc.pTransform = pMonster->Get_Transform();
+		CCollider_OBB* pCol = dynamic_cast<CCollider_OBB*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::COMPONENT, ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Collider_OBB"), &tColliderDesc));
+		m_pGameInstance->Add_Collider(pCol);
 	}
 }
 

@@ -18,6 +18,9 @@ public:
 		_float3 vPos;
 		D3DXQUATERNION qRot;
 		_float3 vScale;
+
+		_float4x4 matWorld;
+		_bool isMatWorld = false;
 	} EFFECT_DESC;
 
 protected:

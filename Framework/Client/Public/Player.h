@@ -32,7 +32,9 @@ public:
 public:
 	void Change_TerrainBox(CTerrainBox* pTerrainBox)
 	{
+		Safe_Release(m_pTerrainBox);
 		m_pTerrainBox = pTerrainBox;
+		Safe_AddRef(m_pTerrainBox);
 	}
 
 public:
@@ -62,7 +64,7 @@ private:
 	_bool					m_isFlippedX					= false;
 
 	CTerrainBox*			m_pTerrainBox					= { nullptr };
-	CCollider_OBB*			m_pCollider						= { nullptr };
+	//CCollider_OBB*			m_pCollider						= { nullptr };
 	
 	_wstring				m_strTimerTag					= {};
 
