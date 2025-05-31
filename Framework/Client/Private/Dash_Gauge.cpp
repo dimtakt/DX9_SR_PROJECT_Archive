@@ -30,7 +30,7 @@ HRESULT CDash_Gauge::Initialize(void* pArg)
 	m_fSizeY = 30;
 	m_fX = 0;
 	m_fY = 0;
-	m_fZ = 0.f;
+	m_fZ = UI_DEPTH::HUD_DASH;;
 	m_iWinSizeX = g_iWinSizeX;
 	m_iWinSizeY = g_iWinSizeY;
 
@@ -48,27 +48,6 @@ HRESULT CDash_Gauge::Initialize(void* pArg)
 
 	if (FAILED(Ready_Children()))
 		return E_FAIL;
-
-
-	//임시 
-	CPlayerStats::PLAYERSTAT_DESC PlayerStatDesc{};
-	PlayerStatDesc.strName = L"테스트";
-	PlayerStatDesc.iLevel = 1;
-	PlayerStatDesc.iExp = 0;
-	PlayerStatDesc.fHp = 50.f;
-	PlayerStatDesc.fMp = 50.f;
-	PlayerStatDesc.fDash = 5.f;
-	PlayerStatDesc.fAtkSpeed = 1.0f;
-	PlayerStatDesc.fMoveSpeed = 1.0f;
-	PlayerStatDesc.fHpRegen = 0.f;
-	PlayerStatDesc.fMpRegen = 0.f;
-	PlayerStatDesc.fDashRegen = 0.01f;
-	PlayerStatDesc.fEvade = 0.f;
-	PlayerStatDesc.fDef = 0.f;
-	PlayerStatDesc.fExpMultiply = 1.0f;
-	PlayerStatDesc.fGoldMultiply = 1.0f;
-
-	m_pPlayerStatsCom->Set_Stats(PlayerStatDesc);
 
 	return S_OK;
 }

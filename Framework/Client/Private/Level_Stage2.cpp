@@ -43,17 +43,17 @@ HRESULT CLevel_Stage2::Initialize()
 
 void CLevel_Stage2::Update(_float fTimeDelta)
 {
-	if (m_pGameInstance->IsKeyDown(VK_RETURN))		//테스트용
-	{
-		CRoom_Manager::GetInstance()->Enter_Room(i);
-		CPlayer* pPlayer = dynamic_cast<CPlayer*>(m_pGameInstance->Get_GameObject(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Layer_Player")));
-		CRoom* pRoom = CRoom_Manager::GetInstance()->Get_RoomByID(i);
-		pPlayer->Change_TerrainBox(pRoom->Get_TerrainBox());
+	//if (m_pGameInstance->IsKeyDown(VK_RETURN))		//테스트용
+	//{
+	//	CRoom_Manager::GetInstance()->Enter_Room(i);
+	//	CPlayer* pPlayer = dynamic_cast<CPlayer*>(m_pGameInstance->Get_GameObject(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Layer_Player")));
+	//	CRoom* pRoom = CRoom_Manager::GetInstance()->Get_RoomByID(i);
+	//	pPlayer->Change_TerrainBox(pRoom->Get_TerrainBox());
 
 
-		if(i < 5)
-			i++;
-	}
+	//	if(i < 5)
+	//		i++;
+	//}
 }
 
 HRESULT CLevel_Stage2::Render()

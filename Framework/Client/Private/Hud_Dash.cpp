@@ -28,7 +28,7 @@ HRESULT CHud_Dash::Initialize(void* pArg)
     m_fSizeY = 0;
     m_fX = 30;
     m_fY = 100.f;
-    m_fZ = 0.f;
+    m_fZ = UI_DEPTH::HUD_DASH;
     m_iWinSizeX = g_iWinSizeX;
     m_iWinSizeY = g_iWinSizeY;
 

@@ -40,10 +40,17 @@ void CRoom::Priority_Update(_float fTimeDelta)
 			obj->
 		}*/
 
-		for (auto& obj : m_vMonster)
-		{
-			obj->Priority_Update(fTimeDelta);
+		for (auto it = m_vMonster.begin(); it != m_vMonster.end(); ) {
+			if ((*it)->Get_IsDead()) {
+				Safe_Release(*it);
+				it = m_vMonster.erase(it); 
+			}
+			else {
+				(*it)->Priority_Update(fTimeDelta);
+				++it;
+			}
 		}
+
 	}
 }
 
@@ -62,7 +69,8 @@ void CRoom::Update(_float fTimeDelta)
 
 		for (auto& obj : m_vMonster)
 		{
-			obj->Update(fTimeDelta);
+			if(nullptr != obj)
+				obj->Update(fTimeDelta);
 		}
 	}
 
@@ -82,7 +90,8 @@ void CRoom::Late_Update(_float fTimeDelta)
 
 		for (auto& obj : m_vMonster)
 		{
-			obj->Late_Update(fTimeDelta);
+			if (nullptr != obj)
+				obj->Late_Update(fTimeDelta);
 		}
 	}
 }
@@ -204,7 +213,13 @@ void CRoom::Enter()
 
 	for (auto& pMonster : m_vMonster)
 	{
-		m_pGameInstance->Add_Collider(pMonster->Get_Collider());
+		// collider
+		CCollider_OBB::OBB_DESC tColliderDesc;
+		tColliderDesc.vScale = _float3(1.f, 4.f, 1.f);
+		tColliderDesc.pOwner = pMonster;
+		tColliderDesc.pTransform = pMonster->Get_Transform();
+		CCollider_OBB* pCol = dynamic_cast<CCollider_OBB*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::COMPONENT, ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Collider_OBB"), &tColliderDesc));
+		m_pGameInstance->Add_Collider(pCol);
 	}
 }
 

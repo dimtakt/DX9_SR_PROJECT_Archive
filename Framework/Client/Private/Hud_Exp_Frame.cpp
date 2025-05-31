@@ -26,7 +26,7 @@ HRESULT CHud_Exp_Frame::Initialize(void* pArg)
 	m_fSizeY = 9.f;
 	m_fX = m_fSizeX * 0.5f;
 	m_fY = g_iWinSizeY - m_fSizeY * 0.5f;
-	m_fZ = 0.f;
+	m_fZ = UI_DEPTH::HUD_EXP;
 	m_iWinSizeX = g_iWinSizeX;
 	m_iWinSizeY = g_iWinSizeY;
 

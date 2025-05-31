@@ -91,6 +91,9 @@ void CGameInstance::Update_Engine(_float fTimeDelta)
     m_pObject_Manager->Priority_Update(fTimeDelta);
 
     m_pPicking->Update();
+    // 콜리전 동기화
+    m_pCollision_Manager->Update();
+    // 콜리전 충돌확인
     m_pCollision_Manager->Check_RoomCollisions();
     m_pObject_Manager->Update(fTimeDelta);
     m_pObject_Manager->Late_Update(fTimeDelta);
@@ -120,6 +123,9 @@ HRESULT CGameInstance::Draw()
 
     if (FAILED(m_pRenderer->Draw()))
         return E_FAIL;
+
+    // 충돌체 시각화
+    m_pCollision_Manager->Render();
 
     if (FAILED(m_pLevel_Manager->Render()))
         return E_FAIL;

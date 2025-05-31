@@ -8,7 +8,7 @@ BEGIN(Client)
 class CPlayerEffect final : public CEffect
 {
 private:
-	Client::CPlayerEffect(LPDIRECT3DDEVICE9 pGraphic_Device);
+	CPlayerEffect(LPDIRECT3DDEVICE9 pGraphic_Device);
 	CPlayerEffect(const CPlayerEffect& Prototype);
 	virtual ~CPlayerEffect() = default;
 

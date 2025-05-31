@@ -2,7 +2,7 @@
 #include "GameInstance.h"
 #include "Inven_Slot_Selete.h"
 #include "Client_Defines_Item.h"
-
+#include "Inventory.h"
 CInven_Slot::CInven_Slot(LPDIRECT3DDEVICE9 pGraphic_Device) : CButton{ pGraphic_Device }
 {
 }
@@ -30,7 +30,7 @@ HRESULT CInven_Slot::Initialize(void* pArg)
 	m_fSizeY = 76;
 	m_fX = -203 + Desc->fX * (m_fSizeX + 5);
 	m_fY = -151 + Desc->fY * (m_fSizeY + 5);
-	m_fZ = 0.2f;
+	m_fZ = UI_DEPTH::INVEN_SLOT;
 	m_iWinSizeX = g_iWinSizeX;
 	m_iWinSizeY = g_iWinSizeY;
 
@@ -92,6 +92,12 @@ HRESULT CInven_Slot::Render()
 	if (FAILED(CButton::Bind_ButtonTex_Single(g_hWnd, m_iSlotItem_Tex)))
 		return E_FAIL;
 	Reset_RenderState();
+
+	CInventory* pInven = static_cast<CInventory*>(m_pGameInstance->Get_GameObject(ENUM_CLASS(LEVEL::LEVEL_GAMEPLAY), TEXT("Layer_Inventory")));
+	
+	if (m_pGameInstance->IsKeyHold(VK_LBUTTON) && m_bIsOver && pInven->Pick_Slot())
+		return S_OK;
+
 	Render_Font();
 	return S_OK;
 }
@@ -118,7 +124,6 @@ void CInven_Slot::Push_Item(CItem_Base* pItem)
 
 void CInven_Slot::ItemRender()
 {
-
 	m_pSlotItem->IsSelete();
 }
 
@@ -274,8 +279,6 @@ void CInven_Slot::Render_Font()
 	if (m_pSlotItem == nullptr)
 	{
 		if (m_iSlotGradeCount == 0)
-			return;
-		if (m_bIsOver)
 			return;
 		if (m_iSlotGradeCount > 0)
 		{

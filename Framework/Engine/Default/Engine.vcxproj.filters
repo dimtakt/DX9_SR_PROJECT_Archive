@@ -151,12 +151,6 @@
     <Filter Include="01.Utility\03.GameObject\UIObject\ItemObject\Manager">
       <UniqueIdentifier>{4952152d-59be-44a7-b464-9253c3e6c8a6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01.Utility\03.GameObject\Room">
-      <UniqueIdentifier>{1ea77080-eead-4c49-a109-9c0cdf2debe3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="01.Utility\03.GameObject\Room\Manager">
-      <UniqueIdentifier>{41604ee7-c0cd-4e02-8734-8658020c1b54}</UniqueIdentifier>
-    </Filter>
     <Filter Include="01.Utility\05.Component\Animator\Animation">
       <UniqueIdentifier>{a2b3e8b3-9054-42b4-9d65-cdfc0ea5a43b}</UniqueIdentifier>
     </Filter>

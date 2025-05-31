@@ -23,6 +23,7 @@ HRESULT CHud_Exp::Initialize(void* pArg)
     m_fSizeY = 9;
     m_fX = 0;
     m_fY = 0;
+    m_fZ = UI_DEPTH::HUD_EXP;
     m_iWinSizeX = g_iWinSizeX;
     m_iWinSizeY = g_iWinSizeY;
 
