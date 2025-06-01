@@ -18,7 +18,7 @@ protected:
 	virtual ~CUIObject() = default;
 
 public:
-	const _float3	Get_WorldPos() { return m_vWorldPos; }
+ 	const _float3	Get_WorldPos() { return m_vWorldPos; }
 
 public:
 	virtual HRESULT Initialize_Prototype();

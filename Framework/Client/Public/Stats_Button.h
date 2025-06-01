@@ -20,6 +20,7 @@ public:
 
 private:
 	LEVEL							m_eLevel = {};
+	CGameObject*					m_pTargetUI = { nullptr };
 
 private:
 	HRESULT							Ready_Components();
@@ -28,6 +29,8 @@ private:
 
 	HRESULT							Ready_ChildPrototype(LEVEL eLevel);
 	HRESULT							Ready_Children();
+
+	HRESULT							Setting_Target();
 public:
 	static CStats_Button*			Create(LPDIRECT3DDEVICE9 pGraphic_Device, LEVEL eLevel);
 	virtual CGameObject*			Clone(void* pArg) override;

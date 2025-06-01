@@ -40,19 +40,34 @@ HRESULT CUIObject::Initialize(void* pArg)
 void CUIObject::Priority_Update(_float fTimeDelta)
 {
     for (auto child : m_vecChildren)
-        child->Priority_Update(fTimeDelta);
+    {
+        if (m_vecChildren.size() == 0)
+            return;
+        if (child != nullptr)
+            child->Priority_Update(fTimeDelta);
+    }
 }
 
 void CUIObject::Update(_float fTimeDelta)
 {
     for (auto child : m_vecChildren)
-        child->Update(fTimeDelta);
+    {
+        if (m_vecChildren.size() == 0)
+            return;
+        if (child != nullptr)
+            child->Update(fTimeDelta);
+    }
 }
 
 void CUIObject::Late_Update(_float fTimeDelta)
 {
     for (auto child : m_vecChildren)
-        child->Late_Update(fTimeDelta);
+    {
+        if (m_vecChildren.size() == 0)
+            return;
+        if (child != nullptr)
+            child->Late_Update(fTimeDelta);
+    }
 }
 
 HRESULT CUIObject::Render()

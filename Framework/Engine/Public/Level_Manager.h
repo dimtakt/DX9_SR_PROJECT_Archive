@@ -15,10 +15,17 @@ public:
 	void Update(_float fTimeDelta);
 	HRESULT Render();
 
+public:
+	_uint	Get_CurrentLevel() { return m_iCurrentLevelID; }
+
 private:
-	class CLevel*			m_pCurrentLevel = { nullptr };
-	class CGameInstance*	m_pGameInstance = { nullptr };
+	class CLevel* m_pCurrentLevel = { nullptr };
+	class CGameInstance* m_pGameInstance = { nullptr };
 	_uint					m_iCurrentLevelID = {};
+	
+	class CLevel*			m_pNextLevel = { nullptr };
+	_uint					m_iNextLevelID = {};
+	_bool					m_bIsNextLevel = { false };
 
 private:
 	HRESULT Clear_Resources();

@@ -2,12 +2,13 @@
 #include "TerrainBox.h"
 #include "GameInstance.h"
 #include "Collider_OBB.h"
-
+#include "Event_Manager.h"
 #include "Effect_Factory.h"
 
 CPlayer::CPlayer(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CGameObject{ pGraphic_Device }
 {
+
 }
 
 CPlayer::CPlayer(const CPlayer& Prototype)
@@ -31,6 +32,7 @@ HRESULT CPlayer::Initialize(void* pArg)
     
     m_pGameInstance->Add_Timer(m_strTimerTag);      // 마지막으로 상태가 바뀐지 지난 시간을 측정할 타이머
     m_pGameInstance->Compute_TimeDelta(m_strTimerTag);
+    m_pGameInstance->Subscribe(ENUM_CLASS(EVENT_TYPE::UICHANGE), this);
 
 	return S_OK;
 }
@@ -370,6 +372,28 @@ void CPlayer::OnCollision(CGameObject* pGameObject)
     }
 }
 
+void CPlayer::ChangeStat(STAT_INFO eStat, float fValue)
+{
+    //STATCHANGE tEvent{};
+    //tEvent.eStatType = eStat;
+    //tEvent.fValue = fValue;
+
+    //m_pGameInstance->Broadcast(ENUM_CLASS(EVENT_TYPE::PLAYERTSTATCHANGE), &tEvent);
+}
+
+void CPlayer::OnEvent(_uint iTypeindex, const EVENTDATA* pData)
+{
+    //if (static_cast<EVENT_TYPE>(iTypeindex) == EVENT_TYPE::UICHANGE) {
+    //    auto pStat = static_cast<const STATCHANGE*>(pData);
+    //    if (pStat->eStatType == STAT_INFO::CULDAMAGE)
+    //    {
+    //        //데미지 처리
+
+    //    }
+    //}
+}
+
+
 HRESULT CPlayer::Ready_Components()
 {
     /* For Com_VIBuffer */
@@ -581,6 +605,7 @@ CGameObject* CPlayer::Clone(void* pArg)
 
 void CPlayer::Free()
 {
+    m_pGameInstance->Unsubscribe(ENUM_CLASS(EVENT_TYPE::UICHANGE), this);
     __super::Free();
 
     Safe_Release(m_pVIBufferCom);
@@ -610,6 +635,7 @@ void CPlayer::Free()
         m_pCollider->Set_Owner(nullptr);
         Safe_Release(m_pCollider);
     }*/
+    
 
     CEffect_Factory::GetInstance()->Free();
     

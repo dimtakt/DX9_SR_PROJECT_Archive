@@ -11,16 +11,33 @@ CLevel_Manager::CLevel_Manager()
 
 HRESULT CLevel_Manager::Open_Level(_uint iLevelID, CLevel* pNewLevel)
 {
-    if (FAILED(Clear_Resources()))
+    if (nullptr == m_pCurrentLevel)
+    {
+        if (FAILED(Clear_Resources()))
+        {
+            MSG_BOX(TEXT("Failed to Level_Clear"));
+            return E_FAIL;
+        }
+
+        if (0 != Safe_Release(m_pCurrentLevel))
+            MSG_BOX(TEXT("Failed to Change Level"));
+        
+        m_pCurrentLevel = pNewLevel;
+
+        m_iCurrentLevelID = iLevelID;
+
+        return S_OK;
+    }
+    else if (m_bIsNextLevel == true)
+    {
+        MSG_BOX(TEXT("Failed to NextLevel"));
         return E_FAIL;
+    }
 
-    if (0 != Safe_Release(m_pCurrentLevel))
-        MSG_BOX(TEXT("Failed to Change Level"));
-
-    m_pCurrentLevel = pNewLevel;
-
-    m_iCurrentLevelID = iLevelID;
-
+    m_pNextLevel = pNewLevel;
+    m_iNextLevelID = iLevelID;
+    m_bIsNextLevel = true;
+    
     return S_OK;
 }
 
@@ -30,6 +47,23 @@ void CLevel_Manager::Update(_float fTimeDelta)
         return;
 
     m_pCurrentLevel->Update(fTimeDelta);
+
+    if (m_bIsNextLevel)
+    {
+        if (FAILED(Clear_Resources()))
+        {
+            MSG_BOX(TEXT("Failed to Level_Clear"));
+            return;
+        }
+
+        if (0 != Safe_Release(m_pCurrentLevel))
+            MSG_BOX(TEXT("Failed to Change Level"));
+
+        m_pCurrentLevel = m_pNextLevel;
+        m_iCurrentLevelID= m_iNextLevelID;
+        m_bIsNextLevel = false;
+    }
+
 }
 
 HRESULT CLevel_Manager::Render()

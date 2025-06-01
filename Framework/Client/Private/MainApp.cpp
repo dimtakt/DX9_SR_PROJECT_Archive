@@ -9,6 +9,7 @@
 #include "Monster_Factory.h"
 #include "Collider_OBB.h"
 #include "PlayerEffect.h"
+#include "Stat_Manager.h"
 
 CMainApp::CMainApp()
 	: m_pGameInstance{ CGameInstance::GetInstance() }
@@ -106,6 +107,11 @@ HRESULT CMainApp::Ready_Prototype_ForStatic()
 	//나무 텍스처 추가, 15개
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_SHARED), TEXT("Prototype_Component_Texture_Tree"),
 		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/BleakSwordDX/Object/Tree/ForestTrees_%d.png"), 16))))
+		return E_FAIL;
+
+	/* Prototype_Component_Texture_Sky */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Sky"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/BleakSwordDX/SkyBox/Sky.png"), 1))))
 		return E_FAIL;
 
 
@@ -263,6 +269,9 @@ void CMainApp::Ready_Font_Setting()
 		MSG_BOX(TEXT("FAILED to Font"));
 	if (FAILED(m_pGameInstance->Ready_Font(TEXT("UI_Font_12"), TEXT("../Bin/Resources/Font/Galmuri9.ttf"), TEXT("Galmuri9 Regular"), 14, 13, 700)))
 		MSG_BOX(TEXT("FAILED to Font"));
+
+	if (FAILED(m_pGameInstance->Ready_Font(TEXT("UI_Font_Logo"), TEXT("../Bin/Resources/Font/Galmuri9.ttf"), TEXT("Galmuri9 Regular"), 31, 36, 400)))
+		MSG_BOX(TEXT("FAILED to Font"));
 }
 
 HRESULT CMainApp::Ready_Item_Setting()
@@ -288,7 +297,7 @@ HRESULT CMainApp::Ready_Item_Setting()
 
 HRESULT CMainApp::Start_Level(LEVEL eStartLevelID)
 {
-	if (FAILED(m_pGameInstance->Open_Level(ENUM_CLASS(LEVEL::LEVEL_LOADING), CLevel_Loading::Create(m_pGraphic_Device, eStartLevelID))))
+  	if (FAILED(m_pGameInstance->Open_Level(ENUM_CLASS(LEVEL::LEVEL_LOADING), CLevel_Loading::Create(m_pGraphic_Device, eStartLevelID))))
 		return E_FAIL;
 
 	return S_OK;
@@ -319,6 +328,7 @@ void CMainApp::Free()
 	Safe_Release(m_pGraphic_Device);
 	CRoom_Manager::GetInstance()->Free();
 	CMonster_Factory::GetInstance()->Free();
+	CStat_Manager::GetInstance()->Free();
 	m_pGameInstance->Release_Engine();
 	Safe_Release(m_pGameInstance);
 
