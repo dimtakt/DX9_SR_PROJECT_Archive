@@ -26,6 +26,24 @@ HRESULT CStat_Manager::Initialize()
     m_fOriginStats[static_cast<int>(STAT_INFO::GOLD)] = 0.f; // 보유 골드
     m_fOriginStats[static_cast<int>(STAT_INFO::DICE)] = 3.f; // 주사위
 
+    m_fCurStats[static_cast<int>(STAT_INFO::MAXHP)] = 200.f; // 최대 생명력
+    m_fCurStats[static_cast<int>(STAT_INFO::CULHP)] = 200.f; // 현재 생명력
+    m_fCurStats[static_cast<int>(STAT_INFO::MAXMP)] = 200.f; // 최대 마나
+    m_fCurStats[static_cast<int>(STAT_INFO::CULMP)] = 200.f; // 현재 마나
+    m_fCurStats[static_cast<int>(STAT_INFO::CULDEF)] = 10.f; // 현재 방어력
+    m_fCurStats[static_cast<int>(STAT_INFO::CULDAMAGE)] = 20.f; // 현재 물리 피해
+    m_fCurStats[static_cast<int>(STAT_INFO::CULCRITICAL)] = 5.f; // 현재 치명타 확률
+    m_fCurStats[static_cast<int>(STAT_INFO::CRITICALDAMAGE)] = 10.f; // 현재 치명타 피해
+    m_fCurStats[static_cast<int>(STAT_INFO::MAXDASH)] = 3.f; // 최대 대시 횟수
+    m_fCurStats[static_cast<int>(STAT_INFO::CULDASH)] = 3.f; // 현재 대시 횟수
+    m_fCurStats[static_cast<int>(STAT_INFO::REGENDASH)] = 0.2f; // 대시 회복 속도
+    m_fCurStats[static_cast<int>(STAT_INFO::EXP)] = 0.f; // 현재 경험치
+    m_fCurStats[static_cast<int>(STAT_INFO::MAXSTATPOINT)] = 0.f; // 획득한 재능 포인트
+    m_fCurStats[static_cast<int>(STAT_INFO::CULSTATPOINT)] = 0.f; // 현재 재능 포인트
+    m_fCurStats[static_cast<int>(STAT_INFO::LEVEL)] = 1.f; // 레벨
+    m_fCurStats[static_cast<int>(STAT_INFO::GOLD)] = 0.f; // 보유 골드
+    m_fCurStats[static_cast<int>(STAT_INFO::DICE)] = 3.f; // 주사위
+
     return S_OK;
 }
 

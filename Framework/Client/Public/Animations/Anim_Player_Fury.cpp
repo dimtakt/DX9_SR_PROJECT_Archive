@@ -1,10 +1,10 @@
-#include "Animations/Anim_Player_Parry.h"
+#include "Animations/Anim_Player_Fury.h"
 
-CAnim_Player_Parry::CAnim_Player_Parry()
+CAnim_Player_Fury::CAnim_Player_Fury()
 {
 }
 
-HRESULT CAnim_Player_Parry::Initialize()
+HRESULT CAnim_Player_Fury::Initialize()
 {
 	// Setting : 변환용 행렬 선언 및 초기화
 	_float4x4 matTrans, matRot, matScale, matResult;
@@ -29,14 +29,14 @@ HRESULT CAnim_Player_Parry::Initialize()
 	{
 		// transform
 		vecTrans = {
-			static_cast<_float>(-0.5 * cosf( 0.4 * iKeyFrame - 0.7 ) + 0.5),
-			static_cast<_float>(0.6 * sinf(- 0.35 * iKeyFrame)),
+			0.8,
+			0,
 			0
 		};
 
 		// rotation
 		_float3 vAxis = { 0, 0, 1 };
-		D3DXQuaternionRotationAxis(&quatRot, &vAxis, D3DXToRadian(130 -iKeyFrame * -15));
+		D3DXQuaternionRotationAxis(&quatRot, &vAxis, D3DXToRadian(-90));
 
 		// scale
 		vecScale = {
@@ -57,20 +57,20 @@ HRESULT CAnim_Player_Parry::Initialize()
 	return S_OK;
 }
 
-CAnim_Player_Parry* CAnim_Player_Parry::Create()
+CAnim_Player_Fury* CAnim_Player_Fury::Create()
 {
-	CAnim_Player_Parry* pInstance = new CAnim_Player_Parry();
+	CAnim_Player_Fury* pInstance = new CAnim_Player_Fury();
 
 	if (FAILED(pInstance->Initialize()))
 	{
-		MSG_BOX(TEXT("Failed to Created : CAnim_Player_Parry"));
+		MSG_BOX(TEXT("Failed to Created : CAnim_Player_Fury"));
 		Safe_Release(pInstance);
 	}
 
 	return pInstance;
 }
 
-void CAnim_Player_Parry::Free()
+void CAnim_Player_Fury::Free()
 {
 	__super::Free();
 }

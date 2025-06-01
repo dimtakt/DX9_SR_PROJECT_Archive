@@ -59,6 +59,8 @@ void CLevel_Manager::Update(_float fTimeDelta)
         if (0 != Safe_Release(m_pCurrentLevel))
             MSG_BOX(TEXT("Failed to Change Level"));
 
+        m_pGameInstance->Renderer_Clear();
+
         m_pCurrentLevel = m_pNextLevel;
         m_iCurrentLevelID= m_iNextLevelID;
         m_bIsNextLevel = false;

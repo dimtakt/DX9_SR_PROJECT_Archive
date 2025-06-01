@@ -73,16 +73,21 @@ HRESULT CInventory::Initialize(void* pArg)
 
 void CInventory::Priority_Update(_float fTimeDelta)
 {
-
-	__super::Priority_Update(fTimeDelta);
+	if (m_bIsOpen == true)
+	{
+		__super::Priority_Update(fTimeDelta);
+	}
 }
 
 void CInventory::Update(_float fTimeDelta)
 {
-	Selete_Slot();
-	Set_Grade();
+	if (m_bIsOpen == true)
+	{
+		Selete_Slot();
+		Set_Grade();
 
-	__super::Update(fTimeDelta);
+		__super::Update(fTimeDelta);
+	}
 }
 
 void CInventory::Late_Update(_float fTimeDelta)

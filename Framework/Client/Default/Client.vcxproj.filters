@@ -22,9 +22,6 @@
     <Filter Include="01.Levels\01.Logo">
       <UniqueIdentifier>{de282568-7c3a-4b47-aafb-7562c87502a8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01.Levels\02.GamePlay">
-      <UniqueIdentifier>{7b5c17bd-eff1-43d7-aee5-93d48946b2bf}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObject">
       <UniqueIdentifier>{f01476d4-271b-4e61-8d77-9cc8d67a8203}</UniqueIdentifier>
     </Filter>
@@ -51,9 +48,6 @@
     </Filter>
     <Filter Include="02.GameObject\UI\UI_KeyGuide">
       <UniqueIdentifier>{0d678967-3801-4d44-85e0-a25912f0ae23}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="01.Levels\03. MapEdit">
-      <UniqueIdentifier>{4b8e29b8-bfc5-4731-bed0-1f8a89a74abf}</UniqueIdentifier>
     </Filter>
     <Filter Include="97. ImGUI">
       <UniqueIdentifier>{e9dd8747-47c8-419c-b4e9-ce6a64ce081f}</UniqueIdentifier>
@@ -93,12 +87,6 @@
     </Filter>
     <Filter Include="02.GameObject\UI\Title\BackGround\Star_Wave">
       <UniqueIdentifier>{e537c5f7-17c1-46af-96cd-4f0792ac1b67}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="01.Levels\04. Dungeon">
-      <UniqueIdentifier>{4e0547a5-20d4-4fce-ad1a-38c0f87a0263}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="01.Levels\04. Dungeon\Stage1">
-      <UniqueIdentifier>{8c937ec2-8640-4a1c-a652-f4d52468f321}</UniqueIdentifier>
     </Filter>
     <Filter Include="02.GameObject\Room">
       <UniqueIdentifier>{f6d2f95f-05f3-469a-893b-d7822001c440}</UniqueIdentifier>
@@ -220,9 +208,6 @@
     <Filter Include="03.Animations\Player">
       <UniqueIdentifier>{89952621-bacd-4c55-81a8-42271890590d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01.Levels\04. Dungeon\Stage2">
-      <UniqueIdentifier>{ee486fd6-c2f0-46be-ace0-c71a1efa864a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObject\Effect">
       <UniqueIdentifier>{f23c713d-5b4e-4b50-b339-bc7a31cc0b05}</UniqueIdentifier>
     </Filter>
@@ -289,6 +274,27 @@
     <Filter Include="02.GameObject\Object\Potal">
       <UniqueIdentifier>{b6666f70-5fbb-48b5-96c9-b8966dda1b33}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01.Levels\02. MapEdit">
+      <UniqueIdentifier>{4b8e29b8-bfc5-4731-bed0-1f8a89a74abf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Levels\04. Dungeon">
+      <UniqueIdentifier>{4e0547a5-20d4-4fce-ad1a-38c0f87a0263}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Levels\04. Dungeon\Stage1">
+      <UniqueIdentifier>{8c937ec2-8640-4a1c-a652-f4d52468f321}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Levels\04. Dungeon\Stage2">
+      <UniqueIdentifier>{ee486fd6-c2f0-46be-ace0-c71a1efa864a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\UI\Window\Status_Window\Stauts_Frame\Status_Value">
+      <UniqueIdentifier>{81cf6232-8bf4-4a09-8c97-02ecb3e8afac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\UI\Loding">
+      <UniqueIdentifier>{cbf541aa-b9b4-4462-a616-049ae2b889be}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\UI\Loding\Loding_Ani">
+      <UniqueIdentifier>{afa15727-b2f5-4aa7-b382-b19232bbd3f6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -317,9 +323,6 @@
     </ClInclude>
     <ClInclude Include="..\Public\BackGround.h">
       <Filter>02.GameObject\BackGround</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\Level_GamePlay.h">
-      <Filter>01.Levels\02.GamePlay</Filter>
     </ClInclude>
     <ClInclude Include="..\public\Terrain.h">
       <Filter>02.GameObject\Terrain</Filter>
@@ -511,7 +514,7 @@
       <Filter>02.GameObject\Room\Manager</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Level_MapEdit.h">
-      <Filter>01.Levels\03. MapEdit</Filter>
+      <Filter>01.Levels\02. MapEdit</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Animations\Anim_Player_Attack2.h">
       <Filter>03.Animations\Player</Filter>
@@ -594,6 +597,27 @@
     <ClInclude Include="..\Public\Potal.h">
       <Filter>02.GameObject\Object\Potal</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\Animations\Anim_Player_Fury.h">
+      <Filter>03.Animations\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Status_Stat_Frame_Name.h">
+      <Filter>02.GameObject\UI\Window\Status_Window\Stauts_Frame\Status_Stat_Frame</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Status_Stat_Frame_Value.h">
+      <Filter>02.GameObject\UI\Window\Status_Window\Stauts_Frame\Status_Stat_Frame</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Status_Stat_Frame_Type.h">
+      <Filter>02.GameObject\UI\Window\Status_Window\Stauts_Frame\Status_Stat_Frame</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Status_Value.h">
+      <Filter>02.GameObject\UI\Window\Status_Window\Stauts_Frame\Status_Value</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Loding_UI.h">
+      <Filter>02.GameObject\UI\Loding</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Loding_Ani.h">
+      <Filter>02.GameObject\UI\Loding\Loding_Ani</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -623,9 +647,6 @@
     </ClCompile>
     <ClCompile Include="..\Private\BackGround.cpp">
       <Filter>02.GameObject\BackGround</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\Level_GamePlay.cpp">
-      <Filter>01.Levels\02.GamePlay</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Terrain.cpp">
       <Filter>02.GameObject\Terrain</Filter>
@@ -787,7 +808,7 @@
       <Filter>02.GameObject\Room\Manager</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Level_MapEdit.cpp">
-      <Filter>01.Levels\03. MapEdit</Filter>
+      <Filter>01.Levels\02. MapEdit</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Level_Stage2.cpp">
       <Filter>01.Levels\04. Dungeon\Stage2</Filter>
@@ -860,6 +881,27 @@
     </ClCompile>
     <ClCompile Include="..\Private\Potal.cpp">
       <Filter>02.GameObject\Object\Potal</Filter>
+    </ClCompile>
+    <ClCompile Include="..\public\Animations\Anim_Player_Fury.cpp">
+      <Filter>03.Animations\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Status_Stat_Frame_Name.cpp">
+      <Filter>02.GameObject\UI\Window\Status_Window\Stauts_Frame\Status_Stat_Frame</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Status_Stat_Frame_Value.cpp">
+      <Filter>02.GameObject\UI\Window\Status_Window\Stauts_Frame\Status_Stat_Frame</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Status_Stat_Frame_Type.cpp">
+      <Filter>02.GameObject\UI\Window\Status_Window\Stauts_Frame\Status_Stat_Frame</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Status_Value.cpp">
+      <Filter>02.GameObject\UI\Window\Status_Window\Stauts_Frame\Status_Value</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Loding_UI.cpp">
+      <Filter>02.GameObject\UI\Loding</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Loding_Ani.cpp">
+      <Filter>02.GameObject\UI\Loding\Loding_Ani</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

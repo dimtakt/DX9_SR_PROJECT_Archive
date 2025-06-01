@@ -4,7 +4,6 @@
 BEGIN(Engine)
 class CVIBuffer_Rect;
 class CTexture;
-class CPlayerStats;
 END
 BEGIN(Client)
 class CDash_Gauge final : public CUIObject
@@ -32,8 +31,7 @@ private:
 	LEVEL							m_eLevel = {};
 	CVIBuffer_Rect*					m_pVIBufferCom = { nullptr };
 	CTexture*						m_pTextureCom = { nullptr };
-	CPlayerStats*					m_pPlayerStatsCom = { nullptr };
-	_float							m_fDash;
+	_float							m_fDash = {};
 	_bool							m_bIsRender = {};
 	_int							m_iIndex = {};
 private:
@@ -44,8 +42,6 @@ private:
 
 	HRESULT							Ready_ChildPrototype(LEVEL eLevel);
 	HRESULT							Ready_Children();
-
-	HRESULT							Reday_SyncingObject();
 
 	void							SetUp_Render_Gauge();
 	void							Reset_Render_Gauge();
