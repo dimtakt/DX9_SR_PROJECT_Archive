@@ -42,6 +42,7 @@ public:
 	ANIMSTATE* Get_CurState()	{ return m_pCurState; };
 	_wstring Get_PrevStateTag()	{ return m_strPrevStateTag; };
 	_wstring Get_CurStateTag()	{ return m_strCurStateTag; };
+	_int Get_CurStackedFrame() { return m_iStackedFrames; };
 	_bool Get_IsLastFrame() {
 		float result1 = static_cast<float>((m_iStackedFrames + 1) / m_pCurState->iFramePerImage);
 		float result2 = static_cast<float>((m_pCurState->pTextureCom) ? m_pCurState->pTextureCom->Get_NumTextures() : 1);

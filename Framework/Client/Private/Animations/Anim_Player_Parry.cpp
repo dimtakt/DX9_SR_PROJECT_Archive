@@ -23,33 +23,33 @@ HRESULT CAnim_Player_Parry::Initialize()
 	// End Setting *********
 
 
-	// desmos : https://www.desmos.com/calculator/y5idpmfzbi
-	// keyStart (0~7) *********
-	//for (size_t i = 0; i < 8; i++)
-	//{
-	//	// transform
-	//	vecTrans = {
-	//		static_cast<_float>(-0.1 * pow((iKeyFrame - 4), 2) + 1.8),
-	//		//static_cast<_float>((iKeyFrame - 4) * -0.05),
-	//		static_cast<_float>(sinf(iKeyFrame / 1.5) * 0.5),
-	//		0
-	//	};
+	// desmos : https://www.desmos.com/calculator/uael15ald2
+	// keyStart (0~17) *********
+	for (size_t i = 0; i < 18; i++)
+	{
+		// transform
+		vecTrans = {
+			static_cast<_float>(-0.5 * cosf( 0.43 * iKeyFrame ) + 0.5),
+			//static_cast<_float>((iKeyFrame - 4) * -0.05),
+			static_cast<_float>(0.6 * sinf(- 0.35 * iKeyFrame)),
+			0
+		};
 
-	//	// rotation
-	//	_float3 vAxis = { 0, 0, 1 };
-	//	D3DXQuaternionRotationAxis(&quatRot, &vAxis, D3DXToRadian(iKeyFrame * -20));
+		// rotation
+		_float3 vAxis = { 0, 0, 1 };
+		D3DXQuaternionRotationAxis(&quatRot, &vAxis, D3DXToRadian(iKeyFrame * -10));
 
-	//	// scale
-	//	vecScale = {
-	//		float(7) / 18,
-	//		float(15) / 19,
-	//		1
-	//	};
+		// scale
+		vecScale = {
+			float(7) / 18,
+			float(15) / 19,
+			1
+		};
 
-	//	// 반영
-	//	Insert_KeyFrames(iKeyFrame, vecScale, quatRot, vecTrans);
-	//	iKeyFrame++;
-	//}
+		// 반영
+		Insert_KeyFrames(iKeyFrame, vecScale, quatRot, vecTrans);
+		iKeyFrame++;
+	}
 	// End key *********
 
 

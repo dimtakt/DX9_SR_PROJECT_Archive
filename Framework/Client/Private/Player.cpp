@@ -175,7 +175,8 @@ void CPlayer::Update(_float fTimeDelta)
         }
     }
     // [이동 이동]
-    if (m_pAnimatorTransCom->Get_CurStateTag() != L"Dash")
+    if (m_pAnimatorTransCom->Get_CurStateTag() != L"Dash" ||
+        m_pAnimatorTransCom->Get_CurStateTag() != L"Parry")
     {
         if (m_pGameInstance->IsKeyHold('W'))
             {m_pTransformCom->Go_Straight(fTimeDelta);   m_vDashDir = { 0, 0, 1 };}
@@ -209,7 +210,7 @@ void CPlayer::Update(_float fTimeDelta)
         {
             D3DXVec3Normalize(&m_vDashDir, &m_vDashDir);
             CPlayerStats::PLAYERSTAT_DESC playerStat = m_pPlayerStatsCom->Get_Stats();
-            playerStat.fDash -= 1; // 이거왜안줄지??????????????
+            playerStat.fDash -= 1; // 이거왜안줄지????????? 디버그로확인했을땐줄긴하는데
             playerStat.isGodMode = true;
             m_pPlayerStatsCom->Set_Stats(playerStat);
         }
@@ -247,21 +248,27 @@ void CPlayer::Update(_float fTimeDelta)
             if (m_pAnimatorTransCom->Get_CurStateTag() == L"Fury_Ready")
                 m_pAnimatorTransCom->Change_State(L"Fury");
             else if (m_pAnimatorTransCom->Get_CurStateTag() == L"Idle")
+            {
                 m_pAnimatorTransCom->Change_State(L"Parry");
+                m_pAnimatorCom->Change_State(L"Parry");
+            }
         }
     }
     else
+    {
         m_pAnimatorTransCom->Change_State(L"Idle");
+    }
 
     // [Parry 이동]
     if (m_pAnimatorTransCom->Get_CurStateTag() == L"Parry")
     {
         _float3 playerPos = vPlayerPos;
-        m_vCursorDir = _float3{ vRayPoint.x, playerPos.y, vRayPoint.z } - playerPos;
-        D3DXVec3Normalize(&m_vCursorDir, &m_vCursorDir);
-        playerPos += m_vCursorDir * fTimeDelta * 20.f;        // 커서 방향으로 이동
-        m_pTransformCom->Set_State(STATE::POSITION, playerPos);
 
+        if (m_pAnimatorCom->Get_CurStackedFrame() >= 10)
+        {
+            playerPos += m_vCursorDir * fTimeDelta * 20.f;        // 커서 방향으로 이동
+            m_pTransformCom->Set_State(STATE::POSITION, playerPos);
+        }
         // if ( 공격 막는 데에 성공하면)
         // {
         //  m_pAnimatorTransCom->Set_State("Fury_Ready");
@@ -272,8 +279,6 @@ void CPlayer::Update(_float fTimeDelta)
     if (m_pAnimatorTransCom->Get_CurStateTag() == L"Fury_Ready")
     {
         _float3 playerPos = vPlayerPos;
-        m_vCursorDir = _float3{ vRayPoint.x, playerPos.y, vRayPoint.z } - playerPos;
-        D3DXVec3Normalize(&m_vCursorDir, &m_vCursorDir);
         playerPos += m_vCursorDir * fTimeDelta * 30.f;        // 커서 방향으로 이동
         m_pTransformCom->Set_State(STATE::POSITION, playerPos);
     }
@@ -285,6 +290,15 @@ void CPlayer::Update(_float fTimeDelta)
     if (strCurStateTag == L"Attack_Upper" ||
         strCurStateTag == L"Attack_Lower" )
         m_fStackedTime = 0.f;
+
+    // 이동 관련 상태가 Idle 일 때만 커서 위치 갱신
+    if (m_pAnimatorTransCom->Get_CurStateTag() == L"Idle")
+    {
+        _float3 playerPos = vPlayerPos;
+        m_vCursorDir = _float3{ vRayPoint.x, playerPos.y, vRayPoint.z } - playerPos;
+        D3DXVec3Normalize(&m_vCursorDir, &m_vCursorDir);
+    }
+        
 
 
     m_pGameInstance->Compute_TimeDelta(m_strTimerTag);
@@ -486,7 +500,7 @@ HRESULT CPlayer::Ready_Components()
     m_pAnimatorCom->Add_State(L"GreatSwordHeavyAttack_Upper", { m_pTextureCom_GreatSwordHeavyAttack_Upper, 4, false});
     m_pAnimatorCom->Add_State(L"WhirlWind_Ready",   { m_pTextureCom_WhirlWind_Ready, 4, false });
     m_pAnimatorCom->Add_State(L"WhirlWind_Cycle",   { m_pTextureCom_WhirlWind_Cycle, 4, false });
-    m_pAnimatorCom->Add_State(L"Parry",             { m_pTextureCom_Roll, 3, false/* 맞는 애니메이션 제작하여 삽입 */ });
+    m_pAnimatorCom->Add_State(L"Parry",             { m_pTextureCom_Roll, 3, false, m_pGameInstance->Find_Animation(L"Player_Parry") });
     m_pAnimatorCom->Add_State(L"Fury",              { m_pTextureCom_Roll, 3, false/* 맞는 애니메이션 제작하여 삽입 */ });
 
     /* For Com_Animator (Dash) */
@@ -502,7 +516,7 @@ HRESULT CPlayer::Ready_Components()
     m_pAnimatorTransCom->Add_State(L"Idle",         { nullptr, 1, true });
     m_pAnimatorTransCom->Add_State(L"Dash",         { nullptr, 10, false });
     m_pAnimatorTransCom->Add_State(L"Attack",       { nullptr, 4, false });
-    m_pAnimatorTransCom->Add_State(L"Parry",        { nullptr, 6, false });
+    m_pAnimatorTransCom->Add_State(L"Parry",        { nullptr, 18, false });
     m_pAnimatorTransCom->Add_State(L"Fury",         { nullptr, 6, false });
     
     // collider
