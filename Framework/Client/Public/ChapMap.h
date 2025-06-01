@@ -21,8 +21,10 @@ public:
 	virtual HRESULT					Render() override;
 
 public:
-	void							Player_Offset(_float fX, _float fY, _uint iLineIndex);
+	void							Player_Offset(_float fX, _float fY, _uint iLineIndex, _uint iMapIdex);
 	const _uint						Get_Player_Line() { return m_iPlayerLineIndex; };
+	const _uint						Get_Player_Map() { return m_iPlayerMapIndex; };
+
 private:
 	LEVEL							m_eLevel = {};
 	_bool							m_bRender = {};
@@ -32,6 +34,9 @@ private:
 
 	class CChapMap_PlayerSymbol*	m_pPlayerSymbol = { nullptr};
 	_uint							m_iPlayerLineIndex = {};
+	_uint							m_iPlayerMapIndex = {};
+
+	_bool							m_bIsNextLevel = { false };
 
 private:
 	void							Scroll_Map();

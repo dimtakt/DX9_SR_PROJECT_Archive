@@ -1,12 +1,13 @@
 #pragma once
 #include "Client_Defines.h"
 #include "ProgressBar.h"
+#include "EventListener.h"
 BEGIN(Engine)
 class CVIBuffer_Rect;
 END
 
 BEGIN(Client)
-class CHp_Player final : public CProgressBar
+class CHp_Player final : public CProgressBar, public IEventListener
 {
 private:
 							CHp_Player(LPDIRECT3DDEVICE9 pGraphic_Device);
@@ -26,6 +27,10 @@ private:
 private:
 	HRESULT					Ready_Components();
 	void					Render_Font();
+
+public:
+	virtual void OnEvent(_uint iTypeindex, const EVENTDATA* pData);
+
 public:
 	static CHp_Player*		Create(LPDIRECT3DDEVICE9 pGraphic_Device);
 	virtual CGameObject*	Clone(void* pArg) override;

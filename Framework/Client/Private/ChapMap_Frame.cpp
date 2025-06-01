@@ -23,20 +23,25 @@ HRESULT CChapMap_Frame::Initialize(void* pArg)
 {
 	UIOBJECT_DESC* Desc = static_cast<UIOBJECT_DESC*>(pArg);
 	
-	m_fSizeX = g_iWinSizeX;
-	m_fSizeY = g_iWinSizeX;
-	m_fX = 0.f;
-
 	if (Desc->fY >= 0)
 	{
+		m_fSizeX = g_iWinSizeX * 1;
+		m_fSizeY = g_iWinSizeX * 1;
+
 		m_TexIndex = 1;
+		m_fX = 0.f;
 		m_fY = Desc->fY * m_fSizeY * 0.45;
 		m_fZ = UI_DEPTH::CHATERMAP;
 	}
 	else
 	{
+		m_fSizeX = g_iWinSizeX * 1.4;
+		m_fSizeY = g_iWinSizeX * 1.4;
+
 		m_TexIndex = 0;
-		m_fY = Desc->fY * m_fSizeY * 0.45 + 160;
+
+		m_fX = 0.f;
+		m_fY = Desc->fY * m_fSizeY * 0.3 + 100;
 		m_fZ = UI_DEPTH::CHATERMAP_UP;
 	}
 	

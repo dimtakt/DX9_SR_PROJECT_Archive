@@ -1,5 +1,5 @@
-#include "Animator.h"
-#include "GameInstance.h" // ÀÌ·¡µµ µÇ³ª
+ï»¿#include "Animator.h"
+#include "GameInstance.h" // ì´ë˜ë„ ë˜ë‚˜
 
 CAnimator::CAnimator(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CComponent{ pGraphic_Device }
@@ -26,14 +26,14 @@ HRESULT CAnimator::Initialize(void* pArg)
 		return E_FAIL;
 	}
 
-	// Å¸ÀÌ¸Ó ÅÂ±× Arg·ÎºÎÅÍ °¡Á®¿Í¼­ ¹İ¿µ
+	// íƒ€ì´ë¨¸ íƒœê·¸ Argë¡œë¶€í„° ê°€ì ¸ì™€ì„œ ë°˜ì˜
 	ANIMSTATE_DESC* pDesc = static_cast<ANIMSTATE_DESC*>(pArg);
 	m_strTimerTag = pDesc->strTimerTag;
 
-	// Å¸ÀÌ¸Ó »ı¼º
+	// íƒ€ì´ë¨¸ ìƒì„±
 	m_pGameInstance->Add_Timer(m_strTimerTag);
 
-	// ¾Ö´Ï¸ŞÀÌ¼Ç ¹İ¿µÇÒ Transform(Child) °ú ±âÁØÁ¡(Parent)ÀÌ µÉ °´Ã¼ ÃÊ±â ¼³Á¤
+	// ì• ë‹ˆë©”ì´ì…˜ ë°˜ì˜í•  Transform(Child) ê³¼ ê¸°ì¤€ì (Parent)ì´ ë  ê°ì²´ ì´ˆê¸° ì„¤ì •
 	m_pParentTransform	= nullptr != pDesc->pParentTransform? pDesc->pParentTransform : nullptr;
 	m_pChildTransform	= nullptr != pDesc->pChildTransform? pDesc->pChildTransform : nullptr;
 	
@@ -45,20 +45,22 @@ HRESULT CAnimator::Initialize(void* pArg)
 
 void CAnimator::Update_State()
 {
- 	CTexture* pCurTextureCom = m_pCurState->pTextureCom;
+	CTexture* pCurTextureCom;
 	
-	if (m_pCurState == nullptr)
-		return;
+	if (m_pCurState->pTextureCom != nullptr)
+	{
+		pCurTextureCom = m_pCurState->pTextureCom;
 
-	_uint iImageMaxIndex = pCurTextureCom->Get_NumTextures();
-	_uint iImageCurIndex = m_iStackedFrames / m_pCurState->iFramePerImage;
-	iImageCurIndex %= iImageMaxIndex;
-	pCurTextureCom->Bind_Texture(iImageCurIndex);
+		_uint iImageMaxIndex = pCurTextureCom->Get_NumTextures();
+		_uint iImageCurIndex = m_iStackedFrames / m_pCurState->iFramePerImage;
+		iImageCurIndex %= iImageMaxIndex;
+		pCurTextureCom->Bind_Texture(iImageCurIndex);
+	}
 
-
-	CAnimation* pAnimation = m_pCurState->pAnimation;
-	if (pAnimation != nullptr)
+	if (m_pCurState->pAnimation != nullptr)
+	{
 		Update_Keyframes();
+	}
 
 	//std::wcout << "[CAnimator::Update_State] Current State : \"" << m_strCurStateTag << "\" (" << iImageCurIndex + 1 << "/" << iImageMaxIndex << ")" << std::endl;
 
@@ -67,22 +69,19 @@ void CAnimator::Update_State()
 
 HRESULT CAnimator::Add_State(const _wstring strStateTag, ANIMSTATE _state)
 {
-	if (nullptr != Find_State(strStateTag))		// Áßº¹ °Ë»ç
+	if (nullptr != Find_State(strStateTag))		// ì¤‘ë³µ ê²€ì‚¬
 	{
 		std::wcout << "[CAnimator::Add_State] Adding State Failed. \"" << strStateTag << "\" state already exist." << std::endl;
 		return E_FAIL;
 	}
 	
 	if (_state.pTextureCom == nullptr)
-	{
-		std::wcout << "[CAnimator::Add_State] Adding State Failed. Texture Component was nullptr." << std::endl;
-		return E_FAIL;
-	}
+		std::wcout << "[CAnimator::Add_State]  \"" << strStateTag << "\" State Added. but Texture Component was nullptr." << std::endl;
 
 	m_pStates.emplace(strStateTag, _state);
 	std::wcout << "[CAnimator::Add_State] \"" << strStateTag << "\" State Added." << std::endl;
 
-	// ÃÖÃÊ »ğÀÔÀÌ¸é ÇØ´ç State ¸¦ ÇöÀç State·Î 
+	// ìµœì´ˆ ì‚½ì…ì´ë©´ í•´ë‹¹ State ë¥¼ í˜„ì¬ Stateë¡œ 
 	if (m_pCurState == nullptr)
 	{
 		m_pCurState = Find_State(strStateTag);
@@ -93,35 +92,34 @@ HRESULT CAnimator::Add_State(const _wstring strStateTag, ANIMSTATE _state)
 	return S_OK;
 }
 
-void CAnimator::Change_State(const _wstring strStateTag, _bool isChangeCurFrame)
+_bool CAnimator::Change_State(const _wstring strStateTag, _bool isChangeCurFrame)
 {
-	// ÀÌ¹Ì ÇØ´ç State¶ó¸é return
+	// ì´ë¯¸ í•´ë‹¹ Stateë¼ë©´ return
 	if (strStateTag == m_strCurStateTag)
-		return;
+		return false;
 
 	ANIMSTATE* pTmpState = Find_State(strStateTag);
 
-	// Áï½Ã ÀüÀÌ°¡ °¡´ÉÇÑ StateÀÎ °æ¿ì ÀüÀÌ,
-	// Áï½Ã ÀüÀÌ°¡ ºÒ°¡´ÉÇÑ StateÀÎ °æ¿ì ¸¶Áö¸·À¸·Î ÀüÈ¯µÈ Áö ÃæºĞÇÑ ½Ã°£ÀÌ Áö³­ °æ¿ì¿¡¸¸ ÀüÀÌ
+	// ì¦‰ì‹œ ì „ì´ê°€ ê°€ëŠ¥í•œ Stateì¸ ê²½ìš° ì „ì´,
+	// ì¦‰ì‹œ ì „ì´ê°€ ë¶ˆê°€ëŠ¥í•œ Stateì¸ ê²½ìš° ë§ˆì§€ë§‰ìœ¼ë¡œ ì „í™˜ëœ ì§€ ì¶©ë¶„í•œ ì‹œê°„ì´ ì§€ë‚œ ê²½ìš°ì—ë§Œ ì „ì´
 
 	if (nullptr == pTmpState)
 	{
 		std::wcout << "[CAnimator::Change_State] Failed to Change State. Can't find State : \"" << strStateTag << "\"." << std::endl;
-		return;
+		return false;
 	}
 
-	_uint iTextureMaxFrame = m_pCurState->pTextureCom->Get_NumTextures();
+	_uint iTextureMaxFrame;
+	if (m_pCurState->pTextureCom != nullptr)
+		iTextureMaxFrame = m_pCurState->pTextureCom->Get_NumTextures();
+	else
+		iTextureMaxFrame = 1;
 
-	// ksta : Àß µÇ´ÂÁö È®ÀÎÇØ¾ßÇÔ
-	if (!(m_iStackedFrames / m_pCurState->iFramePerImage >= iTextureMaxFrame) &&
-		!m_pCurState->isExitable)
-	{
-		// 1. ÇÁ·¹ÀÓÀÌ ÃæºĞÈ÷ Áö³² (ÆĞ½º)
-		// 2. µµÁß ÀüÀÌ°¡ °¡´ÉÇØ¾ß ÇÔ
-		// ½Ã°£ »ó°ü¾øÀÌ Áï½Ã ÀüÀÌ°¡ ºÒ°¡´ÉÇÑ State ÀÎµ¥ ÇÁ·¹ÀÓÀÌ ³¡³ªÁö ¾ÊÀº °æ¿ì
-		//std::wcout << "[CAnimator::Change_State] Can't change State. \"" << m_strCurStateTag << "\" State Frame Elapsed : " << m_iStackedFrames / m_pCurState->iFramePerImage << " / " << m_pCurState->pTextureCom->Get_NumTextures() << "." << std::endl;
-		return;
-	}
+	if (!(m_iStackedFrames / m_pCurState->iFramePerImage >= iTextureMaxFrame) &&	// í”„ë ˆì„ì´ ì¶©ë¶„íˆ ì§€ë‚¬ëŠ”ì§€
+		!m_pCurState->isExitable)													// ë„ì¤‘ ì „ì´ê°€ ê°€ëŠ¥í•œì§€
+		return false;
+	
+
 
 	m_pPrevState = m_pCurState;
 	m_strPrevStateTag = m_strCurStateTag;
@@ -129,11 +127,13 @@ void CAnimator::Change_State(const _wstring strStateTag, _bool isChangeCurFrame)
 	m_pCurState = pTmpState;
 	m_strCurStateTag = strStateTag;
 
-	//std::wcout << "[CAnimator::Change_State] State Changed to \""<< strStateTag << "\"." << std::endl;
+	std::wcout << "[CAnimator::Change_State] State Changed to \""<< strStateTag << "\"." << std::endl;
 	
-	// ÇÁ·¹ÀÓ ¼ø¼­ À¯Áö ºÒÇÊ¿ä½Ã¿¡¸¸ °»½Å
+	// í”„ë ˆì„ ìˆœì„œ ìœ ì§€ ë¶ˆí•„ìš”ì‹œì—ë§Œ ê°±ì‹ 
 	if (isChangeCurFrame)
 		m_iStackedFrames = 0;
+
+	return true;
 }
 
 CAnimator::ANIMSTATE* CAnimator::Find_State(const _wstring& strStateTag)
@@ -148,15 +148,15 @@ CAnimator::ANIMSTATE* CAnimator::Find_State(const _wstring& strStateTag)
 
 void CAnimator::Update_Keyframes()
 {
-	// ÇöÀç »óÅÂ¿¡ ¾Ö´Ï¸ŞÀÌ¼ÇÀÌ ¾ø°Å³ª, ¿òÁ÷ÀÏ °´Ã¼°¡ ¾øÀ¸¸é ½ÇÇà X
+	// í˜„ì¬ ìƒíƒœì— ì• ë‹ˆë©”ì´ì…˜ì´ ì—†ê±°ë‚˜, ì›€ì§ì¼ ê°ì²´ê°€ ì—†ìœ¼ë©´ ì‹¤í–‰ X
 	if (m_pCurState->pAnimation == nullptr ||
 		m_pChildTransform == nullptr)
 		return;
 
-	// »ç¿ëÇÒ ¾Ö´Ï¸ŞÀÌ¼Ç
+	// ì‚¬ìš©í•  ì• ë‹ˆë©”ì´ì…˜
 	CAnimation* pAnim = m_pCurState->pAnimation;
 
-	// °´Ã¼°¡ ¿òÁ÷ÀÏ ¾Ö´Ï¸ŞÀÌ¼ÇÀÇ ±âÁØÁ¡ Çà·Ä ¼³Á¤. ¾øÀ¸¸é ¿øÁ¡ ±âÁØ.
+	// ê°ì²´ê°€ ì›€ì§ì¼ ì• ë‹ˆë©”ì´ì…˜ì˜ ê¸°ì¤€ì  í–‰ë ¬ ì„¤ì •. ì—†ìœ¼ë©´ ì›ì  ê¸°ì¤€.
 	_float4x4 matTrackTarget;
 	if (m_pParentTransform != nullptr)
 		matTrackTarget = *m_pParentTransform->Get_WorldMatrix();
@@ -164,12 +164,15 @@ void CAnimator::Update_Keyframes()
 		D3DXMatrixIdentity(&matTrackTarget);
 	
 	_int iMaxFrame = pAnim->Get_iMaxFrame();
-	if (iMaxFrame == 0) return;						// ºó ¾Ö´Ï¸ŞÀÌ¼ÇÀÌ¸é ¸®ÅÏ 
-	_int iCurFrame = m_iStackedFrames % iMaxFrame;	// ÀÎµ¦½º ³Ñ±â¸é ±×³É ·çÇÁÇÏ°Ô
+	if (iMaxFrame == 0) return;						// ë¹ˆ ì• ë‹ˆë©”ì´ì…˜ì´ë©´ ë¦¬í„´ 
 
-	_float4x4 matLocal = pAnim->Get_CurKeyFrame(iCurFrame).matTransform; // º¯È¯¿ë Çà·Ä °¡Á®¿È
 
-	// ½ÇÁ¦·Î ¾Ö´Ï¸ŞÀÌ¼ÇÀÇ ¿òÁ÷ÀÓÀÌ ¹İ¿µµÉ Çà·Ä °è»ê..
+
+	_int iCurFrame = m_iStackedFrames % iMaxFrame;	// ì¸ë±ìŠ¤ ë„˜ê¸°ë©´ ê·¸ëƒ¥ ë£¨í”„í•˜ê²Œ
+
+	_float4x4 matLocal = pAnim->Get_CurKeyFrame(iCurFrame).matTransform; // ë³€í™˜ìš© í–‰ë ¬ ê°€ì ¸ì˜´
+
+	// ì‹¤ì œë¡œ ì• ë‹ˆë©”ì´ì…˜ì˜ ì›€ì§ì„ì´ ë°˜ì˜ë  í–‰ë ¬ ê³„ì‚°..
 	_float4x4 matResult = matLocal * matTrackTarget;
 
 	for (int i = 0; i < 3; i++)

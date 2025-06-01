@@ -80,6 +80,7 @@ HRESULT CObject_Manager::Remove_GameObject_ToLayer(_uint iLayerLevelIndex, const
     }
     return E_NOTIMPL;
 }
+
 HRESULT CObject_Manager::Add_ItemObject_ToLayer(_uint iLayerLevelIndex, const _wstring& strLayerTag, _uint iItemIndex, void* pArg)
 {
     CGameObject* pGameObject = static_cast<CGameObject*>(m_pGameInstance->find_ItemObject(iItemIndex));
@@ -117,7 +118,8 @@ void CObject_Manager::Priority_Update(_float fTimeDelta)
     {
         for (auto& Pair : m_pLayers[i])
         {
-            Pair.second->Priority_Update(fTimeDelta);            
+            if (nullptr != Pair.second)
+                Pair.second->Priority_Update(fTimeDelta);            
         }
     }
 }

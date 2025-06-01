@@ -2,6 +2,7 @@
 #include "Client_Defines.h"
 #include "GameObject.h"
 #include "TerrainBox.h"
+#include "EventListener.h"
 
 BEGIN(Engine)
 class CTexture;
@@ -14,7 +15,7 @@ END
 
 BEGIN(Client)
 
-class CPlayer final : public CGameObject
+class CPlayer final : public CGameObject, public IEventListener
 {
 private:
 	CPlayer(LPDIRECT3DDEVICE9 pGraphic_Device);
@@ -39,6 +40,8 @@ public:
 
 public:
 	virtual void OnCollision(CGameObject* pGameObject) override;
+	void ChangeStat(STAT_INFO eStat, float fValue);
+	virtual void OnEvent(_uint iTypeindex, const EVENTDATA* pData);
 
 private:
 	CVIBuffer_Rect*			m_pVIBufferCom					= { nullptr };
@@ -60,6 +63,7 @@ private:
 
 	CPlayerStats*			m_pPlayerStatsCom				= { nullptr };
 	CAnimator*				m_pAnimatorCom					= { nullptr };
+	CAnimator*				m_pAnimatorTransCom				= { nullptr };
 
 	_bool					m_isFlippedX					= false;
 
@@ -69,6 +73,10 @@ private:
 	_wstring				m_strTimerTag					= {};
 
 	_float					m_fStackedTime					= 0;
+
+	_float3					m_vDashDir						= {};
+	_float3					m_vCursorDir					= {};
+
 
 private:
 	HRESULT Ready_Components();

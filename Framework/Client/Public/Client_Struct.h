@@ -17,5 +17,4 @@ typedef struct tagInteractionDesc : public tagMAPObjectDesc
 
 }OBJECT_INTERACTION_DESC;
 
-
 END

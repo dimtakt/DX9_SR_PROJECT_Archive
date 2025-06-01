@@ -23,7 +23,7 @@ HRESULT CPlayerEffect::Initialize(void* pArg)
 
 	EFFECT_DESC* pDesc = reinterpret_cast<EFFECT_DESC*>(pArg);
 	m_strEffectTag = pDesc->strEffectTag;
-
+	m_isFlippedX = pDesc->isFlippedX;
 
 	if (FAILED(Ready_Components()))
 		return E_FAIL;
@@ -76,6 +76,17 @@ void CPlayerEffect::Late_Update(_float fTimeDelta)
 
 HRESULT CPlayerEffect::Render()
 {
+	SetUp_RenderState();
+
+
+	_float fPointY = 0.f;       // 교차 평면의 기준이 될 Y값
+	_float3 vRayPoint = {};     // fPointY 값 기준 마우스 Ray와 교차하는 좌표
+	m_pGameInstance->Get_IntersectAtY(fPointY, vRayPoint);
+
+	_float3 vPlayerPos = {};    // 플레이어 좌표
+	vPlayerPos = m_pTransformCom->Get_State(STATE::POSITION);
+
+
 	m_pTransformCom->Bind_Matrix();
 
 	m_pAnimatorCom->Update_State();
@@ -83,6 +94,9 @@ HRESULT CPlayerEffect::Render()
 	m_pVIBufferCom->Bind_Buffers();
 	m_pVIBufferCom->Render();
 
+
+
+	Reset_RenderState();
 	return S_OK;
 }
 
@@ -115,6 +129,33 @@ HRESULT CPlayerEffect::Ready_Components()
 
 	return S_OK;
 }
+
+void CPlayerEffect::SetUp_RenderState()
+{
+	m_pGraphic_Device->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
+
+	//m_pGraphic_Device->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
+	//m_pGraphic_Device->SetRenderState(D3DRS_ALPHAREF, 200);
+	//m_pGraphic_Device->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER);
+
+	//m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_POINT);
+	//m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_POINT);
+	//m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MIPFILTER, D3DTEXF_NONE);
+}
+
+void CPlayerEffect::Reset_RenderState()
+{
+	m_pGraphic_Device->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);
+
+	//m_pGraphic_Device->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
+
+	//m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_LINEAR);
+	//m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);
+	//m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MIPFILTER, D3DTEXF_LINEAR);
+
+	//m_pGraphic_Device->SetTexture(0, NULL);
+}
+
 
 CGameObject* CPlayerEffect::Create(LPDIRECT3DDEVICE9 pGraphic_Device)
 {

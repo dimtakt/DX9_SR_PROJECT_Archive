@@ -1,6 +1,7 @@
 #pragma once
 #include "Client_Defines.h"
 #include "Client_Defines_Map.h"
+#include "ChapMap_Line.h"
 #include "Button.h"
 
 BEGIN(Client)
@@ -21,11 +22,15 @@ public:
 
 private:
 	LEVEL							m_eLevel = {};
-	_uint							m_iMapIndex = {};
+	_uint							m_iMapID = {};
 	_uint							m_iMapTex = {};
 	_uint							m_iPlayerLine = {};
+
+	vector<CChapMap_Line*>			m_vecLine;
+	_bool							m_lineRender{ true };
 private:
 	void							Click_Event();
+	void							Line_Render_Setting();
 private:
 	HRESULT							Ready_Components();
 	void							SetUp_RenderState();
@@ -34,6 +39,7 @@ private:
 	HRESULT							Ready_ChildPrototype(LEVEL eLevel);
 	HRESULT							Ready_Children();
 
+	HRESULT							Ready_Line();
 public:
 
 	static CChapMap_Button* Create(LPDIRECT3DDEVICE9 pGraphic_Device, LEVEL eLevel);
