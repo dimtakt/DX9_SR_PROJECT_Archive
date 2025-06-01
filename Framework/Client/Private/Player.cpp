@@ -23,7 +23,7 @@ HRESULT CPlayer::Initialize_Prototype()
 
 HRESULT CPlayer::Initialize(void* pArg)
 {
- 	if (FAILED(Ready_Components()))
+ 	if (FAILED(Ready_Components(pArg)))
 		return E_FAIL;
 
     m_eObjType = GAMEOBJ_TYPE::PLAYER;
@@ -455,8 +455,10 @@ void CPlayer::OnEvent(_uint iTypeindex, const EVENTDATA* pData)
 }
 
 
-HRESULT CPlayer::Ready_Components()
+HRESULT CPlayer::Ready_Components(void* pArg)
 {
+    PLAYERDESC* pDesc = static_cast<PLAYERDESC*>(pArg);
+
     /* For Com_VIBuffer */
     if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_VIBuffer_Rect"),
         TEXT("Com_VIBuffer"), reinterpret_cast<CComponent**>(&m_pVIBufferCom))))
@@ -533,7 +535,7 @@ HRESULT CPlayer::Ready_Components()
     CAnimator::ANIMSTATE_DESC StartAnimStateDesc{};
     StartAnimStateDesc.strTimerTag = L"Animator_Player_Main";   // 해당 애니메이터가 타이머에서 사용할 태그 key값
     StartAnimStateDesc.pParentTransform = m_pTransformCom;
-    StartAnimStateDesc.pChildTransform = static_cast<CTransform*>(m_pGameInstance->Get_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), L"Layer_Weapon", L"Com_Transform"));
+    StartAnimStateDesc.pChildTransform = static_cast<CTransform*>(m_pGameInstance->Get_Component(pDesc->iLayerIndex, L"Layer_Weapon", L"Com_Transform"));
 
     if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Animator"),
         TEXT("Com_Animator"), reinterpret_cast<CComponent**>(&m_pAnimatorCom), &StartAnimStateDesc)))
@@ -663,7 +665,8 @@ void CPlayer::Free()
     Safe_Release(m_pPlayerStatsCom);
     Safe_Release(m_pAnimatorCom);
     Safe_Release(m_pAnimatorTransCom);
-    Safe_Release(m_pTerrainBox);
+    /*Safe_Release(m_pTerrainBox);*/
+    m_pTerrainBox = nullptr;
     
     /*if (m_pCollider)
     {

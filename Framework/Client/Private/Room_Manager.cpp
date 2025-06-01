@@ -186,7 +186,7 @@ HRESULT CRoom_Manager::Check_Potal_Coll(POTAL_TYPE ePotalType, _float3& vNextPos
 			CPotal* pPotal = pNeighborRoom->Find_Potal(ePotal);
 			CTransform* pPotalTransform = static_cast<CTransform*>(pPotal->Find_Component(TEXT("Com_Transform")));
 			Enter_Room(pNeighborRoom->GetID());
-			CPlayer* pPlayer = dynamic_cast<CPlayer*>(m_pGameInstance->Get_GameObject(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Layer_Player")));
+			CPlayer* pPlayer = dynamic_cast<CPlayer*>(m_pGameInstance->Get_GameObject(m_iCurrentLevelID, TEXT("Layer_Player")));
 			pPlayer->Change_TerrainBox(pNeighborRoom->Get_TerrainBox(), 99);
 			vNextPos = (pPotalTransform->Get_State(STATE::POSITION)) + vOffset;
 			if (pPotal == nullptr || pPotalTransform == nullptr)

@@ -111,15 +111,18 @@ HRESULT CLevel_Stage1::Ready_Layer_BackGround(const _wstring& strLayerTag)
 
 HRESULT CLevel_Stage1::Ready_Layer_Player(const _wstring& strLayerTag)
 {
-	CDagger::DAGGERDESC desc{};
-	desc.iLayerIndex = ENUM_CLASS(LEVEL::LEVEL_STAGE1);
+	CDagger::DAGGERDESC DaggerDesc{};
+	DaggerDesc.iLayerIndex = ENUM_CLASS(LEVEL::LEVEL_STAGE1);
 
 	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_STAGE1), TEXT("Layer_Weapon"),
-		ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_Weapon_Dagger"), &desc)))
+		ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_Weapon_Dagger"), &DaggerDesc)))
 		return E_FAIL;
 
+	CPlayer::PLAYERDESC PlayerDesc{};
+	PlayerDesc.iLayerIndex = ENUM_CLASS(LEVEL::LEVEL_STAGE1);
+
 	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_STAGE1), TEXT("Layer_Player"),
-		ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_Player"))))
+		ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_Player"), &PlayerDesc)))
 		return E_FAIL;
 
 	return S_OK;

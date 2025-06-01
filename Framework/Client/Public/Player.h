@@ -17,6 +17,11 @@ BEGIN(Client)
 
 class CPlayer final : public CGameObject, public IEventListener
 {
+public:
+	typedef struct tagPlayerDesc
+	{
+		_uint iLayerIndex;
+	}PLAYERDESC;
 private:
 	CPlayer(LPDIRECT3DDEVICE9 pGraphic_Device);
 	CPlayer(const CPlayer& Prototype);
@@ -84,7 +89,7 @@ private:
 
 
 private:
-	HRESULT Ready_Components();
+	HRESULT Ready_Components(void* pArg);
 	void SetUp_RenderState();
 	void Reset_RenderState();
 
