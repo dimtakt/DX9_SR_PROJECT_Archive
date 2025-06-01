@@ -13,6 +13,7 @@
 #include "Animations/Anim_Player_Idle.h"
 #include "Animations/Anim_Player_Attack.h"
 #include "Animations/Anim_Player_Attack2.h"
+#include "Animations/Anim_Player_Parry.h"
 #pragma endregion
 
 
@@ -103,6 +104,9 @@ HRESULT CLevel_GamePlay::Ready_Animations()
 		return E_FAIL;
 	if (FAILED(m_pGameInstance->Insert_Animation(L"Player_Attack2", CAnim_Player_Attack2::Create())))
 		return E_FAIL;
+	if (FAILED(m_pGameInstance->Insert_Animation(L"Player_Parry", CAnim_Player_Parry::Create())))
+		return E_FAIL;
+	
 
 	return S_OK;
 }

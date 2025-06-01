@@ -585,6 +585,9 @@
     <ClInclude Include="..\Public\Client_Defines_Event.h">
       <Filter>99.Defines</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Animations\Anim_Player_Parry.h">
+      <Filter>03.Animations\Player</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -845,6 +848,9 @@
     </ClCompile>
     <ClCompile Include="..\private\Status_Stat_Frame.cpp">
       <Filter>02.GameObject\UI\Window\Status_Window\Stauts_Frame\Status_Stat_Frame</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Animations\Anim_Player_Parry.cpp">
+      <Filter>03.Animations\Player</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -22,6 +22,8 @@ public:
 
 private:
 	HRESULT Ready_Components();
+	void SetUp_RenderState();
+	void Reset_RenderState();
 
 private:
 	CVIBuffer_Rect* m_pVIBufferCom = { nullptr };

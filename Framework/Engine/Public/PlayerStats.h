@@ -35,6 +35,8 @@ public:
 
 		_float		fExpMultiply;
 		_float		fGoldMultiply;
+
+		_bool		isGodMode;	// 무적인 경우 true, 평시 false
 	}PLAYERSTAT_DESC;
 
 private:

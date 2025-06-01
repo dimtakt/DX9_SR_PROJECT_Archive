@@ -146,6 +146,7 @@
     <ClInclude Include="..\Public\Animations\Anim_Player_Attack.h" />
     <ClInclude Include="..\Public\Animations\Anim_Player_Attack2.h" />
     <ClInclude Include="..\public\Animations\Anim_Player_Idle.h" />
+    <ClInclude Include="..\Public\Animations\Anim_Player_Parry.h" />
     <ClInclude Include="..\Public\BackGround.h" />
     <ClInclude Include="..\Public\Buff_Frame.h" />
     <ClInclude Include="..\Public\Buff_Icon.h" />
@@ -247,6 +248,7 @@
     <ClCompile Include="..\Private\Animations\Anim_Player_Attack.cpp" />
     <ClCompile Include="..\Private\Animations\Anim_Player_Attack2.cpp" />
     <ClCompile Include="..\private\Animations\Anim_Player_Idle.cpp" />
+    <ClCompile Include="..\Private\Animations\Anim_Player_Parry.cpp" />
     <ClCompile Include="..\Private\BackGround.cpp" />
     <ClCompile Include="..\Private\Buff_Frame.cpp" />
     <ClCompile Include="..\Private\Buff_Icon.cpp" />

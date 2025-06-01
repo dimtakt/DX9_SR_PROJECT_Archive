@@ -170,7 +170,7 @@ HRESULT CMainApp::Ready_Prototype_ForStatic()
 		return E_FAIL;
 	// Blade0_Swing1
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Effect_Blade0_Swing1"),
-		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Effect/Blade0_Swing1_%d.png"), 3))))
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Effect/Blade0_Swing1_R%d.png"), 3))))
 		return E_FAIL;
 
 

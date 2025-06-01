@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 #include "Component.h"
 #include "Texture.h"
@@ -9,19 +9,19 @@ BEGIN(Engine)
 class ENGINE_DLL CAnimator final : public CComponent
 {
 public:
-	// °¢ State°¡ °¡Áú Á¤º¸
+	// ê° Stateê°€ ê°€ì§ˆ ì •ë³´
 	typedef struct tagAnimState
 	{
-		CTexture* pTextureCom;	// ÅØ½ºÃÄ º¯È­¸¦ ¾Ö´Ï¸ŞÀÌÅÍ ³»¿¡¼­ ±¸ÇöÀ» À§ÇÔ
-		_int iFramePerImage;	// ¸îÇÁ·¹ÀÓ µÚ¿¡ ´ÙÀ½ ÀÌ¹ÌÁö·Î ³Ñ¾î°¥°ÇÁö
-		_bool isExitable;		// ÇÁ·¹ÀÓÀÌ ³¡³ªÁö ¾Ê¾Æµµ ´Ù¸¥ State·Î ³Ñ¾î°¥ ¼ö ÀÖ´ÂÁö
+		CTexture* pTextureCom = nullptr;	// í…ìŠ¤ì³ ë³€í™”ë¥¼ ì• ë‹ˆë©”ì´í„° ë‚´ì—ì„œ êµ¬í˜„ì„ ìœ„í•¨. ì—†ì–´ë„ ì‚¬ìš© ê°€ëŠ¥í•˜ë©°, ì´ ê²½ìš° iFramePerImage í”„ë ˆì„ ë’¤ì— ìƒíƒœì „ì´ ì¤€ë¹„ê°€ ë¨
+		_int iFramePerImage;	// ëª‡í”„ë ˆì„ ë’¤ì— ë‹¤ìŒ ì´ë¯¸ì§€ë¡œ ë„˜ì–´ê°ˆê±´ì§€
+		_bool isExitable;		// í”„ë ˆì„ì´ ëë‚˜ì§€ ì•Šì•„ë„ ë‹¤ë¥¸ Stateë¡œ ë„˜ì–´ê°ˆ ìˆ˜ ìˆëŠ”ì§€
 		CAnimation* pAnimation = nullptr;
 	} ANIMSTATE;
 
-	// Animator ÃÖÃÊ »ı¼º ½Ã ÇÊ¿ä·Î ÇÏ´Â Á¤º¸ (pArg)
+	// Animator ìµœì´ˆ ìƒì„± ì‹œ í•„ìš”ë¡œ í•˜ëŠ” ì •ë³´ (pArg)
 	typedef struct tagStartStateDesc
 	{
-		_wstring strTimerTag; // ¾Ö´Ï¸ŞÀÌÅÍ ´ÙÁß »ç¿ëÀ» °í·ÁÇÏ¿© Å¸ÀÌ¸Ó ÅÂ±×¸¦ ´Ù¸£°Ô ±¸¼º
+		_wstring strTimerTag; // ì• ë‹ˆë©”ì´í„° ë‹¤ì¤‘ ì‚¬ìš©ì„ ê³ ë ¤í•˜ì—¬ íƒ€ì´ë¨¸ íƒœê·¸ë¥¼ ë‹¤ë¥´ê²Œ êµ¬ì„±
 		CTransform* pParentTransform = nullptr;
 		CTransform* pChildTransform = nullptr;
 	} ANIMSTATE_DESC;
@@ -35,27 +35,28 @@ public:
 	virtual HRESULT Initialize_Prototype() override;
 	virtual HRESULT Initialize(void* pArg) override;
 	void Update_State();
-	void Change_State(const _wstring strStatetag, _bool isChangeCurFrame = true); // bool ÀÎÀÚ : ÇöÀç Ãâ·ÂÁßÀÎ ÀÌ¹ÌÁö ¼ø¼­ ÃÊ±âÈ­ ÇÒ°ÇÁö
+	_bool Change_State(const _wstring strStatetag, _bool isChangeCurFrame = true); // bool ì¸ì : í˜„ì¬ ì¶œë ¥ì¤‘ì¸ ì´ë¯¸ì§€ ìˆœì„œ ì´ˆê¸°í™” í• ê±´ì§€
 
 public:
 	HRESULT Add_State(const _wstring strStateTag, ANIMSTATE _state);
 	ANIMSTATE* Get_CurState()	{ return m_pCurState; };
 	_wstring Get_PrevStateTag()	{ return m_strPrevStateTag; };
 	_wstring Get_CurStateTag()	{ return m_strCurStateTag; };
+	_int Get_CurStackedFrame() { return m_iStackedFrames; };
 	_bool Get_IsLastFrame() {
-		float result1 = (m_iStackedFrames + 1) / m_pCurState->iFramePerImage;
-		float result2 = m_pCurState->pTextureCom->Get_NumTextures();
+		float result1 = static_cast<float>((m_iStackedFrames + 1) / m_pCurState->iFramePerImage);
+		float result2 = static_cast<float>((m_pCurState->pTextureCom) ? m_pCurState->pTextureCom->Get_NumTextures() : 1);
 		bool result = (result1 >= result2);
 		return result;
 
 		//return (((m_iStackedFrames + 1.0f) / m_pCurState->iFramePerImage - 1.0f) >= m_pCurState->pTextureCom->Get_NumTextures());
 	}
 	_bool Get_IsReachedFrame(_uint iFrame) {
-		// ÇØ´ç ¹øÂ° ÀÌ¹ÌÁö°¡ Áö³ª±â Á÷Àü ½ÃÁ¡ºÎÅÍ true¸¦ ¹İÈ¯ÇÕ´Ï´Ù.
+		// í•´ë‹¹ ë²ˆì§¸ ì´ë¯¸ì§€ê°€ ì§€ë‚˜ê¸° ì§ì „ ì‹œì ë¶€í„° trueë¥¼ ë°˜í™˜í•©ë‹ˆë‹¤.
 		return (((m_iStackedFrames + 1) / m_pCurState->iFramePerImage - 1) >= iFrame);
 	}
 	_bool Check_State(const _wstring& strStateTag) {
-		// ÇØ´ç State°¡ Á¸ÀçÇÏ´ÂÁö ¿©ºÎ¸¸ È®ÀÎ
+		// í•´ë‹¹ Stateê°€ ì¡´ì¬í•˜ëŠ”ì§€ ì—¬ë¶€ë§Œ í™•ì¸
 		return Find_State(strStateTag) != nullptr;
 	}
 	//_bool Get_isChangedState() { return (m_strPrevStateTag == m_strCurStateTag); }
@@ -79,8 +80,8 @@ private:
 
 	_uint		m_iStackedFrames = {};
 
-	CTransform* m_pParentTransform = { nullptr };	// ¾Ö´Ï¸ŞÀÌ¼Ç - ±âÁØÁ¡ÀÌ µÉ Æ®·£½ºÆû (ÇÃ·¹ÀÌ¾î°°Àº)
-	CTransform* m_pChildTransform = { nullptr };	// ¾Ö´Ï¸ŞÀÌ¼Ç - ½ÇÁ¦ ¿òÁ÷ÀÏ °ÍÀÇ Æ®·£½ºÆû (¹«±â°°Àº)
+	CTransform* m_pParentTransform = { nullptr };	// ì• ë‹ˆë©”ì´ì…˜ - ê¸°ì¤€ì ì´ ë  íŠ¸ëœìŠ¤í¼ (í”Œë ˆì´ì–´ê°™ì€)
+	CTransform* m_pChildTransform = { nullptr };	// ì• ë‹ˆë©”ì´ì…˜ - ì‹¤ì œ ì›€ì§ì¼ ê²ƒì˜ íŠ¸ëœìŠ¤í¼ (ë¬´ê¸°ê°™ì€)
 
 public:
 	static CAnimator* Create(LPDIRECT3DDEVICE9 pGraphic_Device);
