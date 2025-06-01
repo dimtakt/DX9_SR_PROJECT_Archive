@@ -175,8 +175,8 @@ void CPlayer::Update(_float fTimeDelta)
         }
     }
     // [이동 이동]
-    if (m_pAnimatorTransCom->Get_CurStateTag() != L"Dash" ||
-        m_pAnimatorTransCom->Get_CurStateTag() != L"Parry")
+    if (!(m_pAnimatorTransCom->Get_CurStateTag() == L"Dash" ||
+        m_pAnimatorTransCom->Get_CurStateTag() == L"Parry"))
     {
         if (m_pGameInstance->IsKeyHold('W'))
             {m_pTransformCom->Go_Straight(fTimeDelta);   m_vDashDir = { 0, 0, 1 };}
@@ -196,6 +196,11 @@ void CPlayer::Update(_float fTimeDelta)
         if (m_pGameInstance->IsKeyHold('S') && m_pGameInstance->IsKeyHold('A'))
             m_vDashDir = { -1, 0, -1 };
 
+        if (!(m_pGameInstance->IsKeyHold('A') ||
+            m_pGameInstance->IsKeyHold('S') ||
+            m_pGameInstance->IsKeyHold('W') ||
+            m_pGameInstance->IsKeyHold('D')))
+            m_vDashDir = m_vCursorDir;
     }
 
     
@@ -264,16 +269,31 @@ void CPlayer::Update(_float fTimeDelta)
     {
         _float3 playerPos = vPlayerPos;
 
+        playerStat.fMp -= 10;
+        m_pPlayerStatsCom->Set_Stats(playerStat);
+
         if (m_pAnimatorCom->Get_CurStackedFrame() >= 10)
         {
-            playerPos += m_vCursorDir * fTimeDelta * 20.f;        // 커서 방향으로 이동
+            playerPos += m_vCursorDir * fTimeDelta * 15.f;        // 커서 방향으로 이동
             m_pTransformCom->Set_State(STATE::POSITION, playerPos);
+
+            playerStat.isGodMode = true;
+            m_pPlayerStatsCom->Set_Stats(playerStat);
+
+            // 공격 막는 데에 성공 시 Fury_Ready로 넘어갈 준비
         }
+
         // if ( 공격 막는 데에 성공하면)
         // {
         //  m_pAnimatorTransCom->Set_State("Fury_Ready");
         // }
     }
+    else
+    {
+        playerStat.isGodMode = false;
+        m_pPlayerStatsCom->Set_Stats(playerStat);
+    }
+        
 
     // [Fury 이동]
     if (m_pAnimatorTransCom->Get_CurStateTag() == L"Fury_Ready")
@@ -297,6 +317,8 @@ void CPlayer::Update(_float fTimeDelta)
         _float3 playerPos = vPlayerPos;
         m_vCursorDir = _float3{ vRayPoint.x, playerPos.y, vRayPoint.z } - playerPos;
         D3DXVec3Normalize(&m_vCursorDir, &m_vCursorDir);
+
+
     }
         
 

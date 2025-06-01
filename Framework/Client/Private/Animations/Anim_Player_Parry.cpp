@@ -23,21 +23,20 @@ HRESULT CAnim_Player_Parry::Initialize()
 	// End Setting *********
 
 
-	// desmos : https://www.desmos.com/calculator/uael15ald2
+	// desmos : https://www.desmos.com/calculator/hqkn67hpjk
 	// keyStart (0~17) *********
 	for (size_t i = 0; i < 18; i++)
 	{
 		// transform
 		vecTrans = {
-			static_cast<_float>(-0.5 * cosf( 0.43 * iKeyFrame ) + 0.5),
-			//static_cast<_float>((iKeyFrame - 4) * -0.05),
+			static_cast<_float>(-0.5 * cosf( 0.4 * iKeyFrame - 0.7 ) + 0.5),
 			static_cast<_float>(0.6 * sinf(- 0.35 * iKeyFrame)),
 			0
 		};
 
 		// rotation
 		_float3 vAxis = { 0, 0, 1 };
-		D3DXQuaternionRotationAxis(&quatRot, &vAxis, D3DXToRadian(iKeyFrame * -10));
+		D3DXQuaternionRotationAxis(&quatRot, &vAxis, D3DXToRadian(130 -iKeyFrame * -15));
 
 		// scale
 		vecScale = {
