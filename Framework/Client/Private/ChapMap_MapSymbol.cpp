@@ -30,7 +30,7 @@ HRESULT CChapMap_MapSymbol::Initialize(void* pArg)
         m_fX = m_fSizeX * 0.3;
 
     m_fY = -40.f;
-    m_fZ = UI_DEPTH::CHATERMAP;
+    m_fZ = UI_DEPTH::CHATERMAP_BUTTON;
     m_iWinSizeX = g_iWinSizeX;
     m_iWinSizeY = g_iWinSizeY;
 

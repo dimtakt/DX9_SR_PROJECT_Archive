@@ -117,7 +117,8 @@ void CObject_Manager::Priority_Update(_float fTimeDelta)
     {
         for (auto& Pair : m_pLayers[i])
         {
-            Pair.second->Priority_Update(fTimeDelta);            
+            if (nullptr != Pair.second)
+                Pair.second->Priority_Update(fTimeDelta);            
         }
     }
 }

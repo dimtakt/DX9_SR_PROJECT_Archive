@@ -30,6 +30,7 @@
 #include "Sky.h"
 #include "ChapMap.h"
 #include "Room_Manager.h"
+#include "Status_Window.h"
 CLoader::CLoader(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: m_pGraphic_Device{ pGraphic_Device }
 	, m_pGameInstance{ CGameInstance::GetInstance() }
@@ -159,7 +160,7 @@ HRESULT CLoader::Loading_For_Logo_Level()
 
 HRESULT CLoader::Loading_For_GamePlay_Level()
 {
-	lstrcpy(m_szLoadingText, TEXT("텍스쳐를 로딩중입니다."));
+ 	lstrcpy(m_szLoadingText, TEXT("텍스쳐를 로딩중입니다."));
 	/* Prototype_Component_Texture_TerrainBox_Top */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_SHARED), TEXT("Prototype_Component_Texture_TerrainBox_Top"),
 		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/BleakSwordDX/Terrain/Basic/BlankTex16_00.png"), 1))))
@@ -282,8 +283,16 @@ HRESULT CLoader::Loading_For_GamePlay_Level()
 		if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_GAMEPLAY), TEXT("Prototype_Component_Texture_Rect_ChapMap_Node_Player"),
 			CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/UI/ChapMap/Node_Player.png"), 1))))
 			return E_FAIL;
-#pragma endregion
 
+ 		if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_GAMEPLAY), TEXT("Prototype_Component_Texture_Rect_ChapMap_Node_Line"),
+			CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/UI/ChapMap/Node_Line_%d.png"), 2))))
+			return E_FAIL;
+#pragma endregion
+#pragma region Prototype_Component_Window_Status
+		if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_GAMEPLAY), TEXT("Prototype_Component_Texture_Rect_Status_Window_Frame"),
+			CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/UI/StatusWindow/Status_Window_Frame_%d.png"), 5))))
+			return E_FAIL;
+#pragma endregion
 	lstrcpy(m_szLoadingText, TEXT("모델을 로딩중입니다."));
 	/* Prototype_Component_VIbuffer_TerrainBox */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_SHARED), TEXT("Prototype_Component_VIBuffer_TerrainBox"),
@@ -340,6 +349,10 @@ HRESULT CLoader::Loading_For_GamePlay_Level()
 
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_GAMEPLAY), TEXT("Prototype_GameObject_UI_ChapMap"),
 		CChapMap::Create(m_pGraphic_Device, LEVEL::LEVEL_GAMEPLAY))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_GAMEPLAY), TEXT("Prototype_GameObject_UI_Status"),
+		CStatus_Window::Create(m_pGraphic_Device, LEVEL::LEVEL_GAMEPLAY))))
 		return E_FAIL;
 
 #pragma endregion

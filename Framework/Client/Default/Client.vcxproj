@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -157,8 +157,10 @@
     <ClInclude Include="..\public\Chapmap_Boss.h" />
     <ClInclude Include="..\public\ChapMap_Button.h" />
     <ClInclude Include="..\public\ChapMap_Frame.h" />
+    <ClInclude Include="..\public\ChapMap_Line.h" />
     <ClInclude Include="..\public\ChapMap_PlayerSymbol.h" />
     <ClInclude Include="..\Public\Client_Defines.h" />
+    <ClInclude Include="..\Public\Client_Defines_Event.h" />
     <ClInclude Include="..\Public\Client_Defines_Item.h" />
     <ClInclude Include="..\Public\Client_Defines_Map.h" />
     <ClInclude Include="..\Public\Client_Struct.h" />
@@ -180,6 +182,12 @@
     <ClInclude Include="..\public\Sky.h" />
     <ClInclude Include="..\Public\Start_Button.h" />
     <ClInclude Include="..\Public\Stat_Manager.h" />
+    <ClInclude Include="..\public\Status_Frame_Down.h" />
+    <ClInclude Include="..\public\Status_Frame_Mid.h" />
+    <ClInclude Include="..\public\Status_Miracle_Frame.h" />
+    <ClInclude Include="..\public\Status_Stat_Frame.h" />
+    <ClInclude Include="..\public\Status_Window.h" />
+    <ClInclude Include="..\public\Status_Frame_UP.h" />
     <ClInclude Include="..\Public\TerrainBox.h" />
     <ClInclude Include="..\public\Dagger.h" />
     <ClInclude Include="..\public\Dash_Gauge.h" />
@@ -250,6 +258,7 @@
     <ClCompile Include="..\private\Chapmap_Boss.cpp" />
     <ClCompile Include="..\private\ChapMap_Button.cpp" />
     <ClCompile Include="..\private\ChapMap_Frame.cpp" />
+    <ClCompile Include="..\private\ChapMap_Line.cpp" />
     <ClCompile Include="..\private\ChapMap_MapSymbol.cpp" />
     <ClCompile Include="..\private\ChapMap_PlayerSymbol.cpp" />
     <ClCompile Include="..\Private\Effect_Factory.cpp" />
@@ -269,6 +278,12 @@
     <ClCompile Include="..\private\Sky.cpp" />
     <ClCompile Include="..\Private\Start_Button.cpp" />
     <ClCompile Include="..\Private\Stat_Manager.cpp" />
+    <ClCompile Include="..\private\Status_Frame_Down.cpp" />
+    <ClCompile Include="..\private\Status_Frame_Mid.cpp" />
+    <ClCompile Include="..\private\Status_Miracle_Frame.cpp" />
+    <ClCompile Include="..\private\Status_Stat_Frame.cpp" />
+    <ClCompile Include="..\private\Status_Window.cpp" />
+    <ClCompile Include="..\private\Status_Frame_UP.cpp" />
     <ClCompile Include="..\Private\TerrainBox.cpp" />
     <ClCompile Include="..\private\Dagger.cpp" />
     <ClCompile Include="..\private\Dash_Gauge.cpp" />
