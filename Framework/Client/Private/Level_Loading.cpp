@@ -4,7 +4,6 @@
 #include "GameInstance.h"
 
 #include "Level_Logo.h"
-#include "Level_GamePlay.h"
 #include "Level_MapEdit.h"
 #include "Level_Stage1.h"
 #include "Level_Stage2.h"
@@ -32,7 +31,7 @@ HRESULT CLevel_Loading::Initialize(LEVEL eNextLevelID)
 
 void CLevel_Loading::Update(_float fTimeDelta)
 {
-	if (true == m_pLoader->isFinished() && m_pGameInstance->IsKeyDown(VK_SPACE))
+	if (true == m_pLoader->isFinished())
 	{
 		m_pGameInstance->Clear_Colliders();
 
