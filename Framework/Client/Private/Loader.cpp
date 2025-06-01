@@ -77,7 +77,7 @@ HRESULT CLoader::Loading()
 	case LEVEL::LEVEL_LOGO:
 		hr = Loading_For_Logo_Level();
 		break;
-	case LEVEL::LEVEL_GAMEPLAY:
+	case LEVEL::LEVEL_STATIC:
 		hr = Loading_For_GamePlay_Level();
 		break;
 	case LEVEL::LEVEL_MAPEDIT:
@@ -162,139 +162,8 @@ HRESULT CLoader::Loading_For_Logo_Level()
 
 HRESULT CLoader::Loading_For_GamePlay_Level()
 {
- 	lstrcpy(m_szLoadingText, TEXT("텍스쳐를 로딩중입니다."));
-	/* Prototype_Component_Texture_TerrainBox_Top */
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_SHARED), TEXT("Prototype_Component_Texture_TerrainBox_Top"),
-		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/BleakSwordDX/Terrain/Basic/BlankTex16_00.png"), 1))))
-		return E_FAIL;
-	/* Prototype_Component_Texture_TerrainBox_Side */
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_SHARED), TEXT("Prototype_Component_Texture_TerrainBox_Side"),
-		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/BleakSwordDX/Terrain/Basic/BaseArenaTex.png"), 1))))
-		return E_FAIL;
-
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_GAMEPLAY), TEXT("Prototype_Component_Texture_Player"),
-		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Textures/Player/Player0.png"), 1))))
-		return E_FAIL;
+ 	lstrcpy(m_szLoadingText, TEXT("텍스쳐를 로딩중입니다."));	
 	
-	/* Prototype_Component_Texture_HUD */
-	D3DXCOLOR vRectCol = {};
-#pragma region Prototype_Component_UI_Default_Texture
-	vRectCol = { 0.f, 0.f, 0.f, 1.f };
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_GAMEPLAY), TEXT("Prototype_Component_Texture_Rect_UI_BalckRect"), CVIBuffer_Rect::Create(m_pGraphic_Device, vRectCol))))
-		return E_FAIL;
-#pragma endregion
-#pragma region Prototype_Component_Hud_States_Texture
-	vRectCol = { 0.816, 0.255, 0.267, 1.f };
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_GAMEPLAY), TEXT("Prototype_Component_Texture_Rect_UI_Hud_States_Hp"), CVIBuffer_Rect::Create(m_pGraphic_Device, vRectCol))))
-		return E_FAIL;
-	vRectCol = { 0.525, 0.737, 0.965, 1.f };
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_GAMEPLAY), TEXT("Prototype_Component_Texture_Rect_UI_Hud_States_Mp"), CVIBuffer_Rect::Create(m_pGraphic_Device, vRectCol))))
-		return E_FAIL;
-#pragma endregion
-#pragma region Prototype_Component_Hud_Exp_Texture
-	vRectCol = { 0.200, 0.184, 0.231, 1.f };
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_GAMEPLAY), TEXT("Prototype_Component_Texture_Rect_UI_Hud_Exp_Fream_1"), CVIBuffer_Rect::Create(m_pGraphic_Device, vRectCol))))
-		return E_FAIL;
-	vRectCol = { 0.431, 0.412, 0.463, 1.f };
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_GAMEPLAY), TEXT("Prototype_Component_Texture_Rect_UI_Hud_Exp_Fream_2"), CVIBuffer_Rect::Create(m_pGraphic_Device, vRectCol))))
-		return E_FAIL;
-	vRectCol = { 0.808, 0.957, 0.706, 0.75f };
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_GAMEPLAY), TEXT("Prototype_Component_Texture_Rect_UI_Hud_Exp_Player"), CVIBuffer_Rect::Create(m_pGraphic_Device, vRectCol))))
-		return E_FAIL;
-#pragma endregion
-#pragma region Prototype_Component_Hud_States_Texture
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_GAMEPLAY), TEXT("Prototype_Component_Texture_Rect_UI_Hud_Money_Symbol"),
-		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/UI/HUD/HUD_Money.png"), 1))))
-		return E_FAIL;
-
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_GAMEPLAY), TEXT("Prototype_Component_Texture_Rect_UI_Hud_Dice_Symbol"),
-		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/UI/HUD/HUD_Dice.png"), 1))))
-		return E_FAIL;
-#pragma endregion
-#pragma region Prototype_Component_Hud_Button_Texture
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_GAMEPLAY), TEXT("Prototype_Component_Texture_Rect_UI_Hud_Inven_Symbol"),
-		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/UI/HUD/HUDInventory_%d.png"), 2))))
-		return E_FAIL;
-
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_GAMEPLAY), TEXT("Prototype_Component_Texture_Rect_UI_Hud_Stats_Symbol"),
-		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/UI/HUD/HUDStats_%d.png"), 2))))
-		return E_FAIL;
-
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_GAMEPLAY), TEXT("Prototype_Component_Texture_Rect_UI_Hud_Mirror_Symbol"),
-		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/UI/HUD/HUDMirror_%d.png"), 2))))
-		return E_FAIL;
-#pragma endregion
-#pragma region Prototype_Component_Hud_Dash_Texture
-    	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_GAMEPLAY), TEXT("Prototype_Component_Texture_Rect_UI_Hud_Dash_Symbol"),
-		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/UI/HUD/HUD_Dash_%d.png"), 2))))
-		return E_FAIL;
-#pragma endregion
-#pragma region Prototype_Component_Hud_Buffe_Texture
-		if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_GAMEPLAY), TEXT("Prototype_Component_Texture_Rect_UI_Hud_Buff_Frame"),
-			CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/UI/HUD/HUD_Buff_Fream.png"), 1))))
-			return E_FAIL;
-		if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_GAMEPLAY), TEXT("Prototype_Component_Texture_Rect_UI_Hud_Buff_Base"),
-			CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/UI/HUD/HUD_Buff_Base_%d.png"), 2))))
-			return E_FAIL;
-  		if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_GAMEPLAY), TEXT("Prototype_Component_Texture_Rect_UI_Buff_Icon"),
-			CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/UI/Buff_Icon/Effect_Icon_0%d.png"), 50))))
-			return E_FAIL;
-#pragma endregion
-#pragma region Prototype_Component_Window_Inventory_Texture
-		if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_GAMEPLAY), TEXT("Prototype_Component_Texture_Rect_Window_Inventory"),
-			CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/UI/Inventory/InventoryBase.png"), 1))))
-			return E_FAIL;
-
-		if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_GAMEPLAY), TEXT("Prototype_Component_Texture_Rect_Slot_Inven"),
-			CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/UI/Inventory/InventorySlot_%d.png"), 9))))
-			return E_FAIL;
-#pragma endregion
-#pragma region Prototype_Component_Window_ChapterMap_Texture
-		if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_GAMEPLAY), TEXT("Prototype_Component_Texture_Rect_ChapMap"),
-			CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/UI/ChapMap/ChapMapBG_%d.png"), 2))))
-			return E_FAIL;
-
-		if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_GAMEPLAY), TEXT("Prototype_Component_Texture_Rect_ChapMap_Node_0"),
-			CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/UI/ChapMap/Cave_Node0_%d.png"), 3))))
-			return E_FAIL;
-
-		if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_GAMEPLAY), TEXT("Prototype_Component_Texture_Rect_ChapMap_Node_1"),
-			CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/UI/ChapMap/Cave_Node1_%d.png"), 3))))
-			return E_FAIL;
-
-		if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_GAMEPLAY), TEXT("Prototype_Component_Texture_Rect_ChapMap_Node_2"),
-			CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/UI/ChapMap/Cave_Node2_%d.png"), 3))))
-			return E_FAIL;
-
-		if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_GAMEPLAY), TEXT("Prototype_Component_Texture_Rect_ChapMap_Node_3"),
-			CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/UI/ChapMap/Cave_Node3_%d.png"), 3))))
-			return E_FAIL;
-
-		if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_GAMEPLAY), TEXT("Prototype_Component_Texture_Rect_ChapMap_Node_4"),
-			CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/UI/ChapMap/Cave_Node4_%d.png"), 3))))
-			return E_FAIL;
-
-		if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_GAMEPLAY), TEXT("Prototype_Component_Texture_Rect_ChapMap_Node_Symbol"),
-			CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/UI/ChapMap/Node_Icon%d.png"), 6))))
-			return E_FAIL;
-
-		if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_GAMEPLAY), TEXT("Prototype_Component_Texture_Rect_ChapMap_Node_Boss"),
-			CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/UI/ChapMap/Node_Boss_%d.png"), 2))))
-			return E_FAIL;
-
-		if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_GAMEPLAY), TEXT("Prototype_Component_Texture_Rect_ChapMap_Node_Player"),
-			CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/UI/ChapMap/Node_Player.png"), 1))))
-			return E_FAIL;
-
- 		if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_GAMEPLAY), TEXT("Prototype_Component_Texture_Rect_ChapMap_Node_Line"),
-			CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/UI/ChapMap/Node_Line_%d.png"), 2))))
-			return E_FAIL;
-#pragma endregion
-#pragma region Prototype_Component_Window_Status
-		if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_GAMEPLAY), TEXT("Prototype_Component_Texture_Rect_Status_Window_Frame"),
-			CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/UI/StatusWindow/Status_Window_Frame_%d.png"), 5))))
-			return E_FAIL;
-#pragma endregion
 	lstrcpy(m_szLoadingText, TEXT("모델을 로딩중입니다."));
 
 	lstrcpy(m_szLoadingText, TEXT("쉐이더를 로딩중입니다."));
@@ -302,58 +171,15 @@ HRESULT CLoader::Loading_For_GamePlay_Level()
 	lstrcpy(m_szLoadingText, TEXT("게임오브젝트를 로딩중입니다."));
 
 	/* Prototype_GameObject_TerrainBox*/
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_GAMEPLAY), TEXT("Prototype_GameObject_TerrainBox"),
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_TerrainBox"),
 		CTerrainBox::Create(m_pGraphic_Device))))
 		return E_FAIL;
 
 	/* Prototype_GameObject_Camera*/
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_GAMEPLAY), TEXT("Prototype_GameObject_Camera_Follow"),
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_Camera_Follow"),
 		CCamera_Follow::Create(m_pGraphic_Device))))
 		return E_FAIL;
-#pragma region Prototype_GameObject_Hud
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_GAMEPLAY), TEXT("Prototype_GameObject_UI_Hud_States"),
-		CHud_States_Frame::Create(m_pGraphic_Device, LEVEL::LEVEL_GAMEPLAY))))
-		return E_FAIL;
 
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_GAMEPLAY), TEXT("Prototype_GameObject_UI_Hud_Exp"),
-		CHud_Exp_Frame::Create(m_pGraphic_Device, LEVEL::LEVEL_GAMEPLAY))))
-		return E_FAIL;
-
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_GAMEPLAY), TEXT("Prototype_GameObject_UI_Hud_Wallet"),
-		CHud_Wallet::Create(m_pGraphic_Device, LEVEL::LEVEL_GAMEPLAY))))
-		return E_FAIL;
-
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_GAMEPLAY), TEXT("Prototype_GameObject_UI_Hud_Button"),
-		CHud_Button::Create(m_pGraphic_Device, LEVEL::LEVEL_GAMEPLAY))))
-		return E_FAIL;
-
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_GAMEPLAY), TEXT("Prototype_GameObject_UI_Hud_Dash"),
-		CHud_Dash::Create(m_pGraphic_Device, LEVEL::LEVEL_GAMEPLAY))))
-		return E_FAIL;
-
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_GAMEPLAY), TEXT("Prototype_GameObject_UI_Hud_Buff"),
-		CHud_Buff::Create(m_pGraphic_Device, LEVEL::LEVEL_GAMEPLAY))))
-		return E_FAIL;
-#pragma endregion
-
-#pragma region Prototype_GameObject_Window
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_GAMEPLAY), TEXT("Prototype_GameObject_UI_Field_Hp"),
-		CField_Hp::Create(m_pGraphic_Device, LEVEL::LEVEL_GAMEPLAY))))
-		return E_FAIL;
-
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_GAMEPLAY), TEXT("Prototype_GameObject_UI_Inventory"),
-		CInventory::Create(m_pGraphic_Device, LEVEL::LEVEL_GAMEPLAY))))
-		return E_FAIL;
-
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_GAMEPLAY), TEXT("Prototype_GameObject_UI_ChapMap"),
-		CChapMap::Create(m_pGraphic_Device, LEVEL::LEVEL_GAMEPLAY))))
-		return E_FAIL;
-
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_GAMEPLAY), TEXT("Prototype_GameObject_UI_Status"),
-		CStatus_Window::Create(m_pGraphic_Device, LEVEL::LEVEL_GAMEPLAY))))
-		return E_FAIL;
-
-#pragma endregion
 	lstrcpy(m_szLoadingText, TEXT("로딩이 완료되었습니다."));
 
 
@@ -573,10 +399,7 @@ HRESULT CLoader::Loading_For_Stage2_Level()
 {
 	lstrcpy(m_szLoadingText, TEXT("텍스쳐를 로딩중입니다."));
 
-	//포탈 임시용 텍스처 세팅
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_SHARED), TEXT("Prototype_Component_Texture_Potal"),
-		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/BleakSwordDX/Object/Potal/Potal.png"), 1))))
-		return E_FAIL;
+	
 	
 	lstrcpy(m_szLoadingText, TEXT("모델을 로딩중입니다."));
 
