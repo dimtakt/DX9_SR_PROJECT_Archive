@@ -44,9 +44,6 @@ void CMonster::Priority_Update(_float fTimeDelta)
 void CMonster::Update(_float fTimeDelta)
 {
 
-	if (m_pTerrainBox != nullptr) {
-		m_pTerrainBox->SetUp_OnTerrainBox(m_pTransformCom, _float3(0.05f, 0.1f, 0.05f));
-	}
 }
 
 void CMonster::Late_Update(_float fTimeDelta)
