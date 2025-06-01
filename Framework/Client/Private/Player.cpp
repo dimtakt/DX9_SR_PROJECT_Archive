@@ -4,7 +4,7 @@
 #include "Collider_OBB.h"
 #include "Event_Manager.h"
 #include "Effect_Factory.h"
-
+#include "Room_Manager.h"
 CPlayer::CPlayer(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CGameObject{ pGraphic_Device }
 {
@@ -365,8 +365,14 @@ void CPlayer::OnCollision(CGameObject* pGameObject)
         {
             //pGameObject->Set_IsDead(true);
             break;
+        }       
+    case GAMEOBJ_TYPE::POTAL:
+        {
+            _float3 vPos;
+            CRoom_Manager::GetInstance()->Check_Potal_Coll(dynamic_cast<CPotal*>(pGameObject)->Get_PotalType(), vPos);
+
+            m_pTransformCom->Set_State(STATE::POSITION, vPos);
         }
-        
     }
 }
 

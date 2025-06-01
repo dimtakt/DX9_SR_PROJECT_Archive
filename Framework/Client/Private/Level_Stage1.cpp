@@ -124,9 +124,11 @@ HRESULT CLevel_Stage1::Ready_Layer_Room(const _wstring& strLayerTag)
 	CRoom* pRoom = nullptr;
 	m_pGameInstance->Seed_Random();
 
-	vector<pair<_int, _int>> RoomIndex = CRoom_Manager::GetInstance()->Create_RandomRooms(4); //지정하고 싶은 룸의 개수 - 1 ( 내부에서 0 0 디폴트로 저장함 )
+	_int iIndex = 8;
 
-	for (size_t num = 0; num < 5; num++)
+	vector<pair<_int, _int>> RoomIndex = CRoom_Manager::GetInstance()->Create_RandomRooms(iIndex-1); //지정하고 싶은 룸의 개수 - 1 ( 내부에서 0 0 디폴트로 저장함 )
+
+	for (size_t num = 0; num < iIndex; num++)
 	{
 
 		pRoom = dynamic_cast<CRoom*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::LEVEL_STAGE1), TEXT("Prototype_GameObject_Room")));
@@ -140,7 +142,7 @@ HRESULT CLevel_Stage1::Ready_Layer_Room(const _wstring& strLayerTag)
 
 		CMole_A* pMonster = nullptr;
 		list<CMonster::MONSTERDESC> DescList;
-		for (size_t i = 0; i < 20; i++)
+		for (size_t i = 0; i < 5; i++)
 		{
 			CMonster::MONSTERDESC tDesc = {};
 			tDesc.iLayerLevelIndex = ENUM_CLASS(LEVEL::LEVEL_STAGE1);
@@ -164,7 +166,7 @@ HRESULT CLevel_Stage1::Ready_Layer_Room(const _wstring& strLayerTag)
 		CRoom_Manager::GetInstance()->Add_Room(pRoom, ENUM_CLASS(LEVEL::LEVEL_STAGE1), strLayerTag);
 	}
 
-	for (size_t num = 0; num < 5; num++)
+	for (size_t num = 0; num < iIndex; num++)
 	{
 		CRoom_Manager::GetInstance()->Check_Room(ENUM_CLASS(LEVEL::LEVEL_STAGE1), strLayerTag, num);
 	}
