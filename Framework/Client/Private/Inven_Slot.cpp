@@ -93,7 +93,7 @@ HRESULT CInven_Slot::Render()
 		return E_FAIL;
 	Reset_RenderState();
 
-	CInventory* pInven = static_cast<CInventory*>(m_pGameInstance->Get_GameObject(ENUM_CLASS(LEVEL::LEVEL_GAMEPLAY), TEXT("Layer_Inventory")));
+	CInventory* pInven = static_cast<CInventory*>(m_pGameInstance->Get_GameObject(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Layer_Inventory")));
 	
 	if (m_pGameInstance->IsKeyHold(VK_LBUTTON) && m_bIsOver && pInven->Pick_Slot())
 		return S_OK;
@@ -217,7 +217,7 @@ HRESULT CInven_Slot::Ready_Components()
 		TEXT("Com_Transform"), reinterpret_cast<CComponent**>(&m_pTransformCom))))
 		return E_FAIL;
 
-	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_GAMEPLAY), TEXT("Prototype_Component_Texture_Rect_Slot_Inven"),
+	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Rect_Slot_Inven"),
 		TEXT("Com_Texture"), reinterpret_cast<CComponent**>(&m_pTextureCom))))
 		return E_FAIL;
 

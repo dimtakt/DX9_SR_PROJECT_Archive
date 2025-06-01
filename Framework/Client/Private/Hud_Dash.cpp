@@ -143,14 +143,14 @@ HRESULT CHud_Dash::Ready_Children()
 
 HRESULT CHud_Dash::Reday_SyncingObject()
 {
-    m_pPlayerStatsCom = dynamic_cast<CPlayerStats*>(m_pGameInstance->Get_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Layer_Player"), TEXT("Com_PlayerStats"), 0));
+   /* m_pPlayerStatsCom = dynamic_cast<CPlayerStats*>(m_pGameInstance->Get_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Layer_Player"), TEXT("Com_PlayerStats"), 0));
     if (m_pPlayerStatsCom == nullptr)
     {
         MSG_BOX(TEXT("Failed to Syncing : CHud_Dash"));
         return E_FAIL;
     }
     Safe_AddRef(m_pPlayerStatsCom);
-
+    */
     return S_OK;
 }
 
