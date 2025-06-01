@@ -53,7 +53,7 @@ void CStart_Button::Update(_float fTimeDelta)
         m_FontColor = { 1.f, 1.f, 0.2f, 1.f };
         if (m_pGameInstance->IsKeyDown(VK_LBUTTON))
         {
-            if (FAILED(m_pGameInstance->Open_Level(ENUM_CLASS(LEVEL::LEVEL_LOADING), CLevel_Loading::Create(m_pGraphic_Device, LEVEL::LEVEL_GAMEPLAY))))
+            if (FAILED(m_pGameInstance->Open_Level(ENUM_CLASS(LEVEL::LEVEL_LOADING), CLevel_Loading::Create(m_pGraphic_Device, LEVEL::LEVEL_STAGE1))))
                 return;
         }
     }

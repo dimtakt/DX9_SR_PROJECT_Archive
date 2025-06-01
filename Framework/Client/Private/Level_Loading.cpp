@@ -24,6 +24,9 @@ HRESULT CLevel_Loading::Initialize(LEVEL eNextLevelID)
 	if (FAILED(Ready_LoadingThread()))
 		return E_FAIL;
 
+	CTransform* pPlayerTransform = dynamic_cast<CTransform*>(m_pGameInstance->Get_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Layer_Player"), TEXT("Com_Transform")));
+	pPlayerTransform->Set_State(STATE::POSITION, _float3(12488.f, 12488.f, 12488.f));
+
 	return S_OK;
 }
 
@@ -39,9 +42,6 @@ void CLevel_Loading::Update(_float fTimeDelta)
 		{
 		case LEVEL::LEVEL_LOGO:
 			pNewLevel = CLevel_Logo::Create(m_pGraphic_Device);
-			break;
-		case LEVEL::LEVEL_GAMEPLAY:
-			pNewLevel = CLevel_GamePlay::Create(m_pGraphic_Device);
 			break;
 		case LEVEL::LEVEL_MAPEDIT:
 			pNewLevel = CLevel_MapEdit::Create(m_pGraphic_Device);
