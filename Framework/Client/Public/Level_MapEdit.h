@@ -84,7 +84,7 @@ private:
 	CTransform*									m_pObjectTransform = nullptr;		// 하나의 오브젝트 선택되면 트랜스폼 설정하고자 함
 	CGameObject*								m_pPickingObject = nullptr;			// 피킹된 얘 저장용
 	vector<CGameObject*>						m_pObject = {};						// 만든 얘들 주소 저장
-	list<MAP_OBJECT_DESC>						m_pObject_Desc = {};				// 만든 얘들 구조체 저장?
+	list<MAP_OBJECT_DESC>						m_pObject_Desc = {};				// 저장할 때 쓸 구조체에 값 넣어줌
 	_bool									m_bPicking = false;						// 피킹 된 객체 있으면 활성화
 
 public:

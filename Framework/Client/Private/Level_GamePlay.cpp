@@ -13,6 +13,8 @@
 #include "Animations/Anim_Player_Idle.h"
 #include "Animations/Anim_Player_Attack.h"
 #include "Animations/Anim_Player_Attack2.h"
+#include "Animations/Anim_Player_Parry.h"
+#include "Room_Manager.h"
 #pragma endregion
 
 
@@ -61,7 +63,10 @@ void CLevel_GamePlay::Update(_float fTimeDelta)
 	{
 		if (FAILED(m_pGameInstance->Open_Level(ENUM_CLASS(LEVEL::LEVEL_LOADING), CLevel_Loading::Create(m_pGraphic_Device, LEVEL::LEVEL_STAGE1))))
 			return;
+
+		CRoom_Manager::GetInstance()->Clear(ENUM_CLASS(LEVEL::LEVEL_GAMEPLAY));
 	}
+	
 }
 
 HRESULT CLevel_GamePlay::Render()
@@ -102,6 +107,9 @@ HRESULT CLevel_GamePlay::Ready_Animations()
 		return E_FAIL;
 	if (FAILED(m_pGameInstance->Insert_Animation(L"Player_Attack2", CAnim_Player_Attack2::Create())))
 		return E_FAIL;
+	if (FAILED(m_pGameInstance->Insert_Animation(L"Player_Parry", CAnim_Player_Parry::Create())))
+		return E_FAIL;
+	
 
 	return S_OK;
 }
@@ -191,14 +199,17 @@ HRESULT CLevel_GamePlay::Ready_Layer_UI(const _wstring& strLayerTag)
 		ENUM_CLASS(LEVEL::LEVEL_GAMEPLAY), TEXT("Prototype_GameObject_UI_Inventory"))))
 		return E_FAIL;
 
-	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_GAMEPLAY), strLayerTag,
-		ENUM_CLASS(LEVEL::LEVEL_GAMEPLAY), TEXT("Prototype_GameObject_UI_Hud_Button"))))
-		return E_FAIL;
-
 	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_GAMEPLAY), TEXT("Layer_ChapMap"),
 		ENUM_CLASS(LEVEL::LEVEL_GAMEPLAY), TEXT("Prototype_GameObject_UI_ChapMap"))))
 		return E_FAIL;
 
+	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_GAMEPLAY), TEXT("Layer_Status"),
+		ENUM_CLASS(LEVEL::LEVEL_GAMEPLAY), TEXT("Prototype_GameObject_UI_Status"))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_GAMEPLAY), strLayerTag,
+		ENUM_CLASS(LEVEL::LEVEL_GAMEPLAY), TEXT("Prototype_GameObject_UI_Hud_Button"))))
+		return E_FAIL;
 	return S_OK;
 }
 

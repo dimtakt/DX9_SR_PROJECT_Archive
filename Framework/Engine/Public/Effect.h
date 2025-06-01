@@ -21,6 +21,7 @@ public:
 
 		_float4x4 matWorld;
 		_bool isMatWorld = false;
+		_bool isFlippedX = false;
 	} EFFECT_DESC;
 
 protected:
@@ -39,7 +40,7 @@ public:
 protected:
 	_int			m_iImagePerFrame = 0;
 	_wstring		m_strEffectTag = {};
-
+	_bool			m_isFlippedX = false;
 
 
 public:

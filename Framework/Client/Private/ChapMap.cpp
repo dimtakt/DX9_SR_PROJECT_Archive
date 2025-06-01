@@ -3,6 +3,8 @@
 #include "ChapMap_Frame.h"
 #include "ChapMap_Button.h"
 #include "ChapMap_PlayerSymbol.h"
+#include "ChapMap_Line.h"
+#include "Level_Loading.h"
 CChapMap::CChapMap(LPDIRECT3DDEVICE9 pGraphic_Device) : CButton(pGraphic_Device)
 {
 }
@@ -53,10 +55,17 @@ void CChapMap::Priority_Update(_float fTimeDelta)
 			m_bRender = false;
 		else
 		{
+			if(m_pPlayerSymbol->Player_OffsetPos() <= -100)
+				m_fY = -m_pPlayerSymbol->Player_OffsetPos() + 100;
+			else
+				m_fY = -m_pPlayerSymbol->Player_OffsetPos() + 150;
+
 			m_bRender = true;
-			/*m_fY = m_pPlayerSymbol->Player_OffsetPos();
-			__super::Update_Position();*/
+			
+			__super::Update_Position();
 		}
+
+
 	__super::Priority_Update(fTimeDelta);
 }
 
@@ -83,10 +92,11 @@ HRESULT CChapMap::Render()
 	return S_OK;
 }
 
-void CChapMap::Player_Offset(_float fX, _float fY, _uint iLineIndex)
+void CChapMap::Player_Offset(_float fX, _float fY, _uint iLineIndex, _uint iMapIdex)
 {
 	m_pPlayerSymbol->Player_Move(fX, fY);
 	m_iPlayerLineIndex = iLineIndex;
+	m_iPlayerMapIndex = iMapIdex;
 	//m_bRender = false;
 }
 
@@ -112,29 +122,29 @@ void CChapMap::Scroll_Map()
 			m_fY += ptMouse.y - m_iMouseY;
 			m_iMouseY = ptMouse.y;
 		}
-		
 	}
-
-	if (m_fY < _float(g_iWinSizeX) * -3 * 0.25)
-		m_fY = _int(_float(g_iWinSizeX) * -3 * 0.25);
-	else if (m_fY > 160 + g_iWinSizeX * 0.28)
-		m_fY = _int(160 + g_iWinSizeX * 0.28);
 
 	if (g_ScrollValue > 0 || g_ScrollValue < 0)
 		m_iScrollValue = g_ScrollValue;
 
-	if (m_iScrollValue > 0 && m_fY <= 160 + g_iWinSizeX * 0.28)
+	if (m_iScrollValue > 0 )
 	{
 		m_fY += m_iScrollValue * 0.25 + 15;
 		m_iScrollValue -= 10;
 	}
-	else if (m_iScrollValue < 0 && m_fY >= _float(g_iWinSizeX) * -3 * 0.25)
+	else if (m_iScrollValue < 0 )
 	{
 		m_fY += m_iScrollValue * 0.25 - 15;
 		m_iScrollValue += 10;
 	}
 	if (m_iScrollValue >= -30 && m_iScrollValue <= 30)
 		m_iScrollValue = 0;
+
+	if (m_fY < _float(g_iWinSizeX) * -3 * 0.25)
+		m_fY = _int(_float(g_iWinSizeX) * -3 * 0.25);
+	else if (m_fY > 160 + g_iWinSizeX * 0.28)
+		m_fY = _int(160 + g_iWinSizeX * 0.28);
+
 
 	__super::Update_Position();
 }
@@ -153,9 +163,14 @@ HRESULT CChapMap::Ready_ChildPrototype(LEVEL eLevel)
 		CChapMap_Frame::Create(m_pGraphic_Device, eLevel))))
 		return E_FAIL;
 	
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(eLevel), TEXT("Prototype_GameObject_UI_ChapMap_Line"),
+		CChapMap_Line::Create(m_pGraphic_Device))))
+		return E_FAIL;
+
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(eLevel), TEXT("Prototype_GameObject_UI_ChapMap_Button"),
 		CChapMap_Button::Create(m_pGraphic_Device, eLevel))))
 		return E_FAIL;
+
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(eLevel), TEXT("Prototype_GameObject_UI_ChapMap_Player"),
 		CChapMap_PlayerSymbol::Create(m_pGraphic_Device))))
 		return E_FAIL;
@@ -197,6 +212,7 @@ HRESULT CChapMap::Ready_Children()
 
 	m_pPlayerSymbol->Player_Move(0, -100);
 	m_iPlayerLineIndex = 0;
+	m_iPlayerMapIndex = 0;
 	return S_OK;
 }
 

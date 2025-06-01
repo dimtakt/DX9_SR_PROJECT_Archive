@@ -1,5 +1,6 @@
 #include "Hp_Player.h"
 #include "GameInstance.h"
+#include "Client_Defines_Event.h"
 
 CHp_Player::CHp_Player(LPDIRECT3DDEVICE9 pGraphic_Device) : CProgressBar( pGraphic_Device )
 {

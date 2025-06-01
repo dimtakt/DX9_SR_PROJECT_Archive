@@ -34,16 +34,10 @@ HRESULT CTree::Initialize(void* pArg)
     m_pTransformCom->Set_State(STATE::POSITION, pObject_Desc->vPos);
 
     //X축 회전
-    if (pObject_Desc->vRotate.x != 0.f)
-        m_pTransformCom->Rotation(_float3(1.f, 0.f, 0.f), D3DXToRadian(pObject_Desc->vRotate.x));
-
-    // Y축 회전
-    if (pObject_Desc->vRotate.y != 0.f)
-        m_pTransformCom->Rotation(_float3(0.f, 1.f, 0.f), D3DXToRadian(pObject_Desc->vRotate.y));
-
-    // Z축 회전
-    if (pObject_Desc->vRotate.z != 0.f)
-        m_pTransformCom->Rotation(_float3(0.f, 0.f, 1.f), D3DXToRadian(pObject_Desc->vRotate.z));
+    if (pObject_Desc->vRotate.x != 0.f || pObject_Desc->vRotate.y != 0.f || pObject_Desc->vRotate.z != 0.f)
+        m_pTransformCom->ApplyEulerRotation(pObject_Desc->vRotate);
+       
+    m_pTransformCom->Set_RotationEuler(pObject_Desc->vRotate.x, pObject_Desc->vRotate.y,pObject_Desc->vRotate.z);
 
     m_pTransformCom->Scaling(pObject_Desc->vScale.x, pObject_Desc->vScale.y, pObject_Desc->vScale.z);
 

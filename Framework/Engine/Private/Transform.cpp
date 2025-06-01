@@ -214,19 +214,25 @@ void CTransform::RotationByParent(const _float3 axis, CTransform* parent, _float
 	return;
 }
 
-void CTransform::Add_Rotation(const _float3& vAxis, _float fRadian)
+void CTransform::ApplyEulerRotation(const _float3& vEuler)
 {
-	_float3			vRight = Get_State(STATE::RIGHT);
-	_float3			vUp = Get_State(STATE::UP);
-	_float3			vLook = Get_State(STATE::LOOK);
+	_float3			vScaled = Get_Scaled();
 
-	_float4x4		RotationMatrix = {};
+	D3DXMATRIX matX, matY, matZ, matFinal;
 
-	D3DXMatrixRotationAxis(&RotationMatrix, &vAxis, fRadian);
+	D3DXMatrixRotationX(&matX, D3DXToRadian(vEuler.x));
+	D3DXMatrixRotationY(&matY, D3DXToRadian(vEuler.y));
+	D3DXMatrixRotationZ(&matZ, D3DXToRadian(vEuler.z));
 
-	D3DXVec3TransformNormal(&vRight, &vRight, &RotationMatrix);
-	D3DXVec3TransformNormal(&vUp, &vUp, &RotationMatrix);
-	D3DXVec3TransformNormal(&vLook, &vLook, &RotationMatrix);
+	matFinal = matZ * matY * matX;
+
+	_float3 vRight = _float3(1.f, 0.f, 0.f) * vScaled.x;
+	_float3 vUp = _float3(0.f, 1.f, 0.f) * vScaled.y;
+	_float3	vLook = _float3(0.f, 0.f, 1.f) * vScaled.z;
+
+	D3DXVec3TransformNormal(&vRight, &vRight, &matFinal);
+	D3DXVec3TransformNormal(&vUp, &vUp, &matFinal);
+	D3DXVec3TransformNormal(&vLook, &vLook, &matFinal);
 
 	Set_State(STATE::RIGHT, vRight);
 	Set_State(STATE::UP, vUp);
