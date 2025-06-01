@@ -145,6 +145,7 @@
   <ItemGroup>
     <ClInclude Include="..\Public\Animations\Anim_Player_Attack.h" />
     <ClInclude Include="..\Public\Animations\Anim_Player_Attack2.h" />
+    <ClInclude Include="..\public\Animations\Anim_Player_Fury.h" />
     <ClInclude Include="..\public\Animations\Anim_Player_Idle.h" />
     <ClInclude Include="..\Public\Animations\Anim_Player_Parry.h" />
     <ClInclude Include="..\Public\BackGround.h" />
@@ -173,6 +174,8 @@
     <ClInclude Include="..\public\Item_Base.h" />
     <ClInclude Include="..\Public\Level_MapEdit.h" />
     <ClInclude Include="..\Public\Level_Stage2.h" />
+    <ClInclude Include="..\public\Loding_Ani.h" />
+    <ClInclude Include="..\public\Loding_UI.h" />
     <ClInclude Include="..\public\Mole_A.h" />
     <ClInclude Include="..\Public\Monster.h" />
     <ClInclude Include="..\Public\Monster_Factory.h" />
@@ -183,6 +186,10 @@
     <ClInclude Include="..\Public\Room_Manager.h" />
     <ClInclude Include="..\public\Sky.h" />
     <ClInclude Include="..\Public\Start_Button.h" />
+    <ClInclude Include="..\public\Status_Stat_Frame_Name.h" />
+    <ClInclude Include="..\public\Status_Stat_Frame_Type.h" />
+    <ClInclude Include="..\public\Status_Stat_Frame_Value.h" />
+    <ClInclude Include="..\public\Status_Value.h" />
     <ClInclude Include="..\Public\Stat_Manager.h" />
     <ClInclude Include="..\public\Status_Frame_Down.h" />
     <ClInclude Include="..\public\Status_Frame_Mid.h" />
@@ -270,6 +277,8 @@
     <ClCompile Include="..\private\Item_Base.cpp" />
     <ClCompile Include="..\Private\Level_MapEdit.cpp" />
     <ClCompile Include="..\Private\Level_Stage2.cpp" />
+    <ClCompile Include="..\private\Loding_Ani.cpp" />
+    <ClCompile Include="..\private\Loding_UI.cpp" />
     <ClCompile Include="..\private\Mole_A.cpp" />
     <ClCompile Include="..\Private\Monster.cpp" />
     <ClCompile Include="..\Private\Monster_Factory.cpp" />
@@ -280,6 +289,10 @@
     <ClCompile Include="..\Private\Room_Manager.cpp" />
     <ClCompile Include="..\private\Sky.cpp" />
     <ClCompile Include="..\Private\Start_Button.cpp" />
+    <ClCompile Include="..\private\Status_Stat_Frame_Name.cpp" />
+    <ClCompile Include="..\private\Status_Stat_Frame_Type.cpp" />
+    <ClCompile Include="..\private\Status_Stat_Frame_Value.cpp" />
+    <ClCompile Include="..\private\Status_Value.cpp" />
     <ClCompile Include="..\Private\Stat_Manager.cpp" />
     <ClCompile Include="..\private\Status_Frame_Down.cpp" />
     <ClCompile Include="..\private\Status_Frame_Mid.cpp" />
@@ -327,6 +340,7 @@
     <ClCompile Include="..\Private\Title_Tree.cpp" />
     <ClCompile Include="..\Private\Tree.cpp" />
     <ClCompile Include="..\private\UI_KeyGuide.cpp" />
+    <ClCompile Include="..\public\Animations\Anim_Player_Fury.cpp" />
     <ClCompile Include="Client.cpp" />
   </ItemGroup>
   <ItemGroup>

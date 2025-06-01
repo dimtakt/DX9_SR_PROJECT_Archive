@@ -8,12 +8,12 @@ class CTexture;
 END
 
 BEGIN(Client)
-class CStatus_Miracle_Frame final : public CUIObject
+class CLoding_Ani final : public CUIObject
 {
 private:
-	CStatus_Miracle_Frame(LPDIRECT3DDEVICE9 pGraphic_Device);
-	CStatus_Miracle_Frame(const CStatus_Miracle_Frame& Prototype);
-	virtual							~CStatus_Miracle_Frame() = default;
+									CLoding_Ani(LPDIRECT3DDEVICE9 pGraphic_Device);
+									CLoding_Ani(const CLoding_Ani& Prototype);
+	virtual							~CLoding_Ani() = default;
 
 public:
 	virtual HRESULT					Initialize_Prototype(LEVEL eLevel);
@@ -25,21 +25,20 @@ public:
 
 private:
 	LEVEL							m_eLevel = {};
-	CVIBuffer_Rect* m_pVIBufferCom = { nullptr };
-	CTexture* m_pTextureCom = { nullptr };
+	CVIBuffer_Rect*					m_pVIBufferCom = { nullptr };
+	CTexture*						m_pTextureCom = { nullptr };
 
+	_uint							m_iTexIndex = {};
+	_float							m_fSpeed = {};
 private:
 	HRESULT							Ready_Components();
-
-	HRESULT							Ready_ChildPrototype(LEVEL eLevel);
-	HRESULT							Ready_Children();
 
 	void							SetUp_RenderState();
 	void							Reset_RenderState();
 
 public:
-	static CStatus_Miracle_Frame* Create(LPDIRECT3DDEVICE9 pGraphic_Device, LEVEL eLevel);
-	virtual CGameObject* Clone(void* pArg) override;
+	static CLoding_Ani*				Create(LPDIRECT3DDEVICE9 pGraphic_Device, LEVEL eLevel);
+	virtual CGameObject*			Clone(void* pArg) override;
 	virtual void					Free() override;
 };
 END

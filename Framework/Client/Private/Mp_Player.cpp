@@ -1,6 +1,6 @@
 #include "Mp_Player.h"
 #include "GameInstance.h"
-
+#include "Stat_Manager.h"
 CMp_Player::CMp_Player(LPDIRECT3DDEVICE9 pGraphic_Device) : CProgressBar(pGraphic_Device)
 {
 }
@@ -16,8 +16,6 @@ HRESULT CMp_Player::Initialize_Prototype()
 
 HRESULT CMp_Player::Initialize(void* pArg)
 {
-	m_iCulMaxValue = 200;
-	m_iCulValue = 200;
 	m_fSizeX = 180;
 	m_fSizeY = 20;
 	m_fX = 0;
@@ -49,6 +47,9 @@ void CMp_Player::Update(_float fTimeDelta)
 
 void CMp_Player::Late_Update(_float fTimeDelta)
 {
+	m_iCulMaxValue = CStat_Manager::GetInstance()->Get_CurStats()[ENUM_CLASS(STAT_INFO::MAXMP)];
+	m_iCulValue = CStat_Manager::GetInstance()->Get_CurStats()[ENUM_CLASS(STAT_INFO::CULMP)];
+
 	Progress_UpdateX();
 	m_pGameInstance->Add_RenderGroup(RENDERGROUP::RG_UI, this);
 }
@@ -58,10 +59,19 @@ HRESULT CMp_Player::Render()
 	m_pVIBufferCom->Bind_Buffers();
 	__super::Begin();
 	m_pVIBufferCom->Render();
-	Render_Font();
+	if (m_isFontRender)
+		Render_Font();
 	__super::End();
 
 	return S_OK;
+}
+
+void CMp_Player::FontRender_Switch()
+{
+	if (m_isFontRender)
+		m_isFontRender = false;
+	else
+		m_isFontRender = true;
 }
 
 

@@ -286,6 +286,15 @@
     <Filter Include="01.Levels\04. Dungeon\Stage2">
       <UniqueIdentifier>{ee486fd6-c2f0-46be-ace0-c71a1efa864a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\UI\Window\Status_Window\Stauts_Frame\Status_Value">
+      <UniqueIdentifier>{81cf6232-8bf4-4a09-8c97-02ecb3e8afac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\UI\Loding">
+      <UniqueIdentifier>{cbf541aa-b9b4-4462-a616-049ae2b889be}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\UI\Loding\Loding_Ani">
+      <UniqueIdentifier>{afa15727-b2f5-4aa7-b382-b19232bbd3f6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -588,6 +597,27 @@
     <ClInclude Include="..\Public\Potal.h">
       <Filter>02.GameObject\Object\Potal</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\Animations\Anim_Player_Fury.h">
+      <Filter>03.Animations\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Status_Stat_Frame_Name.h">
+      <Filter>02.GameObject\UI\Window\Status_Window\Stauts_Frame\Status_Stat_Frame</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Status_Stat_Frame_Value.h">
+      <Filter>02.GameObject\UI\Window\Status_Window\Stauts_Frame\Status_Stat_Frame</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Status_Stat_Frame_Type.h">
+      <Filter>02.GameObject\UI\Window\Status_Window\Stauts_Frame\Status_Stat_Frame</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Status_Value.h">
+      <Filter>02.GameObject\UI\Window\Status_Window\Stauts_Frame\Status_Value</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Loding_UI.h">
+      <Filter>02.GameObject\UI\Loding</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Loding_Ani.h">
+      <Filter>02.GameObject\UI\Loding\Loding_Ani</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -851,6 +881,27 @@
     </ClCompile>
     <ClCompile Include="..\Private\Potal.cpp">
       <Filter>02.GameObject\Object\Potal</Filter>
+    </ClCompile>
+    <ClCompile Include="..\public\Animations\Anim_Player_Fury.cpp">
+      <Filter>03.Animations\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Status_Stat_Frame_Name.cpp">
+      <Filter>02.GameObject\UI\Window\Status_Window\Stauts_Frame\Status_Stat_Frame</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Status_Stat_Frame_Value.cpp">
+      <Filter>02.GameObject\UI\Window\Status_Window\Stauts_Frame\Status_Stat_Frame</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Status_Stat_Frame_Type.cpp">
+      <Filter>02.GameObject\UI\Window\Status_Window\Stauts_Frame\Status_Stat_Frame</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Status_Value.cpp">
+      <Filter>02.GameObject\UI\Window\Status_Window\Stauts_Frame\Status_Value</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Loding_UI.cpp">
+      <Filter>02.GameObject\UI\Loding</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Loding_Ani.cpp">
+      <Filter>02.GameObject\UI\Loding\Loding_Ani</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

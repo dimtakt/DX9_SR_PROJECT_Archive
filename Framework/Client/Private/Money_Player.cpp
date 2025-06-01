@@ -1,5 +1,6 @@
 #include "Money_Player.h"
 #include "GameInstance.h"
+#include "Stat_Manager.h"
 CMoney_Player::CMoney_Player(LPDIRECT3DDEVICE9 pGraphic_Device) : CUIObject(pGraphic_Device)
 {
 }
@@ -45,6 +46,8 @@ void CMoney_Player::Update(_float fTimeDelta)
 
 void CMoney_Player::Late_Update(_float fTimeDelta)
 {
+	m_iValue = CStat_Manager::GetInstance()->Get_CurStats()[ENUM_CLASS(STAT_INFO::GOLD)];
+
 	m_pGameInstance->Add_RenderGroup(RENDERGROUP::RG_UI, this);
 }
 

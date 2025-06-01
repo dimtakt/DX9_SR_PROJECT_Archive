@@ -244,6 +244,10 @@ HRESULT CGameInstance::Add_RenderGroup(RENDERGROUP eRenderGroup, CGameObject* pR
 
     return m_pRenderer->Add_RenderGroup(eRenderGroup, pRenderObject);
 }
+void CGameInstance::Renderer_Clear()
+{
+    return m_pRenderer->Clear();
+}
 #pragma endregion
 
 #pragma region TIMER_MANAGER
