@@ -2,11 +2,17 @@
 #include "Client_Defines.h"
 #include "GameObject.h"
 #include "Camera.h"
+#include "Transform.h"
 
 BEGIN(Client)
 
 class CCamera_Follow final : public CCamera
 {
+public:
+	typedef struct tagCameraFolDesc
+	{
+		_uint iLayerIndex;
+	}CAMERAFOLDESC;
 private:
 	CCamera_Follow(LPDIRECT3DDEVICE9 pGraphic_Device);
 	CCamera_Follow(const CCamera_Follow& Prototype);
@@ -26,10 +32,10 @@ private:
 
 private:
 	CTransform* m_pTargetTransformCom = { nullptr };
-	std::vector<CTransform*> m_vRotateObjectsTransformCom = { };
+	vector<CTransform*> m_vRotateObjectsTransformCom = { };
 
 private:
-	HRESULT Ready_Target();
+	HRESULT Ready_Target(void* pArg);
 	HRESULT Ready_Components(void* pArg);
 
 private:

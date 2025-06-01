@@ -1,8 +1,6 @@
 #include "Potal.h"
-
 #include "GameInstance.h"
 #include "Client_Struct.h"
-
 CPotal::CPotal(LPDIRECT3DDEVICE9 pGraphic_Device)
     : CGameObject{ pGraphic_Device }
 {
@@ -22,6 +20,8 @@ HRESULT CPotal::Initialize(void* pArg)
 {
     if (FAILED(Ready_Components()))
         return E_FAIL;
+
+    m_eObjType = GAMEOBJ_TYPE::POTAL;
 
     if (pArg == nullptr)
     {
