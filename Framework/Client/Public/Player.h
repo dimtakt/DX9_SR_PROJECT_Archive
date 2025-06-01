@@ -77,6 +77,8 @@ private:
 	_float3					m_vDashDir						= {};
 	_float3					m_vCursorDir					= {};
 
+	_bool					m_isReadyFury					= false;
+
 
 private:
 	HRESULT Ready_Components();

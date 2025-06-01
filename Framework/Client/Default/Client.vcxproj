@@ -145,6 +145,7 @@
   <ItemGroup>
     <ClInclude Include="..\Public\Animations\Anim_Player_Attack.h" />
     <ClInclude Include="..\Public\Animations\Anim_Player_Attack2.h" />
+    <ClInclude Include="..\public\Animations\Anim_Player_Fury.h" />
     <ClInclude Include="..\public\Animations\Anim_Player_Idle.h" />
     <ClInclude Include="..\Public\Animations\Anim_Player_Parry.h" />
     <ClInclude Include="..\Public\BackGround.h" />
@@ -329,6 +330,7 @@
     <ClCompile Include="..\Private\Title_Tree.cpp" />
     <ClCompile Include="..\Private\Tree.cpp" />
     <ClCompile Include="..\private\UI_KeyGuide.cpp" />
+    <ClCompile Include="..\public\Animations\Anim_Player_Fury.cpp" />
     <ClCompile Include="Client.cpp" />
   </ItemGroup>
   <ItemGroup>

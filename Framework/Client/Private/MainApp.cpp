@@ -14,6 +14,7 @@
 #include "Animations/Anim_Player_Attack2.h"
 #include "Animations/Anim_Player_Idle.h"
 #include "Animations/Anim_Player_Parry.h"
+#include "Animations/Anim_Player_Fury.h"
 #include "Mp_Player.h"
 #include "Hp_Player.h"
 #include "Hud_States_Frame.h"
@@ -475,6 +476,8 @@ HRESULT CMainApp::Ready_Animation_Setting()
 		return E_FAIL;
 	if (FAILED(m_pGameInstance->Insert_Animation(L"Player_Parry", CAnim_Player_Parry::Create())))
 		return E_FAIL;
+	if (FAILED(m_pGameInstance->Insert_Animation(L"Player_Fury", CAnim_Player_Fury::Create())))
+		return E_FAIL;
 
 	return S_OK;
 }
@@ -508,6 +511,7 @@ void CMainApp::Ready_Key_Setting()
 #if _DEBUG
 	m_pGameInstance->AddTrackingKey('J');
 	m_pGameInstance->AddTrackingKey('K');
+	m_pGameInstance->AddTrackingKey('M');
 #endif
 
 }
