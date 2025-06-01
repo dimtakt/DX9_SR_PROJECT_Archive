@@ -65,6 +65,10 @@ HRESULT CMainApp::Initialize()
 
 	Ready_Key_Setting();
 	Ready_Font_Setting();
+
+	if (FAILED(Ready_UI_Stting()))
+		return E_FAIL;
+
 	return S_OK;
 }
 
@@ -118,7 +122,6 @@ HRESULT CMainApp::Ready_Static_Setting()
 	if (FAILED(Ready_GameObject_Setting()))
 		return E_FAIL;
 
-	
 	return S_OK;
 }
 
@@ -413,11 +416,11 @@ HRESULT CMainApp::Ready_Texture_Setting()
 #pragma endregion
 #pragma region Prototype_Component_Window_Status
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Rect_Status_Window_Frame"),
-		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/UI/StatusWindow/Status_Window_Frame_%d.png"), 5))))
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/UI/StatusWindow/Status_Window_Frame_%d.png"), 7))))
 		return E_FAIL;
 
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Rect_Status_Icon"),
-		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/UI/StatusWindow/Status_Icon_%d.png"), 7))))
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/UI/StatusWindow/Status_Icon_%d.png"), 12))))
 		return E_FAIL;
 #pragma endregion
 #pragma region Prototype_Component_UI_Loding
@@ -581,6 +584,28 @@ HRESULT CMainApp::Ready_Manager_Setting()
 	CRoom_Manager::GetInstance();
 	CMonster_Factory::GetInstance();
 	CStat_Manager::GetInstance()->Initialize();
+
+	return S_OK;
+}
+
+HRESULT CMainApp::Ready_UI_Stting()
+{
+	/* Prototype_GameObject_UI*/
+	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Layer_Inventory"),
+		ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_Inventory"))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Layer_ChapMap"),
+		ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_ChapMap"))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Layer_Status"),
+		ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_Status"))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Layer_Button"),
+		ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_Hud_Button"))))
+		return E_FAIL;
 
 	return S_OK;
 }

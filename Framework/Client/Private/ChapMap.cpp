@@ -50,6 +50,9 @@ HRESULT CChapMap::Initialize(void* pArg)
 
 void CChapMap::Priority_Update(_float fTimeDelta)
 {
+	if (m_pGameInstance->Get_CurrentLevel() == ENUM_CLASS(LEVEL::LEVEL_LOADING) || m_pGameInstance->Get_CurrentLevel() == ENUM_CLASS(LEVEL::LEVEL_LOGO) || m_pGameInstance->Get_CurrentLevel() == ENUM_CLASS(LEVEL::LEVEL_MAPEDIT))
+		return;
+		
 	if(m_pGameInstance->IsKeyDown('F'))
 		if(m_bRender)
 			m_bRender = false;
@@ -71,6 +74,9 @@ void CChapMap::Priority_Update(_float fTimeDelta)
 
 void CChapMap::Update(_float fTimeDelta)
 {
+	if (m_pGameInstance->Get_CurrentLevel() == ENUM_CLASS(LEVEL::LEVEL_LOADING) || m_pGameInstance->Get_CurrentLevel() == ENUM_CLASS(LEVEL::LEVEL_LOGO) || m_pGameInstance->Get_CurrentLevel() == ENUM_CLASS(LEVEL::LEVEL_MAPEDIT))
+		return;
+
 	if (!m_bRender)
 		return;
 
@@ -81,6 +87,9 @@ void CChapMap::Update(_float fTimeDelta)
 
 void CChapMap::Late_Update(_float fTimeDelta)
 {
+	if (m_pGameInstance->Get_CurrentLevel() == ENUM_CLASS(LEVEL::LEVEL_LOADING) || m_pGameInstance->Get_CurrentLevel() == ENUM_CLASS(LEVEL::LEVEL_LOGO) || m_pGameInstance->Get_CurrentLevel() == ENUM_CLASS(LEVEL::LEVEL_MAPEDIT))
+		return;
+
 	if (!m_bRender)
 		return;
 

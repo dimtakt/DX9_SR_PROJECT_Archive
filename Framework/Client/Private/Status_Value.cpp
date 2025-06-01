@@ -19,10 +19,11 @@ HRESULT CStatus_Value::Initialize(void* pArg)
 {
 	UIOBJECT_DESC* Desc = static_cast<UIOBJECT_DESC*>(pArg);
 
-	m_fSizeX = 64;
-	m_fSizeY = 64 ;
-	m_fX = 0;
-	m_fY = 0;
+	m_iTexIndex = Desc->fZ;
+	m_fSizeX = 22;
+	m_fSizeY = 22 ;
+	m_fX = - 110;
+	m_fY = Desc->fY;
 	m_fZ = UI_DEPTH::PLAYER_STAUTS;
 	m_iWinSizeX = g_iWinSizeX;
 	m_iWinSizeY = g_iWinSizeY;
@@ -56,7 +57,7 @@ HRESULT CStatus_Value::Render()
 {
 	SetUp_RenderState();
 
-	if (FAILED(m_pTextureCom->Bind_Texture(6)))
+	if (FAILED(m_pTextureCom->Bind_Texture(m_iTexIndex)))
 		return E_FAIL;
 	m_pVIBufferCom->Bind_Buffers();
 
@@ -78,7 +79,7 @@ HRESULT CStatus_Value::Ready_Components()
 		TEXT("Com_Transform"), reinterpret_cast<CComponent**>(&m_pTransformCom))))
 		return E_FAIL;
 
-	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Rect_Status_Window_Frame"),
+	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Rect_Status_Icon"),
 		TEXT("Com_Texture"), reinterpret_cast<CComponent**>(&m_pTextureCom))))
 		return E_FAIL;
 
