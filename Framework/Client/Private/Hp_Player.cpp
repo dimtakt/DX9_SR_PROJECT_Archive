@@ -1,5 +1,6 @@
 #include "Hp_Player.h"
 #include "GameInstance.h"
+#include "Client_Defines_Event.h"
 
 CHp_Player::CHp_Player(LPDIRECT3DDEVICE9 pGraphic_Device) : CProgressBar( pGraphic_Device )
 {
@@ -36,7 +37,7 @@ HRESULT CHp_Player::Initialize(void* pArg)
 	m_pTransformCom->Scaling(m_fSizeX, m_fSizeY, 1.f);
 	__super::Update_Position();
 
-
+	m_pGameInstance->Subscribe(ENUM_CLASS(EVENT_TYPE::PLAYERTSTATCHANGE), this);
 
 	return S_OK;
 }
@@ -105,6 +106,16 @@ void CHp_Player::Render_Font()
 
 }
 
+void CHp_Player::OnEvent(_uint iTypeindex, const EVENTDATA* pData)
+{
+	if (static_cast<EVENT_TYPE>(iTypeindex) == EVENT_TYPE::PLAYERTSTATCHANGE) {
+		auto pStat = static_cast<const STATCHANGE*>(pData);
+		if (pStat->eStatType == STAT_INFO::CULHP) {
+			m_iCulValue = pStat->fValue;
+		}
+	}
+}
+
 
 CHp_Player* CHp_Player::Create(LPDIRECT3DDEVICE9 pGraphic_Device)
 {
@@ -132,6 +143,7 @@ CGameObject* CHp_Player::Clone(void* pArg)
 
 void CHp_Player::Free()
 {
+	m_pGameInstance->Unsubscribe(ENUM_CLASS(EVENT_TYPE::PLAYERTSTATCHANGE), this);
 	__super::Free();
 	Safe_Release(m_pVIBufferCom);
 }

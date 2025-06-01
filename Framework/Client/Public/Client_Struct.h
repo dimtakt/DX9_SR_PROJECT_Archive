@@ -11,5 +11,10 @@ typedef struct tagMAPObjectDesc
 	_int iTextureIndex = { 0 };
 }MAP_OBJECT_DESC;
 
+typedef struct tagInteractionDesc : public tagMAPObjectDesc
+{
+	POTAL_TYPE ePotalType;
+
+}OBJECT_INTERACTION_DESC;
 
 END
