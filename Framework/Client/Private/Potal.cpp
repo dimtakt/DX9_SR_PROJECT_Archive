@@ -1,24 +1,24 @@
-#include "Tree.h"
+#include "Potal.h"
 
 #include "GameInstance.h"
 #include "Client_Struct.h"
 
-CTree::CTree(LPDIRECT3DDEVICE9 pGraphic_Device)
+CPotal::CPotal(LPDIRECT3DDEVICE9 pGraphic_Device)
     : CGameObject{ pGraphic_Device }
 {
 }
 
-CTree::CTree(const CTree& Prototype)
+CPotal::CPotal(const CPotal& Prototype)
     : CGameObject{ Prototype }
 {
 }
 
-HRESULT CTree::Initialize_Prototype()
+HRESULT CPotal::Initialize_Prototype()
 {
     return S_OK;
 }
 
-HRESULT CTree::Initialize(void* pArg)
+HRESULT CPotal::Initialize(void* pArg)
 {
     if (FAILED(Ready_Components()))
         return E_FAIL;
@@ -29,7 +29,7 @@ HRESULT CTree::Initialize(void* pArg)
         return S_OK;
     }
 
-    MAP_OBJECT_DESC* pObject_Desc = static_cast<MAP_OBJECT_DESC*>(pArg);
+    OBJECT_INTERACTION_DESC* pObject_Desc = static_cast<OBJECT_INTERACTION_DESC*>(pArg);
 
     m_pTransformCom->Set_State(STATE::POSITION, pObject_Desc->vPos);
 
@@ -37,32 +37,34 @@ HRESULT CTree::Initialize(void* pArg)
     if (pObject_Desc->vRotate.x != 0.f || pObject_Desc->vRotate.y != 0.f || pObject_Desc->vRotate.z != 0.f)
         m_pTransformCom->ApplyEulerRotation(pObject_Desc->vRotate);
        
-    m_pTransformCom->Set_RotationEuler(pObject_Desc->vRotate.x, pObject_Desc->vRotate.y,pObject_Desc->vRotate.z);
+    if(pObject_Desc->vRotate != nullptr)
+      m_pTransformCom->Set_RotationEuler(pObject_Desc->vRotate.x, pObject_Desc->vRotate.y,pObject_Desc->vRotate.z);
 
+    if (pObject_Desc->vRotate != nullptr)
     m_pTransformCom->Scaling(pObject_Desc->vScale.x, pObject_Desc->vScale.y, pObject_Desc->vScale.z);
 
     m_iTextureIndex = pObject_Desc->iTextureIndex;
     m_pTextureCom->Bind_Texture(m_iTextureIndex);
-    m_eObjType = GAMEOBJ_TYPE::OBJECT;
+    m_eDirType = pObject_Desc->ePotalType;
 
     return S_OK;
 }
 
-void CTree::Priority_Update(_float fTimeDelta)
+void CPotal::Priority_Update(_float fTimeDelta)
 {
 
 }
 
-void CTree::Update(_float fTimeDelta)
+void CPotal::Update(_float fTimeDelta)
 {
 }
 
-void CTree::Late_Update(_float fTimeDelta)
+void CPotal::Late_Update(_float fTimeDelta)
 {
     m_pGameInstance->Add_RenderGroup(RENDERGROUP::RG_PRIORITY, this);
 }
 
-HRESULT CTree::Render()
+HRESULT CPotal::Render()
 {
     m_pTransformCom->Bind_Matrix();
 
@@ -76,14 +78,14 @@ HRESULT CTree::Render()
     return S_OK;
 }
 
-HRESULT CTree::Ready_Components()
+HRESULT CPotal::Ready_Components()
 {
     if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_VIBuffer_Rect"),
         TEXT("Com_VIBuffer"), reinterpret_cast<CComponent**>(&m_pVIBufferCom))))
         return E_FAIL;
 
     /* For.Com_Texture */
-    if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_SHARED), TEXT("Prototype_Component_Texture_Tree"),
+    if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_SHARED), TEXT("Prototype_Component_Texture_Potal"),
         TEXT("Com_Texture"), reinterpret_cast<CComponent**>(&m_pTextureCom))))
         return E_FAIL;
 
@@ -95,22 +97,12 @@ HRESULT CTree::Ready_Components()
         TEXT("Com_Transform"), reinterpret_cast<CComponent**>(&m_pTransformCom), &TransformDesc)))
         return E_FAIL;
 
-    /*m_pVIBufferCom = dynamic_cast<CVIBuffer_Rect*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::COMPONENT, ));
-
-    if (nullptr == m_pVIBufferCom)
-        return E_FAIL;
-
-    if (nullptr == Get_Component(TEXT("Com_VIBuffer")))
-        m_Components.emplace(TEXT("Com_VIBuffer"), m_pVIBufferCom);
-
-    Safe_AddRef(m_pVIBufferCom);*/
-
     return S_OK;
 }
 
-CTree* CTree::Create(LPDIRECT3DDEVICE9 pGraphic_Device)
+CPotal* CPotal::Create(LPDIRECT3DDEVICE9 pGraphic_Device)
 {
-    CTree* pInstance = new CTree(pGraphic_Device);
+    CPotal* pInstance = new CPotal(pGraphic_Device);
 
     if (FAILED(pInstance->Initialize_Prototype()))
     {
@@ -121,20 +113,20 @@ CTree* CTree::Create(LPDIRECT3DDEVICE9 pGraphic_Device)
     return pInstance;
 }
 
-CGameObject* CTree::Clone(void* pArg)
+CGameObject* CPotal::Clone(void* pArg)
 {
-    CTree* pInstance = new CTree(*this);
+    CPotal* pInstance = new CPotal(*this);
 
     if (FAILED(pInstance->Initialize(pArg)))
     {
-        MSG_BOX(TEXT("Failde to Cloned : CTree"));
+        MSG_BOX(TEXT("Failde to Cloned : CPotal"));
         Safe_Release(pInstance);
     }
 
     return pInstance;
 }
 
-void CTree::Free()
+void CPotal::Free()
 {
     __super::Free();
 

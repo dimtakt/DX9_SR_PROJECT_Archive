@@ -14,6 +14,7 @@
 #include "Animations/Anim_Player_Attack.h"
 #include "Animations/Anim_Player_Attack2.h"
 #include "Animations/Anim_Player_Parry.h"
+#include "Room_Manager.h"
 #pragma endregion
 
 
@@ -62,6 +63,8 @@ void CLevel_GamePlay::Update(_float fTimeDelta)
 	{
 		if (FAILED(m_pGameInstance->Open_Level(ENUM_CLASS(LEVEL::LEVEL_LOADING), CLevel_Loading::Create(m_pGraphic_Device, LEVEL::LEVEL_STAGE1))))
 			return;
+
+		CRoom_Manager::GetInstance()->Clear(ENUM_CLASS(LEVEL::LEVEL_GAMEPLAY));
 	}
 	
 }

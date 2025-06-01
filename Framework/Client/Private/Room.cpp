@@ -126,9 +126,35 @@ HRESULT CRoom::Ready_Objects(void* pArg)
 	return S_OK;
 }
 
+HRESULT CRoom::Ready_Potal(_uint iLayerLevelIndex, const _wstring& strLayerTag, _float3 vOffset, POTAL_TYPE eType)
+{
+	OBJECT_INTERACTION_DESC pDesc{};
+	pDesc.ePotalType = eType;
+	pDesc.iTextureIndex = 0;
+	pDesc.vScale = { 1.f, 1.f, 1.f };
+	pDesc.vRotate = { 0.f, 0.f, 0.f };
+	CTransform* pTransform = static_cast<CTransform*>(m_pTerrainBox->Find_Component(TEXT("Com_Transform_TerrainBox")));
+	pDesc.vPos = pTransform->Get_State(STATE::POSITION) + vOffset;
+
+	m_pGameInstance->Add_GameObject_ToLayer(
+		iLayerLevelIndex, strLayerTag,
+		iLayerLevelIndex,
+		TEXT("Prototype_GameObject_Potal"),
+		&pDesc);
+
+	CPotal* pPotal = static_cast<CPotal*>(m_pGameInstance->Get_LastGameObject(iLayerLevelIndex, strLayerTag));
+	m_vPotal.push_back(pPotal);
+
+	return E_NOTIMPL;
+}
+
 HRESULT CRoom::Load_From_File(_uint iLayerLevelIndex, const _wstring& strLayerTag, const _tchar* pLoadFileTag, _int iIndex, _int RoomX , _int RoomZ)
 {
 	Compute_ObjectOffset(RoomX, RoomZ);
+
+	/*m_iID = iIndex;*/
+	m_iRoomX = RoomX;
+	m_iRoomZ = RoomZ;
 
 	_tchar szFileName[MAX_PATH] = {};
 	

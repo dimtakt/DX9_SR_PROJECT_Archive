@@ -57,6 +57,7 @@ HRESULT CRoom_Manager::Enter_Room(_int iRoomID)
 
 vector<pair<_int, _int>> CRoom_Manager::Create_RandomRooms(_int iRoomMax)
 {
+
 	_int x{ 0 }, z{ 0 };
 
 	m_RoomIndex.push_back({ x, z });
@@ -94,6 +95,92 @@ vector<pair<_int, _int>> CRoom_Manager::Create_RandomRooms(_int iRoomMax)
 	return vector<pair<_int, _int>>(m_RoomIndex);
 }
 
+HRESULT CRoom_Manager::Check_Room(_uint iLayerLevelIndex, const _wstring& strLayerTag, _int iRoomID)
+{
+	CRoom* pRoom = Get_RoomByID(iRoomID);
+
+	_int X = pRoom->Get_RoomX();
+	_int Z = pRoom->Get_RoomZ();
+
+	//x - 1, x + 1 , z - 1 , z + 1 을 체크해줘야 함.
+	for (auto& Room : m_RoomIndex) 
+	{
+		_int iNeighborRoomX = Room.first;
+		_int iNeighborRoomZ = Room.second;
+
+		if(iNeighborRoomX == X - 1 && iNeighborRoomZ == Z)
+		{
+			//현재 찾은 ID의 룸에 포탈 생성 함수 자동 호출, _float3는 오프셋값 그 룸이 가지고 있는 지형을 중심 기줌으로 포탈의 위치를 -40.f 준것
+			pRoom->Ready_Potal(iLayerLevelIndex, strLayerTag, _float3(-10.f, 2.f, 0.f), POTAL_TYPE::LEFT);
+		}
+
+		if(iNeighborRoomX == X + 1 && iNeighborRoomZ == Z)
+		{
+			pRoom->Ready_Potal(iLayerLevelIndex, strLayerTag, _float3(10.f, 2.f, 0.f), POTAL_TYPE::RIGHT);
+		}
+
+		if(iNeighborRoomZ == Z - 1 && iNeighborRoomX == X)
+		{
+			pRoom->Ready_Potal(iLayerLevelIndex, strLayerTag, _float3(0.f, 2.f, -10.f), POTAL_TYPE::DOWN);
+		}
+
+		if(iNeighborRoomZ == Z + 1 && iNeighborRoomX == X)
+		{
+			pRoom->Ready_Potal(iLayerLevelIndex, strLayerTag, _float3(0.f, 2.f, 10.f), POTAL_TYPE::UP);
+		}
+
+	}
+
+	return S_OK;
+}
+
+//HRESULT CRoom_Manager::Check_Potal_Coll(POTAL_TYPE ePotal)
+//{
+	//	CRoom* pRoom = Get_CurrentRoom();
+//
+//	_int X = pRoom->Get_RoomX();
+//	_int Z = pRoom->Get_RoomZ();
+//
+//	POTAL_TYPE ePotal = {};
+//
+//	if (ePotalType == POTAL_TYPE::LEFT) // X - 1 , Z 그대로
+//	{
+//		X -= 1;
+//		ePotal = POTAL_TYPE::RIGHT;
+//	}
+//	else if (ePotalType == POTAL_TYPE::RIGHT)
+//	{
+//		X += 1;
+//		ePotal = POTAL_TYPE::LEFT;
+//	}
+//	else if (ePotalType == POTAL_TYPE::UP)
+//	{
+//		Z += 1;
+//		ePotal = POTAL_TYPE::DOWN;
+//	}
+//	else if (ePotalType == POTAL_TYPE::DOWN)
+//	{
+//		Z -= 1;
+//		ePotal = POTAL_TYPE::UP;
+//	}
+//	for (auto& Room : m_RoomIndex)
+//	{
+//		_int iNeighborRoomX = Room.first;
+//		_int iNeighborRoomZ = Room.second;
+//
+//		if (iNeighborRoomX == X && iNeighborRoomZ == Z)
+//		{
+//			같은 값 가진 얘만 Find
+//		}
+//
+//
+//	}
+//
+//	return S_OK;
+//}
+
+
+
 
 CRoom* CRoom_Manager::Get_CurrentRoom()
 {
@@ -128,6 +215,14 @@ CRoom* CRoom_Manager::Get_RoomByID(_int iRoomID)
 	}
 
 	return nullptr;
+}
+
+CRoom* CRoom_Manager::Find_Roomd(_int iRoomIndexX, _int iRoomIndexZ)
+{
+	// 가지고 있는 룸 정보 꺼내와서 들어온 x,z 와 같은 값 가지고 있는 룸 주소 리턴 해주고자 함.
+
+	return nullptr;
+
 }
 
 void CRoom_Manager::Clear(_uint iLevelIndex)
