@@ -55,6 +55,7 @@ HRESULT CDice_Player::Render()
 {
 	SetUp_RenderState();
 
+	
 	if (FAILED(m_pTextureCom->Bind_Texture(0)))
 		return E_FAIL;
 	m_pVIBufferCom->Bind_Buffers();
