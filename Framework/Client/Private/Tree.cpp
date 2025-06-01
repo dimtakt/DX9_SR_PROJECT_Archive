@@ -64,16 +64,40 @@ void CTree::Late_Update(_float fTimeDelta)
 
 HRESULT CTree::Render()
 {
-    m_pTransformCom->Bind_Matrix();
+    SetUp_RenderState();
 
+    m_pTransformCom->Bind_Matrix();
     if (FAILED(m_pTextureCom->Bind_Texture(m_iTextureIndex)))
         return E_FAIL;
-
-    /* 그리기위해 이용할 자원과 설정들을 장치에 바인딩한다. */
     m_pVIBufferCom->Bind_Buffers();
 
     m_pVIBufferCom->Render();
+
+    Reset_RenderState();
+
     return S_OK;
+}
+
+void CTree::SetUp_RenderState()
+{
+    m_pGraphic_Device->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
+    m_pGraphic_Device->SetRenderState(D3DRS_ALPHAREF, 200);
+    m_pGraphic_Device->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER);
+
+    m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_POINT);
+    m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_POINT);
+    m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MIPFILTER, D3DTEXF_NONE);
+}
+
+void CTree::Reset_RenderState()
+{
+    m_pGraphic_Device->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
+
+    m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_LINEAR);
+    m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);
+    m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MIPFILTER, D3DTEXF_LINEAR);
+
+    m_pGraphic_Device->SetTexture(0, NULL);
 }
 
 HRESULT CTree::Ready_Components()

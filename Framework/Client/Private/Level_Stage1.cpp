@@ -163,11 +163,10 @@ HRESULT CLevel_Stage1::Ready_Layer_Room(const _wstring& strLayerTag)
 			CMonster::MONSTERDESC tDesc = {};
 			tDesc.iLayerLevelIndex = ENUM_CLASS(LEVEL::LEVEL_STAGE1);
 			tDesc.iPrototypeLevelIndex = ENUM_CLASS(LEVEL::LEVEL_STAGE1);
-			tDesc.strLayerTag = strLayerTag;
+			tDesc.strLayerTag = strLayerTag; 
 			//tDesc.strPrototypeTag = TEXT("Prototype_GameObject_ShortMonster");
 			//tDesc.strPrototypeTag = TEXT("Prototype_GameObject_Monster_Mole_A");
 			tDesc.strPrototypeTag = TEXT("Prototype_GameObject_Monster_Oink_A");
-			tDesc.vPosition = _float3(10.f * i + 10.f, 0.f, 5.f * i + 5.f);
 			tDesc.pTerrainBox = pRoom->Get_TerrainBox();
 			//pMonster = dynamic_cast<CMonster_Default*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::LEVEL_STAGE1), TEXT("Prototype_GameObject_ShortMonster")));
 			//NULL_CHECK_RETURN(pMonster, E_FAIL);

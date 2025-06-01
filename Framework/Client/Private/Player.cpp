@@ -46,7 +46,7 @@ void CPlayer::Update(_float fTimeDelta)
 {    
     //m_pCollider->Update_Collider();
     if (m_pTerrainBox != nullptr) {
-        m_pTerrainBox->SetUp_OnTerrainBox(m_pTransformCom, _float3(0.f, 0.1f, 0.f));
+        m_pTerrainBox->SetUp_OnTerrainBox(m_pTransformCom, _float3(0.f, 0.2f, 0.f));
     }
 
     _float fPointY = 0.f;       // 교차 평면의 기준이 될 Y값
@@ -665,8 +665,8 @@ void CPlayer::Free()
     Safe_Release(m_pPlayerStatsCom);
     Safe_Release(m_pAnimatorCom);
     Safe_Release(m_pAnimatorTransCom);
-    /*Safe_Release(m_pTerrainBox);*/
-    m_pTerrainBox = nullptr;
+    Safe_Release(m_pTerrainBox);
+    
     
     /*if (m_pCollider)
     {
