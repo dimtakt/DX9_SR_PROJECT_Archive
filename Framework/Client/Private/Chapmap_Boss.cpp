@@ -22,7 +22,6 @@ HRESULT CChapmap_Boss::Initialize(void* pArg)
 	m_fSizeX = 150;
 	m_fSizeY = 150;
 
-
 	m_fX = 0.f;
 	m_fY = 50.f;
 	m_fZ = UI_DEPTH::CHATERMAP_BUTTON;

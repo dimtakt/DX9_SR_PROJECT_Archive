@@ -36,8 +36,11 @@ namespace Client
 		static constexpr float CHATERMAP = 0.26f;
 		static constexpr float CHATERMAP_BUTTON = 0.24f;
 		static constexpr float CHATERMAP_UP = 0.245f;
-		static constexpr float CHATERMAP_Player = 0.235f;
+		static constexpr float CHATERMAP_PLAYER = 0.235f;
 		static constexpr float CHATERMAP_LINE = 0.242f;
+
+		//플레이어 스테이터스 창
+		static constexpr float PLAYER_STAUTS = 0.2f;
 	};
 
 };

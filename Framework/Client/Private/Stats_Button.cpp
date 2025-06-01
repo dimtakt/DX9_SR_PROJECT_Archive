@@ -1,6 +1,7 @@
 #include "Stats_Button.h"
 #include "GameInstance.h"
 #include "UI_KeyGuide.h"
+#include "Status_Window.h"
 
 CStats_Button::CStats_Button(LPDIRECT3DDEVICE9 pGraphic_Device) : CButton(pGraphic_Device)
 {
@@ -42,6 +43,9 @@ HRESULT CStats_Button::Initialize(void* pArg)
 	if (FAILED(Ready_Children()))
 		return E_FAIL;
 
+	if (FAILED(Setting_Target()))
+		return E_FAIL;
+
 	return S_OK;
 }
 
@@ -52,6 +56,12 @@ void CStats_Button::Priority_Update(_float fTimeDelta)
 
 void CStats_Button::Update(_float fTimeDelta)
 {
+	if (Check_Key_Down(g_hWnd, VK_LBUTTON))
+		static_cast<CStatus_Window*>(m_pTargetUI)->UI_Switch();
+
+	if (m_pGameInstance->IsKeyDown('C'))
+		static_cast<CStatus_Window*>(m_pTargetUI)->UI_Switch();
+
 	CUIObject::Update(fTimeDelta);
 }
 
@@ -114,7 +124,7 @@ void CStats_Button::Reset_RenderState()
 HRESULT CStats_Button::Ready_ChildPrototype(LEVEL eLevel)
 {
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(eLevel), TEXT("Prototype_GameObject_UI_StatsButton_Guide"),
-		CUI_KeyGuide::Create(m_pGraphic_Device, TEXT("X")))))
+		CUI_KeyGuide::Create(m_pGraphic_Device, TEXT("C")))))
 		return E_FAIL;
 
 	return S_OK;
@@ -128,6 +138,20 @@ HRESULT CStats_Button::Ready_Children()
 	if (nullptr == pGameObject)
 		return E_FAIL;
 	Add_Child(pGameObject);
+
+	return S_OK;
+}
+
+HRESULT CStats_Button::Setting_Target()
+{
+	m_pTargetUI = m_pGameInstance->Get_GameObject(ENUM_CLASS(LEVEL::LEVEL_GAMEPLAY), TEXT("Layer_Status"), 0);
+
+	if (m_pTargetUI == nullptr)
+	{
+		MSG_BOX(TEXT("Failed to Setting : CInven_Button"));
+		return E_FAIL;
+	}
+	Safe_AddRef(m_pTargetUI);
 
 	return S_OK;
 }

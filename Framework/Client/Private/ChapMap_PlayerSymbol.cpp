@@ -22,7 +22,7 @@ HRESULT CChapMap_PlayerSymbol::Initialize(void* pArg)
     m_fSizeY = 100;
     m_fX = 0.f;
     m_fY = 0.f;
-    m_fZ = UI_DEPTH::CHATERMAP_Player;
+    m_fZ = UI_DEPTH::CHATERMAP_PLAYER;
     m_iWinSizeX = g_iWinSizeX;
     m_iWinSizeY = g_iWinSizeY;
 

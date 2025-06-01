@@ -256,6 +256,18 @@
     <Filter Include="02.GameObject\UI\Window\ChapMap\ChapMap_Line">
       <UniqueIdentifier>{158d2a62-f001-4702-82e3-1e0f71406a06}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\UI\Window\Status_Window">
+      <UniqueIdentifier>{b8935682-b10b-4b1b-83ec-9e34c446efcb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\UI\Window\Status_Window\Stauts_Frame">
+      <UniqueIdentifier>{5650d645-75a3-4830-93a8-b105b622651a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\UI\Window\Status_Window\Stauts_Frame\Status_Miracle_Frame">
+      <UniqueIdentifier>{099f1a29-fbc4-4a1a-8f43-b701b389df07}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\UI\Window\Status_Window\Stauts_Frame\Status_Stat_Frame">
+      <UniqueIdentifier>{c72af6f8-ab18-4e63-a8cd-eaa59e2185f1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -522,6 +534,24 @@
     <ClInclude Include="..\public\ChapMap_Line.h">
       <Filter>02.GameObject\UI\Window\ChapMap\ChapMap_Line</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\Status_Window.h">
+      <Filter>02.GameObject\UI\Window\Status_Window</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Status_Frame_UP.h">
+      <Filter>02.GameObject\UI\Window\Status_Window\Stauts_Frame</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Status_Frame_Mid.h">
+      <Filter>02.GameObject\UI\Window\Status_Window\Stauts_Frame</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Status_Frame_Down.h">
+      <Filter>02.GameObject\UI\Window\Status_Window\Stauts_Frame</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Status_Miracle_Frame.h">
+      <Filter>02.GameObject\UI\Window\Status_Window\Stauts_Frame\Status_Miracle_Frame</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Status_Stat_Frame.h">
+      <Filter>02.GameObject\UI\Window\Status_Window\Stauts_Frame\Status_Stat_Frame</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -752,6 +782,24 @@
     </ClCompile>
     <ClCompile Include="..\private\ChapMap_Line.cpp">
       <Filter>02.GameObject\UI\Window\ChapMap\ChapMap_Line</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Status_Window.cpp">
+      <Filter>02.GameObject\UI\Window\Status_Window</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Status_Frame_UP.cpp">
+      <Filter>02.GameObject\UI\Window\Status_Window\Stauts_Frame</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Status_Frame_Mid.cpp">
+      <Filter>02.GameObject\UI\Window\Status_Window\Stauts_Frame</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Status_Frame_Down.cpp">
+      <Filter>02.GameObject\UI\Window\Status_Window\Stauts_Frame</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Status_Miracle_Frame.cpp">
+      <Filter>02.GameObject\UI\Window\Status_Window\Stauts_Frame\Status_Miracle_Frame</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Status_Stat_Frame.cpp">
+      <Filter>02.GameObject\UI\Window\Status_Window\Stauts_Frame\Status_Stat_Frame</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -113,7 +113,7 @@ void CMirror_Button::Reset_RenderState()
 HRESULT CMirror_Button::Ready_ChildPrototype(LEVEL eLevel)
 {
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(eLevel), TEXT("Prototype_GameObject_UI_MirrorButton_Guide"),
-		CUI_KeyGuide::Create(m_pGraphic_Device, TEXT("C")))))
+		CUI_KeyGuide::Create(m_pGraphic_Device, TEXT("P")))))
 
 	return E_NOTIMPL;
 }

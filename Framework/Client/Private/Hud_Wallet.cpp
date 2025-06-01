@@ -27,7 +27,7 @@ HRESULT CHud_Wallet::Initialize(void* pArg)
 	m_fSizeY = 0;
 	m_fX = g_iWinSizeX;
 	m_fY = g_iWinSizeY - 32.f;;
-	m_fZ = 0.f;
+	m_fZ = UI_DEPTH::PLAYER_STAUTS;
 	m_iWinSizeX = g_iWinSizeX;
 	m_iWinSizeY = g_iWinSizeY;
 
