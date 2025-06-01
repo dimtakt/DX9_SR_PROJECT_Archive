@@ -31,9 +31,12 @@ public:
 	virtual HRESULT Render() override;
 
 public:
-	void Change_TerrainBox(CTerrainBox* pTerrainBox)
+	void Change_TerrainBox(CTerrainBox* pTerrainBox, _int iIndex)
 	{
-		Safe_Release(m_pTerrainBox);
+		if (iIndex != 0)
+		{
+			Safe_Release(m_pTerrainBox);
+		}
 		m_pTerrainBox = pTerrainBox;
 		Safe_AddRef(m_pTerrainBox);
 	}

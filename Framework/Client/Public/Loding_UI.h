@@ -1,19 +1,16 @@
 #pragma once
 #include "UIObject.h"
 #include "Client_Defines.h"
-
 BEGIN(Engine)
 class CVIBuffer_Rect;
-class CTexture;
 END
-
 BEGIN(Client)
-class CStatus_Miracle_Frame final : public CUIObject
+class CLoding_UI final : public CUIObject
 {
 private:
-	CStatus_Miracle_Frame(LPDIRECT3DDEVICE9 pGraphic_Device);
-	CStatus_Miracle_Frame(const CStatus_Miracle_Frame& Prototype);
-	virtual							~CStatus_Miracle_Frame() = default;
+									CLoding_UI(LPDIRECT3DDEVICE9 pGraphic_Device);
+									CLoding_UI(const CLoding_UI& Prototype);
+	virtual							~CLoding_UI() = default;
 
 public:
 	virtual HRESULT					Initialize_Prototype(LEVEL eLevel);
@@ -25,8 +22,7 @@ public:
 
 private:
 	LEVEL							m_eLevel = {};
-	CVIBuffer_Rect* m_pVIBufferCom = { nullptr };
-	CTexture* m_pTextureCom = { nullptr };
+	CVIBuffer_Rect*					m_pVIBufferCom = { nullptr };
 
 private:
 	HRESULT							Ready_Components();
@@ -34,12 +30,12 @@ private:
 	HRESULT							Ready_ChildPrototype(LEVEL eLevel);
 	HRESULT							Ready_Children();
 
-	void							SetUp_RenderState();
-	void							Reset_RenderState();
+	void							Font_Render();
 
 public:
-	static CStatus_Miracle_Frame* Create(LPDIRECT3DDEVICE9 pGraphic_Device, LEVEL eLevel);
-	virtual CGameObject* Clone(void* pArg) override;
+	static CLoding_UI*				Create(LPDIRECT3DDEVICE9 pGraphic_Device, LEVEL eLevel);
+	virtual CGameObject*			Clone(void* pArg) override;
 	virtual void					Free() override;
 };
 END
+

@@ -30,7 +30,7 @@ HRESULT CRoom_Manager::Add_Room(CRoom* pRoom, _uint iLayerLevelIndex, const _wst
 		pRoom->Enter();
 		m_iCurrentLevelID = iLayerLevelIndex;
 		m_iCurrentRoomID = 0;
-		CTransform* pPlayerTransform = dynamic_cast<CTransform*>(m_pGameInstance->Get_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Layer_Player"), TEXT("Com_Transform")));
+		CTransform* pPlayerTransform = dynamic_cast<CTransform*>(m_pGameInstance->Get_Component(iLayerLevelIndex, TEXT("Layer_Player"), TEXT("Com_Transform")));
 		pPlayerTransform->Set_State(STATE::POSITION, _float3(0.f, 10.f, 0.f));
 	}
 	Safe_AddRef(pRoom);
@@ -187,7 +187,7 @@ HRESULT CRoom_Manager::Check_Potal_Coll(POTAL_TYPE ePotalType, _float3& vNextPos
 			CTransform* pPotalTransform = static_cast<CTransform*>(pPotal->Find_Component(TEXT("Com_Transform")));
 			Enter_Room(pNeighborRoom->GetID());
 			CPlayer* pPlayer = dynamic_cast<CPlayer*>(m_pGameInstance->Get_GameObject(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Layer_Player")));
-			pPlayer->Change_TerrainBox(pNeighborRoom->Get_TerrainBox());
+			pPlayer->Change_TerrainBox(pNeighborRoom->Get_TerrainBox(), 99);
 			vNextPos = (pPotalTransform->Get_State(STATE::POSITION)) + vOffset;
 			if (pPotal == nullptr || pPotalTransform == nullptr)
 				return E_FAIL;

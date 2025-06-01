@@ -117,6 +117,19 @@ HRESULT CRenderer::Render_UI()
 	return S_OK;
 }
 
+void CRenderer::Clear()
+{
+	for (size_t i = 0; i < ENUM_CLASS(RENDERGROUP::RG_END); i++)
+	{
+		for (auto& pRenderObject : m_RenderObjects[i])
+		{
+			Safe_Release(pRenderObject);
+		}
+		m_RenderObjects[i].clear();
+	}
+	
+}
+
 CRenderer* CRenderer::Create(LPDIRECT3DDEVICE9 pGraphic_Device)
 {
 	return new CRenderer(pGraphic_Device);

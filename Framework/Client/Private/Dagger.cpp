@@ -19,7 +19,7 @@ HRESULT CDagger::Initialize_Prototype()
 
 HRESULT CDagger::Initialize(void* pArg)
 {
-	if (FAILED(Ready_Components()))
+	if (FAILED(Ready_Components(pArg)))
 		return E_FAIL;
 
 	m_eObjType = GAMEOBJ_TYPE::WEAPON;
@@ -30,7 +30,7 @@ HRESULT CDagger::Initialize(void* pArg)
 void CDagger::Priority_Update(_float fTimeDelta)
 {
 	if (m_pTargetTransformCom == nullptr)
-		m_pTargetTransformCom = dynamic_cast<CTransform*>(m_pGameInstance->Get_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Layer_Player"), TEXT("Com_Transform")));
+		m_pTargetTransformCom = dynamic_cast<CTransform*>(m_pGameInstance->Get_Component(m_tDesc.iLayerIndex, TEXT("Layer_Player"), TEXT("Com_Transform")));
 
 }
 
@@ -113,7 +113,7 @@ void CDagger::OnCollision(CGameObject* pGameObject)
 	}
 }
 
-HRESULT	CDagger::Ready_Components()
+HRESULT	CDagger::Ready_Components(void* pArg)
 {
 	/* For Com_VIBuffer */
 	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_VIBuffer_Rect"),
@@ -149,9 +149,10 @@ HRESULT	CDagger::Ready_Components()
 	m_pAnimatorCom->Add_State(L"Idle", { m_pTextureCom, 4, true });
 
 
-
+	DAGGERDESC* pDesc = static_cast<DAGGERDESC*>(pArg);
+	m_tDesc = *pDesc;
 	/* Get Player Transform to m_pTargetTransformCom */
-	m_pTargetTransformCom = dynamic_cast<CTransform*>(m_pGameInstance->Get_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Layer_Player"), TEXT("Com_Transform")));
+	m_pTargetTransformCom = dynamic_cast<CTransform*>(m_pGameInstance->Get_Component(m_tDesc.iLayerIndex, TEXT("Layer_Player"), TEXT("Com_Transform")));
 
 	// collider
 	CCollider_OBB::OBB_DESC tColliderDesc;
@@ -271,7 +272,7 @@ void CDagger::Follow_Player()
 void CDagger::Look_At_Cursor()
 {
 	// 애니메이션의 기준점이 커서를 바라보도록 재조정 필요
-	CAnimator* pTargetAnimatorCom = dynamic_cast<CAnimator*>(m_pGameInstance->Get_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Layer_Player"), TEXT("Com_Animator")));
+	CAnimator* pTargetAnimatorCom = dynamic_cast<CAnimator*>(m_pGameInstance->Get_Component(m_tDesc.iLayerIndex, TEXT("Layer_Player"), TEXT("Com_Animator")));
 
 	_float3 vTargetPos = m_pTargetTransformCom->Get_State(STATE::POSITION);
 	_float fPointY = vTargetPos.y;       // 교차 평면의 기준이 될 Y값

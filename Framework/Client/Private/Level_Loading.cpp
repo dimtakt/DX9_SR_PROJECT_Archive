@@ -23,9 +23,6 @@ HRESULT CLevel_Loading::Initialize(LEVEL eNextLevelID)
 	if (FAILED(Ready_LoadingThread()))
 		return E_FAIL;
 
-	CTransform* pPlayerTransform = dynamic_cast<CTransform*>(m_pGameInstance->Get_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Layer_Player"), TEXT("Com_Transform")));
-	pPlayerTransform->Set_State(STATE::POSITION, _float3(12488.f, 12488.f, 12488.f));
-
 	return S_OK;
 }
 
@@ -67,6 +64,11 @@ HRESULT CLevel_Loading::Render()
 
 HRESULT CLevel_Loading::Ready_GameObjects()
 {
+	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_LOADING), TEXT("Layer_UI"),
+		ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_Loding"))))
+		return E_FAIL;
+
+
 	return S_OK;
 }
 

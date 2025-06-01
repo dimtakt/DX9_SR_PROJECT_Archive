@@ -20,6 +20,9 @@ public:
 	virtual void				Late_Update(_float fTimeDelta) override;
 	virtual HRESULT				Render() override;
 
+public:
+	void						FontRender_Switch();
+
 private:
 	CVIBuffer_Rect*				m_pVIBufferCom = { nullptr };
 	LEVEL						m_eLevel = {};

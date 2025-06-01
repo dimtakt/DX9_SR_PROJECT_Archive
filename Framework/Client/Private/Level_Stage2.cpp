@@ -117,7 +117,7 @@ HRESULT CLevel_Stage2::Ready_Layer_Player(const _wstring& strLayerTag)
 	
 	CRoom* pRoom = CRoom_Manager::GetInstance()->Get_CurrentRoom();
 	
-	pPlayer->Change_TerrainBox(dynamic_cast<CTerrainBox*>(pRoom->Get_TerrainBox()));
+	//pPlayer->Change_TerrainBox(dynamic_cast<CTerrainBox*>(pRoom->Get_TerrainBox()));
 
 	return S_OK;
 }

@@ -2,6 +2,7 @@
 #include "Client_Struct.h"
 #include "GameInstance.h"
 #include "Camera_Free.h"
+#include "Camera_Follow.h"
 #include "Player.h"
 #include "Hud_Buff.h"
 #include "Room.h"
@@ -13,6 +14,7 @@
 #include "Field_Hp.h"
 #include "Animation.h"
 #include "Mole_A.h"
+#include "Dagger.h"
 
 CLevel_Stage1::CLevel_Stage1(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CLevel{ pGraphic_Device }
@@ -26,10 +28,10 @@ HRESULT CLevel_Stage1::Initialize()
 	if (FAILED(Ready_Light()))
 		return E_FAIL;
 
-	if (FAILED(Ready_Layer_Camera(TEXT("Layer_Camera"))))
+	if (FAILED(Ready_Layer_BackGround(TEXT("Layer_BackGround"))))
 		return E_FAIL;
 
-	if (FAILED(Ready_Layer_BackGround(TEXT("Layer_BackGround"))))
+	if (FAILED(Ready_Layer_Player(TEXT("Layer_Player"))))
 		return E_FAIL;
 
 	if (FAILED(Ready_Layer_Room(TEXT("Layer_Room"))))
@@ -38,7 +40,7 @@ HRESULT CLevel_Stage1::Initialize()
 	if (FAILED(Ready_Layer_UI(TEXT("Layer_UI"))))
 		return E_FAIL;
 
-	if (FAILED(Ready_Layer_Player(TEXT("Layer_Player"))))
+	if (FAILED(Ready_Layer_Camera(TEXT("Layer_Camera"))))
 		return E_FAIL;
 
 	return S_OK;
@@ -85,8 +87,11 @@ HRESULT CLevel_Stage1::Ready_Light()
 
 HRESULT CLevel_Stage1::Ready_Layer_Camera(const _wstring& strLayerTag)
 {
+	CCamera_Follow::CAMERAFOLDESC desc{};
+	desc.iLayerIndex = ENUM_CLASS(LEVEL::LEVEL_STAGE1);
+
 	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_STAGE1), strLayerTag,
-		ENUM_CLASS(LEVEL::LEVEL_STAGE1), TEXT("Prototype_GameObject_Camera_Follow"))))
+		ENUM_CLASS(LEVEL::LEVEL_STAGE1), TEXT("Prototype_GameObject_Camera_Follow"), &desc)))
 		return E_FAIL;
 
 	/*if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_STAGE1), strLayerTag,
@@ -106,15 +111,16 @@ HRESULT CLevel_Stage1::Ready_Layer_BackGround(const _wstring& strLayerTag)
 
 HRESULT CLevel_Stage1::Ready_Layer_Player(const _wstring& strLayerTag)
 {
-	/*if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_STATIC), strLayerTag,
-		ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_Player"))))
-		return E_FAIL;*/
+	CDagger::DAGGERDESC desc{};
+	desc.iLayerIndex = ENUM_CLASS(LEVEL::LEVEL_STAGE1);
 
-	CPlayer* pPlayer = dynamic_cast<CPlayer*>(m_pGameInstance->Get_GameObject(ENUM_CLASS(LEVEL::LEVEL_STATIC), strLayerTag));
-	
-	CRoom* pRoom = CRoom_Manager::GetInstance()->Get_CurrentRoom();
-	
-	pPlayer->Change_TerrainBox(dynamic_cast<CTerrainBox*>(pRoom->Get_TerrainBox()));
+	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_STAGE1), TEXT("Layer_Weapon"),
+		ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_Weapon_Dagger"), &desc)))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_STAGE1), TEXT("Layer_Player"),
+		ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_Player"))))
+		return E_FAIL;
 
 	return S_OK;
 }
@@ -139,6 +145,13 @@ HRESULT CLevel_Stage1::Ready_Layer_Room(const _wstring& strLayerTag)
 
 		//현재 정해진 ID값의 룸에 지형, 오브젝트 세팅 내부에서 지형 위치 자동 배치
 		pRoom->Load_From_File(ENUM_CLASS(LEVEL::LEVEL_STAGE1), strLayerTag, TEXT("../../data/Stage2_Map%d.txt"), num, RoomX, RoomZ);
+
+		if(num == 0)
+		{
+			CPlayer* pPlayer = dynamic_cast<CPlayer*>(m_pGameInstance->Get_GameObject(ENUM_CLASS(LEVEL::LEVEL_STAGE1), TEXT("Layer_Player")));
+			pPlayer->Change_TerrainBox(dynamic_cast<CTerrainBox*>(pRoom->Get_TerrainBox()), num);
+		}
+		
 
 		CMole_A* pMonster = nullptr;
 		list<CMonster::MONSTERDESC> DescList;
@@ -177,7 +190,7 @@ HRESULT CLevel_Stage1::Ready_Layer_Room(const _wstring& strLayerTag)
 
 HRESULT CLevel_Stage1::Ready_Layer_UI(const _wstring& strLayerTag)
 {
-	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_STATIC), strLayerTag,
+	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Layer_Hud_States"),
 		ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_Hud_States"))))
 		return E_FAIL;
 
@@ -189,9 +202,9 @@ HRESULT CLevel_Stage1::Ready_Layer_UI(const _wstring& strLayerTag)
 		ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_Hud_Wallet"))))
 		return E_FAIL;
 
-	/*if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_STATIC), strLayerTag,
+  	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_STATIC), strLayerTag,
 		ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_Hud_Dash"))))
-		return E_FAIL;*/
+		return E_FAIL;
 	CHud_Buff::UIHUD_BUFF_DESC Desc{};
 	Desc.fX = 190.f;
 	Desc.fY = 100.f;
@@ -216,9 +229,9 @@ HRESULT CLevel_Stage1::Ready_Layer_UI(const _wstring& strLayerTag)
 	Field_HP_Desc.iTarget_Index = 0;
 	Field_HP_Desc.fY = 30.f;
 
-	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_STATIC), strLayerTag,
-		ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_Field_Hp"), &Field_HP_Desc)))
-		return E_FAIL;
+	//if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_STATIC), strLayerTag,
+	//	ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_Field_Hp"), &Field_HP_Desc)))
+	//	return E_FAIL;
 
 	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Layer_Inventory"),
 		ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_Inventory"))))
