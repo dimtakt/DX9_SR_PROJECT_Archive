@@ -22,13 +22,15 @@ HRESULT CMonster::Initialize(void* pArg)
 	if (FAILED(Ready_Components()))
 		return E_FAIL;
 
-	m_pTransformCom->Set_State(STATE::POSITION, _float3(
-		m_pGameInstance->Compute_Random(0.f, 50.f),
-		0.f,
-		m_pGameInstance->Compute_Random(0.f, 50.f)));
-
 	MONSTERDESC* desc = static_cast<MONSTERDESC*>(pArg);
 
+	CTransform* pTerrainTransform = dynamic_cast<CTransform*>(desc->pTerrainBox->Find_Component(TEXT("Com_Transform_TerrainBox")));
+	_float3 fTerrainPos = pTerrainTransform->Get_State(STATE::POSITION);
+	_float3 fTerrainScale = pTerrainTransform->Get_Scaled();
+	m_pTransformCom->Set_State(STATE::POSITION, _float3(
+		m_pGameInstance->Compute_Random(fTerrainPos.x - fTerrainScale.x/2.f, fTerrainPos.x + fTerrainScale.x / 2.f),
+		0.f,
+		m_pGameInstance->Compute_Random(fTerrainPos.z - fTerrainScale.z / 2.f, fTerrainPos.z + fTerrainScale.z / 2.f)));
 	//m_pTransformCom->Set_State(STATE::POSITION, desc->vPosition);
 	m_pTerrainBox = desc->pTerrainBox;
 	Safe_AddRef(m_pTerrainBox);

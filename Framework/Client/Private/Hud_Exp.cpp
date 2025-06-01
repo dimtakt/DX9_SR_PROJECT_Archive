@@ -1,6 +1,6 @@
 #include "Hud_Exp.h"
 #include "GameInstance.h"
-
+#include "Stat_Manager.h"
 CHud_Exp::CHud_Exp(LPDIRECT3DDEVICE9 pGraphic_Device) : CProgressBar(pGraphic_Device)
 {
 }
@@ -48,10 +48,12 @@ void CHud_Exp::Priority_Update(_float fTimeDelta)
 
 void CHud_Exp::Update(_float fTimeDelta)
 {
+
 }
 
 void CHud_Exp::Late_Update(_float fTimeDelta)
 {
+    m_iCulValue = CStat_Manager::GetInstance()->Get_CurStats()[ENUM_CLASS(STAT_INFO::EXP)];
     Progress_UpdateX();
     m_pGameInstance->Add_RenderGroup(RENDERGROUP::RG_UI, this);
 }

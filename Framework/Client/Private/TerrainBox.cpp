@@ -128,6 +128,9 @@ HRESULT CTerrainBox::Ready_Material()
 
 void CTerrainBox::SetUp_OnTerrainBox(CTransform* pTransformCom, _float3 vOffset)
 {
+	if (this == nullptr)
+		return;
+
 	_float3     vWorldPos = pTransformCom->Get_State(STATE::POSITION);
 
 	_float3     vLocalPos{};

@@ -22,7 +22,7 @@ public:
 
 private:
 	LEVEL							m_eLevel = {};
-	_uint							m_iDashMaxValue = {};
+	_float							m_iDashMaxValue = {};
 	CPlayerStats*					m_pPlayerStatsCom = { nullptr };
 
 private:
@@ -31,7 +31,6 @@ private:
 	HRESULT							Ready_ChildPrototype(LEVEL eLevel);
 	HRESULT							Ready_Children();
 
-	HRESULT							Reday_SyncingObject();
 public:
 	static CHud_Dash*				Create(LPDIRECT3DDEVICE9 pGraphic_Device, LEVEL eLevel);
 	virtual CGameObject*			Clone(void* pArg) override;

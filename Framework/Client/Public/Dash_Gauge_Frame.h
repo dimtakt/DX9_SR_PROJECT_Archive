@@ -32,7 +32,7 @@ private:
 	LEVEL							m_eLevel = {};
 	CVIBuffer_Rect*					m_pVIBufferCom = { nullptr };
 	CTexture*						m_pTextureCom = { nullptr };
-	_int							m_iIndex;
+	_int							m_iIndex = {};
 
 private:
 	HRESULT							Ready_Components();

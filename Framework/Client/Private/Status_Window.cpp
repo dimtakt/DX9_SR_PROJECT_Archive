@@ -3,7 +3,7 @@
 #include "Status_Frame_UP.h"
 #include "Status_Frame_Mid.h"
 #include "Status_Frame_Down.h"
-
+#include "Hud_States_Frame.h"
 CStatus_Window::CStatus_Window(LPDIRECT3DDEVICE9 pGraphic_Device) : CUIObject(pGraphic_Device)
 {
 }
@@ -15,9 +15,15 @@ CStatus_Window::CStatus_Window(const CStatus_Window& Prototype) : CUIObject(Prot
 void CStatus_Window::UI_Switch()
 {
 	if (m_bIsOpen)
+	{
 		m_bIsOpen = false;
+		static_cast<CHud_States_Frame*>(m_pGameInstance->Get_GameObject(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Layer_Hud_States")))->FontRender_Switch();
+	}
 	else
+	{
+		static_cast<CHud_States_Frame*>(m_pGameInstance->Get_GameObject(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Layer_Hud_States")))->FontRender_Switch();
 		m_bIsOpen = true;
+	}
 }
 
 HRESULT CStatus_Window::Initialize_Prototype(LEVEL eLevel)

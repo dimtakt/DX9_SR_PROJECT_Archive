@@ -25,6 +25,9 @@ private:
 	HRESULT Render_UI();
 
 public:
+	void Clear();
+
+public:
 	static CRenderer* Create(LPDIRECT3DDEVICE9 pGraphic_Device);
 	virtual void Free() override;
 };

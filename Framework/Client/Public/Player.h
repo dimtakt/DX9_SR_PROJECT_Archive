@@ -17,6 +17,11 @@ BEGIN(Client)
 
 class CPlayer final : public CGameObject, public IEventListener
 {
+public:
+	typedef struct tagPlayerDesc
+	{
+		_uint iLayerIndex;
+	}PLAYERDESC;
 private:
 	CPlayer(LPDIRECT3DDEVICE9 pGraphic_Device);
 	CPlayer(const CPlayer& Prototype);
@@ -31,9 +36,12 @@ public:
 	virtual HRESULT Render() override;
 
 public:
-	void Change_TerrainBox(CTerrainBox* pTerrainBox)
+	void Change_TerrainBox(CTerrainBox* pTerrainBox, _int iIndex)
 	{
-		Safe_Release(m_pTerrainBox);
+		if (iIndex != 0)
+		{
+			Safe_Release(m_pTerrainBox);
+		}
 		m_pTerrainBox = pTerrainBox;
 		Safe_AddRef(m_pTerrainBox);
 	}
@@ -81,7 +89,7 @@ private:
 
 
 private:
-	HRESULT Ready_Components();
+	HRESULT Ready_Components(void* pArg);
 	void SetUp_RenderState();
 	void Reset_RenderState();
 

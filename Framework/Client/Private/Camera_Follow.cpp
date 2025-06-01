@@ -21,7 +21,7 @@ HRESULT CCamera_Follow::Initialize(void* pArg)
 	if (FAILED(Ready_Components(pArg)))
 		return E_FAIL;
 
-	if (FAILED(Ready_Target()))
+	if (FAILED(Ready_Target(pArg)))
 		return E_FAIL;
 	
 	CCamera::CAMERA_DESC CameraDesc{};
@@ -72,9 +72,11 @@ HRESULT CCamera_Follow::Render()
 	return S_OK;
 }
 
-HRESULT CCamera_Follow::Ready_Target()
+HRESULT CCamera_Follow::Ready_Target(void* pArg)
 {
-	m_pTargetTransformCom = dynamic_cast<CTransform*>(m_pGameInstance->Get_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Layer_Player"), TEXT("Com_Transform")));
+	CAMERAFOLDESC* pDesc = static_cast<CAMERAFOLDESC*>(pArg);
+
+	m_pTargetTransformCom = dynamic_cast<CTransform*>(m_pGameInstance->Get_Component(pDesc->iLayerIndex, TEXT("Layer_Player"), TEXT("Com_Transform")));
 	if (m_pTargetTransformCom == nullptr)
 		return E_FAIL;
 
