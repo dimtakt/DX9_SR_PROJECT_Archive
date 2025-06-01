@@ -16,9 +16,6 @@ CRoom_Manager::CRoom_Manager()
 
 HRESULT CRoom_Manager::Initialize()
 {
-	CPlayer* pPlayer = dynamic_cast<CPlayer*>(m_pGameInstance->Get_GameObject(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Layer_Player")));
-	m_pPlayerTransform = static_cast<CTransform*>(pPlayer->Find_Component(TEXT("Com_Transform")));
-
 	return S_OK;
 }
 
@@ -143,7 +140,7 @@ HRESULT CRoom_Manager::Check_Room(_uint iLayerLevelIndex, const _wstring& strLay
 	return S_OK;
 }
 
-HRESULT CRoom_Manager::Check_Potal_Coll(POTAL_TYPE ePotalType)
+HRESULT CRoom_Manager::Check_Potal_Coll(POTAL_TYPE ePotalType, _float3& vNextPos)
 {
 	CRoom* pRoom = Get_CurrentRoom();
 
@@ -151,26 +148,32 @@ HRESULT CRoom_Manager::Check_Potal_Coll(POTAL_TYPE ePotalType)
 	_int Z = pRoom->Get_RoomZ();
 
 	POTAL_TYPE ePotal = {};
+	_float3 vOffset = {0.f, 0.f, 0.f};
 
 	if (ePotalType == POTAL_TYPE::LEFT) // X - 1 , Z ±×´ë·Î
 	{
 		X -= 1;
 		ePotal = POTAL_TYPE::RIGHT;
+		vOffset.x = -2.f;
+		
 	}
 	else if (ePotalType == POTAL_TYPE::RIGHT)
 	{
 		X += 1;
 		ePotal = POTAL_TYPE::LEFT;
+		vOffset.x = 2.f;
 	}
 	else if (ePotalType == POTAL_TYPE::UP)
 	{
 		Z += 1;
 		ePotal = POTAL_TYPE::DOWN;
+		vOffset.z = 2.f;
 	}
 	else if (ePotalType == POTAL_TYPE::DOWN)
 	{
 		Z -= 1;
 		ePotal = POTAL_TYPE::UP;
+		vOffset.z = -2.f;
 	}
 	for (auto& Room : m_RoomIndex)
 	{
@@ -182,8 +185,10 @@ HRESULT CRoom_Manager::Check_Potal_Coll(POTAL_TYPE ePotalType)
 			CRoom* pNeighborRoom = Find_Room(iNeighborRoomX, iNeighborRoomZ);
 			CPotal* pPotal = pNeighborRoom->Find_Potal(ePotal);
 			CTransform* pPotalTransform = static_cast<CTransform*>(pPotal->Find_Component(TEXT("Com_Transform")));
-			m_pPlayerTransform->Set_State(STATE::POSITION, pPotalTransform->Get_State(STATE::POSITION));
-
+			Enter_Room(pNeighborRoom->GetID());
+			CPlayer* pPlayer = dynamic_cast<CPlayer*>(m_pGameInstance->Get_GameObject(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Layer_Player")));
+			pPlayer->Change_TerrainBox(pNeighborRoom->Get_TerrainBox());
+			vNextPos = (pPotalTransform->Get_State(STATE::POSITION)) + vOffset;
 			if (pPotal == nullptr || pPotalTransform == nullptr)
 				return E_FAIL;
 		}
@@ -236,7 +241,7 @@ CRoom* CRoom_Manager::Find_Room(_int iRoomIndexX, _int iRoomIndexZ)
 	{
 		for (auto& pRoom : pair->second)
 		{
-			if (pRoom->Get_RoomX() == iRoomIndex && pRoom->Get_RoomZ() == iRoomIndexZ)
+			if (pRoom->Get_RoomX() == iRoomIndexX && pRoom->Get_RoomZ() == iRoomIndexZ)
 			{
 				return pRoom;
 			}
