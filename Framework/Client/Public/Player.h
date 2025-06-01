@@ -60,6 +60,7 @@ private:
 
 	CPlayerStats*			m_pPlayerStatsCom				= { nullptr };
 	CAnimator*				m_pAnimatorCom					= { nullptr };
+	CAnimator*				m_pAnimatorTransCom				= { nullptr };
 
 	_bool					m_isFlippedX					= false;
 
@@ -69,6 +70,10 @@ private:
 	_wstring				m_strTimerTag					= {};
 
 	_float					m_fStackedTime					= 0;
+
+	_float3					m_vDashDir						= {};
+	_float3					m_vCursorDir					= {};
+
 
 private:
 	HRESULT Ready_Components();

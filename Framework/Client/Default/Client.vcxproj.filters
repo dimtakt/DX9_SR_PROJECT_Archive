@@ -516,6 +516,9 @@
     <ClInclude Include="..\Public\Level_Stage2.h">
       <Filter>01.Levels\04. Dungeon\Stage2</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Animations\Anim_Player_Parry.h">
+      <Filter>03.Animations\Player</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -743,6 +746,9 @@
     </ClCompile>
     <ClCompile Include="..\private\Oink_A.cpp">
       <Filter>02.GameObject\Monster\Oink_A</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Animations\Anim_Player_Parry.cpp">
+      <Filter>03.Animations\Player</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
