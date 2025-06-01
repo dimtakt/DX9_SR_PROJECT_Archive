@@ -98,22 +98,25 @@ void CCollision_Manager::Render()
 {
     for (auto& Col : m_vColliders)
     {
-        Col->Render();
+        if(nullptr != Col)
+            Col->Render();
     }
 }
 
 void CCollision_Manager::Update()
 {
     for (auto it = m_vColliders.begin(); it != m_vColliders.end();) {
-        if ((*it)->Get_Owner()->Get_IsDead())
-        {
-            Safe_Release(*it);
-            it = m_vColliders.erase(it);
-        }
-        else
-        {
-            (*it)->Update_Collider();
-            ++it;
+        if (*it != nullptr) {
+            if ((*it)->Get_Owner()->Get_IsDead())
+            {
+                Safe_Release(*it);
+                it = m_vColliders.erase(it);
+            }
+            else
+            {
+                (*it)->Update_Collider();
+                ++it;
+            }
         }
     }
 }
