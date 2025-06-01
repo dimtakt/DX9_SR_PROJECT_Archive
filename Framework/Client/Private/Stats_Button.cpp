@@ -91,7 +91,7 @@ HRESULT CStats_Button::Ready_Components()
 		TEXT("Com_Transform"), reinterpret_cast<CComponent**>(&m_pTransformCom))))
 		return E_FAIL;
 
-	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_GAMEPLAY), TEXT("Prototype_Component_Texture_Rect_UI_Hud_Stats_Symbol"),
+	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Rect_UI_Hud_Stats_Symbol"),
 		TEXT("Com_Texture"), reinterpret_cast<CComponent**>(&m_pTextureCom))))
 		return E_FAIL;
 
@@ -144,7 +144,7 @@ HRESULT CStats_Button::Ready_Children()
 
 HRESULT CStats_Button::Setting_Target()
 {
-	m_pTargetUI = m_pGameInstance->Get_GameObject(ENUM_CLASS(LEVEL::LEVEL_GAMEPLAY), TEXT("Layer_Status"), 0);
+	m_pTargetUI = m_pGameInstance->Get_GameObject(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Layer_Status"), 0);
 
 	if (m_pTargetUI == nullptr)
 	{
