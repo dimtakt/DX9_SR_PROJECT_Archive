@@ -236,7 +236,7 @@ CRoom* CRoom_Manager::Find_Room(_int iRoomIndexX, _int iRoomIndexZ)
 	{
 		for (auto& pRoom : pair->second)
 		{
-			if (pRoom->Get_RoomX() == iRoomIndex && pRoom->Get_RoomZ() == iRoomIndexZ)
+			if (pRoom->Get_RoomX() == iRoomIndexX && pRoom->Get_RoomZ() == iRoomIndexZ)
 			{
 				return pRoom;
 			}
