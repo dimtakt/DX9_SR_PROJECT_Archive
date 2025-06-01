@@ -21,7 +21,7 @@ void CLevel_Logo::Update(_float fTimeDelta)
 {
 	if (m_pGameInstance->IsKeyDown(VK_RETURN))
 	{
-		if(FAILED(m_pGameInstance->Open_Level(ENUM_CLASS(LEVEL::LEVEL_LOADING), CLevel_Loading::Create(m_pGraphic_Device, LEVEL::LEVEL_GAMEPLAY))))
+		if(FAILED(m_pGameInstance->Open_Level(ENUM_CLASS(LEVEL::LEVEL_LOADING), CLevel_Loading::Create(m_pGraphic_Device, LEVEL::LEVEL_STATIC))))
 			return;
 	}	
 	// MAP Editor
