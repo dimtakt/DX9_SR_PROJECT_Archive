@@ -15,6 +15,7 @@
 #include "GameObject.h"
 #include "Anim_Manager.h"
 #include "Item_Manager.h"
+#include "Event_Manager.h"
 
 IMPLEMENT_SINGLETON(CGameInstance)
 
@@ -82,6 +83,10 @@ HRESULT CGameInstance::Initialize_Engine(const ENGINE_DESC& EngineDesc, LPDIRECT
     if (nullptr == m_pItem_Manager)
         return E_FAIL;
 
+    m_pEvent_Manager = CEvent_Manager::Create();
+    if (nullptr == m_pEvent_Manager)
+        return E_FAIL;
+
     return S_OK;
 }
 
@@ -106,6 +111,8 @@ HRESULT CGameInstance::Clear_Resources(_uint iClearLevelID)
     m_pPrototype_Manager->Clear(iClearLevelID);
 
     m_pObject_Manager->Clear(iClearLevelID);
+
+    m_pCollision_Manager->Clear_Colliders();
 
     return S_OK;
 }
@@ -161,6 +168,10 @@ HRESULT CGameInstance::Open_Level(_uint iLevelID, CLevel* pNewLevel)
 
     return m_pLevel_Manager->Open_Level(iLevelID, pNewLevel);
 }
+_uint CGameInstance::Get_CurrentLevel()
+{
+    return m_pLevel_Manager->Get_CurrentLevel();
+}
 #pragma endregion
 
 #pragma region PROTOTYPE_MANAGER
@@ -184,6 +195,7 @@ CBase* CGameInstance::Clone_Prototype(PROTOTYPE ePrototype, _uint iPrototypeLeve
 #pragma region OBJECT_MANAGER
 HRESULT CGameInstance::Add_GameObject_ToLayer(_uint iLayerLevelIndex, const _wstring& strLayerTag, _uint iPrototypeLevelIndex, const _wstring strPrototypeTag, void* pArg)
 {
+
     if (nullptr == m_pObject_Manager)
         return E_FAIL;
 
@@ -354,6 +366,8 @@ CAnimation* CGameInstance::Find_Animation(const wstring& strAnimTag)
     return m_pAnimation_Manager->Find_Animation(strAnimTag);
 #pragma endregion
 }
+
+#pragma region ITEM_MANAGER
 HRESULT CGameInstance::Setting_Item(void* pArg, _uint iMaxItemIndex, _uint iLevelIndex, const _wstring& strItemBaseTag)
 {
     return m_pItem_Manager->Setting_Item(pArg, iMaxItemIndex, iLevelIndex, strItemBaseTag);
@@ -368,9 +382,28 @@ CItemObject* CGameInstance::Get_ItemObject(_uint iIndex)
 {
     return m_pItem_Manager->Get_ItemObject(iIndex);
 }
+#pragma endregion
+
+#pragma region EVENT_MANAGER
+void CGameInstance::Subscribe(_uint iTypeIndex, class IEventListener* pListener)
+{
+    m_pEvent_Manager->Subscribe(iTypeIndex, pListener);
+}
+
+void CGameInstance::Unsubscribe(_uint iTypeIndex, class IEventListener* pListener)
+{
+    m_pEvent_Manager->Unsubscribe(iTypeIndex, pListener);
+}
+
+void CGameInstance::Broadcast(_uint iTypeIndex, const EVENTDATA* pData)
+{
+    m_pEvent_Manager->Broadcast(iTypeIndex, pData);
+}
+#pragma endregion
 
 void CGameInstance::Release_Engine()
 {
+    
     Release();
     Safe_Release(m_pCollision_Manager);
     Safe_Release(m_pTimer_Manager);
@@ -379,13 +412,15 @@ void CGameInstance::Release_Engine()
     Safe_Release(m_pPrototype_Manager);
     Safe_Release(m_pObject_Manager);
     Safe_Release(m_pRenderer);
+    Safe_Release(m_pEvent_Manager);
     Safe_Release(m_pKey_Manager);
     //Safe_Release(m_pNetwork_Manager);
     Safe_Release(m_pPicking);
     Safe_Release(m_pFont_Manager);
     Safe_Release(m_pLight_Manager);
     Safe_Release(m_pAnimation_Manager);
-    Safe_Release(m_pItem_Manager);
+    Safe_Release(m_pItem_Manager);//
+    
 }
 
 void CGameInstance::Free()

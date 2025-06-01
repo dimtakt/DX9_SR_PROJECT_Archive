@@ -183,4 +183,6 @@ CGameObject* CStats_Button::Clone(void* pArg)
 void CStats_Button::Free()
 {
 	__super::Free();
+
+	Safe_Release(m_pTargetUI);
 }

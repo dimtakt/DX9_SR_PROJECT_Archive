@@ -5,6 +5,9 @@
 #include "Title_Logo.h"
 #include "Title_Star.h"
 #include "Title_Logo_Wave.h"
+#include "Start_Button.h"
+#include "Exit_Button.h"
+#include "Option_Button.h"
 
 CTitle_BackGround::CTitle_BackGround(LPDIRECT3DDEVICE9 pGraphic_Device)
     : CUIObject{ pGraphic_Device }
@@ -99,6 +102,8 @@ HRESULT CTitle_BackGround::Render()
     return S_OK;
 }
 
+
+
 HRESULT CTitle_BackGround::Ready_Components()
 {
     if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_VIBuffer_Rect"),
@@ -142,6 +147,18 @@ HRESULT CTitle_BackGround::Ready_ChildPrototype(LEVEL eLevel)
         CTitle_Logo_Wave::Create(m_pGraphic_Device))))
         return E_FAIL;
 
+    if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(eLevel), TEXT("Prototype_GameObject_UI_Start_Button"),
+        CStart_Button::Create(m_pGraphic_Device))))
+        return E_FAIL;
+
+    if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(eLevel), TEXT("Prototype_GameObject_UI_Exit_Button"),
+        CExit_Button::Create(m_pGraphic_Device))))
+        return E_FAIL;
+
+    if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(eLevel), TEXT("Prototype_GameObject_UI_Option_Button"),
+        COption_Button::Create(m_pGraphic_Device))))
+        return E_FAIL;
+
     return S_OK;
 }
 
@@ -165,6 +182,21 @@ HRESULT CTitle_BackGround::Ready_Children()
     Add_Child(pGameObject);
 
     pGameObject = dynamic_cast<CUIObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(m_eLevel), TEXT("Prototype_GameObject_UI_Title_Logo_Wave")));
+    if (nullptr == pGameObject)
+        return E_FAIL;
+    Add_Child(pGameObject);
+
+    pGameObject = dynamic_cast<CUIObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(m_eLevel), TEXT("Prototype_GameObject_UI_Start_Button")));
+    if (nullptr == pGameObject)
+        return E_FAIL;
+    Add_Child(pGameObject);
+
+    pGameObject = dynamic_cast<CUIObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(m_eLevel), TEXT("Prototype_GameObject_UI_Exit_Button")));
+    if (nullptr == pGameObject)
+        return E_FAIL;
+    Add_Child(pGameObject);
+
+    pGameObject = dynamic_cast<CUIObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(m_eLevel), TEXT("Prototype_GameObject_UI_Option_Button")));
     if (nullptr == pGameObject)
         return E_FAIL;
     Add_Child(pGameObject);

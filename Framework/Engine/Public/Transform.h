@@ -45,7 +45,12 @@ public:
 
 	void Set_FlipX(_bool isFlip) { m_bFlipX = isFlip; }
 
-	void Set_RotationEuler(_float3 vRotates) { m_vRotationEuler = vRotates; }
+	void Set_RotationEuler(_float vRotatesX, _float vRotatesY, _float vRotatesZ) {
+		m_vRotationEuler.x = vRotatesX;
+		m_vRotationEuler.y = vRotatesY;
+		m_vRotationEuler.z = vRotatesZ;
+	}
+
 	_float3 Get_RotationEuler() { return m_vRotationEuler; }
 
 public:
@@ -65,7 +70,7 @@ public:
 	void RotationAccumulate(const _float3& vAxis, _float fRadian);
 	void Turn(const _float3& vAxis, _float fTimeDelta);
 	void Scaling(_float fScaleX, _float fScaleY, _float fScaleZ);
-	void Add_Rotation(const _float3& vAxis, _float fRadian);
+	void ApplyEulerRotation(const _float3& vEuler);
 
 	void RotationByParent(const _float3 axis, CTransform* parent, _float fRadian);
 

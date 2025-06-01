@@ -6,6 +6,7 @@
 #include "Monster.h"
 #include <fstream>
 #include "Client_Struct.h"
+#include "Potal.h"
 
 BEGIN(Client)
 
@@ -34,13 +35,15 @@ public:
     virtual void Activate();
     virtual void Deactivate();
     HRESULT Load_From_File(_uint iLayerLevelIndex, const _wstring& strLayerTag, const _tchar* pLoadFileTag, _int iIndex, _int RoomX, _int RoomZ);
-
+    HRESULT Ready_Potal(_uint iLayerLevelIndex, const _wstring& strLayerTag, _float3 vOffset, POTAL_TYPE eType);
 public:
     _bool GetIsActive() { return m_bIsActive; }
     _bool GetIsVisited() { return m_bIsVisited; }
     _int  GetID() { return m_iID; }
     CTerrainBox* Get_TerrainBox(){ return m_pTerrainBox; }
     vector<CMonster*> Get_MonsterList() { return m_vMonster; }
+    _int Get_RoomX() { return m_iRoomX; }
+    _int Get_RoomZ() { return m_iRoomZ; }
 
 public:
     void Add_TerrainBox(class CTerrainBox* pTerrainBox){m_pTerrainBox = pTerrainBox;}
@@ -59,9 +62,10 @@ protected:
     vector<CMonster*> m_vMonster = {};
     ROOM_STATE m_eRoomState = {};
     list<MAP_OBJECT_DESC> m_Object_Desc = {};
+    vector<CPotal*> m_vPotal = {};
 
-    _int iRoomX = {};
-    _int iRoomZ = {};
+    _int m_iRoomX = {};
+    _int m_iRoomZ = {};
 
     _float3 m_ObjectOffset = {};
 
