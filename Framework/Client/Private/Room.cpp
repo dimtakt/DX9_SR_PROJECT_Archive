@@ -126,9 +126,10 @@ HRESULT CRoom::Ready_Objects(void* pArg)
 	return S_OK;
 }
 
-HRESULT CRoom::Ready_Potal(_uint iLayerLevelIndex, const _wstring& strLayerTag, _float3 vOffset)
+HRESULT CRoom::Ready_Potal(_uint iLayerLevelIndex, const _wstring& strLayerTag, _float3 vOffset, POTAL_TYPE eType)
 {
-	MAP_OBJECT_DESC pDesc{};
+	OBJECT_INTERACTION_DESC pDesc{};
+	pDesc.ePotalType = eType;
 	pDesc.iTextureIndex = 0;
 	pDesc.vScale = { 1.f, 1.f, 1.f };
 	pDesc.vRotate = { 0.f, 0.f, 0.f };
@@ -141,8 +142,8 @@ HRESULT CRoom::Ready_Potal(_uint iLayerLevelIndex, const _wstring& strLayerTag, 
 		TEXT("Prototype_GameObject_Potal"),
 		&pDesc);
 
-	CGameObject* pGameObject = m_pGameInstance->Get_LastGameObject(iLayerLevelIndex, strLayerTag);
-	m_vObject.push_back(pGameObject);
+	CPotal* pPotal = static_cast<CPotal*>(m_pGameInstance->Get_LastGameObject(iLayerLevelIndex, strLayerTag));
+	m_vPotal.push_back(pPotal);
 
 	return E_NOTIMPL;
 }

@@ -133,7 +133,7 @@ HRESULT CLevel_Stage2::Ready_Layer_Room(const _wstring& strLayerTag)
 	CRoom* pRoom = nullptr;
 	m_pGameInstance->Seed_Random();
 
-	vector<pair<_int, _int>> RoomIndex = CRoom_Manager::GetInstance()->Create_RandomRooms(5);
+	vector<pair<_int, _int>> RoomIndex = CRoom_Manager::GetInstance()->Create_RandomRooms(4); //지정하고 싶은 룸의 개수 - 1 ( 내부에서 0 0 디폴트로 저장함 )
 
 	for (size_t num = 0; num < 5; num++)
 	{

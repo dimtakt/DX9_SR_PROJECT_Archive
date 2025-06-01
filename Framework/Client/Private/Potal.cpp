@@ -29,7 +29,7 @@ HRESULT CPotal::Initialize(void* pArg)
         return S_OK;
     }
 
-    MAP_OBJECT_DESC* pObject_Desc = static_cast<MAP_OBJECT_DESC*>(pArg);
+    OBJECT_INTERACTION_DESC* pObject_Desc = static_cast<OBJECT_INTERACTION_DESC*>(pArg);
 
     m_pTransformCom->Set_State(STATE::POSITION, pObject_Desc->vPos);
 
@@ -45,7 +45,7 @@ HRESULT CPotal::Initialize(void* pArg)
 
     m_iTextureIndex = pObject_Desc->iTextureIndex;
     m_pTextureCom->Bind_Texture(m_iTextureIndex);
-    m_eObjType = GAMEOBJ_TYPE::OBJECT;
+    m_eDirType = pObject_Desc->ePotalType;
 
     return S_OK;
 }

@@ -17,9 +17,12 @@ public:
 	HRESULT Enter_Room(_int iRoomID);
 	vector<pair<_int, _int>> Create_RandomRooms(_int iRoomMax);
 	HRESULT Check_Room(_uint iLayerLevelIndex, const _wstring& strLayerTag, _int iRoomID);
+	/*HRESULT Check_Potal_Coll(POTAL_TYPE ePotal);*/
 
 	CRoom* Get_CurrentRoom();
 	CRoom* Get_RoomByID(_int iRoomID);
+	CRoom* Find_Roomd(_int iRoomIndexX, _int iRoomIndexZ);
+
 
 	void Clear(_uint iLevelIndex);
 

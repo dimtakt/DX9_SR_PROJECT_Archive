@@ -25,6 +25,9 @@ public:
 	virtual void Update(_float fTimeDelta) override;
 	virtual void Late_Update(_float fTimeDelta) override;
 	virtual HRESULT Render() override;
+	//이벤트 함수 추가, 룸매니저의 체크포탈 함수 호출 매개변수로 m_eDirType
+
+	POTAL_TYPE Get_PotalType() { return m_eDirType; }
 
 private:
 	CVIBuffer_Rect* m_pVIBufferCom = { nullptr };
@@ -32,6 +35,7 @@ private:
 	CTexture* m_pTextureCom = { nullptr };
 
 	_uint m_iTextureIndex = 0;
+	POTAL_TYPE m_eDirType = {};
 
 private:
 	HRESULT Ready_Components();
