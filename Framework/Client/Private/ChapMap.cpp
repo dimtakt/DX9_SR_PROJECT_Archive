@@ -97,7 +97,7 @@ void CChapMap::Player_Offset(_float fX, _float fY, _uint iLineIndex, _uint iMapI
 	m_pPlayerSymbol->Player_Move(fX, fY);
 	m_iPlayerLineIndex = iLineIndex;
 	m_iPlayerMapIndex = iMapIdex;
-	//m_bRender = false;
+	m_bRender = false;
 }
 
 void CChapMap::Scroll_Map()

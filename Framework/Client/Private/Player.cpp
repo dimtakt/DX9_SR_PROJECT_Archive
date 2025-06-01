@@ -49,8 +49,6 @@ void CPlayer::Update(_float fTimeDelta)
         m_pTerrainBox->SetUp_OnTerrainBox(m_pTransformCom, _float3(0.f, 0.1f, 0.f));
     }
 
-    CPlayerStats::PLAYERSTAT_DESC playerStat = m_pPlayerStatsCom->Get_Stats();
-
     _float fPointY = 0.f;       // 교차 평면의 기준이 될 Y값
     _float3 vRayPoint = {};     // fPointY 값 기준 마우스 Ray와 교차하는 좌표
     m_pGameInstance->Get_IntersectAtY(fPointY, vRayPoint);
@@ -207,22 +205,22 @@ void CPlayer::Update(_float fTimeDelta)
     if (m_pGameInstance->IsKeyDown(VK_SPACE))
     {
         // 스페이스바 누를 시 Dash 상태로 바꾸기 시도
-        if (playerStat.fDash >= 1 &&
+        if (//playerStat.fDash >= 1 &&
             m_pAnimatorTransCom->Change_State(L"Dash"))
         {
             D3DXVec3Normalize(&m_vDashDir, &m_vDashDir);
-            CPlayerStats::PLAYERSTAT_DESC playerStat = m_pPlayerStatsCom->Get_Stats();
-            playerStat.fDash -= 1; // 이거왜안줄지????????? 디버그로확인했을땐줄긴하는데
-            playerStat.isGodMode = true;
-            m_pPlayerStatsCom->Set_Stats(playerStat);
+            //CPlayerStats::PLAYERSTAT_DESC playerStat = m_pPlayerStatsCom->Get_Stats();
+            //playerStat.fDash -= 1; // 이거왜안줄지????????? 디버그로확인했을땐줄긴하는데
+            //playerStat.isGodMode = true;
+            //m_pPlayerStatsCom->Set_Stats(playerStat);
         }
     }
     else
     {
         if (m_pAnimatorTransCom->Change_State(L"Idle"))
         {
-            playerStat.isGodMode = false;
-            m_pPlayerStatsCom->Set_Stats(playerStat);
+            //playerStat.isGodMode = false;
+            //m_pPlayerStatsCom->Set_Stats(playerStat);
         }
     }
 
@@ -466,33 +464,6 @@ HRESULT CPlayer::Ready_Components()
     _float3 vPlayerPos = m_pTransformCom->Get_State(STATE::POSITION);
     m_pTransformCom->Set_State(STATE::POSITION, vPlayerPos + _float3{0, 0.5, 0});
     m_pTransformCom->Scaling(float(18) / 19, 1, 1);
-
-
-    /* For Com_PlayerStats */
-    CPlayerStats::PLAYERSTAT_DESC PlayerStatDesc{};
-
-    // 만약 기존 플레이 저장 정보가 존재한다면
-    // 해당 정보를 불러오도록 나중에 수정
-    PlayerStatDesc.strName  = L"테스트";
-    PlayerStatDesc.iLevel   = 1;
-    PlayerStatDesc.iExp     = 0;
-    PlayerStatDesc.fHp      = 50.f;
-    PlayerStatDesc.fMp      = 50.f;
-    PlayerStatDesc.fDash    = 2.f;
-    PlayerStatDesc.fAtkSpeed    = 1.0f;
-    PlayerStatDesc.fMoveSpeed   = 1.0f;
-    PlayerStatDesc.fHpRegen     = 0.f;
-    PlayerStatDesc.fMpRegen     = 0.f;
-    PlayerStatDesc.fDashRegen   = 0.f;
-    PlayerStatDesc.fEvade   = 0.f;
-    PlayerStatDesc.fDef     = 0.f;
-    PlayerStatDesc.fExpMultiply     = 1.0f;
-    PlayerStatDesc.fGoldMultiply    = 1.0f;
-
-    if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_PlayerStats"),
-        TEXT("Com_PlayerStats"), reinterpret_cast<CComponent**>(&m_pPlayerStatsCom), &PlayerStatDesc)))
-        return E_FAIL;
-
 
 
     /* For Com_Animator */

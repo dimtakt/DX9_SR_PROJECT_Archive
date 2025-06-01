@@ -211,7 +211,7 @@ HRESULT CChapMap_Button::Ready_Components()
 
 	_tchar szTemp[128] = {};
 	wsprintf(szTemp, TEXT("Prototype_Component_Texture_Rect_ChapMap_Node_%d"), m_iMapTex);
-	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_GAMEPLAY), szTemp,
+	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), szTemp,
 		TEXT("Com_Texture"), reinterpret_cast<CComponent**>(&m_pTextureCom))))
 		return E_FAIL;
 

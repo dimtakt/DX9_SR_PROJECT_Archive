@@ -73,11 +73,11 @@ HRESULT CHud_Exp_Frame::Render()
 
 HRESULT CHud_Exp_Frame::Ready_Components()
 {
-	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_GAMEPLAY), TEXT("Prototype_Component_Texture_Rect_UI_Hud_Exp_Fream_2"),
+	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Rect_UI_Hud_Exp_Fream_2"),
 		TEXT("Com_VIBuffer1"), reinterpret_cast<CComponent**>(&m_pVIBufferCom1))))
 		return E_FAIL;
 
-	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_GAMEPLAY), TEXT("Prototype_Component_Texture_Rect_UI_Hud_Exp_Fream_1"),
+	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Rect_UI_Hud_Exp_Fream_1"),
 		TEXT("Com_VIBuffer2"), reinterpret_cast<CComponent**>(&m_pVIBufferCom2))))
 		return E_FAIL;
 
