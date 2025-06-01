@@ -148,6 +148,16 @@ HRESULT CRoom::Ready_Potal(_uint iLayerLevelIndex, const _wstring& strLayerTag, 
 	return E_NOTIMPL;
 }
 
+CPotal* CRoom::Find_Potal(POTAL_TYPE ePotal)
+{
+	for (auto& pPotal : m_vPotal)
+	{
+		if (pPotal->Get_PotalType() == ePotal)
+			return pPotal;
+	}
+	return nullptr;
+}
+
 HRESULT CRoom::Load_From_File(_uint iLayerLevelIndex, const _wstring& strLayerTag, const _tchar* pLoadFileTag, _int iIndex, _int RoomX , _int RoomZ)
 {
 	Compute_ObjectOffset(RoomX, RoomZ);

@@ -1,5 +1,6 @@
 #pragma once
 #include "GameInstance.h"
+#include "Room.h"
 
 BEGIN(Client)
 
@@ -17,11 +18,10 @@ public:
 	HRESULT Enter_Room(_int iRoomID);
 	vector<pair<_int, _int>> Create_RandomRooms(_int iRoomMax);
 	HRESULT Check_Room(_uint iLayerLevelIndex, const _wstring& strLayerTag, _int iRoomID);
-	/*HRESULT Check_Potal_Coll(POTAL_TYPE ePotal);*/
-
+	HRESULT Check_Potal_Coll(POTAL_TYPE ePotalType);
 	CRoom* Get_CurrentRoom();
 	CRoom* Get_RoomByID(_int iRoomID);
-	CRoom* Find_Roomd(_int iRoomIndexX, _int iRoomIndexZ);
+	CRoom* Find_Room(_int iRoomIndexX, _int iRoomIndexZ);
 
 
 	void Clear(_uint iLevelIndex);
@@ -34,6 +34,7 @@ private:
 
 	vector<pair<_int, _int>> m_RoomIndex = {};
 
+	CTransform* m_pPlayerTransform = {};
 
 public:
 	virtual void Free() override;
