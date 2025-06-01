@@ -269,16 +269,16 @@ void CPlayer::Update(_float fTimeDelta)
     {
         _float3 playerPos = vPlayerPos;
 
-        playerStat.fMp -= 10;
-        m_pPlayerStatsCom->Set_Stats(playerStat);
+        //playerStat.fMp -= 10;
+        //m_pPlayerStatsCom->Set_Stats(playerStat);
 
         if (m_pAnimatorCom->Get_CurStackedFrame() >= 10)
         {
             playerPos += m_vCursorDir * fTimeDelta * 15.f;        // 커서 방향으로 이동
             m_pTransformCom->Set_State(STATE::POSITION, playerPos);
 
-            playerStat.isGodMode = true;
-            m_pPlayerStatsCom->Set_Stats(playerStat);
+            //playerStat.isGodMode = true;
+            //m_pPlayerStatsCom->Set_Stats(playerStat);
 
             // 공격 막는 데에 성공 시 Fury_Ready로 넘어갈 준비
         }
@@ -290,8 +290,8 @@ void CPlayer::Update(_float fTimeDelta)
     }
     else
     {
-        playerStat.isGodMode = false;
-        m_pPlayerStatsCom->Set_Stats(playerStat);
+        //playerStat.isGodMode = false;
+        //m_pPlayerStatsCom->Set_Stats(playerStat);
     }
         
 
