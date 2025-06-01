@@ -29,6 +29,7 @@
 #include "Dagger.h"
 #include "Sky.h"
 #include "ChapMap.h"
+#include "Room_Manager.h"
 CLoader::CLoader(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: m_pGraphic_Device{ pGraphic_Device }
 	, m_pGameInstance{ CGameInstance::GetInstance() }
@@ -49,6 +50,8 @@ unsigned int APIENTRY LoadingMain(void* pArg)
 
 HRESULT CLoader::Initialize(LEVEL eNextLevelID)
 {
+	CRoom_Manager::GetInstance()->Clear(m_pGameInstance->Get_CurrentLevel());
+
 	m_eNextLevelID = eNextLevelID;
 
 	InitializeCriticalSection(&m_CriticalSection);

@@ -11,5 +11,4 @@ typedef struct tagMAPObjectDesc
 	_int iTextureIndex = { 0 };
 }MAP_OBJECT_DESC;
 
-
 END
