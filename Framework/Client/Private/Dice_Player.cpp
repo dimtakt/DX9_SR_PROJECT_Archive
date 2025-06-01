@@ -1,6 +1,6 @@
 #include "Dice_Player.h"
 #include "GameInstance.h"
-
+#include "Stat_Manager.h"
 CDice_Player::CDice_Player(LPDIRECT3DDEVICE9 pGraphic_Device) : CUIObject(pGraphic_Device)
 {
 }
@@ -16,8 +16,6 @@ HRESULT CDice_Player::Initialize_Prototype()
 
 HRESULT CDice_Player::Initialize(void* pArg)
 {
-	m_iValue = 1000;
-	
 	m_fSizeX = 32;
 	m_fSizeY = 32;
 	m_fX = -32;
@@ -48,6 +46,8 @@ void CDice_Player::Update(_float fTimeDelta)
 
 void CDice_Player::Late_Update(_float fTimeDelta)
 {
+	m_iValue = CStat_Manager::GetInstance()->Get_CurStats()[ENUM_CLASS(STAT_INFO::DICE)];
+
 	m_pGameInstance->Add_RenderGroup(RENDERGROUP::RG_UI, this);
 }
 

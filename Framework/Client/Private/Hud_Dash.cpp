@@ -1,6 +1,7 @@
 #include "Hud_Dash.h"
 #include "GameInstance.h"
 #include "Dash_Gauge_Frame.h"
+#include "Stat_Manager.h"
 
 CHud_Dash::CHud_Dash(LPDIRECT3DDEVICE9 pGraphic_Device) : CUIObject(pGraphic_Device)
 {
@@ -22,8 +23,6 @@ HRESULT CHud_Dash::Initialize_Prototype(LEVEL eLevel)
 
 HRESULT CHud_Dash::Initialize(void* pArg)
 {
-    m_iDashMaxValue = 5;
-
     m_fSizeX = 0;
     m_fSizeY = 0;
     m_fX = 30;
@@ -38,9 +37,6 @@ HRESULT CHud_Dash::Initialize(void* pArg)
     if (FAILED(Ready_Components()))
         return E_FAIL;
 
-    if (FAILED(Reday_SyncingObject()))
-        return E_FAIL;
-
     m_pTransformCom->Scaling(m_fSizeX, m_fSizeY, 1.f);
     __super::Update_Position();
 
@@ -52,53 +48,31 @@ HRESULT CHud_Dash::Initialize(void* pArg)
 
 void CHud_Dash::Priority_Update(_float fTimeDelta)
 {
-    if (GetKeyState('N') < 0)
-    {
-        --m_iDashMaxValue;
-    }
-    if (GetKeyState('M') < 0)
-    {
-        ++m_iDashMaxValue;
-    }
-    
+    m_iDashMaxValue = CStat_Manager::GetInstance()->Get_CurStats()[ENUM_CLASS(STAT_INFO::MAXDASH)];
+
     if (m_iDashMaxValue > 5)
         m_iDashMaxValue = 5;
-
-    if (m_iDashMaxValue <= 0)
-    {
+    
+    if(m_iDashMaxValue <= 0)
         m_iDashMaxValue = 0;
-    }
     else
-    {
         for (_int i = 0; i < m_iDashMaxValue; ++i)
             m_vecChildren[i]->Priority_Update(fTimeDelta);
-    }
 }
 
 void CHud_Dash::Update(_float fTimeDelta)
 {
-    if (m_iDashMaxValue <= 0)
-    {
-        m_iDashMaxValue = 0;
-    }
-    else
-    {
+    
+    if (m_iDashMaxValue > 0)
         for (_int i = 0; i < m_iDashMaxValue; ++i)
             m_vecChildren[i]->Update(fTimeDelta);
-    }
 }
 
 void CHud_Dash::Late_Update(_float fTimeDelta)
 {
-    if (m_iDashMaxValue <= 0)
-    {
-        m_iDashMaxValue = 0;
-    }
-    else
-    {
+    if (m_iDashMaxValue > 0)
         for (_int i = 0; i < m_iDashMaxValue; ++i)
             m_vecChildren[i]->Late_Update(fTimeDelta);
-    }
 }
 
 HRESULT CHud_Dash::Render()
@@ -138,19 +112,6 @@ HRESULT CHud_Dash::Ready_Children()
         Add_Child(pGameObject);
     }
     
-    return S_OK;
-}
-
-HRESULT CHud_Dash::Reday_SyncingObject()
-{
-   /* m_pPlayerStatsCom = dynamic_cast<CPlayerStats*>(m_pGameInstance->Get_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Layer_Player"), TEXT("Com_PlayerStats"), 0));
-    if (m_pPlayerStatsCom == nullptr)
-    {
-        MSG_BOX(TEXT("Failed to Syncing : CHud_Dash"));
-        return E_FAIL;
-    }
-    Safe_AddRef(m_pPlayerStatsCom);
-    */
     return S_OK;
 }
 

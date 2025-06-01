@@ -183,6 +183,10 @@
     <ClInclude Include="..\Public\Room_Manager.h" />
     <ClInclude Include="..\public\Sky.h" />
     <ClInclude Include="..\Public\Start_Button.h" />
+    <ClInclude Include="..\public\Status_Stat_Frame_Name.h" />
+    <ClInclude Include="..\public\Status_Stat_Frame_Type.h" />
+    <ClInclude Include="..\public\Status_Stat_Frame_Value.h" />
+    <ClInclude Include="..\public\Status_Value.h" />
     <ClInclude Include="..\Public\Stat_Manager.h" />
     <ClInclude Include="..\public\Status_Frame_Down.h" />
     <ClInclude Include="..\public\Status_Frame_Mid.h" />
@@ -281,6 +285,10 @@
     <ClCompile Include="..\Private\Room_Manager.cpp" />
     <ClCompile Include="..\private\Sky.cpp" />
     <ClCompile Include="..\Private\Start_Button.cpp" />
+    <ClCompile Include="..\private\Status_Stat_Frame_Name.cpp" />
+    <ClCompile Include="..\private\Status_Stat_Frame_Type.cpp" />
+    <ClCompile Include="..\private\Status_Stat_Frame_Value.cpp" />
+    <ClCompile Include="..\private\Status_Value.cpp" />
     <ClCompile Include="..\Private\Stat_Manager.cpp" />
     <ClCompile Include="..\private\Status_Frame_Down.cpp" />
     <ClCompile Include="..\private\Status_Frame_Mid.cpp" />

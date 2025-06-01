@@ -289,6 +289,9 @@
     <Filter Include="02.GameObject\Object\Potal">
       <UniqueIdentifier>{b6666f70-5fbb-48b5-96c9-b8966dda1b33}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\UI\Window\Status_Window\Stauts_Frame\Status_Value">
+      <UniqueIdentifier>{81cf6232-8bf4-4a09-8c97-02ecb3e8afac}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -594,6 +597,18 @@
     <ClInclude Include="..\Public\Potal.h">
       <Filter>02.GameObject\Object\Potal</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\Status_Stat_Frame_Name.h">
+      <Filter>02.GameObject\UI\Window\Status_Window\Stauts_Frame\Status_Stat_Frame</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Status_Stat_Frame_Value.h">
+      <Filter>02.GameObject\UI\Window\Status_Window\Stauts_Frame\Status_Stat_Frame</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Status_Stat_Frame_Type.h">
+      <Filter>02.GameObject\UI\Window\Status_Window\Stauts_Frame\Status_Stat_Frame</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Status_Value.h">
+      <Filter>02.GameObject\UI\Window\Status_Window\Stauts_Frame\Status_Value</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -860,6 +875,18 @@
     </ClCompile>
     <ClCompile Include="..\Private\Potal.cpp">
       <Filter>02.GameObject\Object\Potal</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Status_Stat_Frame_Name.cpp">
+      <Filter>02.GameObject\UI\Window\Status_Window\Stauts_Frame\Status_Stat_Frame</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Status_Stat_Frame_Value.cpp">
+      <Filter>02.GameObject\UI\Window\Status_Window\Stauts_Frame\Status_Stat_Frame</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Status_Stat_Frame_Type.cpp">
+      <Filter>02.GameObject\UI\Window\Status_Window\Stauts_Frame\Status_Stat_Frame</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Status_Value.cpp">
+      <Filter>02.GameObject\UI\Window\Status_Window\Stauts_Frame\Status_Value</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
