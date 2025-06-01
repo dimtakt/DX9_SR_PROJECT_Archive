@@ -193,11 +193,12 @@ HRESULT CRoom::Load_From_File(_uint iLayerLevelIndex, const _wstring& strLayerTa
 			tSrc.vScale = pDesc.vScale;
 			tSrc.vRotate = pDesc.vRotate;
 
-			m_pGameInstance->Add_GameObject_ToLayer(
+			if(FAILED(m_pGameInstance->Add_GameObject_ToLayer(
 				iLayerLevelIndex, strLayerTag,
 				iLayerLevelIndex,
 				TEXT("Prototype_GameObject_Tree"),
-				&tSrc);
+				&tSrc)))
+				return E_FAIL;
 
 			CGameObject* pGameObject = m_pGameInstance->Get_LastGameObject(iLayerLevelIndex, strLayerTag);
 			m_vObject.push_back(pGameObject);

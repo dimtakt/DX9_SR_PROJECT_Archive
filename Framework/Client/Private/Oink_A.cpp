@@ -34,7 +34,9 @@ void COink_A::Priority_Update(_float fTimeDelta)
 
 void COink_A::Update(_float fTimeDelta)
 {
-    __super::Update(fTimeDelta);
+    if (m_pTerrainBox != nullptr) {
+        m_pTerrainBox->SetUp_OnTerrainBox(m_pTransformCom, _float3(0.05f, 0.2f, 0.05f));
+    }
 
     if (m_isTracking)           m_pAnimatorCom->Change_State(L"Move");
 	else                        m_pAnimatorCom->Change_State(L"Idle");

@@ -28,6 +28,8 @@ HRESULT CRoom_Manager::Add_Room(CRoom* pRoom, _uint iLayerLevelIndex, const _wst
 		pRoom->Enter();
 		m_iCurrentLevelID = iLayerLevelIndex;
 		m_iCurrentRoomID = 0;
+		CTransform* pPlayerTransform = dynamic_cast<CTransform*>(m_pGameInstance->Get_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Layer_Player"), TEXT("Com_Transform")));
+		pPlayerTransform->Set_State(STATE::POSITION, _float3(0.f, 10.f, 0.f));
 	}
 	Safe_AddRef(pRoom);
 	CRoom_Manager::RoomIndexAdd();
@@ -61,21 +63,23 @@ vector<pair<_int, _int>> CRoom_Manager::Create_RandomRooms(_int iRoomMax)
 	_int x{ 0 }, z{ 0 };
 
 	m_RoomIndex.push_back({ x, z });
-	
-	for (_int i = 0; i < iRoomMax; ++i)
+
+	_int iCreated = 1;
+
+	while(iCreated <= iRoomMax)
 	{
 
-		_int iRandom = static_cast<_int>(m_pGameInstance->Compute_Random(0.f, 8.f));
+		_int iRandom = static_cast<_int>(m_pGameInstance->Compute_Random(0.f, 7.f));
 
 		_int nX = x;
 		_int nZ = z;
 
-		if (iRandom == 0 || iRandom == 8)
+		if (iRandom == 0 || iRandom == 7)
 			nZ += 1;
 
-		else if (iRandom == 1 || iRandom == 7)
+		else if (iRandom == 1 || iRandom == 6)
 			nX -= 1;
-		else if (iRandom == 2 || iRandom == 6)
+		else if (iRandom == 2 || iRandom == 5)
 			nZ -= 1;
 		else 
 			nX += 1;
@@ -89,7 +93,7 @@ vector<pair<_int, _int>> CRoom_Manager::Create_RandomRooms(_int iRoomMax)
 
 		x = nX;
 		z = nZ;
-
+		++iCreated;
 	}
 
 	return vector<pair<_int, _int>>(m_RoomIndex);

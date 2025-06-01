@@ -449,9 +449,9 @@ HRESULT CMainApp::Ready_ETC_Setting()
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Animator"), CAnimator::Create(m_pGraphic_Device))))
 		return E_FAIL;
 
-	/* Prototype_GameObject_Room */
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_Room"), CRoom::Create(m_pGraphic_Device))))
-		return E_FAIL;
+	///* Prototype_GameObject_Room */
+	//if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_Room"), CRoom::Create(m_pGraphic_Device))))
+	//	return E_FAIL;
 
 	/* Prototype_Component_Collider_OBB */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Collider_OBB"), CCollider_OBB::Create(m_pGraphic_Device))))

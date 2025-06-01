@@ -38,6 +38,9 @@ HRESULT CLevel_Stage1::Initialize()
 	if (FAILED(Ready_Layer_UI(TEXT("Layer_UI"))))
 		return E_FAIL;
 
+	if (FAILED(Ready_Layer_Player(TEXT("Layer_Player"))))
+		return E_FAIL;
+
 	return S_OK;
 }
 
@@ -45,7 +48,7 @@ void CLevel_Stage1::Update(_float fTimeDelta)
 {
 	if (m_pGameInstance->IsKeyDown(VK_RETURN))
 	{
- 		if(FAILED(m_pGameInstance->Open_Level(ENUM_CLASS(LEVEL::LEVEL_LOADING), CLevel_Loading::Create(m_pGraphic_Device, LEVEL::LEVEL_STAGE2))))
+ 		if(FAILED(m_pGameInstance->Open_Level(ENUM_CLASS(LEVEL::LEVEL_LOADING), CLevel_Loading::Create(m_pGraphic_Device, LEVEL::LEVEL_STAGE1))))
 			return;
 	}
 }
@@ -119,43 +122,22 @@ HRESULT CLevel_Stage1::Ready_Layer_Player(const _wstring& strLayerTag)
 HRESULT CLevel_Stage1::Ready_Layer_Room(const _wstring& strLayerTag)
 {
 	CRoom* pRoom = nullptr;
+	m_pGameInstance->Seed_Random();
+
+	vector<pair<_int, _int>> RoomIndex = CRoom_Manager::GetInstance()->Create_RandomRooms(4); //지정하고 싶은 룸의 개수 - 1 ( 내부에서 0 0 디폴트로 저장함 )
 
 	for (size_t num = 0; num < 5; num++)
 	{
 
 		pRoom = dynamic_cast<CRoom*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::LEVEL_STAGE1), TEXT("Prototype_GameObject_Room")));
 		NULL_CHECK_RETURN(pRoom, E_FAIL);
-		// 지형 셋팅
-		CTerrainBox* pTerrainBox = nullptr;
 
-		MAP_OBJECT_DESC tDesc{};
-		tDesc.iTextureIndex = 0;
-		tDesc.vPos = _float3(static_cast<_float>(num) * 20.f + 2.f, 0.f, 0.f);
-		tDesc.vScale = _float3(20.f, 2.f, 20.f);
-		pTerrainBox = dynamic_cast<CTerrainBox*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::LEVEL_STAGE1), TEXT("Prototype_GameObject_TerrainBox"), &tDesc));
-		NULL_CHECK_RETURN(pTerrainBox, E_FAIL);
-		pRoom->Add_TerrainBox(pTerrainBox);
-		// 몬스터 셋팅
-#pragma region old monster spawn
-		/*
-		CMonster* pMonster = nullptr;
-		list<CMonster::MONSTERDESC> DescList;
-		for (size_t i = 0; i < 20; i++)
-		{
-			CMonster::MONSTERDESC tDesc = {};
-			tDesc.iLayerLevelIndex = ENUM_CLASS(LEVEL::LEVEL_STAGE1);
-			tDesc.iPrototypeLevelIndex = ENUM_CLASS(LEVEL::LEVEL_STAGE1);
-			tDesc.strLayerTag = strLayerTag;
-			tDesc.strPrototypeTag = TEXT("Prototype_GameObject_ShortMonster");
-			tDesc.vPosition = _float3(10.f * i + 10.f, 0.f, 5.f * i + 5.f);
-			tDesc.pTerrainBox = pTerrainBox;
-			//pMonster = dynamic_cast<CMonster_Default*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::LEVEL_STAGE1), TEXT("Prototype_GameObject_ShortMonster")));
-			//NULL_CHECK_RETURN(pMonster, E_FAIL);
-			//pRoom->Add_Monster(pMonster);
-			DescList.push_back(tDesc);
-		}
-		*/
-#pragma endregion
+		_int RoomX = RoomIndex[num].first;
+		_int RoomZ = RoomIndex[num].second;
+
+		//현재 정해진 ID값의 룸에 지형, 오브젝트 세팅 내부에서 지형 위치 자동 배치
+		pRoom->Load_From_File(ENUM_CLASS(LEVEL::LEVEL_STAGE1), strLayerTag, TEXT("../../data/Stage2_Map%d.txt"), num, RoomX, RoomZ);
+
 		CMole_A* pMonster = nullptr;
 		list<CMonster::MONSTERDESC> DescList;
 		for (size_t i = 0; i < 20; i++)
@@ -168,7 +150,7 @@ HRESULT CLevel_Stage1::Ready_Layer_Room(const _wstring& strLayerTag)
 			//tDesc.strPrototypeTag = TEXT("Prototype_GameObject_Monster_Mole_A");
 			tDesc.strPrototypeTag = TEXT("Prototype_GameObject_Monster_Oink_A");
 			tDesc.vPosition = _float3(10.f * i + 10.f, 0.f, 5.f * i + 5.f);
-			tDesc.pTerrainBox = pTerrainBox;
+			tDesc.pTerrainBox = pRoom->Get_TerrainBox();
 			//pMonster = dynamic_cast<CMonster_Default*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::LEVEL_STAGE1), TEXT("Prototype_GameObject_ShortMonster")));
 			//NULL_CHECK_RETURN(pMonster, E_FAIL);
 			//pRoom->Add_Monster(pMonster);
@@ -177,13 +159,16 @@ HRESULT CLevel_Stage1::Ready_Layer_Room(const _wstring& strLayerTag)
 		//CMonster_Factory::GetInstance()->Add_Monsters(pRoom, DescList);
 		//CMonster_Factory::GetInstance()->Add_Monsters(pRoom, DescList, CMonster_Factory::MONSTER_TYPE::MONSTER_MOLE_A);
 		CMonster_Factory::GetInstance()->Add_Monsters(pRoom, DescList, CMonster_Factory::MONSTER_TYPE::MONSTER_OINK_A);
-		
-
-		// 오브젝트 셋팅
 
 		// 룸매니저 투입
-		CRoom_Manager::GetInstance()->Add_Room(pRoom, ENUM_CLASS(LEVEL::LEVEL_STAGE1), TEXT("Layer_Room"));
+		CRoom_Manager::GetInstance()->Add_Room(pRoom, ENUM_CLASS(LEVEL::LEVEL_STAGE1), strLayerTag);
 	}
+
+	for (size_t num = 0; num < 5; num++)
+	{
+		CRoom_Manager::GetInstance()->Check_Room(ENUM_CLASS(LEVEL::LEVEL_STAGE1), strLayerTag, num);
+	}
+
 
 	return S_OK;
 }
