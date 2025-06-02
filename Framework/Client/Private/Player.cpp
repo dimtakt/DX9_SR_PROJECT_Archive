@@ -6,6 +6,7 @@
 #include "Effect_Factory.h"
 #include "Room_Manager.h"
 #include "Stat_Manager.h"
+#include "ChapMap.h"
 CPlayer::CPlayer(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CGameObject{ pGraphic_Device }
 {
@@ -449,17 +450,25 @@ void CPlayer::OnCollision(CGameObject* pGameObject)
     switch (pGameObject->Get_ObjType())
     {
     case GAMEOBJ_TYPE::MONSTER:
-        {
-            //pGameObject->Set_IsDead(true);
-            break;
-        }       
+    {
+        //pGameObject->Set_IsDead(true);
+        break;
+    }
     case GAMEOBJ_TYPE::POTAL:
-        {
-            _float3 vPos;
-            CRoom_Manager::GetInstance()->Check_Potal_Coll(dynamic_cast<CPotal*>(pGameObject)->Get_PotalType(), vPos);
+    {
+        _float3 vPos;
+        CRoom_Manager::GetInstance()->Check_Potal_Coll(dynamic_cast<CPotal*>(pGameObject)->Get_PotalType(), vPos);
 
-            m_pTransformCom->Set_State(STATE::POSITION, vPos);
+        m_pTransformCom->Set_State(STATE::POSITION, vPos);
+    }
+    case GAMEOBJ_TYPE::END_POTAL:
+    {
+        if (m_pGameInstance->IsKeyDown(VK_DOWN))
+        {
+            dynamic_cast<CChapMap*>(m_pGameInstance->Get_GameObject(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Layer_UI")))->Open_Ui();
+         
         }
+    }
     }
 }
 
