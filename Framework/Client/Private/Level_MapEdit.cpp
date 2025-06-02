@@ -52,8 +52,6 @@ HRESULT CLevel_MapEdit::Render()
 
 HRESULT CLevel_MapEdit::Ready_ImGui(HWND hWnd, LPDIRECT3DDEVICE9 pOut)
 {
-	MessageBox(0, TEXT("Ready_ImGui 시작"), TEXT("Debug"), MB_OK);
-
 
 	m_pImgui_Manage = CImgui_Manager::Create(hWnd, pOut);
 	if (m_pImgui_Manage == nullptr)
@@ -61,7 +59,7 @@ HRESULT CLevel_MapEdit::Ready_ImGui(HWND hWnd, LPDIRECT3DDEVICE9 pOut)
 		MSG_BOX(TEXT("Failed to Created : CImgui_Manager"));
 		return E_FAIL;
 	}
-	MessageBox(0, TEXT("Imgui 매니저 생성 성공"), TEXT("Debug"), MB_OK);
+	//MessageBox(0, TEXT("Imgui 매니저 생성 성공"), TEXT("Debug"), MB_OK);
 	return S_OK;
 }
 
@@ -759,16 +757,12 @@ void CLevel_MapEdit::ImGui_Terrain_Scale_Render()
 CLevel_MapEdit* CLevel_MapEdit::Create(LPDIRECT3DDEVICE9 pGraphic_Device)
 {
 
-	MessageBox(0, TEXT("맵 에디터 생성 시작"), TEXT("Debug"), MB_OK);
-
 	CLevel_MapEdit* pInstance = new CLevel_MapEdit(pGraphic_Device);
 	if (FAILED(pInstance->Initialize()))
 	{
 		MSG_BOX(TEXT("Failed to Created : CLevel_MapEdit"));
 		Safe_Release(pInstance);
 	}
-
-	MessageBox(0, TEXT("맵 에디터 생성 성공"), TEXT("Debug"), MB_OK);
 
 	return pInstance;
 }
