@@ -2,6 +2,9 @@
 #include "GameInstance.h"
 #include "Status_Miracle_Frame.h"
 #include "Status_Stat_Frame.h"
+#include "Status_Stat_Frame_Name.h"
+#include "Status_Stat_Frame_Value.h"
+#include "Status_Stat_Frame_Type.h"
 CStatus_Frame_Mid::CStatus_Frame_Mid(LPDIRECT3DDEVICE9 pGraphic_Device) : CUIObject(pGraphic_Device)
 {
 }
@@ -91,6 +94,7 @@ HRESULT CStatus_Frame_Mid::Ready_Components()
 		TEXT("Com_Texture"), reinterpret_cast<CComponent**>(&m_pTextureCom))))
 		return E_FAIL;
 
+
 	return S_OK;
 }
 
@@ -102,6 +106,19 @@ HRESULT CStatus_Frame_Mid::Ready_ChildPrototype(LEVEL eLevel)
 
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(eLevel), TEXT("Prototype_GameObject_UI_Status_Miracle_Frame"),
 		CStatus_Miracle_Frame::Create(m_pGraphic_Device, eLevel))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(eLevel), TEXT("Prototype_GameObject_UI_Status_Miracle_Frame_Name"),
+		CStatus_Stat_Frame_Name::Create(m_pGraphic_Device, eLevel))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(eLevel), TEXT("Prototype_GameObject_UI_Status_Miracle_Frame_Value"),
+		CStatus_Stat_Frame_Value::Create(m_pGraphic_Device, eLevel))))
+		return E_FAIL;
+
+
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(eLevel), TEXT("Prototype_GameObject_UI_Status_Miracle_Frame_Type"),
+		CStatus_Stat_Frame_Type::Create(m_pGraphic_Device, eLevel))))
 		return E_FAIL;
 
 	return S_OK;
@@ -117,6 +134,25 @@ HRESULT CStatus_Frame_Mid::Ready_Children()
 	Add_Child(pGameObject);
 
 	pGameObject = dynamic_cast<CUIObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(m_eLevel), TEXT("Prototype_GameObject_UI_Status_Miracle_Frame")));
+	if (nullptr == pGameObject)
+		return E_FAIL;
+	Add_Child(pGameObject);
+
+	pGameObject = dynamic_cast<CUIObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(m_eLevel), TEXT("Prototype_GameObject_UI_Status_Miracle_Frame_Name")));
+	if (nullptr == pGameObject)
+		return E_FAIL;
+	Add_Child(pGameObject);
+
+	pGameObject = dynamic_cast<CUIObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(m_eLevel), TEXT("Prototype_GameObject_UI_Status_Miracle_Frame_Value")));
+	if (nullptr == pGameObject)
+		return E_FAIL;
+	Add_Child(pGameObject);
+
+	UIOBJECT_DESC Desc{};
+	Desc.fSizeY = 150;
+	Desc.fY = -50;
+
+	pGameObject = dynamic_cast<CUIObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(m_eLevel), TEXT("Prototype_GameObject_UI_Status_Miracle_Frame_Type"), &Desc));
 	if (nullptr == pGameObject)
 		return E_FAIL;
 	Add_Child(pGameObject);

@@ -1,5 +1,7 @@
 #include "Dash_Gauge.h"
 #include "GameInstance.h"
+#include "Stat_Manager.h"
+
 CDash_Gauge::CDash_Gauge(LPDIRECT3DDEVICE9 pGraphic_Device) : CUIObject(pGraphic_Device)
 {
 }
@@ -40,9 +42,6 @@ HRESULT CDash_Gauge::Initialize(void* pArg)
 	if (FAILED(Ready_Components()))
 		return E_FAIL;
 
-	if (FAILED(Reday_SyncingObject()))
-		return E_FAIL;
-
 	m_pTransformCom->Scaling(m_fSizeX, m_fSizeY, 1.f);
 	__super::Update_Position();
 
@@ -64,34 +63,12 @@ void CDash_Gauge::Update(_float fTimeDelta)
 
 void CDash_Gauge::Late_Update(_float fTimeDelta)
 {
-	//임시 
-	m_fDash += 0.01f;
-	if (m_fDash >= 5.f)
-		m_fDash = 0.f;
-
-	CPlayerStats::PLAYERSTAT_DESC PlayerStatDesc{};
-	PlayerStatDesc.strName = L"테스트";
-	PlayerStatDesc.iLevel = 1;
-	PlayerStatDesc.iExp = 0;
-	PlayerStatDesc.fHp = 50.f;
-	PlayerStatDesc.fMp = 50.f;
- 	PlayerStatDesc.fDash = m_fDash;
-	PlayerStatDesc.fAtkSpeed = 1.0f;
-	PlayerStatDesc.fMoveSpeed = 1.0f;
-	PlayerStatDesc.fHpRegen = 0.f;
-	PlayerStatDesc.fMpRegen = 0.f;
-	PlayerStatDesc.fDashRegen = 0.01f;
-	PlayerStatDesc.fEvade = 0.f;
-	PlayerStatDesc.fDef = 0.f;
-	PlayerStatDesc.fExpMultiply = 1.0f;
-	PlayerStatDesc.fGoldMultiply = 1.0f;
-
-	m_pPlayerStatsCom->Set_Stats(PlayerStatDesc);
+	m_fDash = CStat_Manager::GetInstance()->Get_CurStats()[ENUM_CLASS(STAT_INFO::CULDASH)];
 
 	//업데이트용
-	if (m_pPlayerStatsCom->Get_Stats().fDash <= m_iIndex - 1)
+	if (m_fDash <= m_iIndex - 1)
 		m_bIsRender = false;
-	else if (m_pPlayerStatsCom->Get_Stats().fDash < m_iIndex)
+	else if (m_fDash < m_iIndex)
 		m_bIsRender = true;
 
 	if(m_bIsRender)
@@ -134,7 +111,7 @@ HRESULT CDash_Gauge::Ready_Components()
 
 void CDash_Gauge::SetUp_RenderState()
 {
-	if (m_pPlayerStatsCom->Get_Stats().fDash < m_iIndex)
+	if (m_fDash < m_iIndex)
 		SetUp_Render_Gauge();
 	
 	m_pGraphic_Device->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
@@ -148,9 +125,6 @@ void CDash_Gauge::SetUp_RenderState()
 
 void CDash_Gauge::Reset_RenderState()
 {
-	if (m_pPlayerStatsCom->Get_Stats().fDash < m_iIndex)
-		Reset_Render_Gauge();
-
 	m_pGraphic_Device->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
 
 	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_LINEAR);
@@ -170,24 +144,11 @@ HRESULT CDash_Gauge::Ready_Children()
 	return S_OK;
 }
 
-HRESULT CDash_Gauge::Reday_SyncingObject()
-{
-	m_pPlayerStatsCom = dynamic_cast<CPlayerStats*>(m_pGameInstance->Get_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Layer_Player"), TEXT("Com_PlayerStats"), 0));
-	if (m_pPlayerStatsCom == nullptr)
-	{
-		MSG_BOX(TEXT("Failed to Syncing : CDash_Gauge"));
-		return E_FAIL;
-	}
-	Safe_AddRef(m_pPlayerStatsCom);
-
-	return S_OK;
-}
-
 void CDash_Gauge::SetUp_Render_Gauge()
 {
 	_float4x4 matTex;
 	D3DXMatrixIdentity(&matTex);
-	_float fRatio = m_pPlayerStatsCom->Get_Stats().fDash - (m_iIndex - 1);
+	_float fRatio = m_fDash - (m_iIndex - 1);
 	matTex._11 = fRatio;
 	matTex._22 = 1.0f;
 	m_pGraphic_Device->SetTransform(D3DTS_TEXTURE0, &matTex);
@@ -242,5 +203,4 @@ void CDash_Gauge::Free()
 	__super::Free();
 	Safe_Release(m_pVIBufferCom);
 	Safe_Release(m_pTextureCom);
-	Safe_Release(m_pPlayerStatsCom);
 }

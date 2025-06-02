@@ -1,6 +1,8 @@
 
 #include "Room_Manager.h"
 #include "Room.h"
+#include "Player.h"
+#include "Client_Defines.h"
 
 IMPLEMENT_SINGLETON(CRoom_Manager)
 
@@ -28,7 +30,7 @@ HRESULT CRoom_Manager::Add_Room(CRoom* pRoom, _uint iLayerLevelIndex, const _wst
 		pRoom->Enter();
 		m_iCurrentLevelID = iLayerLevelIndex;
 		m_iCurrentRoomID = 0;
-		CTransform* pPlayerTransform = dynamic_cast<CTransform*>(m_pGameInstance->Get_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Layer_Player"), TEXT("Com_Transform")));
+		CTransform* pPlayerTransform = dynamic_cast<CTransform*>(m_pGameInstance->Get_Component(iLayerLevelIndex, TEXT("Layer_Player"), TEXT("Com_Transform")));
 		pPlayerTransform->Set_State(STATE::POSITION, _float3(0.f, 10.f, 0.f));
 	}
 	Safe_AddRef(pRoom);
@@ -138,52 +140,62 @@ HRESULT CRoom_Manager::Check_Room(_uint iLayerLevelIndex, const _wstring& strLay
 	return S_OK;
 }
 
-//HRESULT CRoom_Manager::Check_Potal_Coll(POTAL_TYPE ePotal)
-//{
-	//	CRoom* pRoom = Get_CurrentRoom();
-//
-//	_int X = pRoom->Get_RoomX();
-//	_int Z = pRoom->Get_RoomZ();
-//
-//	POTAL_TYPE ePotal = {};
-//
-//	if (ePotalType == POTAL_TYPE::LEFT) // X - 1 , Z 그대로
-//	{
-//		X -= 1;
-//		ePotal = POTAL_TYPE::RIGHT;
-//	}
-//	else if (ePotalType == POTAL_TYPE::RIGHT)
-//	{
-//		X += 1;
-//		ePotal = POTAL_TYPE::LEFT;
-//	}
-//	else if (ePotalType == POTAL_TYPE::UP)
-//	{
-//		Z += 1;
-//		ePotal = POTAL_TYPE::DOWN;
-//	}
-//	else if (ePotalType == POTAL_TYPE::DOWN)
-//	{
-//		Z -= 1;
-//		ePotal = POTAL_TYPE::UP;
-//	}
-//	for (auto& Room : m_RoomIndex)
-//	{
-//		_int iNeighborRoomX = Room.first;
-//		_int iNeighborRoomZ = Room.second;
-//
-//		if (iNeighborRoomX == X && iNeighborRoomZ == Z)
-//		{
-//			같은 값 가진 얘만 Find
-//		}
-//
-//
-//	}
-//
-//	return S_OK;
-//}
+HRESULT CRoom_Manager::Check_Potal_Coll(POTAL_TYPE ePotalType, _float3& vNextPos)
+{
+	CRoom* pRoom = Get_CurrentRoom();
 
+	_int X = pRoom->Get_RoomX();
+	_int Z = pRoom->Get_RoomZ();
 
+	POTAL_TYPE ePotal = {};
+	_float3 vOffset = {0.f, 0.f, 0.f};
+
+	if (ePotalType == POTAL_TYPE::LEFT) // X - 1 , Z 그대로
+	{
+		X -= 1;
+		ePotal = POTAL_TYPE::RIGHT;
+		vOffset.x = -2.f;
+		
+	}
+	else if (ePotalType == POTAL_TYPE::RIGHT)
+	{
+		X += 1;
+		ePotal = POTAL_TYPE::LEFT;
+		vOffset.x = 2.f;
+	}
+	else if (ePotalType == POTAL_TYPE::UP)
+	{
+		Z += 1;
+		ePotal = POTAL_TYPE::DOWN;
+		vOffset.z = 2.f;
+	}
+	else if (ePotalType == POTAL_TYPE::DOWN)
+	{
+		Z -= 1;
+		ePotal = POTAL_TYPE::UP;
+		vOffset.z = -2.f;
+	}
+	for (auto& Room : m_RoomIndex)
+	{
+		_int iNeighborRoomX = Room.first;
+		_int iNeighborRoomZ = Room.second;
+
+		if (iNeighborRoomX == X && iNeighborRoomZ == Z)
+		{
+			CRoom* pNeighborRoom = Find_Room(iNeighborRoomX, iNeighborRoomZ);
+			CPotal* pPotal = pNeighborRoom->Find_Potal(ePotal);
+			CTransform* pPotalTransform = static_cast<CTransform*>(pPotal->Find_Component(TEXT("Com_Transform")));
+			Enter_Room(pNeighborRoom->GetID());
+			CPlayer* pPlayer = dynamic_cast<CPlayer*>(m_pGameInstance->Get_GameObject(m_iCurrentLevelID, TEXT("Layer_Player")));
+			pPlayer->Change_TerrainBox(pNeighborRoom->Get_TerrainBox(), 99);
+			vNextPos = (pPotalTransform->Get_State(STATE::POSITION)) + vOffset;
+			if (pPotal == nullptr || pPotalTransform == nullptr)
+				return E_FAIL;
+		}
+	}
+
+	return S_OK;
+}
 
 
 CRoom* CRoom_Manager::Get_CurrentRoom()
@@ -221,12 +233,22 @@ CRoom* CRoom_Manager::Get_RoomByID(_int iRoomID)
 	return nullptr;
 }
 
-CRoom* CRoom_Manager::Find_Roomd(_int iRoomIndexX, _int iRoomIndexZ)
+CRoom* CRoom_Manager::Find_Room(_int iRoomIndexX, _int iRoomIndexZ)
 {
-	// 가지고 있는 룸 정보 꺼내와서 들어온 x,z 와 같은 값 가지고 있는 룸 주소 리턴 해주고자 함.
+	auto pair = m_mRooms.find(m_iCurrentLevelID);
+	
+	if (pair != m_mRooms.end())
+	{
+		for (auto& pRoom : pair->second)
+		{
+			if (pRoom->Get_RoomX() == iRoomIndexX && pRoom->Get_RoomZ() == iRoomIndexZ)
+			{
+				return pRoom;
+			}
+		}
+	}
 
 	return nullptr;
-
 }
 
 void CRoom_Manager::Clear(_uint iLevelIndex)

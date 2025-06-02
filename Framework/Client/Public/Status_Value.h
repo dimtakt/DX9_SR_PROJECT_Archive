@@ -5,15 +5,16 @@
 BEGIN(Engine)
 class CVIBuffer_Rect;
 class CTexture;
+class CItemObject;
 END
 
 BEGIN(Client)
-class CStatus_Miracle_Frame final : public CUIObject
+class CStatus_Value final : public CUIObject
 {
 private:
-	CStatus_Miracle_Frame(LPDIRECT3DDEVICE9 pGraphic_Device);
-	CStatus_Miracle_Frame(const CStatus_Miracle_Frame& Prototype);
-	virtual							~CStatus_Miracle_Frame() = default;
+									CStatus_Value(LPDIRECT3DDEVICE9 pGraphic_Device);
+									CStatus_Value(const CStatus_Value& Prototype);
+	virtual							~CStatus_Value() = default;
 
 public:
 	virtual HRESULT					Initialize_Prototype(LEVEL eLevel);
@@ -25,8 +26,8 @@ public:
 
 private:
 	LEVEL							m_eLevel = {};
-	CVIBuffer_Rect* m_pVIBufferCom = { nullptr };
-	CTexture* m_pTextureCom = { nullptr };
+	CVIBuffer_Rect*					m_pVIBufferCom = { nullptr };
+	CTexture*						m_pTextureCom = { nullptr };
 
 private:
 	HRESULT							Ready_Components();
@@ -38,8 +39,8 @@ private:
 	void							Reset_RenderState();
 
 public:
-	static CStatus_Miracle_Frame* Create(LPDIRECT3DDEVICE9 pGraphic_Device, LEVEL eLevel);
-	virtual CGameObject* Clone(void* pArg) override;
+	static CStatus_Value*			Create(LPDIRECT3DDEVICE9 pGraphic_Device, LEVEL eLevel);
+	virtual CGameObject*			Clone(void* pArg) override;
 	virtual void					Free() override;
 };
 END

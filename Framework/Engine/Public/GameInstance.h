@@ -54,6 +54,7 @@ public:
 #pragma region RENDERER
 public:
 	HRESULT Add_RenderGroup(RENDERGROUP eRenderGroup, class CGameObject* pRenderObject);
+	void Renderer_Clear();
 #pragma endregion
 
 #pragma region TIMER_MANAGER

@@ -4,7 +4,7 @@
 #include "Collider_OBB.h"
 #include "Event_Manager.h"
 #include "Effect_Factory.h"
-
+#include "Room_Manager.h"
 CPlayer::CPlayer(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CGameObject{ pGraphic_Device }
 {
@@ -23,7 +23,7 @@ HRESULT CPlayer::Initialize_Prototype()
 
 HRESULT CPlayer::Initialize(void* pArg)
 {
- 	if (FAILED(Ready_Components()))
+ 	if (FAILED(Ready_Components(pArg)))
 		return E_FAIL;
 
     m_eObjType = GAMEOBJ_TYPE::PLAYER;
@@ -46,7 +46,7 @@ void CPlayer::Update(_float fTimeDelta)
 {    
     //m_pCollider->Update_Collider();
     if (m_pTerrainBox != nullptr) {
-        m_pTerrainBox->SetUp_OnTerrainBox(m_pTransformCom, _float3(0.f, 0.1f, 0.f));
+        m_pTerrainBox->SetUp_OnTerrainBox(m_pTransformCom, _float3(0.f, 0.2f, 0.f));
     }
 
     _float fPointY = 0.f;       // 교차 평면의 기준이 될 Y값
@@ -83,7 +83,7 @@ void CPlayer::Update(_float fTimeDelta)
     // 2. 크기
     _float4x4 matScale = {};
     D3DXMatrixIdentity(&matScale);
-    D3DXMatrixScaling(&matScale, -4, 4, 4);
+    D3DXMatrixScaling(&matScale, -3.5f, 3.5f, 3.5f);
 
     // 3. 자전
     _float4x4 matRotateChild = {};
@@ -449,8 +449,14 @@ void CPlayer::OnCollision(CGameObject* pGameObject)
         {
             //pGameObject->Set_IsDead(true);
             break;
+        }       
+    case GAMEOBJ_TYPE::POTAL:
+        {
+            _float3 vPos;
+            CRoom_Manager::GetInstance()->Check_Potal_Coll(dynamic_cast<CPotal*>(pGameObject)->Get_PotalType(), vPos);
+
+            m_pTransformCom->Set_State(STATE::POSITION, vPos);
         }
-        
     }
 }
 
@@ -476,8 +482,10 @@ void CPlayer::OnEvent(_uint iTypeindex, const EVENTDATA* pData)
 }
 
 
-HRESULT CPlayer::Ready_Components()
+HRESULT CPlayer::Ready_Components(void* pArg)
 {
+    PLAYERDESC* pDesc = static_cast<PLAYERDESC*>(pArg);
+
     /* For Com_VIBuffer */
     if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_VIBuffer_Rect"),
         TEXT("Com_VIBuffer"), reinterpret_cast<CComponent**>(&m_pVIBufferCom))))
@@ -554,7 +562,7 @@ HRESULT CPlayer::Ready_Components()
     CAnimator::ANIMSTATE_DESC StartAnimStateDesc{};
     StartAnimStateDesc.strTimerTag = L"Animator_Player_Main";   // 해당 애니메이터가 타이머에서 사용할 태그 key값
     StartAnimStateDesc.pParentTransform = m_pTransformCom;
-    StartAnimStateDesc.pChildTransform = static_cast<CTransform*>(m_pGameInstance->Get_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), L"Layer_Weapon", L"Com_Transform"));
+    StartAnimStateDesc.pChildTransform = static_cast<CTransform*>(m_pGameInstance->Get_Component(pDesc->iLayerIndex, L"Layer_Weapon", L"Com_Transform"));
 
     if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Animator"),
         TEXT("Com_Animator"), reinterpret_cast<CComponent**>(&m_pAnimatorCom), &StartAnimStateDesc)))
@@ -685,6 +693,7 @@ void CPlayer::Free()
     Safe_Release(m_pAnimatorCom);
     Safe_Release(m_pAnimatorTransCom);
     Safe_Release(m_pTerrainBox);
+    
     
     /*if (m_pCollider)
     {

@@ -19,9 +19,13 @@ public:
 	virtual void			Update(_float fTimeDelta) override;
 	virtual void			Late_Update(_float fTimeDelta) override;
 	virtual HRESULT			Render() override;
+	
+public:
+	void					FontRender_Switch();
 
 private:
 	CVIBuffer_Rect*			m_pVIBufferCom = { nullptr };
+	_bool					m_isFontRender = { true };
 
 private:
 	HRESULT					Ready_Components();

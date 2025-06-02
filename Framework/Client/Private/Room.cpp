@@ -143,9 +143,27 @@ HRESULT CRoom::Ready_Potal(_uint iLayerLevelIndex, const _wstring& strLayerTag, 
 		&pDesc);
 
 	CPotal* pPotal = static_cast<CPotal*>(m_pGameInstance->Get_LastGameObject(iLayerLevelIndex, strLayerTag));
+
+	// collider
+	CCollider_OBB::OBB_DESC tColliderDesc;
+	tColliderDesc.vScale = _float3(1.f, 0.001f, 1.f);
+	tColliderDesc.pOwner = pPotal;
+	tColliderDesc.pTransform = dynamic_cast<CTransform*>(pPotal->Find_Component(TEXT("Com_Transform")));
+	CCollider_OBB* pCol = dynamic_cast<CCollider_OBB*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::COMPONENT, ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Collider_OBB"), &tColliderDesc));
+	m_pGameInstance->Add_Collider(pCol);
 	m_vPotal.push_back(pPotal);
 
 	return E_NOTIMPL;
+}
+
+CPotal* CRoom::Find_Potal(POTAL_TYPE ePotal)
+{
+	for (auto& pPotal : m_vPotal)
+	{
+		if (pPotal->Get_PotalType() == ePotal)
+			return pPotal;
+	}
+	return nullptr;
 }
 
 HRESULT CRoom::Load_From_File(_uint iLayerLevelIndex, const _wstring& strLayerTag, const _tchar* pLoadFileTag, _int iIndex, _int RoomX , _int RoomZ)

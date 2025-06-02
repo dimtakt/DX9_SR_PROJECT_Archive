@@ -1,30 +1,33 @@
-#include "Dice_Player.h"
+#include "Status_Value.h"
 #include "GameInstance.h"
-#include "Stat_Manager.h"
-CDice_Player::CDice_Player(LPDIRECT3DDEVICE9 pGraphic_Device) : CUIObject(pGraphic_Device)
+CStatus_Value::CStatus_Value(LPDIRECT3DDEVICE9 pGraphic_Device) : CUIObject(pGraphic_Device)
 {
 }
 
-CDice_Player::CDice_Player(const CDice_Player& Prototype) : CUIObject(Prototype)
+CStatus_Value::CStatus_Value(const CStatus_Value& Prototype) : CUIObject(Prototype), m_eLevel{ Prototype.m_eLevel }
 {
 }
 
-HRESULT CDice_Player::Initialize_Prototype()
+HRESULT CStatus_Value::Initialize_Prototype(LEVEL eLevel)
 {
+	m_eLevel = eLevel;
+
 	return S_OK;
 }
 
-HRESULT CDice_Player::Initialize(void* pArg)
+HRESULT CStatus_Value::Initialize(void* pArg)
 {
-	m_fSizeX = 32;
-	m_fSizeY = 32;
-	m_fX = -32;
-	m_fY = -32;
-	m_fZ = UI_DEPTH::HUD_WALLET;
+	UIOBJECT_DESC* Desc = static_cast<UIOBJECT_DESC*>(pArg);
+
+	m_fSizeX = 64;
+	m_fSizeY = 64 ;
+	m_fX = 0;
+	m_fY = 0;
+	m_fZ = UI_DEPTH::PLAYER_STAUTS;
 	m_iWinSizeX = g_iWinSizeX;
 	m_iWinSizeY = g_iWinSizeY;
 
-	if (FAILED(CUIObject::Initialize()))
+	if (FAILED(__super::Initialize()))
 		return E_FAIL;
 
 	if (FAILED(Ready_Components()))
@@ -36,41 +39,36 @@ HRESULT CDice_Player::Initialize(void* pArg)
 	return S_OK;
 }
 
-void CDice_Player::Priority_Update(_float fTimeDelta)
+void CStatus_Value::Priority_Update(_float fTimeDelta)
 {
 }
 
-void CDice_Player::Update(_float fTimeDelta)
+void CStatus_Value::Update(_float fTimeDelta)
 {
 }
 
-void CDice_Player::Late_Update(_float fTimeDelta)
+void CStatus_Value::Late_Update(_float fTimeDelta)
 {
-	m_iValue = CStat_Manager::GetInstance()->Get_CurStats()[ENUM_CLASS(STAT_INFO::DICE)];
-
 	m_pGameInstance->Add_RenderGroup(RENDERGROUP::RG_UI, this);
 }
 
-HRESULT CDice_Player::Render()
+HRESULT CStatus_Value::Render()
 {
 	SetUp_RenderState();
 
-	
-	if (FAILED(m_pTextureCom->Bind_Texture(0)))
+	if (FAILED(m_pTextureCom->Bind_Texture(6)))
 		return E_FAIL;
 	m_pVIBufferCom->Bind_Buffers();
 
 	__super::Begin();
 	m_pVIBufferCom->Render();
-
-	Render_Font();
 	__super::End();
 
 	Reset_RenderState();
 	return S_OK;
 }
 
-HRESULT CDice_Player::Ready_Components()
+HRESULT CStatus_Value::Ready_Components()
 {
 	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_VIBuffer_Rect"),
 		TEXT("Com_VIBuffer"), reinterpret_cast<CComponent**>(&m_pVIBufferCom))))
@@ -80,14 +78,14 @@ HRESULT CDice_Player::Ready_Components()
 		TEXT("Com_Transform"), reinterpret_cast<CComponent**>(&m_pTransformCom))))
 		return E_FAIL;
 
-	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Rect_UI_Hud_Dice_Symbol"),
+	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Rect_Status_Window_Frame"),
 		TEXT("Com_Texture"), reinterpret_cast<CComponent**>(&m_pTextureCom))))
 		return E_FAIL;
 
 	return S_OK;
 }
 
-void CDice_Player::SetUp_RenderState()
+void CStatus_Value::SetUp_RenderState()
 {
 	m_pGraphic_Device->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
 	m_pGraphic_Device->SetRenderState(D3DRS_ALPHAREF, 200);
@@ -98,7 +96,7 @@ void CDice_Player::SetUp_RenderState()
 	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MIPFILTER, D3DTEXF_NONE);
 }
 
-void CDice_Player::Reset_RenderState()
+void CStatus_Value::Reset_RenderState()
 {
 	m_pGraphic_Device->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
 
@@ -109,43 +107,34 @@ void CDice_Player::Reset_RenderState()
 	m_pGraphic_Device->SetTexture(0, NULL);
 }
 
-void CDice_Player::Render_Font()
+CStatus_Value* CStatus_Value::Create(LPDIRECT3DDEVICE9 pGraphic_Device, LEVEL eLevel)
 {
-	Font_Rect_Update();
-	TCHAR szText[64];
-	m_vTexRect.left -= 400;
-	m_vTexRect.right -= m_fSizeX;
-	_stprintf_s(szText, TEXT("%d"), m_iValue);
-	m_pGameInstance->Render_Font(TEXT("UI_Font_18"), szText, m_vTexRect, D3DXCOLOR(1.f, 1.f, 1.f, 1.f), DT_RIGHT | DT_VCENTER | DT_SINGLELINE);
-}
+	CStatus_Value* pInstance = new CStatus_Value(pGraphic_Device);
 
-CDice_Player* CDice_Player::Create(LPDIRECT3DDEVICE9 pGraphic_Device)
-{
-	CDice_Player* pInstance = new CDice_Player(pGraphic_Device);
-
-	if (FAILED(pInstance->Initialize_Prototype()))
+	if (FAILED(pInstance->Initialize_Prototype(eLevel)))
 	{
-		MSG_BOX(TEXT("Failed to Created : CDice_Player"));
+		MSG_BOX(TEXT("Failed to Create : CStatus_Value"));
 		Safe_Release(pInstance);
 	}
 	return pInstance;
 }
 
-CGameObject* CDice_Player::Clone(void* pArg)
+CGameObject* CStatus_Value::Clone(void* pArg)
 {
-	CDice_Player* pInstance = new CDice_Player(*this);
+	CStatus_Value* pInstance = new CStatus_Value(*this);
 
 	if (FAILED(pInstance->Initialize(pArg)))
 	{
-		MSG_BOX(TEXT("Failed to Clone : CDice_Player"));
+		MSG_BOX(TEXT("Failed to Clone : CStatus_Value"));
 		Safe_Release(pInstance);
 	}
 	return pInstance;
 }
 
-void CDice_Player::Free()
+void CStatus_Value::Free()
 {
 	__super::Free();
-	Safe_Release(m_pVIBufferCom);
+
 	Safe_Release(m_pTextureCom);
+	Safe_Release(m_pVIBufferCom);
 }

@@ -13,6 +13,11 @@ BEGIN(Client)
 
 class CDagger final : public CGameObject
 {
+public:
+	typedef struct tagDaggerDesc
+	{
+		_uint iLayerIndex;
+	}DAGGERDESC;
 private:
 	CDagger(LPDIRECT3DDEVICE9 pGraphic_Device);
 	CDagger(const CDagger& Prototype);
@@ -38,9 +43,10 @@ private:
 	_bool					m_isFlippedX					= false;
 
 	CTransform*				m_pTargetTransformCom			= { nullptr };
+	DAGGERDESC				m_tDesc = {};
 
 private:
-	HRESULT	Ready_Components();
+	HRESULT	Ready_Components(void* pArg);
 	void SetUp_RenderState();
 	void Reset_RenderState();
 

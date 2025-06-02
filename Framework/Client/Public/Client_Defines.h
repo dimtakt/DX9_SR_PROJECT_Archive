@@ -14,7 +14,7 @@ namespace Client
 	enum class POTAL_TYPE { LEFT, RIGHT, UP, DOWN, POTAL_END };
 
 	struct UI_DEPTH {
-		//? ?????
+		//KEY_GUIDE
 		static constexpr float KEY_GUIDE = 0.15f;
 
 		//HUD
@@ -25,24 +25,28 @@ namespace Client
 		static constexpr float HUD_STATUS = 0.25f;
 		static constexpr float HUD_WALLET = 0.25f;
 
-		//???
+		//FILED
 		static constexpr float FILED_HP = 0.3f;
 		static constexpr float FILED_HP_FRAME = 0.4f;
 
-		//?¥ê?
+		//INVEN
 		static constexpr float INVEN_SLOT_SELETE = 0.1f;
 		static constexpr float INVENTORY = 0.2f;
 		static constexpr float INVEN_SLOT = 0.2f;
 
-		//??? ????
+		//CHATERMAP
 		static constexpr float CHATERMAP = 0.26f;
 		static constexpr float CHATERMAP_BUTTON = 0.24f;
 		static constexpr float CHATERMAP_UP = 0.245f;
 		static constexpr float CHATERMAP_PLAYER = 0.235f;
 		static constexpr float CHATERMAP_LINE = 0.242f;
 
-		//?¡À???? ????????? ?
+		//PLAYER_STAUTS
 		static constexpr float PLAYER_STAUTS = 0.2f;
+
+		//Loding
+		static constexpr float LODING = 0.2f;
+
 	};
 
 };

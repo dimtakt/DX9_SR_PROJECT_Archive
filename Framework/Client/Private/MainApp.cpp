@@ -27,6 +27,7 @@
 #include "Field_Hp.h"
 #include "ChapMap.h"
 #include "Status_Window.h"
+#include "Loding_UI.h"
 
 CMainApp::CMainApp()
 	: m_pGameInstance{ CGameInstance::GetInstance() }
@@ -186,18 +187,14 @@ HRESULT CMainApp::Ready_GameObject_Setting()
 
 #pragma endregion
 
-
-
+#pragma region Prototype_GameObject_Loding_UI
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_Loding"),
+		CLoding_UI::Create(m_pGraphic_Device, LEVEL::LEVEL_STATIC))))
+		return E_FAIL;
+#pragma endregion
 	/////////////////////////////////////////////Add Layer///////////////////////////////////////////
 
 	/* Add Layer*/
-	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Layer_Weapon"),
-		ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_Weapon_Dagger"))))
-		return E_FAIL;
-
- 	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Layer_Player"),
-		ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_Player"))))
-		return E_FAIL;
 
 	return S_OK;
 }
@@ -427,8 +424,17 @@ HRESULT CMainApp::Ready_Texture_Setting()
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Rect_Status_Window_Frame"),
 		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/UI/StatusWindow/Status_Window_Frame_%d.png"), 5))))
 		return E_FAIL;
-#pragma endregion
 
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Rect_Status_Icon"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/UI/StatusWindow/Status_Icon_%d.png"), 7))))
+		return E_FAIL;
+#pragma endregion
+#pragma region Prototype_Component_UI_Loding
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Rect_Loding_1"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/UI/Loding/St1Loading_%d.png"), 20))))
+		return E_FAIL;
+
+#pragma endregion
 	return S_OK;
 }
 
@@ -527,6 +533,16 @@ void CMainApp::Ready_Key_Setting()
 
 void CMainApp::Ready_Font_Setting()
 {
+	if (FAILED(m_pGameInstance->Ready_Font(TEXT("UI_Font_50"), TEXT("../Bin/Resources/Font/Galmuri9.ttf"), TEXT("Galmuri9 Regular"), 0, 50, 900)))
+		MSG_BOX(TEXT("FAILED to Font"));
+
+	if (FAILED(m_pGameInstance->Ready_Font(TEXT("UI_Font_40"), TEXT("../Bin/Resources/Font/Galmuri9.ttf"), TEXT("Galmuri9 Regular"), 0, 40, 900)))
+		MSG_BOX(TEXT("FAILED to Font"));
+
+	if (FAILED(m_pGameInstance->Ready_Font(TEXT("UI_Font_30"), TEXT("../Bin/Resources/Font/Galmuri9.ttf"), TEXT("Galmuri9 Regular"), 0, 30, 400)))
+		MSG_BOX(TEXT("FAILED to Font"));
+
+
 	if (FAILED(m_pGameInstance->Ready_Font(TEXT("UI_Font_18"), TEXT("../Bin/Resources/Font/Galmuri9.ttf"), TEXT("Galmuri9 Regular"), 0, 18, 900)))
 		MSG_BOX(TEXT("FAILED to Font"));
 	if (FAILED(m_pGameInstance->Ready_Font(TEXT("UI_Font_16"), TEXT("../Bin/Resources/Font/Galmuri9.ttf"), TEXT("Galmuri9 Regular"), 0, 16, 900)))
@@ -571,6 +587,10 @@ HRESULT CMainApp::Start_Level(LEVEL eStartLevelID)
 
 HRESULT CMainApp::Ready_Manager_Setting()
 {
+	CRoom_Manager::GetInstance();
+	CMonster_Factory::GetInstance();
+	CStat_Manager::GetInstance()->Initialize();
+
 	return S_OK;
 }
 
