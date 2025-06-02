@@ -3,6 +3,7 @@
 #include "Room.h"
 #include "Player.h"
 #include "Client_Defines.h"
+#include "Client_Defines_Event.h"
 
 IMPLEMENT_SINGLETON(CRoom_Manager)
 
@@ -188,6 +189,10 @@ HRESULT CRoom_Manager::Check_Potal_Coll(POTAL_TYPE ePotalType, _float3& vNextPos
 			Enter_Room(pNeighborRoom->GetID());
 			CPlayer* pPlayer = dynamic_cast<CPlayer*>(m_pGameInstance->Get_GameObject(m_iCurrentLevelID, TEXT("Layer_Player")));
 			pPlayer->Change_TerrainBox(pNeighborRoom->Get_TerrainBox(), 99);
+
+			ROOMCHANGE EventDesc;
+			EventDesc.vPosition = dynamic_cast<CTransform*>(pNeighborRoom->Get_TerrainBox()->Find_Component(TEXT("Com_Transform_TerrainBox")))->Get_State(STATE::POSITION);
+			m_pGameInstance->Broadcast(ENUM_CLASS(EVENT_TYPE::ROOMCHANGE), &EventDesc);
 			vNextPos = (pPotalTransform->Get_State(STATE::POSITION)) + vOffset;
 			if (pPotal == nullptr || pPotalTransform == nullptr)
 				return E_FAIL;
