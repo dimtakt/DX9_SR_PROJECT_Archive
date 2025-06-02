@@ -23,7 +23,7 @@ HRESULT CAnim_Player_Fury::Initialize()
 	// End Setting *********
 
 
-	// desmos : https://www.desmos.com/calculator/hqkn67hpjk
+	// desmos : -
 	// keyStart (0~17) *********
 	for (size_t i = 0; i < 18; i++)
 	{
