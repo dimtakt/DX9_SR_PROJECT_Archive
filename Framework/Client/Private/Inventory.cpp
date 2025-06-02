@@ -73,6 +73,9 @@ HRESULT CInventory::Initialize(void* pArg)
 
 void CInventory::Priority_Update(_float fTimeDelta)
 {
+	if (m_pGameInstance->Get_CurrentLevel() == ENUM_CLASS(LEVEL::LEVEL_LOADING) || m_pGameInstance->Get_CurrentLevel() == ENUM_CLASS(LEVEL::LEVEL_LOGO) || m_pGameInstance->Get_CurrentLevel() == ENUM_CLASS(LEVEL::LEVEL_MAPEDIT))
+		return;
+
 	if (m_bIsOpen == true)
 	{
 		__super::Priority_Update(fTimeDelta);
@@ -81,6 +84,9 @@ void CInventory::Priority_Update(_float fTimeDelta)
 
 void CInventory::Update(_float fTimeDelta)
 {
+	if (m_pGameInstance->Get_CurrentLevel() == ENUM_CLASS(LEVEL::LEVEL_LOADING) || m_pGameInstance->Get_CurrentLevel() == ENUM_CLASS(LEVEL::LEVEL_LOGO) || m_pGameInstance->Get_CurrentLevel() == ENUM_CLASS(LEVEL::LEVEL_MAPEDIT))
+		return;
+
 	if (m_bIsOpen == true)
 	{
 		Selete_Slot();
@@ -92,6 +98,9 @@ void CInventory::Update(_float fTimeDelta)
 
 void CInventory::Late_Update(_float fTimeDelta)
 {
+	if (m_pGameInstance->Get_CurrentLevel() == ENUM_CLASS(LEVEL::LEVEL_LOADING) || m_pGameInstance->Get_CurrentLevel() == ENUM_CLASS(LEVEL::LEVEL_LOGO) || m_pGameInstance->Get_CurrentLevel() == ENUM_CLASS(LEVEL::LEVEL_MAPEDIT))
+		return;
+
 	if (m_bIsOpen == true)
 	{
 		m_pGameInstance->Add_RenderGroup(RENDERGROUP::RG_UI, this);

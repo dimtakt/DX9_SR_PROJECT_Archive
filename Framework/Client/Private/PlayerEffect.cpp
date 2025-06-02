@@ -50,6 +50,8 @@ HRESULT CPlayerEffect::Initialize(void* pArg)
 		matTransform = matScale * matRot * matTrans;
 	}
 
+	std::cout << "[PlayerEffect::Initialize] EffectPos : " << matTransform.m[3][0] << ", " << matTransform.m[3][1] << ", " << matTransform.m[3][2] << std::endl;
+
 
 	for (int i = 0; i < 3; i++)
 		m_pTransformCom->Set_State(STATE(i), *reinterpret_cast<_float3*>(&matTransform.m[i]));
