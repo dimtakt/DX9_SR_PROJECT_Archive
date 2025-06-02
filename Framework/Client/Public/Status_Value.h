@@ -29,6 +29,7 @@ private:
 	CVIBuffer_Rect*					m_pVIBufferCom = { nullptr };
 	CTexture*						m_pTextureCom = { nullptr };
 
+	_uint							m_iTexIndex = {};
 private:
 	HRESULT							Ready_Components();
 

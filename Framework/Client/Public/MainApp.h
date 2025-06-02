@@ -38,7 +38,7 @@ private:
 	HRESULT Ready_Item_Setting();
 	HRESULT Start_Level(LEVEL eStartLevelID);
 	HRESULT Ready_Manager_Setting();
-
+	HRESULT	Ready_UI_Stting();
 public:
 	static CMainApp* Create();
 	virtual void Free() override;
