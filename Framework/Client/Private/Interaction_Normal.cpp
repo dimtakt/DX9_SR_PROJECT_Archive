@@ -20,6 +20,9 @@ HRESULT CInteraction_Normal::Initialize_Prototype()
 
 HRESULT CInteraction_Normal::Initialize(void* pArg)
 {
+    MAP_OBJECT_DESC* pObject_Desc = static_cast<MAP_OBJECT_DESC*>(pArg);
+    m_eObjType = pObject_Desc->eType;
+
     if (FAILED(Ready_Components()))
         return E_FAIL;
 
@@ -33,7 +36,7 @@ HRESULT CInteraction_Normal::Initialize(void* pArg)
 
     m_pTransformCom->Set_State(STATE::POSITION, pObject_Desc->vPos);*/
 
-    m_pTransformCom->Set_State(STATE::POSITION, _float3(0.f, 10.f, 0.f));
+    m_pTransformCom->Set_State(STATE::POSITION, pObject_Desc->vPos);
 
     //XÃà È¸Àü
     /*if (pObject_Desc->vRotate.x != 0.f || pObject_Desc->vRotate.y != 0.f || pObject_Desc->vRotate.z != 0.f)
@@ -43,12 +46,11 @@ HRESULT CInteraction_Normal::Initialize(void* pArg)
 
     m_pTransformCom->Scaling(pObject_Desc->vScale.x, pObject_Desc->vScale.y, pObject_Desc->vScale.z);*/
 
-    m_pTransformCom->Scaling(5.f, 5.f, 5.f);
+    m_pTransformCom->Scaling(pObject_Desc->vScale.x, pObject_Desc->vScale.y, pObject_Desc->vScale.z);
 
     /*m_iTextureIndex = pObject_Desc->iTextureIndex;
     m_pTextureCom->Bind_Texture(m_iTextureIndex);*/
-    MAP_OBJECT_DESC* pObject_Desc = static_cast<MAP_OBJECT_DESC*>(pArg);
-    m_eObjType = pObject_Desc->eType;
+    
     if (pObject_Desc->eType == GAMEOBJ_TYPE::EXP)
         EXP_Initialize();
     else if (pObject_Desc->eType == GAMEOBJ_TYPE::GOLD)
@@ -165,8 +167,6 @@ void CInteraction_Normal::Reset_RenderState()
 
 HRESULT CInteraction_Normal::EXP_Initialize()
 {
-    
-
     return S_OK;
 }
 
@@ -188,11 +188,16 @@ HRESULT CInteraction_Normal::EXP_Late_Update(_float fTimeDelta)
 HRESULT CInteraction_Normal::EXP_Render()
 {
     m_pTransformCom->Bind_Matrix();
-    if (FAILED(m_pTextureCom_0->Bind_Texture(0)))
-        return E_FAIL;
-    m_pVIBufferCom->Bind_Buffers();
 
-    m_pVIBufferCom->Render();
+    m_pVIBufferCom_1->Bind_Buffers();
+
+    m_pAnimatorCom_1->Update_State();
+    m_pVIBufferCom_1->Render();
+
+    m_pVIBufferCom_0->Bind_Buffers();
+
+    m_pAnimatorCom_0->Update_State();
+    m_pVIBufferCom_0->Render();
 
     return S_OK;
 }
@@ -200,25 +205,31 @@ HRESULT CInteraction_Normal::EXP_Render()
 HRESULT CInteraction_Normal::EXP_Component()
 {
     if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_VIBuffer_Rect"),
-        TEXT("Com_VIBuffer"), reinterpret_cast<CComponent**>(&m_pVIBufferCom))))
+        TEXT("Com_VIBuffer"), reinterpret_cast<CComponent**>(&m_pVIBufferCom_0))))
         return E_FAIL;
 
-    /* For.Com_Texture */
-    if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_EXP"),
-        TEXT("Com_Texture"), reinterpret_cast<CComponent**>(&m_pTextureCom_0))))
-        return E_FAIL;
-
-    if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_EXP_Big"),
-        TEXT("Com_Texture"), reinterpret_cast<CComponent**>(&m_pTextureCom_1))))
-        return E_FAIL;
-
-    if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_EXP_Fx"),
-        TEXT("Com_Texture"), reinterpret_cast<CComponent**>(&m_pTextureCom_2))))
+    if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_VIBuffer_Rect"),
+        TEXT("Com_VIBuffer_1"), reinterpret_cast<CComponent**>(&m_pVIBufferCom_1))))
         return E_FAIL;
 
     if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Transform"),
         TEXT("Com_Transform"), reinterpret_cast<CComponent**>(&m_pTransformCom))))
         return E_FAIL;
+
+    /* For.Com_Texture */
+    if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_EXP_Big"),
+        TEXT("Com_Texture"), reinterpret_cast<CComponent**>(&m_pTextureCom_0))))
+        return E_FAIL;
+
+    if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_EXP_Big_Light"),
+        TEXT("Com_Texture_1"), reinterpret_cast<CComponent**>(&m_pTextureCom_1))))
+        return E_FAIL;
+
+    if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_EXP_Big_Fx"),
+        TEXT("Com_Texture_2"), reinterpret_cast<CComponent**>(&m_pTextureCom_2))))
+        return E_FAIL;
+
+    
 
     CAnimator::ANIMSTATE_DESC StartAnimStateDesc_0{};
     StartAnimStateDesc_0.strTimerTag = L"Animator_EXP";
@@ -228,17 +239,13 @@ HRESULT CInteraction_Normal::EXP_Component()
     CAnimator::ANIMSTATE_DESC StartAnimStateDesc_1{};
     StartAnimStateDesc_1.strTimerTag = L"Animator_EXP_Big";
     if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Animator"),
-        TEXT("Com_Animator"), reinterpret_cast<CComponent**>(&m_pAnimatorCom_1), &StartAnimStateDesc_1)))
-        return E_FAIL;
-    CAnimator::ANIMSTATE_DESC StartAnimStateDesc_2{};
-    StartAnimStateDesc_2.strTimerTag = L"Animator_EXP_Fx";
-    if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Animator"),
-        TEXT("Com_Animator"), reinterpret_cast<CComponent**>(&m_pAnimatorCom_2), &StartAnimStateDesc_2)))
+        TEXT("Com_Animator_1"), reinterpret_cast<CComponent**>(&m_pAnimatorCom_1), &StartAnimStateDesc_1)))
         return E_FAIL;
 
-    m_pAnimatorCom_0->Add_State(L"EXP_big", { m_pTextureCom_0, 12, true });
-    m_pAnimatorCom_1->Add_State(L"EXP_Light", { m_pTextureCom_1, 12, true });
-    m_pAnimatorCom_2->Add_State(L"EXP_Fx", { m_pTextureCom_2, 13, true });
+    m_pAnimatorCom_0->Add_State(L"EXP_big", { m_pTextureCom_0, 3, true });
+    m_pAnimatorCom_0->Add_State(L"EXP_Fx", { m_pTextureCom_2, 3, true });
+    m_pAnimatorCom_1->Add_State(L"EXP_Light", { m_pTextureCom_1, 3, true });
+    
 
     return S_OK;
 }
@@ -271,9 +278,9 @@ HRESULT CInteraction_Normal::Gold_Render()
     m_pTransformCom->Bind_Matrix();
     if (FAILED(m_pTextureCom_0->Bind_Texture(0)))
         return E_FAIL;
-    m_pVIBufferCom->Bind_Buffers();
+    m_pVIBufferCom_0->Bind_Buffers();
 
-    m_pVIBufferCom->Render();
+    m_pVIBufferCom_0->Render();
 
     return S_OK;
 }
@@ -281,7 +288,7 @@ HRESULT CInteraction_Normal::Gold_Render()
 HRESULT CInteraction_Normal::Gold_Component()
 {
     if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_VIBuffer_Rect"),
-        TEXT("Com_VIBuffer"), reinterpret_cast<CComponent**>(&m_pVIBufferCom))))
+        TEXT("Com_VIBuffer"), reinterpret_cast<CComponent**>(&m_pVIBufferCom_0))))
         return E_FAIL;
 
     /* For.Com_Texture */
@@ -331,9 +338,9 @@ HRESULT CInteraction_Normal::HP_Render()
     m_pTransformCom->Bind_Matrix();
     if (FAILED(m_pTextureCom_0->Bind_Texture(0)))
         return E_FAIL;
-    m_pVIBufferCom->Bind_Buffers();
+    m_pVIBufferCom_0->Bind_Buffers();
 
-    m_pVIBufferCom->Render();
+    m_pVIBufferCom_0->Render();
 
     return S_OK;
 }
@@ -341,7 +348,7 @@ HRESULT CInteraction_Normal::HP_Render()
 HRESULT CInteraction_Normal::HP_Component()
 {
     if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_VIBuffer_Rect"),
-        TEXT("Com_VIBuffer"), reinterpret_cast<CComponent**>(&m_pVIBufferCom))))
+        TEXT("Com_VIBuffer"), reinterpret_cast<CComponent**>(&m_pVIBufferCom_0))))
         return E_FAIL;
 
     /* For.Com_Texture */
@@ -389,11 +396,11 @@ HRESULT CInteraction_Normal::Stone_Tablet_Late_Update(_float fTimeDelta)
 HRESULT CInteraction_Normal::Stone_Tablet_Render()
 {
     m_pTransformCom->Bind_Matrix();
-    if (FAILED(m_pTextureCom_0->Bind_Texture(0)))
-        return E_FAIL;
-    m_pVIBufferCom->Bind_Buffers();
 
-    m_pVIBufferCom->Render();
+    m_pVIBufferCom_0->Bind_Buffers();
+
+    m_pAnimatorCom_0->Update_State();
+    m_pVIBufferCom_0->Render();
 
     return S_OK;
 }
@@ -401,7 +408,7 @@ HRESULT CInteraction_Normal::Stone_Tablet_Render()
 HRESULT CInteraction_Normal::Stone_Tablet_Component()
 {
     if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_VIBuffer_Rect"),
-        TEXT("Com_VIBuffer"), reinterpret_cast<CComponent**>(&m_pVIBufferCom))))
+        TEXT("Com_VIBuffer"), reinterpret_cast<CComponent**>(&m_pVIBufferCom_0))))
         return E_FAIL;
 
     /* For.Com_Texture */
@@ -419,7 +426,7 @@ HRESULT CInteraction_Normal::Stone_Tablet_Component()
         TEXT("Com_Animator"), reinterpret_cast<CComponent**>(&m_pAnimatorCom_0), &StartAnimStateDesc)))
         return E_FAIL;
 
-    m_pAnimatorCom_0->Add_State(L"Stone_Tablet", { m_pTextureCom_0, 1, true });
+    m_pAnimatorCom_0->Add_State(L"Stone_Tablet", { m_pTextureCom_0, 3, true });
     return S_OK;
 }
 #pragma endregion
@@ -450,9 +457,9 @@ HRESULT CInteraction_Normal::Atifact_Render()
     m_pTransformCom->Bind_Matrix();
     if (FAILED(m_pTextureCom_0->Bind_Texture(0)))
         return E_FAIL;
-    m_pVIBufferCom->Bind_Buffers();
+    m_pVIBufferCom_0->Bind_Buffers();
 
-    m_pVIBufferCom->Render();
+    m_pVIBufferCom_0->Render();
 
     return S_OK;
 }
@@ -460,7 +467,7 @@ HRESULT CInteraction_Normal::Atifact_Render()
 HRESULT CInteraction_Normal::Atifact_Component()
 {
     if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_VIBuffer_Rect"),
-        TEXT("Com_VIBuffer"), reinterpret_cast<CComponent**>(&m_pVIBufferCom))))
+        TEXT("Com_VIBuffer"), reinterpret_cast<CComponent**>(&m_pVIBufferCom_0))))
         return E_FAIL;
 
     /* For.Com_Texture */
@@ -510,9 +517,9 @@ HRESULT CInteraction_Normal::Merchant_Render()
     m_pTransformCom->Bind_Matrix();
     if (FAILED(m_pTextureCom_0->Bind_Texture(0)))
         return E_FAIL;
-    m_pVIBufferCom->Bind_Buffers();
+    m_pVIBufferCom_0->Bind_Buffers();
 
-    m_pVIBufferCom->Render();
+    m_pVIBufferCom_0->Render();
 
     return S_OK;
 }
@@ -520,7 +527,7 @@ HRESULT CInteraction_Normal::Merchant_Render()
 HRESULT CInteraction_Normal::Merchant_Component()
 {
     if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_VIBuffer_Rect"),
-        TEXT("Com_VIBuffer"), reinterpret_cast<CComponent**>(&m_pVIBufferCom))))
+        TEXT("Com_VIBuffer"), reinterpret_cast<CComponent**>(&m_pVIBufferCom_0))))
         return E_FAIL;
 
     /* For.Com_Texture */
@@ -549,17 +556,36 @@ HRESULT CInteraction_Normal::Ready_Components()
 {
 
     if (m_eObjType == GAMEOBJ_TYPE::EXP)
-        EXP_Component();
+    {
+        if (FAILED(EXP_Component()))
+            return E_FAIL;
+    }
     else if (m_eObjType == GAMEOBJ_TYPE::GOLD)
-        Gold_Component();
+    {
+        if (FAILED(Gold_Component()))
+            return E_FAIL;
+    }
     else if (m_eObjType == GAMEOBJ_TYPE::HP)
-        HP_Component();
+    {
+        if (FAILED(HP_Component()))
+            return E_FAIL;
+    }
     else if (m_eObjType == GAMEOBJ_TYPE::STONE_TABLET)
-        Stone_Tablet_Component();
+    {
+        if (FAILED(Stone_Tablet_Component()))
+            return E_FAIL;
+    }
     else if (m_eObjType == GAMEOBJ_TYPE::ATIFACT)
-        Atifact_Component();
+    {
+        if (FAILED(Atifact_Component()))
+            return E_FAIL;
+    }
     else
-        Merchant_Component();
+    {
+        if (FAILED(Merchant_Component()))
+            return E_FAIL;
+    }
+        
 
     return S_OK;
 
@@ -595,10 +621,12 @@ void CInteraction_Normal::Free()
 {
     __super::Free();
 
-    Safe_Release(m_pVIBufferCom);
+    Safe_Release(m_pVIBufferCom_0);
+    Safe_Release(m_pVIBufferCom_1);
     Safe_Release(m_pTransformCom);
     Safe_Release(m_pTextureCom_0);
     Safe_Release(m_pTextureCom_1);
+    Safe_Release(m_pTextureCom_2);
     Safe_Release(m_pAnimatorCom_0);
     Safe_Release(m_pAnimatorCom_1);
 

@@ -93,14 +93,14 @@ public:
 #pragma endregion
 
 private:
-	CVIBuffer_Rect* m_pVIBufferCom = { nullptr };
+	CVIBuffer_Rect* m_pVIBufferCom_0 = { nullptr };
+	CVIBuffer_Rect* m_pVIBufferCom_1 = { nullptr };
 	CTransform* m_pTransformCom = { nullptr };
 	CTexture* m_pTextureCom_0 = { nullptr };
 	CTexture* m_pTextureCom_1 = { nullptr };
 	CTexture* m_pTextureCom_2 = { nullptr };
 	CAnimator* m_pAnimatorCom_0 = { nullptr };
 	CAnimator* m_pAnimatorCom_1 = { nullptr };
-	CAnimator* m_pAnimatorCom_2 = { nullptr };
 private:
 	HRESULT Ready_Components();
 

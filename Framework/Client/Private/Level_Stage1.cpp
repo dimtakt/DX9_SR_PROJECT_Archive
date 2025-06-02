@@ -43,6 +43,9 @@ HRESULT CLevel_Stage1::Initialize()
 	if (FAILED(Ready_Layer_Camera(TEXT("Layer_Camera"))))
 		return E_FAIL;
 
+	if (FAILED(Ready_Test(TEXT("Layer_Test"))))
+		return E_FAIL;
+
 	return S_OK;
 }
 
@@ -186,6 +189,29 @@ HRESULT CLevel_Stage1::Ready_Layer_Room(const _wstring& strLayerTag)
 		CRoom_Manager::GetInstance()->Check_Room(ENUM_CLASS(LEVEL::LEVEL_STAGE1), strLayerTag, num);
 	}
 
+
+	return S_OK;
+}
+
+HRESULT CLevel_Stage1::Ready_Test(const _wstring& strLayerTag)
+{
+	/*MAP_OBJECT_DESC ExpDesc{};
+	ExpDesc.eType = GAMEOBJ_TYPE::EXP;
+	ExpDesc.vPos = _float3(0.f, 4.f, 0.f);
+	ExpDesc.vRotate = _float3(0.f, 0.f, 0.f);
+	ExpDesc.vScale = _float3(4.f, 4.f, 4.f);
+	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_STAGE1), strLayerTag,
+		ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_Interaction_Normal"), &ExpDesc)))
+		return E_FAIL;
+
+	MAP_OBJECT_DESC StoneDesc{};
+	StoneDesc.eType = GAMEOBJ_TYPE::STONE_TABLET;
+	StoneDesc.vPos = _float3(3.f, 4.f, 3.f);
+	StoneDesc.vRotate = _float3(0.f, 0.f, 0.f);
+	StoneDesc.vScale = _float3(1.f, 1.f, 1.f);
+	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_STAGE1), strLayerTag,
+		ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_Interaction_Normal"), &StoneDesc)))
+		return E_FAIL;*/
 
 	return S_OK;
 }

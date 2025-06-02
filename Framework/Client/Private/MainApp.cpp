@@ -28,6 +28,7 @@
 #include "ChapMap.h"
 #include "Status_Window.h"
 #include "Loding_UI.h"
+#include "Interaction_Normal.h"
 
 CMainApp::CMainApp()
 	: m_pGameInstance{ CGameInstance::GetInstance() }
@@ -140,6 +141,10 @@ HRESULT CMainApp::Ready_GameObject_Setting()
 
 	/* Prototype_GameObject_Item  */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_Item"), CItem_Base::Create(m_pGraphic_Device))))
+		return E_FAIL;
+
+	/* Prototype_GameObject_Interaction_Normal  */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_Interaction_Normal"), CInteraction_Normal::Create(m_pGraphic_Device))))
 		return E_FAIL;
 
 
@@ -466,7 +471,7 @@ HRESULT CMainApp::Ready_Texture_Setting()
 
 #pragma region Prototype_Component_Stone_Tablet
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Stone_Tablet"),
-		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/InteractionObject/Stone_Tablet/Stone_Tablet%d.png"), 1))))
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/InteractionObject/Stone_Tablet/Stone_Tablet%d.png"), 20))))
 		return E_FAIL;
 #pragma endregion
 
