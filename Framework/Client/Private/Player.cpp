@@ -62,38 +62,58 @@ void CPlayer::Update(_float fTimeDelta)
 
     wstring strStateTag = {}; // 임시 저장용 현재 상태
 
-    /*
+
+    
     // *** 무기 트랜스폼 관련 변수설정
-	CTransform* pWeaponTransform = static_cast<CTransform*>(m_pGameInstance->Get_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), L"Layer_Weapon", L"Com_Transform"));
-    _float4x4 matWeaponWorld = *pWeaponTransform->Get_WorldMatrix();
+    _float4x4 matPlayerWorld = *m_pTransformCom->Get_WorldMatrix();
 
-    // 이펙트 크기 변경
-    _float4x4 matWeaponScaleWorld;
-    D3DXMatrixIdentity(&matWeaponScaleWorld);
-    D3DXMatrixScaling(&matWeaponScaleWorld, 1.5f, 1.5f, 1.5f);    // 크기 변경
-    matWeaponWorld *= matWeaponScaleWorld;
 
-    // 이펙트 회전값 변경 (인자)
-    _float fWeaponOffsetDegree = 40.f;
-	_float fWeaponOffsetRadian = (vRayPoint.x < vPlayerPos.x) ?
-        D3DXToRadian(-fWeaponOffsetDegree) :
-        D3DXToRadian(fWeaponOffsetDegree);
-    _float4x4 matWeaponRotateWorld;
-    _float3 vAxis = { 0, 1, 0 };
-    D3DXMatrixIdentity(&matWeaponRotateWorld);
-    D3DXMatrixRotationAxis(&matWeaponRotateWorld, &vAxis, fWeaponOffsetRadian);
-    matWeaponWorld *= matWeaponRotateWorld;
+    // *** 걍 차근차근 해보자 ***
 
-    // 이펙트 위치 변경
-    _float4x4 matWeaponTranslateWorld;
-    D3DXMatrixIdentity(&matWeaponTranslateWorld);
-    _float3 vDiff = - vPlayerPos + vRayPoint;       // 플레이어 위치에서 마우스 교차좌표로 가는 벡터
-    D3DXVec3Normalize(&vDiff, &vDiff);              // 를 단위벡터화
-    _float fDistanceOffset = 0.f;                   // ** ksta : 중점으로부터 떨어져 있을 거리 **
+    // "크자이" 순서
+    // 단, 로컬 회전을 원하므로 먼저 원점으로 이동 후 회전
+    // 단, 순서에 맞게 회전 전 크기조절
+    // 이후 재이동, 후 추가이동 자유롭게
+
+    // 1. 원점으로 이동
+    _float4x4 matTransToOrigin = {};
+    D3DXMatrixIdentity(&matTransToOrigin);
+    D3DXMatrixTranslation(&matTransToOrigin, -matPlayerWorld._41, -matPlayerWorld._42, -matPlayerWorld._43);
+
+    // 2. 크기
+    _float4x4 matScale = {};
+    D3DXMatrixIdentity(&matScale);
+    D3DXMatrixScaling(&matScale, -4, 4, 4);
+
+    // 3. 자전
+    _float4x4 matRotateChild = {};
+    D3DXMatrixIdentity(&matRotateChild);
+    D3DXMatrixRotationX(&matRotateChild, D3DXToRadian(-90)); // 안되면 -90도도 해보기
+
+    _float4x4 matRotateChildtoCursor = {};
+    D3DXMatrixIdentity(&matRotateChildtoCursor);
+    _float fAngle = atan2f(vRayPoint.x - vPlayerPos.x, vRayPoint.z - vPlayerPos.z);
+    _float fDegree = D3DXToDegree(fAngle) + 190;
+    D3DXMatrixRotationY(&matRotateChildtoCursor, D3DXToRadian(fDegree)); // ksta2 : 커서각 어케구함
+
+    // 4. 원래 위치(플레이어)로 재이동
+    _float4x4 matTransReturn = {};
+    D3DXMatrixIdentity(&matTransReturn);
+    D3DXMatrixTranslation(&matTransReturn, matPlayerWorld._41, matPlayerWorld._42, matPlayerWorld._43);
+
+    // 5. 거기에 추가 이동
+    _float4x4 matTransAddition = {};
+    D3DXMatrixIdentity(&matTransAddition);
+    _float3 vDiff = -vPlayerPos + vRayPoint;       // 플레이어 위치에서 마우스 교차좌표로 가는 벡터
+    D3DXVec3Normalize(&vDiff, &vDiff);              // 를 단위벡터화, 안되면 vDiff 순서 바꿔보기
+    _float fDistanceOffset = 1.2f;                   // ** ksta : 중점으로부터 떨어져 있을 거리 **
     vDiff *= fDistanceOffset;
-    D3DXMatrixTranslation(&matWeaponTranslateWorld, vDiff.x, vDiff.y, vDiff.z);
-    matWeaponWorld *= matWeaponTranslateWorld;
-    */
+    D3DXMatrixTranslation(&matTransAddition, vDiff.x, 0, vDiff.z);
+
+    matPlayerWorld = matTransToOrigin * matScale * matRotateChild * matRotateChildtoCursor * matTransReturn * matTransAddition;
+   
+    // ***********************
+
 
     // ***************************************
     // * [마우스 좌클] 일반 공격
@@ -110,9 +130,9 @@ void CPlayer::Update(_float fTimeDelta)
                                                             L"Attack_Lower2";
 
             // 바꾸는 데에 성공시 2타공격 이펙트 출력
-            if (m_pAnimatorCom->Change_State(strStateTag, true));
-            //    CEffect_Factory::GetInstance()->Create_Effect(L"Prototype_Component_Texture_Effect_Blade0_Swing1",
-            //        *m_pTransformCom->Get_WorldMatrix(), matWeaponWorld, true);
+            if (m_pAnimatorCom->Change_State(strStateTag, true))
+                CEffect_Factory::GetInstance()->Create_Effect(L"Prototype_Component_Texture_Effect_Blade0_Swing1",
+                    *m_pTransformCom->Get_WorldMatrix(), matPlayerWorld, true);
         }
 
         // 1번째 공격으로.
@@ -121,9 +141,11 @@ void CPlayer::Update(_float fTimeDelta)
         m_pAnimatorTransCom->Change_State(L"Attack");
 
         // 바꾸는 데에 성공시 1타공격 이펙트 출력
-        if (m_pAnimatorCom->Change_State(strStateTag, true));
-        //    CEffect_Factory::GetInstance()->Create_Effect(L"Prototype_Component_Texture_Effect_Blade0_Swing0",
-        //        *m_pTransformCom->Get_WorldMatrix(), matWeaponWorld);
+        if (m_pAnimatorCom->Change_State(strStateTag, true))
+            CEffect_Factory::GetInstance()->Create_Effect(L"Prototype_Component_Texture_Effect_Blade0_Swing0",
+                *m_pTransformCom->Get_WorldMatrix(), matPlayerWorld);
+
+        std::cout << "[Player::Update] PlayerPos : " << vPlayerPos.x << ", " << vPlayerPos.y << ", " << vPlayerPos.z << std::endl;
     }
 
     if (m_pAnimatorTransCom->Get_CurStateTag() == L"Attack")
@@ -261,7 +283,9 @@ void CPlayer::Update(_float fTimeDelta)
         {
             if (m_isReadyFury)
             {
-                m_pAnimatorTransCom->Change_State(L"Fury");
+                if(m_pAnimatorTransCom->Change_State(L"Fury"))
+                    CEffect_Factory::GetInstance()->Create_Effect(L"Prototype_Component_Texture_Effect_Blade0_NFury",
+                        *m_pTransformCom->Get_WorldMatrix(), matPlayerWorld, true);
                 strStateTag = (vRayPoint.z > vPlayerPos.z)?     L"Fury_Upper":
                                                                 L"Fury_Lower";
                 m_pAnimatorCom->Change_State(strStateTag);
@@ -269,7 +293,10 @@ void CPlayer::Update(_float fTimeDelta)
             }
             else if (m_pAnimatorTransCom->Get_CurStateTag() == L"Idle")
             {
-                m_pAnimatorTransCom->Change_State(L"Parry");
+                if (m_pAnimatorTransCom->Change_State(L"Parry"))
+                    CEffect_Factory::GetInstance()->Create_Effect(L"Prototype_Component_Texture_Effect_Blade0_Parry",
+                        *m_pTransformCom->Get_WorldMatrix(), matPlayerWorld, true);
+                    
                 m_pAnimatorCom->Change_State(L"Parry");
             }
         }
