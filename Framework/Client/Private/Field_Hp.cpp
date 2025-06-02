@@ -5,8 +5,18 @@ CField_Hp::CField_Hp(LPDIRECT3DDEVICE9 pGraphic_Device) : CProgressBar(pGraphic_
 {
 }
 
-CField_Hp::CField_Hp(const CField_Hp& Prototype) : CProgressBar(Prototype), m_iTarget_Index(Prototype.m_iTarget_Index), m_eLevel(Prototype.m_eLevel)
+CField_Hp::CField_Hp(const CField_Hp& Prototype) : CProgressBar(Prototype), m_eLevel(Prototype.m_eLevel)
 {
+}
+
+void CField_Hp::Render_HP_Progress(CTransform* pTransform, _int iCulHp, _int iMaxHp)
+{
+	m_iCulValue = iCulHp;
+	m_iCulMaxValue = iMaxHp;
+	Target_Pos(pTransform);
+	Target_ProgressBar(pTransform);
+	m_pGameInstance->Add_RenderGroup(RENDERGROUP::RG_UI, this);
+	static_cast<CField_Hp_Frame*>(m_vecChildren[0])->Render_HP_Frame(pTransform);
 }
 
 HRESULT CField_Hp::Initialize_Prototype(LEVEL eLevel)
@@ -19,20 +29,13 @@ HRESULT CField_Hp::Initialize_Prototype(LEVEL eLevel)
 
 HRESULT CField_Hp::Initialize(void* pArg)
 {
-	UI_FIELD_HP_DESC* Desc = static_cast<UI_FIELD_HP_DESC*>(pArg);
-
-	m_iTarget_Index = Desc->iTarget_Index;
-
-	if (FAILED(Reday_SyncingObject()))
-		return E_FAIL;
-
 	m_iCulMaxValue = 200;
 	m_iCulValue = 200;
 
 	m_fSizeX = 70.f;
 	m_fSizeY = 10.f;
 	m_fX = 0;
-	m_fY = Desc->fY;
+	m_fY = 40;
 	m_fZ = UI_DEPTH::FILED_HP;
 	m_iWinSizeX = g_iWinSizeX;
 	m_iWinSizeY = g_iWinSizeY;
@@ -54,20 +57,17 @@ HRESULT CField_Hp::Initialize(void* pArg)
 
 void CField_Hp::Priority_Update(_float fTimeDelta)
 {
-	__super::Priority_Update(fTimeDelta);
+
 }
 
 void CField_Hp::Update(_float fTimeDelta)
 {
-	__super::Update(fTimeDelta);
+
 }
 
 void CField_Hp::Late_Update(_float fTimeDelta)
 {
-	Target_Pos();
-	Target_ProgressBar();
-	__super::Late_Update(fTimeDelta);
-	m_pGameInstance->Add_RenderGroup(RENDERGROUP::RG_UI, this);
+
 }
 
 HRESULT CField_Hp::Render()
@@ -106,15 +106,7 @@ HRESULT CField_Hp::Ready_Children()
 {
 	CUIObject* pGameObject = nullptr;
 
-	CField_Hp_Frame::UI_FIELD_HP_FREAM_DESC Field_HP_Desc{};
-	Field_HP_Desc.fSizeX = m_fSizeX + 6.f;
-	Field_HP_Desc.fSizeY = m_fSizeY + 6.f;
-	Field_HP_Desc.iTarget_Index = m_iTarget_Index;
-	Field_HP_Desc.pTarget_TransformCom = m_pTarget_TransformCom;
-	Field_HP_Desc.fX = m_fX;
-	Field_HP_Desc.fY = m_fY;
-
-	pGameObject = dynamic_cast<CUIObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(m_eLevel), TEXT("Prototype_GameObject_Field_Hp_Fream"), &Field_HP_Desc));
+	pGameObject = dynamic_cast<CUIObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(m_eLevel), TEXT("Prototype_GameObject_Field_Hp_Fream")));
 	if (nullptr == pGameObject)
 		return E_FAIL;
 	Add_Child(pGameObject);
@@ -122,22 +114,9 @@ HRESULT CField_Hp::Ready_Children()
 	return S_OK;
 }
 
-HRESULT CField_Hp::Reday_SyncingObject()
+void CField_Hp::Target_Pos(CTransform* pTransform)
 {
-	m_pTarget_TransformCom = dynamic_cast<CTransform*>(m_pGameInstance->Get_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Layer_Player"), TEXT("Com_Transform"), m_iTarget_Index));
-	if (m_pTarget_TransformCom == nullptr)
-	{
-		MSG_BOX(TEXT("Failed to Syncing : CField_Hp"));
-		return E_FAIL;
-	}
-	Safe_AddRef(m_pTarget_TransformCom);
-
-	return S_OK;
-}
-
-void CField_Hp::Target_Pos()
-{
-	_float3 Target_Pos = m_pTarget_TransformCom->Get_State(STATE::POSITION);
+	_float3 Target_Pos = pTransform->Get_State(STATE::POSITION);
 
 	m_pGraphic_Device->GetTransform(D3DTS_VIEW, &m_OldViewMatrix);
 	m_pGraphic_Device->GetTransform(D3DTS_PROJECTION, &m_OldProjMatrix);
@@ -152,10 +131,11 @@ void CField_Hp::Target_Pos()
 	m_vWorldPos.x = fWinPosX - m_iWinSizeX * 0.5f;
 	m_vWorldPos.y = -fWinPosY + m_iWinSizeY * 0.5f;
 
+
 	m_pTransformCom->Set_State(STATE::POSITION, m_vWorldPos);
 }
 
-void CField_Hp::Target_ProgressBar()
+void CField_Hp::Target_ProgressBar(CTransform* pTransform)
 {
 	_float fRatio{};
 
@@ -214,5 +194,4 @@ void CField_Hp::Free()
 {
 	__super::Free();
 	Safe_Release(m_pVIBufferCom);
-	Safe_Release(m_pTarget_TransformCom);
 }

@@ -63,7 +63,7 @@ void CDash_Gauge::Update(_float fTimeDelta)
 
 void CDash_Gauge::Late_Update(_float fTimeDelta)
 {
-	m_fDash = CStat_Manager::GetInstance()->Get_CurStats()[ENUM_CLASS(STAT_INFO::CULDASH)];
+ 	m_fDash = CStat_Manager::GetInstance()->Get_CurStats()[ENUM_CLASS(STAT_INFO::CULDASH)];
 
 	//업데이트용
 	if (m_fDash <= m_iIndex - 1)
