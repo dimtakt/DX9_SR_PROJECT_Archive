@@ -5,7 +5,6 @@
 BEGIN(Engine)
 class CVIBuffer_Rect;
 class CTexture;
-class CItemObject;
 END
 
 BEGIN(Client)
@@ -37,6 +36,8 @@ private:
 
 	void							SetUp_RenderState();
 	void							Reset_RenderState();
+
+	void							Font_Render();
 
 public:
 	static CStatus_Stat_Frame_Name* Create(LPDIRECT3DDEVICE9 pGraphic_Device, LEVEL eLevel);

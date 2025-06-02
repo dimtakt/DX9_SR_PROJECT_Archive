@@ -5,7 +5,6 @@
 BEGIN(Engine)
 class CVIBuffer_Rect;
 class CTexture;
-class CItemObject;
 END
 
 BEGIN(Client)

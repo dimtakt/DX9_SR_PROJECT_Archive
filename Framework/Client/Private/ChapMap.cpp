@@ -56,18 +56,6 @@ void CChapMap::Priority_Update(_float fTimeDelta)
 	if(m_pGameInstance->IsKeyDown('F'))
 		if(m_bRender)
 			m_bRender = false;
-		else
-		{
-			if(m_pPlayerSymbol->Player_OffsetPos() <= -100)
-				m_fY = -m_pPlayerSymbol->Player_OffsetPos() + 100;
-			else
-				m_fY = -m_pPlayerSymbol->Player_OffsetPos() + 150;
-
-			m_bRender = true;
-			
-			__super::Update_Position();
-		}
-
 
 	__super::Priority_Update(fTimeDelta);
 }
@@ -99,6 +87,18 @@ void CChapMap::Late_Update(_float fTimeDelta)
 HRESULT CChapMap::Render()
 {
 	return S_OK;
+}
+
+void CChapMap::Open_Ui()
+{
+	if (m_pPlayerSymbol->Player_OffsetPos() <= -100)
+		m_fY = -m_pPlayerSymbol->Player_OffsetPos() + 100;
+	else
+		m_fY = -m_pPlayerSymbol->Player_OffsetPos() + 150;
+
+	m_bRender = true;
+
+	__super::Update_Position();
 }
 
 void CChapMap::Player_Offset(_float fX, _float fY, _uint iLineIndex, _uint iMapIdex)

@@ -187,6 +187,7 @@
     <ClInclude Include="..\Public\Room_Manager.h" />
     <ClInclude Include="..\public\Sky.h" />
     <ClInclude Include="..\Public\Start_Button.h" />
+    <ClInclude Include="..\public\Status_Element_Icon.h" />
     <ClInclude Include="..\public\Status_Stat_Frame_Name.h" />
     <ClInclude Include="..\public\Status_Stat_Frame_Type.h" />
     <ClInclude Include="..\public\Status_Stat_Frame_Value.h" />
@@ -291,6 +292,7 @@
     <ClCompile Include="..\Private\Room_Manager.cpp" />
     <ClCompile Include="..\private\Sky.cpp" />
     <ClCompile Include="..\Private\Start_Button.cpp" />
+    <ClCompile Include="..\private\Status_Element_Icon.cpp" />
     <ClCompile Include="..\private\Status_Stat_Frame_Name.cpp" />
     <ClCompile Include="..\private\Status_Stat_Frame_Type.cpp" />
     <ClCompile Include="..\private\Status_Stat_Frame_Value.cpp" />

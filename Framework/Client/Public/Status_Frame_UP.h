@@ -5,7 +5,6 @@
 BEGIN(Engine)
 class CVIBuffer_Rect;
 class CTexture;
-class CItemObject;
 END
 
 BEGIN(Client)
@@ -38,10 +37,11 @@ private:
 	void							SetUp_RenderState();
 	void							Reset_RenderState();
 
+	void							Font_Render();
+
 public:
 	static CStatus_Frame_UP*			Create(LPDIRECT3DDEVICE9 pGraphic_Device, LEVEL eLevel);
 	virtual CGameObject*			Clone(void* pArg) override;
 	virtual void					Free() override;
 };
 END
-

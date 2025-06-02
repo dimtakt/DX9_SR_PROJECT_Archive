@@ -48,7 +48,7 @@ HRESULT CHud_Dash::Initialize(void* pArg)
 
 void CHud_Dash::Priority_Update(_float fTimeDelta)
 {
-    m_iDashMaxValue = CStat_Manager::GetInstance()->Get_CurStats()[ENUM_CLASS(STAT_INFO::MAXDASH)];
+    m_iDashMaxValue = (int)CStat_Manager::GetInstance()->Get_CurStats()[ENUM_CLASS(STAT_INFO::MAXDASH)];
 
     if (m_iDashMaxValue > 5)
         m_iDashMaxValue = 5;
