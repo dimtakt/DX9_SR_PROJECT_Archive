@@ -4,9 +4,6 @@
     <Filter Include="98.Default">
       <UniqueIdentifier>{a1c507ab-9c9f-4741-910a-671c26ada697}</UniqueIdentifier>
     </Filter>
-    <Filter Include="99.Defines">
-      <UniqueIdentifier>{0b9f6ede-74ab-4dc8-813b-32276d487d12}</UniqueIdentifier>
-    </Filter>
     <Filter Include="00.MainApp">
       <UniqueIdentifier>{d8dd1642-566a-436d-95e6-46c61ef13602}</UniqueIdentifier>
     </Filter>
@@ -294,6 +291,12 @@
     </Filter>
     <Filter Include="02.GameObject\UI\Loding\Loding_Ani">
       <UniqueIdentifier>{afa15727-b2f5-4aa7-b382-b19232bbd3f6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\UI\Window\Status_Window\Stauts_Frame\Status_Element_Icon">
+      <UniqueIdentifier>{03a7fd85-f03b-4e8f-8be3-812ccfb72039}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="99.Defines">
+      <UniqueIdentifier>{0b9f6ede-74ab-4dc8-813b-32276d487d12}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -618,6 +621,9 @@
     <ClInclude Include="..\public\Loding_Ani.h">
       <Filter>02.GameObject\UI\Loding\Loding_Ani</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\Status_Element_Icon.h">
+      <Filter>02.GameObject\UI\Window\Status_Window\Stauts_Frame\Status_Element_Icon</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -902,6 +908,9 @@
     </ClCompile>
     <ClCompile Include="..\private\Loding_Ani.cpp">
       <Filter>02.GameObject\UI\Loding\Loding_Ani</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Status_Element_Icon.cpp">
+      <Filter>02.GameObject\UI\Window\Status_Window\Stauts_Frame\Status_Element_Icon</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

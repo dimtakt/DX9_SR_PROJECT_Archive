@@ -1,5 +1,6 @@
 #include "Field_Hp_Frame.h"
 #include "GameInstance.h"
+#include "Field_Hp.h"
 
 CField_Hp_Frame::CField_Hp_Frame(LPDIRECT3DDEVICE9 pGraphic_Device) : CUIObject(pGraphic_Device)
 {
@@ -7,6 +8,12 @@ CField_Hp_Frame::CField_Hp_Frame(LPDIRECT3DDEVICE9 pGraphic_Device) : CUIObject(
 
 CField_Hp_Frame::CField_Hp_Frame(const CField_Hp_Frame& Prototype) : CUIObject(Prototype), m_eLevel(Prototype.m_eLevel)
 {
+}
+
+void CField_Hp_Frame::Render_HP_Frame(CTransform* pTransform)
+{
+	Target_Pos(pTransform);
+	m_pGameInstance->Add_RenderGroup(RENDERGROUP::RG_UI, this);
 }
 
 HRESULT CField_Hp_Frame::Initialize_Prototype(LEVEL eLevel)
@@ -17,15 +24,10 @@ HRESULT CField_Hp_Frame::Initialize_Prototype(LEVEL eLevel)
 
 HRESULT CField_Hp_Frame::Initialize(void* pArg)
 {
-	UI_FIELD_HP_FREAM_DESC* Desc = static_cast<UI_FIELD_HP_FREAM_DESC*>(pArg);
-
-	m_pTarget_TransformCom = Desc->pTarget_TransformCom;
-	m_iTarget_Index = Desc->iTarget_Index;
-
-	m_fSizeX = Desc->fSizeX;
-	m_fSizeY = Desc->fSizeY;
-	m_fX = Desc->fX;
-	m_fY = Desc->fY;
+	m_fSizeX = 75;
+	m_fSizeY = 15;
+	m_fX = 0;
+	m_fY = 40;
 	m_fZ = UI_DEPTH::FILED_HP_FRAME;
 	m_iWinSizeX = g_iWinSizeX;
 	m_iWinSizeY = g_iWinSizeY;
@@ -53,8 +55,6 @@ void CField_Hp_Frame::Update(_float fTimeDelta)
 
 void CField_Hp_Frame::Late_Update(_float fTimeDelta)
 {
-	Target_Pos();
-	m_pGameInstance->Add_RenderGroup(RENDERGROUP::RG_UI, this);
 }
 
 HRESULT CField_Hp_Frame::Render()
@@ -69,7 +69,7 @@ HRESULT CField_Hp_Frame::Render()
 
 HRESULT CField_Hp_Frame::Ready_Components()
 {
-	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Rect_UI_BalckRect"),
+	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Rect_UI_WhiteRect"),
 		TEXT("Com_VIBuffer"), reinterpret_cast<CComponent**>(&m_pVIBufferCom))))
 		return E_FAIL;
 
@@ -80,9 +80,9 @@ HRESULT CField_Hp_Frame::Ready_Components()
 	return S_OK;
 }
 
-void CField_Hp_Frame::Target_Pos()
+void CField_Hp_Frame::Target_Pos(CTransform* pTransform)
 {
-	_float3 Target_Pos = m_pTarget_TransformCom->Get_State(STATE::POSITION);
+	_float3 Target_Pos = pTransform->Get_State(STATE::POSITION);
 
 	m_pGraphic_Device->GetTransform(D3DTS_VIEW, &m_OldViewMatrix);
 	m_pGraphic_Device->GetTransform(D3DTS_PROJECTION, &m_OldProjMatrix);

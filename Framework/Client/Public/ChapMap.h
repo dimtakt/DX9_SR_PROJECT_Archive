@@ -21,6 +21,8 @@ public:
 	virtual HRESULT					Render() override;
 
 public:
+	void							Open_Ui();		//UI 출력 함수
+
 	void							Player_Offset(_float fX, _float fY, _uint iLineIndex, _uint iMapIdex);
 	const _uint						Get_Player_Line() { return m_iPlayerLineIndex; };
 	const _uint						Get_Player_Map() { return m_iPlayerMapIndex; };

@@ -3,7 +3,7 @@
 #include "GameObject.h"
 #include "TerrainBox.h"
 #include "EventListener.h"
-
+#include "Field_Hp.h"
 BEGIN(Engine)
 class CTexture;
 class CTransform;
@@ -87,9 +87,11 @@ private:
 
 	_bool					m_isReadyFury					= false;
 
+	CField_Hp*				m_pHpBar						= { nullptr };
 
 private:
 	HRESULT Ready_Components(void* pArg);
+	HRESULT Ready_Object();					//필드 HP바 테스트용
 	void SetUp_RenderState();
 	void Reset_RenderState();
 
