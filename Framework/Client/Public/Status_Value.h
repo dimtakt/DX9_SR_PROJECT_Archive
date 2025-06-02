@@ -5,7 +5,6 @@
 BEGIN(Engine)
 class CVIBuffer_Rect;
 class CTexture;
-class CItemObject;
 END
 
 BEGIN(Client)
@@ -29,15 +28,19 @@ private:
 	CVIBuffer_Rect*					m_pVIBufferCom = { nullptr };
 	CTexture*						m_pTextureCom = { nullptr };
 
-	_uint							m_iTexIndex = {};
+	_uint							m_iIndex = {};
+
+	_int							m_iMaxValue = {};
+	_int							m_iCulValue = {};
+
 private:
 	HRESULT							Ready_Components();
-
-	HRESULT							Ready_ChildPrototype(LEVEL eLevel);
-	HRESULT							Ready_Children();
-
+	
 	void							SetUp_RenderState();
 	void							Reset_RenderState();
+
+	void							Update_Value();
+	void							Font_Render();
 
 public:
 	static CStatus_Value*			Create(LPDIRECT3DDEVICE9 pGraphic_Device, LEVEL eLevel);

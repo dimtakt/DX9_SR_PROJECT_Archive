@@ -153,8 +153,24 @@ HRESULT CStatus_Frame_Mid::Ready_Children()
 	Add_Child(pGameObject);
 
 	UIOBJECT_DESC Desc{};
-	Desc.fSizeY = 150;
-	Desc.fY = -120;
+	Desc.fSizeY = 385;
+	Desc.fY = -88;
+
+	pGameObject = dynamic_cast<CUIObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(m_eLevel), TEXT("Prototype_GameObject_UI_Status_Frame_Type"), &Desc));
+	if (nullptr == pGameObject)
+		return E_FAIL;
+	Add_Child(pGameObject);
+
+	Desc.fSizeY = 285;
+	Desc.fY = 2;
+
+	pGameObject = dynamic_cast<CUIObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(m_eLevel), TEXT("Prototype_GameObject_UI_Status_Frame_Type"), &Desc));
+	if (nullptr == pGameObject)
+		return E_FAIL;
+	Add_Child(pGameObject);
+
+	Desc.fSizeY = 385;
+	Desc.fY = 92;
 
 	pGameObject = dynamic_cast<CUIObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(m_eLevel), TEXT("Prototype_GameObject_UI_Status_Frame_Type"), &Desc));
 	if (nullptr == pGameObject)
@@ -166,9 +182,9 @@ HRESULT CStatus_Frame_Mid::Ready_Children()
 		if(i < 3)
 			Desc.fY = - 120 + i * 32;
 		else if(i < 5)
-			Desc.fY = -100 + i * 32;
+			Desc.fY = -113 + i * 32;
 		else
-			Desc.fY = -80 + i * 32;
+			Desc.fY = -101 + i * 32;
 
 		Desc.fZ = i;
 		pGameObject = dynamic_cast<CUIObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(m_eLevel), TEXT("Prototype_GameObject_UI_Status_Value"), &Desc));
