@@ -232,14 +232,6 @@ HRESULT CLevel_Stage1::Ready_Layer_UI(const _wstring& strLayerTag)
 		ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_Hud_Buff"), &Desc)))
 		return E_FAIL;
 
-	CField_Hp::UI_FIELD_HP_DESC Field_HP_Desc{};
-	Field_HP_Desc.iTarget_Index = 0;
-	Field_HP_Desc.fY = 30.f;
-
-	//if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_STATIC), strLayerTag,
-	//	ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_Field_Hp"), &Field_HP_Desc)))
-	//	return E_FAIL;
-
 	return S_OK;
 }
 

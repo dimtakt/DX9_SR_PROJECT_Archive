@@ -48,7 +48,6 @@ namespace Client
 		static constexpr float LODING = 0.2f;
 
 	};
-
 };
 
 extern short g_ScrollValue;
