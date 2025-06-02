@@ -295,6 +295,12 @@
     <Filter Include="02.GameObject\UI\Loding\Loding_Ani">
       <UniqueIdentifier>{afa15727-b2f5-4aa7-b382-b19232bbd3f6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\Object\Interaction">
+      <UniqueIdentifier>{51d2231c-faba-45ec-ad21-1fd9c691c4ab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Object\Interaction\Normal">
+      <UniqueIdentifier>{73544435-24d8-4011-835b-c5d3ac8481b5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -618,6 +624,9 @@
     <ClInclude Include="..\public\Loding_Ani.h">
       <Filter>02.GameObject\UI\Loding\Loding_Ani</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Interaction_Normal.h">
+      <Filter>02.GameObject\Object\Interaction\Normal</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -902,6 +911,9 @@
     </ClCompile>
     <ClCompile Include="..\private\Loding_Ani.cpp">
       <Filter>02.GameObject\UI\Loding\Loding_Ani</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Interaction_Normal.cpp">
+      <Filter>02.GameObject\Object\Interaction\Normal</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
