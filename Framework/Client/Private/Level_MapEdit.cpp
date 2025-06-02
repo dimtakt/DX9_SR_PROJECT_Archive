@@ -325,7 +325,7 @@ void CLevel_MapEdit::Picking_Check()
 
 void CLevel_MapEdit::ImGui_Object_MenBar()
 {
-	if (ImGui::CollapsingHeader("Object Settings", ImGuiTreeNodeFlags_DefaultOpen))   //?„ì²´ ?¹ì…˜
+	if (ImGui::CollapsingHeader("Object Settings", ImGuiTreeNodeFlags_DefaultOpen))   
 	{
 		ImGui_Transform_Render();
 

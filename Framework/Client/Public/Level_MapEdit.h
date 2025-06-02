@@ -62,6 +62,9 @@ private:
 	void ImGui_Picking_Object_Rotate();
 	void ImGui_Picking_Object_Scale();
 	void ImGui_Picking_UnCheck();
+
+	//상호작용 오브젝트 전용
+
 	
 	//지형 전용
 	void ImGui_Terrain_MenBar();

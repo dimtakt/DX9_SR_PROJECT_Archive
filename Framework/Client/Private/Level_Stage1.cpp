@@ -136,16 +136,18 @@ HRESULT CLevel_Stage1::Ready_Layer_Room(const _wstring& strLayerTag)
 	_int iIndex = 8;
 
 	vector<pair<_int, _int>> RoomIndex = CRoom_Manager::GetInstance()->Create_RandomRooms(iIndex-1); //지정하고 싶은 룸의 개수 - 1 ( 내부에서 0 0 디폴트로 저장함 )
-
-	for (size_t num = 0; num < iIndex; num++)
+	//while문 돌릴 인덱스값 정의 일반룸 5 + 상호룸 2 = 7
+	// 상호작용 룸 설치할 곳 랜덤 난수 뽑기 3~6 두개의 숫자를 뽑기
+	for (size_t num = 0; num < iIndex; num++) // while < 7
 	{
-
+		
 		pRoom = dynamic_cast<CRoom*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::LEVEL_STAGE1), TEXT("Prototype_GameObject_Room")));
 		NULL_CHECK_RETURN(pRoom, E_FAIL);
 
 		_int RoomX = RoomIndex[num].first;
 		_int RoomZ = RoomIndex[num].second;
 
+		//if(상호작용 방이 아닌경우!)
 		//현재 정해진 ID값의 룸에 지형, 오브젝트 세팅 내부에서 지형 위치 자동 배치
 		pRoom->Load_From_File(ENUM_CLASS(LEVEL::LEVEL_STAGE1), strLayerTag, TEXT("../../data/Stage2_Map%d.txt"), num, RoomX, RoomZ);
 
@@ -176,7 +178,10 @@ HRESULT CLevel_Stage1::Ready_Layer_Room(const _wstring& strLayerTag)
 		//CMonster_Factory::GetInstance()->Add_Monsters(pRoom, DescList);
 		//CMonster_Factory::GetInstance()->Add_Monsters(pRoom, DescList, CMonster_Factory::MONSTER_TYPE::MONSTER_MOLE_A);
 		CMonster_Factory::GetInstance()->Add_Monsters(pRoom, DescList, CMonster_Factory::MONSTER_TYPE::MONSTER_OINK_A);
-
+		// if문 종료
+		// else 문로 해당 상호작용 룸일시
+		// 난수로 정해진 상호작용 타입값에 맞게 룸데이터 불러오기
+		//
 		// 룸매니저 투입
 		CRoom_Manager::GetInstance()->Add_Room(pRoom, ENUM_CLASS(LEVEL::LEVEL_STAGE1), strLayerTag);
 	}
