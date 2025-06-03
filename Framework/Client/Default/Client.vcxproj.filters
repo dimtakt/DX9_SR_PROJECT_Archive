@@ -310,20 +310,20 @@
     <Filter Include="02.GameObject\UI\Window\Talent\Talent_Button">
       <UniqueIdentifier>{9eb92a0f-2c87-4573-a394-bc10835ec4fe}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\UI\Window\Talent\Talent_Slot">
-      <UniqueIdentifier>{956e449f-cee9-4457-a2f5-7f3dc6765127}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\UI\Window\Talent\Talent_Slot\Talent_Slot_Button">
-      <UniqueIdentifier>{3adc1560-f8d0-466b-bdb5-d7f7a6b150ea}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObject\UI\Window\Talent\Talent_Button\Talent_Button_Chiled">
       <UniqueIdentifier>{7c1bc1c5-9595-45dd-91cc-a2020063d227}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\UI\Window\Talent\Talent_Slot">
+      <UniqueIdentifier>{956e449f-cee9-4457-a2f5-7f3dc6765127}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\UI\Window\Talent\Talent_Slot\Talent_Slot_Etc">
+      <UniqueIdentifier>{80ffa2d0-af0f-4eb2-be15-dfc6f744e714}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\UI\Window\Talent\Talent_Slot\Talent_Slot_Etc\Selete_Button">
+      <UniqueIdentifier>{8aa2ffa6-72e6-435f-9df9-692f29a2d026}</UniqueIdentifier>
+    </Filter>
     <Filter Include="02.GameObject\UI\Window\Talent\Talent_ETC">
       <UniqueIdentifier>{fec88bab-fcaa-44a2-a7a0-30b36862b16e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\UI\Window\Talent\Talent_Slot\Talent_Slot_Frame">
-      <UniqueIdentifier>{4da686ad-d4f2-4bef-a733-c3b531e78fc2}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -455,9 +455,6 @@
     </ClInclude>
     <ClInclude Include="..\Public\imstb_truetype.h">
       <Filter>97. ImGUI</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\Client_Struct.h">
-      <Filter>99.Defines</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Tree.h">
       <Filter>02.GameObject\Object\Tree</Filter>
@@ -678,8 +675,23 @@
     <ClInclude Include="..\public\Talent_Slot.h">
       <Filter>02.GameObject\UI\Window\Talent\Talent_Slot</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Client_Struct.h">
+      <Filter>99.Defines</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Talent_Slot_Icon.h">
+      <Filter>02.GameObject\UI\Window\Talent\Talent_Slot\Talent_Slot_Etc</Filter>
+    </ClInclude>
     <ClInclude Include="..\public\Talent_Slot_Frame.h">
-      <Filter>02.GameObject\UI\Window\Talent\Talent_Slot\Talent_Slot_Frame</Filter>
+      <Filter>02.GameObject\UI\Window\Talent\Talent_Slot\Talent_Slot_Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Talent_Slot_Button.h">
+      <Filter>02.GameObject\UI\Window\Talent\Talent_Slot\Talent_Slot_Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Talent_Icon_Selete.h">
+      <Filter>02.GameObject\UI\Window\Talent\Talent_Slot\Talent_Slot_Etc\Selete_Button</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Talent_Button_Selete.h">
+      <Filter>02.GameObject\UI\Window\Talent\Talent_Slot\Talent_Slot_Etc\Selete_Button</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -996,8 +1008,20 @@
     <ClCompile Include="..\private\Talent_Slot.cpp">
       <Filter>02.GameObject\UI\Window\Talent\Talent_Slot</Filter>
     </ClCompile>
+    <ClCompile Include="..\private\Talent_Slot_Icon.cpp">
+      <Filter>02.GameObject\UI\Window\Talent\Talent_Slot\Talent_Slot_Etc</Filter>
+    </ClCompile>
     <ClCompile Include="..\private\Talent_Slot_Frame.cpp">
-      <Filter>02.GameObject\UI\Window\Talent\Talent_Slot\Talent_Slot_Frame</Filter>
+      <Filter>02.GameObject\UI\Window\Talent\Talent_Slot\Talent_Slot_Etc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Talent_Slot_Button.cpp">
+      <Filter>02.GameObject\UI\Window\Talent\Talent_Slot\Talent_Slot_Etc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Talent_Icon_Selete.cpp">
+      <Filter>02.GameObject\UI\Window\Talent\Talent_Slot\Talent_Slot_Etc\Selete_Button</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Talent_Button_Selete.cpp">
+      <Filter>02.GameObject\UI\Window\Talent\Talent_Slot\Talent_Slot_Etc\Selete_Button</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

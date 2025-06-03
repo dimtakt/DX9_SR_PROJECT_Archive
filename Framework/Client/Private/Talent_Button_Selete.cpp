@@ -1,30 +1,39 @@
-#include "Talent_Slot_Frame.h"
+#include "Talent_Button_Selete.h"
 #include "GameInstance.h"
-#include "Stat_Manager.h"
-CTalent_Slot_Frame::CTalent_Slot_Frame(LPDIRECT3DDEVICE9 pGraphic_Device) : CUIObject(pGraphic_Device)
+
+CTalent_Button_Selete::CTalent_Button_Selete(LPDIRECT3DDEVICE9 pGraphic_Device) : CUIObject(pGraphic_Device)
 {
 }
 
-CTalent_Slot_Frame::CTalent_Slot_Frame(const CTalent_Slot_Frame& Prototype) : CUIObject(Prototype)
+CTalent_Button_Selete::CTalent_Button_Selete(const CTalent_Button_Selete& Prototype) : CUIObject(Prototype)
 {
 }
 
-HRESULT CTalent_Slot_Frame::Initialize_Prototype()
+HRESULT CTalent_Button_Selete::Initialize_Prototype()
 {
 	return S_OK;
 }
 
-HRESULT CTalent_Slot_Frame::Initialize(void* pArg)
+HRESULT CTalent_Button_Selete::Initialize(void* pArg)
 {
 	UIOBJECT_DESC* Desc = static_cast<UIOBJECT_DESC*>(pArg);
 
 	m_iIndex = Desc->fZ;
 
-	m_fSizeX = 390;
-	m_fSizeY = 390;
+	if (Desc->fZ == 1 || Desc->fZ == 2)
+	{
+		m_fSizeX = 55;
+		m_fSizeY = 55;
+	}
+	else
+	{
+		m_fSizeX = 64;
+		m_fSizeY = 64;
+	}
+	
 	m_fX = 0;
-	m_fY = -220;
-	m_fZ = UI_DEPTH::TALENT;
+	m_fY = 0;
+	m_fZ = UI_DEPTH::TALENT_Selete;
 	m_iWinSizeX = g_iWinSizeX;
 	m_iWinSizeY = g_iWinSizeY;
 
@@ -40,20 +49,20 @@ HRESULT CTalent_Slot_Frame::Initialize(void* pArg)
 	return S_OK;
 }
 
-void CTalent_Slot_Frame::Priority_Update(_float fTimeDelta)
+void CTalent_Button_Selete::Priority_Update(_float fTimeDelta)
 {
 }
 
-void CTalent_Slot_Frame::Update(_float fTimeDelta)
+void CTalent_Button_Selete::Update(_float fTimeDelta)
 {
 }
 
-void CTalent_Slot_Frame::Late_Update(_float fTimeDelta)
+void CTalent_Button_Selete::Late_Update(_float fTimeDelta)
 {
 	m_pGameInstance->Add_RenderGroup(RENDERGROUP::RG_UI, this);
 }
 
-HRESULT CTalent_Slot_Frame::Render()
+HRESULT CTalent_Button_Selete::Render()
 {
 	SetUp_RenderState();
 
@@ -67,7 +76,7 @@ HRESULT CTalent_Slot_Frame::Render()
 	return S_OK;
 }
 
-HRESULT CTalent_Slot_Frame::Ready_Components()
+HRESULT CTalent_Button_Selete::Ready_Components()
 {
 	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_VIBuffer_Rect"),
 		TEXT("Com_VIBuffer"), reinterpret_cast<CComponent**>(&m_pVIBufferCom))))
@@ -77,14 +86,14 @@ HRESULT CTalent_Slot_Frame::Ready_Components()
 		TEXT("Com_Transform"), reinterpret_cast<CComponent**>(&m_pTransformCom))))
 		return E_FAIL;
 
-	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Rect_Talent_Slot_Frame"),
+	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Rect_Talent_Slot_Button_Selete"),
 		TEXT("Com_Texture"), reinterpret_cast<CComponent**>(&m_pTextureCom))))
 		return E_FAIL;
 
 	return S_OK;
 }
 
-void CTalent_Slot_Frame::SetUp_RenderState()
+void CTalent_Button_Selete::SetUp_RenderState()
 {
 	m_pGraphic_Device->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
 	m_pGraphic_Device->SetRenderState(D3DRS_ALPHAREF, 200);
@@ -95,7 +104,7 @@ void CTalent_Slot_Frame::SetUp_RenderState()
 	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MIPFILTER, D3DTEXF_NONE);
 }
 
-void CTalent_Slot_Frame::Reset_RenderState()
+void CTalent_Button_Selete::Reset_RenderState()
 {
 	m_pGraphic_Device->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
 
@@ -106,31 +115,31 @@ void CTalent_Slot_Frame::Reset_RenderState()
 	m_pGraphic_Device->SetTexture(0, NULL);
 }
 
-CTalent_Slot_Frame* CTalent_Slot_Frame::Create(LPDIRECT3DDEVICE9 pGraphic_Device)
+CTalent_Button_Selete* CTalent_Button_Selete::Create(LPDIRECT3DDEVICE9 pGraphic_Device)
 {
-	CTalent_Slot_Frame* pInstance = new CTalent_Slot_Frame(pGraphic_Device);
+	CTalent_Button_Selete* pInstance = new CTalent_Button_Selete(pGraphic_Device);
 
 	if (FAILED(pInstance->Initialize_Prototype()))
 	{
-		MSG_BOX(TEXT("Failed to Created : CTalent_Slot_Frame"));
+		MSG_BOX(TEXT("Failed to Created : CTalent_Button_Selete"));
 		Safe_Release(pInstance);
 	}
 	return pInstance;
 }
 
-CGameObject* CTalent_Slot_Frame::Clone(void* pArg)
+CGameObject* CTalent_Button_Selete::Clone(void* pArg)
 {
-	CTalent_Slot_Frame* pInstance = new CTalent_Slot_Frame(*this);
+	CTalent_Button_Selete* pInstance = new CTalent_Button_Selete(*this);
 
 	if (FAILED(pInstance->Initialize(pArg)))
 	{
-		MSG_BOX(TEXT("Failed to Clone : CTalent_Slot_Frame"));
+		MSG_BOX(TEXT("Failed to Clone : CTalent_Button_Selete"));
 		Safe_Release(pInstance);
 	}
 	return pInstance;
 }
 
-void CTalent_Slot_Frame::Free()
+void CTalent_Button_Selete::Free()
 {
 	__super::Free();
 	Safe_Release(m_pVIBufferCom);

@@ -9,7 +9,7 @@ CChapMap::CChapMap(LPDIRECT3DDEVICE9 pGraphic_Device) : CButton(pGraphic_Device)
 {
 }
 
-CChapMap::CChapMap(const CChapMap& Prototype) : CButton(Prototype), m_eLevel{ Prototype.m_eLevel }
+CChapMap::CChapMap(const CChapMap& Prototype) : CButton(Prototype), m_eLevel{ Prototype.m_eLevel }, m_pPlayerSymbol(Prototype.m_pPlayerSymbol)
 {
 }
 

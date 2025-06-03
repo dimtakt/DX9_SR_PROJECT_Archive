@@ -118,7 +118,7 @@ HRESULT CTalent::Ready_ChildPrototype(LEVEL eLevel)
 
 
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(eLevel), TEXT("Prototype_GameObject_UI_Talent_Slot"),
-		CTalent_Slot::Create(m_pGraphic_Device))))
+		CTalent_Slot::Create(m_pGraphic_Device, m_eLevel))))
 		return E_FAIL;
 
 	return S_OK;
@@ -165,7 +165,7 @@ void CTalent::Font_Render()
 	
 	m_vTexRect.top = 100;
 	_stprintf_s(szText, TEXT("어릴 적부터 타고났던 특별한 능력입니다."));
-	m_pGameInstance->Render_Font(TEXT("UI_Font_22_Nomal"), szText, m_vTexRect, D3DXCOLOR(0.8, 0.8, 0.8, 1.0f), DT_CENTER | DT_TOP);
+	m_pGameInstance->Render_Font(TEXT("UI_Font_22_Normal"), szText, m_vTexRect, D3DXCOLOR(0.8, 0.8, 0.8, 1.0f), DT_CENTER | DT_TOP);
 
 	//m_pGameInstance->Render_Font(TEXT("UI_Font_22"), szText, m_vTexRect, D3DXCOLOR(1.f, 1.f, 1.f, 1.f), DT_CENTER | DT_VCENTER | DT_SINGLELINE);
 
