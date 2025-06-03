@@ -21,6 +21,7 @@ HRESULT CEffect_Factory::Initialize()
 	return S_OK;
 }
 
+// 벡터 위치, 쿼터니언 회전, 벡터 스케일 정보로 생성
 void CEffect_Factory::Create_Effect(const _wstring& strEffectTag, _float3 vPos, D3DXQUATERNION qRot, _float3 vScale, _bool isFlippedX)
 {
 	CEffect::EFFECT_DESC EffectDesc;
@@ -35,6 +36,7 @@ void CEffect_Factory::Create_Effect(const _wstring& strEffectTag, _float3 vPos, 
 	return;
 }
 
+// 위치 정보가 담긴 행렬을 넣으면 해당 좌표에 생성
 void CEffect_Factory::Create_Effect(const _wstring& strEffectTag, _float4x4 matEffectWorld, _bool isFlippedX)
 {
 	CEffect::EFFECT_DESC EffectDesc;
@@ -48,6 +50,7 @@ void CEffect_Factory::Create_Effect(const _wstring& strEffectTag, _float4x4 matE
 	return;
 }
 
+// 기준이 될 행렬과 거기서 추가 변화를 줄 행렬을 넣으면 해당 좌표에 생성
 void CEffect_Factory::Create_Effect(const _wstring& strEffectTag, _float4x4 matEffectWorld, _float4x4 matOffsetWorld, _bool isFlippedX)
 {
 	CEffect::EFFECT_DESC EffectDesc;
@@ -56,56 +59,38 @@ void CEffect_Factory::Create_Effect(const _wstring& strEffectTag, _float4x4 matE
 	EffectDesc.isMatWorld = true;
 	EffectDesc.isFlippedX = isFlippedX;
 
+	m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_STATIC), L"Layer_Effect",
+		ENUM_CLASS(LEVEL::LEVEL_STATIC), L"Prototype_GameObject_PlayerEffect", &EffectDesc);
+	return;
+}
+
+// + 생성 후 해당 객체의 Position 값만을 따라감
+void CEffect_Factory::Create_Effect(const _wstring& strEffectTag, _float4x4 matEffectWorld, _float4x4 matOffsetWorld, CTransform* pFollowTransformCom, _bool isFlippedX)
+{
+	CEffect::EFFECT_DESC EffectDesc;
+	EffectDesc.strEffectTag = strEffectTag;
+	EffectDesc.matWorld = matEffectWorld * matOffsetWorld;
+	EffectDesc.isMatWorld = true;
+	EffectDesc.isFlippedX = isFlippedX;
+	EffectDesc.pFollowTransformCom = pFollowTransformCom;
 
 	m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_STATIC), L"Layer_Effect",
 		ENUM_CLASS(LEVEL::LEVEL_STATIC), L"Prototype_GameObject_PlayerEffect", &EffectDesc);
 	return;
 }
 
-// 커서와 같이 특정 기준점을 기준으로 회전할 필요가 있을 때에 사용
-void CEffect_Factory::Create_Effect_RotationByParent(const _wstring& strEffectTag, _float4x4 matEffectWorld, const _float3 axis, _bool isFlippedX, CTransform* parent, _float fRadian)
+// + 생성 후 해당 단위벡터의 방향으로 날아감 (투사체)
+void CEffect_Factory::Create_Effect(const _wstring& strEffectTag, _float4x4 matEffectWorld, _float4x4 matOffsetWorld, _float3 vThrownDir, _float fThrownPower, _float fLifeTimeSec, _bool isFlippedX)
 {
-	// 객체가 돌아갈 때의 기준점 행렬 설정, 없으면 원점 기준.
-	_float4x4 matTrackTarget;
-	if (parent != nullptr)
-		matTrackTarget = *parent->Get_WorldMatrix();
-	else
-		D3DXMatrixIdentity(&matTrackTarget);
-
-	// 변환..
-
-	// 원점으로 중심축 이동
-	_float4x4 matToOrigin;
-	D3DXMatrixTranslation(&matToOrigin,
-		-matTrackTarget._41,
-		-matTrackTarget._42,
-		-matTrackTarget._43);
-
-	// 축 기준 회전행렬
-	_float4x4 matRot;
-	D3DXMatrixRotationAxis(&matRot, &axis, fRadian);
-
-	// 다시 제자리로
-	_float4x4 matFromOrigin;
-	D3DXMatrixTranslation(&matFromOrigin,
-		matTrackTarget._41,
-		matTrackTarget._42,
-		matTrackTarget._43);
-
-	// 다 합치기
-	_float4x4 matRotationTotal = matToOrigin * matRot * matFromOrigin;
-
-	// 반영..
-
-	_float4x4 matResult = matEffectWorld * matRotationTotal;
-	matEffectWorld = matResult;
-
 	CEffect::EFFECT_DESC EffectDesc;
 	EffectDesc.strEffectTag = strEffectTag;
-	EffectDesc.matWorld = matEffectWorld;
+	EffectDesc.matWorld = matEffectWorld * matOffsetWorld;
 	EffectDesc.isMatWorld = true;
 	EffectDesc.isFlippedX = isFlippedX;
-
+	D3DXVec3Normalize(&vThrownDir, &vThrownDir);
+	EffectDesc.vThrownDir = vThrownDir;
+	EffectDesc.fThrownPower = fThrownPower;
+	EffectDesc.fLifeTimeSec = fLifeTimeSec;
 
 	m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_STATIC), L"Layer_Effect",
 		ENUM_CLASS(LEVEL::LEVEL_STATIC), L"Prototype_GameObject_PlayerEffect", &EffectDesc);

@@ -170,6 +170,7 @@
     <ClInclude Include="..\Public\Effect_Factory.h" />
     <ClInclude Include="..\public\ChapMap_MapSymbol.h" />
     <ClInclude Include="..\Public\Exit_Button.h" />
+    <ClInclude Include="..\Public\Interaction_Normal.h" />
     <ClInclude Include="..\public\Inven_Slot.h" />
     <ClInclude Include="..\public\Inven_Slot_Selete.h" />
     <ClInclude Include="..\public\Item_Base.h" />
@@ -283,6 +284,7 @@
     <ClCompile Include="..\private\Talent.cpp" />
     <ClCompile Include="..\Private\Effect_Factory.cpp" />
     <ClCompile Include="..\Private\Exit_Button.cpp" />
+    <ClCompile Include="..\Private\Interaction_Normal.cpp" />
     <ClCompile Include="..\private\Inven_Slot.cpp" />
     <ClCompile Include="..\private\Inven_Slot_Selete.cpp" />
     <ClCompile Include="..\private\Item_Base.cpp" />

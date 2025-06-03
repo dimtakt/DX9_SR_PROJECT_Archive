@@ -31,7 +31,9 @@ HRESULT CAnimator::Initialize(void* pArg)
 	m_strTimerTag = pDesc->strTimerTag;
 
 	// 타이머 생성
-	m_pGameInstance->Add_Timer(m_strTimerTag);
+	m_pGameInstance->Compute_TimeDelta(m_strTimerTag);
+	m_fElapsedTimesCheck = 0;
+	m_fElapsedTimes = 0;
 
 	// 애니메이션 반영할 Transform(Child) 과 기준점(Parent)이 될 객체 초기 설정
 	m_pParentTransform	= nullptr != pDesc->pParentTransform? pDesc->pParentTransform : nullptr;
@@ -58,13 +60,10 @@ void CAnimator::Update_State()
 	}
 
 	if (m_pCurState->pAnimation != nullptr)
-	{
 		Update_Keyframes();
-	}
-
-	//std::wcout << "[CAnimator::Update_State] Current State : \"" << m_strCurStateTag << "\" (" << iImageCurIndex + 1 << "/" << iImageMaxIndex << ")" << std::endl;
 
 	m_iStackedFrames++;
+	m_fElapsedTimes += 1 / 60.f;
 }
 
 HRESULT CAnimator::Add_State(const _wstring strStateTag, ANIMSTATE _state)
@@ -92,8 +91,11 @@ HRESULT CAnimator::Add_State(const _wstring strStateTag, ANIMSTATE _state)
 	return S_OK;
 }
 
-_bool CAnimator::Change_State(const _wstring strStateTag, _bool isChangeCurFrame)
+_bool CAnimator::Change_State(const _wstring strStateTag, _bool isChangeCurFrame, _float fLoopTime)
 {
+	if (!(m_fElapsedTimes >= m_fElapsedTimesCheck))
+		return false;
+
 	// 이미 해당 State라면 return
 	if (strStateTag == m_strCurStateTag)
 		return false;
@@ -127,11 +129,15 @@ _bool CAnimator::Change_State(const _wstring strStateTag, _bool isChangeCurFrame
 	m_pCurState = pTmpState;
 	m_strCurStateTag = strStateTag;
 
+	m_fElapsedTimes = 0;
+	m_fElapsedTimesCheck = fLoopTime;
+
 	std::wcout << "[CAnimator::Change_State] State Changed to \""<< strStateTag << "\"." << std::endl;
-	
+
 	// 프레임 순서 유지 불필요시에만 갱신
 	if (isChangeCurFrame)
 		m_iStackedFrames = 0;
+
 
 	return true;
 }

@@ -21,6 +21,7 @@ HRESULT CPotal::Initialize(void* pArg)
     if (FAILED(Ready_Components()))
         return E_FAIL;
 
+
     m_eObjType = GAMEOBJ_TYPE::POTAL;
 
     if (pArg == nullptr)
@@ -46,6 +47,8 @@ HRESULT CPotal::Initialize(void* pArg)
     m_iTextureIndex = pObject_Desc->iTextureIndex;
     m_pTextureCom->Bind_Texture(m_iTextureIndex);
     m_eDirType = pObject_Desc->ePotalType;
+    if (m_eDirType == POTAL_TYPE::END_POTAL)
+        m_eObjType = GAMEOBJ_TYPE::END_POTAL;
 
     return S_OK;
 }

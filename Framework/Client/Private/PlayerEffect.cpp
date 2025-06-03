@@ -49,13 +49,25 @@ HRESULT CPlayerEffect::Initialize(void* pArg)
 		
 		matTransform = matScale * matRot * matTrans;
 	}
-
-	std::cout << "[PlayerEffect::Initialize] EffectPos : " << matTransform.m[3][0] << ", " << matTransform.m[3][1] << ", " << matTransform.m[3][2] << std::endl;
+	//std::cout << "[PlayerEffect::Initialize] EffectPos : " << matTransform.m[3][0] << ", " << matTransform.m[3][1] << ", " << matTransform.m[3][2] << std::endl;
 
 
 	for (int i = 0; i < 3; i++)
 		m_pTransformCom->Set_State(STATE(i), *reinterpret_cast<_float3*>(&matTransform.m[i]));
 	m_pTransformCom->Set_State(STATE::POSITION, *reinterpret_cast<_float3*>(&matTransform.m[3]));
+
+	m_pFollowTransformCom = nullptr;
+	if (pDesc->pFollowTransformCom != nullptr)
+	{
+		m_pFollowTransformCom = pDesc->pFollowTransformCom;
+		_float3 vTargetPos = pDesc->pFollowTransformCom->Get_State(STATE::POSITION);
+		m_vFollowOffset = vTargetPos - m_pTransformCom->Get_State(STATE::POSITION);
+	}
+	m_vThrownDir = pDesc->vThrownDir;
+	m_fThrownPower = pDesc->fThrownPower;
+	m_fLifeTimeSec = pDesc->fLifeTimeSec;
+
+	m_iStackedFrame = 0;
 
 	return S_OK;
 }
@@ -67,8 +79,33 @@ void CPlayerEffect::Priority_Update(_float fTimeDelta)
 
 void CPlayerEffect::Update(_float fTimeDelta)
 {
-	if (m_pAnimatorCom->Get_IsLastFrame())
+	if (m_pAnimatorCom->Get_IsLastFrame() &&
+		m_iStackedFrame >= m_fLifeTimeSec * 60.f)
 		m_bDead = true;
+
+	// 생성 위치 기준 해당 객체 따라가도록
+	if (m_pFollowTransformCom != nullptr)
+	{
+		// Initialize 시 타겟과 이펙트 생성 위치의 오프셋을 저장 후
+		// 매 업데이트마다 오프셋을 적용해주는 식
+		_float3 vTargetPos = m_pFollowTransformCom->Get_State(STATE::POSITION);
+		// 타겟에서 m_vFollowOffset 을 뺄셈하면 의도한 이펙트의 좌표가 됨
+		_float3 vResultPos = vTargetPos - m_vFollowOffset;
+		std::cout << "vResultPos = " << vResultPos.x << ", " << vResultPos.y << ", " << vResultPos.z << std::endl;
+		m_pTransformCom->Set_State(STATE::POSITION, vResultPos);
+	}
+
+	// 해당 방향으로 날아가도록
+	if (m_fThrownPower != 0)
+	{
+		_float3 vEffectPos = m_pTransformCom->Get_State(STATE::POSITION);
+		_float3 vThrownDir = m_vThrownDir * m_fThrownPower * fTimeDelta;
+		vEffectPos += vThrownDir;
+		m_pTransformCom->Set_State(STATE::POSITION, vEffectPos);
+	}
+
+
+	m_iStackedFrame++;
 }
 
 void CPlayerEffect::Late_Update(_float fTimeDelta)

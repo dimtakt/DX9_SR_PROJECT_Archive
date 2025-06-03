@@ -185,7 +185,7 @@ HRESULT CGameInstance::Add_Prototype(_uint iPrototypeLevelIndex, const _wstring&
 
 CBase* CGameInstance::Clone_Prototype(PROTOTYPE ePrototype, _uint iPrototypeLevelIndex, const _wstring& strPrototypeTag, void* pArg)
 {
-     if (nullptr == m_pPrototype_Manager)
+      if (nullptr == m_pPrototype_Manager)
         return nullptr;
 
     return m_pPrototype_Manager->Clone_Prototype(ePrototype, iPrototypeLevelIndex, strPrototypeTag, pArg);
@@ -264,6 +264,10 @@ HRESULT CGameInstance::Add_Timer(const _wstring& strTimerTag)
 void CGameInstance::Compute_TimeDelta(const _wstring& strTimerTag)
 {
     m_pTimer_Manager->Compute_TimeDelta(strTimerTag);
+}
+void CGameInstance::Remove_Timer(const _wstring& strTimerTag)
+{
+	m_pTimer_Manager->Remove_Timer(strTimerTag);
 }
 #pragma endregion 
 
