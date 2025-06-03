@@ -101,8 +101,14 @@ private:
 	CTexture* m_pTextureCom_2 = { nullptr };
 	CAnimator* m_pAnimatorCom_0 = { nullptr };
 	CAnimator* m_pAnimatorCom_1 = { nullptr };
+
+	bool m_bActive = { TRUE };
+
 private:
 	HRESULT Ready_Components();
+
+public:
+	virtual void OnCollision(CGameObject* pGameObject) override;
 
 public:
 	static CInteraction_Normal* Create(LPDIRECT3DDEVICE9 pGraphic_Device);

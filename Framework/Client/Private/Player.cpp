@@ -7,6 +7,7 @@
 #include "Room_Manager.h"
 #include "Stat_Manager.h"
 #include "ChapMap.h"
+#include "EXP_Ball.h"
 
 CPlayer::CPlayer(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CGameObject{ pGraphic_Device }
@@ -452,6 +453,7 @@ void CPlayer::OnCollision(CGameObject* pGameObject)
         CRoom_Manager::GetInstance()->Check_Potal_Coll(dynamic_cast<CPotal*>(pGameObject)->Get_PotalType(), vPos);
 
         m_pTransformCom->Set_State(STATE::POSITION, vPos);
+        break;
     }
     case GAMEOBJ_TYPE::END_POTAL:
     {
@@ -460,6 +462,13 @@ void CPlayer::OnCollision(CGameObject* pGameObject)
             dynamic_cast<CChapMap*>(m_pGameInstance->Get_GameObject(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Layer_UI")))->Open_Ui();
          
         }
+        break;
+    }
+    case GAMEOBJ_TYPE::EXPBALL:
+    {
+        CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::EXP, dynamic_cast<CEXP_Ball*>(pGameObject)->Get_EXP());
+        pGameObject->Set_IsDead(TRUE);
+        break;
     }
     }
 }
