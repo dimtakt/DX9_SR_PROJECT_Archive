@@ -1,6 +1,6 @@
 #include "Status_Element_Icon.h"
 #include "GameInstance.h"
-
+#include "Stat_Manager.h"
 CStatus_Element_Icon::CStatus_Element_Icon(LPDIRECT3DDEVICE9 pGraphic_Device) : CUIObject(pGraphic_Device)
 {
 }
@@ -20,10 +20,10 @@ HRESULT CStatus_Element_Icon::Initialize(void* pArg)
 	UIOBJECT_DESC* Desc = static_cast<UIOBJECT_DESC*>(pArg);
 
 	m_iIndex = Desc->fZ;
-	m_fSizeX = 64;
-	m_fSizeY = 64;
+	m_fSizeX = 50;
+	m_fSizeY = 50;
 	m_fX = Desc->fX;
-	m_fY = 40;
+	m_fY = 50;
 	m_fZ = UI_DEPTH::PLAYER_STAUTS;
 	m_iWinSizeX = g_iWinSizeX;
 	m_iWinSizeY = g_iWinSizeY;
@@ -112,10 +112,73 @@ void CStatus_Element_Icon::Reset_RenderState()
 
 void CStatus_Element_Icon::Update_Value()
 {
+	switch (m_iIndex)
+	{
+	case 8:
+		m_iCulValue = (_int)CStat_Manager::GetInstance()->Get_CurStats()[ENUM_CLASS(STAT_INFO::CULDAMAGE)];
+		break;
+	case 9:
+		m_iCulValue = 20;
+		break;
+	case 10:
+		m_iCulValue = 20;
+		break;
+	case 11:
+		m_iCulValue = 20;
+		break;
+	}
 }
 
 void CStatus_Element_Icon::Font_Render()
 {
+	TCHAR szText[64];
+
+	m_vTexRect.left = 2 + (m_pParent->Get_WorldPos().x + m_fX) - m_fSizeX * 0.5;
+	m_vTexRect.top = 2 + 28 + (m_pParent->Get_WorldPos().y + m_fY) - m_fSizeX * 0.5;
+	m_vTexRect.right = 2 + (m_pParent->Get_WorldPos().x + m_fX) + m_fSizeX * 0.5;
+	m_vTexRect.bottom = 2 + 28 + (m_pParent->Get_WorldPos().y + m_fY) + m_fSizeX * 0.5;
+
+	switch (m_iIndex)
+	{
+	case 8:
+		_stprintf_s(szText, TEXT("%d"), m_iCulValue);
+		m_pGameInstance->Render_Font(TEXT("UI_Font_25"), szText, m_vTexRect, D3DXCOLOR(0.f, 0.f, 0.f, 1.f), DT_CENTER | DT_VCENTER | DT_SINGLELINE);
+		break;
+	case 9:
+		_stprintf_s(szText, TEXT("%d"), m_iCulValue);
+		m_pGameInstance->Render_Font(TEXT("UI_Font_25"), szText, m_vTexRect, D3DXCOLOR(0.f, 0.f, 0.f, 1.f), DT_CENTER | DT_VCENTER | DT_SINGLELINE);
+		break;
+	case 10:
+		_stprintf_s(szText, TEXT("%d"), m_iCulValue);
+		m_pGameInstance->Render_Font(TEXT("UI_Font_25"), szText, m_vTexRect, D3DXCOLOR(0.f, 0.f, 0.f, 1.f), DT_CENTER | DT_VCENTER | DT_SINGLELINE);
+		break;
+	case 11:
+		_stprintf_s(szText, TEXT("%d"), m_iCulValue);
+		m_pGameInstance->Render_Font(TEXT("UI_Font_25"), szText, m_vTexRect, D3DXCOLOR(0.f, 0.f, 0.f, 1.f), DT_CENTER | DT_VCENTER | DT_SINGLELINE);
+		break;
+	}
+
+	m_vTexRect.left -= 2;
+	m_vTexRect.top -= 2;
+	m_vTexRect.right -= 2;
+	m_vTexRect.bottom -= 2;
+
+	switch (m_iIndex)
+	{
+	case 8:
+		m_pGameInstance->Render_Font(TEXT("UI_Font_25"), szText, m_vTexRect, D3DXCOLOR(1.f, 1.f, 1.f, 1.f), DT_CENTER | DT_VCENTER | DT_SINGLELINE);
+		break;
+	case 9:
+		m_pGameInstance->Render_Font(TEXT("UI_Font_25"), szText, m_vTexRect, D3DXCOLOR(0.929f, 0.694f, 0.180f, 1.0f), DT_CENTER | DT_VCENTER | DT_SINGLELINE);
+		break;
+	case 10:
+		m_pGameInstance->Render_Font(TEXT("UI_Font_25"), szText, m_vTexRect, D3DXCOLOR(0.392f, 0.600f, 0.910f, 1.0f), DT_CENTER | DT_VCENTER | DT_SINGLELINE);
+		break;	
+	case 11:
+		m_pGameInstance->Render_Font(TEXT("UI_Font_25"), szText, m_vTexRect, D3DXCOLOR(0.506f, 1.000f, 1.000f, 1.0f), DT_CENTER | DT_VCENTER | DT_SINGLELINE);
+		break;
+	}
+
 }
 
 CStatus_Element_Icon* CStatus_Element_Icon::Create(LPDIRECT3DDEVICE9 pGraphic_Device, LEVEL eLevel)

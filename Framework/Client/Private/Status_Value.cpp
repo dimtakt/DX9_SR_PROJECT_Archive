@@ -148,7 +148,7 @@ void CStatus_Value::Font_Render()
 	TCHAR szText[64];
 	m_vTexRect.left = 25 + (m_pParent->Get_WorldPos().x + m_fX) - m_fSizeX * 0.5;
 	m_vTexRect.top = (m_pParent->Get_WorldPos().y + m_fY) - m_fSizeX * 0.5;
-	m_vTexRect.right = 200 + (m_pParent->Get_WorldPos().x + m_fX) + m_fSizeX * 0.5;
+	m_vTexRect.right = 215 + (m_pParent->Get_WorldPos().x + m_fX) + m_fSizeX * 0.5;
 	m_vTexRect.bottom = (m_pParent->Get_WorldPos().y + m_fY) + m_fSizeX * 0.5;
 
 	switch (m_iIndex)

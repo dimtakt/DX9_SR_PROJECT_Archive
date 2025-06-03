@@ -31,8 +31,8 @@ private:
 
 	HRESULT							Setting_Target();
 public:
-	static CInven_Button* Create(LPDIRECT3DDEVICE9 pGraphic_Device, LEVEL eLevel);
-	virtual CGameObject* Clone(void* pArg) override;
+	static CInven_Button*			Create(LPDIRECT3DDEVICE9 pGraphic_Device, LEVEL eLevel);
+	virtual CGameObject*			Clone(void* pArg) override;
 	virtual void					Free() override;
 };
 END
