@@ -40,6 +40,12 @@ void CRoom::Priority_Update(_float fTimeDelta)
 			obj->
 		}*/
 
+		for (auto& obj : m_vObject)
+		{
+			if (nullptr != obj)
+				obj->Priority_Update(fTimeDelta);
+		}
+
 		for (auto it = m_vMonster.begin(); it != m_vMonster.end(); ) {
 			if ((*it)->Get_IsDead()) {
 				Safe_Release(*it);
@@ -65,7 +71,11 @@ void CRoom::Update(_float fTimeDelta)
 		{
 			obj->
 		}*/
-
+		for (auto& obj : m_vObject)
+		{
+			if (nullptr != obj)
+				obj->Update(fTimeDelta);
+		}
 
 		for (auto& obj : m_vMonster)
 		{
@@ -78,7 +88,7 @@ void CRoom::Update(_float fTimeDelta)
 
 void CRoom::Late_Update(_float fTimeDelta)
 {
-	if (m_bIsActive)
+	if (m_bIsVisited)
 	{
 		if (m_pTerrainBox != nullptr)
 			m_pTerrainBox->Late_Update(fTimeDelta);
@@ -87,7 +97,20 @@ void CRoom::Late_Update(_float fTimeDelta)
 		{
 			obj->
 		}*/
+		for (auto& obj : m_vObject)
+		{
+			if (nullptr != obj)
+				obj->Late_Update(fTimeDelta);
+		}
 
+		for (auto& obj : m_vPotal)
+		{
+			if (nullptr != obj)
+				obj->Late_Update(fTimeDelta);
+		}
+	}
+	if (m_bIsActive)
+	{
 		for (auto& obj : m_vMonster)
 		{
 			if (nullptr != obj)
@@ -98,7 +121,7 @@ void CRoom::Late_Update(_float fTimeDelta)
 
 HRESULT CRoom::Render()
 {
-	if (m_bIsActive)
+	if (m_bIsVisited)
 	{
 		if (m_pTerrainBox != nullptr)
 			m_pTerrainBox->Render();
@@ -108,6 +131,19 @@ HRESULT CRoom::Render()
 			obj->
 		}*/
 
+		for (auto& obj : m_vObject)
+		{
+			obj->Render();
+		}
+
+		for (auto& obj : m_vPotal)
+		{
+			obj->Render();
+		}
+	}
+
+	if (m_bIsActive)
+	{
 		for (auto& obj : m_vMonster)
 		{
 			obj->Render();
@@ -211,14 +247,14 @@ HRESULT CRoom::Load_From_File(_uint iLayerLevelIndex, const _wstring& strLayerTa
 			tSrc.vScale = pDesc.vScale;
 			tSrc.vRotate = pDesc.vRotate;
 
-			if(FAILED(m_pGameInstance->Add_GameObject_ToLayer(
-				iLayerLevelIndex, strLayerTag,
-				iLayerLevelIndex,
-				TEXT("Prototype_GameObject_Tree"),
-				&tSrc)))
-				return E_FAIL;
-
-			CGameObject* pGameObject = m_pGameInstance->Get_LastGameObject(iLayerLevelIndex, strLayerTag);
+			//if(FAILED(m_pGameInstance->Add_GameObject_ToLayer(
+			//	iLayerLevelIndex, strLayerTag,
+			//	iLayerLevelIndex,
+			//	TEXT("Prototype_GameObject_Tree"),
+			//	&tSrc)))
+			//	return E_FAIL;
+			CGameObject* pGameObject = dynamic_cast<CGameObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, iLayerLevelIndex, TEXT("Prototype_GameObject_Tree"), &tSrc));
+	/*		CGameObject* pGameObject = m_pGameInstance->Get_LastGameObject(iLayerLevelIndex, strLayerTag);*/
 			m_vObject.push_back(pGameObject);
 		}
 		else if (pDesc.eType == GAMEOBJ_TYPE::TERRAIN)
@@ -228,13 +264,14 @@ HRESULT CRoom::Load_From_File(_uint iLayerLevelIndex, const _wstring& strLayerTa
 			tSrc.vPos = pDesc.vPos + m_ObjectOffset;
 			tSrc.vScale = pDesc.vScale;
 
-			m_pGameInstance->Add_GameObject_ToLayer(
+			/*m_pGameInstance->Add_GameObject_ToLayer(
 				iLayerLevelIndex, strLayerTag,
 				iLayerLevelIndex,
 				TEXT("Prototype_GameObject_TerrainBox"),
-				&tSrc);
+				&tSrc);*/
+			CGameObject* pGameObject = dynamic_cast<CGameObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, iLayerLevelIndex, TEXT("Prototype_GameObject_TerrainBox"), &tSrc));
 
-			CGameObject* pGameObject = m_pGameInstance->Get_LastGameObject(iLayerLevelIndex, strLayerTag);
+		/*	CGameObject* pGameObject = m_pGameInstance->Get_LastGameObject(iLayerLevelIndex, strLayerTag);*/
 			m_pTerrainBox = dynamic_cast<CTerrainBox*>(pGameObject);
 		}
 		else
@@ -245,13 +282,14 @@ HRESULT CRoom::Load_From_File(_uint iLayerLevelIndex, const _wstring& strLayerTa
 			tSrc.vScale = pDesc.vScale;
 			tSrc.vRotate = pDesc.vRotate;
 
-			m_pGameInstance->Add_GameObject_ToLayer(
+		/*	m_pGameInstance->Add_GameObject_ToLayer(
 				iLayerLevelIndex, strLayerTag,
 				ENUM_CLASS(LEVEL::LEVEL_STATIC),
 				TEXT("Prototype_GameObject_Interaction_Normal"),
-				&tSrc);
+				&tSrc);*/
 
-			CGameObject* pGameObject = m_pGameInstance->Get_LastGameObject(iLayerLevelIndex, strLayerTag);
+			CGameObject* pGameObject = dynamic_cast<CGameObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_Interaction_Normal"), &tSrc));
+	/*		CGameObject* pGameObject = m_pGameInstance->Get_LastGameObject(iLayerLevelIndex, strLayerTag);*/
 			m_vObject.push_back(pGameObject);
 		}
 	}
@@ -336,9 +374,19 @@ void CRoom::Free()
 		Safe_Release(obj);
 	}
 	m_vObject.clear();
+
 	for (auto& obj : m_vMonster)
 	{
 		Safe_Release(obj);
 	}
 	m_vMonster.clear();
+
+	for (auto& obj : m_vPotal)
+	{
+		Safe_Release(obj);
+
+	}
+	m_vPotal.clear();
+
+	m_Object_Desc.clear();
 }

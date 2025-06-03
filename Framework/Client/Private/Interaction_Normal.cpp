@@ -21,7 +21,7 @@ HRESULT CInteraction_Normal::Initialize_Prototype()
 HRESULT CInteraction_Normal::Initialize(void* pArg)
 {
     MAP_OBJECT_DESC* pObject_Desc = static_cast<MAP_OBJECT_DESC*>(pArg);
-   /* m_eObjType = pObject_Desc->eType;*/
+    m_eObjType = pObject_Desc->eType;
 
     if (FAILED(Ready_Components()))
         return E_FAIL;

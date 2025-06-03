@@ -189,6 +189,7 @@ HRESULT CRoom_Manager::Check_Potal_Coll(POTAL_TYPE ePotalType, _float3& vNextPos
 			CPotal* pPotal = pNeighborRoom->Find_Potal(ePotal);
 			CTransform* pPotalTransform = static_cast<CTransform*>(pPotal->Find_Component(TEXT("Com_Transform")));
 			Enter_Room(pNeighborRoom->GetID());
+			pRoom->Exit();
 			CPlayer* pPlayer = dynamic_cast<CPlayer*>(m_pGameInstance->Get_GameObject(m_iCurrentLevelID, TEXT("Layer_Player")));
 			pPlayer->Change_TerrainBox(pNeighborRoom->Get_TerrainBox(), 99);
 
@@ -311,6 +312,9 @@ void CRoom_Manager::Free()
 	}
 	m_mRooms.clear();
 	Safe_Release(m_pGameInstance);
+
+	m_RoomIndex.clear();
+
 	__super::Free();
 
 	DestroyInstance();
