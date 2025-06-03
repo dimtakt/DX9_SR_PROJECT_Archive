@@ -5,6 +5,7 @@
 #include "Event_Manager.h"
 #include "Effect_Factory.h"
 #include "Room_Manager.h"
+#include "Stat_Manager.h"
 CPlayer::CPlayer(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CGameObject{ pGraphic_Device }
 {
@@ -61,11 +62,12 @@ void CPlayer::Update(_float fTimeDelta)
     // ******** 상태 변화 분기들
 
     wstring strStateTag = {}; // 임시 저장용 현재 상태
-
+    CStat_Manager* pPlayerStat = CStat_Manager::GetInstance();
 
     
     // *** 무기 트랜스폼 관련 변수설정
     _float4x4 matPlayerWorld = *m_pTransformCom->Get_WorldMatrix();
+    CStat_Manager* pStats =  CStat_Manager::GetInstance();
 
 
     // *** 걍 차근차근 해보자 ***
@@ -132,7 +134,7 @@ void CPlayer::Update(_float fTimeDelta)
             // 바꾸는 데에 성공시 2타공격 이펙트 출력
             if (m_pAnimatorCom->Change_State(strStateTag, true))
                 CEffect_Factory::GetInstance()->Create_Effect(L"Prototype_Component_Texture_Effect_Blade0_Swing1",
-                    *m_pTransformCom->Get_WorldMatrix(), matPlayerWorld, true);
+                    *m_pTransformCom->Get_WorldMatrix(), matPlayerWorld, m_pTransformCom, true);
         }
 
         // 1번째 공격으로.
@@ -143,7 +145,7 @@ void CPlayer::Update(_float fTimeDelta)
         // 바꾸는 데에 성공시 1타공격 이펙트 출력
         if (m_pAnimatorCom->Change_State(strStateTag, true))
             CEffect_Factory::GetInstance()->Create_Effect(L"Prototype_Component_Texture_Effect_Blade0_Swing0",
-                *m_pTransformCom->Get_WorldMatrix(), matPlayerWorld);
+                *m_pTransformCom->Get_WorldMatrix(), matPlayerWorld, m_pTransformCom);
 
         std::cout << "[Player::Update] PlayerPos : " << vPlayerPos.x << ", " << vPlayerPos.y << ", " << vPlayerPos.z << std::endl;
     }
@@ -242,22 +244,19 @@ void CPlayer::Update(_float fTimeDelta)
     if (m_pGameInstance->IsKeyDown(VK_SPACE))
     {
         // 스페이스바 누를 시 Dash 상태로 바꾸기 시도
-        if (//playerStat.fDash >= 1 &&
+        if (pStats->Get_CurStats()[ENUM_CLASS(STAT_INFO::CULDASH)] >= 1 &&
             m_pAnimatorTransCom->Change_State(L"Dash"))
         {
             D3DXVec3Normalize(&m_vDashDir, &m_vDashDir);
-            //CPlayerStats::PLAYERSTAT_DESC playerStat = m_pPlayerStatsCom->Get_Stats();
-            //playerStat.fDash -= 1;
-            //playerStat.isGodMode = true;
-            //m_pPlayerStatsCom->Set_Stats(playerStat);
+            pStats->Cal_Stats(STAT_INFO::CULDASH, -1);
+            // 무적 설정..
         }
     }
     else
     {
         if (m_pAnimatorTransCom->Change_State(L"Idle"))
         {
-            //playerStat.isGodMode = false;
-            //m_pPlayerStatsCom->Set_Stats(playerStat);
+            // 무적 해제...
         }
     }
 
@@ -265,7 +264,7 @@ void CPlayer::Update(_float fTimeDelta)
     if (m_pAnimatorTransCom->Get_CurStateTag() == L"Dash")
     {
         _float3 playerPos = vPlayerPos;
-        playerPos += m_vDashDir * fTimeDelta * 15.f;        // 마지막으로 누른 방향으로 이동
+        playerPos += m_vDashDir * 30.f * (-0.04 * pow((fTimeDelta - 5), 2) + 1);        // 마지막으로 누른 방향으로 이동
         m_pTransformCom->Set_State(STATE::POSITION, playerPos);
     }
         
@@ -285,19 +284,21 @@ void CPlayer::Update(_float fTimeDelta)
             {
                 if(m_pAnimatorTransCom->Change_State(L"Fury"))
                     CEffect_Factory::GetInstance()->Create_Effect(L"Prototype_Component_Texture_Effect_Blade0_NFury",
-                        *m_pTransformCom->Get_WorldMatrix(), matPlayerWorld, true);
+                        *m_pTransformCom->Get_WorldMatrix(), matPlayerWorld, m_pTransformCom, true);
                 strStateTag = (vRayPoint.z > vPlayerPos.z)?     L"Fury_Upper":
                                                                 L"Fury_Lower";
                 m_pAnimatorCom->Change_State(strStateTag);
                 m_isReadyFury = false;
             }
-            else if (m_pAnimatorTransCom->Get_CurStateTag() == L"Idle")
+            else if (m_pAnimatorTransCom->Get_CurStateTag() == L"Idle" &&
+                pStats->Get_CurStats()[ENUM_CLASS(STAT_INFO::CULMP)] >= 10)
             {
                 if (m_pAnimatorTransCom->Change_State(L"Parry"))
                     CEffect_Factory::GetInstance()->Create_Effect(L"Prototype_Component_Texture_Effect_Blade0_Parry",
-                        *m_pTransformCom->Get_WorldMatrix(), matPlayerWorld, true);
+                        *m_pTransformCom->Get_WorldMatrix(), matPlayerWorld, m_pTransformCom, true);
                     
-                m_pAnimatorCom->Change_State(L"Parry");
+                if (m_pAnimatorCom->Change_State(L"Parry"))
+                    pStats->Cal_Stats(STAT_INFO::CULMP, -10);
             }
         }
     }
@@ -309,33 +310,21 @@ void CPlayer::Update(_float fTimeDelta)
     // [Parry 이동]
     if (m_pAnimatorTransCom->Get_CurStateTag() == L"Parry")
     {
-        _float3 playerPos = vPlayerPos;
-
-        //playerStat.fMp -= 10;
-        //m_pPlayerStatsCom->Set_Stats(playerStat);
-
         if (m_pAnimatorCom->Get_CurStackedFrame() >= 8)
         {
+            _float3 playerPos = vPlayerPos;
             playerPos += m_vCursorDir * fTimeDelta * 15.f * (-1 * cosf(0.4f * m_pAnimatorCom->Get_CurStackedFrame() - 0.7) + 1);        // 커서 방향으로 이동
             m_pTransformCom->Set_State(STATE::POSITION, playerPos);
-
-            //playerStat.isGodMode = true;
-            //m_pPlayerStatsCom->Set_Stats(playerStat);
-
+            // 무적 설정...
+            
             // 공격 막는 데에 성공 시 Fury_Ready로 넘어갈 준비
             if (m_pGameInstance->IsKeyDown('M'))    // ksta : 조건은 나중에 수정
                 m_isReadyFury = true;
         }
-
-        // if ( 공격 막는 데에 성공하면)
-        // {
-        //  m_pAnimatorTransCom->Set_State("Fury_Ready");
-        // }
     }
     else
     {
-        //playerStat.isGodMode = false;
-        //m_pPlayerStatsCom->Set_Stats(playerStat);
+        // 무적 해제...
     }
     
     // [Fury 이동]
@@ -346,15 +335,13 @@ void CPlayer::Update(_float fTimeDelta)
             _float3 playerPos = vPlayerPos;
             playerPos += m_vCursorDir * fTimeDelta * 14.f * (-1 * cosf(0.4f * m_pAnimatorCom->Get_CurStackedFrame() - 0.7) + 1);        // 커서 방향으로 이동
             m_pTransformCom->Set_State(STATE::POSITION, playerPos);
-
-            //playerStat.isGodMode = true;
-            //m_pPlayerStatsCom->Set_Stats(playerStat);
+            
+            // 무적 설정...
         }
     }
     else
     {
-        //playerStat.isGodMode = false;
-        //m_pPlayerStatsCom->Set_Stats(playerStat);
+        // 무적 해제...
     }
 
 

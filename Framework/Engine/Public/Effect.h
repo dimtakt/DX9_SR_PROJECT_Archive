@@ -22,6 +22,12 @@ public:
 		_float4x4 matWorld;
 		_bool isMatWorld = false;
 		_bool isFlippedX = false;
+
+		CTransform* pFollowTransformCom = nullptr;
+
+		_float3 vThrownDir = {};
+		_float fThrownPower = 0.f;
+		_float fLifeTimeSec = 0.f;
 	} EFFECT_DESC;
 
 protected:
@@ -42,6 +48,14 @@ protected:
 	_wstring		m_strEffectTag = {};
 	_bool			m_isFlippedX = false;
 
+	CTransform*		m_pFollowTransformCom = nullptr;
+	_float3			m_vFollowOffset = {};
+
+	_float3			m_vThrownDir = {};
+	_float			m_fThrownPower = 0.f;
+	_float			m_fLifeTimeSec = 0.f;
+
+	_uint			m_iStackedFrame = 0;
 
 public:
 	virtual CGameObject* Clone(void* pArg) = 0;

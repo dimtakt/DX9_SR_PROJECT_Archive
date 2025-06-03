@@ -265,6 +265,10 @@ void CGameInstance::Compute_TimeDelta(const _wstring& strTimerTag)
 {
     m_pTimer_Manager->Compute_TimeDelta(strTimerTag);
 }
+void CGameInstance::Remove_Timer(const _wstring& strTimerTag)
+{
+	m_pTimer_Manager->Remove_Timer(strTimerTag);
+}
 #pragma endregion 
 
 #pragma region KEY_MANAGER
