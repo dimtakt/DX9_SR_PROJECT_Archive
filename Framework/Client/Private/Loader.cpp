@@ -25,6 +25,7 @@
 #include "Monster.h"
 #include "Mole_A.h"
 #include "Oink_A.h"
+#include "LaserGhost_D.h"
 #include "TerrainBox.h"
 #include "Dagger.h"
 #include "Sky.h"
@@ -274,10 +275,40 @@ HRESULT CLoader::Loading_For_Stage1_Level()
 		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Monster/Oink_A/OinkChief_Charge_End%d.png"), 4))))
 		return E_FAIL;
 
-
-
-
-
+	// Prototype_Component_Texture_Monster (LaserGhost_D)
+    // 파일명을 00, 01, ..., 09, 10, 11, 12와 같이 2자리로 불러오려면 "%02d" 포맷을 사용해야 합니다.
+	// Idle
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STAGE1), TEXT("Prototype_Component_Texture_LaserGhost_D_Idle"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Monster/LaserGhost_D/LaserGhost_Idle%02d.png"), 14))))
+		return E_FAIL;
+	// Move 14
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STAGE1), TEXT("Prototype_Component_Texture_LaserGhost_D_Move"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Monster/LaserGhost_D/LaserGhost_Move%02d.png"), 14))))
+		return E_FAIL;
+	// Down 03
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STAGE1), TEXT("Prototype_Component_Texture_LaserGhost_D_Down"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Monster/LaserGhost_D/LaserGhost_Down%02d.png"), 3))))
+		return E_FAIL;
+	// AttackReady 28
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STAGE1), TEXT("Prototype_Component_Texture_LaserGhost_D_AttackReady"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Monster/LaserGhost_D/LaserGhost_AttackReady%02d.png"), 28))))
+		return E_FAIL;
+	// Attack_Start 01
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STAGE1), TEXT("Prototype_Component_Texture_LaserGhost_D_Attack_Start"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Monster/LaserGhost_D/LaserGhost_Attack_Start%02d.png"), 1))))
+		return E_FAIL;
+	// Attack_Cycle 07
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STAGE1), TEXT("Prototype_Component_Texture_LaserGhost_D_Attack_Cycle"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Monster/LaserGhost_D/LaserGhost_Attack_Cycle%02d.png"), 7))))
+		return E_FAIL;
+	// Attack_End 08
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STAGE1), TEXT("Prototype_Component_Texture_LaserGhost_D_Attack_End"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Monster/LaserGhost_D/LaserGhost_Attack_End%02d.png"), 8))))
+		return E_FAIL;
+	// Airborne 03
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STAGE1), TEXT("Prototype_Component_Texture_LaserGhost_D_Airborne"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Monster/LaserGhost_D/LaserGhost_Airborne%02d.png"), 3))))
+		return E_FAIL;
 
 
 	lstrcpy(m_szLoadingText, TEXT("모델을 로딩중입니다."));
@@ -309,6 +340,9 @@ HRESULT CLoader::Loading_For_Stage1_Level()
 		return E_FAIL;
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STAGE1), TEXT("Prototype_GameObject_Monster_Oink_A"),
 		COink_A::Create(m_pGraphic_Device))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STAGE1), TEXT("Prototype_GameObject_Monster_LaserGhost_D"),
+		CLaserGhost_D::Create(m_pGraphic_Device))))
 		return E_FAIL;
 
 	/* Prototype_GameObject_Sky */

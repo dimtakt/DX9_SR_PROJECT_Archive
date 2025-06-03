@@ -125,7 +125,7 @@ void CMole_A::Update(_float fTimeDelta)
     }
 
 
-    // 각 분기점마다의 핻동
+    // 각 분기점마다의 행동
     if (m_isTracking)
     {
         float fMoveSpeed = 1.5f;

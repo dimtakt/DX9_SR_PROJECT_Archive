@@ -166,6 +166,7 @@
     <ClInclude Include="..\Public\Client_Defines_Item.h" />
     <ClInclude Include="..\Public\Client_Defines_Map.h" />
     <ClInclude Include="..\Public\Client_Struct.h" />
+    <ClInclude Include="..\public\LaserGhost_D.h" />
     <ClInclude Include="..\public\Talent.h" />
     <ClInclude Include="..\Public\Effect_Factory.h" />
     <ClInclude Include="..\public\ChapMap_MapSymbol.h" />
@@ -281,6 +282,7 @@
     <ClCompile Include="..\private\ChapMap_Line.cpp" />
     <ClCompile Include="..\private\ChapMap_MapSymbol.cpp" />
     <ClCompile Include="..\private\ChapMap_PlayerSymbol.cpp" />
+    <ClCompile Include="..\Private\LaserGhost_D.cpp" />
     <ClCompile Include="..\private\Talent.cpp" />
     <ClCompile Include="..\Private\Effect_Factory.cpp" />
     <ClCompile Include="..\Private\Exit_Button.cpp" />
