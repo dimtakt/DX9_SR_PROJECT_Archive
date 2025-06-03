@@ -6,6 +6,8 @@
 #include "Effect_Factory.h"
 #include "Room_Manager.h"
 #include "Stat_Manager.h"
+#include "ChapMap.h"
+
 CPlayer::CPlayer(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CGameObject{ pGraphic_Device }
 {
@@ -34,12 +36,18 @@ HRESULT CPlayer::Initialize(void* pArg)
     m_pGameInstance->Add_Timer(m_strTimerTag);      // 마지막으로 상태가 바뀐지 지난 시간을 측정할 타이머
     m_pGameInstance->Compute_TimeDelta(m_strTimerTag);
     m_pGameInstance->Subscribe(ENUM_CLASS(EVENT_TYPE::UICHANGE), this);
-
+    Ready_Object();
 	return S_OK;
 }
 
 void CPlayer::Priority_Update(_float fTimeDelta)
 {
+    //필드 HP바 Priority_Update에서 호출 필요
+    _int m_iCulHp = CStat_Manager::GetInstance()->Get_CurStats()[ENUM_CLASS(STAT_INFO::CULHP)];
+    _int m_iMaxHp = CStat_Manager::GetInstance()->Get_CurStats()[ENUM_CLASS(STAT_INFO::MAXHP)];
+
+    if (m_pHpBar != nullptr)
+        m_pHpBar->Render_HP_Progress(m_pTransformCom, m_iCulHp, m_iMaxHp);
 
 }
 
@@ -382,6 +390,7 @@ void CPlayer::Update(_float fTimeDelta)
 void CPlayer::Late_Update(_float fTimeDelta)
 {
     m_pGameInstance->Add_RenderGroup(RENDERGROUP::RG_BLEND, this);
+    
 }
 
 HRESULT CPlayer::Render()
@@ -433,17 +442,25 @@ void CPlayer::OnCollision(CGameObject* pGameObject)
     switch (pGameObject->Get_ObjType())
     {
     case GAMEOBJ_TYPE::MONSTER:
-        {
-            //pGameObject->Set_IsDead(true);
-            break;
-        }       
+    {
+        //pGameObject->Set_IsDead(true);
+        break;
+    }
     case GAMEOBJ_TYPE::POTAL:
-        {
-            _float3 vPos;
-            CRoom_Manager::GetInstance()->Check_Potal_Coll(dynamic_cast<CPotal*>(pGameObject)->Get_PotalType(), vPos);
+    {
+        _float3 vPos;
+        CRoom_Manager::GetInstance()->Check_Potal_Coll(dynamic_cast<CPotal*>(pGameObject)->Get_PotalType(), vPos);
 
-            m_pTransformCom->Set_State(STATE::POSITION, vPos);
+        m_pTransformCom->Set_State(STATE::POSITION, vPos);
+    }
+    case GAMEOBJ_TYPE::END_POTAL:
+    {
+        if (m_pGameInstance->IsKeyDown(VK_DOWN))
+        {
+            dynamic_cast<CChapMap*>(m_pGameInstance->Get_GameObject(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Layer_UI")))->Open_Ui();
+         
         }
+    }
     }
 }
 
@@ -604,6 +621,13 @@ HRESULT CPlayer::Ready_Components(void* pArg)
     return S_OK;
 }
 
+HRESULT CPlayer::Ready_Object()
+{
+    m_pHpBar = dynamic_cast<CField_Hp*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_Field_Hp")));
+
+    return E_NOTIMPL;
+}
+
 void CPlayer::SetUp_RenderState()
 {
     m_pGraphic_Device->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
@@ -681,7 +705,7 @@ void CPlayer::Free()
     Safe_Release(m_pAnimatorTransCom);
     Safe_Release(m_pTerrainBox);
     
-    
+    Safe_Release(m_pHpBar);
     /*if (m_pCollider)
     {
         m_pCollider->Set_Owner(nullptr);

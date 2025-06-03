@@ -166,17 +166,17 @@ HRESULT CTitle_BackGround::Ready_Children()
 {
     CUIObject* pGameObject = nullptr;
 
-    pGameObject = dynamic_cast<CUIObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(m_eLevel), TEXT("Prototype_GameObject_UI_Title_Star")));
-    if (nullptr == pGameObject)
-        return E_FAIL;
-    Add_Child(pGameObject);
-    
     pGameObject = dynamic_cast<CUIObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(m_eLevel), TEXT("Prototype_GameObject_UI_Title_Tree")));
     if (nullptr == pGameObject)
         return E_FAIL;
     Add_Child(pGameObject);
 
     pGameObject = dynamic_cast<CUIObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(m_eLevel), TEXT("Prototype_GameObject_UI_Title_Logo")));
+    if (nullptr == pGameObject)
+       return E_FAIL;
+    Add_Child(pGameObject);
+
+    pGameObject = dynamic_cast<CUIObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(m_eLevel), TEXT("Prototype_GameObject_UI_Title_Star")));
     if (nullptr == pGameObject)
         return E_FAIL;
     Add_Child(pGameObject);

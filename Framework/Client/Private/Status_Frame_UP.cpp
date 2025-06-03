@@ -1,5 +1,8 @@
 #include "Status_Frame_UP.h"
 #include "GameInstance.h"
+#include "Status_Element_Icon.h"
+#include "Stat_Manager.h"
+#include "Status_Item_Slot.h"
 CStatus_Frame_UP::CStatus_Frame_UP(LPDIRECT3DDEVICE9 pGraphic_Device) : CUIObject(pGraphic_Device)
 {
 }
@@ -70,7 +73,7 @@ HRESULT CStatus_Frame_UP::Render()
 	__super::Begin();
 	m_pVIBufferCom->Render();
 	__super::End();
-
+	Font_Render();
 	Reset_RenderState();
 	return S_OK;
 }
@@ -94,12 +97,37 @@ HRESULT CStatus_Frame_UP::Ready_Components()
 
 HRESULT CStatus_Frame_UP::Ready_ChildPrototype(LEVEL eLevel)
 {
-    return S_OK;
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(eLevel), TEXT("Prototype_GameObject_UI_Status_Element_Icon"),
+		CStatus_Element_Icon::Create(m_pGraphic_Device, eLevel))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(eLevel), TEXT("Prototype_GameObject_UI_Status_Item_Slot"),
+		CStatus_Item_Slot::Create(m_pGraphic_Device, eLevel))))
+		return E_FAIL;
 }
 
 HRESULT CStatus_Frame_UP::Ready_Children()
 {
-    return S_OK;
+	CUIObject* pGameObject = nullptr;
+	
+	for (_int i = 8; i < 12; ++i)
+	{
+		UIOBJECT_DESC Desc{};
+
+		Desc.fX = -90 + (i - 7) * 50;
+		Desc.fZ = i;
+		pGameObject = dynamic_cast<CUIObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(m_eLevel), TEXT("Prototype_GameObject_UI_Status_Element_Icon"),&Desc));
+		if (nullptr == pGameObject)
+			return E_FAIL;
+		Add_Child(pGameObject);
+	}
+    
+	pGameObject = dynamic_cast<CUIObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(m_eLevel), TEXT("Prototype_GameObject_UI_Status_Item_Slot")));
+	if (nullptr == pGameObject)
+		return E_FAIL;
+	Add_Child(pGameObject);
+	
+	return S_OK;
 }
 
 void CStatus_Frame_UP::SetUp_RenderState()
@@ -123,6 +151,23 @@ void CStatus_Frame_UP::Reset_RenderState()
 	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MIPFILTER, D3DTEXF_LINEAR);
 
 	m_pGraphic_Device->SetTexture(0, NULL);
+
+}
+
+void CStatus_Frame_UP::Font_Render()
+{
+	TCHAR szText[64];
+	CUIObject::Font_Rect_Update();
+	
+	m_vTexRect.left += 80;
+	m_vTexRect.top += 32;
+	m_vTexRect.right -= 80;
+	_int iLv = CStat_Manager::GetInstance()->Get_CurStats()[ENUM_CLASS(STAT_INFO::LEVEL)];
+	_stprintf_s(szText, TEXT("LV %d"), iLv);
+	m_pGameInstance->Render_Font(TEXT("UI_Font_18"), szText, m_vTexRect, D3DXCOLOR(1.f, 1.f, 1.f, 1.f), DT_LEFT | DT_VCENTER | DT_SINGLELINE);
+	
+	_stprintf_s(szText, TEXT("¼¼ÇÇ"));
+	m_pGameInstance->Render_Font(TEXT("UI_Font_22"), szText, m_vTexRect, D3DXCOLOR(1.f, 1.f, 1.f, 1.f), DT_CENTER | DT_VCENTER | DT_SINGLELINE);
 
 }
 

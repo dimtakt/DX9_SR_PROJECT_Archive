@@ -185,7 +185,7 @@ HRESULT CGameInstance::Add_Prototype(_uint iPrototypeLevelIndex, const _wstring&
 
 CBase* CGameInstance::Clone_Prototype(PROTOTYPE ePrototype, _uint iPrototypeLevelIndex, const _wstring& strPrototypeTag, void* pArg)
 {
-     if (nullptr == m_pPrototype_Manager)
+      if (nullptr == m_pPrototype_Manager)
         return nullptr;
 
     return m_pPrototype_Manager->Clone_Prototype(ePrototype, iPrototypeLevelIndex, strPrototypeTag, pArg);

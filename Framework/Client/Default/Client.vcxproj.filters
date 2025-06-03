@@ -4,9 +4,6 @@
     <Filter Include="98.Default">
       <UniqueIdentifier>{a1c507ab-9c9f-4741-910a-671c26ada697}</UniqueIdentifier>
     </Filter>
-    <Filter Include="99.Defines">
-      <UniqueIdentifier>{0b9f6ede-74ab-4dc8-813b-32276d487d12}</UniqueIdentifier>
-    </Filter>
     <Filter Include="00.MainApp">
       <UniqueIdentifier>{d8dd1642-566a-436d-95e6-46c61ef13602}</UniqueIdentifier>
     </Filter>
@@ -265,12 +262,6 @@
     <Filter Include="02.GameObject\UI\Window\Status_Window\Stauts_Frame">
       <UniqueIdentifier>{5650d645-75a3-4830-93a8-b105b622651a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\UI\Window\Status_Window\Stauts_Frame\Status_Miracle_Frame">
-      <UniqueIdentifier>{099f1a29-fbc4-4a1a-8f43-b701b389df07}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\UI\Window\Status_Window\Stauts_Frame\Status_Stat_Frame">
-      <UniqueIdentifier>{c72af6f8-ab18-4e63-a8cd-eaa59e2185f1}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObject\Object\Potal">
       <UniqueIdentifier>{b6666f70-5fbb-48b5-96c9-b8966dda1b33}</UniqueIdentifier>
     </Filter>
@@ -286,14 +277,53 @@
     <Filter Include="01.Levels\04. Dungeon\Stage2">
       <UniqueIdentifier>{ee486fd6-c2f0-46be-ace0-c71a1efa864a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\UI\Window\Status_Window\Stauts_Frame\Status_Value">
-      <UniqueIdentifier>{81cf6232-8bf4-4a09-8c97-02ecb3e8afac}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObject\UI\Loding">
       <UniqueIdentifier>{cbf541aa-b9b4-4462-a616-049ae2b889be}</UniqueIdentifier>
     </Filter>
     <Filter Include="02.GameObject\UI\Loding\Loding_Ani">
       <UniqueIdentifier>{afa15727-b2f5-4aa7-b382-b19232bbd3f6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Object\Interaction">
+      <UniqueIdentifier>{51d2231c-faba-45ec-ad21-1fd9c691c4ab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Object\Interaction\Normal">
+      <UniqueIdentifier>{73544435-24d8-4011-835b-c5d3ac8481b5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\UI\Window\Status_Window\Stauts_Frame\Status_Element_Icon">
+      <UniqueIdentifier>{03a7fd85-f03b-4e8f-8be3-812ccfb72039}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="99.Defines">
+      <UniqueIdentifier>{0b9f6ede-74ab-4dc8-813b-32276d487d12}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\UI\Window\Status_Window\Stauts_Frame\Status_Stat_Frame">
+      <UniqueIdentifier>{c72af6f8-ab18-4e63-a8cd-eaa59e2185f1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\UI\Window\Status_Window\Stauts_Frame\Status_Item">
+      <UniqueIdentifier>{70617cdf-97df-460e-8890-47be0d16bc54}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\UI\Window\Status_Window\Stauts_Frame\Status_StatProfile">
+      <UniqueIdentifier>{d8f2a755-0cd4-4b58-ac8d-035bd3d0f0e9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\UI\Window\Talent">
+      <UniqueIdentifier>{c63b0c6a-9342-47f8-9846-9c269d556f3b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\UI\Window\Talent\Talent_Button">
+      <UniqueIdentifier>{9eb92a0f-2c87-4573-a394-bc10835ec4fe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\UI\Window\Talent\Talent_Slot">
+      <UniqueIdentifier>{956e449f-cee9-4457-a2f5-7f3dc6765127}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\UI\Window\Talent\Talent_Slot\Talent_Slot_Button">
+      <UniqueIdentifier>{3adc1560-f8d0-466b-bdb5-d7f7a6b150ea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\UI\Window\Talent\Talent_Button\Talent_Button_Chiled">
+      <UniqueIdentifier>{7c1bc1c5-9595-45dd-91cc-a2020063d227}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\UI\Window\Talent\Talent_ETC">
+      <UniqueIdentifier>{fec88bab-fcaa-44a2-a7a0-30b36862b16e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\UI\Window\Talent\Talent_Slot\Talent_Slot_Frame">
+      <UniqueIdentifier>{4da686ad-d4f2-4bef-a733-c3b531e78fc2}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -582,9 +612,6 @@
     <ClInclude Include="..\public\Status_Frame_Down.h">
       <Filter>02.GameObject\UI\Window\Status_Window\Stauts_Frame</Filter>
     </ClInclude>
-    <ClInclude Include="..\public\Status_Miracle_Frame.h">
-      <Filter>02.GameObject\UI\Window\Status_Window\Stauts_Frame\Status_Miracle_Frame</Filter>
-    </ClInclude>
     <ClInclude Include="..\public\Status_Stat_Frame.h">
       <Filter>02.GameObject\UI\Window\Status_Window\Stauts_Frame\Status_Stat_Frame</Filter>
     </ClInclude>
@@ -609,14 +636,50 @@
     <ClInclude Include="..\public\Status_Stat_Frame_Type.h">
       <Filter>02.GameObject\UI\Window\Status_Window\Stauts_Frame\Status_Stat_Frame</Filter>
     </ClInclude>
-    <ClInclude Include="..\public\Status_Value.h">
-      <Filter>02.GameObject\UI\Window\Status_Window\Stauts_Frame\Status_Value</Filter>
-    </ClInclude>
     <ClInclude Include="..\public\Loding_UI.h">
       <Filter>02.GameObject\UI\Loding</Filter>
     </ClInclude>
     <ClInclude Include="..\public\Loding_Ani.h">
       <Filter>02.GameObject\UI\Loding\Loding_Ani</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Interaction_Normal.h">
+      <Filter>02.GameObject\Object\Interaction\Normal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Status_Element_Icon.h">
+      <Filter>02.GameObject\UI\Window\Status_Window\Stauts_Frame\Status_StatProfile</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Status_Miracle_Frame.h">
+      <Filter>02.GameObject\UI\Window\Status_Window\Stauts_Frame\Status_StatProfile</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Status_Value.h">
+      <Filter>02.GameObject\UI\Window\Status_Window\Stauts_Frame\Status_StatProfile</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Status_Item_Slot.h">
+      <Filter>02.GameObject\UI\Window\Status_Window\Stauts_Frame\Status_Item</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Status_Item_Icon.h">
+      <Filter>02.GameObject\UI\Window\Status_Window\Stauts_Frame\Status_Item</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Talent.h">
+      <Filter>02.GameObject\UI\Window\Talent</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Talent_Reset.h">
+      <Filter>02.GameObject\UI\Window\Talent\Talent_Button</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Talent_Button_Icon.h">
+      <Filter>02.GameObject\UI\Window\Talent\Talent_Button\Talent_Button_Chiled</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Talent_Progress.h">
+      <Filter>02.GameObject\UI\Window\Talent\Talent_Button\Talent_Button_Chiled</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Talent_Point.h">
+      <Filter>02.GameObject\UI\Window\Talent\Talent_ETC</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Talent_Slot.h">
+      <Filter>02.GameObject\UI\Window\Talent\Talent_Slot</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Talent_Slot_Frame.h">
+      <Filter>02.GameObject\UI\Window\Talent\Talent_Slot\Talent_Slot_Frame</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -870,9 +933,6 @@
     <ClCompile Include="..\private\Status_Frame_Down.cpp">
       <Filter>02.GameObject\UI\Window\Status_Window\Stauts_Frame</Filter>
     </ClCompile>
-    <ClCompile Include="..\private\Status_Miracle_Frame.cpp">
-      <Filter>02.GameObject\UI\Window\Status_Window\Stauts_Frame\Status_Miracle_Frame</Filter>
-    </ClCompile>
     <ClCompile Include="..\private\Status_Stat_Frame.cpp">
       <Filter>02.GameObject\UI\Window\Status_Window\Stauts_Frame\Status_Stat_Frame</Filter>
     </ClCompile>
@@ -894,14 +954,50 @@
     <ClCompile Include="..\private\Status_Stat_Frame_Type.cpp">
       <Filter>02.GameObject\UI\Window\Status_Window\Stauts_Frame\Status_Stat_Frame</Filter>
     </ClCompile>
-    <ClCompile Include="..\private\Status_Value.cpp">
-      <Filter>02.GameObject\UI\Window\Status_Window\Stauts_Frame\Status_Value</Filter>
-    </ClCompile>
     <ClCompile Include="..\private\Loding_UI.cpp">
       <Filter>02.GameObject\UI\Loding</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Loding_Ani.cpp">
       <Filter>02.GameObject\UI\Loding\Loding_Ani</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Interaction_Normal.cpp">
+      <Filter>02.GameObject\Object\Interaction\Normal</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Status_Element_Icon.cpp">
+      <Filter>02.GameObject\UI\Window\Status_Window\Stauts_Frame\Status_StatProfile</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Status_Miracle_Frame.cpp">
+      <Filter>02.GameObject\UI\Window\Status_Window\Stauts_Frame\Status_StatProfile</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Status_Value.cpp">
+      <Filter>02.GameObject\UI\Window\Status_Window\Stauts_Frame\Status_StatProfile</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Status_Item_Slot.cpp">
+      <Filter>02.GameObject\UI\Window\Status_Window\Stauts_Frame\Status_Item</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Status_Item_Icon.cpp">
+      <Filter>02.GameObject\UI\Window\Status_Window\Stauts_Frame\Status_Item</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Talent.cpp">
+      <Filter>02.GameObject\UI\Window\Talent</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Talent_Reset.cpp">
+      <Filter>02.GameObject\UI\Window\Talent\Talent_Button</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Talent_Button_Icon.cpp">
+      <Filter>02.GameObject\UI\Window\Talent\Talent_Button\Talent_Button_Chiled</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Talent_Progress.cpp">
+      <Filter>02.GameObject\UI\Window\Talent\Talent_Button\Talent_Button_Chiled</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Talent_Point.cpp">
+      <Filter>02.GameObject\UI\Window\Talent\Talent_ETC</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Talent_Slot.cpp">
+      <Filter>02.GameObject\UI\Window\Talent\Talent_Slot</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Talent_Slot_Frame.cpp">
+      <Filter>02.GameObject\UI\Window\Talent\Talent_Slot\Talent_Slot_Frame</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

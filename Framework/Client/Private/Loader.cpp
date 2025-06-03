@@ -32,6 +32,7 @@
 #include "Room_Manager.h"
 #include "Status_Window.h"
 #include "Potal.h"
+#include "Interaction_Normal.h"
 
 CLoader::CLoader(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: m_pGraphic_Device{ pGraphic_Device }
@@ -161,6 +162,10 @@ HRESULT CLoader::Loading_For_MapEdit_Level()
 {
 	lstrcpy(m_szLoadingText, TEXT("텍스쳐를 로딩중입니다."));
 
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_MAPEDIT), TEXT("Prototype_Component_Texture_Interaction"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/InteractionObject/MapEdit/Interaction_%d.png"), 6))))
+		return E_FAIL;
+
 	lstrcpy(m_szLoadingText, TEXT("모델를 로딩중입니다."));
 
 	lstrcpy(m_szLoadingText, TEXT("쉐이더를 로딩중입니다."));
@@ -180,6 +185,11 @@ HRESULT CLoader::Loading_For_MapEdit_Level()
 	/* Prototype_GameObject_TerrainBox*/
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_MAPEDIT), TEXT("Prototype_GameObject_TerrainBox"),
 		CTerrainBox::Create(m_pGraphic_Device))))
+		return E_FAIL;
+
+	/* Prototype_GameObject_Interaction_Normal  */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_MAPEDIT), TEXT("Prototype_GameObject_Interaction_Normal"),
+		CInteraction_Normal::Create(m_pGraphic_Device))))
 		return E_FAIL;
 
 	lstrcpy(m_szLoadingText, TEXT("로딩이 완료되었습니다."));

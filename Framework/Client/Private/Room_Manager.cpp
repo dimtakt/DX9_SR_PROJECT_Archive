@@ -3,6 +3,7 @@
 #include "Room.h"
 #include "Player.h"
 #include "Client_Defines.h"
+#include "Client_Defines_Event.h"
 
 IMPLEMENT_SINGLETON(CRoom_Manager)
 
@@ -134,8 +135,10 @@ HRESULT CRoom_Manager::Check_Room(_uint iLayerLevelIndex, const _wstring& strLay
 		{
 			pRoom->Ready_Potal(iLayerLevelIndex, strLayerTag, _float3(0.f, 2.f, 10.f), POTAL_TYPE::UP);
 		}
-
 	}
+
+	if (!m_bCheckEnd)
+		Check_END_Potal(iLayerLevelIndex, strLayerTag, iRoomID);
 
 	return S_OK;
 }
@@ -188,10 +191,37 @@ HRESULT CRoom_Manager::Check_Potal_Coll(POTAL_TYPE ePotalType, _float3& vNextPos
 			Enter_Room(pNeighborRoom->GetID());
 			CPlayer* pPlayer = dynamic_cast<CPlayer*>(m_pGameInstance->Get_GameObject(m_iCurrentLevelID, TEXT("Layer_Player")));
 			pPlayer->Change_TerrainBox(pNeighborRoom->Get_TerrainBox(), 99);
+
+			ROOMCHANGE EventDesc;
+			EventDesc.vPosition = dynamic_cast<CTransform*>(pNeighborRoom->Get_TerrainBox()->Find_Component(TEXT("Com_Transform_TerrainBox")))->Get_State(STATE::POSITION);
+			m_pGameInstance->Broadcast(ENUM_CLASS(EVENT_TYPE::ROOMCHANGE), &EventDesc);
 			vNextPos = (pPotalTransform->Get_State(STATE::POSITION)) + vOffset;
 			if (pPotal == nullptr || pPotalTransform == nullptr)
 				return E_FAIL;
 		}
+	}
+
+	return S_OK;
+}
+
+HRESULT CRoom_Manager::Check_END_Potal(_uint iLayerLevelIndex, const _wstring& strLayerTag, _int iRoomID)
+{
+	CRoom* pRoom = Get_RoomByID(iRoomID);
+	_int iRandom = static_cast<_int>(m_pGameInstance->Compute_Random(0.f, 3.f));
+	
+	if(!m_bCheckEnd)
+	{
+		if (pRoom->GetID() >= 4 && iRandom == 2)	// 4번방 이후 부터 앤드포탈 생기게 설정
+		{
+			pRoom->Ready_Potal(iLayerLevelIndex, strLayerTag, _float3(0.f, 2.f, 0.f), POTAL_TYPE::END_POTAL);
+			m_bCheckEnd = true;    //스테이지 변경시 그부분에서 false로 초기화 해줘야 함.
+		}
+	}
+	
+	if (!m_bCheckEnd && iRoomIndex == pRoom->GetID() + 1)  // 룸인덱스 8 == 7 , + 1해줘야 됨
+	{
+		pRoom->Ready_Potal(iLayerLevelIndex, strLayerTag, _float3(0.f, 2.f, 0.f), POTAL_TYPE::END_POTAL);
+		m_bCheckEnd = true;
 	}
 
 	return S_OK;

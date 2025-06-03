@@ -70,7 +70,7 @@ HRESULT CStatus_Stat_Frame_Name::Render()
 	__super::Begin();
 	m_pVIBufferCom->Render();
 	__super::End();
-
+	Font_Render();
 	Reset_RenderState();
 	return S_OK;
 }
@@ -122,6 +122,14 @@ void CStatus_Stat_Frame_Name::Reset_RenderState()
 	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MIPFILTER, D3DTEXF_LINEAR);
 
 	m_pGraphic_Device->SetTexture(0, NULL);
+}
+
+void CStatus_Stat_Frame_Name::Font_Render()
+{
+	TCHAR szText[64];
+	Font_Rect_Update();
+	_stprintf_s(szText, TEXT("Ä³¸¯ÅÍ ½ºÅÈ"));
+	m_pGameInstance->Render_Font(TEXT("UI_Font_18_Stat"), szText, m_vTexRect, D3DXCOLOR(1.f, 1.f, 1.f, 1.f), DT_CENTER | DT_VCENTER | DT_SINGLELINE);
 }
 
 CStatus_Stat_Frame_Name* CStatus_Stat_Frame_Name::Create(LPDIRECT3DDEVICE9 pGraphic_Device, LEVEL eLevel)

@@ -28,7 +28,8 @@
 #include "ChapMap.h"
 #include "Status_Window.h"
 #include "Loding_UI.h"
-
+#include "Interaction_Normal.h"
+#include "Talent.h"
 CMainApp::CMainApp()
 	: m_pGameInstance{ CGameInstance::GetInstance() }
 {
@@ -142,6 +143,10 @@ HRESULT CMainApp::Ready_GameObject_Setting()
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_Item"), CItem_Base::Create(m_pGraphic_Device))))
 		return E_FAIL;
 
+	/* Prototype_GameObject_Interaction_Normal  */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_Interaction_Normal"), CInteraction_Normal::Create(m_pGraphic_Device))))
+		return E_FAIL;
+
 
 	// UI
 
@@ -171,10 +176,13 @@ HRESULT CMainApp::Ready_GameObject_Setting()
 		return E_FAIL;
 #pragma endregion
 
-#pragma region Prototype_GameObject_Window
+#pragma region Prototype_GameObject_Field_UI
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_Field_Hp"),
 		CField_Hp::Create(m_pGraphic_Device, LEVEL::LEVEL_STATIC))))
 		return E_FAIL;
+#pragma endregion
+
+#pragma region Prototype_GameObject_Window
 
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_Inventory"),
 		CInventory::Create(m_pGraphic_Device, LEVEL::LEVEL_STATIC))))
@@ -186,6 +194,10 @@ HRESULT CMainApp::Ready_GameObject_Setting()
 
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_Status"),
 		CStatus_Window::Create(m_pGraphic_Device, LEVEL::LEVEL_STATIC))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_Talent"),
+		CTalent::Create(m_pGraphic_Device, LEVEL::LEVEL_STATIC))))
 		return E_FAIL;
 
 #pragma endregion
@@ -337,6 +349,15 @@ HRESULT CMainApp::Ready_Texture_Setting()
 	vRectCol = { 0.f, 0.f, 0.f, 1.f };
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Rect_UI_BalckRect"), CVIBuffer_Rect::Create(m_pGraphic_Device, vRectCol))))
 		return E_FAIL;
+
+	vRectCol = { 1.f, 1.f, 1.f, 1.f };
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Rect_UI_WhiteRect"), CVIBuffer_Rect::Create(m_pGraphic_Device, vRectCol))))
+		return E_FAIL;
+
+	vRectCol = { 1.0f, 0.647f, 0.0f, 1.0f };
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Rect_UI_OrangeRect"), CVIBuffer_Rect::Create(m_pGraphic_Device, vRectCol))))
+		return E_FAIL;
+
 #pragma endregion
 #pragma region Prototype_Component_Hud_States_Texture
 	vRectCol = { 0.816, 0.255, 0.267, 1.f };
@@ -453,6 +474,35 @@ HRESULT CMainApp::Ready_Texture_Setting()
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Rect_Status_Icon"),
 		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/UI/StatusWindow/Status_Icon_%d.png"), 12))))
 		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Rect_Status_Slot"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/UI/StatusWindow/ItemSlot.png"), 1))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Rect_Status_Item"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/UI/StatusWindow/Item_Icon_%d.png"), 2))))
+		return E_FAIL;
+#pragma endregion
+#pragma region Prototype_Component_Window_Talent
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Rect_Talent_Button"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/UI/Talent/Button_%d.png"),2))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Rect_Talent_Button_Icon"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/UI/Talent/Reset_Icon.png"), 1))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Rect_Talent_Frame"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/UI/Talent/Talent_Frame.png"), 1))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Rect_Talent_Slot"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/UI/Talent/Talent_Slot.png"), 1))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Rect_Talent_Slot_Frame"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/UI/Talent/Talent_Slot_Frame_%d.png"), 4))))
+		return E_FAIL;
 #pragma endregion
 #pragma region Prototype_Component_UI_Loding
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Rect_Loding_1"),
@@ -460,6 +510,47 @@ HRESULT CMainApp::Ready_Texture_Setting()
 		return E_FAIL;
 
 #pragma endregion
+
+#pragma region Prototype_Component_EXP
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_EXP_Big"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/InteractionObject/Exp/Big/EXP_Big%d.png"), 12))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_EXP_Big_Fx"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/InteractionObject/Exp/BigFx/EXP_Big_FX%d.png"), 13))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region Prototype_Component_Gold
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Gold"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/InteractionObject/Gold/Gold%d.png"), 1))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region Prototype_Component_HP
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_HP"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/InteractionObject/HP/HP%d.png"), 5))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region Prototype_Component_Stone_Tablet
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Stone_Tablet"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/InteractionObject/Stone_Tablet/Stone_Tablet%d.png"), 20))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region Prototype_Component_Atifact
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Atifact"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/InteractionObject/Atifact/Atifact%d.png"), 20))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region Prototype_Component_Merchant
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Merchant"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/InteractionObject/Merchant/Merchant%d.png"), 5))))
+		return E_FAIL;
+#pragma endregion
+
 	return S_OK;
 }
 
@@ -567,6 +658,23 @@ void CMainApp::Ready_Font_Setting()
 	if (FAILED(m_pGameInstance->Ready_Font(TEXT("UI_Font_30"), TEXT("../Bin/Resources/Font/Galmuri9.ttf"), TEXT("Galmuri9 Regular"), 0, 30, 400)))
 		MSG_BOX(TEXT("FAILED to Font"));
 
+	if (FAILED(m_pGameInstance->Ready_Font(TEXT("UI_Font_28"), TEXT("../Bin/Resources/Font/Galmuri9.ttf"), TEXT("Galmuri9 Regular"), 0, 28, 700)))
+		MSG_BOX(TEXT("FAILED to Font"));
+
+	if (FAILED(m_pGameInstance->Ready_Font(TEXT("UI_Font_25"), TEXT("../Bin/Resources/Font/Galmuri9.ttf"), TEXT("Galmuri9 Regular"), 0, 25, 700)))
+		MSG_BOX(TEXT("FAILED to Font"));
+
+	if (FAILED(m_pGameInstance->Ready_Font(TEXT("UI_Font_22_Nomal"), TEXT("../Bin/Resources/Font/Galmuri9.ttf"), TEXT("Galmuri9 Regular"), 0, 22, 500)))
+		MSG_BOX(TEXT("FAILED to Font"));
+
+	if (FAILED(m_pGameInstance->Ready_Font(TEXT("UI_Font_22"), TEXT("../Bin/Resources/Font/Galmuri9.ttf"), TEXT("Galmuri9 Regular"), 0, 22, 700)))
+		MSG_BOX(TEXT("FAILED to Font"));
+
+	if (FAILED(m_pGameInstance->Ready_Font(TEXT("UI_Font_13_Stat"), TEXT("../Bin/Resources/Font/Galmuri9.ttf"), TEXT("Galmuri9 Regular"), 12, 15, 600)))
+		MSG_BOX(TEXT("FAILED to Font"));
+
+	if (FAILED(m_pGameInstance->Ready_Font(TEXT("UI_Font_18_Stat"), TEXT("../Bin/Resources/Font/Galmuri9.ttf"), TEXT("Galmuri9 Regular"), 14, 18, 700)))
+		MSG_BOX(TEXT("FAILED to Font"));
 
 	if (FAILED(m_pGameInstance->Ready_Font(TEXT("UI_Font_18"), TEXT("../Bin/Resources/Font/Galmuri9.ttf"), TEXT("Galmuri9 Regular"), 0, 18, 900)))
 		MSG_BOX(TEXT("FAILED to Font"));
@@ -634,9 +742,15 @@ HRESULT CMainApp::Ready_UI_Stting()
 		ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_Status"))))
 		return E_FAIL;
 
+	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Layer_Talent"),
+		ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_Talent"))))
+		return E_FAIL;
+
 	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Layer_Button"),
 		ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_Hud_Button"))))
 		return E_FAIL;
+
+
 
 	return S_OK;
 }
