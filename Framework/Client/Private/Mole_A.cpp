@@ -139,7 +139,7 @@ void CMole_A::Update(_float fTimeDelta)
 
 
     if (m_pAnimatorCom->Get_CurStateTag() == L"Attack" &&
-        m_pAnimatorCom->Get_CurStackedFrame() == 12)
+        m_pAnimatorCom->Get_CurStackedFrame() == 20)
     {
         CEffect_Factory::GetInstance()->Create_Effect(L"Prototype_Component_Texture_Mole_A_Effect_Swing",
             *m_pTransformCom->Get_WorldMatrix(), matMonsterWorld, true);
@@ -255,7 +255,7 @@ HRESULT CMole_A::Ready_Components()
     m_pAnimatorCom->Add_State(L"Idle",          { m_pTextureCom_Idle, 4, true });       // 6
 	m_pAnimatorCom->Add_State(L"Move",          { m_pTextureCom_Move, 4, true });       // 10
 	m_pAnimatorCom->Add_State(L"Down",          { m_pTextureCom_Down, 4, false });      // 1
-	m_pAnimatorCom->Add_State(L"Attack",        { m_pTextureCom_Attack, 4, false });    // 7
+	m_pAnimatorCom->Add_State(L"Attack",        { m_pTextureCom_Attack, 6, false });    // 7
 	m_pAnimatorCom->Add_State(L"Attack_Standby",{ m_pTextureCom_Idle, 4, false });      // 6
 	m_pAnimatorCom->Add_State(L"Airborne",      { m_pTextureCom_Airborne, 4, false});   // 1
 

@@ -25,6 +25,9 @@ HRESULT COink_A::Initialize(void* pArg)
     if (FAILED(this->Ready_Components()))
         return E_FAIL;
 
+    
+    m_iAtkCooldownFrames = static_cast<_int>(m_pGameInstance->Compute_Random(0, 300));
+
     return S_OK;
 }
 
@@ -34,17 +37,16 @@ void COink_A::Priority_Update(_float fTimeDelta)
 }
 
 void COink_A::Update(_float fTimeDelta)
-{
-    // 임시로 두더지꺼 붙여넣음
-
-    // 가까이 있으면 근접공격 (Attack)
-    // 멀리 있으면 차지 후(ChargeReady - ChargeReadyCycle)
-    // Change_End 투사체 공격 하는듯 
-    
-    _float fMinDist = 4.f;      // 원거리 공격 할 기준 거리
-    _float fMaxDist = 8.f;     // 어그로가 풀리는 기준 거리
+{    
+    _float fMinDist = 5.f;      // 원거리 공격 할 기준 거리
+    _float fMaxDist = 12.f;     // 어그로가 풀리는 기준 거리
     _float fAtkDist = 2.f;     // 근접공격할 기준 거리
 
+    _float fChargeAtkCooldown = 5.f;    // 원거리 공격 쿨타임 (공격 종료 시점부터 흐름)
+    _float fThrownAtkLifeTime = 2.f;    // 투사체 생존 시간
+    _float fThrownPower = 5.f;          // 투사체 속도
+
+    m_iAtkCooldownFrames++;
 
 
 
@@ -97,7 +99,7 @@ void COink_A::Update(_float fTimeDelta)
     D3DXMatrixIdentity(&matTransAddition);
     //_float3 vDiff = -vPlayerPos + vMonsterPos;       // 플레이어 위치에서 마우스 교차좌표로 가는 벡터
     D3DXVec3Normalize(&vDiff, &vDiff);              // 를 단위벡터화, 안되면 vDiff 순서 바꿔보기
-    _float fDistanceOffset = 1.2f;                   // ** ksta : 중점으로부터 떨어져 있을 거리 **
+    _float fDistanceOffset = 1.0f;                   // ** ksta : 중점으로부터 떨어져 있을 거리 **
     vDiff *= fDistanceOffset;
     D3DXMatrixTranslation(&matTransAddition, vDiff.x, 0, vDiff.z);
 
@@ -106,7 +108,7 @@ void COink_A::Update(_float fTimeDelta)
 
 
 
-
+    // ksta : 여기에 분기 추가 필요
     if (!(m_pAnimatorCom->Get_CurStateTag() == L"ChargeReady" ||
         m_pAnimatorCom->Get_CurStateTag() == L"ChargeReady_Cycle" ||
         m_pAnimatorCom->Get_CurStateTag() == L"ChargeEnd"))
@@ -118,13 +120,14 @@ void COink_A::Update(_float fTimeDelta)
                 m_isTracking = false;
         }
         // 거리가 약간 떨어져있다면 원거리 공격 준비
-        else if (fDistance <= fMinDist)
+        else if (fDistance <= fMinDist &&
+            m_iAtkCooldownFrames >= 60 * fChargeAtkCooldown)
         {
             if (m_pAnimatorCom->Change_State(L"ChargeReady"))
                 m_isTracking = false;
         }
         // 거리가 적당히 떨어져있다면 추적 ON
-        else if (fMinDist <= fDistance &&
+        else if (fAtkDist <= fDistance &&
             fDistance <= fMaxDist)
         {
             if (m_pAnimatorCom->Change_State(L"Move"))
@@ -171,11 +174,14 @@ void COink_A::Update(_float fTimeDelta)
         {
             _float3 vThrownDir = pTargetTransform->Get_State(STATE::POSITION) - vMonsterPos;
             CEffect_Factory::GetInstance()->Create_Effect(L"Prototype_Component_Texture_Oink_A_Effect_SpinSwing",
-                *m_pTransformCom->Get_WorldMatrix(), matMonsterWorld, vThrownDir, 3.f, 2.f, true);
+                *m_pTransformCom->Get_WorldMatrix(), matMonsterWorld, vThrownDir, fThrownPower, fThrownAtkLifeTime, true);
         }
         else {}
     else if (m_pAnimatorCom->Get_CurStateTag() == L"Charge_End")
+    {
         m_pAnimatorCom->Change_State(L"Attack_Standby");
+        m_iAtkCooldownFrames = 0;
+    }
 
 
 
