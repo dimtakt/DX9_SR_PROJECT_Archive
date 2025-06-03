@@ -3,12 +3,12 @@
 #include "Button.h"
 
 BEGIN(Client)
-class CTalent_Reset final : public CButton
+class CTalent_Slot_Button final : public CButton
 {
 private:
-									CTalent_Reset(LPDIRECT3DDEVICE9 pGraphic_Device);
-									CTalent_Reset(const CTalent_Reset& Prototype);
-	virtual							~CTalent_Reset() = default;
+	CTalent_Slot_Button(LPDIRECT3DDEVICE9 pGraphic_Device);
+	CTalent_Slot_Button(const CTalent_Slot_Button& Prototype);
+	virtual							~CTalent_Slot_Button() = default;
 
 public:
 	virtual HRESULT					Initialize_Prototype(LEVEL eLevel);
@@ -20,8 +20,9 @@ public:
 
 private:
 	LEVEL							m_eLevel = {};
-	_bool							m_bHold = { false };
-	_int							m_iClickValue = {};
+	_uint							m_iIndex = {};
+	_uint							m_iTexIdex = {};
+	_int							m_iAddValue = {};
 
 private:
 	HRESULT							Ready_Components();
@@ -31,13 +32,14 @@ private:
 	HRESULT							Ready_ChildPrototype(LEVEL eLevel);
 	HRESULT							Ready_Children();
 
-	void							Font_Render();
+	void							Ready_ButtonSet();
 
-	_bool							Reset_Pick();
+	_bool							Is_Button_Pick();
+
 
 public:
-	static CTalent_Reset*			Create(LPDIRECT3DDEVICE9 pGraphic_Device, LEVEL eLevel);
-	virtual CGameObject*			Clone(void* pArg) override;
+	static CTalent_Slot_Button* Create(LPDIRECT3DDEVICE9 pGraphic_Device, LEVEL eLevel);
+	virtual CGameObject* Clone(void* pArg) override;
 	virtual void					Free() override;
 };
 END

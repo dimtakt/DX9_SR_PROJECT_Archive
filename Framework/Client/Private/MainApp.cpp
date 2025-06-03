@@ -507,6 +507,47 @@ HRESULT CMainApp::Ready_Texture_Setting()
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Rect_Talent_Slot_Frame"),
 		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/UI/Talent/Talent_Slot_Frame_%d.png"), 4))))
 		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Rect_Talent_Slot_Icon_0"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/UI/Talent/Talent_Slot_Icon0_%d.png"), 4))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Rect_Talent_Slot_Icon_1"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/UI/Talent/Talent_Slot_Icon1_%d.png"), 4))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Rect_Talent_Slot_Icon_2"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/UI/Talent/Talent_Slot_Icon2_%d.png"), 4))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Rect_Talent_Slot_Icon_3"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/UI/Talent/Talent_Slot_Icon3_%d.png"), 4))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Rect_Talent_Slot_Icon_Selete"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/UI/Talent/Talent_Slot_Icon_Selete.png"), 1))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Rect_Talent_Slot_Button_0"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/UI/Talent/Talent_Slot_Button_0_%d.png"), 4))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Rect_Talent_Slot_Button_1"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/UI/Talent/Talent_Slot_Button_1_%d.png"), 4))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Rect_Talent_Slot_Button_2"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/UI/Talent/Talent_Slot_Button_2_%d.png"), 4))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Rect_Talent_Slot_Button_3"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/UI/Talent/Talent_Slot_Button_3_%d.png"), 4))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Rect_Talent_Slot_Button_Selete"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/UI/Talent/Talent_Slot_Button_Selete_%d.png"), 4))))
+		return E_FAIL;
+
 #pragma endregion
 #pragma region Prototype_Component_UI_Loding
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Rect_Loding_1"),
@@ -661,10 +702,16 @@ void CMainApp::Ready_Key_Setting()
 
 void CMainApp::Ready_Font_Setting()
 {
+	if (FAILED(m_pGameInstance->Ready_Font(TEXT("UI_Font_60"), TEXT("../Bin/Resources/Font/Galmuri9.ttf"), TEXT("Galmuri9 Regular"), 0, 60, 700)))
+		MSG_BOX(TEXT("FAILED to Font"));
+
 	if (FAILED(m_pGameInstance->Ready_Font(TEXT("UI_Font_50"), TEXT("../Bin/Resources/Font/Galmuri9.ttf"), TEXT("Galmuri9 Regular"), 0, 50, 900)))
 		MSG_BOX(TEXT("FAILED to Font"));
 
 	if (FAILED(m_pGameInstance->Ready_Font(TEXT("UI_Font_40"), TEXT("../Bin/Resources/Font/Galmuri9.ttf"), TEXT("Galmuri9 Regular"), 0, 40, 900)))
+		MSG_BOX(TEXT("FAILED to Font"));
+
+	if (FAILED(m_pGameInstance->Ready_Font(TEXT("UI_Font_35"), TEXT("../Bin/Resources/Font/Galmuri9.ttf"), TEXT("Galmuri9 Regular"), 0, 35, 500)))
 		MSG_BOX(TEXT("FAILED to Font"));
 
 	if (FAILED(m_pGameInstance->Ready_Font(TEXT("UI_Font_30"), TEXT("../Bin/Resources/Font/Galmuri9.ttf"), TEXT("Galmuri9 Regular"), 0, 30, 400)))
@@ -673,10 +720,13 @@ void CMainApp::Ready_Font_Setting()
 	if (FAILED(m_pGameInstance->Ready_Font(TEXT("UI_Font_28"), TEXT("../Bin/Resources/Font/Galmuri9.ttf"), TEXT("Galmuri9 Regular"), 0, 28, 700)))
 		MSG_BOX(TEXT("FAILED to Font"));
 
+	if (FAILED(m_pGameInstance->Ready_Font(TEXT("UI_Font_25_Normal"), TEXT("../Bin/Resources/Font/Galmuri9.ttf"), TEXT("Galmuri9 Regular"), 0, 25, 400)))
+		MSG_BOX(TEXT("FAILED to Font"));
+
 	if (FAILED(m_pGameInstance->Ready_Font(TEXT("UI_Font_25"), TEXT("../Bin/Resources/Font/Galmuri9.ttf"), TEXT("Galmuri9 Regular"), 0, 25, 700)))
 		MSG_BOX(TEXT("FAILED to Font"));
 
-	if (FAILED(m_pGameInstance->Ready_Font(TEXT("UI_Font_22_Nomal"), TEXT("../Bin/Resources/Font/Galmuri9.ttf"), TEXT("Galmuri9 Regular"), 0, 22, 500)))
+	if (FAILED(m_pGameInstance->Ready_Font(TEXT("UI_Font_22_Normal"), TEXT("../Bin/Resources/Font/Galmuri9.ttf"), TEXT("Galmuri9 Regular"), 0, 22, 500)))
 		MSG_BOX(TEXT("FAILED to Font"));
 
 	if (FAILED(m_pGameInstance->Ready_Font(TEXT("UI_Font_22"), TEXT("../Bin/Resources/Font/Galmuri9.ttf"), TEXT("Galmuri9 Regular"), 0, 22, 700)))
@@ -686,6 +736,9 @@ void CMainApp::Ready_Font_Setting()
 		MSG_BOX(TEXT("FAILED to Font"));
 
 	if (FAILED(m_pGameInstance->Ready_Font(TEXT("UI_Font_18_Stat"), TEXT("../Bin/Resources/Font/Galmuri9.ttf"), TEXT("Galmuri9 Regular"), 14, 18, 700)))
+		MSG_BOX(TEXT("FAILED to Font"));
+
+	if (FAILED(m_pGameInstance->Ready_Font(TEXT("UI_Font_18_Normal"), TEXT("../Bin/Resources/Font/Galmuri9.ttf"), TEXT("Galmuri9 Regular"), 0, 18, 500)))
 		MSG_BOX(TEXT("FAILED to Font"));
 
 	if (FAILED(m_pGameInstance->Ready_Font(TEXT("UI_Font_18"), TEXT("../Bin/Resources/Font/Galmuri9.ttf"), TEXT("Galmuri9 Regular"), 0, 18, 900)))

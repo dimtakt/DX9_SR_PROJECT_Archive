@@ -52,14 +52,21 @@ void CTalent_Reset::Priority_Update(_float fTimeDelta)
 
 void CTalent_Reset::Update(_float fTimeDelta)
 {
-	if (Check_Key_Down(g_hWnd, VK_LBUTTON))
-		m_bHold = true;
-	else if (Check_Key_UP(g_hWnd, VK_LBUTTON))
+
+	if (Reset_Pick())
+	{
+		if(m_pGameInstance->IsKeyDown(VK_LBUTTON))
+			m_bHold = true;
+	}
+	else
+	{
 		m_bHold = false;
-	
+	}
+	if (m_pGameInstance->IsKeyUp(VK_LBUTTON))
+		m_bHold = false;
 
 	if (m_bHold)
-		m_iClickValue += 100 * fTimeDelta;
+		m_iClickValue += 80 * fTimeDelta;
 	else
 		m_iClickValue = 0;
 
@@ -84,8 +91,10 @@ HRESULT CTalent_Reset::Render()
 	}
 	else
 	{
-		if (FAILED(CButton::Bind_ButtonTex_Double(g_hWnd, 0, 1)))
-			return E_FAIL;
+		if(Reset_Pick())
+			__super::Render_Button(1);
+		else
+			__super::Render_Button(0);
 	}
 	Font_Render();
 	Reset_RenderState();
@@ -173,6 +182,17 @@ void CTalent_Reset::Font_Render()
 	_stprintf_s(szText, TEXT("ÃÊ±âÈ­"));
 	m_pGameInstance->Render_Font(TEXT("UI_Font_30"), szText, m_vTexRect, D3DXCOLOR(1.f, 1.f, 1.f, 1.0f), DT_CENTER | DT_TOP);
 
+}
+
+_bool CTalent_Reset::Reset_Pick()
+{
+	POINT			ptMouse{};
+	GetCursorPos(&ptMouse);
+	ScreenToClient(g_hWnd, &ptMouse);
+
+	RECT			rcUI = { m_vWorldPos.x - m_fSizeX * 0.5f, m_vWorldPos.y - m_fSizeY * 0.5f + 60, m_vWorldPos.x + m_fSizeX * 0.5f, + m_vWorldPos.y + m_fSizeY * 0.5f + 60 };
+
+	return PtInRect(&rcUI, ptMouse);
 }
 
 CTalent_Reset* CTalent_Reset::Create(LPDIRECT3DDEVICE9 pGraphic_Device, LEVEL eLevel)

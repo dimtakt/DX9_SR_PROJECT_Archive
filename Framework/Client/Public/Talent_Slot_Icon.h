@@ -3,12 +3,12 @@
 #include "Button.h"
 
 BEGIN(Client)
-class CTalent_Reset final : public CButton
+class CTalent_Slot_Icon final : public CButton
 {
 private:
-									CTalent_Reset(LPDIRECT3DDEVICE9 pGraphic_Device);
-									CTalent_Reset(const CTalent_Reset& Prototype);
-	virtual							~CTalent_Reset() = default;
+	CTalent_Slot_Icon(LPDIRECT3DDEVICE9 pGraphic_Device);
+	CTalent_Slot_Icon(const CTalent_Slot_Icon& Prototype);
+	virtual							~CTalent_Slot_Icon() = default;
 
 public:
 	virtual HRESULT					Initialize_Prototype(LEVEL eLevel);
@@ -20,8 +20,8 @@ public:
 
 private:
 	LEVEL							m_eLevel = {};
-	_bool							m_bHold = { false };
-	_int							m_iClickValue = {};
+	_uint							m_iIndex = {};
+	_uint							m_iTexIdex = {};
 
 private:
 	HRESULT							Ready_Components();
@@ -31,13 +31,9 @@ private:
 	HRESULT							Ready_ChildPrototype(LEVEL eLevel);
 	HRESULT							Ready_Children();
 
-	void							Font_Render();
-
-	_bool							Reset_Pick();
-
 public:
-	static CTalent_Reset*			Create(LPDIRECT3DDEVICE9 pGraphic_Device, LEVEL eLevel);
-	virtual CGameObject*			Clone(void* pArg) override;
+	static CTalent_Slot_Icon* Create(LPDIRECT3DDEVICE9 pGraphic_Device, LEVEL eLevel);
+	virtual CGameObject* Clone(void* pArg) override;
 	virtual void					Free() override;
 };
 END
