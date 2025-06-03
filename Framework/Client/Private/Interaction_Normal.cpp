@@ -2,6 +2,8 @@
 
 #include "GameInstance.h"
 #include "Client_Struct.h"
+#include "Stat_Manager.h"
+#include "EXP_Ball.h"
 
 CInteraction_Normal::CInteraction_Normal(LPDIRECT3DDEVICE9 pGraphic_Device)
     : CGameObject{ pGraphic_Device }
@@ -21,7 +23,7 @@ HRESULT CInteraction_Normal::Initialize_Prototype()
 HRESULT CInteraction_Normal::Initialize(void* pArg)
 {
     MAP_OBJECT_DESC* pObject_Desc = static_cast<MAP_OBJECT_DESC*>(pArg);
-   /* m_eObjType = pObject_Desc->eType;*/
+    m_eObjType = pObject_Desc->eType;
 
     if (FAILED(Ready_Components()))
         return E_FAIL;
@@ -167,6 +169,14 @@ void CInteraction_Normal::Reset_RenderState()
 
 HRESULT CInteraction_Normal::EXP_Initialize()
 {
+    // collider
+    CCollider_OBB::OBB_DESC tColliderDesc;
+    tColliderDesc.vScale = _float3(1.f, 0.001f, 1.f);
+    tColliderDesc.pOwner = this;
+    tColliderDesc.pTransform = m_pTransformCom;
+    CCollider_OBB* pCol = dynamic_cast<CCollider_OBB*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::COMPONENT, ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Collider_OBB"), &tColliderDesc));
+    m_pGameInstance->Add_Collider(pCol);
+
     return S_OK;
 }
 
@@ -182,6 +192,20 @@ HRESULT CInteraction_Normal::EXP_Update(_float fTimeDelta)
 
 HRESULT CInteraction_Normal::EXP_Late_Update(_float fTimeDelta)
 {
+    if (m_pAnimatorCom_0->Check_State(TEXT("EXP_Fx")) && m_pAnimatorCom_0->Get_IsLastFrame())
+    {
+        m_bDead = true;
+        for (size_t i = 0; i < 10; i++)
+        {
+            CEXP_Ball::EXPBALLDESC desc{};
+            desc.fValue = 0.f;
+            desc.vPosition = m_pTransformCom->Get_State(STATE::POSITION);
+            CEXP_Ball* pEXP_Ball = dynamic_cast<CEXP_Ball*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_EXP_Ball"), &desc));
+            m_pGameInstance->Add_Direct_GameObject_ToLayer(m_pGameInstance->Get_CurrentLevel(), TEXT("Layer_Exp"), pEXP_Ball);
+        }
+
+    }
+
     return S_OK;
 }
 
@@ -300,6 +324,14 @@ HRESULT CInteraction_Normal::Gold_Component()
 #pragma region HP
 HRESULT CInteraction_Normal::HP_Initialize()
 {
+    // collider
+    CCollider_OBB::OBB_DESC tColliderDesc;
+    tColliderDesc.vScale = _float3(1.f, 0.001f, 1.f);
+    tColliderDesc.pOwner = this;
+    tColliderDesc.pTransform = m_pTransformCom;
+    CCollider_OBB* pCol = dynamic_cast<CCollider_OBB*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::COMPONENT, ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Collider_OBB"), &tColliderDesc));
+    m_pGameInstance->Add_Collider(pCol);
+
     return S_OK;
 }
 
@@ -335,10 +367,14 @@ HRESULT CInteraction_Normal::HP_Component()
     if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_VIBuffer_Rect"),
         TEXT("Com_VIBuffer"), reinterpret_cast<CComponent**>(&m_pVIBufferCom_0))))
         return E_FAIL;
-
+    
     /* For.Com_Texture */
     if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_HP"),
         TEXT("Com_Texture"), reinterpret_cast<CComponent**>(&m_pTextureCom_0))))
+        return E_FAIL;
+
+    if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Empty_HP"),
+        TEXT("Com_Texture_1"), reinterpret_cast<CComponent**>(&m_pTextureCom_1))))
         return E_FAIL;
 
     if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Transform"),
@@ -352,6 +388,7 @@ HRESULT CInteraction_Normal::HP_Component()
         return E_FAIL;
 
     m_pAnimatorCom_0->Add_State(L"HP", { m_pTextureCom_0, 3, true });
+    m_pAnimatorCom_0->Add_State(L"Empty_HP", { m_pTextureCom_1, 1, false });
 
     return S_OK;
 }
@@ -574,6 +611,63 @@ HRESULT CInteraction_Normal::Ready_Components()
 
     return S_OK;
 
+}
+
+void CInteraction_Normal::OnCollision(CGameObject* pGameObject)
+{
+    if (m_bActive) {
+        if (m_eObjType == GAMEOBJ_TYPE::EXP)
+        {
+            if (pGameObject->Get_ObjType() == GAMEOBJ_TYPE::PLAYER)
+            {
+
+                CStat_Manager::GetInstance()->Interaction_Obj_Stat(GAMEOBJ_TYPE::EXP);
+                m_pAnimatorCom_0->Change_State(TEXT("EXP_Fx"));
+                m_bActive = FALSE;
+            }
+        }
+        else if (m_eObjType == GAMEOBJ_TYPE::GOLD)
+        {
+            if (pGameObject->Get_ObjType() == GAMEOBJ_TYPE::PLAYER)
+            {
+
+            }
+        }
+        else if (m_eObjType == GAMEOBJ_TYPE::HP)
+        {
+            if (pGameObject->Get_ObjType() == GAMEOBJ_TYPE::PLAYER)
+            {
+                if (m_pGameInstance->IsKeyDown('F'))
+                {
+                    CStat_Manager::GetInstance()->Interaction_Obj_Stat(GAMEOBJ_TYPE::HP);
+                    m_pAnimatorCom_0->Change_State(TEXT("Empty_HP"));
+                    m_bActive = FALSE;
+                }
+
+            }
+        }
+        else if (m_eObjType == GAMEOBJ_TYPE::STONE_TABLET)
+        {
+            if (pGameObject->Get_ObjType() == GAMEOBJ_TYPE::PLAYER)
+            {
+
+            }
+        }
+        else if (m_eObjType == GAMEOBJ_TYPE::ATIFACT)
+        {
+            if (pGameObject->Get_ObjType() == GAMEOBJ_TYPE::PLAYER)
+            {
+
+            }
+        }
+        else
+        {
+            if (pGameObject->Get_ObjType() == GAMEOBJ_TYPE::PLAYER)
+            {
+
+            }
+        }
+    }
 }
 
 CInteraction_Normal* CInteraction_Normal::Create(LPDIRECT3DDEVICE9 pGraphic_Device)

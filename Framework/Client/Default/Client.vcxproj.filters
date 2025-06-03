@@ -325,6 +325,9 @@
     <Filter Include="02.GameObject\UI\Window\Talent\Talent_Slot\Talent_Slot_Frame">
       <UniqueIdentifier>{4da686ad-d4f2-4bef-a733-c3b531e78fc2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\Object\EXP_Ball">
+      <UniqueIdentifier>{109028fc-4bee-49e2-a8ce-c44d047116da}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -681,6 +684,9 @@
     <ClInclude Include="..\public\Talent_Slot_Frame.h">
       <Filter>02.GameObject\UI\Window\Talent\Talent_Slot\Talent_Slot_Frame</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\EXP_Ball.h">
+      <Filter>02.GameObject\Object\EXP_Ball</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -998,6 +1004,9 @@
     </ClCompile>
     <ClCompile Include="..\private\Talent_Slot_Frame.cpp">
       <Filter>02.GameObject\UI\Window\Talent\Talent_Slot\Talent_Slot_Frame</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\EXP_Ball.cpp">
+      <Filter>02.GameObject\Object\EXP_Ball</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -30,6 +30,7 @@
 #include "Loding_UI.h"
 #include "Interaction_Normal.h"
 #include "Talent.h"
+#include "EXP_Ball.h"
 CMainApp::CMainApp()
 	: m_pGameInstance{ CGameInstance::GetInstance() }
 {
@@ -207,9 +208,12 @@ HRESULT CMainApp::Ready_GameObject_Setting()
 		CLoding_UI::Create(m_pGraphic_Device, LEVEL::LEVEL_STATIC))))
 		return E_FAIL;
 #pragma endregion
-	/////////////////////////////////////////////Add Layer///////////////////////////////////////////
-
-	/* Add Layer*/
+	
+#pragma region Prototype_GameObject_Loding_EXP_Ball
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_EXP_Ball"),
+		CEXP_Ball::Create(m_pGraphic_Device))))
+		return E_FAIL;
+#pragma endregion
 
 	return S_OK;
 }
@@ -519,6 +523,10 @@ HRESULT CMainApp::Ready_Texture_Setting()
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_EXP_Big_Fx"),
 		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/InteractionObject/Exp/BigFx/EXP_Big_FX%d.png"), 13))))
 		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_EXP_Ball"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/InteractionObject/Exp/MiniBall/EXP_Mini_Ball%d.png"), 8))))
+		return E_FAIL;
 #pragma endregion
 
 #pragma region Prototype_Component_Gold
@@ -530,6 +538,10 @@ HRESULT CMainApp::Ready_Texture_Setting()
 #pragma region Prototype_Component_HP
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_HP"),
 		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/InteractionObject/HP/HP%d.png"), 5))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Empty_HP"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/InteractionObject/HP/Empty_HP.png"), 1))))
 		return E_FAIL;
 #pragma endregion
 

@@ -47,6 +47,36 @@ HRESULT CStat_Manager::Initialize()
     return S_OK;
 }
 
+void CStat_Manager::Cal_Stats(STAT_INFO eStat, float fValue)
+{
+    m_fCurStats[static_cast<int>(eStat)] += fValue;
+
+    if (eStat == STAT_INFO::EXP)
+    {
+        if (m_fCurStats[static_cast<int>(eStat)] >= 100.f)
+        {
+            m_fCurStats[static_cast<int>(eStat)] -= 100.f;
+            m_fCurStats[static_cast<int>(STAT_INFO::LEVEL)] += 1.f;
+        }
+
+    }
+    
+}
+
+void CStat_Manager::Interaction_Obj_Stat(GAMEOBJ_TYPE eType)
+{
+    if (eType == GAMEOBJ_TYPE::EXP)
+    {
+        m_fCurStats[static_cast<int>(STAT_INFO::LEVEL)] += 1.f;
+        m_fCurStats[static_cast<int>(STAT_INFO::EXP)] = 0.f;
+    }
+    else if (eType == GAMEOBJ_TYPE::HP)
+    {
+        m_fCurStats[static_cast<int>(STAT_INFO::MAXHP)] += 15.f;
+        m_fCurStats[static_cast<int>(STAT_INFO::CULHP)] += 15.f;
+    }
+}
+
 void CStat_Manager::Reset_CurStats()
 {
     for (size_t i = 0; i < static_cast<int>(STAT_INFO::STAT_END); i++)
