@@ -2,6 +2,7 @@
 #include "GameInstance.h"
 #include "Status_Element_Icon.h"
 #include "Stat_Manager.h"
+#include "Status_Item_Slot.h"
 CStatus_Frame_UP::CStatus_Frame_UP(LPDIRECT3DDEVICE9 pGraphic_Device) : CUIObject(pGraphic_Device)
 {
 }
@@ -99,6 +100,10 @@ HRESULT CStatus_Frame_UP::Ready_ChildPrototype(LEVEL eLevel)
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(eLevel), TEXT("Prototype_GameObject_UI_Status_Element_Icon"),
 		CStatus_Element_Icon::Create(m_pGraphic_Device, eLevel))))
 		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(eLevel), TEXT("Prototype_GameObject_UI_Status_Item_Slot"),
+		CStatus_Item_Slot::Create(m_pGraphic_Device, eLevel))))
+		return E_FAIL;
 }
 
 HRESULT CStatus_Frame_UP::Ready_Children()
@@ -116,7 +121,13 @@ HRESULT CStatus_Frame_UP::Ready_Children()
 			return E_FAIL;
 		Add_Child(pGameObject);
 	}
-    return S_OK;
+    
+	pGameObject = dynamic_cast<CUIObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(m_eLevel), TEXT("Prototype_GameObject_UI_Status_Item_Slot")));
+	if (nullptr == pGameObject)
+		return E_FAIL;
+	Add_Child(pGameObject);
+	
+	return S_OK;
 }
 
 void CStatus_Frame_UP::SetUp_RenderState()

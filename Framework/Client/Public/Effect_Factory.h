@@ -20,8 +20,8 @@ public:
 	void Create_Effect(const _wstring& strEffectTag, _float3 vPos, D3DXQUATERNION qRot, _float3 vScale, _bool isFlippedX = false);
 	void Create_Effect(const _wstring& strEffectTag, _float4x4 matEffectWorld, _bool isFlippedX = false);
 	void Create_Effect(const _wstring& strEffectTag, _float4x4 matEffectWorld, _float4x4 matOffsetWorld, _bool isFlippedX = false);
-	void Create_Effect_RotationByParent(const _wstring& strEffectTag, _float4x4 matEffectWorld, const _float3 axis, _bool isFlippedX = false, CTransform* parent = nullptr, _float fRadian = 0);
-
+	void Create_Effect(const _wstring& strEffectTag, _float4x4 matEffectWorld, _float4x4 matOffsetWorld, CTransform* pFollowTransformCom,_bool isFlippedX = false);
+	void Create_Effect(const _wstring& strEffectTag, _float4x4 matEffectWorld, _float4x4 matOffsetWorld, _float3 vThrownDir, _float fThrownPower, _float fLifeTimeSec = 0.f, _bool isFlippedX = false);
 
 private:
 	CGameInstance* m_pGameInstance = { nullptr };

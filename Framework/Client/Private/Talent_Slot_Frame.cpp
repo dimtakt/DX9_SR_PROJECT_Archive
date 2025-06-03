@@ -1,0 +1,138 @@
+#include "Talent_Slot_Frame.h"
+#include "GameInstance.h"
+#include "Stat_Manager.h"
+CTalent_Slot_Frame::CTalent_Slot_Frame(LPDIRECT3DDEVICE9 pGraphic_Device) : CUIObject(pGraphic_Device)
+{
+}
+
+CTalent_Slot_Frame::CTalent_Slot_Frame(const CTalent_Slot_Frame& Prototype) : CUIObject(Prototype)
+{
+}
+
+HRESULT CTalent_Slot_Frame::Initialize_Prototype()
+{
+	return S_OK;
+}
+
+HRESULT CTalent_Slot_Frame::Initialize(void* pArg)
+{
+	UIOBJECT_DESC* Desc = static_cast<UIOBJECT_DESC*>(pArg);
+
+	m_iIndex = Desc->fZ;
+
+	m_fSizeX = 470;
+	m_fSizeY = 470;
+	m_fX = 0;
+	m_fY = 0;
+	m_fZ = UI_DEPTH::TALENT;
+	m_iWinSizeX = g_iWinSizeX;
+	m_iWinSizeY = g_iWinSizeY;
+
+	if (FAILED(CUIObject::Initialize()))
+		return E_FAIL;
+
+	if (FAILED(Ready_Components()))
+		return E_FAIL;
+
+	m_pTransformCom->Scaling(m_fSizeX, m_fSizeY, 1.f);
+	__super::Update_Position();
+
+	return S_OK;
+}
+
+void CTalent_Slot_Frame::Priority_Update(_float fTimeDelta)
+{
+}
+
+void CTalent_Slot_Frame::Update(_float fTimeDelta)
+{
+}
+
+void CTalent_Slot_Frame::Late_Update(_float fTimeDelta)
+{
+	m_pGameInstance->Add_RenderGroup(RENDERGROUP::RG_UI, this);
+}
+
+HRESULT CTalent_Slot_Frame::Render()
+{
+	SetUp_RenderState();
+
+	if (FAILED(m_pTextureCom->Bind_Texture(0)))
+		return E_FAIL;
+	m_pVIBufferCom->Bind_Buffers();
+
+	__super::Begin();
+	m_pVIBufferCom->Render();
+	Reset_RenderState();
+	return S_OK;
+}
+
+HRESULT CTalent_Slot_Frame::Ready_Components()
+{
+	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_VIBuffer_Rect"),
+		TEXT("Com_VIBuffer"), reinterpret_cast<CComponent**>(&m_pVIBufferCom))))
+		return E_FAIL;
+
+	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Transform"),
+		TEXT("Com_Transform"), reinterpret_cast<CComponent**>(&m_pTransformCom))))
+		return E_FAIL;
+
+	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Rect_Talent_Slot_Frame"),
+		TEXT("Com_Texture"), reinterpret_cast<CComponent**>(&m_pTextureCom))))
+		return E_FAIL;
+
+	return S_OK;
+}
+
+void CTalent_Slot_Frame::SetUp_RenderState()
+{
+	m_pGraphic_Device->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
+	m_pGraphic_Device->SetRenderState(D3DRS_ALPHAREF, 200);
+	m_pGraphic_Device->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER);
+
+	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_POINT);
+	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_POINT);
+	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MIPFILTER, D3DTEXF_NONE);
+}
+
+void CTalent_Slot_Frame::Reset_RenderState()
+{
+	m_pGraphic_Device->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
+
+	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_LINEAR);
+	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);
+	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MIPFILTER, D3DTEXF_LINEAR);
+
+	m_pGraphic_Device->SetTexture(0, NULL);
+}
+
+CTalent_Slot_Frame* CTalent_Slot_Frame::Create(LPDIRECT3DDEVICE9 pGraphic_Device)
+{
+	CTalent_Slot_Frame* pInstance = new CTalent_Slot_Frame(pGraphic_Device);
+
+	if (FAILED(pInstance->Initialize_Prototype()))
+	{
+		MSG_BOX(TEXT("Failed to Created : CTalent_Slot_Frame"));
+		Safe_Release(pInstance);
+	}
+	return pInstance;
+}
+
+CGameObject* CTalent_Slot_Frame::Clone(void* pArg)
+{
+	CTalent_Slot_Frame* pInstance = new CTalent_Slot_Frame(*this);
+
+	if (FAILED(pInstance->Initialize(pArg)))
+	{
+		MSG_BOX(TEXT("Failed to Clone : CTalent_Slot_Frame"));
+		Safe_Release(pInstance);
+	}
+	return pInstance;
+}
+
+void CTalent_Slot_Frame::Free()
+{
+	__super::Free();
+	Safe_Release(m_pVIBufferCom);
+	Safe_Release(m_pTextureCom);
+}

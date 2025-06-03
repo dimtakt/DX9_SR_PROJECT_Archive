@@ -3,10 +3,11 @@
 #include "GameObject.h"
 #include "Camera.h"
 #include "Transform.h"
-
+#include "EventListener.h"
+#include "Client_Defines_Event.h"
 BEGIN(Client)
 
-class CCamera_Follow final : public CCamera
+class CCamera_Follow final : public CCamera, public IEventListener
 {
 public:
 	typedef struct tagCameraFolDesc
@@ -26,12 +27,21 @@ public:
 	virtual void Late_Update(_float fTimeDelta) override;
 	virtual HRESULT Render() override;
 
-private:
-	_float3			m_vOffset{};
-	_float			m_fCurrentAngle{};
+public:
+	virtual void OnEvent(_uint iTypeindex, const EVENTDATA* pData) override;
 
 private:
-	CTransform* m_pTargetTransformCom = { nullptr };
+	_float3			m_vOffset = {};
+	_float			m_fCurrentAngle = {};
+	_float			m_fMaxXRange = {};
+	_float			m_fZMin = {};
+	_float			m_fZMax = {};
+	_float3			m_vTerrainPos = {};
+	_float			m_fDistance = {};
+	_bool			m_bForceSnapCamera = {false};
+
+private:
+	CTransform* m_pTargetPlayerTransformCom = { nullptr };
 	vector<CTransform*> m_vRotateObjectsTransformCom = { };
 
 private:
@@ -40,7 +50,7 @@ private:
 
 private:
 	void	Move_Angle(_float fAngle, _float fTimeDelta);
-	void	Follow_Target();
+	void	Follow_Target(_float fTimeDelta);
 
 public:
 	static CCamera_Follow* Create(LPDIRECT3DDEVICE9 pGraphic_Device);

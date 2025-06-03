@@ -62,6 +62,7 @@ public:
 	_float	Get_TimeDelta(const _wstring& strTimerTag);
 	HRESULT	Add_Timer(const _wstring& strTimerTag);
 	void	Compute_TimeDelta(const _wstring& strTimerTag);
+	void	Remove_Timer(const _wstring& strTimerTag);
 #pragma endregion
 
 #pragma region KEY_MANAGER

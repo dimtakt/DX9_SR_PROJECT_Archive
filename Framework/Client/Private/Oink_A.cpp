@@ -1,4 +1,5 @@
 #include "Oink_A.h"
+#include "Effect_Factory.h"
 
 COink_A::COink_A(LPDIRECT3DDEVICE9 pGraphic_Device)
     : CMonster{ pGraphic_Device }
@@ -34,14 +35,167 @@ void COink_A::Priority_Update(_float fTimeDelta)
 
 void COink_A::Update(_float fTimeDelta)
 {
+    // 임시로 두더지꺼 붙여넣음
+
+    // 가까이 있으면 근접공격 (Attack)
+    // 멀리 있으면 차지 후(ChargeReady - ChargeReadyCycle)
+    // Change_End 투사체 공격 하는듯 
+    
+    _float fMinDist = 4.f;      // 원거리 공격 할 기준 거리
+    _float fMaxDist = 8.f;     // 어그로가 풀리는 기준 거리
+    _float fAtkDist = 2.f;     // 근접공격할 기준 거리
+
+
+
+
+    _uint iCurLevel = CGameInstance::GetInstance()->Get_CurrentLevel();
+
+    CTransform* pTargetTransform = dynamic_cast<CTransform*>(m_pGameInstance->GetInstance()->Get_Component(iCurLevel, TEXT("Layer_Player"), TEXT("Com_Transform")));
+
+    _float3 vMonsterPos = m_pTransformCom->Get_State(STATE::POSITION);
+    _float3 vTargetPos = pTargetTransform->Get_State(STATE::POSITION);
+
+    _float3 vDiff = -vMonsterPos + vTargetPos;
+    _float fDistance = D3DXVec3Length(&vDiff);
+
+
+    // ********* matMonster 구하기
+    _float4x4 matMonsterWorld = *m_pTransformCom->Get_WorldMatrix();
+
+
+
+
+    // 이펙트용
+    // 1. 원점으로 이동
+    _float4x4 matTransToOrigin = {};
+    D3DXMatrixIdentity(&matTransToOrigin);
+    D3DXMatrixTranslation(&matTransToOrigin, -matMonsterWorld._41, -matMonsterWorld._42, -matMonsterWorld._43);
+
+    // 2. 크기
+    _float4x4 matScale = {};
+    D3DXMatrixIdentity(&matScale);
+    D3DXMatrixScaling(&matScale, -1.5f, 1.5f, 1.5f);
+
+    // 3. 자전
+    _float4x4 matRotateChild = {};
+    D3DXMatrixIdentity(&matRotateChild);
+    D3DXMatrixRotationX(&matRotateChild, D3DXToRadian(-90)); // 안되면 -90도도 해보기
+
+    _float4x4 matRotateChildtoPlayer = {};
+    D3DXMatrixIdentity(&matRotateChildtoPlayer);
+    _float fAngle = atan2f(vTargetPos.x - vMonsterPos.x, vTargetPos.z - vMonsterPos.z);
+    _float fDegree = D3DXToDegree(fAngle) + 190;
+    D3DXMatrixRotationY(&matRotateChildtoPlayer, D3DXToRadian(fDegree));
+
+    // 4. 원래 위치(몬스터)로 재이동
+    _float4x4 matTransReturn = {};
+    D3DXMatrixIdentity(&matTransReturn);
+    D3DXMatrixTranslation(&matTransReturn, matMonsterWorld._41, matMonsterWorld._42, matMonsterWorld._43);
+
+    // 5. 거기에 추가 이동 (플레이어 방향)
+    _float4x4 matTransAddition = {};
+    D3DXMatrixIdentity(&matTransAddition);
+    //_float3 vDiff = -vPlayerPos + vMonsterPos;       // 플레이어 위치에서 마우스 교차좌표로 가는 벡터
+    D3DXVec3Normalize(&vDiff, &vDiff);              // 를 단위벡터화, 안되면 vDiff 순서 바꿔보기
+    _float fDistanceOffset = 1.2f;                   // ** ksta : 중점으로부터 떨어져 있을 거리 **
+    vDiff *= fDistanceOffset;
+    D3DXMatrixTranslation(&matTransAddition, vDiff.x, 0, vDiff.z);
+
+    matMonsterWorld = matTransToOrigin * matScale * matRotateChild * matRotateChildtoPlayer * matTransReturn * matTransAddition;
+
+
+
+
+
+    if (!(m_pAnimatorCom->Get_CurStateTag() == L"ChargeReady" ||
+        m_pAnimatorCom->Get_CurStateTag() == L"ChargeReady_Cycle" ||
+        m_pAnimatorCom->Get_CurStateTag() == L"ChargeEnd"))
+    {
+        // 거리가 아주 가깝다면 근접공격 상태
+        if (fDistance <= fAtkDist)
+        {
+            if (m_pAnimatorCom->Change_State(L"Attack"))
+                m_isTracking = false;
+        }
+        // 거리가 약간 떨어져있다면 원거리 공격 준비
+        else if (fDistance <= fMinDist)
+        {
+            if (m_pAnimatorCom->Change_State(L"ChargeReady"))
+                m_isTracking = false;
+        }
+        // 거리가 적당히 떨어져있다면 추적 ON
+        else if (fMinDist <= fDistance &&
+            fDistance <= fMaxDist)
+        {
+            if (m_pAnimatorCom->Change_State(L"Move"))
+                m_isTracking = true;
+        }
+        // 충분히 멀리 떨어지면 Idle 상태
+        else if (fDistance >= fMaxDist)
+        {
+            if (m_pAnimatorCom->Change_State(L"Idle"))
+                m_isTracking = false;
+        }
+    }
+    
+
+
+    // 각 분기점마다의 핻동
+    if (m_isTracking)
+    {
+        float fMoveSpeed = 1.2f;
+
+        // 플레이어 추적
+        _float3 vPosDiff = vTargetPos - vMonsterPos;
+        D3DXVec3Normalize(&vPosDiff, &vPosDiff);
+        _float3 vNewMonsterPos = vMonsterPos + vPosDiff * fTimeDelta * fMoveSpeed;
+        m_pTransformCom->Set_State(STATE::POSITION, vNewMonsterPos);
+    }
+
+    if (m_pAnimatorCom->Get_CurStateTag() == L"Attack" &&
+        m_pAnimatorCom->Get_CurStackedFrame() == 24)
+    {
+        CEffect_Factory::GetInstance()->Create_Effect(L"Prototype_Component_Texture_Oink_A_Effect_Swing",
+            *m_pTransformCom->Get_WorldMatrix(), matMonsterWorld, true);
+    }
+    else if (m_pAnimatorCom->Get_CurStateTag() == L"Attack" &&
+        m_pAnimatorCom->Get_IsLastFrame())
+    {
+        if (m_pAnimatorCom->Change_State(L"Attack_Standby")) {}
+    }
+
+    if (m_pAnimatorCom->Get_CurStateTag() == L"ChargeReady")
+        m_pAnimatorCom->Change_State(L"ChargeReady_Cycle", true, 3.f);
+    else if (m_pAnimatorCom->Get_CurStateTag() == L"ChargeReady_Cycle")
+        if (m_pAnimatorCom->Change_State(L"Charge_End"))
+        {
+            _float3 vThrownDir = pTargetTransform->Get_State(STATE::POSITION) - vMonsterPos;
+            CEffect_Factory::GetInstance()->Create_Effect(L"Prototype_Component_Texture_Oink_A_Effect_SpinSwing",
+                *m_pTransformCom->Get_WorldMatrix(), matMonsterWorld, vThrownDir, 3.f, 2.f, true);
+        }
+        else {}
+    else if (m_pAnimatorCom->Get_CurStateTag() == L"Charge_End")
+        m_pAnimatorCom->Change_State(L"Attack_Standby");
+
+
+
+
+    // 딜레이 Exit 역할
+    if (m_pAnimatorCom->Get_CurStateTag() == L"Attack_Standby")
+        m_pAnimatorCom->Change_State(L"Idle");
+
+
+
+
+
+
     if (m_pTerrainBox != nullptr) {
         m_pTerrainBox->SetUp_OnTerrainBox(m_pTransformCom, _float3(0.05f, 0.2f, 0.05f));
     }
 
-    if (m_isTracking)           m_pAnimatorCom->Change_State(L"Move");
-	else                        m_pAnimatorCom->Change_State(L"Idle");
-
-	m_isTracking = false;
+    //if (m_isTracking)           m_pAnimatorCom->Change_State(L"Move");
+	//else                        m_pAnimatorCom->Change_State(L"Idle");
+	//m_isTracking = false;
 }
 
 void COink_A::Late_Update(_float fTimeDelta)
@@ -51,6 +205,30 @@ void COink_A::Late_Update(_float fTimeDelta)
 
 HRESULT COink_A::Render()
 {
+    // 플레이어 위치에 따라 좌우반전 적용,
+    // 단 공격 중 등의 경우에는 변경 X
+    _uint iCurLevel = m_pGameInstance->GetInstance()->Get_CurrentLevel();
+    _float3 vTargetPos = {}, vMonsterPos = {};    // 플레이어 좌표
+    CTransform* pTargetTransform = dynamic_cast<CTransform*>(m_pGameInstance->GetInstance()->Get_Component(iCurLevel, TEXT("Layer_Player"), TEXT("Com_Transform")));
+    vTargetPos = pTargetTransform->Get_State(STATE::POSITION);
+    vMonsterPos = m_pTransformCom->Get_State(STATE::POSITION);
+
+    // 좌우반전
+    if (vTargetPos.x < vMonsterPos.x && !m_isFlippedX)   // 좌측
+    {
+        m_pVIBufferCom->ChangeUV_FlipX(true);
+        m_isFlippedX = true;
+        //std::cout << "[CPlayer::Update] FlippedX Changed to True." << std::endl;
+    }
+    else if (vTargetPos.x > vMonsterPos.x && m_isFlippedX)    // 우측
+    {
+        m_pVIBufferCom->ChangeUV_FlipX(false);
+        m_isFlippedX = false;
+        //std::cout << "[CPlayer::Update] FlippedX Changed to False." << std::endl;
+    }
+
+
+
     m_pTransformCom->Bind_Matrix();
 
     m_pAnimatorCom->Update_State(); // Bind_Texture
@@ -62,6 +240,12 @@ HRESULT COink_A::Render()
     m_pVIBufferCom->Render();
 
     m_pTerrainBox->Render();
+
+    if (m_isFlippedX)
+    {
+        m_pVIBufferCom->ResetUV_FlipX();
+        m_isFlippedX = false;
+    }
 
     return S_OK;
 }
@@ -120,14 +304,16 @@ HRESULT COink_A::Ready_Components()
     // State 삽입
     m_pAnimatorCom->Add_State(L"Idle",                  { m_pTextureCom_Idle, 4, true });
 	m_pAnimatorCom->Add_State(L"Move",                  { m_pTextureCom_Move, 4, true });
-	m_pAnimatorCom->Add_State(L"Attack",                { m_pTextureCom_Attack, 4, false });
-	m_pAnimatorCom->Add_State(L"ChargeReady",           { m_pTextureCom_ChargeReady, 4, false });
-	m_pAnimatorCom->Add_State(L"ChargeReady_Cycle",     { m_pTextureCom_ChargeReady_Cycle, 4, true });
+	m_pAnimatorCom->Add_State(L"Attack",                { m_pTextureCom_Attack, 6, false });
+	m_pAnimatorCom->Add_State(L"ChargeReady",           { m_pTextureCom_ChargeReady, 6, false });
+	m_pAnimatorCom->Add_State(L"ChargeReady_Cycle",     { m_pTextureCom_ChargeReady_Cycle, 6, true });
 	m_pAnimatorCom->Add_State(L"Charge_Cycle",          { m_pTextureCom_Charge_Cycle, 4, true });
-	m_pAnimatorCom->Add_State(L"Charge_Airborne",       { m_pTextureCom_Charge_Airborne, 4, false });
+	m_pAnimatorCom->Add_State(L"Charge_End",            { m_pTextureCom_Charge_End, 6, false });
 	m_pAnimatorCom->Add_State(L"Charge_Down",           { m_pTextureCom_Charge_Down, 4, false });
-	m_pAnimatorCom->Add_State(L"Charge_End",            { m_pTextureCom_Charge_End, 4, false });
+	m_pAnimatorCom->Add_State(L"Charge_Airborne",       { m_pTextureCom_Charge_Airborne, 4, false });
+    m_pAnimatorCom->Add_State(L"Attack_Standby",        { m_pTextureCom_Idle, 4, false });
     
+
     return S_OK;
 }
 

@@ -9,6 +9,11 @@ namespace Client
 		float		fValue;
 	}STATCHANGE;
 
+	typedef struct tagRoomChangeEvent : public EVENTDATA
+	{
+		_float3		vPosition;
+	}ROOMCHANGE;
+
 	typedef struct tagActionEvent : public EVENTDATA
 	{
 		_wstring strActionName;

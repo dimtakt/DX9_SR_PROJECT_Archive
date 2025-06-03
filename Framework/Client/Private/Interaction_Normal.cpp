@@ -189,11 +189,6 @@ HRESULT CInteraction_Normal::EXP_Render()
 {
     m_pTransformCom->Bind_Matrix();
 
-    m_pVIBufferCom_1->Bind_Buffers();
-
-    m_pAnimatorCom_1->Update_State();
-    m_pVIBufferCom_1->Render();
-
     m_pVIBufferCom_0->Bind_Buffers();
 
     m_pAnimatorCom_0->Update_State();
@@ -221,12 +216,8 @@ HRESULT CInteraction_Normal::EXP_Component()
         TEXT("Com_Texture"), reinterpret_cast<CComponent**>(&m_pTextureCom_0))))
         return E_FAIL;
 
-    if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_EXP_Big_Light"),
-        TEXT("Com_Texture_1"), reinterpret_cast<CComponent**>(&m_pTextureCom_1))))
-        return E_FAIL;
-
     if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_EXP_Big_Fx"),
-        TEXT("Com_Texture_2"), reinterpret_cast<CComponent**>(&m_pTextureCom_2))))
+        TEXT("Com_Texture_1"), reinterpret_cast<CComponent**>(&m_pTextureCom_2))))
         return E_FAIL;
 
     
@@ -236,15 +227,9 @@ HRESULT CInteraction_Normal::EXP_Component()
     if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Animator"),
         TEXT("Com_Animator"), reinterpret_cast<CComponent**>(&m_pAnimatorCom_0), &StartAnimStateDesc_0)))
         return E_FAIL;
-    CAnimator::ANIMSTATE_DESC StartAnimStateDesc_1{};
-    StartAnimStateDesc_1.strTimerTag = L"Animator_EXP_Big";
-    if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Animator"),
-        TEXT("Com_Animator_1"), reinterpret_cast<CComponent**>(&m_pAnimatorCom_1), &StartAnimStateDesc_1)))
-        return E_FAIL;
 
-    m_pAnimatorCom_0->Add_State(L"EXP_big", { m_pTextureCom_0, 3, true });
+    m_pAnimatorCom_0->Add_State(L"EXP_big", { m_pTextureCom_0, 10, true });
     m_pAnimatorCom_0->Add_State(L"EXP_Fx", { m_pTextureCom_2, 3, true });
-    m_pAnimatorCom_1->Add_State(L"EXP_Light", { m_pTextureCom_1, 3, true });
     
 
     return S_OK;
@@ -336,10 +321,10 @@ HRESULT CInteraction_Normal::HP_Late_Update(_float fTimeDelta)
 HRESULT CInteraction_Normal::HP_Render()
 {
     m_pTransformCom->Bind_Matrix();
-    if (FAILED(m_pTextureCom_0->Bind_Texture(0)))
-        return E_FAIL;
+
     m_pVIBufferCom_0->Bind_Buffers();
 
+    m_pAnimatorCom_0->Update_State();
     m_pVIBufferCom_0->Render();
 
     return S_OK;
@@ -366,7 +351,7 @@ HRESULT CInteraction_Normal::HP_Component()
         TEXT("Com_Animator"), reinterpret_cast<CComponent**>(&m_pAnimatorCom_0), &StartAnimStateDesc)))
         return E_FAIL;
 
-    m_pAnimatorCom_0->Add_State(L"HP", { m_pTextureCom_0, 1, true });
+    m_pAnimatorCom_0->Add_State(L"HP", { m_pTextureCom_0, 3, true });
 
     return S_OK;
 }
@@ -455,10 +440,10 @@ HRESULT CInteraction_Normal::Atifact_Late_Update(_float fTimeDelta)
 HRESULT CInteraction_Normal::Atifact_Render()
 {
     m_pTransformCom->Bind_Matrix();
-    if (FAILED(m_pTextureCom_0->Bind_Texture(0)))
-        return E_FAIL;
+
     m_pVIBufferCom_0->Bind_Buffers();
 
+    m_pAnimatorCom_0->Update_State();
     m_pVIBufferCom_0->Render();
 
     return S_OK;
@@ -485,7 +470,7 @@ HRESULT CInteraction_Normal::Atifact_Component()
         TEXT("Com_Animator"), reinterpret_cast<CComponent**>(&m_pAnimatorCom_0), &StartAnimStateDesc)))
         return E_FAIL;
 
-    m_pAnimatorCom_0->Add_State(L"Atifact", { m_pTextureCom_0, 1, true });
+    m_pAnimatorCom_0->Add_State(L"Atifact", { m_pTextureCom_0, 3, true });
     
     return S_OK;
 }
@@ -515,10 +500,10 @@ HRESULT CInteraction_Normal::Merchant_Late_Update(_float fTimeDelta)
 HRESULT CInteraction_Normal::Merchant_Render()
 {
     m_pTransformCom->Bind_Matrix();
-    if (FAILED(m_pTextureCom_0->Bind_Texture(0)))
-        return E_FAIL;
+
     m_pVIBufferCom_0->Bind_Buffers();
 
+    m_pAnimatorCom_0->Update_State();
     m_pVIBufferCom_0->Render();
 
     return S_OK;
@@ -545,7 +530,7 @@ HRESULT CInteraction_Normal::Merchant_Component()
         TEXT("Com_Animator"), reinterpret_cast<CComponent**>(&m_pAnimatorCom_0), &StartAnimStateDesc)))
         return E_FAIL;
 
-    m_pAnimatorCom_0->Add_State(L"Merchant", { m_pTextureCom_0, 1, true });
+    m_pAnimatorCom_0->Add_State(L"Merchant", { m_pTextureCom_0, 5, true });
 
     return S_OK;
 }
