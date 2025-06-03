@@ -221,7 +221,7 @@ HRESULT CRoom::Load_From_File(_uint iLayerLevelIndex, const _wstring& strLayerTa
 			CGameObject* pGameObject = m_pGameInstance->Get_LastGameObject(iLayerLevelIndex, strLayerTag);
 			m_vObject.push_back(pGameObject);
 		}
-		else
+		else if (pDesc.eType == GAMEOBJ_TYPE::TERRAIN)
 		{
 			MAP_OBJECT_DESC tSrc{};
 			tSrc.iTextureIndex = pDesc.iTextureIndex;
@@ -236,6 +236,23 @@ HRESULT CRoom::Load_From_File(_uint iLayerLevelIndex, const _wstring& strLayerTa
 
 			CGameObject* pGameObject = m_pGameInstance->Get_LastGameObject(iLayerLevelIndex, strLayerTag);
 			m_pTerrainBox = dynamic_cast<CTerrainBox*>(pGameObject);
+		}
+		else
+		{
+			MAP_OBJECT_DESC tSrc{};
+			tSrc.eType = pDesc.eType;
+			tSrc.vPos = pDesc.vPos + m_ObjectOffset;
+			tSrc.vScale = pDesc.vScale;
+			tSrc.vRotate = pDesc.vRotate;
+
+			m_pGameInstance->Add_GameObject_ToLayer(
+				iLayerLevelIndex, strLayerTag,
+				ENUM_CLASS(LEVEL::LEVEL_STATIC),
+				TEXT("Prototype_GameObject_Interaction_Normal"),
+				&tSrc);
+
+			CGameObject* pGameObject = m_pGameInstance->Get_LastGameObject(iLayerLevelIndex, strLayerTag);
+			m_vObject.push_back(pGameObject);
 		}
 	}
 

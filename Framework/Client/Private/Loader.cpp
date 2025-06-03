@@ -19,7 +19,7 @@
 #include "Inventory.h"
 #include "Hud_Dash.h"
 #include "Tree.h"
-#include "Mountain.h"
+#include "MapEditObject.h"
 #include "Field_Hp.h"
 #include "Room.h"
 #include "Monster.h"
@@ -189,7 +189,7 @@ HRESULT CLoader::Loading_For_MapEdit_Level()
 
 	/* Prototype_GameObject_Interaction_Normal  */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_MAPEDIT), TEXT("Prototype_GameObject_Interaction_Normal"),
-		CInteraction_Normal::Create(m_pGraphic_Device))))
+		CMapEditObject::Create(m_pGraphic_Device))))
 		return E_FAIL;
 
 	lstrcpy(m_szLoadingText, TEXT("로딩이 완료되었습니다."));
