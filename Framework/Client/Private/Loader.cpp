@@ -19,7 +19,7 @@
 #include "Inventory.h"
 #include "Hud_Dash.h"
 #include "Tree.h"
-#include "Mountain.h"
+#include "MapEditObject.h"
 #include "Field_Hp.h"
 #include "Room.h"
 #include "Monster.h"
@@ -189,7 +189,7 @@ HRESULT CLoader::Loading_For_MapEdit_Level()
 
 	/* Prototype_GameObject_Interaction_Normal  */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_MAPEDIT), TEXT("Prototype_GameObject_Interaction_Normal"),
-		CInteraction_Normal::Create(m_pGraphic_Device))))
+		CMapEditObject::Create(m_pGraphic_Device))))
 		return E_FAIL;
 
 	lstrcpy(m_szLoadingText, TEXT("로딩이 완료되었습니다."));
@@ -275,11 +275,6 @@ HRESULT CLoader::Loading_For_Stage1_Level()
 		return E_FAIL;
 
 
-
-
-
-
-
 	lstrcpy(m_szLoadingText, TEXT("모델을 로딩중입니다."));
 
 	lstrcpy(m_szLoadingText, TEXT("쉐이더를 로딩중입니다."));
@@ -290,10 +285,11 @@ HRESULT CLoader::Loading_For_Stage1_Level()
  	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STAGE1), TEXT("Prototype_GameObject_Camera_Follow"),
 		CCamera_Follow::Create(m_pGraphic_Device))))
 		return E_FAIL;
+
 	// Camera
-	/*if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STAGE1), TEXT("Prototype_GameObject_Camera_Mouse"),
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STAGE1), TEXT("Prototype_GameObject_Camera_Mouse"),
 		CCamera_Mouse::Create(m_pGraphic_Device))))
-		return E_FAIL;*/
+		return E_FAIL;
 
 	/* Prototype_GameObject_Land*/
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STAGE1), TEXT("Prototype_GameObject_Room"),

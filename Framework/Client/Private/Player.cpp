@@ -463,8 +463,8 @@ void CPlayer::OnCollision(CGameObject* pGameObject)
     case GAMEOBJ_TYPE::MONSTER:
     {
         //pGameObject->Set_IsDead(true);
-        break;
     }
+    break;
     case GAMEOBJ_TYPE::POTAL:
     {
         _float3 vPos;
@@ -473,12 +473,12 @@ void CPlayer::OnCollision(CGameObject* pGameObject)
         m_pTransformCom->Set_State(STATE::POSITION, vPos);
         break;
     }
+    break;
     case GAMEOBJ_TYPE::END_POTAL:
     {
         if (m_pGameInstance->IsKeyDown(VK_DOWN))
         {
-            dynamic_cast<CChapMap*>(m_pGameInstance->Get_GameObject(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Layer_UI")))->Open_Ui();
-         
+            dynamic_cast<CChapMap*>(m_pGameInstance->Get_GameObject(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Layer_ChapMap")))->Open_Ui();
         }
         break;
     }
@@ -488,6 +488,7 @@ void CPlayer::OnCollision(CGameObject* pGameObject)
         pGameObject->Set_IsDead(TRUE);
         break;
     }
+    break;
     }
 }
 

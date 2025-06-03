@@ -249,7 +249,7 @@
     <ClInclude Include="..\Public\MainApp.h" />
     <ClInclude Include="..\public\Mirror_Button.h" />
     <ClInclude Include="..\public\Money_Player.h" />
-    <ClInclude Include="..\Public\Mountain.h" />
+    <ClInclude Include="..\Public\MapEditObject.h" />
     <ClInclude Include="..\Public\Mp_Player.h" />
     <ClInclude Include="..\Public\Player.h" />
     <ClInclude Include="..\Public\Room.h" />
@@ -359,7 +359,7 @@
     <ClCompile Include="..\Private\MainApp.cpp" />
     <ClCompile Include="..\private\Mirror_Button.cpp" />
     <ClCompile Include="..\private\Money_Player.cpp" />
-    <ClCompile Include="..\Private\Mountain.cpp" />
+    <ClCompile Include="..\Private\MapEditObject.cpp" />
     <ClCompile Include="..\Private\Mp_Player.cpp" />
     <ClCompile Include="..\Private\Player.cpp" />
     <ClCompile Include="..\Private\Room.cpp" />
