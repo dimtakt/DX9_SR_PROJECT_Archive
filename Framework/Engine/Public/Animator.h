@@ -35,7 +35,7 @@ public:
 	virtual HRESULT Initialize_Prototype() override;
 	virtual HRESULT Initialize(void* pArg) override;
 	void Update_State();
-	_bool Change_State(const _wstring strStatetag, _bool isChangeCurFrame = true); // bool 인자 : 현재 출력중인 이미지 순서 초기화 할건지
+	_bool Change_State(const _wstring strStatetag, _bool isChangeCurFrame = true, _float fLoopTime = 0); // bool 인자 : 현재 출력중인 이미지 순서 초기화 할건지
 
 public:
 	HRESULT Add_State(const _wstring strStateTag, ANIMSTATE _state);
@@ -79,6 +79,8 @@ private:
 	std::map<const _wstring, ANIMSTATE> m_pStates = {};
 
 	_uint		m_iStackedFrames = {};
+	_float		m_fElapsedTimes = {};	// 하나는 기준 저장용, 하나는 실제 지난시간 저장용..
+	_float		m_fElapsedTimesCheck = {};
 
 	CTransform* m_pParentTransform = { nullptr };	// 애니메이션 - 기준점이 될 트랜스폼 (플레이어같은)
 	CTransform* m_pChildTransform = { nullptr };	// 애니메이션 - 실제 움직일 것의 트랜스폼 (무기같은)
