@@ -45,6 +45,9 @@ namespace Client
 		//PLAYER_STAUTS
 		static constexpr float PLAYER_STAUTS = 0.2f;
 
+		//PLAYER_STAUTS
+		static constexpr float TALENT = 0.2f;
+
 		//Loding
 		static constexpr float LODING = 0.2f;
 
