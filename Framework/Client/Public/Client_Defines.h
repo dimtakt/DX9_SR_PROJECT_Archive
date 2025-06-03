@@ -35,6 +35,10 @@ namespace Client
 		static constexpr float INVENTORY = 0.2f;
 		static constexpr float INVEN_SLOT = 0.2f;
 
+		//Gahcah
+		static constexpr float GACHA = 0.2f;
+		static constexpr float GACHA_SLOT = 0.2f;
+
 		//CHATERMAP
 		static constexpr float CHATERMAP = 0.26f;
 		static constexpr float CHATERMAP_BUTTON = 0.24f;

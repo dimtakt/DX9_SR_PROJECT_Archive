@@ -58,8 +58,17 @@ void CTalent::Update(_float fTimeDelta)
 {
 	if (m_pGameInstance->Get_CurrentLevel() == ENUM_CLASS(LEVEL::LEVEL_LOADING) || m_pGameInstance->Get_CurrentLevel() == ENUM_CLASS(LEVEL::LEVEL_LOGO) || m_pGameInstance->Get_CurrentLevel() == ENUM_CLASS(LEVEL::LEVEL_MAPEDIT))
 		return;
-	if (m_bIsOpen == true)
-	__super::Update(fTimeDelta);
+
+
+	if (m_bIsOpen == true) 
+	{
+		if (m_pGameInstance->IsKeyDown(VK_ESCAPE))
+		{
+			m_bIsOpen = false;
+			return;
+		}
+		__super::Update(fTimeDelta);
+	}
 }
 
 void CTalent::Late_Update(_float fTimeDelta)
@@ -91,6 +100,12 @@ void CTalent::UI_Switch()
 		m_bIsOpen = false;
 	else
 		m_bIsOpen = true;
+}
+
+void CTalent::Slot_Reset()
+{
+	for (_int i = 0; i < 4; ++i)
+		static_cast<CTalent_Slot*>(m_vecChildren[i])->Reset_Value();
 }
 
 HRESULT CTalent::Ready_Components()
@@ -128,6 +143,18 @@ HRESULT CTalent::Ready_Children()
 {
 	CUIObject* pGameObject = nullptr;
 
+	UIOBJECT_DESC Desc{};
+
+	for (_int i = 0; i < 4; ++i)
+	{
+		Desc.fX = -460 + i * 310;
+		Desc.fZ = i;
+		pGameObject = dynamic_cast<CUIObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(m_eLevel), TEXT("Prototype_GameObject_UI_Talent_Slot"), &Desc));
+		if (nullptr == pGameObject)
+			return E_FAIL;
+		Add_Child(pGameObject);
+	}
+
 	pGameObject = dynamic_cast<CUIObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(m_eLevel), TEXT("Prototype_GameObject_UI_Talent_Reset")));
 	if (nullptr == pGameObject)
 		return E_FAIL;
@@ -138,17 +165,7 @@ HRESULT CTalent::Ready_Children()
 		return E_FAIL;
 	Add_Child(pGameObject);
 
-	UIOBJECT_DESC Desc{};
 
-	for (_int i = 0; i < 4; ++i)
-	{
-		Desc.fX = -460 + i * 310;
-		Desc.fZ = i;
-		pGameObject = dynamic_cast<CUIObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(m_eLevel), TEXT("Prototype_GameObject_UI_Talent_Slot"),&Desc));
-		if (nullptr == pGameObject)
-			return E_FAIL;
-		Add_Child(pGameObject);
-	}
 	return S_OK;
 }
 

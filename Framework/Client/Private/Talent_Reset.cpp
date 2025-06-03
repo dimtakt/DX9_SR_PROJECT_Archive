@@ -2,6 +2,8 @@
 #include "GameInstance.h"
 #include "Talent_Button_Icon.h"
 #include "Talent_Progress.h"
+#include "Stat_Manager.h"
+#include "Talent.h"
 CTalent_Reset::CTalent_Reset(LPDIRECT3DDEVICE9 pGraphic_Device) : CButton(pGraphic_Device)
 {
 }
@@ -70,6 +72,15 @@ void CTalent_Reset::Update(_float fTimeDelta)
 	else
 		m_iClickValue = 0;
 
+	_int iPoint = CStat_Manager::GetInstance()->Get_CurStats()[ENUM_CLASS(STAT_INFO::CULSTATPOINT)];
+	_int iMaxPoint = CStat_Manager::GetInstance()->Get_CurStats()[ENUM_CLASS(STAT_INFO::MAXSTATPOINT)];
+
+	if (m_iClickValue > 90)
+	{
+		CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CULSTATPOINT, iMaxPoint - iPoint);
+		static_cast<CTalent*>(m_pParent)->Slot_Reset();
+		m_bHold = false;
+	}
 	static_cast<CTalent_Progress*>(m_vecChildren[0])->Progress_Update(m_iClickValue);
 	CUIObject::Update(fTimeDelta);
 }

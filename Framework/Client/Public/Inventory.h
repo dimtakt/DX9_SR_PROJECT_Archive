@@ -28,6 +28,8 @@ public:
 	void						UI_Switch();
 	void						Add_Item_Inven(_uint ItemIndex);
 	_bool						Pick_Slot();
+	void						Open_UI(_float fX, _float fY);
+	void						Close_UI();
 private:
 	CVIBuffer_Rect*				m_pVIBufferCom = { nullptr };
 	CTexture*					m_pTextureCom = { nullptr };
