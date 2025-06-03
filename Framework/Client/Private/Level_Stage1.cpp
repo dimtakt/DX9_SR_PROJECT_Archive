@@ -15,6 +15,7 @@
 #include "Animation.h"
 #include "Mole_A.h"
 #include "Dagger.h"
+#include "Client_Defines_Event.h"
 
 CLevel_Stage1::CLevel_Stage1(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CLevel{ pGraphic_Device }
@@ -34,13 +35,13 @@ HRESULT CLevel_Stage1::Initialize()
 	if (FAILED(Ready_Layer_Player(TEXT("Layer_Player"))))
 		return E_FAIL;
 
+	if (FAILED(Ready_Layer_Camera(TEXT("Layer_Camera"))))
+		return E_FAIL;
+
 	if (FAILED(Ready_Layer_Room(TEXT("Layer_Room"))))
 		return E_FAIL;
 
 	if (FAILED(Ready_Layer_UI(TEXT("Layer_UI"))))
-		return E_FAIL;
-
-	if (FAILED(Ready_Layer_Camera(TEXT("Layer_Camera"))))
 		return E_FAIL;
 
 	if (FAILED(Ready_Test(TEXT("Layer_Test"))))
@@ -156,6 +157,10 @@ HRESULT CLevel_Stage1::Ready_Layer_Room(const _wstring& strLayerTag)
 		{
 			CPlayer* pPlayer = dynamic_cast<CPlayer*>(m_pGameInstance->Get_GameObject(ENUM_CLASS(LEVEL::LEVEL_STAGE1), TEXT("Layer_Player")));
 			pPlayer->Change_TerrainBox(dynamic_cast<CTerrainBox*>(pRoom->Get_TerrainBox()), num);
+
+			ROOMCHANGE EventDesc;
+			EventDesc.vPosition = dynamic_cast<CTransform*>(pRoom->Get_TerrainBox()->Find_Component(TEXT("Com_Transform_TerrainBox")))->Get_State(STATE::POSITION);
+			m_pGameInstance->Broadcast(ENUM_CLASS(EVENT_TYPE::ROOMCHANGE), &EventDesc);
 		}
 		
 
@@ -195,7 +200,7 @@ HRESULT CLevel_Stage1::Ready_Layer_Room(const _wstring& strLayerTag)
 
 HRESULT CLevel_Stage1::Ready_Test(const _wstring& strLayerTag)
 {
-	/*MAP_OBJECT_DESC ExpDesc{};
+	MAP_OBJECT_DESC ExpDesc{};
 	ExpDesc.eType = GAMEOBJ_TYPE::EXP;
 	ExpDesc.vPos = _float3(0.f, 4.f, 0.f);
 	ExpDesc.vRotate = _float3(0.f, 0.f, 0.f);
@@ -211,7 +216,34 @@ HRESULT CLevel_Stage1::Ready_Test(const _wstring& strLayerTag)
 	StoneDesc.vScale = _float3(1.f, 1.f, 1.f);
 	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_STAGE1), strLayerTag,
 		ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_Interaction_Normal"), &StoneDesc)))
-		return E_FAIL;*/
+		return E_FAIL;
+
+	MAP_OBJECT_DESC MerchantDesc{};
+	MerchantDesc.eType = GAMEOBJ_TYPE::MERCAHNT;
+	MerchantDesc.vPos = _float3(-3.f, 3.f, -3.f);
+	MerchantDesc.vRotate = _float3(0.f, 0.f, 0.f);
+	MerchantDesc.vScale = _float3(5.f, 5.f, 5.f);
+	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_STAGE1), strLayerTag,
+		ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_Interaction_Normal"), &MerchantDesc)))
+		return E_FAIL;
+
+	MAP_OBJECT_DESC ArtifactDesc{};
+	ArtifactDesc.eType = GAMEOBJ_TYPE::ATIFACT;
+	ArtifactDesc.vPos = _float3(3.f, 3.f, -3.f);
+	ArtifactDesc.vRotate = _float3(0.f, 0.f, 0.f);
+	ArtifactDesc.vScale = _float3(2.f, 2.f, 2.f);
+	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_STAGE1), strLayerTag,
+		ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_Interaction_Normal"), &ArtifactDesc)))
+		return E_FAIL;
+
+	MAP_OBJECT_DESC HPDesc{};
+	HPDesc.eType = GAMEOBJ_TYPE::HP;
+	HPDesc.vPos = _float3(-3.f, 3.f, 3.f);
+	HPDesc.vRotate = _float3(0.f, 0.f, 0.f);
+	HPDesc.vScale = _float3(2.f, 2.f, 2.f);
+	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_STAGE1), strLayerTag,
+		ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_Interaction_Normal"), &HPDesc)))
+		return E_FAIL;
 
 	return S_OK;
 }
