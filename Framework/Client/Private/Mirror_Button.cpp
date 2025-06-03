@@ -1,7 +1,7 @@
 #include "Mirror_Button.h"
 #include "GameInstance.h"
 #include "UI_KeyGuide.h"
-
+#include "Talent.h"
 CMirror_Button::CMirror_Button(LPDIRECT3DDEVICE9 pGraphic_Device) : CButton(pGraphic_Device)
 {
 }
@@ -42,6 +42,8 @@ HRESULT CMirror_Button::Initialize(void* pArg)
 	if (FAILED(Ready_Children()))
 		return E_FAIL;
 
+	if (FAILED(Setting_Target()))
+		return E_FAIL;
 	return S_OK;
 }
 
@@ -52,6 +54,12 @@ void CMirror_Button::Priority_Update(_float fTimeDelta)
 
 void CMirror_Button::Update(_float fTimeDelta)
 {
+	if (Check_Key_Down(g_hWnd, VK_LBUTTON))
+		static_cast<CTalent*>(m_pTargetUI)->UI_Switch();
+
+	if (m_pGameInstance->IsKeyDown('P'))
+		static_cast<CTalent*>(m_pTargetUI)->UI_Switch();
+
 	CUIObject::Update(fTimeDelta);
 }
 
@@ -130,6 +138,19 @@ HRESULT CMirror_Button::Ready_Children()
 	return S_OK;
 }
 
+HRESULT CMirror_Button::Setting_Target()
+{
+	m_pTargetUI = m_pGameInstance->Get_GameObject(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Layer_Talent"), 0);
+
+	if (m_pTargetUI == nullptr)
+	{
+		MSG_BOX(TEXT("Failed to Setting : CInven_Button"));
+		return E_FAIL;
+	}
+	Safe_AddRef(m_pTargetUI);
+	return S_OK;
+}
+
 CMirror_Button* CMirror_Button::Create(LPDIRECT3DDEVICE9 pGraphic_Device, LEVEL eLevel)
 {
 	CMirror_Button* pInstance = new CMirror_Button(pGraphic_Device);
@@ -157,4 +178,5 @@ CGameObject* CMirror_Button::Clone(void* pArg)
 void CMirror_Button::Free()
 {
 	__super::Free();
+	Safe_Release(m_pTargetUI);
 }

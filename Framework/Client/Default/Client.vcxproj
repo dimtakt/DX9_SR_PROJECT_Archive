@@ -166,6 +166,7 @@
     <ClInclude Include="..\Public\Client_Defines_Item.h" />
     <ClInclude Include="..\Public\Client_Defines_Map.h" />
     <ClInclude Include="..\Public\Client_Struct.h" />
+    <ClInclude Include="..\public\Talent.h" />
     <ClInclude Include="..\Public\Effect_Factory.h" />
     <ClInclude Include="..\public\ChapMap_MapSymbol.h" />
     <ClInclude Include="..\Public\Exit_Button.h" />
@@ -187,6 +188,8 @@
     <ClInclude Include="..\public\Sky.h" />
     <ClInclude Include="..\Public\Start_Button.h" />
     <ClInclude Include="..\public\Status_Element_Icon.h" />
+    <ClInclude Include="..\public\Status_Item_Icon.h" />
+    <ClInclude Include="..\public\Status_Item_Slot.h" />
     <ClInclude Include="..\public\Status_Stat_Frame_Name.h" />
     <ClInclude Include="..\public\Status_Stat_Frame_Type.h" />
     <ClInclude Include="..\public\Status_Stat_Frame_Value.h" />
@@ -198,6 +201,12 @@
     <ClInclude Include="..\public\Status_Stat_Frame.h" />
     <ClInclude Include="..\public\Status_Window.h" />
     <ClInclude Include="..\public\Status_Frame_UP.h" />
+    <ClInclude Include="..\public\Talent_Button_Icon.h" />
+    <ClInclude Include="..\public\Talent_Point.h" />
+    <ClInclude Include="..\public\Talent_Progress.h" />
+    <ClInclude Include="..\public\Talent_Reset.h" />
+    <ClInclude Include="..\public\Talent_Slot.h" />
+    <ClInclude Include="..\public\Talent_Slot_Frame.h" />
     <ClInclude Include="..\Public\TerrainBox.h" />
     <ClInclude Include="..\public\Dagger.h" />
     <ClInclude Include="..\public\Dash_Gauge.h" />
@@ -271,6 +280,7 @@
     <ClCompile Include="..\private\ChapMap_Line.cpp" />
     <ClCompile Include="..\private\ChapMap_MapSymbol.cpp" />
     <ClCompile Include="..\private\ChapMap_PlayerSymbol.cpp" />
+    <ClCompile Include="..\private\Talent.cpp" />
     <ClCompile Include="..\Private\Effect_Factory.cpp" />
     <ClCompile Include="..\Private\Exit_Button.cpp" />
     <ClCompile Include="..\private\Inven_Slot.cpp" />
@@ -291,6 +301,8 @@
     <ClCompile Include="..\private\Sky.cpp" />
     <ClCompile Include="..\Private\Start_Button.cpp" />
     <ClCompile Include="..\private\Status_Element_Icon.cpp" />
+    <ClCompile Include="..\private\Status_Item_Icon.cpp" />
+    <ClCompile Include="..\private\Status_Item_Slot.cpp" />
     <ClCompile Include="..\private\Status_Stat_Frame_Name.cpp" />
     <ClCompile Include="..\private\Status_Stat_Frame_Type.cpp" />
     <ClCompile Include="..\private\Status_Stat_Frame_Value.cpp" />
@@ -302,6 +314,12 @@
     <ClCompile Include="..\private\Status_Stat_Frame.cpp" />
     <ClCompile Include="..\private\Status_Window.cpp" />
     <ClCompile Include="..\private\Status_Frame_UP.cpp" />
+    <ClCompile Include="..\private\Talent_Button_Icon.cpp" />
+    <ClCompile Include="..\private\Talent_Point.cpp" />
+    <ClCompile Include="..\private\Talent_Progress.cpp" />
+    <ClCompile Include="..\private\Talent_Reset.cpp" />
+    <ClCompile Include="..\private\Talent_Slot.cpp" />
+    <ClCompile Include="..\private\Talent_Slot_Frame.cpp" />
     <ClCompile Include="..\Private\TerrainBox.cpp" />
     <ClCompile Include="..\private\Dagger.cpp" />
     <ClCompile Include="..\private\Dash_Gauge.cpp" />

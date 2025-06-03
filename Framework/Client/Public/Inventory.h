@@ -29,13 +29,13 @@ public:
 	void						Add_Item_Inven(_uint ItemIndex);
 	_bool						Pick_Slot();
 private:
-	CVIBuffer_Rect* m_pVIBufferCom = { nullptr };
-	CTexture* m_pTextureCom = { nullptr };
+	CVIBuffer_Rect*				m_pVIBufferCom = { nullptr };
+	CTexture*					m_pTextureCom = { nullptr };
 	LEVEL						m_eLevel = {};
 	_bool						m_bIsOpen = {};
 	vector<CInven_Slot*>		m_vecInventory = {};
 
-	CInven_Slot* m_pPickSlot = { nullptr };
+	CInven_Slot*				m_pPickSlot = { nullptr };
 
 private:
 	void						Selete_Slot();

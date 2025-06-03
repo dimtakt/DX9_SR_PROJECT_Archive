@@ -34,6 +34,9 @@ HRESULT CRenderer::Draw()
 	if (FAILED(Render_UI()))
 		return E_FAIL;
 
+	if (FAILED(Render_UI_Blend()))
+		return E_FAIL;
+
 	return S_OK;
 }
 
@@ -113,6 +116,27 @@ HRESULT CRenderer::Render_UI()
 	}
 
 	m_RenderObjects[ENUM_CLASS(RENDERGROUP::RG_UI)].clear();
+
+	return S_OK;
+}
+
+HRESULT CRenderer::Render_UI_Blend()
+{
+	m_pGraphic_Device->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
+	m_pGraphic_Device->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
+	m_pGraphic_Device->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
+	m_pGraphic_Device->SetRenderState(D3DRS_BLENDOP, D3DBLENDOP_ADD);
+
+	for (auto& pRenderObject : m_RenderObjects[ENUM_CLASS(RENDERGROUP::RG_BLEND)])
+	{
+		if (nullptr != pRenderObject)
+			pRenderObject->Render();
+
+		Safe_Release(pRenderObject);
+	}
+
+	m_RenderObjects[ENUM_CLASS(RENDERGROUP::RG_BLEND)].clear();
+	m_pGraphic_Device->SetRenderState(D3DRS_ALPHABLENDENABLE, FALSE);
 
 	return S_OK;
 }
