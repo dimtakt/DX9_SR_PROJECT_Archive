@@ -39,6 +39,7 @@ public:
 	HRESULT Ready_Layer_Camera(const _wstring& strLayerTag);
 	HRESULT Ready_Texture_Info();
 	HRESULT Ready_Terrain_Texture_Info();
+	HRESULT Ready_Interaction_Texture_Info();
 
 private:
 	CImgui_Manager* m_pImgui_Manage = { nullptr };
@@ -51,6 +52,8 @@ private:
 	void ImGui_Object_MenBar();
 	void ImGui_Object_Texture_Redner(int iTextureIndex);
 	void ImGui_Option_Button_Reset();
+
+	//오브젝트들 공용 버튼
 	void ImGui_Transform_Render(); 
 	void ImGui_Rotate_Render();
 	void ImGui_Scale_Render();
@@ -64,7 +67,9 @@ private:
 	void ImGui_Picking_UnCheck();
 
 	//상호작용 오브젝트 전용
-
+	void ImGui_Interaction_Object_MenBar();
+	void ImGui_Interaction_Texture_Render(int iTextureIndex);
+	
 	
 	//지형 전용
 	void ImGui_Terrain_MenBar();
@@ -77,7 +82,7 @@ private:
 
 	_float3 m_Scales = { 1.f,1.f,1.f };				//오브젝트 전용
 	_float3 m_Rotates = { 0.f,0.f, 0.f };
-	_float3 m_Translates = { 0.f,0.f,0.f };
+	_float3 m_Translates = { 0.f,2.f,0.f };
 
 	_float3 m_TrrainTranslate = { 0.f, 0.f, 0.f };	//지형 전용
 	_float3 m_TrrainScales = { 20.f, 2.f, 20.f };
