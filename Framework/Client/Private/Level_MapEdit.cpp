@@ -11,7 +11,7 @@
 #include "json.hpp"
 #include "Tree.h"
 #include "TerrainBox.h"
-
+#include "Interaction_Normal.h"
 
 
 CLevel_MapEdit::CLevel_MapEdit(LPDIRECT3DDEVICE9 pGraphic_Device)
@@ -32,6 +32,10 @@ HRESULT CLevel_MapEdit::Initialize()
 
 	if (FAILED(Ready_Texture_Info()))
 		return E_FAIL;
+
+	if (FAILED(Ready_Interaction_Texture_Info()))
+		return E_FAIL;
+
 
 	return S_OK;
 }
@@ -113,6 +117,27 @@ HRESULT CLevel_MapEdit::Ready_Terrain_Texture_Info()
 	return S_OK;
 }
 
+HRESULT CLevel_MapEdit::Ready_Interaction_Texture_Info()
+{
+	//상호 작용 오브젝트 텍스처 가져오기.
+ 	m_pPreview = static_cast<CGameObject*>(m_pGameInstance->Clone_Prototype(
+		PROTOTYPE::GAMEOBJECT,
+		ENUM_CLASS(LEVEL::LEVEL_MAPEDIT),
+		TEXT("Prototype_GameObject_Interaction_Normal")));
+
+	OBJECT_TEXTURE_INFO Interraction;
+	Interraction.iTextureCount = 6;
+	Interraction.pTextureCom = static_cast<CTexture*>(m_pPreview->Find_Component(TEXT("Com_Texture")));
+	if (Interraction.pTextureCom)
+		Interraction.pTextureCom->AddRef();
+
+	m_ObjectTextureInfo["Interaction"] = Interraction;
+
+	Safe_Release(m_pPreview); // 텍스처만 가져와서 저장하고 삭제
+
+	return S_OK;
+}
+
 void CLevel_MapEdit::Imgui_Render()
 {
 	m_pImgui_Manage->Render_Begin();
@@ -131,6 +156,8 @@ void CLevel_MapEdit::Imgui_Render()
 	}
 
 	ImGui::End();
+
+	ImGui_Interaction_Object_MenBar();
 
 	ImGui_Terrain_MenBar();  //지형 전용 UI
 
@@ -301,7 +328,7 @@ void CLevel_MapEdit::ImGui_MenuBar_Render()
 
 void CLevel_MapEdit::Picking_Check()
 {
-	if (!m_pObject.empty() && m_pGameInstance->IsKeyDown(VK_LBUTTON))
+	if (!m_pObject.empty() && m_pGameInstance->IsKeyDown(VK_LBUTTON) && !m_bPicking)
 		for (CGameObject* pObj : m_pObject)
 		{
 			if (pObj->Get_ObjType() == GAMEOBJ_TYPE::TERRAIN)
@@ -320,12 +347,15 @@ void CLevel_MapEdit::Picking_Check()
 				m_Rotates = m_pObjectTransform->Get_RotationEuler();
 				break;
 			}
+			
+			if (pVIBuffer == nullptr)
+				return;
 		}
 }
 
 void CLevel_MapEdit::ImGui_Object_MenBar()
 {
-	if (ImGui::CollapsingHeader("Object Settings", ImGuiTreeNodeFlags_DefaultOpen))   //?꾩껜 ?뱀뀡
+	if (ImGui::CollapsingHeader("Object Settings", ImGuiTreeNodeFlags_DefaultOpen))   
 	{
 		ImGui_Transform_Render();
 
@@ -665,6 +695,76 @@ void CLevel_MapEdit::ImGui_Picking_UnCheck()
 		m_pPickingObject = nullptr;
 		m_pObjectTransform = nullptr;
 		m_bPicking = false;
+	}
+}
+
+void CLevel_MapEdit::ImGui_Interaction_Object_MenBar()
+{
+	if (ImGui::CollapsingHeader("Interaction Settings", ImGuiTreeNodeFlags_DefaultOpen))
+	{
+		ImGui_Transform_Render();
+
+		ImGui_Rotate_Render();
+
+		ImGui_Scale_Render();
+
+		static int iInteractionTexIndex = 0;
+
+		ImGui::Text("Interaction Texture Index:");
+		ImGui::SetNextItemWidth(250);
+		ImGui::SliderInt("Texture", &iInteractionTexIndex, 0, 5); // 0~15 인덱스
+		ImGui::SameLine();
+		if (ImGui::Button("-"))
+			iInteractionTexIndex -= 1;
+
+		ImGui::SameLine();
+		if (ImGui::Button("+"))
+			iInteractionTexIndex += 1;
+
+		ImGui_Interaction_Texture_Render(iInteractionTexIndex);
+
+
+		if (ImGui::Button("Create Interaction"))   //버튼입력시 선택한 값으로 생성
+		{
+			MAP_OBJECT_DESC  tSrc{};
+			tSrc.iTextureIndex = iInteractionTexIndex;
+			tSrc.vPos = m_Translates;
+			tSrc.vScale = m_Scales;
+			tSrc.vRotate = m_Rotates;
+
+			m_pGameInstance->Add_GameObject_ToLayer(
+				ENUM_CLASS(LEVEL::LEVEL_MAPEDIT), TEXT("Layer_MapEdit"),
+				ENUM_CLASS(LEVEL::LEVEL_MAPEDIT),
+				TEXT("Prototype_GameObject_Interaction_Normal"),
+				&tSrc);
+
+			CGameObject* pGameObject = m_pGameInstance->Get_LastGameObject(ENUM_CLASS(LEVEL::LEVEL_MAPEDIT), TEXT("Layer_MapEdit"));
+			m_pObject.push_back(pGameObject); 
+		}
+	}
+}
+
+void CLevel_MapEdit::ImGui_Interaction_Texture_Render(int iTextureIndex)
+{
+	auto iter = m_ObjectTextureInfo.find("Interaction");
+	if (iter != m_ObjectTextureInfo.end())
+	{
+		OBJECT_TEXTURE_INFO& info = iter->second;
+
+		if (info.pTextureCom)
+		{
+ 			LPDIRECT3DTEXTURE9 pTex = info.pTextureCom->Get_Textures(iTextureIndex);
+			ImGui::Text("Preview:");
+			ImGui::SameLine();
+
+
+			ImTextureID texID = reinterpret_cast<ImTextureID>(pTex);
+			ImGui::Image(texID, ImVec2(100, 100));
+		}
+		else
+		{
+			ImGui::Text("Texture Component Missing");
+		}
 	}
 }
 
