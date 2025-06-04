@@ -456,6 +456,13 @@ HRESULT CPlayer::Render()
 	return S_OK;
 }
 
+void CPlayer::Change_TerrainBox(CTerrainBox* pTerrainBox, _int iIndex)
+{
+    Safe_Release(m_pTerrainBox);
+    m_pTerrainBox = pTerrainBox;
+    Safe_AddRef(m_pTerrainBox);
+}
+
 void CPlayer::OnCollision(CGameObject* pGameObject)
 {
     switch (pGameObject->Get_ObjType())
@@ -737,13 +744,8 @@ void CPlayer::Free()
     Safe_Release(m_pTerrainBox);
     
     Safe_Release(m_pHpBar);
-    /*if (m_pCollider)
-    {
-        m_pCollider->Set_Owner(nullptr);
-        Safe_Release(m_pCollider);
-    }*/
     
     CEffect_Factory::GetInstance()->Free();
-    
+
     __super::Free();
 }
