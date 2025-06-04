@@ -23,6 +23,9 @@ private:
 	_uint							m_iIndex = {};
 	_uint							m_iTexIdex = {};
 
+	_bool							m_bGiftCheck = { false };
+	_bool							m_bIsGetGift = { false };
+	_int							m_iSpecial_Gift = {};
 private:
 	HRESULT							Ready_Components();
 	void							SetUp_RenderState();
@@ -31,6 +34,7 @@ private:
 	HRESULT							Ready_ChildPrototype(LEVEL eLevel);
 	HRESULT							Ready_Children();
 
+	void							Special_Gift_Update();
 public:
 	static CTalent_Slot_Icon* Create(LPDIRECT3DDEVICE9 pGraphic_Device, LEVEL eLevel);
 	virtual CGameObject* Clone(void* pArg) override;

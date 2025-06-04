@@ -36,15 +36,8 @@ public:
 	virtual HRESULT Render() override;
 
 public:
-	void Change_TerrainBox(CTerrainBox* pTerrainBox, _int iIndex)
-	{
-		if (iIndex != 0)
-		{
-			Safe_Release(m_pTerrainBox);
-		}
-		m_pTerrainBox = pTerrainBox;
-		Safe_AddRef(m_pTerrainBox);
-	}
+	void Change_TerrainBox(CTerrainBox* pTerrainBox, _int iIndex);
+	
 
 public:
 	virtual void OnCollision(CGameObject* pGameObject) override;

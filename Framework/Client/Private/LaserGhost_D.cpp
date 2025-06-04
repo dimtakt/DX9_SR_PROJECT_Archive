@@ -20,7 +20,8 @@ HRESULT CLaserGhost_D::Initialize_Prototype()
 
 HRESULT CLaserGhost_D::Initialize(void* pArg)
 {
-    __super::Initialize(pArg);
+    if (FAILED(__super::Initialize(pArg)))
+        return E_FAIL;
 
     if (FAILED(this->Ready_Components(pArg)))
         return E_FAIL;

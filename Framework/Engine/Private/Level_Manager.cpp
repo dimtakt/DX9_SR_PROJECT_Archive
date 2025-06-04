@@ -13,6 +13,7 @@ HRESULT CLevel_Manager::Open_Level(_uint iLevelID, CLevel* pNewLevel)
 {
     if (nullptr == m_pCurrentLevel)
     {
+        m_pGameInstance->Clear_Resources(iLevelID);
         if (FAILED(Clear_Resources()))
         {
             MSG_BOX(TEXT("Failed to Level_Clear"));

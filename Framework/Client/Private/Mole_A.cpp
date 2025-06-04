@@ -20,7 +20,8 @@ HRESULT CMole_A::Initialize_Prototype()
 
 HRESULT CMole_A::Initialize(void* pArg)
 {
-	__super::Initialize(pArg);
+	if(FAILED(__super::Initialize(pArg)))
+        return E_FAIL;
 
     if (FAILED(this->Ready_Components(pArg)))
         return E_FAIL;
@@ -35,9 +36,6 @@ void CMole_A::Priority_Update(_float fTimeDelta)
 
 void CMole_A::Update(_float fTimeDelta)
 {
-    if (!m_pTerrainBox || !m_pTransformCom || !m_pTextureCom)
-        return;
-
     _float fMinDist = 6.f;      // 추적 상태로 변할 기준 거리
     _float fMaxDist = 12.f;     // 어그로가 풀리는 기준 거리
     _float fAtkDist = 1.5f;     // 근접공격할 기준 거리
@@ -175,8 +173,6 @@ void CMole_A::Late_Update(_float fTimeDelta)
 
 HRESULT CMole_A::Render()
 {
-    if (!m_pTransformCom)
-        return S_OK;
     // 플레이어 위치에 따라 좌우반전 적용,
     // 단 공격 중 등의 경우에는 변경 X
     _uint iCurLevel = m_pGameInstance->GetInstance()->Get_CurrentLevel();
