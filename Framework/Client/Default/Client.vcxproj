@@ -167,6 +167,10 @@
     <ClInclude Include="..\Public\Client_Defines_Map.h" />
     <ClInclude Include="..\Public\Client_Struct.h" />
     <ClInclude Include="..\Public\EXP_Ball.h" />
+    <ClInclude Include="..\public\Gacha.h" />
+    <ClInclude Include="..\public\Gacha_Pass.h" />
+    <ClInclude Include="..\public\Gacha_Reroll.h" />
+    <ClInclude Include="..\public\Gacha_Slot.h" />
     <ClInclude Include="..\public\Talent.h" />
     <ClInclude Include="..\Public\Effect_Factory.h" />
     <ClInclude Include="..\public\ChapMap_MapSymbol.h" />
@@ -287,6 +291,10 @@
     <ClCompile Include="..\private\ChapMap_MapSymbol.cpp" />
     <ClCompile Include="..\private\ChapMap_PlayerSymbol.cpp" />
     <ClCompile Include="..\Private\EXP_Ball.cpp" />
+    <ClCompile Include="..\private\Gacha.cpp" />
+    <ClCompile Include="..\private\Gacha_Pass.cpp" />
+    <ClCompile Include="..\private\Gacha_Reroll.cpp" />
+    <ClCompile Include="..\private\Gacha_Slot.cpp" />
     <ClCompile Include="..\private\Talent.cpp" />
     <ClCompile Include="..\Private\Effect_Factory.cpp" />
     <ClCompile Include="..\Private\Exit_Button.cpp" />

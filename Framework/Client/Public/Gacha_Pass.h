@@ -3,12 +3,12 @@
 #include "Button.h"
 
 BEGIN(Client)
-class CTalent_Slot_Button final : public CButton
+class CGacha_Pass final : public CButton
 {
 private:
-	CTalent_Slot_Button(LPDIRECT3DDEVICE9 pGraphic_Device);
-	CTalent_Slot_Button(const CTalent_Slot_Button& Prototype);
-	virtual							~CTalent_Slot_Button() = default;
+	CGacha_Pass(LPDIRECT3DDEVICE9 pGraphic_Device);
+	CGacha_Pass(const CGacha_Pass& Prototype);
+	virtual							~CGacha_Pass() = default;
 
 public:
 	virtual HRESULT					Initialize_Prototype(LEVEL eLevel);
@@ -20,9 +20,8 @@ public:
 
 private:
 	LEVEL							m_eLevel = {};
-	_uint							m_iIndex = {};
-	_uint							m_iTexIdex = {};
-	_int							m_iAddValue = {};
+	_bool							m_bHold = { false };
+	_int							m_iClickValue = {};
 
 private:
 	HRESULT							Ready_Components();
@@ -32,13 +31,12 @@ private:
 	HRESULT							Ready_ChildPrototype(LEVEL eLevel);
 	HRESULT							Ready_Children();
 
-	void							Ready_ButtonSet();
+	void							Font_Render();
 
-	_bool							Is_Button_Pick();
-	void							On_Button();
+	_bool							Reset_Pick();
 
 public:
-	static CTalent_Slot_Button* Create(LPDIRECT3DDEVICE9 pGraphic_Device, LEVEL eLevel);
+	static CGacha_Pass* Create(LPDIRECT3DDEVICE9 pGraphic_Device, LEVEL eLevel);
 	virtual CGameObject* Clone(void* pArg) override;
 	virtual void					Free() override;
 };

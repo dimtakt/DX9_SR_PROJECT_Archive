@@ -81,17 +81,7 @@ void CTalent_Slot_Button::Priority_Update(_float fTimeDelta)
 
 void CTalent_Slot_Button::Update(_float fTimeDelta)
 {
-	_int iTemp = static_cast<CTalent_Slot*>(m_pParent)->Get_Value();
-	_int iSrc = CStat_Manager::GetInstance()->Get_CurStats()[ENUM_CLASS(STAT_INFO::CULSTATPOINT)];
-
-	if (m_iIndex > 1 && iSrc > 0)
-	{
-		if (Is_Button_Pick() && m_pGameInstance->IsKeyDown(VK_LBUTTON))
-		{
-			static_cast<CTalent_Slot*>(m_pParent)->Add_Value(m_iAddValue);
-			CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CULSTATPOINT, -m_iAddValue);
-		}
-	}
+	On_Button();
 	CUIObject::Update(fTimeDelta);
 }
 
@@ -209,9 +199,57 @@ _bool CTalent_Slot_Button::Is_Button_Pick()
 	GetCursorPos(&ptMouse);
 	ScreenToClient(g_hWnd, &ptMouse);
 
-	RECT			rcUI = { m_vWorldPos.x - m_fSizeX * 0.5f, m_vWorldPos.y - m_fSizeY * 0.5f, m_vWorldPos.x + m_fSizeX * 0.5f, +m_vWorldPos.y + m_fSizeY * 0.5f + 60 };
+	RECT			rcUI = { m_vWorldPos.x - m_fSizeX * 0.5f, m_vWorldPos.y - m_fSizeY * 0.5f, m_vWorldPos.x + m_fSizeX * 0.5f, +m_vWorldPos.y + m_fSizeY * 0.5f };
 
 	return PtInRect(&rcUI, ptMouse);
+}
+
+void CTalent_Slot_Button::On_Button()
+{
+	_int iTemp = static_cast<CTalent_Slot*>(m_pParent)->Get_Value();
+	_int iPoint = CStat_Manager::GetInstance()->Get_CurStats()[ENUM_CLASS(STAT_INFO::CULSTATPOINT)];
+	_int iMaxPoint = CStat_Manager::GetInstance()->Get_CurStats()[ENUM_CLASS(STAT_INFO::MAXSTATPOINT)];
+
+	if (Is_Button_Pick() && m_pGameInstance->IsKeyDown(VK_LBUTTON))
+	{
+		switch (m_iTexIdex)
+		{
+		case 0:
+			if (iMaxPoint - iPoint < -m_iAddValue)
+			{
+				static_cast<CTalent_Slot*>(m_pParent)->Add_Value(iPoint - iMaxPoint);
+				CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CULSTATPOINT, -(iPoint - iMaxPoint));
+			}
+			else
+			{
+				static_cast<CTalent_Slot*>(m_pParent)->Add_Value(m_iAddValue);
+				CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CULSTATPOINT, -m_iAddValue);
+			}
+			break;
+		case 1:
+			static_cast<CTalent_Slot*>(m_pParent)->Add_Value(m_iAddValue);
+			CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CULSTATPOINT, -m_iAddValue);
+			break;
+		case 2:
+			static_cast<CTalent_Slot*>(m_pParent)->Add_Value(m_iAddValue);
+			CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CULSTATPOINT, -m_iAddValue);
+			break;
+		case 3:
+			if (iPoint < m_iAddValue)
+			{
+				static_cast<CTalent_Slot*>(m_pParent)->Add_Value(iPoint);
+				CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CULSTATPOINT, -iPoint);
+			}
+			else
+			{
+				static_cast<CTalent_Slot*>(m_pParent)->Add_Value(m_iAddValue);
+				CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CULSTATPOINT, -m_iAddValue);
+			}
+			break;
+		}
+
+	}
+
 }
 
 CTalent_Slot_Button* CTalent_Slot_Button::Create(LPDIRECT3DDEVICE9 pGraphic_Device, LEVEL eLevel)

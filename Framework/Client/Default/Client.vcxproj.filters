@@ -324,12 +324,21 @@
     </Filter>
     <Filter Include="02.GameObject\UI\Window\Talent\Talent_Slot\Talent_Slot_Frame">
       <UniqueIdentifier>{4da686ad-d4f2-4bef-a733-c3b531e78fc2}</UniqueIdentifier>
-	</Filter>
+	  </Filter>
     <Filter Include="02.GameObject\Object\Interaction\Normal\MapEditObject">
       <UniqueIdentifier>{2879c6c3-314f-4553-9bb7-3bda46e4769b}</UniqueIdentifier>
     </Filter>
     <Filter Include="02.GameObject\Object\EXP_Ball">
       <UniqueIdentifier>{109028fc-4bee-49e2-a8ce-c44d047116da}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\UI\Window\Gacha">
+      <UniqueIdentifier>{a8120267-034e-4f4b-bd73-e73492f9798e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\UI\Window\Gacha\Gacha_Slot">
+      <UniqueIdentifier>{bb4740a5-d589-4aa7-b780-6765b3bb66bd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\UI\Window\Gacha\Gacha_Button">
+      <UniqueIdentifier>{ffa2167b-4c62-4a34-849c-35f373d2c0a0}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -702,6 +711,18 @@
     <ClInclude Include="..\Public\EXP_Ball.h">
       <Filter>02.GameObject\Object\EXP_Ball</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\Gacha.h">
+      <Filter>02.GameObject\UI\Window\Gacha</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Gacha_Slot.h">
+      <Filter>02.GameObject\UI\Window\Gacha\Gacha_Slot</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Gacha_Reroll.h">
+      <Filter>02.GameObject\UI\Window\Gacha\Gacha_Button</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Gacha_Pass.h">
+      <Filter>02.GameObject\UI\Window\Gacha\Gacha_Button</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -1034,6 +1055,18 @@
     </ClCompile>
     <ClCompile Include="..\Private\EXP_Ball.cpp">
       <Filter>02.GameObject\Object\EXP_Ball</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Gacha.cpp">
+      <Filter>02.GameObject\UI\Window\Gacha</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Gacha_Slot.cpp">
+      <Filter>02.GameObject\UI\Window\Gacha\Gacha_Slot</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Gacha_Reroll.cpp">
+      <Filter>02.GameObject\UI\Window\Gacha\Gacha_Button</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Gacha_Pass.cpp">
+      <Filter>02.GameObject\UI\Window\Gacha\Gacha_Button</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
