@@ -152,6 +152,11 @@ HRESULT CLoader::Loading_For_Logo_Level()
 		CTitle_BackGround::Create(m_pGraphic_Device, LEVEL::LEVEL_LOGO))))
 		return E_FAIL;
 
+	for (size_t i = 0; i < 100000000; i++)
+	{
+		int a = 1;
+	}
+
 	lstrcpy(m_szLoadingText, TEXT("로딩이 완료되었습니다."));
 
 	m_isFinished = true;
@@ -212,7 +217,6 @@ HRESULT CLoader::Loading_For_Stage1_Level()
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STAGE1), TEXT("Prototype_Component_Texture_Monster"),
 		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Textures/Player/Player0.png"), 1))))
 		return E_FAIL;
-
 
 
 	// Prototype_Component_Texture_Monster (Mole_A)
@@ -403,6 +407,11 @@ HRESULT CLoader::Loading_For_Stage1_Level()
 	//	m_pGameInstance->Add_Room(pRoom, ENUM_CLASS(LEVEL::LEVEL_STAGE1), TEXT("Layer_Room"));
 	//}
 
+	for (size_t i = 0; i < 10000000000; i++)
+	{
+		int a = 1;
+	}
+
 	lstrcpy(m_szLoadingText, TEXT("로딩이 완료되었습니다."));
 
 
@@ -526,7 +535,10 @@ HRESULT CLoader::Loading_For_Stage2_Level()
 		return E_FAIL;
 
 	
-
+	for (size_t i = 0; i < 10000000000; i++)
+	{
+		int a = 1;
+	}
 
 	lstrcpy(m_szLoadingText, TEXT("로딩이 완료되었습니다."));
 
