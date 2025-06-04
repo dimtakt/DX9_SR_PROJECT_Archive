@@ -270,7 +270,7 @@ void CMole_A::OnCollision(CGameObject* pGameObject)
 {
     __super::OnCollision(pGameObject);
 
-    m_isTracking = true;
+    //m_isTracking = true;
 }
 
 CMole_A* CMole_A::Create(LPDIRECT3DDEVICE9 pGraphic_Device)

@@ -179,7 +179,7 @@ void COink_A::Update(_float fTimeDelta)
         {
             _float3 vThrownDir = pTargetTransform->Get_State(STATE::POSITION) - vMonsterPos;
             CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::MONSTER_EFFECT, L"Prototype_Component_Texture_Oink_A_Effect_SpinSwing",
-                *m_pTransformCom->Get_WorldMatrix(), matMonsterWorld, vThrownDir, fThrownPower, fThrownAtkLifeTime, true);
+                *m_pTransformCom->Get_WorldMatrix(), matMonsterWorld, vThrownDir, fThrownPower, fThrownAtkLifeTime, 0.f, true);
         }
         else {}
     else if (m_pAnimatorCom->Get_CurStateTag() == L"Charge_End")
@@ -328,7 +328,7 @@ HRESULT COink_A::Ready_Components(void* pArg)
 	m_pAnimatorCom->Add_State(L"Charge_End",            { m_pTextureCom_Charge_End, 6, false });
 	m_pAnimatorCom->Add_State(L"Charge_Down",           { m_pTextureCom_Charge_Down, 4, false });
 	m_pAnimatorCom->Add_State(L"Charge_Airborne",       { m_pTextureCom_Charge_Airborne, 4, false });
-    m_pAnimatorCom->Add_State(L"Attack_Standby",        { m_pTextureCom_Idle, 4, false });
+    m_pAnimatorCom->Add_State(L"Attack_Standby",        { m_pTextureCom_Idle, 6, false });
     
 
     return S_OK;
@@ -338,7 +338,7 @@ void COink_A::OnCollision(CGameObject* pGameObject)
 {
 	__super::OnCollision(pGameObject);
 
-	m_isTracking = true;
+	//m_isTracking = true;
 }
 
 COink_A* COink_A::Create(LPDIRECT3DDEVICE9 pGraphic_Device)
