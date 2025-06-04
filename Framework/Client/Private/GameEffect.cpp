@@ -1,6 +1,6 @@
 #include "GameEffect.h"
 #include "GameInstance.h"
-
+#include "Stat_Manager.h"
 CGameEffect::CGameEffect(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CEffect(pGraphic_Device)
 {
@@ -72,7 +72,7 @@ HRESULT CGameEffect::Initialize(void* pArg)
 	m_iStackedFrame = 0;
 
 	CCollider_OBB::OBB_DESC tColliderDesc;
-	tColliderDesc.vScale = _float3(4.f, 3.f, 4.f);
+	tColliderDesc.vScale = _float3(3.f, 5.f, 3.f);
 	tColliderDesc.pOwner = this;
 	tColliderDesc.pTransform = m_pTransformCom;
 	CCollider_OBB* pCol = dynamic_cast<CCollider_OBB*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::COMPONENT, ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Collider_OBB"), &tColliderDesc));
@@ -206,17 +206,18 @@ void CGameEffect::Reset_RenderState()
 
 void CGameEffect::OnCollision(CGameObject* pGameObject)
 {
-	switch (pGameObject->Get_ObjType())
-	{
-	case GAMEOBJ_TYPE::MONSTER:
-	{
-		//pGameObject->Set_IsDead(true);
+	if (m_eObjType == GAMEOBJ_TYPE::PLAYER_EFFECT) {
+		switch (pGameObject->Get_ObjType())
+		{
+		case GAMEOBJ_TYPE::MONSTER:
+		{
+			pGameObject->Set_IsDead(true);
+			break;
+		}
 
-		// 현재 이곳에서 플레이어, 몬스터 둘다 이펙트 처리하고있어서 분리 필요
-		break;
+		}
 	}
-
-	}
+	
 }
 
 

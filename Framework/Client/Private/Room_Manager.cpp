@@ -297,6 +297,8 @@ void CRoom_Manager::Clear(_uint iLevelIndex)
 	m_mRooms[iLevelIndex].clear();
 	m_RoomIndex.clear();
 	CRoom_Manager::RoomIndexReset();
+	m_bCheckEnd = false;
+
 }
 
 void CRoom_Manager::Free()

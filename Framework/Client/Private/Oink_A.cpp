@@ -34,7 +34,7 @@ HRESULT COink_A::Initialize(void* pArg)
 
 void COink_A::Priority_Update(_float fTimeDelta)
 {
-
+    __super::Priority_Update(fTimeDelta);
 }
 
 void COink_A::Update(_float fTimeDelta)

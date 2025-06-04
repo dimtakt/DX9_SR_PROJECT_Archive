@@ -92,6 +92,8 @@ HRESULT CGameInstance::Initialize_Engine(const ENGINE_DESC& EngineDesc, LPDIRECT
 
 void CGameInstance::Update_Engine(_float fTimeDelta)
 {
+    if (IsKeyDown(VK_TAB))
+        m_pCollision_Manager->Set_IsRender();
     m_pKey_Manager->Update(fTimeDelta);
     m_pObject_Manager->Priority_Update(fTimeDelta);
 
@@ -134,7 +136,8 @@ HRESULT CGameInstance::Draw()
         return E_FAIL;
 
     // 충돌체 시각화
-    m_pCollision_Manager->Render();
+    if(m_pCollision_Manager->Get_IsRender())
+        m_pCollision_Manager->Render();
 
     if (FAILED(m_pLevel_Manager->Render()))
         return E_FAIL;

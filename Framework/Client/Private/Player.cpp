@@ -38,6 +38,7 @@ HRESULT CPlayer::Initialize(void* pArg)
     m_pGameInstance->Compute_TimeDelta(m_strTimerTag);
     m_pGameInstance->Subscribe(ENUM_CLASS(EVENT_TYPE::UICHANGE), this);
     Ready_Object();
+    m_dwHitTime = 0.f;
 	return S_OK;
 }
 
@@ -49,6 +50,14 @@ void CPlayer::Priority_Update(_float fTimeDelta)
 
     if (m_pHpBar != nullptr)
         m_pHpBar->Render_HP_Progress(m_pTransformCom, m_iCulHp, m_iMaxHp);
+
+    m_dwHitTime += 1.f;
+    if (m_dwHitTime >= 30.f)
+    {
+        m_dwHitTime = 0.f;
+        m_bIsHit = false;
+    }
+        
 
 }
 
@@ -170,7 +179,7 @@ void CPlayer::Update(_float fTimeDelta)
     // ***************************************
     // * [WASD] 이동
     // ***************************************
-
+    m_vOldPos = m_pTransformCom->Get_State(STATE::POSITION);
     // 상태전환
     if (m_pGameInstance->IsKeyHold('W') ||
         m_pGameInstance->IsKeyHold('S') ||
@@ -467,24 +476,24 @@ void CPlayer::OnCollision(CGameObject* pGameObject)
 {
     switch (pGameObject->Get_ObjType())
     {
-    case GAMEOBJ_TYPE::MONSTER:
-    {
-        //pGameObject->Set_IsDead(true);
-        break;
-    }
     case GAMEOBJ_TYPE::POTAL:
     {
-        _float3 vPos;
-        CRoom_Manager::GetInstance()->Check_Potal_Coll(dynamic_cast<CPotal*>(pGameObject)->Get_PotalType(), vPos);
+        if (pGameObject->Get_IsActive()) {
+            _float3 vPos;
+            CRoom_Manager::GetInstance()->Check_Potal_Coll(dynamic_cast<CPotal*>(pGameObject)->Get_PotalType(), vPos);
 
-        m_pTransformCom->Set_State(STATE::POSITION, vPos);
+            m_pTransformCom->Set_State(STATE::POSITION, vPos);
+        }
+        
         break;
     }
     case GAMEOBJ_TYPE::END_POTAL:
     {
-        if (m_pGameInstance->IsKeyDown(VK_DOWN))
-        {
-            dynamic_cast<CChapMap*>(m_pGameInstance->Get_GameObject(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Layer_ChapMap")))->Open_Ui();
+        if (pGameObject->Get_IsActive()) {
+            if (m_pGameInstance->IsKeyDown(VK_DOWN))
+            {
+                dynamic_cast<CChapMap*>(m_pGameInstance->Get_GameObject(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Layer_ChapMap")))->Open_Ui();
+            }
         }
         break;
     }
@@ -496,7 +505,16 @@ void CPlayer::OnCollision(CGameObject* pGameObject)
     }
     case GAMEOBJ_TYPE::OBJECT:
     {
-        int a = 1;
+        m_pTransformCom->Set_State(STATE::POSITION, m_vOldPos);
+        break;
+    }
+
+    case GAMEOBJ_TYPE::MONSTER_EFFECT:
+    {
+        if (!m_bIsHit) {
+            CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CULHP, -5.f);
+            m_bIsHit = true;
+        }
         break;
     }
         

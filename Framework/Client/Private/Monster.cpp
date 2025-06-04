@@ -36,11 +36,19 @@ HRESULT CMonster::Initialize(void* pArg)
 	Safe_AddRef(m_pTerrainBox);
 	m_eObjType = GAMEOBJ_TYPE::MONSTER;
 
+	m_dwHitTime = 0.f;
+
 	return S_OK;
 }
 
 void CMonster::Priority_Update(_float fTimeDelta)
 {
+	m_dwHitTime += 1.f;
+	if (m_dwHitTime >= 30.f)
+	{
+		m_dwHitTime = 0.f;
+		m_bIsHit = false;
+	}
 }
 
 void CMonster::Update(_float fTimeDelta)
@@ -123,17 +131,18 @@ void CMonster::Reset_RenderState()
 
 void CMonster::OnCollision(CGameObject* pGameObject)
 {
-	//CTransform* pTransform = dynamic_cast<CTransform*>(pGameObject->Find_Component(TEXT("Com_Transform")));
-	//switch (pGameObject->Get_ObjType())
-	//{
-	//case GAMEOBJ_TYPE::PLAYER:
-	//	{
-	//		/*_float3 vDir = m_pTransformCom->Get_State(STATE::POSITION) - pTransform->Get_State(STATE::POSITION);*/
-	//		//m_pTransformCom->Look_At(pTransform->Get_State(STATE::POSITION));
-	//		m_pTransformCom->Move_To(pTransform->Get_State(STATE::POSITION), 0.01f, 0.05f);
-	//		break;
-	//	}
-	//}
+	CTransform* pTransform = dynamic_cast<CTransform*>(pGameObject->Find_Component(TEXT("Com_Transform")));
+	switch (pGameObject->Get_ObjType())
+	{
+	case GAMEOBJ_TYPE::PLAYER_EFFECT:
+		{
+		if (!m_bIsHit) {
+			//몬스터 HP감소처리
+			m_bIsHit = true;
+		}
+			break;
+		}
+	}
 }
 
 CMonster* CMonster::Create(LPDIRECT3DDEVICE9 pGraphic_Device)
