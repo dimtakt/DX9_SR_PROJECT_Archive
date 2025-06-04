@@ -2,6 +2,7 @@
 #include "GameInstance.h"
 #include "Talent_Icon_Selete.h"
 #include "Talent_Slot.h"
+#include "Stat_Manager.h"
 CTalent_Slot_Icon::CTalent_Slot_Icon(LPDIRECT3DDEVICE9 pGraphic_Device) : CButton(pGraphic_Device)
 {
 }
@@ -156,6 +157,36 @@ HRESULT CTalent_Slot_Icon::Ready_Children()
 	Add_Child(pGameObject);
 
 	return S_OK;
+}
+
+void CTalent_Slot_Icon::Special_Gift_Update()
+{
+	_int iPoint = static_cast<CTalent_Slot*>(m_pParent)->Get_Value();
+
+	if (m_iTexIdex == 0 && iPoint >= 10 && m_bIsGetGift == false)
+		m_bIsGetGift = true;
+	else if (m_iTexIdex == 0 && iPoint < 10 && m_bIsGetGift == true)
+		m_bIsGetGift = false;
+
+	if (m_iTexIdex == 1 && iPoint >= 20 && m_bIsGetGift == false)
+		m_bIsGetGift = true;
+	else if (m_iTexIdex == 1 && iPoint < 20 && m_bIsGetGift == true)
+		m_bIsGetGift = false;
+
+
+	if (m_bGiftCheck != m_bIsGetGift)
+	{
+	/*	switch (m_iIndex)
+		
+		case 0:
+			if (m_iTexIdex == 0 && m_bIsGetGift == true)
+				CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CULDAMAGE, 10);
+			break;
+		case 1:
+		case 2:
+		case 3:
+		*/
+	}
 }
 
 CTalent_Slot_Icon* CTalent_Slot_Icon::Create(LPDIRECT3DDEVICE9 pGraphic_Device, LEVEL eLevel)

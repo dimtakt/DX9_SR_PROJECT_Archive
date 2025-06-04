@@ -29,7 +29,7 @@ HRESULT CGacha_Slot::Initialize(void* pArg)
 	m_fSizeX = 96;
 	m_fSizeY = 96;
 	m_fX = -320 + Desc->fX;
-	m_fY = Desc->fY;
+	m_fY = -50 + Desc->fY;
 	m_fZ = UI_DEPTH::GACHA_SLOT;
 	m_iWinSizeX = g_iWinSizeX;
 	m_iWinSizeY = g_iWinSizeY;

@@ -20,7 +20,8 @@ HRESULT COink_A::Initialize_Prototype()
 
 HRESULT COink_A::Initialize(void* pArg)
 {
-    __super::Initialize(pArg);
+    if (FAILED(__super::Initialize(pArg)))
+        return E_FAIL;
 
     if (FAILED(this->Ready_Components(pArg)))
         return E_FAIL;
@@ -38,7 +39,7 @@ void COink_A::Priority_Update(_float fTimeDelta)
 
 void COink_A::Update(_float fTimeDelta)
 {    
-    if (!m_pTerrainBox || !m_pTransformCom || !m_pTextureCom)
+    if (m_bDead)
         return;
 
     _float fMinDist = 5.f;      // 원거리 공격 할 기준 거리
@@ -215,50 +216,52 @@ void COink_A::Late_Update(_float fTimeDelta)
 
 HRESULT COink_A::Render()
 {
-    if (!m_pTransformCom)
-        return S_OK;
-    // 플레이어 위치에 따라 좌우반전 적용,
+    if (!m_bDead)
+    {
+        // 플레이어 위치에 따라 좌우반전 적용,
     // 단 공격 중 등의 경우에는 변경 X
-    _uint iCurLevel = m_pGameInstance->GetInstance()->Get_CurrentLevel();
-    _float3 vTargetPos = {}, vMonsterPos = {};    // 플레이어 좌표
-    CTransform* pTargetTransform = dynamic_cast<CTransform*>(m_pGameInstance->GetInstance()->Get_Component(iCurLevel, TEXT("Layer_Player"), TEXT("Com_Transform")));
-    vTargetPos = pTargetTransform->Get_State(STATE::POSITION);
-    vMonsterPos = m_pTransformCom->Get_State(STATE::POSITION);
+        _uint iCurLevel = m_pGameInstance->GetInstance()->Get_CurrentLevel();
+        _float3 vTargetPos = {}, vMonsterPos = {};    // 플레이어 좌표
+        CTransform* pTargetTransform = dynamic_cast<CTransform*>(m_pGameInstance->GetInstance()->Get_Component(iCurLevel, TEXT("Layer_Player"), TEXT("Com_Transform")));
+        vTargetPos = pTargetTransform->Get_State(STATE::POSITION);
+        vMonsterPos = m_pTransformCom->Get_State(STATE::POSITION);
 
-    // 좌우반전
-    if (vTargetPos.x < vMonsterPos.x && !m_isFlippedX)   // 좌측
-    {
-        m_pVIBufferCom->ChangeUV_FlipX(true);
-        m_isFlippedX = true;
-        //std::cout << "[CPlayer::Update] FlippedX Changed to True." << std::endl;
+        // 좌우반전
+        if (vTargetPos.x < vMonsterPos.x && !m_isFlippedX)   // 좌측
+        {
+            m_pVIBufferCom->ChangeUV_FlipX(true);
+            m_isFlippedX = true;
+            //std::cout << "[CPlayer::Update] FlippedX Changed to True." << std::endl;
+        }
+        else if (vTargetPos.x > vMonsterPos.x && m_isFlippedX)    // 우측
+        {
+            m_pVIBufferCom->ChangeUV_FlipX(false);
+            m_isFlippedX = false;
+            //std::cout << "[CPlayer::Update] FlippedX Changed to False." << std::endl;
+        }
+
+
+
+        m_pTransformCom->Bind_Matrix();
+
+        m_pAnimatorCom->Update_State(); // Bind_Texture
+
+        m_pVIBufferCom->Bind_Buffers();
+
+        SetUp_RenderState();
+
+        m_pVIBufferCom->Render();
+
+        m_pTerrainBox->Render();
+
+        if (m_isFlippedX)
+        {
+            m_pVIBufferCom->ResetUV_FlipX();
+            m_isFlippedX = false;
+        }
+
     }
-    else if (vTargetPos.x > vMonsterPos.x && m_isFlippedX)    // 우측
-    {
-        m_pVIBufferCom->ChangeUV_FlipX(false);
-        m_isFlippedX = false;
-        //std::cout << "[CPlayer::Update] FlippedX Changed to False." << std::endl;
-    }
-
-
-
-    m_pTransformCom->Bind_Matrix();
-
-    m_pAnimatorCom->Update_State(); // Bind_Texture
-
-    m_pVIBufferCom->Bind_Buffers();
-
-    SetUp_RenderState();
-
-    m_pVIBufferCom->Render();
-
-    m_pTerrainBox->Render();
-
-    if (m_isFlippedX)
-    {
-        m_pVIBufferCom->ResetUV_FlipX();
-        m_isFlippedX = false;
-    }
-
+    
     return S_OK;
 }
 
