@@ -38,7 +38,20 @@ private:
 	_float			m_fZMax = {};
 	_float3			m_vTerrainPos = {};
 	_float			m_fDistance = {};
-	_bool			m_bForceSnapCamera = {false};
+	_bool			m_bForceSnapCamera = { false };
+	_bool			m_bIgnoreXOffset = { false };
+	_float			m_fXIgnoreTimer = {};
+	_bool			m_bCameraTransition = { false };
+	_float3			m_vCamTransitionStartPos = {};
+	_float3			m_vCamTransitionTargetPos = {};
+	_float			m_fCamTransitionTimer = {};
+	_float			m_fCamTransitionDuration = { };
+	_bool			m_bXTransition = { false };
+	_float			m_fXTransitionTimer = {};
+	_float			m_fXTransitionDuration = {};
+	_float			m_fXStart = {};
+	_float			m_fXTarget = {};
+
 
 private:
 	CTransform* m_pTargetPlayerTransformCom = { nullptr };

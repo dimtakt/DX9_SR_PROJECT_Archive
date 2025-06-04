@@ -94,15 +94,18 @@ public:
 
 private:
 	CVIBuffer_Rect* m_pVIBufferCom_0 = { nullptr };
-	CVIBuffer_Rect* m_pVIBufferCom_1 = { nullptr };
 	CTransform* m_pTransformCom = { nullptr };
 	CTexture* m_pTextureCom_0 = { nullptr };
 	CTexture* m_pTextureCom_1 = { nullptr };
-	CTexture* m_pTextureCom_2 = { nullptr };
 	CAnimator* m_pAnimatorCom_0 = { nullptr };
-	CAnimator* m_pAnimatorCom_1 = { nullptr };
+
+	bool m_bActive = { TRUE };
+
 private:
 	HRESULT Ready_Components();
+
+public:
+	virtual void OnCollision(CGameObject* pGameObject) override;
 
 public:
 	static CInteraction_Normal* Create(LPDIRECT3DDEVICE9 pGraphic_Device);

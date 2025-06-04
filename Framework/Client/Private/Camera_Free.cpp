@@ -174,9 +174,9 @@ CGameObject* CCamera_Free::Clone(void* pArg)
 
 void CCamera_Free::Free()
 {
-	__super::Free();
-
 	Safe_Release(m_pTransformCom);
 	Safe_Release(m_pTargetTransformCom);
+
+	__super::Free();
 }
  

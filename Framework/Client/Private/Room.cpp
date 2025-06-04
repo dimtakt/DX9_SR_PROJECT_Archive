@@ -34,11 +34,12 @@ void CRoom::Priority_Update(_float fTimeDelta)
 	{
 		if (m_pTerrainBox != nullptr)
 			m_pTerrainBox->Priority_Update(fTimeDelta);
-		// 추후 지형 오브젝트 처리
-		/*for (auto& obj : m_vObject)
+
+		for (auto& obj : m_vObject)
 		{
-			obj->
-		}*/
+			if (nullptr != obj)
+				obj->Priority_Update(fTimeDelta);
+		}
 
 		for (auto it = m_vMonster.begin(); it != m_vMonster.end(); ) {
 			if ((*it)->Get_IsDead()) {
@@ -60,12 +61,12 @@ void CRoom::Update(_float fTimeDelta)
 	{
 		if (m_pTerrainBox != nullptr)
 			m_pTerrainBox->Update(fTimeDelta);
-		// 추후 지형 오브젝트 처리
-		/*for (auto& obj : m_vObject)
-		{
-			obj->
-		}*/
 
+		for (auto& obj : m_vObject)
+		{
+			if (nullptr != obj)
+				obj->Update(fTimeDelta);
+		}
 
 		for (auto& obj : m_vMonster)
 		{
@@ -78,36 +79,71 @@ void CRoom::Update(_float fTimeDelta)
 
 void CRoom::Late_Update(_float fTimeDelta)
 {
-	if (m_bIsActive)
+	if (m_bIsVisited)
 	{
 		if (m_pTerrainBox != nullptr)
 			m_pTerrainBox->Late_Update(fTimeDelta);
-		// 추후 지형 오브젝트 처리
-		/*for (auto& obj : m_vObject)
-		{
-			obj->
-		}*/
+		
+		for (auto it = m_vObject.begin(); it != m_vObject.end(); ) {
+			if ((*it) != nullptr && (*it)->Get_IsDead()) { 
+				Safe_Release(*it);
+				it = m_vObject.erase(it); // erase는 다음 이터레이터 반환
+			}
+			else {
+				if (nullptr != *it)
+					(*it)->Late_Update(fTimeDelta);
+				++it;
+			}
+		}
 
-		for (auto& obj : m_vMonster)
+		for (auto& obj : m_vPotal)
 		{
 			if (nullptr != obj)
 				obj->Late_Update(fTimeDelta);
 		}
 	}
+	if (m_bIsActive)
+	{
+
+		for (auto it = m_vMonster.begin(); it != m_vMonster.end(); ) {
+			if ((*it)->Get_IsDead()) { // 짝수인 경우 삭제
+				Safe_Release(*it);
+				it = m_vMonster.erase(it); // erase는 다음 이터레이터 반환
+			}
+			else {
+				if (nullptr != *it)
+					(*it)->Late_Update(fTimeDelta);
+				++it;
+			}
+		}
+		/*for (auto& obj : m_vMonster)
+		{
+			if (nullptr != obj)
+				obj->Late_Update(fTimeDelta);
+		}*/
+	}
 }
 
 HRESULT CRoom::Render()
 {
-	if (m_bIsActive)
+	if (m_bIsVisited)
 	{
 		if (m_pTerrainBox != nullptr)
 			m_pTerrainBox->Render();
-		// 추후 지형 오브젝트 처리
-		/*for (auto& obj : m_vObject)
-		{
-			obj->
-		}*/
 
+		for (auto& obj : m_vObject)
+		{
+			obj->Render();
+		}
+
+		for (auto& obj : m_vPotal)
+		{
+			obj->Render();
+		}
+	}
+
+	if (m_bIsActive)
+	{
 		for (auto& obj : m_vMonster)
 		{
 			obj->Render();
@@ -146,7 +182,7 @@ HRESULT CRoom::Ready_Potal(_uint iLayerLevelIndex, const _wstring& strLayerTag, 
 
 	// collider
 	CCollider_OBB::OBB_DESC tColliderDesc;
-	tColliderDesc.vScale = _float3(1.f, 0.001f, 1.f);
+	tColliderDesc.vScale = _float3(1.f, 3.f, 1.f);
 	tColliderDesc.pOwner = pPotal;
 	tColliderDesc.pTransform = dynamic_cast<CTransform*>(pPotal->Find_Component(TEXT("Com_Transform")));
 	CCollider_OBB* pCol = dynamic_cast<CCollider_OBB*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::COMPONENT, ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Collider_OBB"), &tColliderDesc));
@@ -211,31 +247,50 @@ HRESULT CRoom::Load_From_File(_uint iLayerLevelIndex, const _wstring& strLayerTa
 			tSrc.vScale = pDesc.vScale;
 			tSrc.vRotate = pDesc.vRotate;
 
-			if(FAILED(m_pGameInstance->Add_GameObject_ToLayer(
-				iLayerLevelIndex, strLayerTag,
-				iLayerLevelIndex,
-				TEXT("Prototype_GameObject_Tree"),
-				&tSrc)))
-				return E_FAIL;
-
-			CGameObject* pGameObject = m_pGameInstance->Get_LastGameObject(iLayerLevelIndex, strLayerTag);
+			//if(FAILED(m_pGameInstance->Add_GameObject_ToLayer(
+			//	iLayerLevelIndex, strLayerTag,
+			//	iLayerLevelIndex,
+			//	TEXT("Prototype_GameObject_Tree"),
+			//	&tSrc)))
+			//	return E_FAIL;
+			CGameObject* pGameObject = dynamic_cast<CGameObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, iLayerLevelIndex, TEXT("Prototype_GameObject_Tree"), &tSrc));
+	/*		CGameObject* pGameObject = m_pGameInstance->Get_LastGameObject(iLayerLevelIndex, strLayerTag);*/
 			m_vObject.push_back(pGameObject);
 		}
-		else
+		else if (pDesc.eType == GAMEOBJ_TYPE::TERRAIN)
 		{
 			MAP_OBJECT_DESC tSrc{};
 			tSrc.iTextureIndex = pDesc.iTextureIndex;
 			tSrc.vPos = pDesc.vPos + m_ObjectOffset;
 			tSrc.vScale = pDesc.vScale;
 
-			m_pGameInstance->Add_GameObject_ToLayer(
+			/*m_pGameInstance->Add_GameObject_ToLayer(
 				iLayerLevelIndex, strLayerTag,
 				iLayerLevelIndex,
 				TEXT("Prototype_GameObject_TerrainBox"),
-				&tSrc);
+				&tSrc);*/
+			CGameObject* pGameObject = dynamic_cast<CGameObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, iLayerLevelIndex, TEXT("Prototype_GameObject_TerrainBox"), &tSrc));
 
-			CGameObject* pGameObject = m_pGameInstance->Get_LastGameObject(iLayerLevelIndex, strLayerTag);
+		/*	CGameObject* pGameObject = m_pGameInstance->Get_LastGameObject(iLayerLevelIndex, strLayerTag);*/
 			m_pTerrainBox = dynamic_cast<CTerrainBox*>(pGameObject);
+		}
+		else
+		{
+			MAP_OBJECT_DESC tSrc{};
+			tSrc.eType = pDesc.eType;
+			tSrc.vPos = pDesc.vPos + m_ObjectOffset;
+			tSrc.vScale = pDesc.vScale;
+			tSrc.vRotate = pDesc.vRotate;
+
+		/*	m_pGameInstance->Add_GameObject_ToLayer(
+				iLayerLevelIndex, strLayerTag,
+				ENUM_CLASS(LEVEL::LEVEL_STATIC),
+				TEXT("Prototype_GameObject_Interaction_Normal"),
+				&tSrc);*/
+
+			CGameObject* pGameObject = dynamic_cast<CGameObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_Interaction_Normal"), &tSrc));
+	/*		CGameObject* pGameObject = m_pGameInstance->Get_LastGameObject(iLayerLevelIndex, strLayerTag);*/
+			m_vObject.push_back(pGameObject);
 		}
 	}
 
@@ -258,18 +313,49 @@ void CRoom::Enter()
 
 	for (auto& pMonster : m_vMonster)
 	{
-		// collider
-		CCollider_OBB::OBB_DESC tColliderDesc;
-		tColliderDesc.vScale = _float3(1.f, 4.f, 1.f);
-		tColliderDesc.pOwner = pMonster;
-		tColliderDesc.pTransform = pMonster->Get_Transform();
-		CCollider_OBB* pCol = dynamic_cast<CCollider_OBB*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::COMPONENT, ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Collider_OBB"), &tColliderDesc));
-		m_pGameInstance->Add_Collider(pCol);
+		if (pMonster != nullptr) {
+			pMonster->Set_IsActive(true);
+			// collider
+			CCollider_OBB::OBB_DESC tColliderDesc;
+			tColliderDesc.vScale = _float3(1.f, 3.f, 1.f);
+			tColliderDesc.pOwner = pMonster;
+			tColliderDesc.pTransform = pMonster->Get_Transform();
+			CCollider_OBB* pCol = dynamic_cast<CCollider_OBB*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::COMPONENT, ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Collider_OBB"), &tColliderDesc));
+			m_pGameInstance->Add_Collider(pCol);
+		}
+	}
+
+	for (auto& pObject : m_vObject)
+	{
+		if (pObject != nullptr)
+		{
+			pObject->Set_IsActive(true);
+			// collider
+			CCollider_OBB::OBB_DESC tColliderDesc;
+			tColliderDesc.vScale = _float3(1.0f, 3.f, 1.0f);
+			tColliderDesc.pOwner = pObject;
+			tColliderDesc.pTransform = dynamic_cast<CTransform*>(pObject->Find_Component(TEXT("Com_Transform")));
+			CCollider_OBB* pCol = dynamic_cast<CCollider_OBB*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::COMPONENT, ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Collider_OBB"), &tColliderDesc));
+			m_pGameInstance->Add_Collider(pCol);
+		}
+		
 	}
 }
 
 void CRoom::Exit()
 {
+	for (auto& pMonster : m_vMonster)
+	{
+		if (pMonster != nullptr)
+			pMonster->Set_IsActive(false);
+	}
+
+	for (auto& pObject : m_vObject)
+	{
+		if(pObject != nullptr)
+			pObject->Set_IsActive(false);
+	}
+
 	m_bIsActive = false;
 }
 
@@ -311,17 +397,28 @@ CGameObject* CRoom::Clone(void* pArg)
 }
 void CRoom::Free()
 {
-	__super::Free();
-
 	Safe_Release(m_pTerrainBox);
+
 	for (auto& obj : m_vObject)
 	{
 		Safe_Release(obj);
 	}
 	m_vObject.clear();
+
 	for (auto& obj : m_vMonster)
 	{
 		Safe_Release(obj);
 	}
 	m_vMonster.clear();
+
+	for (auto& obj : m_vPotal)
+	{
+		Safe_Release(obj);
+
+	}
+	m_vPotal.clear();
+
+	m_Object_Desc.clear();
+
+	__super::Free();
 }

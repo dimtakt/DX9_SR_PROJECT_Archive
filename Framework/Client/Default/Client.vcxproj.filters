@@ -58,9 +58,6 @@
     <Filter Include="02.GameObject\Object\Tree">
       <UniqueIdentifier>{bbd28d29-4525-4dcb-94be-ec9b089808a9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\Object\Mountain">
-      <UniqueIdentifier>{2879c6c3-314f-4553-9bb7-3bda46e4769b}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObject\Camera\Free">
       <UniqueIdentifier>{926017ed-9374-426d-9e84-e28f0b80f595}</UniqueIdentifier>
     </Filter>
@@ -325,6 +322,15 @@
     <Filter Include="02.GameObject\UI\Window\Talent\Talent_ETC">
       <UniqueIdentifier>{fec88bab-fcaa-44a2-a7a0-30b36862b16e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\UI\Window\Talent\Talent_Slot\Talent_Slot_Frame">
+      <UniqueIdentifier>{4da686ad-d4f2-4bef-a733-c3b531e78fc2}</UniqueIdentifier>
+	  </Filter>
+    <Filter Include="02.GameObject\Object\Interaction\Normal\MapEditObject">
+      <UniqueIdentifier>{2879c6c3-314f-4553-9bb7-3bda46e4769b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Object\EXP_Ball">
+      <UniqueIdentifier>{109028fc-4bee-49e2-a8ce-c44d047116da}</UniqueIdentifier>
+    </Filter>
     <Filter Include="02.GameObject\UI\Window\Gacha">
       <UniqueIdentifier>{a8120267-034e-4f4b-bd73-e73492f9798e}</UniqueIdentifier>
     </Filter>
@@ -333,6 +339,9 @@
     </Filter>
     <Filter Include="02.GameObject\UI\Window\Gacha\Gacha_Button">
       <UniqueIdentifier>{ffa2167b-4c62-4a34-849c-35f373d2c0a0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Monster\LaserGhost_D">
+      <UniqueIdentifier>{1d6ba4a0-cf84-4e28-8ddf-6830f227f041}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -468,8 +477,8 @@
     <ClInclude Include="..\Public\Tree.h">
       <Filter>02.GameObject\Object\Tree</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\Mountain.h">
-      <Filter>02.GameObject\Object\Mountain</Filter>
+    <ClInclude Include="..\Public\MapEditObject.h">
+      <Filter>02.GameObject\Object\Interaction\Normal\MapEditObject</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Hud_Buff.h">
       <Filter>02.GameObject\UI\HUD\HUD_Buff</Filter>
@@ -702,6 +711,9 @@
     <ClInclude Include="..\public\Talent_Button_Selete.h">
       <Filter>02.GameObject\UI\Window\Talent\Talent_Slot\Talent_Slot_Etc\Selete_Button</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\EXP_Ball.h">
+      <Filter>02.GameObject\Object\EXP_Ball</Filter>
+    </ClInclude>
     <ClInclude Include="..\public\Gacha.h">
       <Filter>02.GameObject\UI\Window\Gacha</Filter>
     </ClInclude>
@@ -713,6 +725,9 @@
     </ClInclude>
     <ClInclude Include="..\public\Gacha_Pass.h">
       <Filter>02.GameObject\UI\Window\Gacha\Gacha_Button</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\LaserGhost_D.h">
+      <Filter>02.GameObject\Monster\LaserGhost_D</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -822,8 +837,8 @@
     <ClCompile Include="..\Private\Tree.cpp">
       <Filter>02.GameObject\Object\Tree</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\Mountain.cpp">
-      <Filter>02.GameObject\Object\Mountain</Filter>
+    <ClCompile Include="..\Private\MapEditObject.cpp">
+      <Filter>02.GameObject\Object\Interaction\Normal\MapEditObject</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Hud_Buff.cpp">
       <Filter>02.GameObject\UI\HUD\HUD_Buff</Filter>
@@ -1044,6 +1059,9 @@
     <ClCompile Include="..\private\Talent_Button_Selete.cpp">
       <Filter>02.GameObject\UI\Window\Talent\Talent_Slot\Talent_Slot_Etc\Selete_Button</Filter>
     </ClCompile>
+    <ClCompile Include="..\Private\EXP_Ball.cpp">
+      <Filter>02.GameObject\Object\EXP_Ball</Filter>
+    </ClCompile>
     <ClCompile Include="..\private\Gacha.cpp">
       <Filter>02.GameObject\UI\Window\Gacha</Filter>
     </ClCompile>
@@ -1055,6 +1073,9 @@
     </ClCompile>
     <ClCompile Include="..\private\Gacha_Pass.cpp">
       <Filter>02.GameObject\UI\Window\Gacha\Gacha_Button</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\LaserGhost_D.cpp">
+      <Filter>02.GameObject\Monster\LaserGhost_D</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

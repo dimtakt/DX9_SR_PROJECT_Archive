@@ -104,7 +104,8 @@ CEffect_Factory* CEffect_Factory::Create()
 
 void CEffect_Factory::Free()
 {
-	__super::Free();
 	Safe_Release(m_pGameInstance);
 	DestroyInstance();
+
+	__super::Free();
 }

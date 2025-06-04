@@ -63,9 +63,6 @@ void CDagger::Update(_float fTimeDelta)
 	vRight = m_pTransformCom->Get_State(STATE::RIGHT);
 	vUp = m_pTransformCom->Get_State(STATE::UP);
 	vLook = m_pTransformCom->Get_State(STATE::LOOK);
-
-
-
 }
 
 void CDagger::Late_Update(_float fTimeDelta)
@@ -102,15 +99,7 @@ HRESULT CDagger::Render()
 
 void CDagger::OnCollision(CGameObject* pGameObject)
 {
-	switch (pGameObject->Get_ObjType())
-	{
-	case GAMEOBJ_TYPE::MONSTER:
-	{
-		pGameObject->Set_IsDead(true);
-		break;
-	}
 
-	}
 }
 
 HRESULT	CDagger::Ready_Components(void* pArg)
@@ -153,14 +142,6 @@ HRESULT	CDagger::Ready_Components(void* pArg)
 	m_tDesc = *pDesc;
 	/* Get Player Transform to m_pTargetTransformCom */
 	m_pTargetTransformCom = dynamic_cast<CTransform*>(m_pGameInstance->Get_Component(m_tDesc.iLayerIndex, TEXT("Layer_Player"), TEXT("Com_Transform")));
-
-	// collider
-	CCollider_OBB::OBB_DESC tColliderDesc;
-	tColliderDesc.vScale = _float3(1.f, 0.001f, 1.f);
-	tColliderDesc.pOwner = this;
-	tColliderDesc.pTransform = m_pTransformCom;
-	CCollider_OBB* pCol = dynamic_cast<CCollider_OBB*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::COMPONENT, ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Collider_OBB"), &tColliderDesc));
-	m_pGameInstance->Add_Collider(pCol);
 
 	return S_OK;
 }
@@ -326,10 +307,10 @@ CGameObject* CDagger::Clone(void* pArg)
 
 void CDagger::Free()
 {
-	__super::Free();
-
 	Safe_Release(m_pVIBufferCom);
 	Safe_Release(m_pTransformCom);
 	Safe_Release(m_pTextureCom);
 	Safe_Release(m_pAnimatorCom);
+
+	__super::Free();
 }

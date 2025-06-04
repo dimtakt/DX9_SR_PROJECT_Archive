@@ -7,6 +7,7 @@
 #include "Room_Manager.h"
 #include "Stat_Manager.h"
 #include "ChapMap.h"
+#include "EXP_Ball.h"
 
 CPlayer::CPlayer(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CGameObject{ pGraphic_Device }
@@ -117,8 +118,8 @@ void CPlayer::Update(_float fTimeDelta)
     _float3 vDiff = -vPlayerPos + vRayPoint;       // 플레이어 위치에서 마우스 교차좌표로 가는 벡터
     D3DXVec3Normalize(&vDiff, &vDiff);              // 를 단위벡터화, 안되면 vDiff 순서 바꿔보기
     _float fDistanceOffset = 1.2f;                   // ** ksta : 중점으로부터 떨어져 있을 거리 **
-    vDiff *= fDistanceOffset;
-    D3DXMatrixTranslation(&matTransAddition, vDiff.x, 0, vDiff.z);
+    _float3 vDiffResult = vDiff * fDistanceOffset;
+    D3DXMatrixTranslation(&matTransAddition, vDiffResult.x, 0, vDiffResult.z);
 
     matPlayerWorld = matTransToOrigin * matScale * matRotateChild * matRotateChildtoCursor * matTransReturn * matTransAddition;
    
@@ -291,8 +292,12 @@ void CPlayer::Update(_float fTimeDelta)
             if (m_isReadyFury)
             {
                 if(m_pAnimatorTransCom->Change_State(L"Fury"))
+                {
                     CEffect_Factory::GetInstance()->Create_Effect(L"Prototype_Component_Texture_Effect_Blade0_NFury",
                         *m_pTransformCom->Get_WorldMatrix(), matPlayerWorld, m_pTransformCom, true);
+                    CEffect_Factory::GetInstance()->Create_Effect(L"Prototype_Component_Texture_Effect_Blade0_NFury_Back",
+                        *m_pTransformCom->Get_WorldMatrix(), matPlayerWorld, m_pTransformCom, true);
+                }
                 strStateTag = (vRayPoint.z > vPlayerPos.z)?     L"Fury_Upper":
                                                                 L"Fury_Lower";
                 m_pAnimatorCom->Change_State(strStateTag);
@@ -302,9 +307,23 @@ void CPlayer::Update(_float fTimeDelta)
                 pStats->Get_CurStats()[ENUM_CLASS(STAT_INFO::CULMP)] >= 10)
             {
                 if (m_pAnimatorTransCom->Change_State(L"Parry"))
+                {
+                    // Parry 시에만 재조정
+                    fDistanceOffset = 0.f;
+                    vDiffResult = vDiff * fDistanceOffset;
+                    D3DXMatrixTranslation(&matTransAddition, vDiffResult.x, 0, vDiffResult.z);
+                    matPlayerWorld = matTransToOrigin * matScale * matRotateChild * matRotateChildtoCursor * matTransReturn * matTransAddition;
+
+                    // 이펙트 적용
                     CEffect_Factory::GetInstance()->Create_Effect(L"Prototype_Component_Texture_Effect_Blade0_Parry",
                         *m_pTransformCom->Get_WorldMatrix(), matPlayerWorld, m_pTransformCom, true);
                     
+                    // 다시 초기값대로 초기화
+                    fDistanceOffset = 1.2f;
+                    vDiffResult = vDiff * fDistanceOffset;
+                    D3DXMatrixTranslation(&matTransAddition, vDiffResult.x, 0, vDiffResult.z);
+                    matPlayerWorld = matTransToOrigin * matScale * matRotateChild * matRotateChildtoCursor * matTransReturn * matTransAddition;
+                }
                 if (m_pAnimatorCom->Change_State(L"Parry"))
                     pStats->Cal_Stats(STAT_INFO::CULMP, -10);
             }
@@ -452,15 +471,28 @@ void CPlayer::OnCollision(CGameObject* pGameObject)
         CRoom_Manager::GetInstance()->Check_Potal_Coll(dynamic_cast<CPotal*>(pGameObject)->Get_PotalType(), vPos);
 
         m_pTransformCom->Set_State(STATE::POSITION, vPos);
+        break;
     }
     case GAMEOBJ_TYPE::END_POTAL:
     {
         if (m_pGameInstance->IsKeyDown(VK_DOWN))
         {
-            dynamic_cast<CChapMap*>(m_pGameInstance->Get_GameObject(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Layer_UI")))->Open_Ui();
-         
+            dynamic_cast<CChapMap*>(m_pGameInstance->Get_GameObject(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Layer_ChapMap")))->Open_Ui();
         }
+        break;
     }
+    case GAMEOBJ_TYPE::EXPBALL:
+    {
+        CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::EXP, dynamic_cast<CEXP_Ball*>(pGameObject)->Get_EXP());
+        pGameObject->Set_IsDead(TRUE);
+        break;
+    }
+    case GAMEOBJ_TYPE::OBJECT:
+    {
+        int a = 1;
+        break;
+    }
+        
     }
 }
 
@@ -595,7 +627,7 @@ HRESULT CPlayer::Ready_Components(void* pArg)
     m_pAnimatorCom->Add_State(L"Fury_Lower",        { m_pTextureCom_Attack_Lower, 6, false, m_pGameInstance->Find_Animation(L"Player_Fury") });
     m_pAnimatorCom->Add_State(L"Fury_Upper",        { m_pTextureCom_Attack_Upper, 6, false, m_pGameInstance->Find_Animation(L"Player_Fury") });
 
-    /* For Com_Animator (Dash) */
+    /* For Com_Animator (이동 관련) */
     CAnimator::ANIMSTATE_DESC StartAnimStateDesc2{};
     StartAnimStateDesc2.strTimerTag = L"Animator_Player_Dash";   // 해당 애니메이터가 타이머에서 사용할 태그 key값
     StartAnimStateDesc2.pParentTransform = nullptr; // m_pTransformCom;
@@ -613,7 +645,7 @@ HRESULT CPlayer::Ready_Components(void* pArg)
     
     // collider
     CCollider_OBB::OBB_DESC tColliderDesc;
-    tColliderDesc.vScale = _float3(1.f, 0.001f, 1.f);
+    tColliderDesc.vScale = _float3(1.f, 3.f, 1.f);
     tColliderDesc.pOwner = this;
     tColliderDesc.pTransform = m_pTransformCom;
     CCollider_OBB* pCol = dynamic_cast<CCollider_OBB*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::COMPONENT, ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Collider_OBB"), &tColliderDesc));
@@ -681,7 +713,6 @@ CGameObject* CPlayer::Clone(void* pArg)
 void CPlayer::Free()
 {
     m_pGameInstance->Unsubscribe(ENUM_CLASS(EVENT_TYPE::UICHANGE), this);
-    __super::Free();
 
     Safe_Release(m_pVIBufferCom);
     Safe_Release(m_pTransformCom);
@@ -712,7 +743,7 @@ void CPlayer::Free()
         Safe_Release(m_pCollider);
     }*/
     
-
     CEffect_Factory::GetInstance()->Free();
     
+    __super::Free();
 }

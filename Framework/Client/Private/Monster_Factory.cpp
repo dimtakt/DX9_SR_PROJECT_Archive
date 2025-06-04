@@ -6,6 +6,7 @@
 
 #include "Mole_A.h"
 #include "Oink_A.h"
+#include "LaserGhost_D.h"
 
 IMPLEMENT_SINGLETON(CMonster_Factory)
 
@@ -38,6 +39,9 @@ HRESULT CMonster_Factory::Add_Monsters(CRoom* pRoom, list<CMonster::MONSTERDESC>
 		case CMonster_Factory::MONSTER_TYPE::MONSTER_OINK_A:
 			pMonster = dynamic_cast<COink_A*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, desc.iPrototypeLevelIndex, desc.strPrototypeTag, &desc));
 			break;
+		case CMonster_Factory::MONSTER_TYPE::MONSTER_LASERGHOST_D:
+			pMonster = dynamic_cast<CLaserGhost_D*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, desc.iPrototypeLevelIndex, desc.strPrototypeTag, &desc));
+			break;
 		default:
 			break;
 		}
@@ -57,7 +61,8 @@ CMonster_Factory* CMonster_Factory::Create()
 
 void CMonster_Factory::Free()
 {
-	__super::Free();
 	Safe_Release(m_pGameInstance);
 	DestroyInstance();
+
+	__super::Free();
 }
