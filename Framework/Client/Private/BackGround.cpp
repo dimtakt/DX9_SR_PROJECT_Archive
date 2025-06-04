@@ -140,9 +140,10 @@ CGameObject* CBackGround::Clone(void* pArg)
 
 void CBackGround::Free()
 {
-    __super::Free();
-
     Safe_Release(m_pVIBufferCom);
     Safe_Release(m_pTransformCom);
     Safe_Release(m_pTextureCom);
+
+    __super::Free();
+
 }

@@ -55,10 +55,10 @@ void CCollider_OBB::Update_Collider()
 	D3DXVec3Normalize(&m_vAxis[2], &m_vAxis[2]);
 
 	// 3. 반크기 (scale만 적용)
-	_float3 vScale = m_pTransformRef->Get_Scaled();
-	m_vWorldExtents.x = vScale.x * 0.5f;
-	m_vWorldExtents.y = vScale.y * 0.5f;
-	m_vWorldExtents.z = vScale.z * 0.5f;
+	//_float3 vScale = m_pTransformRef->Get_Scaled();
+	m_vWorldExtents.x = m_vScale.x * 0.5f;
+	m_vWorldExtents.y = m_vScale.y * 0.5f;
+	m_vWorldExtents.z = m_vScale.z * 0.5f;
 
 	// 4. 중심 보정
 	m_vWorldCenter = m_pTransformRef->Get_State(STATE::POSITION);

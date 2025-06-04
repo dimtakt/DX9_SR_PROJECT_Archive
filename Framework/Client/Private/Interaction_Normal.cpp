@@ -170,12 +170,12 @@ void CInteraction_Normal::Reset_RenderState()
 HRESULT CInteraction_Normal::EXP_Initialize()
 {
     // collider
-    CCollider_OBB::OBB_DESC tColliderDesc;
+    /*CCollider_OBB::OBB_DESC tColliderDesc;
     tColliderDesc.vScale = _float3(1.f, 0.001f, 1.f);
     tColliderDesc.pOwner = this;
     tColliderDesc.pTransform = m_pTransformCom;
     CCollider_OBB* pCol = dynamic_cast<CCollider_OBB*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::COMPONENT, ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Collider_OBB"), &tColliderDesc));
-    m_pGameInstance->Add_Collider(pCol);
+    m_pGameInstance->Add_Collider(pCol);*/
 
     return S_OK;
 }
@@ -227,9 +227,6 @@ HRESULT CInteraction_Normal::EXP_Component()
         TEXT("Com_VIBuffer"), reinterpret_cast<CComponent**>(&m_pVIBufferCom_0))))
         return E_FAIL;
 
-    if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_VIBuffer_Rect"),
-        TEXT("Com_VIBuffer_1"), reinterpret_cast<CComponent**>(&m_pVIBufferCom_1))))
-        return E_FAIL;
 
     if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Transform"),
         TEXT("Com_Transform"), reinterpret_cast<CComponent**>(&m_pTransformCom))))
@@ -241,7 +238,7 @@ HRESULT CInteraction_Normal::EXP_Component()
         return E_FAIL;
 
     if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_EXP_Big_Fx"),
-        TEXT("Com_Texture_1"), reinterpret_cast<CComponent**>(&m_pTextureCom_2))))
+        TEXT("Com_Texture_1"), reinterpret_cast<CComponent**>(&m_pTextureCom_1))))
         return E_FAIL;
 
     
@@ -253,7 +250,7 @@ HRESULT CInteraction_Normal::EXP_Component()
         return E_FAIL;
 
     m_pAnimatorCom_0->Add_State(L"EXP_big", { m_pTextureCom_0, 10, true });
-    m_pAnimatorCom_0->Add_State(L"EXP_Fx", { m_pTextureCom_2, 3, true });
+    m_pAnimatorCom_0->Add_State(L"EXP_Fx", { m_pTextureCom_1, 3, true });
     
 
     return S_OK;
@@ -325,12 +322,12 @@ HRESULT CInteraction_Normal::Gold_Component()
 HRESULT CInteraction_Normal::HP_Initialize()
 {
     // collider
-    CCollider_OBB::OBB_DESC tColliderDesc;
+    /*CCollider_OBB::OBB_DESC tColliderDesc;
     tColliderDesc.vScale = _float3(1.f, 0.001f, 1.f);
     tColliderDesc.pOwner = this;
     tColliderDesc.pTransform = m_pTransformCom;
     CCollider_OBB* pCol = dynamic_cast<CCollider_OBB*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::COMPONENT, ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Collider_OBB"), &tColliderDesc));
-    m_pGameInstance->Add_Collider(pCol);
+    m_pGameInstance->Add_Collider(pCol);*/
 
     return S_OK;
 }
@@ -698,15 +695,13 @@ CGameObject* CInteraction_Normal::Clone(void* pArg)
 
 void CInteraction_Normal::Free()
 {
-    __super::Free();
 
     Safe_Release(m_pVIBufferCom_0);
-    Safe_Release(m_pVIBufferCom_1);
     Safe_Release(m_pTransformCom);
     Safe_Release(m_pTextureCom_0);
     Safe_Release(m_pTextureCom_1);
-    Safe_Release(m_pTextureCom_2);
     Safe_Release(m_pAnimatorCom_0);
-    Safe_Release(m_pAnimatorCom_1);
 
+
+    __super::Free();
 }

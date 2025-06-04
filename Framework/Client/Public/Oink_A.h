@@ -20,7 +20,7 @@ public:
 	virtual HRESULT Render() override;
 
 private:
-	HRESULT Ready_Components();
+	HRESULT Ready_Components(void* pArg);
 
 public:
 	virtual void OnCollision(CGameObject* pGameObject) override;
@@ -39,6 +39,7 @@ private:
 	CAnimator* m_pAnimatorCom					= { nullptr };
 
 	_bool		m_isFlippedX					= false;
+	_int		m_iAtkCooldownFrames			= 0;
 
 public:
 	static COink_A* Create(LPDIRECT3DDEVICE9 pGraphic_Device);

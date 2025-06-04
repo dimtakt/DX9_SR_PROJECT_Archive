@@ -134,6 +134,7 @@ void CInventory::UI_Switch()
 	else
 		m_bIsOpen = true;
 
+
 }
 
 void CInventory::Add_Item_Inven(_uint ItemIndex)
@@ -153,6 +154,24 @@ _bool CInventory::Pick_Slot()
 		return true;
 	
 	return false;
+}
+
+void CInventory::Open_UI(_float fX, _float fY)
+{
+	m_bIsOpen = true;
+
+	m_fX += fX;
+	m_fY += fY;
+	__super::Update_Position();
+}
+
+void CInventory::Close_UI()
+{
+	m_bIsOpen = false;
+
+	m_fX = m_iWinSizeX * 0.5;
+	m_fY = m_iWinSizeY * 0.5;
+	__super::Update_Position();
 }
 
 
