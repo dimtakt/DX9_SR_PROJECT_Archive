@@ -761,7 +761,7 @@ void CLevel_MapEdit::ImGui_Interaction_Object_MenBar()
 		if (ImGui::Button("Create Interaction"))   //버튼입력시 선택한 값으로 생성
 		{
 			MAP_OBJECT_DESC  tSrc{};
-			tSrc.eType = static_cast<GAMEOBJ_TYPE>(iInteractionTexIndex + 7);
+			tSrc.eType = static_cast<GAMEOBJ_TYPE>(iInteractionTexIndex + 7);		//상호작용 타입 인덱스 7번부터
 			tSrc.iTextureIndex = iInteractionTexIndex;
 			tSrc.vPos = m_Translates;
 			tSrc.vScale = m_Scales;
@@ -912,8 +912,6 @@ void CLevel_MapEdit::Free()
 		m_pImgui_Manage = nullptr;
 	}
 
-	__super::Free();
-
 	for (auto& pair : m_ObjectTextureInfo)
 	{
 		if (pair.second.pTextureCom)
@@ -922,4 +920,14 @@ void CLevel_MapEdit::Free()
 		}
 	}
 	m_ObjectTextureInfo.clear();
+	
+	for (auto& pObj : m_pObject)
+	{
+		Safe_Release(pObj);
+	}
+	m_pObject.clear();
+
+	m_pObject_Desc.clear();
+
+	__super::Free();
 }

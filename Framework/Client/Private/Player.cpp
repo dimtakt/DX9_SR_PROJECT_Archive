@@ -682,7 +682,6 @@ CGameObject* CPlayer::Clone(void* pArg)
 void CPlayer::Free()
 {
     m_pGameInstance->Unsubscribe(ENUM_CLASS(EVENT_TYPE::UICHANGE), this);
-    __super::Free();
 
     Safe_Release(m_pVIBufferCom);
     Safe_Release(m_pTransformCom);
@@ -713,7 +712,7 @@ void CPlayer::Free()
         Safe_Release(m_pCollider);
     }*/
     
-
     CEffect_Factory::GetInstance()->Free();
     
+    __super::Free();
 }

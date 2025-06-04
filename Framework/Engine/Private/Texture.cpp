@@ -105,10 +105,10 @@ CComponent* CTexture::Clone(void* pArg)
 
 void CTexture::Free()
 {
-	__super::Free();
-
 	for (auto& pTexture : m_Textures)
 		Safe_Release(pTexture);
 
 	m_Textures.clear();
+
+	__super::Free();
 }

@@ -257,8 +257,9 @@ CGameObject* CCamera_Follow::Clone(void* pArg)
 void CCamera_Follow::Free()
 {
 	m_pGameInstance->Unsubscribe(ENUM_CLASS(EVENT_TYPE::ROOMCHANGE), this);
-	__super::Free();
 
 	Safe_Release(m_pTransformCom);
 	Safe_Release(m_pTargetPlayerTransformCom);
+
+	__super::Free();
 } 

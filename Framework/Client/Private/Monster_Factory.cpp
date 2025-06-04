@@ -57,7 +57,8 @@ CMonster_Factory* CMonster_Factory::Create()
 
 void CMonster_Factory::Free()
 {
-	__super::Free();
 	Safe_Release(m_pGameInstance);
 	DestroyInstance();
+
+	__super::Free();
 }

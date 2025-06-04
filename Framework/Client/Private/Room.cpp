@@ -366,9 +366,8 @@ CGameObject* CRoom::Clone(void* pArg)
 }
 void CRoom::Free()
 {
-	__super::Free();
-
 	Safe_Release(m_pTerrainBox);
+
 	for (auto& obj : m_vObject)
 	{
 		Safe_Release(obj);
@@ -389,4 +388,6 @@ void CRoom::Free()
 	m_vPotal.clear();
 
 	m_Object_Desc.clear();
+
+	__super::Free();
 }

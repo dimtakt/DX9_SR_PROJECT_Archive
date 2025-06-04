@@ -604,7 +604,6 @@ CGameObject* CInteraction_Normal::Clone(void* pArg)
 
 void CInteraction_Normal::Free()
 {
-    __super::Free();
 
     Safe_Release(m_pVIBufferCom_0);
     Safe_Release(m_pVIBufferCom_1);
@@ -615,4 +614,6 @@ void CInteraction_Normal::Free()
     Safe_Release(m_pAnimatorCom_0);
     Safe_Release(m_pAnimatorCom_1);
 
+
+    __super::Free();
 }

@@ -301,7 +301,6 @@ void CRoom_Manager::Free()
 {
 	for (auto& pair : m_mRooms)
 	{
-		_int iKey = pair.first;
 		vector<CRoom*>& vRooms = pair.second;
 
 		for (CRoom* pRoom : vRooms)
@@ -311,13 +310,14 @@ void CRoom_Manager::Free()
 		vRooms.clear();
 	}
 	m_mRooms.clear();
-	Safe_Release(m_pGameInstance);
 
 	m_RoomIndex.clear();
 
-	__super::Free();
+	Safe_Release(m_pGameInstance);
 
 	DestroyInstance();
+
+	__super::Free();
 }
 
 void CRoom_Manager::RoomIndexAdd()
