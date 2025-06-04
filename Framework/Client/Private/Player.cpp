@@ -664,7 +664,7 @@ HRESULT CPlayer::Ready_Object()
 {
     m_pHpBar = dynamic_cast<CField_Hp*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_Field_Hp")));
 
-    return E_NOTIMPL;
+    return S_OK;
 }
 
 void CPlayer::SetUp_RenderState()

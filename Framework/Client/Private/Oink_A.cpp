@@ -34,7 +34,8 @@ HRESULT COink_A::Initialize(void* pArg)
 
 void COink_A::Priority_Update(_float fTimeDelta)
 {
-
+    if (m_pHpBar != nullptr)
+        m_pHpBar->Render_HP_Progress(m_pTransformCom, m_iCulHp, m_iMaxHp);
 }
 
 void COink_A::Update(_float fTimeDelta)
@@ -330,6 +331,13 @@ HRESULT COink_A::Ready_Components(void* pArg)
 	m_pAnimatorCom->Add_State(L"Charge_Airborne",       { m_pTextureCom_Charge_Airborne, 4, false });
     m_pAnimatorCom->Add_State(L"Attack_Standby",        { m_pTextureCom_Idle, 6, false });
     
+
+    return S_OK;
+}
+
+HRESULT COink_A::Ready_Object()
+{
+    m_pHpBar = dynamic_cast<CField_Hp*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_Field_Hp")));
 
     return S_OK;
 }

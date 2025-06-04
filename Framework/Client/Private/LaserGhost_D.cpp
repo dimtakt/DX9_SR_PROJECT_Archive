@@ -34,7 +34,8 @@ HRESULT CLaserGhost_D::Initialize(void* pArg)
 
 void CLaserGhost_D::Priority_Update(_float fTimeDelta)
 {
-
+    if (m_pHpBar != nullptr)
+        m_pHpBar->Render_HP_Progress(m_pTransformCom, m_iCulHp, m_iMaxHp);
 }
 
 void CLaserGhost_D::Update(_float fTimeDelta)
@@ -472,7 +473,6 @@ HRESULT CLaserGhost_D::Ready_Components(void* pArg)
         return E_FAIL;
     
     // State »ðÀÔ
-    m_pAnimatorCom->Add_State(L"Attack_Standby",{ m_pTextureCom_Idle, 4, false });          // 14
     m_pAnimatorCom->Add_State(L"Idle",          { m_pTextureCom_Idle, 4, true });           // 14
     m_pAnimatorCom->Add_State(L"Move",          { m_pTextureCom_Move, 4, true });           // 14
     m_pAnimatorCom->Add_State(L"Down",          { m_pTextureCom_Down, 4, true });           // 3
@@ -481,6 +481,14 @@ HRESULT CLaserGhost_D::Ready_Components(void* pArg)
     m_pAnimatorCom->Add_State(L"Attack_Cycle",  { m_pTextureCom_Attack_Cycle, 4, false });  // 7
     m_pAnimatorCom->Add_State(L"Attack_End",    { m_pTextureCom_Attack_End, 4, false });    // 8
     m_pAnimatorCom->Add_State(L"Airborne",      { m_pTextureCom_Airborne, 4, false });      // 3
+    m_pAnimatorCom->Add_State(L"Attack_Standby",{ m_pTextureCom_Idle, 4, false });          // 14
+
+    return S_OK;
+}
+
+HRESULT CLaserGhost_D::Ready_Object()
+{
+    m_pHpBar = dynamic_cast<CField_Hp*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_Field_Hp")));
 
     return S_OK;
 }

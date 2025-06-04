@@ -1,6 +1,7 @@
 #pragma once
 #include "Monster.h"
 #include "Client_Defines.h"
+#include "Field_Hp.h"
 
 BEGIN(Client)
 
@@ -21,6 +22,7 @@ public:
 
 private:
 	HRESULT Ready_Components(void* pArg);
+	HRESULT Ready_Object();
 
 public:
 	virtual void OnCollision(CGameObject* pGameObject) override;
@@ -41,7 +43,12 @@ private:
 	_bool		m_isRunOut = false;
 	_float3		m_vLockedOnPos = {};
 
+	CField_Hp*	m_pHpBar					= { nullptr };
 	//_int		m_iAtkCooldownFrames = 0;
+
+		// Ω∫≈» ¡§∫∏
+	_int		m_iCulHp					= 70;
+	_int		m_iMaxHp					= 70;
 
 public:
 	static CLaserGhost_D* Create(LPDIRECT3DDEVICE9 pGraphic_Device);

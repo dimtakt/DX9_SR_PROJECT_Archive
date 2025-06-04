@@ -35,7 +35,7 @@ public:
 	virtual HRESULT Render() override;
 
 public:
-	HRESULT Ready_Components();
+	HRESULT Ready_Components(void* pArg);
 	void SetUp_RenderState();
 	void Reset_RenderState();
 
