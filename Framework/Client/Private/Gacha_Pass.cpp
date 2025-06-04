@@ -24,7 +24,7 @@ HRESULT CGacha_Pass::Initialize(void* pArg)
 	m_fSizeX = 200;
 	m_fSizeY = 200;
 	m_fX = -320;
-	m_fY = 300;
+	m_fY = 240;
 	m_fZ = UI_DEPTH::GACHA;
 	m_iWinSizeX = g_iWinSizeX;
 	m_iWinSizeY = g_iWinSizeY;
@@ -52,23 +52,6 @@ void CGacha_Pass::Priority_Update(_float fTimeDelta)
 void CGacha_Pass::Update(_float fTimeDelta)
 {
 
-	if (Reset_Pick())
-	{
-		if (m_pGameInstance->IsKeyDown(VK_LBUTTON))
-			m_bHold = true;
-	}
-	else
-	{
-		m_bHold = false;
-	}
-	if (m_pGameInstance->IsKeyUp(VK_LBUTTON))
-		m_bHold = false;
-
-	if (m_bHold)
-		m_iClickValue += 80 * fTimeDelta;
-	else
-		m_iClickValue = 0;
-
 	CUIObject::Update(fTimeDelta);
 }
 
@@ -82,10 +65,10 @@ HRESULT CGacha_Pass::Render()
 {
 	SetUp_RenderState();
 
-	if (Reset_Pick())
-		__super::Render_Button(2);
-	else
+	if (Button_Pick())
 		__super::Render_Button(3);
+	else
+		__super::Render_Button(2);
 	Font_Render();
 	Reset_RenderState();
 	return S_OK;
@@ -166,13 +149,13 @@ void CGacha_Pass::Font_Render()
 
 }
 
-_bool CGacha_Pass::Reset_Pick()
+_bool CGacha_Pass::Button_Pick()
 {
 	POINT			ptMouse{};
 	GetCursorPos(&ptMouse);
 	ScreenToClient(g_hWnd, &ptMouse);
 
-	RECT			rcUI = { m_vWorldPos.x - m_fSizeX * 0.5f, m_vWorldPos.y - m_fSizeY * 0.5f + 60, m_vWorldPos.x + m_fSizeX * 0.5f, +m_vWorldPos.y + m_fSizeY * 0.5f + 60 };
+	RECT			rcUI = { m_vWorldPos.x - m_fSizeX * 0.5f, m_vWorldPos.y - m_fSizeY * 0.5f + 80, m_vWorldPos.x + m_fSizeX * 0.5f, +m_vWorldPos.y + m_fSizeY * 0.5f - 50};
 
 	return PtInRect(&rcUI, ptMouse);
 }

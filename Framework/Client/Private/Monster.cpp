@@ -123,17 +123,17 @@ void CMonster::Reset_RenderState()
 
 void CMonster::OnCollision(CGameObject* pGameObject)
 {
-	CTransform* pTransform = dynamic_cast<CTransform*>(pGameObject->Find_Component(TEXT("Com_Transform")));
-	switch (pGameObject->Get_ObjType())
-	{
-	case GAMEOBJ_TYPE::PLAYER:
-		{
-			/*_float3 vDir = m_pTransformCom->Get_State(STATE::POSITION) - pTransform->Get_State(STATE::POSITION);*/
-			//m_pTransformCom->Look_At(pTransform->Get_State(STATE::POSITION));
-			m_pTransformCom->Move_To(pTransform->Get_State(STATE::POSITION), 0.01f, 0.05f);
-			break;
-		}
-	}
+	//CTransform* pTransform = dynamic_cast<CTransform*>(pGameObject->Find_Component(TEXT("Com_Transform")));
+	//switch (pGameObject->Get_ObjType())
+	//{
+	//case GAMEOBJ_TYPE::PLAYER:
+	//	{
+	//		/*_float3 vDir = m_pTransformCom->Get_State(STATE::POSITION) - pTransform->Get_State(STATE::POSITION);*/
+	//		//m_pTransformCom->Look_At(pTransform->Get_State(STATE::POSITION));
+	//		m_pTransformCom->Move_To(pTransform->Get_State(STATE::POSITION), 0.01f, 0.05f);
+	//		break;
+	//	}
+	//}
 }
 
 CMonster* CMonster::Create(LPDIRECT3DDEVICE9 pGraphic_Device)

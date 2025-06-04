@@ -142,7 +142,7 @@ void CMole_A::Update(_float fTimeDelta)
     if (m_pAnimatorCom->Get_CurStateTag() == L"Attack" &&
         m_pAnimatorCom->Get_CurStackedFrame() == 20)
     {
-        CEffect_Factory::GetInstance()->Create_Effect(L"Prototype_Component_Texture_Mole_A_Effect_Swing",
+        CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::MONSTER_EFFECT, L"Prototype_Component_Texture_Mole_A_Effect_Swing",
             *m_pTransformCom->Get_WorldMatrix(), matMonsterWorld, true);
     }
     else if (m_pAnimatorCom->Get_CurStateTag() == L"Attack" &&

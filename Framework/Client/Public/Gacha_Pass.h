@@ -33,7 +33,7 @@ private:
 
 	void							Font_Render();
 
-	_bool							Reset_Pick();
+	_bool							Button_Pick();
 
 public:
 	static CGacha_Pass* Create(LPDIRECT3DDEVICE9 pGraphic_Device, LEVEL eLevel);
