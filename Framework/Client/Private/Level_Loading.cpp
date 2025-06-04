@@ -7,6 +7,7 @@
 #include "Level_MapEdit.h"
 #include "Level_Stage1.h"
 #include "Level_Stage2.h"
+#include "Loding_UI.h"
 
 CLevel_Loading::CLevel_Loading(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CLevel { pGraphic_Device }
@@ -64,8 +65,12 @@ HRESULT CLevel_Loading::Render()
 
 HRESULT CLevel_Loading::Ready_GameObjects()
 {
+	CLoding_UI::LOADINGDESC desc{};
+
+	desc.pNewLevel = m_eNextLevelID;
+
 	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_LOADING), TEXT("Layer_UI"),
-		ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_Loding"))))
+		ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_Loding"), &desc)))
 		return E_FAIL;
 
 

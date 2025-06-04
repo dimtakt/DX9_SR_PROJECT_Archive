@@ -1,5 +1,7 @@
 #include "Loding_Ani.h"
+#include "Loding_UI.h"
 #include "GameInstance.h"
+#include "Animation.h"
 CLoding_Ani::CLoding_Ani(LPDIRECT3DDEVICE9 pGraphic_Device) : CUIObject(pGraphic_Device)
 {
 }
@@ -17,8 +19,8 @@ HRESULT CLoding_Ani::Initialize_Prototype(LEVEL eLevel)
 
 HRESULT CLoding_Ani::Initialize(void* pArg)
 {
-	m_fSpeed = 0;
-	m_iTexIndex = 0;
+	//m_fSpeed = 0;
+	//m_iTexIndex = 0;
 	m_fSizeX = 260 + g_iWinSizeX;
 	m_fSizeY = 260 + g_iWinSizeX;
 	m_fX = 0;
@@ -26,6 +28,10 @@ HRESULT CLoding_Ani::Initialize(void* pArg)
 	m_fZ = UI_DEPTH::LODING;
 	m_iWinSizeX = g_iWinSizeX;
 	m_iWinSizeY = g_iWinSizeY;
+
+	CLoding_UI::LOADINGDESC* desc = static_cast<CLoding_UI::LOADINGDESC*>(pArg);
+
+	m_eLevel = desc->pNewLevel;
 
 	if (FAILED(__super::Initialize()))
 		return E_FAIL;
@@ -46,16 +52,16 @@ void CLoding_Ani::Priority_Update(_float fTimeDelta)
 void CLoding_Ani::Update(_float fTimeDelta)
 {
 	
-	m_fSpeed += 10 * fTimeDelta;
+	//m_fSpeed += 10 * fTimeDelta;
 
-	if (m_fSpeed >= 1) 
-	{
-	m_iTexIndex += m_fSpeed;
-	m_fSpeed = 0;
-	}
+	//if (m_fSpeed >= 1) 
+	//{
+	//m_iTexIndex += m_fSpeed;
+	//m_fSpeed = 0;
+	//}
 
-	if (m_iTexIndex >= 20)
-		m_iTexIndex = 0;
+	//if (m_iTexIndex >= 20)
+	//	m_iTexIndex = 0;
 }
 
 void CLoding_Ani::Late_Update(_float fTimeDelta)
@@ -65,8 +71,10 @@ void CLoding_Ani::Late_Update(_float fTimeDelta)
 
 HRESULT CLoding_Ani::Render()
 {
-	if (FAILED(m_pTextureCom->Bind_Texture(m_iTexIndex)))
-		return E_FAIL;
+	/*if (FAILED(m_pTextureCom->Bind_Texture(m_iTexIndex)))
+		return E_FAIL;*/
+	
+	m_pAnimatorCom->Update_State();
 	m_pVIBufferCom->Bind_Buffers();
 
 	__super::Begin();
@@ -86,9 +94,46 @@ HRESULT CLoding_Ani::Ready_Components()
 		TEXT("Com_Transform"), reinterpret_cast<CComponent**>(&m_pTransformCom))))
 		return E_FAIL;
 
-	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Rect_Loding_1"),
-		TEXT("Com_Texture"), reinterpret_cast<CComponent**>(&m_pTextureCom))))
+
+	CAnimator::ANIMSTATE_DESC StartAnimStateDesc{};
+	StartAnimStateDesc.strTimerTag = L"Animator_Loading";
+
+	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Animator"),
+		TEXT("Com_Animator"), reinterpret_cast<CComponent**>(&m_pAnimatorCom), &StartAnimStateDesc)))
 		return E_FAIL;
+
+	
+	if (m_eLevel == LEVEL::LEVEL_STAGE1)
+	{
+		if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Rect_Loding_1"),
+			TEXT("Com_Texture"), reinterpret_cast<CComponent**>(&m_pTextureCom))))
+			return E_FAIL;
+	}
+	else if (m_eLevel == LEVEL::LEVEL_STAGE2)
+	{
+		if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Rect_Loding_2"),
+			TEXT("Com_Texture"), reinterpret_cast<CComponent**>(&m_pTextureCom))))
+			return E_FAIL;
+	}
+	else if (m_eLevel == LEVEL::LEVEL_STAGE3)
+	{
+		if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Rect_Loding_3_BG"),
+			TEXT("Com_Texture"), reinterpret_cast<CComponent**>(&m_pTextureCom))))
+			return E_FAIL;
+	}
+	else if (m_eLevel == LEVEL::LEVEL_STAGE4)
+	{
+		if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Rect_Loding_4_BG"),
+			TEXT("Com_Texture"), reinterpret_cast<CComponent**>(&m_pTextureCom))))
+			return E_FAIL;
+	}
+	else {
+		if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Rect_Loding_1"),
+			TEXT("Com_Texture"), reinterpret_cast<CComponent**>(&m_pTextureCom))))
+			return E_FAIL;
+	}
+
+	m_pAnimatorCom->Add_State(L"Loading", { m_pTextureCom, 4, true });
 
 	return S_OK;
 }
@@ -123,4 +168,5 @@ void CLoding_Ani::Free()
 
 	Safe_Release(m_pTextureCom);
 	Safe_Release(m_pVIBufferCom);
+	Safe_Release(m_pAnimatorCom);
 }
