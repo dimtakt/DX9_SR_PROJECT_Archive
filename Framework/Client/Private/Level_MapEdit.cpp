@@ -761,7 +761,18 @@ void CLevel_MapEdit::ImGui_Interaction_Object_MenBar()
 		if (ImGui::Button("Create Interaction"))   //버튼입력시 선택한 값으로 생성
 		{
 			MAP_OBJECT_DESC  tSrc{};
-			tSrc.eType = static_cast<GAMEOBJ_TYPE>(iInteractionTexIndex + 7);		//상호작용 타입 인덱스 7번부터
+			if (iInteractionTexIndex == 0)
+				tSrc.eType = GAMEOBJ_TYPE::EXP;
+			else if (iInteractionTexIndex == 1)
+				tSrc.eType = GAMEOBJ_TYPE::GOLD;
+			else if (iInteractionTexIndex == 2)
+				tSrc.eType = GAMEOBJ_TYPE::HP;
+			else if (iInteractionTexIndex == 3)
+				tSrc.eType = GAMEOBJ_TYPE::ATIFACT;
+			else if (iInteractionTexIndex == 4)
+				tSrc.eType = GAMEOBJ_TYPE::STONE_TABLET;
+			else
+				tSrc.eType = GAMEOBJ_TYPE::MERCAHNT;
 			tSrc.iTextureIndex = iInteractionTexIndex;
 			tSrc.vPos = m_Translates;
 			tSrc.vScale = m_Scales;
