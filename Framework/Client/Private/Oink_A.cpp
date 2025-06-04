@@ -26,7 +26,7 @@ HRESULT COink_A::Initialize(void* pArg)
     if (FAILED(this->Ready_Components(pArg)))
         return E_FAIL;
 
-    
+    Ready_Object();
     m_iAtkCooldownFrames = static_cast<_int>(m_pGameInstance->Compute_Random(0, 300));
 
     return S_OK;

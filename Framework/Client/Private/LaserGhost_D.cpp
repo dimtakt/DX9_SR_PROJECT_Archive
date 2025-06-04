@@ -28,6 +28,7 @@ HRESULT CLaserGhost_D::Initialize(void* pArg)
 
     m_isRunOut = false;
     //m_iAtkCooldownFrames = static_cast<_int>(m_pGameInstance->Compute_Random(0, 300));
+    Ready_Object();
 
     return S_OK;
 }
@@ -237,9 +238,10 @@ void CLaserGhost_D::Update(_float fTimeDelta)
 
             matMonsterWorld = matTransToOrigin * matScale * matRotateChild * matRotateChildtoPlayer * matTransReturn * matTransOffset * matTransAddition;
 #pragma endregion
+          
             // 공격 이펙트 출력
             CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::MONSTER_EFFECT, L"Prototype_Component_Texture_LaserGhost_D_Effect_Laser_Progress",
-                *m_pTransformCom->Get_WorldMatrix(), matMonsterWorld, { 0, 0, 0 }, 0.f, fLaserLifeTime, D3DXToRadian(fLaserTurnAngle));
+                *m_pTransformCom->Get_WorldMatrix(), matMonsterWorld, { 0, 0, 0 }, 0.f, fLaserLifeTime, D3DXToRadian(fLaserTurnAngle * sign));
             // 세팅 리셋
 #pragma region Laser Setting Reset
             D3DXMatrixScaling(&matScale, -1.f, 1.f, 1.f);
@@ -270,7 +272,6 @@ void CLaserGhost_D::Update(_float fTimeDelta)
             CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::MONSTER_EFFECT, L"Prototype_Component_Texture_LaserGhost_D_Effect_Attack_End",
                 *m_pTransformCom->Get_WorldMatrix(), matMonsterWorld, true);
             // 레이저용 세팅
-
 #pragma region Laser Setting Change
             D3DXMatrixScaling(&matScale, -1.f, 10.f, 10.f);
 
