@@ -20,6 +20,7 @@ public:
 		_float3 vScale;
 
 		_float4x4 matWorld;
+		_float4x4 matOriginWorld;
 		_bool isMatWorld = false;
 		_bool isFlippedX = false;
 
@@ -28,6 +29,7 @@ public:
 		_float3 vThrownDir = {};
 		_float fThrownPower = 0.f;
 		_float fLifeTimeSec = 0.f;
+		_float fDeltaAngle = 0.f;
 
 		GAMEOBJ_TYPE eType;
 	} EFFECT_DESC;
@@ -56,8 +58,11 @@ protected:
 	_float3			m_vThrownDir = {};
 	_float			m_fThrownPower = 0.f;
 	_float			m_fLifeTimeSec = 0.f;
+	_float			m_fDeltaAngle = 0.f;
 
 	_uint			m_iStackedFrame = 0;
+
+	_float3			m_vEffectStartPos = {};
 
 public:
 	virtual CGameObject* Clone(void* pArg) = 0;

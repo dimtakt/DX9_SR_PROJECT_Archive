@@ -509,14 +509,14 @@ void CPlayer::OnCollision(CGameObject* pGameObject)
         break;
     }
 
-    case GAMEOBJ_TYPE::MONSTER_EFFECT:
+    /*case GAMEOBJ_TYPE::MONSTER_EFFECT:
     {
         if (!m_bIsHit) {
             CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CULHP, -5.f);
             m_bIsHit = true;
         }
         break;
-    }
+    }*/
         
     }
 }
@@ -673,6 +673,7 @@ HRESULT CPlayer::Ready_Components(void* pArg)
     tColliderDesc.vScale = _float3(1.f, 3.f, 1.f);
     tColliderDesc.pOwner = this;
     tColliderDesc.pTransform = m_pTransformCom;
+    tColliderDesc.eType = m_eObjType;
     CCollider_OBB* pCol = dynamic_cast<CCollider_OBB*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::COMPONENT, ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Collider_OBB"), &tColliderDesc));
     m_pGameInstance->Add_Collider(pCol);
     return S_OK;
@@ -682,7 +683,7 @@ HRESULT CPlayer::Ready_Object()
 {
     m_pHpBar = dynamic_cast<CField_Hp*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_Field_Hp")));
 
-    return E_NOTIMPL;
+    return S_OK;
 }
 
 void CPlayer::SetUp_RenderState()

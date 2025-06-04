@@ -3,6 +3,7 @@
 #include "GameInstance.h"
 #include "Client_Defines.h"
 #include "TerrainBox.h"
+#include "Field_Hp.h"
 
 BEGIN(Engine)
 class CCollider_OBB;
@@ -35,7 +36,7 @@ public:
 	virtual HRESULT Render() override;
 
 public:
-	HRESULT Ready_Components();
+	HRESULT Ready_Components(void* pArg);
 	void SetUp_RenderState();
 	void Reset_RenderState();
 
@@ -45,6 +46,9 @@ public:
 public:
 	class CTransform* Get_Transform() { return m_pTransformCom; }
 
+public:
+	void Set_Damage(_float fDamage) { m_iCulHp += fDamage; }
+
 protected:
 	class CTransform* m_pTransformCom = { nullptr };
 	class CTexture* m_pTextureCom = { nullptr };
@@ -53,6 +57,12 @@ protected:
 	_bool m_isTracking = false;
 	_bool					m_bIsHit = { false };
 	DWORD					m_dwHitTime = {};
+
+	CField_Hp* m_pHpBar = { nullptr };
+
+	// Ω∫≈» ¡§∫∏
+	_int		m_iCulHp = {};
+	_int		m_iMaxHp = {};
 
 public:
 	static CMonster* Create(LPDIRECT3DDEVICE9 pGraphic_Device);

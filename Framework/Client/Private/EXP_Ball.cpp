@@ -35,6 +35,7 @@ HRESULT CEXP_Ball::Initialize(void* pArg)
     tColliderDesc.vScale = _float3(1.f, 2.f, 1.f);
     tColliderDesc.pOwner = this;
     tColliderDesc.pTransform = m_pTransformCom;
+    tColliderDesc.eType = m_eObjType;
     CCollider_OBB* pCol = dynamic_cast<CCollider_OBB*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::COMPONENT, ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Collider_OBB"), &tColliderDesc));
     m_pGameInstance->Add_Collider(pCol);
 

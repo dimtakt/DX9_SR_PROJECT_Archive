@@ -1,4 +1,5 @@
 #include "Stat_Manager.h"
+#include "GameInstance.h"
 
 IMPLEMENT_SINGLETON(CStat_Manager)
 
@@ -43,6 +44,10 @@ HRESULT CStat_Manager::Initialize()
     m_fCurStats[static_cast<int>(STAT_INFO::LEVEL)] = 1.f; // 레벨
     m_fCurStats[static_cast<int>(STAT_INFO::GOLD)] = 0.f; // 보유 골드
     m_fCurStats[static_cast<int>(STAT_INFO::DICE)] = 3.f; // 주사위
+
+    m_pGameInstance = CGameInstance::GetInstance();
+
+    Safe_AddRef(m_pGameInstance);
 
     return S_OK;
 }
@@ -103,7 +108,34 @@ void CStat_Manager::Reset_CurStats()
     }
 }
 
+_float CStat_Manager::Get_Damage(DAMAGE eDamage)
+{
+    _float fDamage = 0.f;
+    if (eDamage == DAMAGE::NORMAL)
+    {
+        fDamage = m_fCurStats[static_cast<int>(STAT_INFO::CULDAMAGE)];
+    }
+    else if (eDamage == DAMAGE::SPECIAL)
+    {
+        fDamage = m_fCurStats[static_cast<int>(STAT_INFO::CULDAMAGE)] + 10;
+    }
+    else if (eDamage == DAMAGE::DASH)
+    {
+        fDamage = m_fCurStats[static_cast<int>(STAT_INFO::CULDAMAGE)] + 5;
+    }
+    
+    _float fRand = m_pGameInstance->Compute_Random(0, 99);
+
+    if (fRand < m_fCurStats[static_cast<int>(STAT_INFO::CULCRITICAL)])
+    {
+        fDamage = fDamage * (1.0f + m_fCurStats[static_cast<int>(STAT_INFO::CRITICALDAMAGE)] / 100.0f);;
+    }
+
+    return fDamage;
+}
+
 void CStat_Manager::Free()
 {
+    Safe_Release(m_pGameInstance);
     DestroyInstance();
 }

@@ -136,6 +136,7 @@ void CRoom::Late_Update(_float fTimeDelta)
 								tColliderDesc.vScale = _float3(1.f, 3.f, 1.f);
 								tColliderDesc.pOwner = (*it);
 								tColliderDesc.pTransform = dynamic_cast<CTransform*>((*it)->Find_Component(TEXT("Com_Transform")));
+								tColliderDesc.eType = (*it)->Get_ObjType();
 								CCollider_OBB* pCol = dynamic_cast<CCollider_OBB*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::COMPONENT, ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Collider_OBB"), &tColliderDesc));
 								m_pGameInstance->Add_Collider(pCol);
 								if(it == m_vPotal.end() - 1)
@@ -367,6 +368,7 @@ void CRoom::Enter()
 			tColliderDesc.vScale = _float3(1.f, 3.f, 1.f);
 			tColliderDesc.pOwner = pMonster;
 			tColliderDesc.pTransform = pMonster->Get_Transform();
+			tColliderDesc.eType = pMonster->Get_ObjType();
 			CCollider_OBB* pCol = dynamic_cast<CCollider_OBB*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::COMPONENT, ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Collider_OBB"), &tColliderDesc));
 			m_pGameInstance->Add_Collider(pCol);
 		}
@@ -382,6 +384,7 @@ void CRoom::Enter()
 			tColliderDesc.vScale = _float3(1.0f, 3.f, 1.0f);
 			tColliderDesc.pOwner = pObject;
 			tColliderDesc.pTransform = dynamic_cast<CTransform*>(pObject->Find_Component(TEXT("Com_Transform")));
+			tColliderDesc.eType = pObject->Get_ObjType();;
 			CCollider_OBB* pCol = dynamic_cast<CCollider_OBB*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::COMPONENT, ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Collider_OBB"), &tColliderDesc));
 			m_pGameInstance->Add_Collider(pCol);
 		}
