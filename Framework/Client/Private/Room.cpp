@@ -286,6 +286,8 @@ HRESULT CRoom::Load_From_File(_uint iLayerLevelIndex, const _wstring& strLayerTa
 	}
 	ifile.close();
 
+	_bool bIsTerrain = false;
+
 	for (auto& pDesc : m_Object_Desc)
 	{
 		if (pDesc.eType == GAMEOBJ_TYPE::OBJECT)
@@ -308,19 +310,22 @@ HRESULT CRoom::Load_From_File(_uint iLayerLevelIndex, const _wstring& strLayerTa
 		}
 		else if (pDesc.eType == GAMEOBJ_TYPE::TERRAIN)
 		{
-			MAP_OBJECT_DESC tSrc{};
-			tSrc.iTextureIndex = pDesc.iTextureIndex;
-			tSrc.vPos = pDesc.vPos + m_ObjectOffset;
-			tSrc.vScale = pDesc.vScale;
+			if (!bIsTerrain) {
+				MAP_OBJECT_DESC tSrc{};
+				tSrc.iTextureIndex = pDesc.iTextureIndex;
+				tSrc.vPos = pDesc.vPos + m_ObjectOffset;
+				tSrc.vScale = pDesc.vScale;
 
-			/*m_pGameInstance->Add_GameObject_ToLayer(
-				iLayerLevelIndex, strLayerTag,
-				iLayerLevelIndex,
-				TEXT("Prototype_GameObject_TerrainBox"),
-				&tSrc);*/
-			m_pTerrainBox = dynamic_cast<CTerrainBox*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, iLayerLevelIndex, TEXT("Prototype_GameObject_TerrainBox"), &tSrc));
+				/*m_pGameInstance->Add_GameObject_ToLayer(
+					iLayerLevelIndex, strLayerTag,
+					iLayerLevelIndex,
+					TEXT("Prototype_GameObject_TerrainBox"),
+					&tSrc);*/
+				m_pTerrainBox = dynamic_cast<CTerrainBox*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, iLayerLevelIndex, TEXT("Prototype_GameObject_TerrainBox"), &tSrc));
 
-		/*	CGameObject* pGameObject = m_pGameInstance->Get_LastGameObject(iLayerLevelIndex, strLayerTag);*/
+				/*	CGameObject* pGameObject = m_pGameInstance->Get_LastGameObject(iLayerLevelIndex, strLayerTag);*/
+				bIsTerrain = true;
+			}
 		}
 		else
 		{

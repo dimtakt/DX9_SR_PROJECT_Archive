@@ -74,6 +74,9 @@ void CStat_Manager::Cal_Stats(STAT_INFO eStat, float fValue)
 {
     m_fCurStats[static_cast<int>(eStat)] += fValue;
 
+    if (m_fCurStats[static_cast<int>(eStat)] <= 0)
+        m_fCurStats[static_cast<int>(eStat)] = 0;
+
     if (eStat == STAT_INFO::EXP)
     {
         if (m_fCurStats[static_cast<int>(eStat)] >= 100.f)

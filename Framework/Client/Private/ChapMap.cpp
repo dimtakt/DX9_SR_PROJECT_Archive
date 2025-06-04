@@ -72,8 +72,8 @@ void CChapMap::Update(_float fTimeDelta)
 	if (!m_bIsUpdate)
 		return;
 
-	if (m_pGameInstance->IsKeyDown('F'))
-		UI_Switch();
+	/*if (m_pGameInstance->IsKeyDown('F'))
+		UI_Switch();*/
 
 	if (!m_bisOpen)
 		return;
