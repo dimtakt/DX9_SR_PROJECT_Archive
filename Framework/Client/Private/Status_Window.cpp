@@ -13,20 +13,6 @@ CStatus_Window::CStatus_Window(const CStatus_Window& Prototype) : CUIObject(Prot
 {
 }
 
-void CStatus_Window::UI_Switch()
-{
-	if (m_bIsOpen)
-	{
-		m_bIsOpen = false;
-		static_cast<CHud_States_Frame*>(m_pGameInstance->Get_GameObject(m_pGameInstance->Get_CurrentLevel(), TEXT("Layer_Hud_States")))->FontRender_Switch();
-	}
-	else
-	{
-		static_cast<CHud_States_Frame*>(m_pGameInstance->Get_GameObject(m_pGameInstance->Get_CurrentLevel(), TEXT("Layer_Hud_States")))->FontRender_Switch();
-		m_bIsOpen = true;
-	}
-}
-
 HRESULT CStatus_Window::Initialize_Prototype(LEVEL eLevel)
 {
 	m_eLevel = eLevel;
@@ -59,25 +45,52 @@ HRESULT CStatus_Window::Initialize(void* pArg)
 	if (FAILED(Ready_Children()))
 		return E_FAIL;
 
+	m_pGameInstance->Add_UIObject(ENUM_CLASS(m_eLevel), TEXT("UI_Status"), this);
+
 	return S_OK;
+}
+
+void CStatus_Window::UI_Switch()
+{
+	if (m_bIsOpen)
+	{
+		m_bIsOpen = false;
+		static_cast<CHud_States_Frame*>(m_pGameInstance->Get_GameObject(m_pGameInstance->Get_CurrentLevel(), TEXT("Layer_Hud_States")))->FontRender_Switch();
+	}
+	else
+	{
+		static_cast<CHud_States_Frame*>(m_pGameInstance->Get_GameObject(m_pGameInstance->Get_CurrentLevel(), TEXT("Layer_Hud_States")))->FontRender_Switch();
+		m_bIsOpen = true;
+	}
 }
 
 void CStatus_Window::Priority_Update(_float fTimeDelta)
 {
 	if (m_pGameInstance->Get_CurrentLevel() == ENUM_CLASS(LEVEL::LEVEL_LOADING) || m_pGameInstance->Get_CurrentLevel() == ENUM_CLASS(LEVEL::LEVEL_LOGO) || m_pGameInstance->Get_CurrentLevel() == ENUM_CLASS(LEVEL::LEVEL_MAPEDIT))
 		return;
+	
+	if (!m_bIsUpdate)
+		return;
 
-	if (m_bIsOpen)
-		__super::Priority_Update(fTimeDelta);
+	if (!m_bIsOpen)
+		return;
+
+	__super::Priority_Update(fTimeDelta);
+	
 }
 
 void CStatus_Window::Update(_float fTimeDelta)
 {
 	if (m_pGameInstance->Get_CurrentLevel() == ENUM_CLASS(LEVEL::LEVEL_LOADING) || m_pGameInstance->Get_CurrentLevel() == ENUM_CLASS(LEVEL::LEVEL_LOGO) || m_pGameInstance->Get_CurrentLevel() == ENUM_CLASS(LEVEL::LEVEL_MAPEDIT))
 		return;
+	
+	if (!m_bIsUpdate)
+		return;
 
-	if (m_bIsOpen)
-		__super::Update(fTimeDelta);
+	if (!m_bIsOpen)
+		return;
+
+	__super::Update(fTimeDelta);
 }
 
 void CStatus_Window::Late_Update(_float fTimeDelta)
@@ -85,8 +98,13 @@ void CStatus_Window::Late_Update(_float fTimeDelta)
 	if (m_pGameInstance->Get_CurrentLevel() == ENUM_CLASS(LEVEL::LEVEL_LOADING) || m_pGameInstance->Get_CurrentLevel() == ENUM_CLASS(LEVEL::LEVEL_LOGO) || m_pGameInstance->Get_CurrentLevel() == ENUM_CLASS(LEVEL::LEVEL_MAPEDIT))
 		return;
 
-	if (m_bIsOpen)
-		__super::Late_Update(fTimeDelta);
+	if (!m_bIsUpdate)
+		return;
+
+	if (!m_bIsOpen)
+		return;
+
+	__super::Late_Update(fTimeDelta);
 }
 
 HRESULT CStatus_Window::Render()

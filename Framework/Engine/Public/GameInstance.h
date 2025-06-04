@@ -145,6 +145,17 @@ public:
 	void Broadcast(_uint iTypeIndex, const EVENTDATA* pData);
 #pragma endregion
 
+#pragma region UIOBJECT_MANAGER
+	HRESULT				Add_UIObject(_uint iLevelIndex, const _wstring& strUITag, class CUIObject* pUIObj);
+	void				Update_On(_uint iLevelIndex, const _wstring& strUITag);
+	void				Update_Off(_uint iLevelIndex, const _wstring& strUITag);
+	void				All_Update_On();
+	void				All_Update_Off();			
+	void				Clear_UiObj(_uint iLevelIndex);
+	class CUIObject*	Find_UIObj(_uint iLevelIndex, const _wstring& strUITag);
+
+#pragma endregion
+
 private:
 	class CGraphic_Device*		m_pGraphic_Device = { nullptr };
 	class CLevel_Manager*		m_pLevel_Manager = { nullptr };
@@ -161,7 +172,7 @@ private:
 	class CAnim_Manager*		m_pAnimation_Manager = { nullptr };
 	class CItem_Manager*		m_pItem_Manager = { nullptr };
 	class CEvent_Manager*		m_pEvent_Manager = { nullptr };
-
+	class CUIObject_Manager*	m_pUIObject_Manager = { nullptr };
 public:
 	void Release_Engine();
 	virtual void Free() override;

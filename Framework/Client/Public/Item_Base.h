@@ -28,9 +28,6 @@ private:
 
 	HRESULT					Ready_Componet();
 
-	void					SetUp_RenderState();
-	void					Reset_RenderState();
-
 private:
 	_bool					m_bisSelete{};
 

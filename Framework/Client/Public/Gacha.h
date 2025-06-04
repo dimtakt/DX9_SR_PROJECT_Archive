@@ -21,8 +21,8 @@ public:
 	virtual HRESULT					Render() override;
 
 public:
-	void							Open_Ui();
-	void							Close_Ui();
+	void							UI_Switch();
+
 private:
 	LEVEL							m_eLevel = {};
 	CVIBuffer_Rect*					m_pVIBufferCom = { nullptr };

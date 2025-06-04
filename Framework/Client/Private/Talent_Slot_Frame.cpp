@@ -55,15 +55,12 @@ void CTalent_Slot_Frame::Late_Update(_float fTimeDelta)
 
 HRESULT CTalent_Slot_Frame::Render()
 {
-	SetUp_RenderState();
-
 	if (FAILED(m_pTextureCom->Bind_Texture(m_iIndex)))
 		return E_FAIL;
 	m_pVIBufferCom->Bind_Buffers();
 
 	__super::Begin();
 	m_pVIBufferCom->Render();
-	Reset_RenderState();
 	return S_OK;
 }
 
@@ -82,28 +79,6 @@ HRESULT CTalent_Slot_Frame::Ready_Components()
 		return E_FAIL;
 
 	return S_OK;
-}
-
-void CTalent_Slot_Frame::SetUp_RenderState()
-{
-	m_pGraphic_Device->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
-	m_pGraphic_Device->SetRenderState(D3DRS_ALPHAREF, 200);
-	m_pGraphic_Device->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER);
-
-	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_POINT);
-	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_POINT);
-	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MIPFILTER, D3DTEXF_NONE);
-}
-
-void CTalent_Slot_Frame::Reset_RenderState()
-{
-	m_pGraphic_Device->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
-
-	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_LINEAR);
-	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);
-	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MIPFILTER, D3DTEXF_LINEAR);
-
-	m_pGraphic_Device->SetTexture(0, NULL);
 }
 
 CTalent_Slot_Frame* CTalent_Slot_Frame::Create(LPDIRECT3DDEVICE9 pGraphic_Device)

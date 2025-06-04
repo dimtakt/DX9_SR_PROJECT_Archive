@@ -60,6 +60,7 @@ void CTalent_Progress::Late_Update(_float fTimeDelta)
 
 HRESULT CTalent_Progress::Render()
 {
+	m_pGraphic_Device->SetTexture(0, NULL);
 	m_pVIBufferCom->Bind_Buffers();
 	__super::Begin();
 	m_pVIBufferCom->Render();

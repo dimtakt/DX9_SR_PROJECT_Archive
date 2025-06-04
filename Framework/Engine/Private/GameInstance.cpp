@@ -16,7 +16,7 @@
 #include "Anim_Manager.h"
 #include "Item_Manager.h"
 #include "Event_Manager.h"
-
+#include "UIObject_Manager.h"
 IMPLEMENT_SINGLETON(CGameInstance)
 
 CGameInstance::CGameInstance()
@@ -85,6 +85,10 @@ HRESULT CGameInstance::Initialize_Engine(const ENGINE_DESC& EngineDesc, LPDIRECT
 
     m_pEvent_Manager = CEvent_Manager::Create();
     if (nullptr == m_pEvent_Manager)
+        return E_FAIL;
+
+    m_pUIObject_Manager = CUIObject_Manager::Create(EngineDesc.iNumLevels);
+    if (nullptr == m_pUIObject_Manager)
         return E_FAIL;
 
     return S_OK;
@@ -411,6 +415,34 @@ void CGameInstance::Broadcast(_uint iTypeIndex, const EVENTDATA* pData)
 {
     m_pEvent_Manager->Broadcast(iTypeIndex, pData);
 }
+HRESULT CGameInstance::Add_UIObject(_uint iLevelIndex, const _wstring& strUITag, CUIObject* pUIObj)
+{
+    return m_pUIObject_Manager->Add_UIObject(iLevelIndex, strUITag, pUIObj);
+}
+void CGameInstance::Update_On(_uint iLevelIndex, const _wstring& strUITag)
+{
+    m_pUIObject_Manager->Update_On(iLevelIndex, strUITag);
+}
+void CGameInstance::Update_Off(_uint iLevelIndex, const _wstring& strUITag)
+{
+    m_pUIObject_Manager->Update_Off(iLevelIndex, strUITag);
+}
+void CGameInstance::All_Update_On()
+{
+    m_pUIObject_Manager->All_Update_On();
+}
+void CGameInstance::All_Update_Off()
+{
+    m_pUIObject_Manager->All_Update_Off();
+}
+void CGameInstance::Clear_UiObj(_uint iLevelIndex)
+{
+    m_pUIObject_Manager->Clear_UiObj(iLevelIndex);
+}
+CUIObject* CGameInstance::Find_UIObj(_uint iLevelIndex, const _wstring& strUITag)
+{
+    return m_pUIObject_Manager->Find_UIObj(iLevelIndex, strUITag);
+}
 #pragma endregion
 
 void CGameInstance::Release_Engine()
@@ -418,6 +450,7 @@ void CGameInstance::Release_Engine()
     
     Release();
     Safe_Release(m_pCollision_Manager);
+    Safe_Release(m_pUIObject_Manager);
     Safe_Release(m_pTimer_Manager);
     Safe_Release(m_pLevel_Manager);
     Safe_Release(m_pGraphic_Device);
@@ -432,7 +465,7 @@ void CGameInstance::Release_Engine()
     Safe_Release(m_pLight_Manager);
     Safe_Release(m_pAnimation_Manager);
     Safe_Release(m_pItem_Manager);//
-    
+  
 }
 
 void CGameInstance::Free()

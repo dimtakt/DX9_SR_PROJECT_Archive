@@ -44,11 +44,16 @@ HRESULT CHud_Button::Initialize(void* pArg)
 	if (FAILED(Ready_Children()))
 		return E_FAIL;
 
+	m_pGameInstance->Add_UIObject(ENUM_CLASS(m_eLevel), TEXT("Hud_Button"), this);
+
 	return S_OK;
 }
 
 void CHud_Button::Priority_Update(_float fTimeDelta)
 {
+	if (!m_bIsUpdate)
+		return;
+
 	if (m_pGameInstance->Get_CurrentLevel() == ENUM_CLASS(LEVEL::LEVEL_LOADING) || m_pGameInstance->Get_CurrentLevel() == ENUM_CLASS(LEVEL::LEVEL_LOGO) || m_pGameInstance->Get_CurrentLevel() == ENUM_CLASS(LEVEL::LEVEL_MAPEDIT))
 		return;
 
@@ -57,6 +62,9 @@ void CHud_Button::Priority_Update(_float fTimeDelta)
 
 void CHud_Button::Update(_float fTimeDelta)
 {
+	if (!m_bIsUpdate)
+		return;
+
 	if (m_pGameInstance->Get_CurrentLevel() == ENUM_CLASS(LEVEL::LEVEL_LOADING) || m_pGameInstance->Get_CurrentLevel() == ENUM_CLASS(LEVEL::LEVEL_LOGO) || m_pGameInstance->Get_CurrentLevel() == ENUM_CLASS(LEVEL::LEVEL_MAPEDIT))
 		return;
 
@@ -65,6 +73,9 @@ void CHud_Button::Update(_float fTimeDelta)
 
 void CHud_Button::Late_Update(_float fTimeDelta)
 {
+	if (!m_bIsUpdate)
+		return;
+
 	if (m_pGameInstance->Get_CurrentLevel() == ENUM_CLASS(LEVEL::LEVEL_LOADING) || m_pGameInstance->Get_CurrentLevel() == ENUM_CLASS(LEVEL::LEVEL_LOGO) || m_pGameInstance->Get_CurrentLevel() == ENUM_CLASS(LEVEL::LEVEL_MAPEDIT))
 		return;
 	__super::Late_Update(fTimeDelta);

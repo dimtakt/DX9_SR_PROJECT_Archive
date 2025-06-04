@@ -89,6 +89,7 @@ HRESULT CDash_Gauge::Render()
 	__super::End();
 
 	Reset_RenderState();
+	
 	return S_OK;
 }
 
@@ -111,27 +112,19 @@ HRESULT CDash_Gauge::Ready_Components()
 
 void CDash_Gauge::SetUp_RenderState()
 {
+	m_pGraphic_Device->GetTransform(D3DTS_TEXTURE0, &matOldTex);
+	m_pGraphic_Device->GetTextureStageState(0, D3DTSS_TEXTURETRANSFORMFLAGS, &fOldFlags);
+	m_pGraphic_Device->GetTextureStageState(0, D3DTSS_TEXCOORDINDEX, &OldTexCoordIndex);
+
 	if (m_fDash < m_iIndex)
 		SetUp_Render_Gauge();
-	
-	m_pGraphic_Device->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
-	m_pGraphic_Device->SetRenderState(D3DRS_ALPHAREF, 200);
-	m_pGraphic_Device->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER);
-
-	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_POINT);
-	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_POINT);
-	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MIPFILTER, D3DTEXF_NONE);
 }
 
 void CDash_Gauge::Reset_RenderState()
 {
-	m_pGraphic_Device->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
-
-	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_LINEAR);
-	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);
-	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MIPFILTER, D3DTEXF_LINEAR);
-
-	m_pGraphic_Device->SetTexture(0, NULL);
+	m_pGraphic_Device->SetTransform(D3DTS_TEXTURE0, &matOldTex);
+	m_pGraphic_Device->SetTextureStageState(0, D3DTSS_TEXTURETRANSFORMFLAGS, fOldFlags);
+	m_pGraphic_Device->SetTextureStageState(0, D3DTSS_TEXCOORDINDEX, OldTexCoordIndex);
 }
 
 HRESULT CDash_Gauge::Ready_ChildPrototype(LEVEL eLevel)

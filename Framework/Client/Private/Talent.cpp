@@ -23,6 +23,7 @@ HRESULT CTalent::Initialize_Prototype(LEVEL eLevel)
 
 HRESULT CTalent::Initialize(void* pArg)
 {
+	m_bisOpen = false;
 	m_fSizeX = g_iWinSizeX;
 	m_fSizeY = g_iWinSizeY;
 	m_fX = m_fSizeX * 0.5f;
@@ -43,6 +44,8 @@ HRESULT CTalent::Initialize(void* pArg)
 	if (FAILED(Ready_Children()))
 		return E_FAIL;
 
+	m_pGameInstance->Add_UIObject(ENUM_CLASS(m_eLevel), TEXT("UI_Talent"), this);
+
 	return S_OK;
 }
 
@@ -50,7 +53,11 @@ void CTalent::Priority_Update(_float fTimeDelta)
 {
 	if (m_pGameInstance->Get_CurrentLevel() == ENUM_CLASS(LEVEL::LEVEL_LOADING) || m_pGameInstance->Get_CurrentLevel() == ENUM_CLASS(LEVEL::LEVEL_LOGO) || m_pGameInstance->Get_CurrentLevel() == ENUM_CLASS(LEVEL::LEVEL_MAPEDIT))
 		return;
-	if (m_bIsOpen == true)
+	if (!m_bIsUpdate)
+		return;
+	if (!m_bisOpen)
+		return;
+	
 	__super::Priority_Update(fTimeDelta);
 }
 
@@ -59,28 +66,37 @@ void CTalent::Update(_float fTimeDelta)
 	if (m_pGameInstance->Get_CurrentLevel() == ENUM_CLASS(LEVEL::LEVEL_LOADING) || m_pGameInstance->Get_CurrentLevel() == ENUM_CLASS(LEVEL::LEVEL_LOGO) || m_pGameInstance->Get_CurrentLevel() == ENUM_CLASS(LEVEL::LEVEL_MAPEDIT))
 		return;
 
+	if (!m_bIsUpdate)
+		return;
 
-	if (m_bIsOpen == true) 
+	if (m_pGameInstance->IsKeyDown('P'))
+		UI_Switch();
+
+	if (!m_bisOpen)
+		return;
+	if (m_pGameInstance->IsKeyDown(VK_ESCAPE))
 	{
-		if (m_pGameInstance->IsKeyDown(VK_ESCAPE))
-		{
-			m_bIsOpen = false;
-			return;
-		}
-		__super::Update(fTimeDelta);
+		UI_Switch();
+		return;
 	}
+	__super::Update(fTimeDelta);
+	
 }
 
 void CTalent::Late_Update(_float fTimeDelta)
 {
 	if (m_pGameInstance->Get_CurrentLevel() == ENUM_CLASS(LEVEL::LEVEL_LOADING) || m_pGameInstance->Get_CurrentLevel() == ENUM_CLASS(LEVEL::LEVEL_LOGO) || m_pGameInstance->Get_CurrentLevel() == ENUM_CLASS(LEVEL::LEVEL_MAPEDIT))
 		return;
-	if (m_bIsOpen == true)
-	{
-		m_pGameInstance->Add_RenderGroup(RENDERGROUP::RG_UI, this);
 
-		__super::Late_Update(fTimeDelta);
-	}
+	if (!m_bIsUpdate)
+		return;
+
+	if (!m_bisOpen)
+		return;
+
+	m_pGameInstance->Add_RenderGroup(RENDERGROUP::RG_UI, this);
+	__super::Late_Update(fTimeDelta);
+
 }
 
 HRESULT CTalent::Render()
@@ -96,10 +112,17 @@ HRESULT CTalent::Render()
 
 void CTalent::UI_Switch()
 {
-	if (m_bIsOpen)
-		m_bIsOpen = false;
+	if (m_bisOpen)
+	{
+		m_pGameInstance->All_Update_On();
+		m_bisOpen = false;
+	}
 	else
-		m_bIsOpen = true;
+	{
+		m_pGameInstance->All_Update_Off();
+		m_bIsUpdate = true;
+		m_bisOpen = true;
+	}
 }
 
 void CTalent::Slot_Reset()
