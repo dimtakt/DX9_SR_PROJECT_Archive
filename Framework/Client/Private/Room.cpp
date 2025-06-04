@@ -136,6 +136,7 @@ void CRoom::Late_Update(_float fTimeDelta)
 								tColliderDesc.vScale = _float3(1.f, 3.f, 1.f);
 								tColliderDesc.pOwner = (*it);
 								tColliderDesc.pTransform = dynamic_cast<CTransform*>((*it)->Find_Component(TEXT("Com_Transform")));
+								tColliderDesc.eType = (*it)->Get_ObjType();
 								CCollider_OBB* pCol = dynamic_cast<CCollider_OBB*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::COMPONENT, ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Collider_OBB"), &tColliderDesc));
 								m_pGameInstance->Add_Collider(pCol);
 								if(it == m_vPotal.end() - 1)
@@ -285,6 +286,8 @@ HRESULT CRoom::Load_From_File(_uint iLayerLevelIndex, const _wstring& strLayerTa
 	}
 	ifile.close();
 
+	_bool bIsTerrain = false;
+
 	for (auto& pDesc : m_Object_Desc)
 	{
 		if (pDesc.eType == GAMEOBJ_TYPE::OBJECT)
@@ -307,19 +310,22 @@ HRESULT CRoom::Load_From_File(_uint iLayerLevelIndex, const _wstring& strLayerTa
 		}
 		else if (pDesc.eType == GAMEOBJ_TYPE::TERRAIN)
 		{
-			MAP_OBJECT_DESC tSrc{};
-			tSrc.iTextureIndex = pDesc.iTextureIndex;
-			tSrc.vPos = pDesc.vPos + m_ObjectOffset;
-			tSrc.vScale = pDesc.vScale;
+			if (!bIsTerrain) {
+				MAP_OBJECT_DESC tSrc{};
+				tSrc.iTextureIndex = pDesc.iTextureIndex;
+				tSrc.vPos = pDesc.vPos + m_ObjectOffset;
+				tSrc.vScale = pDesc.vScale;
 
-			/*m_pGameInstance->Add_GameObject_ToLayer(
-				iLayerLevelIndex, strLayerTag,
-				iLayerLevelIndex,
-				TEXT("Prototype_GameObject_TerrainBox"),
-				&tSrc);*/
-			m_pTerrainBox = dynamic_cast<CTerrainBox*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, iLayerLevelIndex, TEXT("Prototype_GameObject_TerrainBox"), &tSrc));
+				/*m_pGameInstance->Add_GameObject_ToLayer(
+					iLayerLevelIndex, strLayerTag,
+					iLayerLevelIndex,
+					TEXT("Prototype_GameObject_TerrainBox"),
+					&tSrc);*/
+				m_pTerrainBox = dynamic_cast<CTerrainBox*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, iLayerLevelIndex, TEXT("Prototype_GameObject_TerrainBox"), &tSrc));
 
-		/*	CGameObject* pGameObject = m_pGameInstance->Get_LastGameObject(iLayerLevelIndex, strLayerTag);*/
+				/*	CGameObject* pGameObject = m_pGameInstance->Get_LastGameObject(iLayerLevelIndex, strLayerTag);*/
+				bIsTerrain = true;
+			}
 		}
 		else
 		{
@@ -367,6 +373,7 @@ void CRoom::Enter()
 			tColliderDesc.vScale = _float3(1.f, 3.f, 1.f);
 			tColliderDesc.pOwner = pMonster;
 			tColliderDesc.pTransform = pMonster->Get_Transform();
+			tColliderDesc.eType = pMonster->Get_ObjType();
 			CCollider_OBB* pCol = dynamic_cast<CCollider_OBB*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::COMPONENT, ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Collider_OBB"), &tColliderDesc));
 			m_pGameInstance->Add_Collider(pCol);
 		}
@@ -382,6 +389,7 @@ void CRoom::Enter()
 			tColliderDesc.vScale = _float3(1.0f, 3.f, 1.0f);
 			tColliderDesc.pOwner = pObject;
 			tColliderDesc.pTransform = dynamic_cast<CTransform*>(pObject->Find_Component(TEXT("Com_Transform")));
+			tColliderDesc.eType = pObject->Get_ObjType();;
 			CCollider_OBB* pCol = dynamic_cast<CCollider_OBB*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::COMPONENT, ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Collider_OBB"), &tColliderDesc));
 			m_pGameInstance->Add_Collider(pCol);
 		}

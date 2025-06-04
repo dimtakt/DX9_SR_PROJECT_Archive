@@ -26,15 +26,22 @@ HRESULT COink_A::Initialize(void* pArg)
     if (FAILED(this->Ready_Components(pArg)))
         return E_FAIL;
 
-    
+    Ready_Object();
     m_iAtkCooldownFrames = static_cast<_int>(m_pGameInstance->Compute_Random(0, 300));
 
+    m_iMaxHp = 50;
+    m_iCulHp = 50;
     return S_OK;
 }
 
 void COink_A::Priority_Update(_float fTimeDelta)
 {
     __super::Priority_Update(fTimeDelta);
+    if (m_pHpBar != nullptr)
+        m_pHpBar->Render_HP_Progress(m_pTransformCom, m_iCulHp, m_iMaxHp);
+
+    if (m_iCulHp <= 0)
+        m_bDead = true;
 }
 
 void COink_A::Update(_float fTimeDelta)
@@ -179,7 +186,7 @@ void COink_A::Update(_float fTimeDelta)
         {
             _float3 vThrownDir = pTargetTransform->Get_State(STATE::POSITION) - vMonsterPos;
             CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::MONSTER_EFFECT, L"Prototype_Component_Texture_Oink_A_Effect_SpinSwing",
-                *m_pTransformCom->Get_WorldMatrix(), matMonsterWorld, vThrownDir, fThrownPower, fThrownAtkLifeTime, true);
+                *m_pTransformCom->Get_WorldMatrix(), matMonsterWorld, vThrownDir, fThrownPower, fThrownAtkLifeTime, 0.f, true);
         }
         else {}
     else if (m_pAnimatorCom->Get_CurStateTag() == L"Charge_End")
@@ -328,8 +335,15 @@ HRESULT COink_A::Ready_Components(void* pArg)
 	m_pAnimatorCom->Add_State(L"Charge_End",            { m_pTextureCom_Charge_End, 6, false });
 	m_pAnimatorCom->Add_State(L"Charge_Down",           { m_pTextureCom_Charge_Down, 4, false });
 	m_pAnimatorCom->Add_State(L"Charge_Airborne",       { m_pTextureCom_Charge_Airborne, 4, false });
-    m_pAnimatorCom->Add_State(L"Attack_Standby",        { m_pTextureCom_Idle, 4, false });
+    m_pAnimatorCom->Add_State(L"Attack_Standby",        { m_pTextureCom_Idle, 6, false });
     
+
+    return S_OK;
+}
+
+HRESULT COink_A::Ready_Object()
+{
+    m_pHpBar = dynamic_cast<CField_Hp*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_Field_Hp")));
 
     return S_OK;
 }
@@ -338,7 +352,7 @@ void COink_A::OnCollision(CGameObject* pGameObject)
 {
 	__super::OnCollision(pGameObject);
 
-	m_isTracking = true;
+	//m_isTracking = true;
 }
 
 COink_A* COink_A::Create(LPDIRECT3DDEVICE9 pGraphic_Device)

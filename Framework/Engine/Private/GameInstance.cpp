@@ -98,18 +98,20 @@ void CGameInstance::Update_Engine(_float fTimeDelta)
 {
     if (IsKeyDown(VK_TAB))
         m_pCollision_Manager->Set_IsRender();
+    // 콜리전 충돌확인
+    m_pCollision_Manager->Check_RoomCollisions();
     m_pKey_Manager->Update(fTimeDelta);
+
     m_pObject_Manager->Priority_Update(fTimeDelta);
 
     m_pPicking->Update();
     // 콜리전 동기화
     m_pCollision_Manager->Update();
-    // 콜리전 충돌확인
-    m_pCollision_Manager->Check_RoomCollisions();
     m_pObject_Manager->Update(fTimeDelta);
     m_pObject_Manager->Late_Update(fTimeDelta);
 
     m_pLevel_Manager->Update(fTimeDelta);
+  
 }
 
 HRESULT CGameInstance::Clear_Resources(_uint iClearLevelID)

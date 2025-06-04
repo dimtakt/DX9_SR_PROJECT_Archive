@@ -15,6 +15,8 @@ namespace Client
 	enum class EVENT_TYPE { PLAYERTSTATCHANGE, UICHANGE, ROOMCHANGE, EVENT_END };
 	enum class POTAL_TYPE { LEFT, RIGHT, UP, DOWN, END_POTAL, POTAL_END };
 
+	enum class DAMAGE { NORMAL, SPECIAL, DASH, DAMAGE_END };
+
 	struct UI_DEPTH {
 		//KEY_GUIDE
 		static constexpr float KEY_GUIDE = 0.15f;

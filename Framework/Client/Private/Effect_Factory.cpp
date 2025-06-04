@@ -27,6 +27,7 @@ void CEffect_Factory::Create_Effect(GAMEOBJ_TYPE eType, const _wstring& strEffec
 	CEffect::EFFECT_DESC EffectDesc;
 	EffectDesc.strEffectTag = strEffectTag;
 	EffectDesc.vPos = vPos;
+	
 	EffectDesc.qRot = qRot;
 	EffectDesc.vScale = vScale;
 
@@ -42,6 +43,7 @@ void CEffect_Factory::Create_Effect(GAMEOBJ_TYPE eType, const _wstring& strEffec
 	CEffect::EFFECT_DESC EffectDesc;
 	EffectDesc.strEffectTag = strEffectTag;
 	EffectDesc.matWorld = matEffectWorld;
+	EffectDesc.matOriginWorld = matEffectWorld;	// offset 적용 전 좌표, 즉 해당 이펙트를 소환하는 객체의 최초좌표
 	EffectDesc.isMatWorld = true;
 	EffectDesc.isFlippedX = isFlippedX;
 
@@ -58,6 +60,7 @@ void CEffect_Factory::Create_Effect(GAMEOBJ_TYPE eType, const _wstring& strEffec
 	CEffect::EFFECT_DESC EffectDesc;
 	EffectDesc.strEffectTag = strEffectTag;
 	EffectDesc.matWorld = matEffectWorld * matOffsetWorld;
+	EffectDesc.matOriginWorld = matEffectWorld;	// offset 적용 전 좌표, 즉 해당 이펙트를 소환하는 객체의 최초좌표
 	EffectDesc.isMatWorld = true;
 	EffectDesc.isFlippedX = isFlippedX;
 
@@ -75,6 +78,7 @@ void CEffect_Factory::Create_Effect(GAMEOBJ_TYPE eType, const _wstring& strEffec
 	EffectDesc.strEffectTag = strEffectTag;
 	EffectDesc.matWorld = matEffectWorld * matOffsetWorld;
 	EffectDesc.isMatWorld = true;
+	EffectDesc.matOriginWorld = matEffectWorld;	// offset 적용 전 좌표, 즉 해당 이펙트를 소환하는 객체의 최초좌표
 	EffectDesc.isFlippedX = isFlippedX;
 	EffectDesc.pFollowTransformCom = pFollowTransformCom;
 
@@ -86,17 +90,19 @@ void CEffect_Factory::Create_Effect(GAMEOBJ_TYPE eType, const _wstring& strEffec
 }
 
 // + 생성 후 해당 단위벡터의 방향으로 날아감 (투사체)
-void CEffect_Factory::Create_Effect(GAMEOBJ_TYPE eType, const _wstring& strEffectTag, _float4x4 matEffectWorld, _float4x4 matOffsetWorld, _float3 vThrownDir, _float fThrownPower, _float fLifeTimeSec, _bool isFlippedX)
+void CEffect_Factory::Create_Effect(GAMEOBJ_TYPE eType, const _wstring& strEffectTag, _float4x4 matEffectWorld, _float4x4 matOffsetWorld, _float3 vThrownDir, _float fThrownPower, _float fLifeTimeSec, _float fDeltaAngle, _bool isFlippedX)
 {
 	CEffect::EFFECT_DESC EffectDesc;
 	EffectDesc.strEffectTag = strEffectTag;
 	EffectDesc.matWorld = matEffectWorld * matOffsetWorld;
 	EffectDesc.isMatWorld = true;
 	EffectDesc.isFlippedX = isFlippedX;
+	EffectDesc.matOriginWorld = matEffectWorld;	// offset 적용 전 좌표, 즉 해당 이펙트를 소환하는 객체의 최초좌표
 	D3DXVec3Normalize(&vThrownDir, &vThrownDir);
 	EffectDesc.vThrownDir = vThrownDir;
 	EffectDesc.fThrownPower = fThrownPower;
 	EffectDesc.fLifeTimeSec = fLifeTimeSec;
+	EffectDesc.fDeltaAngle = fDeltaAngle;
 
 	EffectDesc.eType = eType;
 

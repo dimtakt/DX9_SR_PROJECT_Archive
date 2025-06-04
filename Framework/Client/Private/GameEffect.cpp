@@ -1,6 +1,7 @@
 #include "GameEffect.h"
 #include "GameInstance.h"
 #include "Stat_Manager.h"
+#include "Monster.h"
 CGameEffect::CGameEffect(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CEffect(pGraphic_Device)
 {
@@ -26,10 +27,12 @@ HRESULT CGameEffect::Initialize(void* pArg)
 	m_strEffectTag = pDesc->strEffectTag;
 	m_isFlippedX = pDesc->isFlippedX;
 	m_eObjType = pDesc->eType;
+	m_fDeltaAngle = pDesc->fDeltaAngle;
+
 
 	if (FAILED(Ready_Components()))
 		return E_FAIL;
-
+	
 
 	// 위치 반영
 
@@ -65,9 +68,13 @@ HRESULT CGameEffect::Initialize(void* pArg)
 		_float3 vTargetPos = pDesc->pFollowTransformCom->Get_State(STATE::POSITION);
 		m_vFollowOffset = vTargetPos - m_pTransformCom->Get_State(STATE::POSITION);
 	}
+
+	m_vEffectStartPos = {	pDesc->matOriginWorld.m[3][0], 
+							pDesc->matOriginWorld.m[3][1],
+							pDesc->matOriginWorld.m[3][2] };
 	m_vThrownDir = pDesc->vThrownDir;
 	m_fThrownPower = pDesc->fThrownPower;
-	m_fLifeTimeSec = pDesc->fLifeTimeSec;
+	m_fLifeTimeSec = pDesc->fLifeTimeSec + 0.4f;
 
 	m_iStackedFrame = 0;
 
@@ -75,6 +82,7 @@ HRESULT CGameEffect::Initialize(void* pArg)
 	tColliderDesc.vScale = _float3(3.f, 5.f, 3.f);
 	tColliderDesc.pOwner = this;
 	tColliderDesc.pTransform = m_pTransformCom;
+	tColliderDesc.eType = m_eObjType;
 	CCollider_OBB* pCol = dynamic_cast<CCollider_OBB*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::COMPONENT, ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Collider_OBB"), &tColliderDesc));
 	m_pGameInstance->Add_Collider(pCol);
 
@@ -83,14 +91,49 @@ HRESULT CGameEffect::Initialize(void* pArg)
 
 void CGameEffect::Priority_Update(_float fTimeDelta)
 {
-
+	if (m_pAnimatorCom->Get_IsLastFrame() &&
+		m_iStackedFrame >= m_fLifeTimeSec * 60.f)
+		m_bDead = true;
 }
 
 void CGameEffect::Update(_float fTimeDelta)
 {
-	if (m_pAnimatorCom->Get_IsLastFrame() &&
-		m_iStackedFrame >= m_fLifeTimeSec * 60.f)
-		m_bDead = true;
+	
+
+	// fDeltaAngle, fTimeDelta 사용하여 초마다 해당 각도씩 돌아가게
+	if (m_fDeltaAngle != 0)
+	{
+		// 오프셋 적용 전 최초 위치(즉, 이펙트를 소환하는 객체의 초기위치)
+		// 를 기준으로, 회전값 시간에 따라 변화
+#pragma region Turning Effect
+		_float3 vTurnAxis = { 0, 1, 0 };
+		// 원점으로 중심축 이동
+		_float4x4 matToOrigin;
+		D3DXMatrixTranslation(&matToOrigin,
+			-m_vEffectStartPos.x,
+			-m_vEffectStartPos.y,
+			-m_vEffectStartPos.z);
+		// 축 기준 회전행렬
+		_float4x4 matRot;
+		D3DXMatrixRotationAxis(&matRot, &vTurnAxis, m_fDeltaAngle * fTimeDelta);
+		// 다시 제자리로
+		_float4x4 matFromOrigin;
+		D3DXMatrixTranslation(&matFromOrigin,
+			m_vEffectStartPos.x,
+			m_vEffectStartPos.y,
+			m_vEffectStartPos.z);
+		// 다 합치기
+		_float4x4 matRotationTotal = matToOrigin * matRot * matFromOrigin;
+		// 반영
+		_float4x4 matEffectPos = *m_pTransformCom->Get_WorldMatrix();
+		_float4x4 matResult = matEffectPos * matRotationTotal;
+		for (int i = 0; i < 3; i++)
+			m_pTransformCom->Set_State(STATE(i), *reinterpret_cast<_float3*>(&matResult.m[i]));
+		m_pTransformCom->Set_State(STATE::POSITION, *reinterpret_cast<_float3*>(&matResult.m[3]));
+#pragma endregion
+	}
+
+
 
 	// 생성 위치 기준 해당 객체 따라가도록
 	if (m_pFollowTransformCom != nullptr)
@@ -211,8 +254,7 @@ void CGameEffect::OnCollision(CGameObject* pGameObject)
 		{
 		case GAMEOBJ_TYPE::MONSTER:
 		{
-			pGameObject->Set_IsDead(true);
-			break;
+		
 		}
 
 		}
