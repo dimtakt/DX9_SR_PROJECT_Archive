@@ -860,14 +860,14 @@ CMainApp* CMainApp::Create()
 
 void CMainApp::Free()
 {
-	__super::Free();
-
-	Safe_Release(m_pGraphic_Device);
 	CRoom_Manager::GetInstance()->Free();
 	CMonster_Factory::GetInstance()->Free();
 	CStat_Manager::GetInstance()->Free();
 	m_pGameInstance->Release_Engine();
 	Safe_Release(m_pGameInstance);
+	Safe_Release(m_pGraphic_Device);
+
+	__super::Free();
 
 #ifdef _DEBUG
 

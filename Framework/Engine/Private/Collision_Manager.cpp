@@ -24,8 +24,8 @@ void CCollision_Manager::Clear_Colliders()
             !m_vColliders[i]->Get_Owner()->Get_IsActive())
         {
             Safe_Release(m_vColliders[i]);
+
         }
-        
     }
 }
 
@@ -138,6 +138,7 @@ void CCollision_Manager::Free()
     for (size_t i = 0; i < m_vColliders.size(); ++i)
     {
         Safe_Release(m_vColliders[i]);
+
     }
     m_vColliders.clear();
 }

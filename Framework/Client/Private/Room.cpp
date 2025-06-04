@@ -398,6 +398,7 @@ CGameObject* CRoom::Clone(void* pArg)
 void CRoom::Free()
 {
 	Safe_Release(m_pTerrainBox);
+
 	for (auto& obj : m_vObject)
 	{
 		Safe_Release(obj);

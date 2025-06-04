@@ -305,8 +305,6 @@ CGameObject* CMole_A::Clone(void* pArg)
 
 void CMole_A::Free()
 {
-    __super::Free();
-
     Safe_Release(m_pTextureCom_Idle);
     Safe_Release(m_pTextureCom_Move);
     Safe_Release(m_pTextureCom_Down);
@@ -314,4 +312,6 @@ void CMole_A::Free()
     Safe_Release(m_pTextureCom_Airborne);
 
 	Safe_Release(m_pAnimatorCom);
+
+    __super::Free();
 }

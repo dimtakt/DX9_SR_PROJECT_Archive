@@ -513,7 +513,6 @@ CLoader* CLoader::Create(LPDIRECT3DDEVICE9 pGraphic_Device, LEVEL eNextLevelID)
 
 void CLoader::Free()
 {  
-	__super::Free();
 
 	WaitForSingleObject(m_hThread, INFINITE);
 
@@ -523,4 +522,6 @@ void CLoader::Free()
 
 	Safe_Release(m_pGameInstance);
 	Safe_Release(m_pGraphic_Device);
+
+	__super::Free();
 }

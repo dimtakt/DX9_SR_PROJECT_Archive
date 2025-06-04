@@ -81,8 +81,6 @@ HRESULT CGameObject::Add_Component(_uint iPrototypeLevelIndex, const _wstring& s
 
 void CGameObject::Free()
 {
-	__super::Free();
-
 	for (auto& Pair : m_Components)
 		Safe_Release(Pair.second);
 
@@ -90,4 +88,6 @@ void CGameObject::Free()
 
 	Safe_Release(m_pGraphic_Device);
 	Safe_Release(m_pGameInstance);
+
+	__super::Free();
 }

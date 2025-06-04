@@ -167,7 +167,7 @@ CGameObject* CCamera_Mouse::Clone(void* pArg)
 
 void CCamera_Mouse::Free()
 {
-	__super::Free();
-
 	Safe_Release(m_pTransformCom);
+
+	__super::Free();
 }

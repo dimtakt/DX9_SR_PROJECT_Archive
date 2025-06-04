@@ -173,11 +173,10 @@ CGameObject* CTerrainBox::Clone(void* pArg)
 }
 void CTerrainBox::Free()
 {
-	__super::Free();
-
 	Safe_Release(m_pTransformCom);
 	Safe_Release(m_pVIBufferCom);
 	Safe_Release(m_pTextureTop);
 	Safe_Release(m_pTextureSide);
 
+	__super::Free();
 }
