@@ -49,6 +49,7 @@ private:
 		// Ω∫≈» ¡§∫∏
 	_int		m_iCulHp					= 70;
 	_int		m_iMaxHp					= 70;
+	_float		m_fTurnDir					= 0.f;
 
 public:
 	static CLaserGhost_D* Create(LPDIRECT3DDEVICE9 pGraphic_Device);
