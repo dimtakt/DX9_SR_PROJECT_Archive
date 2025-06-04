@@ -33,8 +33,6 @@ private:
 	void							Line_Render_Setting();
 private:
 	HRESULT							Ready_Components();
-	void							SetUp_RenderState();
-	void							Reset_RenderState();
 
 	HRESULT							Ready_ChildPrototype(LEVEL eLevel);
 	HRESULT							Ready_Children();

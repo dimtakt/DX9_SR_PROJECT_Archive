@@ -51,8 +51,6 @@ private:
 
 private:
 	HRESULT							Ready_Components();
-	void							SetUp_RenderState();
-	void							Reset_RenderState();
 
 public:
 	static CChapMap_Line*			Create(LPDIRECT3DDEVICE9 pGraphic_Device);

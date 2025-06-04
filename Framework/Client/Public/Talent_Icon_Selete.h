@@ -28,8 +28,6 @@ private:
 
 private:
 	HRESULT							Ready_Components();
-	void							SetUp_RenderState();
-	void							Reset_RenderState();
 
 public:
 	static CTalent_Icon_Selete* Create(LPDIRECT3DDEVICE9 pGraphic_Device);

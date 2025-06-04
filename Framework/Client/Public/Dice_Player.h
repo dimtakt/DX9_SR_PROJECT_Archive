@@ -29,8 +29,6 @@ private:
 	_uint							m_iValue = {};
 private:
 	HRESULT							Ready_Components();
-	void							SetUp_RenderState();
-	void							Reset_RenderState();
 
 	void							Render_Font();
 public:

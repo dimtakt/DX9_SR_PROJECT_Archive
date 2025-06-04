@@ -26,8 +26,8 @@ public:
 private:
 	LEVEL							m_eLevel = {};
 	CVIBuffer_Rect*					m_pVIBufferCom = { nullptr };
+	_bool							m_bisOpen = {};
 
-	_bool							m_bIsOpen = { false };
 private:
 	HRESULT							Ready_Components();
 

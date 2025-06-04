@@ -52,6 +52,7 @@ void CUI_KeyGuide::Late_Update(_float fTimeDelta)
 
 HRESULT CUI_KeyGuide::Render()
 {
+	m_pGraphic_Device->SetTexture(0, NULL);
 	m_pVIBufferCom->Bind_Buffers();
 	__super::Begin();
 	m_pVIBufferCom->Render();

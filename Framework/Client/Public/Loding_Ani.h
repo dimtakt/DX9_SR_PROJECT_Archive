@@ -32,10 +32,6 @@ private:
 	_float							m_fSpeed = {};
 private:
 	HRESULT							Ready_Components();
-
-	void							SetUp_RenderState();
-	void							Reset_RenderState();
-
 public:
 	static CLoding_Ani*				Create(LPDIRECT3DDEVICE9 pGraphic_Device, LEVEL eLevel);
 	virtual CGameObject*			Clone(void* pArg) override;

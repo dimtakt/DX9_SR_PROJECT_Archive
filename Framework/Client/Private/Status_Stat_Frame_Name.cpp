@@ -61,8 +61,6 @@ void CStatus_Stat_Frame_Name::Late_Update(_float fTimeDelta)
 
 HRESULT CStatus_Stat_Frame_Name::Render()
 {
-	SetUp_RenderState();
-
 	if (FAILED(m_pTextureCom->Bind_Texture(5)))
 		return E_FAIL;
 	m_pVIBufferCom->Bind_Buffers();
@@ -71,7 +69,6 @@ HRESULT CStatus_Stat_Frame_Name::Render()
 	m_pVIBufferCom->Render();
 	__super::End();
 	Font_Render();
-	Reset_RenderState();
 	return S_OK;
 }
 
@@ -100,28 +97,6 @@ HRESULT CStatus_Stat_Frame_Name::Ready_ChildPrototype(LEVEL eLevel)
 HRESULT CStatus_Stat_Frame_Name::Ready_Children()
 {
     return S_OK;
-}
-
-void CStatus_Stat_Frame_Name::SetUp_RenderState()
-{
-	m_pGraphic_Device->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
-	m_pGraphic_Device->SetRenderState(D3DRS_ALPHAREF, 200);
-	m_pGraphic_Device->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER);
-
-	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_POINT);
-	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_POINT);
-	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MIPFILTER, D3DTEXF_NONE);
-}
-
-void CStatus_Stat_Frame_Name::Reset_RenderState()
-{
-	m_pGraphic_Device->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
-
-	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_LINEAR);
-	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);
-	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MIPFILTER, D3DTEXF_LINEAR);
-
-	m_pGraphic_Device->SetTexture(0, NULL);
 }
 
 void CStatus_Stat_Frame_Name::Font_Render()
