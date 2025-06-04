@@ -8,7 +8,7 @@
 #include "Room_Manager.h"
 #include "Monster_Factory.h"
 #include "Collider_OBB.h"
-#include "PlayerEffect.h"
+#include "GameEffect.h"
 #include "Stat_Manager.h"
 #include "Animations/Anim_Player_Attack.h"
 #include "Animations/Anim_Player_Attack2.h"
@@ -691,9 +691,9 @@ HRESULT CMainApp::Ready_ETC_Setting()
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Collider_OBB"), CCollider_OBB::Create(m_pGraphic_Device))))
 		return E_FAIL;
 
-	/* Prototype_GameObject_PlayerEffect */
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_PlayerEffect"),
-		CPlayerEffect::Create(m_pGraphic_Device))))
+	/* Prototype_GameObject_GameEffect */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_GameEffect"),
+		CGameEffect::Create(m_pGraphic_Device))))
 		return E_FAIL;
 
 	return S_OK;

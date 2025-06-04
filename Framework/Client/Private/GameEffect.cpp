@@ -1,31 +1,31 @@
-#include "PlayerEffect.h"
+#include "GameEffect.h"
 #include "GameInstance.h"
 
-CPlayerEffect::CPlayerEffect(LPDIRECT3DDEVICE9 pGraphic_Device)
+CGameEffect::CGameEffect(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CEffect(pGraphic_Device)
 {
 
 }
 
-CPlayerEffect::CPlayerEffect(const CPlayerEffect& Prototype)
+CGameEffect::CGameEffect(const CGameEffect& Prototype)
 	: CEffect(Prototype)
 {
 }
 
-HRESULT CPlayerEffect::Initialize_Prototype()
+HRESULT CGameEffect::Initialize_Prototype()
 {
 	return S_OK;
 }
 
-HRESULT CPlayerEffect::Initialize(void* pArg)
+HRESULT CGameEffect::Initialize(void* pArg)
 {
 	// 이펙트 태그 반영
 
-	m_eObjType = GAMEOBJ_TYPE::PLAYER_EFFECT;
 
 	EFFECT_DESC* pDesc = reinterpret_cast<EFFECT_DESC*>(pArg);
 	m_strEffectTag = pDesc->strEffectTag;
 	m_isFlippedX = pDesc->isFlippedX;
+	m_eObjType = pDesc->eType;
 
 	if (FAILED(Ready_Components()))
 		return E_FAIL;
@@ -51,7 +51,7 @@ HRESULT CPlayerEffect::Initialize(void* pArg)
 		
 		matTransform = matScale * matRot * matTrans;
 	}
-	//std::cout << "[PlayerEffect::Initialize] EffectPos : " << matTransform.m[3][0] << ", " << matTransform.m[3][1] << ", " << matTransform.m[3][2] << std::endl;
+	//std::cout << "[GameEffect::Initialize] EffectPos : " << matTransform.m[3][0] << ", " << matTransform.m[3][1] << ", " << matTransform.m[3][2] << std::endl;
 
 
 	for (int i = 0; i < 3; i++)
@@ -81,12 +81,12 @@ HRESULT CPlayerEffect::Initialize(void* pArg)
 	return S_OK;
 }
 
-void CPlayerEffect::Priority_Update(_float fTimeDelta)
+void CGameEffect::Priority_Update(_float fTimeDelta)
 {
 
 }
 
-void CPlayerEffect::Update(_float fTimeDelta)
+void CGameEffect::Update(_float fTimeDelta)
 {
 	if (m_pAnimatorCom->Get_IsLastFrame() &&
 		m_iStackedFrame >= m_fLifeTimeSec * 60.f)
@@ -117,12 +117,12 @@ void CPlayerEffect::Update(_float fTimeDelta)
 	m_iStackedFrame++;
 }
 
-void CPlayerEffect::Late_Update(_float fTimeDelta)
+void CGameEffect::Late_Update(_float fTimeDelta)
 {
 	m_pGameInstance->Add_RenderGroup(RENDERGROUP::RG_BLEND, this);
 }
 
-HRESULT CPlayerEffect::Render()
+HRESULT CGameEffect::Render()
 {
 	SetUp_RenderState();
 
@@ -148,7 +148,7 @@ HRESULT CPlayerEffect::Render()
 	return S_OK;
 }
 
-HRESULT CPlayerEffect::Ready_Components()
+HRESULT CGameEffect::Ready_Components()
 {
 	/* For.Com_VIBuffer_Rect */
 	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_VIBuffer_Rect"),
@@ -178,7 +178,7 @@ HRESULT CPlayerEffect::Ready_Components()
 	return S_OK;
 }
 
-void CPlayerEffect::SetUp_RenderState()
+void CGameEffect::SetUp_RenderState()
 {
 	m_pGraphic_Device->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
 
@@ -191,7 +191,7 @@ void CPlayerEffect::SetUp_RenderState()
 	//m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MIPFILTER, D3DTEXF_NONE);
 }
 
-void CPlayerEffect::Reset_RenderState()
+void CGameEffect::Reset_RenderState()
 {
 	m_pGraphic_Device->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);
 
@@ -204,7 +204,7 @@ void CPlayerEffect::Reset_RenderState()
 	//m_pGraphic_Device->SetTexture(0, NULL);
 }
 
-void CPlayerEffect::OnCollision(CGameObject* pGameObject)
+void CGameEffect::OnCollision(CGameObject* pGameObject)
 {
 	switch (pGameObject->Get_ObjType())
 	{
@@ -220,33 +220,33 @@ void CPlayerEffect::OnCollision(CGameObject* pGameObject)
 }
 
 
-CGameObject* CPlayerEffect::Create(LPDIRECT3DDEVICE9 pGraphic_Device)
+CGameObject* CGameEffect::Create(LPDIRECT3DDEVICE9 pGraphic_Device)
 {
-	CPlayerEffect* pInstance = new CPlayerEffect(pGraphic_Device);
+	CGameEffect* pInstance = new CGameEffect(pGraphic_Device);
 
 	if (FAILED(pInstance->Initialize_Prototype()))
 	{
-		MSG_BOX(TEXT("Failed to Create : CPlayerEffect"));
+		MSG_BOX(TEXT("Failed to Create : CGameEffect"));
 		Safe_Release(pInstance);
 	}
 
 	return pInstance;
 }
 
-CGameObject* CPlayerEffect::Clone(void* pArg)
+CGameObject* CGameEffect::Clone(void* pArg)
 {
-	CPlayerEffect* pInstance = new CPlayerEffect(*this);
+	CGameEffect* pInstance = new CGameEffect(*this);
 
 	if (FAILED(pInstance->Initialize(pArg)))
 	{
-		MSG_BOX(TEXT("Failed to Clone : CPlayerEffect"));
+		MSG_BOX(TEXT("Failed to Clone : CGameEffect"));
 		Safe_Release(pInstance);
 	}
 
 	return pInstance;
 }
 
-void CPlayerEffect::Free()
+void CGameEffect::Free()
 {
 	Safe_Release(m_pVIBufferCom);
 	Safe_Release(m_pTransformCom);
