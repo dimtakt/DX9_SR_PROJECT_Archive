@@ -34,6 +34,9 @@ void CMole_A::Priority_Update(_float fTimeDelta)
 {
     if (m_pHpBar != nullptr)
         m_pHpBar->Render_HP_Progress(m_pTransformCom, m_iCulHp, m_iMaxHp);
+
+    if (m_iCulHp <= 0)
+        m_bDead = true;
 }
 
 void CMole_A::Update(_float fTimeDelta)
