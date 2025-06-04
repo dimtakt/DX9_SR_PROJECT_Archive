@@ -42,7 +42,8 @@ HRESULT CLevel_MapEdit::Initialize()
 
 void CLevel_MapEdit::Update(_float fTimeDelta)
 {
-	Picking_Check();
+	if(!ImGui::GetIO().WantCaptureMouse)		//UI창 위에 마우스 올라가 있으면 피킹체크X
+		Picking_Check();
 }
 
 HRESULT CLevel_MapEdit::Render()
@@ -84,7 +85,7 @@ HRESULT CLevel_MapEdit::Ready_Texture_Info()
 		TEXT("Prototype_GameObject_Tree")));
 
 	OBJECT_TEXTURE_INFO ObjectInfo;
-	ObjectInfo.iTextureCount = 15;
+	ObjectInfo.iTextureCount = 30;
 	ObjectInfo.pTextureCom = static_cast<CTexture*>(m_pPreview->Find_Component(TEXT("Com_Texture")));
 	if (ObjectInfo.pTextureCom)
 		ObjectInfo.pTextureCom->AddRef();
@@ -395,7 +396,7 @@ void CLevel_MapEdit::ImGui_Object_MenBar()
 
 		ImGui::Text("Object Texture Index:");
 		ImGui::SetNextItemWidth(250);
-		ImGui::SliderInt("Texture", &iObjectTexIndex, 0, 15); // 0~15 인덱스
+		ImGui::SliderInt("Texture", &iObjectTexIndex, 0, 30); // 0~15 인덱스
 		ImGui::SameLine();
 		if (ImGui::Button("-"))
 			iObjectTexIndex -= 1;
@@ -850,6 +851,52 @@ void CLevel_MapEdit::ImGui_Terrain_MenBar()
 
 		CGameObject* pGameObject = m_pGameInstance->Get_LastGameObject(ENUM_CLASS(LEVEL::LEVEL_MAPEDIT), TEXT("Layer_MapEdit"));
 		m_pObject.push_back(pGameObject);
+	}
+
+
+	if (ImGui::Button("Terrain Reset"))				//터레인 전체 삭제
+	{
+		if (!m_pObject.empty())						// 현재 맵툴 내부에서 만들어놓았거나, 불러왔을 경우에도 구조체에 젖아된 값도 삭제 
+		{
+			auto objIter = m_pObject.begin();
+
+			while (objIter != m_pObject.end())
+			{
+				CGameObject* pObj = *objIter;
+
+				if (pObj->Get_ObjType() == GAMEOBJ_TYPE::TERRAIN)
+				{
+					m_pGameInstance->Remove_GameObject_ToLayer(
+						ENUM_CLASS(LEVEL::LEVEL_MAPEDIT),
+						TEXT("Layer_MapEdit"),
+						pObj
+					);
+					Safe_Release(pObj);
+
+					objIter = m_pObject.erase(objIter);
+				}
+				else
+				{
+					++objIter;
+				}
+			}
+		}
+		if (!m_pObject_Desc.empty())
+		{
+			auto descIter = m_pObject_Desc.begin();
+
+			while (descIter != m_pObject_Desc.end())
+			{
+				if (descIter->eType == GAMEOBJ_TYPE::TERRAIN)
+				{
+					descIter = m_pObject_Desc.erase(descIter);
+				}
+				else
+				{
+					++descIter;
+				}
+			}
+		}
 	}
 
 	ImGui::End();
