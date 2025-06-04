@@ -20,7 +20,7 @@ public:
 	virtual HRESULT Render() override;
 
 private:
-	HRESULT Ready_Components();
+	HRESULT Ready_Components(void* pArg);
 
 public:
 	virtual void OnCollision(CGameObject* pGameObject) override;

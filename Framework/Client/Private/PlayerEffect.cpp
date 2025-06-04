@@ -21,6 +21,8 @@ HRESULT CPlayerEffect::Initialize(void* pArg)
 {
 	// 이펙트 태그 반영
 
+	m_eObjType = GAMEOBJ_TYPE::PLAYER_EFFECT;
+
 	EFFECT_DESC* pDesc = reinterpret_cast<EFFECT_DESC*>(pArg);
 	m_strEffectTag = pDesc->strEffectTag;
 	m_isFlippedX = pDesc->isFlippedX;
@@ -68,6 +70,13 @@ HRESULT CPlayerEffect::Initialize(void* pArg)
 	m_fLifeTimeSec = pDesc->fLifeTimeSec;
 
 	m_iStackedFrame = 0;
+
+	CCollider_OBB::OBB_DESC tColliderDesc;
+	tColliderDesc.vScale = _float3(4.f, 3.f, 4.f);
+	tColliderDesc.pOwner = this;
+	tColliderDesc.pTransform = m_pTransformCom;
+	CCollider_OBB* pCol = dynamic_cast<CCollider_OBB*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::COMPONENT, ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Collider_OBB"), &tColliderDesc));
+	m_pGameInstance->Add_Collider(pCol);
 
 	return S_OK;
 }
@@ -193,6 +202,21 @@ void CPlayerEffect::Reset_RenderState()
 	//m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MIPFILTER, D3DTEXF_LINEAR);
 
 	//m_pGraphic_Device->SetTexture(0, NULL);
+}
+
+void CPlayerEffect::OnCollision(CGameObject* pGameObject)
+{
+	switch (pGameObject->Get_ObjType())
+	{
+	case GAMEOBJ_TYPE::MONSTER:
+	{
+		//pGameObject->Set_IsDead(true);
+
+		// 현재 이곳에서 플레이어, 몬스터 둘다 이펙트 처리하고있어서 분리 필요
+		break;
+	}
+
+	}
 }
 
 

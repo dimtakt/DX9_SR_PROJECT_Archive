@@ -463,8 +463,8 @@ void CPlayer::OnCollision(CGameObject* pGameObject)
     case GAMEOBJ_TYPE::MONSTER:
     {
         //pGameObject->Set_IsDead(true);
+        break;
     }
-    break;
     case GAMEOBJ_TYPE::POTAL:
     {
         _float3 vPos;
@@ -473,7 +473,6 @@ void CPlayer::OnCollision(CGameObject* pGameObject)
         m_pTransformCom->Set_State(STATE::POSITION, vPos);
         break;
     }
-    break;
     case GAMEOBJ_TYPE::END_POTAL:
     {
         if (m_pGameInstance->IsKeyDown(VK_DOWN))
@@ -488,7 +487,12 @@ void CPlayer::OnCollision(CGameObject* pGameObject)
         pGameObject->Set_IsDead(TRUE);
         break;
     }
-    break;
+    case GAMEOBJ_TYPE::OBJECT:
+    {
+        int a = 1;
+        break;
+    }
+        
     }
 }
 
@@ -641,7 +645,7 @@ HRESULT CPlayer::Ready_Components(void* pArg)
     
     // collider
     CCollider_OBB::OBB_DESC tColliderDesc;
-    tColliderDesc.vScale = _float3(1.f, 0.001f, 1.f);
+    tColliderDesc.vScale = _float3(1.f, 3.f, 1.f);
     tColliderDesc.pOwner = this;
     tColliderDesc.pTransform = m_pTransformCom;
     CCollider_OBB* pCol = dynamic_cast<CCollider_OBB*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::COMPONENT, ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Collider_OBB"), &tColliderDesc));

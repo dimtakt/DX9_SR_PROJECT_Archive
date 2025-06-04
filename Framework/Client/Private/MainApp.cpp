@@ -38,7 +38,7 @@ CMainApp::CMainApp()
 }
 
 HRESULT CMainApp::Initialize()
-{
+{	
 	ENGINE_DESC		EngineDesc{};
 
 	EngineDesc.hWnd = g_hWnd;

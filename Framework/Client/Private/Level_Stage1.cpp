@@ -54,7 +54,7 @@ void CLevel_Stage1::Update(_float fTimeDelta)
 {
 	if (m_pGameInstance->IsKeyDown(VK_RETURN))
 	{
- 		if(FAILED(m_pGameInstance->Open_Level(ENUM_CLASS(LEVEL::LEVEL_LOADING), CLevel_Loading::Create(m_pGraphic_Device, LEVEL::LEVEL_STAGE1))))
+ 		if(FAILED(m_pGameInstance->Open_Level(ENUM_CLASS(LEVEL::LEVEL_LOADING), CLevel_Loading::Create(m_pGraphic_Device, LEVEL::LEVEL_STAGE2))))
 			return;
 	}
 }
