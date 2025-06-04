@@ -42,7 +42,8 @@ HRESULT CLevel_MapEdit::Initialize()
 
 void CLevel_MapEdit::Update(_float fTimeDelta)
 {
-	Picking_Check();
+	if(!ImGui::GetIO().WantCaptureMouse)		//UI창 위에 마우스 올라가 있으면 피킹체크X
+		Picking_Check();
 }
 
 HRESULT CLevel_MapEdit::Render()
@@ -84,7 +85,7 @@ HRESULT CLevel_MapEdit::Ready_Texture_Info()
 		TEXT("Prototype_GameObject_Tree")));
 
 	OBJECT_TEXTURE_INFO ObjectInfo;
-	ObjectInfo.iTextureCount = 15;
+	ObjectInfo.iTextureCount = 30;
 	ObjectInfo.pTextureCom = static_cast<CTexture*>(m_pPreview->Find_Component(TEXT("Com_Texture")));
 	if (ObjectInfo.pTextureCom)
 		ObjectInfo.pTextureCom->AddRef();
@@ -287,6 +288,7 @@ void CLevel_MapEdit::ImGui_MenuBar_Render()
 					m_pObject.push_back(pGameObject);
 				}
 			}
+			m_pObject_Desc.clear();
 		}
 		ImGuiFileDialog::Instance()->Close();
 	}
@@ -395,7 +397,7 @@ void CLevel_MapEdit::ImGui_Object_MenBar()
 
 		ImGui::Text("Object Texture Index:");
 		ImGui::SetNextItemWidth(250);
-		ImGui::SliderInt("Texture", &iObjectTexIndex, 0, 15); // 0~15 인덱스
+		ImGui::SliderInt("Texture", &iObjectTexIndex, 0, 30); // 0~15 인덱스
 		ImGui::SameLine();
 		if (ImGui::Button("-"))
 			iObjectTexIndex -= 1;
@@ -761,7 +763,18 @@ void CLevel_MapEdit::ImGui_Interaction_Object_MenBar()
 		if (ImGui::Button("Create Interaction"))   //버튼입력시 선택한 값으로 생성
 		{
 			MAP_OBJECT_DESC  tSrc{};
-			tSrc.eType = static_cast<GAMEOBJ_TYPE>(iInteractionTexIndex + 7);		//상호작용 타입 인덱스 7번부터
+			if (iInteractionTexIndex == 0)
+				tSrc.eType = GAMEOBJ_TYPE::EXP;
+			else if (iInteractionTexIndex == 1)
+				tSrc.eType = GAMEOBJ_TYPE::GOLD;
+			else if (iInteractionTexIndex == 2)
+				tSrc.eType = GAMEOBJ_TYPE::HP;
+			else if (iInteractionTexIndex == 3)
+				tSrc.eType = GAMEOBJ_TYPE::ATIFACT;
+			else if (iInteractionTexIndex == 4)
+				tSrc.eType = GAMEOBJ_TYPE::STONE_TABLET;
+			else
+				tSrc.eType = GAMEOBJ_TYPE::MERCAHNT;
 			tSrc.iTextureIndex = iInteractionTexIndex;
 			tSrc.vPos = m_Translates;
 			tSrc.vScale = m_Scales;
@@ -839,6 +852,52 @@ void CLevel_MapEdit::ImGui_Terrain_MenBar()
 
 		CGameObject* pGameObject = m_pGameInstance->Get_LastGameObject(ENUM_CLASS(LEVEL::LEVEL_MAPEDIT), TEXT("Layer_MapEdit"));
 		m_pObject.push_back(pGameObject);
+	}
+
+
+	if (ImGui::Button("Terrain Reset"))				//터레인 전체 삭제
+	{
+		if (!m_pObject.empty())						// 현재 맵툴 내부에서 만들어놓았거나, 불러왔을 경우에도 구조체에 젖아된 값도 삭제 
+		{
+			auto objIter = m_pObject.begin();
+
+			while (objIter != m_pObject.end())
+			{
+				CGameObject* pObj = *objIter;
+
+				if (pObj->Get_ObjType() == GAMEOBJ_TYPE::TERRAIN)
+				{
+					m_pGameInstance->Remove_GameObject_ToLayer(
+						ENUM_CLASS(LEVEL::LEVEL_MAPEDIT),
+						TEXT("Layer_MapEdit"),
+						pObj
+					);
+					Safe_Release(pObj);
+
+					objIter = m_pObject.erase(objIter);
+				}
+				else
+				{
+					++objIter;
+				}
+			}
+		}
+		if (!m_pObject_Desc.empty())
+		{
+			auto descIter = m_pObject_Desc.begin();
+
+			while (descIter != m_pObject_Desc.end())
+			{
+				if (descIter->eType == GAMEOBJ_TYPE::TERRAIN)
+				{
+					descIter = m_pObject_Desc.erase(descIter);
+				}
+				else
+				{
+					++descIter;
+				}
+			}
+		}
 	}
 
 	ImGui::End();

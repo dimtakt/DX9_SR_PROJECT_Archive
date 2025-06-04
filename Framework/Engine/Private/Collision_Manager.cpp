@@ -35,7 +35,9 @@ void CCollision_Manager::Check_RoomCollisions()
     {
         for (size_t j = i + 1; j < m_vColliders.size(); ++j)
         {
-            if (m_vColliders[i]->Get_Owner()->Get_ObjType() != m_vColliders[j]->Get_Owner()->Get_ObjType() 
+            if (m_vColliders[i]->Get_Owner() != nullptr 
+                && m_vColliders[j]->Get_Owner() != nullptr
+                && m_vColliders[i]->Get_Owner()->Get_ObjType() != m_vColliders[j]->Get_Owner()->Get_ObjType() 
                 && Check_OBBtoOBB(m_vColliders[i], m_vColliders[j])
                 && Check_Y_Overlap(m_vColliders[i], m_vColliders[j]))
             {
