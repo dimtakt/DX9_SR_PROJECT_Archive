@@ -12,6 +12,7 @@ public:
 	~CStat_Manager() = default;
 public:
 	HRESULT Initialize();
+	void Update(_float fTimeDelta);
 public:
 	const float* Get_OriginStats() { return m_fOriginStats; }
 	const float* Get_CurStats() { return m_fCurStats; }

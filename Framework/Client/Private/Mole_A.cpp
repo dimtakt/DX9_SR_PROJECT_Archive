@@ -31,7 +31,7 @@ HRESULT CMole_A::Initialize(void* pArg)
 
 void CMole_A::Priority_Update(_float fTimeDelta)
 {
-
+    __super::Priority_Update(fTimeDelta);
 }
 
 void CMole_A::Update(_float fTimeDelta)

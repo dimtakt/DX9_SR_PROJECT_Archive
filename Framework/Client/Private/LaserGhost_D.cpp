@@ -34,7 +34,7 @@ HRESULT CLaserGhost_D::Initialize(void* pArg)
 
 void CLaserGhost_D::Priority_Update(_float fTimeDelta)
 {
-
+    __super::Priority_Update(fTimeDelta);
 }
 
 void CLaserGhost_D::Update(_float fTimeDelta)
