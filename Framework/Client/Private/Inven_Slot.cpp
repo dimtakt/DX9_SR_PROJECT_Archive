@@ -100,14 +100,14 @@ HRESULT CInven_Slot::Render()
 	return S_OK;
 }
 
+void CInven_Slot::Push_Item(CItemObject* pItem)
+{
+	m_pSlotItem = static_cast<CItem_Base*>(pItem);
+}
+
 CItem_Base* CInven_Slot::Pop_Item()
 {
 	return m_pSlotItem;
-}
-
-void CInven_Slot::Push_Item(CItem_Base* pItem)
-{
-	m_pSlotItem = pItem;;
 }
 
 _int CInven_Slot::Slot_Info(ITEM_INFO eInfo)
@@ -198,22 +198,18 @@ void CInven_Slot::Item_Selete()
 		m_bIsPick = true;
 	}
 
-	if (Check_Key_UP(g_hWnd, VK_LBUTTON) && m_pGameInstance->Pop_Item() != nullptr)
+	
+	if (m_pGameInstance->Pop_Item() != nullptr && Check_Key_UP(g_hWnd, VK_LBUTTON))
 	{
-		static_cast<CInven_Slot*>(m_pGameInstance->Pop_Slot())->Push_Item(m_pSlotItem);
-		static_cast<CInven_Slot*>(m_pGameInstance->Pop_Slot())->Push_Item_Count(m_iItemCount);
-
+		m_pGameInstance->Pop_Slot()->Push_Item(m_pSlotItem);
+		m_pGameInstance->Pop_Slot()->Push_Item_Count(m_iItemCount);
+		m_pGameInstance->Pop_Slot()->IsPick_off();
 		m_pSlotItem = static_cast<CItem_Base*>(m_pGameInstance->Pop_Item());
 		m_iItemCount = m_pGameInstance->Pop_Item_Count();
 
 		m_pGameInstance->Pick_Reset();
-	}
-
-	if (m_bIsPick && m_pGameInstance->IsKeyUp(VK_LBUTTON))
-	{
-		m_bIsPick = false;
-		m_pGameInstance->Pick_Reset();
-	}
+	}	
+	
 }
 
 HRESULT CInven_Slot::Ready_Components()

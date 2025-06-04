@@ -83,6 +83,7 @@ void CInventory::Priority_Update(_float fTimeDelta)
 	
 	if (!m_bIsOpen)
 		return;
+
 	__super::Priority_Update(fTimeDelta);
 
 }

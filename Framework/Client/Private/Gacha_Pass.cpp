@@ -1,6 +1,6 @@
 #include "Gacha_Pass.h"
 #include "GameInstance.h"
-
+#include "Gacha.h"
 CGacha_Pass::CGacha_Pass(LPDIRECT3DDEVICE9 pGraphic_Device) : CButton(pGraphic_Device)
 {
 }
@@ -51,6 +51,8 @@ void CGacha_Pass::Priority_Update(_float fTimeDelta)
 
 void CGacha_Pass::Update(_float fTimeDelta)
 {
+	if (Button_Pick() && m_pGameInstance->IsKeyDown(VK_LBUTTON))
+		static_cast<CGacha*>(m_pParent)->UI_Switch();
 
 	CUIObject::Update(fTimeDelta);
 }
@@ -91,9 +93,6 @@ HRESULT CGacha_Pass::Ready_Components()
 
 HRESULT CGacha_Pass::Ready_ChildPrototype(LEVEL eLevel)
 {
-	//	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(eLevel), TEXT("Prototype_GameObject_UI_Talent_Progress"),
-	//		CTalent_Progress::Create(m_pGraphic_Device))))
-	//		return E_FAIL;
 
 	return S_OK;
 }
@@ -101,26 +100,18 @@ HRESULT CGacha_Pass::Ready_ChildPrototype(LEVEL eLevel)
 HRESULT CGacha_Pass::Ready_Children()
 {
 	CUIObject* pGameObject = nullptr;
-
-	//pGameObject = dynamic_cast<CUIObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(m_eLevel), TEXT("Prototype_GameObject_UI_Talent_Progress")));
-	//if (nullptr == pGameObject)
-	//	return E_FAIL;
-	//Add_Child(pGameObject);
-
-
 	return S_OK;
 }
 
 void CGacha_Pass::Font_Render()
 {
-	//TCHAR szText[64];
-	//m_vTexRect.left = 660 + m_fX - m_fSizeX * 0.5;
-	//m_vTexRect.top = 442 + m_fY - m_fSizeY * 0.5;
-	//m_vTexRect.right = 660 + m_fX + m_fSizeX * 0.5;
-	//m_vTexRect.bottom = 441 + m_fY + m_fSizeY * 0.5;
+	TCHAR szText[64];
+	CUIObject::Font_Rect_Update();
 
-	//_stprintf_s(szText, TEXT("초기화"));
-	//m_pGameInstance->Render_Font(TEXT("UI_Font_30"), szText, m_vTexRect, D3DXCOLOR(1.f, 1.f, 1.f, 1.0f), DT_CENTER | DT_TOP);
+	m_vTexRect.top += 88;
+
+	_stprintf_s(szText, TEXT("선택 넘어가기"));
+	m_pGameInstance->Render_Font(TEXT("UI_Font_22_Normal"), szText, m_vTexRect, D3DXCOLOR(1.f, 1.f, 1.f, 1.0f), DT_CENTER | DT_TOP);
 
 }
 

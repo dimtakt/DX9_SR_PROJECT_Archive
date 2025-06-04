@@ -30,13 +30,14 @@ public:
 	void							Add_Item(CItem_Base* pItem) { m_pSlotItem = pItem, m_iItemCount += 1; }
 	void							Release_Item() { m_pSlotItem = nullptr; }
 
+	virtual void					Push_Item(CItemObject* pItem) override;
+	virtual void					Push_Item_Count(_uint iItemCount) override { m_iItemCount = iItemCount; }
+	virtual void					IsPick_off() override { m_bIsPick = false; }
+	
 	CItem_Base*						Pop_Item();
-	void							Push_Item(CItem_Base* pItem);
 	_uint							Pop_Item_Count() { return m_iItemCount; }
-	void							Push_Item_Count(_uint iItemCount) { m_iItemCount = iItemCount; }
 	_int							Slot_Info(ITEM_INFO eInfo);
 	void							Add_GradeCount(_int iValue);
-
 private:
 	LEVEL							m_eLevel = {};
 	_bool							m_bIsOver = {};
@@ -58,6 +59,7 @@ private:
 private:
 	void							Setting_Item();
 	void							Item_Selete();
+	
 
 private:
 	HRESULT							Ready_Components();

@@ -2,7 +2,7 @@
 #include "GameInstance.h"
 
 #include "ItemObject.h"
-
+#include "Button.h"
 CItem_Manager::CItem_Manager(LPDIRECT3DDEVICE9 pGraphic_Device) : m_pGraphic_Device(pGraphic_Device), m_pGameInstance{ CGameInstance::GetInstance() }
 {
 	Safe_AddRef(m_pGraphic_Device);
@@ -12,6 +12,15 @@ CItem_Manager::CItem_Manager(LPDIRECT3DDEVICE9 pGraphic_Device) : m_pGraphic_Dev
 HRESULT CItem_Manager::Initialize()
 {
 	return S_OK;
+}
+
+void CItem_Manager::Update()
+{
+	if (m_pGameInstance->IsKeyUp(VK_LBUTTON) && m_pPickSlot != nullptr)
+	{
+		m_pPickSlot->IsPick_off();
+		Pick_Reset();
+	}
 }
 
 CItemObject* CItem_Manager::Pop_Item()

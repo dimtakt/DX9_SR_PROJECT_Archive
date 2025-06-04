@@ -2,7 +2,7 @@
 #include "GameInstance.h"
 #include "Gacha_Slot_Selete.h"
 #include "Client_Defines_Item.h"
-
+#include "Gacha.h"
 CGacha_Slot::CGacha_Slot(LPDIRECT3DDEVICE9 pGraphic_Device) : CButton{ pGraphic_Device }
 {
 }
@@ -52,6 +52,11 @@ HRESULT CGacha_Slot::Initialize(void* pArg)
 void CGacha_Slot::Priority_Update(_float fTimeDelta)
 {
 	__super::Priority_Update(fTimeDelta);
+
+	if (m_pSlotItem != nullptr)
+		m_iSlotItem_Tex = ENUM_CLASS(m_pSlotItem->Item_Info()->iRarity);
+	else
+		m_iSlotItem_Tex = 0;
 }
 
 void CGacha_Slot::Update(_float fTimeDelta)
@@ -72,6 +77,7 @@ void CGacha_Slot::Late_Update(_float fTimeDelta)
 	
 	if (m_bIsPick)
 		m_pSlotItem->IsSelete();
+
 }
 
 HRESULT CGacha_Slot::Render()
@@ -82,6 +88,19 @@ HRESULT CGacha_Slot::Render()
 	return S_OK;
 }
 
+void CGacha_Slot::Push_Item(CItemObject* pItem)
+{
+	m_pSlotItem = static_cast<CItem_Base*>(pItem);
+	
+	//static_cast<CGacha*>(m_pParent)->UI_Switch();
+}
+
+void CGacha_Slot::Push_Item_ReRoll(CItemObject* pItem)
+{
+	Safe_Release(m_pSlotItem);
+	m_pSlotItem = static_cast<CItem_Base*>(pItem);
+}
+
 void CGacha_Slot::Item_Selete()
 {
 	if(Check_Key_Down(g_hWnd, VK_LBUTTON) && m_pSlotItem != nullptr)
@@ -89,13 +108,6 @@ void CGacha_Slot::Item_Selete()
 		m_pGameInstance->Pick_ItemSlot(m_pSlotItem, this, 1);
 		m_bIsPick = true;
 	}
-
-	if (m_bIsPick && m_pGameInstance->IsKeyUp(VK_LBUTTON))
-	{
-		m_bIsPick = false;
-		m_pGameInstance->Pick_Reset();
-	}
-	m_pGameInstance->Pop_Item();
 }
 
 HRESULT CGacha_Slot::Ready_Components()

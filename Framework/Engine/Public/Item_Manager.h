@@ -11,6 +11,7 @@ private:
 public:
 	HRESULT							Initialize();
 	
+	void							Update();
 	class CItemObject*				Pop_Item();
 	class CButton*					Pop_Slot();
 	_uint							Pop_Item_Count();

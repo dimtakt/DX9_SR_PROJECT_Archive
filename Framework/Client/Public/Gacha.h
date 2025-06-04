@@ -22,6 +22,7 @@ public:
 
 public:
 	void							UI_Switch();
+	void							Rand_Item_Set();
 
 private:
 	LEVEL							m_eLevel = {};
@@ -35,8 +36,10 @@ private:
 	HRESULT							Ready_ChildPrototype(LEVEL eLevel);
 	HRESULT							Ready_Children();
 
+	void							Ready_Fx();
 private:
 	void							Rand_Itme();
+
 public:
 	static CGacha*					Create(LPDIRECT3DDEVICE9 pGraphic_Device, LEVEL eLevel);
 	virtual CGameObject*			Clone(void* pArg) override;

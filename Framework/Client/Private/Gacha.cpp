@@ -4,6 +4,8 @@
 #include "Inventory.h"
 #include "Gacha_Pass.h"
 #include "Gacha_Reroll.h"
+#include "Gacha_FX.h"
+
 CGacha::CGacha(LPDIRECT3DDEVICE9 pGraphic_Device) : CUIObject(pGraphic_Device)
 {
 }
@@ -82,7 +84,10 @@ void CGacha::Update(_float fTimeDelta)
 
 	if (m_pGameInstance->IsKeyDown(VK_ESCAPE))
 	{
-		UI_Switch();
+		static_cast<CInventory*>(m_pGameInstance->Get_GameObject(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Layer_Inventory")))->Close_UI();
+		m_pGameInstance->All_Update_On();
+		m_bIsOpen = false;
+
 		return;
 	}
 	
@@ -133,6 +138,11 @@ void CGacha::UI_Switch()
 	}
 }
 
+void CGacha::Rand_Item_Set()
+{
+	Rand_Itme();
+}
+
 HRESULT CGacha::Ready_Components()
 {
 	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Rect_UI_BalckRect"),
@@ -160,6 +170,10 @@ HRESULT CGacha::Ready_ChildPrototype(LEVEL eLevel)
 		CGacha_Pass::Create(m_pGraphic_Device, eLevel))))
 		return E_FAIL;
 
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(eLevel), TEXT("Prototype_GameObject_UI_Gacha_FX"),
+		CGacha_FX::Create(m_pGraphic_Device))))
+		return E_FAIL;
+
 	return S_OK;
 }
 
@@ -184,6 +198,7 @@ HRESULT CGacha::Ready_Children()
 		Add_Child(pGameObject);
 
 	}
+	Ready_Fx();
 
 	pGameObject = dynamic_cast<CUIObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(m_eLevel), TEXT("Prototype_GameObject_UI_Gacha_Reroll"), &Desc));
 	if (nullptr == pGameObject)
@@ -195,7 +210,76 @@ HRESULT CGacha::Ready_Children()
 		return E_FAIL;
 	Add_Child(pGameObject);
 
+	
+
 	return S_OK;
+}
+
+void CGacha::Ready_Fx()
+{
+	CUIObject* pGameObject = nullptr;
+
+	UIOBJECT_DESC Desc{};
+
+	Desc.fX = -100;
+	Desc.fY = 0;
+	Desc.fZ = 0;
+	pGameObject = dynamic_cast<CUIObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(m_eLevel), TEXT("Prototype_GameObject_UI_Gacha_FX"), &Desc));
+	Add_Child(pGameObject);
+
+	Desc.fX = -120;
+	Desc.fY = 50;
+	Desc.fZ = 0;
+	pGameObject = dynamic_cast<CUIObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(m_eLevel), TEXT("Prototype_GameObject_UI_Gacha_FX"), &Desc));
+	Add_Child(pGameObject);
+
+	Desc.fX = -140;
+	Desc.fY = 70;
+	Desc.fZ = 1;
+	pGameObject = dynamic_cast<CUIObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(m_eLevel), TEXT("Prototype_GameObject_UI_Gacha_FX"), &Desc));
+	Add_Child(pGameObject);
+
+	Desc.fX = -200;
+	Desc.fY = 70;
+	Desc.fZ = 2;
+	pGameObject = dynamic_cast<CUIObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(m_eLevel), TEXT("Prototype_GameObject_UI_Gacha_FX"), &Desc));
+	Add_Child(pGameObject);
+
+	Desc.fX = -240;
+	Desc.fY = 80;
+	Desc.fZ = 0;
+	pGameObject = dynamic_cast<CUIObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(m_eLevel), TEXT("Prototype_GameObject_UI_Gacha_FX"), &Desc));
+	Add_Child(pGameObject);
+
+	Desc.fX = -440;
+	Desc.fY = 80;
+	Desc.fZ = 4;
+	pGameObject = dynamic_cast<CUIObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(m_eLevel), TEXT("Prototype_GameObject_UI_Gacha_FX"), &Desc));
+	Add_Child(pGameObject);
+
+	Desc.fX = -460;
+	Desc.fY = 80;
+	Desc.fZ = 2;
+	pGameObject = dynamic_cast<CUIObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(m_eLevel), TEXT("Prototype_GameObject_UI_Gacha_FX"), &Desc));
+	Add_Child(pGameObject);
+
+	Desc.fX = -490;
+	Desc.fY = 60;
+	Desc.fZ = 0;
+	pGameObject = dynamic_cast<CUIObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(m_eLevel), TEXT("Prototype_GameObject_UI_Gacha_FX"), &Desc));
+	Add_Child(pGameObject);
+
+	Desc.fX = -520;
+	Desc.fY = 30;
+	Desc.fZ = 2;
+	pGameObject = dynamic_cast<CUIObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(m_eLevel), TEXT("Prototype_GameObject_UI_Gacha_FX"), &Desc));
+	Add_Child(pGameObject);
+
+	Desc.fX = -530;
+	Desc.fY = 30;
+	Desc.fZ = 1;
+	pGameObject = dynamic_cast<CUIObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(m_eLevel), TEXT("Prototype_GameObject_UI_Gacha_FX"), &Desc));
+	Add_Child(pGameObject);
 }
 
 void CGacha::Rand_Itme()
@@ -206,7 +290,7 @@ void CGacha::Rand_Itme()
 	{
 		iTemp[i] = m_pGameInstance->Rand(0, 8);
 		pItem = static_cast<CItem_Base*>(m_pGameInstance->Get_ItemObject(iTemp[i]));
-		static_cast<CGacha_Slot*>(m_vecChildren[i])->Push_Item(pItem);
+		static_cast<CGacha_Slot*>(m_vecChildren[i])->Push_Item_ReRoll(pItem);
 	}
 	m_bIsReandom = true;
 }

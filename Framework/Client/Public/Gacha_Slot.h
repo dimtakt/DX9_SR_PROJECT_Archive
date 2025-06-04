@@ -21,7 +21,10 @@ public:
 	virtual HRESULT					Render() override;
 
 public:
-	void							Push_Item(CItem_Base* pItem) { m_pSlotItem = pItem; }
+	virtual void					Push_Item(CItemObject* pItem) override;
+	virtual void					IsPick_off() override { m_bIsPick = false; }
+	void							Push_Item_ReRoll(CItemObject* pItem);
+
 private:
 	LEVEL							m_eLevel = {};
 	_bool							m_bIsPick = {};

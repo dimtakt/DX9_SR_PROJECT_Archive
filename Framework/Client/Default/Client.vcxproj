@@ -168,6 +168,8 @@
     <ClInclude Include="..\Public\Client_Struct.h" />
     <ClInclude Include="..\Public\EXP_Ball.h" />
     <ClInclude Include="..\public\Gacha.h" />
+    <ClInclude Include="..\public\Gacha_Button_Icon.h" />
+    <ClInclude Include="..\public\Gacha_FX.h" />
     <ClInclude Include="..\public\Gacha_Pass.h" />
     <ClInclude Include="..\public\Gacha_Reroll.h" />
     <ClInclude Include="..\public\Gacha_Slot.h" />
@@ -294,6 +296,8 @@
     <ClCompile Include="..\private\ChapMap_PlayerSymbol.cpp" />
     <ClCompile Include="..\Private\EXP_Ball.cpp" />
     <ClCompile Include="..\private\Gacha.cpp" />
+    <ClCompile Include="..\private\Gacha_Button_Icon.cpp" />
+    <ClCompile Include="..\private\Gacha_FX.cpp" />
     <ClCompile Include="..\private\Gacha_Pass.cpp" />
     <ClCompile Include="..\private\Gacha_Reroll.cpp" />
     <ClCompile Include="..\private\Gacha_Slot.cpp" />

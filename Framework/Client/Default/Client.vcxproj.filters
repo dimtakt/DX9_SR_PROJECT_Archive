@@ -343,6 +343,12 @@
     <Filter Include="02.GameObject\UI\Window\Gacha\Gacha_Slot\Selete">
       <UniqueIdentifier>{54880f30-cb87-4b36-8ba3-c1b5a2dce555}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\UI\Window\Gacha\Gacha_Button\Button_Icon">
+      <UniqueIdentifier>{aa6add04-d932-49c9-a09d-f2512c77f752}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\UI\Window\Gacha\Gacha_FX">
+      <UniqueIdentifier>{788cb07d-a84c-4143-9ceb-e2e33b3c7e63}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -732,6 +738,12 @@
     <ClInclude Include="..\public\Gacha_Slot_Selete.h">
       <Filter>02.GameObject\UI\Window\Gacha\Gacha_Slot\Selete</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\Gacha_Button_Icon.h">
+      <Filter>02.GameObject\UI\Window\Gacha\Gacha_Button\Button_Icon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Gacha_FX.h">
+      <Filter>02.GameObject\UI\Window\Gacha\Gacha_FX</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -1082,6 +1094,12 @@
     </ClCompile>
     <ClCompile Include="..\private\Gacha_Slot_Selete.cpp">
       <Filter>02.GameObject\UI\Window\Gacha\Gacha_Slot\Selete</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Gacha_Button_Icon.cpp">
+      <Filter>02.GameObject\UI\Window\Gacha\Gacha_Button\Button_Icon</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Gacha_FX.cpp">
+      <Filter>02.GameObject\UI\Window\Gacha\Gacha_FX</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

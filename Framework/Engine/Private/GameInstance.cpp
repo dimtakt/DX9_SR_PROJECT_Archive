@@ -105,8 +105,8 @@ void CGameInstance::Update_Engine(_float fTimeDelta)
     // 콜리전 충돌확인
     m_pCollision_Manager->Check_RoomCollisions();
     m_pObject_Manager->Update(fTimeDelta);
+    m_pItem_Manager->Update();
     m_pObject_Manager->Late_Update(fTimeDelta);
-
     m_pLevel_Manager->Update(fTimeDelta);
 }
 
