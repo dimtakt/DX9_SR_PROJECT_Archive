@@ -24,7 +24,7 @@ protected:
 	HRESULT						Bind_ButtonTex_Single(HWND hWnd, _uint iTextureIndex);
 	HRESULT						Bind_ButtonTex_Double(HWND hWnd, _uint iTextureIndex_Default, _uint iTextureIndex_NotDefault);
 
-private:
+protected:
 	HRESULT						Render_Button(_uint iTextureIndex);
 
 protected:

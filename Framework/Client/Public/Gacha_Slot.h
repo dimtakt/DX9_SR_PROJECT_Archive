@@ -1,16 +1,16 @@
 #pragma once
-#include "UIObject.h"
 #include "Client_Defines.h"
-BEGIN(Engine)
-class CVIBuffer_Rect;
-END
+#include "Client_Defines_Item.h"
+#include "Button.h"
+#include "ItemObject.h"
+#include "Item_Base.h"
 BEGIN(Client)
-class CTalent final : public CUIObject
+class CGacha_Slot final : public CButton
 {
 private:
-									CTalent(LPDIRECT3DDEVICE9 pGraphic_Device);
-									CTalent(const CTalent& Prototype);
-	virtual							~CTalent() = default;
+									CGacha_Slot(LPDIRECT3DDEVICE9 pGraphic_Device);
+									CGacha_Slot(const CGacha_Slot& Prototype);
+	virtual							~CGacha_Slot() = default;
 
 public:
 	virtual HRESULT					Initialize_Prototype(LEVEL eLevel);
@@ -20,25 +20,23 @@ public:
 	virtual void					Late_Update(_float fTimeDelta) override;
 	virtual HRESULT					Render() override;
 
-public:
-	void							UI_Switch();
-	void							Slot_Reset();
 private:
 	LEVEL							m_eLevel = {};
-	CVIBuffer_Rect*					m_pVIBufferCom = { nullptr };
+	_bool							m_bIsOver = {};
+	_uint							m_iSlotIndex = {};
+	_int							m_iSlotItem_Tex = {};
 
-	_bool							m_bIsOpen = { false };
 private:
 	HRESULT							Ready_Components();
+	void							SetUp_RenderState();
+	void							Reset_RenderState();
 
 	HRESULT							Ready_ChildPrototype(LEVEL eLevel);
 	HRESULT							Ready_Children();
-
-	void							Font_Render();
 public:
-	static CTalent*					Create(LPDIRECT3DDEVICE9 pGraphic_Device, LEVEL eLevel);
+	static CGacha_Slot*				Create(LPDIRECT3DDEVICE9 pGraphic_Device, LEVEL eLevel);
 	virtual CGameObject*			Clone(void* pArg) override;
 	virtual void					Free() override;
 };
-END
 
+END

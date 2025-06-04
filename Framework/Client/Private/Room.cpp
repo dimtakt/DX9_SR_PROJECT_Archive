@@ -34,11 +34,6 @@ void CRoom::Priority_Update(_float fTimeDelta)
 	{
 		if (m_pTerrainBox != nullptr)
 			m_pTerrainBox->Priority_Update(fTimeDelta);
-		// 추후 지형 오브젝트 처리
-		/*for (auto& obj : m_vObject)
-		{
-			obj->
-		}*/
 
 		for (auto& obj : m_vObject)
 		{
@@ -66,11 +61,7 @@ void CRoom::Update(_float fTimeDelta)
 	{
 		if (m_pTerrainBox != nullptr)
 			m_pTerrainBox->Update(fTimeDelta);
-		// 추후 지형 오브젝트 처리
-		/*for (auto& obj : m_vObject)
-		{
-			obj->
-		}*/
+
 		for (auto& obj : m_vObject)
 		{
 			if (nullptr != obj)
@@ -92,15 +83,17 @@ void CRoom::Late_Update(_float fTimeDelta)
 	{
 		if (m_pTerrainBox != nullptr)
 			m_pTerrainBox->Late_Update(fTimeDelta);
-		// 추후 지형 오브젝트 처리
-		/*for (auto& obj : m_vObject)
-		{
-			obj->
-		}*/
-		for (auto& obj : m_vObject)
-		{
-			if (nullptr != obj)
-				obj->Late_Update(fTimeDelta);
+		
+		for (auto it = m_vObject.begin(); it != m_vObject.end(); ) {
+			if ((*it) != nullptr && (*it)->Get_IsDead()) { 
+				Safe_Release(*it);
+				it = m_vObject.erase(it); // erase는 다음 이터레이터 반환
+			}
+			else {
+				if (nullptr != *it)
+					(*it)->Late_Update(fTimeDelta);
+				++it;
+			}
 		}
 
 		for (auto& obj : m_vPotal)
@@ -111,11 +104,23 @@ void CRoom::Late_Update(_float fTimeDelta)
 	}
 	if (m_bIsActive)
 	{
-		for (auto& obj : m_vMonster)
+
+		for (auto it = m_vMonster.begin(); it != m_vMonster.end(); ) {
+			if ((*it)->Get_IsDead()) { // 짝수인 경우 삭제
+				Safe_Release(*it);
+				it = m_vMonster.erase(it); // erase는 다음 이터레이터 반환
+			}
+			else {
+				if (nullptr != *it)
+					(*it)->Late_Update(fTimeDelta);
+				++it;
+			}
+		}
+		/*for (auto& obj : m_vMonster)
 		{
 			if (nullptr != obj)
 				obj->Late_Update(fTimeDelta);
-		}
+		}*/
 	}
 }
 
@@ -125,11 +130,6 @@ HRESULT CRoom::Render()
 	{
 		if (m_pTerrainBox != nullptr)
 			m_pTerrainBox->Render();
-		// 추후 지형 오브젝트 처리
-		/*for (auto& obj : m_vObject)
-		{
-			obj->
-		}*/
 
 		for (auto& obj : m_vObject)
 		{
@@ -182,7 +182,7 @@ HRESULT CRoom::Ready_Potal(_uint iLayerLevelIndex, const _wstring& strLayerTag, 
 
 	// collider
 	CCollider_OBB::OBB_DESC tColliderDesc;
-	tColliderDesc.vScale = _float3(1.f, 0.001f, 1.f);
+	tColliderDesc.vScale = _float3(1.f, 3.f, 1.f);
 	tColliderDesc.pOwner = pPotal;
 	tColliderDesc.pTransform = dynamic_cast<CTransform*>(pPotal->Find_Component(TEXT("Com_Transform")));
 	CCollider_OBB* pCol = dynamic_cast<CCollider_OBB*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::COMPONENT, ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Collider_OBB"), &tColliderDesc));
@@ -313,18 +313,49 @@ void CRoom::Enter()
 
 	for (auto& pMonster : m_vMonster)
 	{
-		// collider
-		CCollider_OBB::OBB_DESC tColliderDesc;
-		tColliderDesc.vScale = _float3(1.f, 4.f, 1.f);
-		tColliderDesc.pOwner = pMonster;
-		tColliderDesc.pTransform = pMonster->Get_Transform();
-		CCollider_OBB* pCol = dynamic_cast<CCollider_OBB*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::COMPONENT, ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Collider_OBB"), &tColliderDesc));
-		m_pGameInstance->Add_Collider(pCol);
+		if (pMonster != nullptr) {
+			pMonster->Set_IsActive(true);
+			// collider
+			CCollider_OBB::OBB_DESC tColliderDesc;
+			tColliderDesc.vScale = _float3(1.f, 3.f, 1.f);
+			tColliderDesc.pOwner = pMonster;
+			tColliderDesc.pTransform = pMonster->Get_Transform();
+			CCollider_OBB* pCol = dynamic_cast<CCollider_OBB*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::COMPONENT, ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Collider_OBB"), &tColliderDesc));
+			m_pGameInstance->Add_Collider(pCol);
+		}
+	}
+
+	for (auto& pObject : m_vObject)
+	{
+		if (pObject != nullptr)
+		{
+			pObject->Set_IsActive(true);
+			// collider
+			CCollider_OBB::OBB_DESC tColliderDesc;
+			tColliderDesc.vScale = _float3(1.0f, 3.f, 1.0f);
+			tColliderDesc.pOwner = pObject;
+			tColliderDesc.pTransform = dynamic_cast<CTransform*>(pObject->Find_Component(TEXT("Com_Transform")));
+			CCollider_OBB* pCol = dynamic_cast<CCollider_OBB*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::COMPONENT, ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Collider_OBB"), &tColliderDesc));
+			m_pGameInstance->Add_Collider(pCol);
+		}
+		
 	}
 }
 
 void CRoom::Exit()
 {
+	for (auto& pMonster : m_vMonster)
+	{
+		if (pMonster != nullptr)
+			pMonster->Set_IsActive(false);
+	}
+
+	for (auto& pObject : m_vObject)
+	{
+		if(pObject != nullptr)
+			pObject->Set_IsActive(false);
+	}
+
 	m_bIsActive = false;
 }
 

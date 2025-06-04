@@ -1,16 +1,14 @@
 #pragma once
-#include "UIObject.h"
 #include "Client_Defines.h"
-BEGIN(Engine)
-class CVIBuffer_Rect;
-END
+#include "Button.h"
+
 BEGIN(Client)
-class CTalent final : public CUIObject
+class CTalent_Slot_Icon final : public CButton
 {
 private:
-									CTalent(LPDIRECT3DDEVICE9 pGraphic_Device);
-									CTalent(const CTalent& Prototype);
-	virtual							~CTalent() = default;
+	CTalent_Slot_Icon(LPDIRECT3DDEVICE9 pGraphic_Device);
+	CTalent_Slot_Icon(const CTalent_Slot_Icon& Prototype);
+	virtual							~CTalent_Slot_Icon() = default;
 
 public:
 	virtual HRESULT					Initialize_Prototype(LEVEL eLevel);
@@ -20,25 +18,22 @@ public:
 	virtual void					Late_Update(_float fTimeDelta) override;
 	virtual HRESULT					Render() override;
 
-public:
-	void							UI_Switch();
-	void							Slot_Reset();
 private:
 	LEVEL							m_eLevel = {};
-	CVIBuffer_Rect*					m_pVIBufferCom = { nullptr };
+	_uint							m_iIndex = {};
+	_uint							m_iTexIdex = {};
 
-	_bool							m_bIsOpen = { false };
 private:
 	HRESULT							Ready_Components();
+	void							SetUp_RenderState();
+	void							Reset_RenderState();
 
 	HRESULT							Ready_ChildPrototype(LEVEL eLevel);
 	HRESULT							Ready_Children();
 
-	void							Font_Render();
 public:
-	static CTalent*					Create(LPDIRECT3DDEVICE9 pGraphic_Device, LEVEL eLevel);
-	virtual CGameObject*			Clone(void* pArg) override;
+	static CTalent_Slot_Icon* Create(LPDIRECT3DDEVICE9 pGraphic_Device, LEVEL eLevel);
+	virtual CGameObject* Clone(void* pArg) override;
 	virtual void					Free() override;
 };
 END
-

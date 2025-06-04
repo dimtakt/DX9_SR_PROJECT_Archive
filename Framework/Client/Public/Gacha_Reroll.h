@@ -1,16 +1,14 @@
 #pragma once
-#include "UIObject.h"
 #include "Client_Defines.h"
-BEGIN(Engine)
-class CVIBuffer_Rect;
-END
+#include "Button.h"
+
 BEGIN(Client)
-class CTalent final : public CUIObject
+class CGacha_Reroll final : public CButton
 {
 private:
-									CTalent(LPDIRECT3DDEVICE9 pGraphic_Device);
-									CTalent(const CTalent& Prototype);
-	virtual							~CTalent() = default;
+	CGacha_Reroll(LPDIRECT3DDEVICE9 pGraphic_Device);
+	CGacha_Reroll(const CGacha_Reroll& Prototype);
+	virtual							~CGacha_Reroll() = default;
 
 public:
 	virtual HRESULT					Initialize_Prototype(LEVEL eLevel);
@@ -20,25 +18,26 @@ public:
 	virtual void					Late_Update(_float fTimeDelta) override;
 	virtual HRESULT					Render() override;
 
-public:
-	void							UI_Switch();
-	void							Slot_Reset();
 private:
 	LEVEL							m_eLevel = {};
-	CVIBuffer_Rect*					m_pVIBufferCom = { nullptr };
+	_bool							m_bHold = { false };
+	_int							m_iClickValue = {};
 
-	_bool							m_bIsOpen = { false };
 private:
 	HRESULT							Ready_Components();
+	void							SetUp_RenderState();
+	void							Reset_RenderState();
 
 	HRESULT							Ready_ChildPrototype(LEVEL eLevel);
 	HRESULT							Ready_Children();
 
 	void							Font_Render();
+
+	_bool							Reset_Pick();
+
 public:
-	static CTalent*					Create(LPDIRECT3DDEVICE9 pGraphic_Device, LEVEL eLevel);
-	virtual CGameObject*			Clone(void* pArg) override;
+	static CGacha_Reroll* Create(LPDIRECT3DDEVICE9 pGraphic_Device, LEVEL eLevel);
+	virtual CGameObject* Clone(void* pArg) override;
 	virtual void					Free() override;
 };
 END
-

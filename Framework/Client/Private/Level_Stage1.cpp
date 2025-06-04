@@ -54,7 +54,7 @@ void CLevel_Stage1::Update(_float fTimeDelta)
 {
 	if (m_pGameInstance->IsKeyDown(VK_RETURN))
 	{
- 		if(FAILED(m_pGameInstance->Open_Level(ENUM_CLASS(LEVEL::LEVEL_LOADING), CLevel_Loading::Create(m_pGraphic_Device, LEVEL::LEVEL_STAGE1))))
+ 		if(FAILED(m_pGameInstance->Open_Level(ENUM_CLASS(LEVEL::LEVEL_LOADING), CLevel_Loading::Create(m_pGraphic_Device, LEVEL::LEVEL_STAGE2))))
 			return;
 	}
 }
@@ -219,7 +219,7 @@ HRESULT CLevel_Stage1::Ready_Test(const _wstring& strLayerTag)
 {
 	MAP_OBJECT_DESC ExpDesc{};
 	ExpDesc.eType = GAMEOBJ_TYPE::EXP;
-	ExpDesc.vPos = _float3(0.f, 4.f, 0.f);
+	ExpDesc.vPos = _float3(0.f, 3.f, 0.f);
 	ExpDesc.vRotate = _float3(0.f, 0.f, 0.f);
 	ExpDesc.vScale = _float3(4.f, 4.f, 4.f);
 	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_STAGE1), strLayerTag,
@@ -228,7 +228,7 @@ HRESULT CLevel_Stage1::Ready_Test(const _wstring& strLayerTag)
 
 	MAP_OBJECT_DESC StoneDesc{};
 	StoneDesc.eType = GAMEOBJ_TYPE::STONE_TABLET;
-	StoneDesc.vPos = _float3(3.f, 4.f, 3.f);
+	StoneDesc.vPos = _float3(3.f, 2.f, 3.f);
 	StoneDesc.vRotate = _float3(0.f, 0.f, 0.f);
 	StoneDesc.vScale = _float3(1.f, 1.f, 1.f);
 	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_STAGE1), strLayerTag,
@@ -237,7 +237,7 @@ HRESULT CLevel_Stage1::Ready_Test(const _wstring& strLayerTag)
 
 	MAP_OBJECT_DESC MerchantDesc{};
 	MerchantDesc.eType = GAMEOBJ_TYPE::MERCAHNT;
-	MerchantDesc.vPos = _float3(-3.f, 3.f, -3.f);
+	MerchantDesc.vPos = _float3(-3.f, 2.f, -3.f);
 	MerchantDesc.vRotate = _float3(0.f, 0.f, 0.f);
 	MerchantDesc.vScale = _float3(5.f, 5.f, 5.f);
 	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_STAGE1), strLayerTag,
@@ -246,7 +246,7 @@ HRESULT CLevel_Stage1::Ready_Test(const _wstring& strLayerTag)
 
 	MAP_OBJECT_DESC ArtifactDesc{};
 	ArtifactDesc.eType = GAMEOBJ_TYPE::ATIFACT;
-	ArtifactDesc.vPos = _float3(3.f, 3.f, -3.f);
+	ArtifactDesc.vPos = _float3(3.f, 2.f, -3.f);
 	ArtifactDesc.vRotate = _float3(0.f, 0.f, 0.f);
 	ArtifactDesc.vScale = _float3(2.f, 2.f, 2.f);
 	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_STAGE1), strLayerTag,
@@ -255,7 +255,7 @@ HRESULT CLevel_Stage1::Ready_Test(const _wstring& strLayerTag)
 
 	MAP_OBJECT_DESC HPDesc{};
 	HPDesc.eType = GAMEOBJ_TYPE::HP;
-	HPDesc.vPos = _float3(-3.f, 3.f, 3.f);
+	HPDesc.vPos = _float3(-3.f, 2.f, 3.f);
 	HPDesc.vRotate = _float3(0.f, 0.f, 0.f);
 	HPDesc.vScale = _float3(2.f, 2.f, 2.f);
 	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_STAGE1), strLayerTag,

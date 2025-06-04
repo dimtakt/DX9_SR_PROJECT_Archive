@@ -25,6 +25,9 @@ private:
 	void SetUp_RenderState();
 	void Reset_RenderState();
 
+public:
+	virtual void OnCollision(CGameObject* pGameObject) override;
+
 private:
 	CVIBuffer_Rect* m_pVIBufferCom = { nullptr };
 	CTransform* m_pTransformCom = { nullptr };

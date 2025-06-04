@@ -24,10 +24,11 @@ public:
 
 
 public:
-	BOOL Get_IsDead() { return m_bDead; }
+	_bool Get_IsDead() { return m_bDead; }
+	_bool Get_IsActive() { return m_bActive; }
 	GAMEOBJ_TYPE Get_ObjType() { return m_eObjType; }
 public:
-	void Set_IsDead(BOOL bDead) { m_bDead = bDead; }
+	void Set_IsDead(_bool bDead) { m_bDead = bDead; }	void Set_IsActive(_bool bActive) { m_bActive = bActive; }
 
 public:
 	virtual void OnCollision(CGameObject* pGameObject);
@@ -38,8 +39,9 @@ protected:
 
 	map<const _wstring, class CComponent*>		m_Components;
 
-	BOOL						m_bDead = {};
+	_bool						m_bDead = {};
 	GAMEOBJ_TYPE				m_eObjType = {};
+	_bool						m_bActive = { true };
 
 protected:
 	HRESULT Add_Component(_uint iPrototypeLevelIndex, const _wstring& strPrototypeTag,
