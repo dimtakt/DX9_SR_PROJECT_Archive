@@ -89,7 +89,7 @@ void COink_A::Update(_float fTimeDelta)
     _float4x4 matRotateChildtoPlayer = {};
     D3DXMatrixIdentity(&matRotateChildtoPlayer);
     _float fAngle = atan2f(vTargetPos.x - vMonsterPos.x, vTargetPos.z - vMonsterPos.z);
-    _float fDegree = D3DXToDegree(fAngle) + 190;
+    _float fDegree = D3DXToDegree(fAngle) + 180;
     D3DXMatrixRotationY(&matRotateChildtoPlayer, D3DXToRadian(fDegree));
 
     // 4. 원래 위치(몬스터)로 재이동
@@ -114,7 +114,8 @@ void COink_A::Update(_float fTimeDelta)
     // ksta : 여기에 분기 추가 필요
     if (!(m_pAnimatorCom->Get_CurStateTag() == L"ChargeReady" ||
         m_pAnimatorCom->Get_CurStateTag() == L"ChargeReady_Cycle" ||
-        m_pAnimatorCom->Get_CurStateTag() == L"ChargeEnd"))
+        m_pAnimatorCom->Get_CurStateTag() == L"ChargeEnd" ||
+        m_pAnimatorCom->Get_CurStateTag() == L"Attack_Standby"))
     {
         // 거리가 아주 가깝다면 근접공격 상태
         if (fDistance <= fAtkDist)
@@ -146,7 +147,7 @@ void COink_A::Update(_float fTimeDelta)
     
 
 
-    // 각 분기점마다의 핻동
+    // 각 분기점마다의 행동
     if (m_isTracking)
     {
         float fMoveSpeed = 1.2f;

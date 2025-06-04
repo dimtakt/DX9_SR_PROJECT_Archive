@@ -336,6 +336,7 @@ HRESULT CMainApp::Ready_Texture_Setting()
 
 	
 	// Prototype_Component_Texture_Effect (Monster)
+	// ksta : 만약 모든 스테이지에서 사용하려는 것이 아니라면 LEVEL_STATIC을 바꿔줘야 할 듯?
 	// --- CTexture
 	/* Prototype_Component_Texture_Mole_A_Effect */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Mole_A_Effect_Swing"),
@@ -349,6 +350,31 @@ HRESULT CMainApp::Ready_Texture_Setting()
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Oink_A_Effect_Swing"),
 		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Monster/Oink_A/Effects/Oink_Chief_Swing%d.png"), 2))))
 		return E_FAIL;
+
+	/* Prototype_Component_Texture_LaserGhost_D_Effect */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_LaserGhost_D_Effect_Attack_Cycle"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Monster/LaserGhost_D/Effects/LaserGhost_FX_Attack_Cycle%02d.png"), 7))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_LaserGhost_D_Effect_Attack_End"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Monster/LaserGhost_D/Effects/LaserGhost_FX_Attack_End%02d.png"), 8))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_LaserGhost_D_Effect_Attack_Start"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Monster/LaserGhost_D/Effects/LaserGhost_FX_Attack_Start%02d.png"), 1))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_LaserGhost_D_Effect_AttackReady"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Monster/LaserGhost_D/Effects/LaserGhost_FX_AttackReady%02d.png"), 28))))
+		return E_FAIL;
+	// ksta : temp. 이펙트 분할 및 적용 끝나면 바로 아래 하나 if문 삭제할 것.
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_LaserGhost_D_Effect_Laser"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Monster/LaserGhost_D/Effects/Laser/Ghost_LaserAti_Laser_%02d.png"), 11))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_LaserGhost_D_Effect_Laser_Progress"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Monster/LaserGhost_D/Effects/Laser/SaparateByState/Ghost_LaserAti_Laser_Progress_%02d.png"), 6))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_LaserGhost_D_Effect_Laser_End"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Monster/LaserGhost_D/Effects/Laser/SaparateByState/Ghost_LaserAti_Laser_End_%02d.png"), 5))))
+		return E_FAIL;
+
 	// ---
 	
 

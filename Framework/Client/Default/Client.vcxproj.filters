@@ -340,6 +340,9 @@
     <Filter Include="02.GameObject\UI\Window\Gacha\Gacha_Button">
       <UniqueIdentifier>{ffa2167b-4c62-4a34-849c-35f373d2c0a0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\Monster\LaserGhost_D">
+      <UniqueIdentifier>{1d6ba4a0-cf84-4e28-8ddf-6830f227f041}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -723,6 +726,9 @@
     <ClInclude Include="..\public\Gacha_Pass.h">
       <Filter>02.GameObject\UI\Window\Gacha\Gacha_Button</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\LaserGhost_D.h">
+      <Filter>02.GameObject\Monster\LaserGhost_D</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -1067,6 +1073,9 @@
     </ClCompile>
     <ClCompile Include="..\private\Gacha_Pass.cpp">
       <Filter>02.GameObject\UI\Window\Gacha\Gacha_Button</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\LaserGhost_D.cpp">
+      <Filter>02.GameObject\Monster\LaserGhost_D</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
