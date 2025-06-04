@@ -142,7 +142,7 @@ void CPlayer::Update(_float fTimeDelta)
 
             // 바꾸는 데에 성공시 2타공격 이펙트 출력
             if (m_pAnimatorCom->Change_State(strStateTag, true))
-                CEffect_Factory::GetInstance()->Create_Effect(L"Prototype_Component_Texture_Effect_Blade0_Swing1",
+                CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::PLAYER_EFFECT, L"Prototype_Component_Texture_Effect_Blade0_Swing1",
                     *m_pTransformCom->Get_WorldMatrix(), matPlayerWorld, m_pTransformCom, true);
         }
 
@@ -153,7 +153,7 @@ void CPlayer::Update(_float fTimeDelta)
 
         // 바꾸는 데에 성공시 1타공격 이펙트 출력
         if (m_pAnimatorCom->Change_State(strStateTag, true))
-            CEffect_Factory::GetInstance()->Create_Effect(L"Prototype_Component_Texture_Effect_Blade0_Swing0",
+            CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::PLAYER_EFFECT, L"Prototype_Component_Texture_Effect_Blade0_Swing0",
                 *m_pTransformCom->Get_WorldMatrix(), matPlayerWorld, m_pTransformCom);
 
         std::cout << "[Player::Update] PlayerPos : " << vPlayerPos.x << ", " << vPlayerPos.y << ", " << vPlayerPos.z << std::endl;
@@ -293,9 +293,9 @@ void CPlayer::Update(_float fTimeDelta)
             {
                 if(m_pAnimatorTransCom->Change_State(L"Fury"))
                 {
-                    CEffect_Factory::GetInstance()->Create_Effect(L"Prototype_Component_Texture_Effect_Blade0_NFury",
+                    CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::PLAYER_EFFECT, L"Prototype_Component_Texture_Effect_Blade0_NFury",
                         *m_pTransformCom->Get_WorldMatrix(), matPlayerWorld, m_pTransformCom, true);
-                    CEffect_Factory::GetInstance()->Create_Effect(L"Prototype_Component_Texture_Effect_Blade0_NFury_Back",
+                    CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::PLAYER_EFFECT, L"Prototype_Component_Texture_Effect_Blade0_NFury_Back",
                         *m_pTransformCom->Get_WorldMatrix(), matPlayerWorld, m_pTransformCom, true);
                 }
                 strStateTag = (vRayPoint.z > vPlayerPos.z)?     L"Fury_Upper":
@@ -315,7 +315,7 @@ void CPlayer::Update(_float fTimeDelta)
                     matPlayerWorld = matTransToOrigin * matScale * matRotateChild * matRotateChildtoCursor * matTransReturn * matTransAddition;
 
                     // 이펙트 적용
-                    CEffect_Factory::GetInstance()->Create_Effect(L"Prototype_Component_Texture_Effect_Blade0_Parry",
+                    CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::PLAYER_EFFECT, L"Prototype_Component_Texture_Effect_Blade0_Parry",
                         *m_pTransformCom->Get_WorldMatrix(), matPlayerWorld, m_pTransformCom, true);
                     
                     // 다시 초기값대로 초기화

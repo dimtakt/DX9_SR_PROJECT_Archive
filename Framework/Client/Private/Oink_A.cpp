@@ -162,7 +162,7 @@ void COink_A::Update(_float fTimeDelta)
     if (m_pAnimatorCom->Get_CurStateTag() == L"Attack" &&
         m_pAnimatorCom->Get_CurStackedFrame() == 24)
     {
-        CEffect_Factory::GetInstance()->Create_Effect(L"Prototype_Component_Texture_Oink_A_Effect_Swing",
+        CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::MONSTER_EFFECT, L"Prototype_Component_Texture_Oink_A_Effect_Swing",
             *m_pTransformCom->Get_WorldMatrix(), matMonsterWorld, true);
     }
     else if (m_pAnimatorCom->Get_CurStateTag() == L"Attack" &&
@@ -177,7 +177,7 @@ void COink_A::Update(_float fTimeDelta)
         if (m_pAnimatorCom->Change_State(L"Charge_End"))
         {
             _float3 vThrownDir = pTargetTransform->Get_State(STATE::POSITION) - vMonsterPos;
-            CEffect_Factory::GetInstance()->Create_Effect(L"Prototype_Component_Texture_Oink_A_Effect_SpinSwing",
+            CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::MONSTER_EFFECT, L"Prototype_Component_Texture_Oink_A_Effect_SpinSwing",
                 *m_pTransformCom->Get_WorldMatrix(), matMonsterWorld, vThrownDir, fThrownPower, fThrownAtkLifeTime, true);
         }
         else {}

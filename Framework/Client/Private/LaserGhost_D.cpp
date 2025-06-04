@@ -22,7 +22,7 @@ HRESULT CLaserGhost_D::Initialize(void* pArg)
 {
     __super::Initialize(pArg);
 
-    if (FAILED(this->Ready_Components()))
+    if (FAILED(this->Ready_Components(pArg)))
         return E_FAIL;
 
     m_isRunOut = false;
@@ -38,6 +38,11 @@ void CLaserGhost_D::Priority_Update(_float fTimeDelta)
 
 void CLaserGhost_D::Update(_float fTimeDelta)
 {
+    if (!m_pTerrainBox || !m_pTransformCom || !m_pTextureCom)
+        return;
+
+
+
     // 처음 타겟 잡은 곳 (플레이어가 위치하던 곳) 을 기준좌표로 조준하다가
     // 이후 초당 20~30도 정도 속도로 반시계방향 회전하며 레이저 발사
     //
@@ -144,7 +149,7 @@ void CLaserGhost_D::Update(_float fTimeDelta)
         {
             if (m_pAnimatorCom->Change_State(L"AttackReady"))
             {
-                CEffect_Factory::GetInstance()->Create_Effect(L"Prototype_Component_Texture_LaserGhost_D_Effect_AttackReady",
+                CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::MONSTER_EFFECT, L"Prototype_Component_Texture_LaserGhost_D_Effect_AttackReady",
                     *m_pTransformCom->Get_WorldMatrix(), matMonsterWorld);
                 m_vLockedOnPos = vTargetPos;
                 m_isTracking = false;
@@ -188,7 +193,7 @@ void CLaserGhost_D::Update(_float fTimeDelta)
     {
         if (m_pAnimatorCom->Change_State(L"Attack_Start"))
         {
-            CEffect_Factory::GetInstance()->Create_Effect(L"Prototype_Component_Texture_LaserGhost_D_Effect_Attack_Start",
+            CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::MONSTER_EFFECT, L"Prototype_Component_Texture_LaserGhost_D_Effect_Attack_Start",
                 *m_pTransformCom->Get_WorldMatrix(), matMonsterWorld);
         }
     }
@@ -196,9 +201,35 @@ void CLaserGhost_D::Update(_float fTimeDelta)
     {
         if (m_pAnimatorCom->Change_State(L"Attack_Cycle", true, fLaserLifeTime))
         {
-            CEffect_Factory::GetInstance()->Create_Effect(L"Prototype_Component_Texture_LaserGhost_D_Effect_Attack_Cycle",
+            CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::MONSTER_EFFECT, L"Prototype_Component_Texture_LaserGhost_D_Effect_Attack_Cycle",
                 *m_pTransformCom->Get_WorldMatrix(), matMonsterWorld);
 
+            // 락온 좌표 시간에 따라 변화
+#pragma region Turning the m_vLockedOnPos // 수정필요, 적용안됨
+            _float fTurnSpeedRad = D3DXToRadian(30);
+            _float3 vTurnAxis = { 0, 1, 0 };
+            // 기준점 설정
+            _float4x4 matTrackTarget = *m_pTransformCom->Get_WorldMatrix();
+            // 원점으로 중심축 이동
+            _float4x4 matToOrigin;
+            D3DXMatrixTranslation(&matToOrigin,
+                -matTrackTarget._41,
+                -matTrackTarget._42,
+                -matTrackTarget._43);
+            // 축 기준 회전행렬
+            _float4x4 matRot;
+            D3DXMatrixRotationAxis(&matRot, &vTurnAxis, fTurnSpeedRad);
+            // 다시 제자리로
+            _float4x4 matFromOrigin;
+            D3DXMatrixTranslation(&matFromOrigin,
+                matTrackTarget._41,
+                matTrackTarget._42,
+                matTrackTarget._43);
+            // 다 합치기
+            _float4x4 matRotationTotal = matToOrigin * matRot * matFromOrigin;
+            // 반영
+            D3DXVec3TransformNormal(&m_vLockedOnPos, &m_vLockedOnPos, &matRotationTotal);
+#pragma endregion
             // 레이저용 세팅
 #pragma region Laser Setting Change
             D3DXMatrixScaling(&matScale, -1.f, 10.f, 10.f);
@@ -226,11 +257,9 @@ void CLaserGhost_D::Update(_float fTimeDelta)
 
             matMonsterWorld = matTransToOrigin * matScale * matRotateChild * matRotateChildtoPlayer * matTransReturn * matTransOffset * matTransAddition;
 #pragma endregion
-
             // 공격 이펙트 출력
-            CEffect_Factory::GetInstance()->Create_Effect(L"Prototype_Component_Texture_LaserGhost_D_Effect_Laser_Progress",
+            CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::MONSTER_EFFECT, L"Prototype_Component_Texture_LaserGhost_D_Effect_Laser_Progress",
                 *m_pTransformCom->Get_WorldMatrix(), matMonsterWorld, { 0, 0, 0 }, 0.f, fLaserLifeTime);
-
             // 세팅 리셋
 #pragma region Laser Setting Reset
             D3DXMatrixScaling(&matScale, -1.f, 1.f, 1.f);
@@ -258,10 +287,8 @@ void CLaserGhost_D::Update(_float fTimeDelta)
 
         if (m_pAnimatorCom->Change_State(L"Attack_End"))
         {
-            CEffect_Factory::GetInstance()->Create_Effect(L"Prototype_Component_Texture_LaserGhost_D_Effect_Attack_End",
+            CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::MONSTER_EFFECT, L"Prototype_Component_Texture_LaserGhost_D_Effect_Attack_End",
                 *m_pTransformCom->Get_WorldMatrix(), matMonsterWorld, true);
-            // 레이저 end 이펙트 추가. 지금 이거 제대로 안나옴
-
             // 레이저용 세팅
 #pragma region Laser Setting Change
             D3DXMatrixScaling(&matScale, -1.f, 10.f, 10.f);
@@ -290,7 +317,7 @@ void CLaserGhost_D::Update(_float fTimeDelta)
             matMonsterWorld = matTransToOrigin * matScale * matRotateChild * matRotateChildtoPlayer * matTransReturn * matTransOffset * matTransAddition;
 #pragma endregion
             // 공격 끝 이펙트 출력
-            CEffect_Factory::GetInstance()->Create_Effect(L"Prototype_Component_Texture_LaserGhost_D_Effect_Laser_End",
+            CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::MONSTER_EFFECT, L"Prototype_Component_Texture_LaserGhost_D_Effect_Laser_End",
                 *m_pTransformCom->Get_WorldMatrix(), matMonsterWorld);
             // 세팅 리셋
 #pragma region Laser Setting Reset
@@ -347,6 +374,9 @@ void CLaserGhost_D::Late_Update(_float fTimeDelta)
 
 HRESULT CLaserGhost_D::Render()
 {
+    if (!m_pTransformCom)
+        return S_OK;
+
     // 플레이어 위치에 따라 좌우반전 적용,
     // 단 공격 중 등의 경우에는 변경 X
     _uint iCurLevel = m_pGameInstance->GetInstance()->Get_CurrentLevel();
@@ -392,39 +422,41 @@ HRESULT CLaserGhost_D::Render()
     return S_OK;
 }
 
-HRESULT CLaserGhost_D::Ready_Components()
+HRESULT CLaserGhost_D::Ready_Components(void* pArg)
 {
+    MONSTERDESC* desc = static_cast<MONSTERDESC*>(pArg);
+
     /* For.Com_Texture */
     // Idle
-    if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STAGE1), TEXT("Prototype_Component_Texture_LaserGhost_D_Idle"),
+    if (FAILED(__super::Add_Component(desc->iLayerLevelIndex, TEXT("Prototype_Component_Texture_LaserGhost_D_Idle"),
         TEXT("Com_Texture_Idle"), reinterpret_cast<CComponent**>(&m_pTextureCom_Idle))))
         return E_FAIL;
     // Move
-    if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STAGE1), TEXT("Prototype_Component_Texture_LaserGhost_D_Move"),
+    if (FAILED(__super::Add_Component(desc->iLayerLevelIndex, TEXT("Prototype_Component_Texture_LaserGhost_D_Move"),
         TEXT("Com_Texture_Move"), reinterpret_cast<CComponent**>(&m_pTextureCom_Move))))
         return E_FAIL;
     // Down
-    if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STAGE1), TEXT("Prototype_Component_Texture_LaserGhost_D_Down"),
+    if (FAILED(__super::Add_Component(desc->iLayerLevelIndex, TEXT("Prototype_Component_Texture_LaserGhost_D_Down"),
         TEXT("Com_Texture_Down"), reinterpret_cast<CComponent**>(&m_pTextureCom_Down))))
         return E_FAIL;
     // AttackReady
-    if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STAGE1), TEXT("Prototype_Component_Texture_LaserGhost_D_AttackReady"),
+    if (FAILED(__super::Add_Component(desc->iLayerLevelIndex, TEXT("Prototype_Component_Texture_LaserGhost_D_AttackReady"),
         TEXT("Com_Texture_AttackReady"), reinterpret_cast<CComponent**>(&m_pTextureCom_AttackReady))))
         return E_FAIL;
     // Attack_Start
-    if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STAGE1), TEXT("Prototype_Component_Texture_LaserGhost_D_Attack_Start"),
+    if (FAILED(__super::Add_Component(desc->iLayerLevelIndex, TEXT("Prototype_Component_Texture_LaserGhost_D_Attack_Start"),
         TEXT("Com_Texture_Attack_Start"), reinterpret_cast<CComponent**>(&m_pTextureCom_Attack_Start))))
         return E_FAIL;
     // Attack_Cycle
-    if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STAGE1), TEXT("Prototype_Component_Texture_LaserGhost_D_Attack_Cycle"),
+    if (FAILED(__super::Add_Component(desc->iLayerLevelIndex, TEXT("Prototype_Component_Texture_LaserGhost_D_Attack_Cycle"),
         TEXT("Com_Texture_Attack_Cycle"), reinterpret_cast<CComponent**>(&m_pTextureCom_Attack_Cycle))))
         return E_FAIL;
     // Attack_End
-    if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STAGE1), TEXT("Prototype_Component_Texture_LaserGhost_D_Attack_End"),
+    if (FAILED(__super::Add_Component(desc->iLayerLevelIndex, TEXT("Prototype_Component_Texture_LaserGhost_D_Attack_End"),
         TEXT("Com_Texture_Attack_End"), reinterpret_cast<CComponent**>(&m_pTextureCom_Attack_End))))
         return E_FAIL;
     // Airborne
-    if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STAGE1), TEXT("Prototype_Component_Texture_LaserGhost_D_Airborne"),
+    if (FAILED(__super::Add_Component(desc->iLayerLevelIndex, TEXT("Prototype_Component_Texture_LaserGhost_D_Airborne"),
         TEXT("Com_Texture_Airborne"), reinterpret_cast<CComponent**>(&m_pTextureCom_Airborne))))
         return E_FAIL;
 
