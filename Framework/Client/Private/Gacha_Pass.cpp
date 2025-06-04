@@ -63,14 +63,11 @@ void CGacha_Pass::Late_Update(_float fTimeDelta)
 
 HRESULT CGacha_Pass::Render()
 {
-	SetUp_RenderState();
-
 	if (Button_Pick())
 		__super::Render_Button(3);
 	else
 		__super::Render_Button(2);
 	Font_Render();
-	Reset_RenderState();
 	return S_OK;
 }
 
@@ -90,28 +87,6 @@ HRESULT CGacha_Pass::Ready_Components()
 
 
 	return S_OK;
-}
-
-void CGacha_Pass::SetUp_RenderState()
-{
-	m_pGraphic_Device->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
-	m_pGraphic_Device->SetRenderState(D3DRS_ALPHAREF, 200);
-	m_pGraphic_Device->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER);
-
-	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_POINT);
-	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_POINT);
-	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MIPFILTER, D3DTEXF_NONE);
-}
-
-void CGacha_Pass::Reset_RenderState()
-{
-	m_pGraphic_Device->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
-
-	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_LINEAR);
-	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);
-	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MIPFILTER, D3DTEXF_LINEAR);
-
-	m_pGraphic_Device->SetTexture(0, NULL);
 }
 
 HRESULT CGacha_Pass::Ready_ChildPrototype(LEVEL eLevel)

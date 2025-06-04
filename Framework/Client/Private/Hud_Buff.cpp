@@ -22,12 +22,14 @@ HRESULT CHud_Buff::Initialize_Prototype(LEVEL eLevel)
 
 HRESULT CHud_Buff::Initialize(void* pArg)
 {
-	UIHUD_BUFF_DESC* DescMy = static_cast<UIHUD_BUFF_DESC*>(pArg);
+	UIOBJECT_DESC* Desc = static_cast<UIOBJECT_DESC*>(pArg);
+
+	m_iIndex = Desc->fZ;
 
 	m_fSizeX = 0;
 	m_fSizeY = 0;
-	m_fX = DescMy->fX;
-	m_fY = DescMy->fY;
+	m_fX = Desc->fX;
+	m_fY = Desc->fY;
 	m_fZ = 0.f;
 	m_iWinSizeX = g_iWinSizeX;
 	m_iWinSizeY = g_iWinSizeY;
@@ -47,11 +49,19 @@ HRESULT CHud_Buff::Initialize(void* pArg)
 	if (FAILED(Ready_Children()))
 		return E_FAIL;
 
+	_tchar	szUITag[MAX_PATH];
+	wsprintf(szUITag, TEXT("Hud_Buff_%d"), m_iIndex);
+
+	m_pGameInstance->Add_UIObject(Desc->m_iLevel, szUITag, this);
+
 	return S_OK;
 }
 
 void CHud_Buff::Priority_Update(_float fTimeDelta)
 {
+	if (!m_bIsUpdate)
+		return;
+
 	//임시
 	//플레이어가 가진 칸별 버프 인덱스주소를 넣어서 사용 예정
 	m_vecChildren[2]->Priority_Update(fTimeDelta);
@@ -59,11 +69,17 @@ void CHud_Buff::Priority_Update(_float fTimeDelta)
 
 void CHud_Buff::Update(_float fTimeDelta)
 {
+	if (!m_bIsUpdate)
+		return;
+
 	m_vecChildren[2]->Update(fTimeDelta);
 }
 
 void CHud_Buff::Late_Update(_float fTimeDelta)
 {
+	if (!m_bIsUpdate)
+		return;
+
 	m_vecChildren[2]->Late_Update(fTimeDelta);
 }
 
@@ -147,6 +163,4 @@ CGameObject* CHud_Buff::Clone(void* pArg)
 void CHud_Buff::Free()
 {
 	__super::Free();
-
-	Safe_Release(m_pPlayerStatsCom);
 }

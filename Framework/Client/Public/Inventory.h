@@ -49,9 +49,6 @@ private:
 	HRESULT						Ready_ChildPrototype(LEVEL eLevel);
 	HRESULT						Ready_Children();
 
-	void						SetUp_RenderState();
-	void						Reset_RenderState();
-
 public:
 	static CInventory* Create(LPDIRECT3DDEVICE9 pGraphic_Device, LEVEL eLevel);
 	virtual CGameObject* Clone(void* pArg) override;

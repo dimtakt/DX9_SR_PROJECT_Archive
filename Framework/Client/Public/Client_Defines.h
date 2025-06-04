@@ -19,12 +19,12 @@ namespace Client
 		static constexpr float KEY_GUIDE = 0.15f;
 
 		//HUD
-		static constexpr float HUD_DASH = 0.25f;
-		static constexpr float HUD_BUFF = 0.25f;
-		static constexpr float HUD_BUTTON = 0.25f;
-		static constexpr float HUD_EXP = 0.25f;
-		static constexpr float HUD_STATUS = 0.25f;
-		static constexpr float HUD_WALLET = 0.25f;
+		static constexpr float HUD_DASH = 0.23f;
+		static constexpr float HUD_BUFF = 0.23f;
+		static constexpr float HUD_BUTTON = 0.23f;
+		static constexpr float HUD_EXP = 0.23f;
+		static constexpr float HUD_STATUS = 0.23f;
+		static constexpr float HUD_WALLET = 0.23f;
 
 		//FILED
 		static constexpr float FILED_HP = 0.3f;

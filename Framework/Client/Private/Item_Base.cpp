@@ -67,8 +67,6 @@ void CItem_Base::Late_Update(_float fTimeDelta, _float3 fPos)
 
 HRESULT CItem_Base::Render()
 {
-	SetUp_RenderState();
-
 	if (FAILED(m_pTextureCom->Bind_Texture(m_iItemTextureID)))
 		return E_FAIL;
 	m_pVIBufferCom->Bind_Buffers();
@@ -79,8 +77,6 @@ HRESULT CItem_Base::Render()
 	if (m_bisSelete)
 		if (FAILED(Selete_Render()))
 			return E_FAIL;
-
-	Reset_RenderState();
 
 	return S_OK;
 }
@@ -142,28 +138,6 @@ HRESULT CItem_Base::Ready_Componet()
 		return E_FAIL;
 
 	return S_OK;
-}
-
-void CItem_Base::SetUp_RenderState()
-{
-	m_pGraphic_Device->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
-	m_pGraphic_Device->SetRenderState(D3DRS_ALPHAREF, 200);
-	m_pGraphic_Device->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER);
-
-	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_POINT);
-	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_POINT);
-	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MIPFILTER, D3DTEXF_NONE);
-}
-
-void CItem_Base::Reset_RenderState()
-{
-	m_pGraphic_Device->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
-
-	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_LINEAR);
-	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);
-	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MIPFILTER, D3DTEXF_LINEAR);
-
-	m_pGraphic_Device->SetTexture(0, NULL);
 }
 
 CItem_Base* CItem_Base::Create(LPDIRECT3DDEVICE9 pGraphic_Device)

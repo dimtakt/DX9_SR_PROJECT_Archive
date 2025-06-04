@@ -44,6 +44,8 @@ HRESULT CGacha::Initialize(void* pArg)
 	if (FAILED(Ready_Children()))
 		return E_FAIL;
 
+	m_pGameInstance->Add_UIObject(ENUM_CLASS(m_eLevel), TEXT("UI_Gacha"), this);
+
 	return S_OK;
 }
 
@@ -52,43 +54,52 @@ void CGacha::Priority_Update(_float fTimeDelta)
 	if (m_pGameInstance->Get_CurrentLevel() == ENUM_CLASS(LEVEL::LEVEL_LOADING) || m_pGameInstance->Get_CurrentLevel() == ENUM_CLASS(LEVEL::LEVEL_LOGO) || m_pGameInstance->Get_CurrentLevel() == ENUM_CLASS(LEVEL::LEVEL_MAPEDIT))
 		return;
 
-	if (m_bIsOpen == true)
-		__super::Priority_Update(fTimeDelta);
+	if (!m_bIsUpdate)
+		return;
+
+	if (!m_bIsOpen)
+		return;
+
+	__super::Priority_Update(fTimeDelta);
 }
 
 void CGacha::Update(_float fTimeDelta)
 {
 	if (m_pGameInstance->Get_CurrentLevel() == ENUM_CLASS(LEVEL::LEVEL_LOADING) || m_pGameInstance->Get_CurrentLevel() == ENUM_CLASS(LEVEL::LEVEL_LOGO) || m_pGameInstance->Get_CurrentLevel() == ENUM_CLASS(LEVEL::LEVEL_MAPEDIT))
 		return;
+	
+	if (!m_bIsUpdate)
+		return;
 
-	if (m_bIsOpen == true)
+	if (m_pGameInstance->IsKeyDown(VK_UP))
+		UI_Switch();
+
+	if (!m_bIsOpen)
+		return;
+
+	if (m_pGameInstance->IsKeyDown(VK_ESCAPE))
 	{
-		if (m_pGameInstance->IsKeyDown(VK_ESCAPE))
-		{
-			Close_Ui();
-			return;
-		}
-		__super::Update(fTimeDelta);
+		UI_Switch();
+		return;
 	}
-	else
-	{
-		if (m_pGameInstance->IsKeyDown(VK_UP))
-		{
-			Open_Ui();
-		}
-	}
+	
+	__super::Update(fTimeDelta);
 }
 
 void CGacha::Late_Update(_float fTimeDelta)
 {
 	if (m_pGameInstance->Get_CurrentLevel() == ENUM_CLASS(LEVEL::LEVEL_LOADING) || m_pGameInstance->Get_CurrentLevel() == ENUM_CLASS(LEVEL::LEVEL_LOGO) || m_pGameInstance->Get_CurrentLevel() == ENUM_CLASS(LEVEL::LEVEL_MAPEDIT))
 		return;
-	if (m_bIsOpen == true)
-	{
-		m_pGameInstance->Add_RenderGroup(RENDERGROUP::RG_UI, this);
+	
+	if (!m_bIsUpdate)
+		return;
 
-		__super::Late_Update(fTimeDelta);
-	}
+	if (!m_bIsOpen)
+		return;
+
+	m_pGameInstance->Add_RenderGroup(RENDERGROUP::RG_UI, this);
+	__super::Late_Update(fTimeDelta);
+	
 }
 
 HRESULT CGacha::Render()
@@ -101,16 +112,22 @@ HRESULT CGacha::Render()
 	return S_OK;
 }
 
-void CGacha::Open_Ui()
+void CGacha::UI_Switch()
 {
-	m_bIsOpen = true;
-	static_cast<CInventory*>(m_pGameInstance->Get_GameObject(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Layer_Inventory")))->Open_UI( 250, 0);
-}
-
-void CGacha::Close_Ui()
-{
-	m_bIsOpen = false;
-	static_cast<CInventory*>(m_pGameInstance->Get_GameObject(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Layer_Inventory")))->Close_UI();
+	if (m_bIsOpen)
+	{
+		static_cast<CInventory*>(m_pGameInstance->Get_GameObject(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Layer_Inventory")))->Close_UI();
+		m_pGameInstance->All_Update_On();
+		m_bIsOpen = false;
+	}
+	else
+	{
+		m_pGameInstance->All_Update_Off();
+		m_pGameInstance->Update_On(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("UI_Inven"));
+		static_cast<CInventory*>(m_pGameInstance->Get_GameObject(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Layer_Inventory")))->Open_UI(250, 0);
+		m_bIsUpdate = true;
+		m_bIsOpen = true;
+	}
 }
 
 HRESULT CGacha::Ready_Components()

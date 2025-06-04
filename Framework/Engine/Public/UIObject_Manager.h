@@ -18,8 +18,6 @@ public:
 	void											All_Update_Off();
 
 	void											Clear_UiObj(_uint iLevelIndex);
-
-private:
 	class CUIObject*								Find_UIObj(_uint iLevelIndex, const _wstring& strUITag);
 
 private:

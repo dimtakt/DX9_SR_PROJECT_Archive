@@ -33,9 +33,6 @@ private:
 	_uint							m_iMapTex = {};
 private:
 	HRESULT							Ready_Components();
-	void							SetUp_RenderState();
-	void							Reset_RenderState();
-
 
 public:
 	static CChapmap_Boss*			Create(LPDIRECT3DDEVICE9 pGraphic_Device);

@@ -62,14 +62,11 @@ void CGacha_Reroll::Late_Update(_float fTimeDelta)
 
 HRESULT CGacha_Reroll::Render()
 {
-	SetUp_RenderState();
-
 	if (Button_Pick())
 		__super::Render_Button(1);
 	else
 		__super::Render_Button(0);
 	Font_Render();
-	Reset_RenderState();
 	return S_OK;
 }
 
@@ -89,28 +86,6 @@ HRESULT CGacha_Reroll::Ready_Components()
 
 
 	return S_OK;
-}
-
-void CGacha_Reroll::SetUp_RenderState()
-{
-	m_pGraphic_Device->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
-	m_pGraphic_Device->SetRenderState(D3DRS_ALPHAREF, 200);
-	m_pGraphic_Device->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER);
-
-	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_POINT);
-	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_POINT);
-	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MIPFILTER, D3DTEXF_NONE);
-}
-
-void CGacha_Reroll::Reset_RenderState()
-{
-	m_pGraphic_Device->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
-
-	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_LINEAR);
-	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);
-	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MIPFILTER, D3DTEXF_LINEAR);
-
-	m_pGraphic_Device->SetTexture(0, NULL);
 }
 
 HRESULT CGacha_Reroll::Ready_ChildPrototype(LEVEL eLevel)

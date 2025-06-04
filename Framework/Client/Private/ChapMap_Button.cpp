@@ -92,8 +92,6 @@ void CChapMap_Button::Late_Update(_float fTimeDelta)
 
 HRESULT CChapMap_Button::Render()
 {
-	SetUp_RenderState();
-	
 	if (m_iPlayerLine + 1 == g_MapDB[m_iMapID].m_iLine)
 	{
 		if (FAILED(CButton::Bind_ButtonTex_Double(g_hWnd, 0, 1)))
@@ -109,7 +107,6 @@ HRESULT CChapMap_Button::Render()
 		if (FAILED(CButton::Bind_ButtonTex_Single(g_hWnd, 2)))
 			return E_FAIL;
 	}
-	Reset_RenderState();
 	return S_OK;
 }
 
@@ -219,28 +216,6 @@ HRESULT CChapMap_Button::Ready_Components()
 		return E_FAIL;
 
 	return S_OK;
-}
-
-void CChapMap_Button::SetUp_RenderState()
-{
-	m_pGraphic_Device->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
-	m_pGraphic_Device->SetRenderState(D3DRS_ALPHAREF, 200);
-	m_pGraphic_Device->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER);
-
-	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_POINT);
-	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_POINT);
-	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MIPFILTER, D3DTEXF_NONE);
-}
-
-void CChapMap_Button::Reset_RenderState()
-{
-	m_pGraphic_Device->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
-
-	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_LINEAR);
-	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);
-	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MIPFILTER, D3DTEXF_LINEAR);
-
-	m_pGraphic_Device->SetTexture(0, NULL);
 }
 
 HRESULT CChapMap_Button::Ready_ChildPrototype(LEVEL eLevel)

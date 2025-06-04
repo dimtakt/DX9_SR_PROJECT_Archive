@@ -25,7 +25,7 @@ HRESULT CUIObject_Manager::Add_UIObject(_uint iLevelIndex, const _wstring& strUI
         return E_FAIL;
 
     m_pUIObjects[iLevelIndex].emplace(strUITag, pUIObj);
-
+    Safe_AddRef(pUIObj);
     return S_OK;
 }
 

@@ -50,16 +50,12 @@ void CTalent_Button_Icon::Late_Update(_float fTimeDelta)
 
 HRESULT CTalent_Button_Icon::Render()
 {
-	SetUp_RenderState();
-
-
 	if (FAILED(m_pTextureCom->Bind_Texture(0)))
 		return E_FAIL;
 	m_pVIBufferCom->Bind_Buffers();
 
 	__super::Begin();
 	m_pVIBufferCom->Render();
-	Reset_RenderState();
 	return S_OK;
 }
 
@@ -78,28 +74,6 @@ HRESULT CTalent_Button_Icon::Ready_Components()
 		return E_FAIL;
 
 	return S_OK;
-}
-
-void CTalent_Button_Icon::SetUp_RenderState()
-{
-	m_pGraphic_Device->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
-	m_pGraphic_Device->SetRenderState(D3DRS_ALPHAREF, 200);
-	m_pGraphic_Device->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER);
-
-	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_POINT);
-	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_POINT);
-	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MIPFILTER, D3DTEXF_NONE);
-}
-
-void CTalent_Button_Icon::Reset_RenderState()
-{
-	m_pGraphic_Device->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
-
-	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_LINEAR);
-	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);
-	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MIPFILTER, D3DTEXF_LINEAR);
-
-	m_pGraphic_Device->SetTexture(0, NULL);
 }
 
 CTalent_Button_Icon* CTalent_Button_Icon::Create(LPDIRECT3DDEVICE9 pGraphic_Device)

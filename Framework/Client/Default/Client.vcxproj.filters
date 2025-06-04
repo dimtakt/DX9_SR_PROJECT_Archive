@@ -286,9 +286,6 @@
     <Filter Include="02.GameObject\Object\Interaction\Normal">
       <UniqueIdentifier>{73544435-24d8-4011-835b-c5d3ac8481b5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\UI\Window\Status_Window\Stauts_Frame\Status_Element_Icon">
-      <UniqueIdentifier>{03a7fd85-f03b-4e8f-8be3-812ccfb72039}</UniqueIdentifier>
-    </Filter>
     <Filter Include="99.Defines">
       <UniqueIdentifier>{0b9f6ede-74ab-4dc8-813b-32276d487d12}</UniqueIdentifier>
     </Filter>
@@ -699,9 +696,6 @@
     <ClInclude Include="..\public\Talent_Slot_Icon.h">
       <Filter>02.GameObject\UI\Window\Talent\Talent_Slot\Talent_Slot_Etc</Filter>
     </ClInclude>
-    <ClInclude Include="..\public\Talent_Slot_Frame.h">
-      <Filter>02.GameObject\UI\Window\Talent\Talent_Slot\Talent_Slot_Etc</Filter>
-    </ClInclude>
     <ClInclude Include="..\public\Talent_Slot_Button.h">
       <Filter>02.GameObject\UI\Window\Talent\Talent_Slot\Talent_Slot_Etc</Filter>
     </ClInclude>
@@ -728,6 +722,9 @@
     </ClInclude>
     <ClInclude Include="..\public\LaserGhost_D.h">
       <Filter>02.GameObject\Monster\LaserGhost_D</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Talent_Slot_Frame.h">
+      <Filter>02.GameObject\UI\Window\Talent\Talent_Slot\Talent_Slot_Frame</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1047,9 +1044,6 @@
     <ClCompile Include="..\private\Talent_Slot_Icon.cpp">
       <Filter>02.GameObject\UI\Window\Talent\Talent_Slot\Talent_Slot_Etc</Filter>
     </ClCompile>
-    <ClCompile Include="..\private\Talent_Slot_Frame.cpp">
-      <Filter>02.GameObject\UI\Window\Talent\Talent_Slot\Talent_Slot_Etc</Filter>
-    </ClCompile>
     <ClCompile Include="..\private\Talent_Slot_Button.cpp">
       <Filter>02.GameObject\UI\Window\Talent\Talent_Slot\Talent_Slot_Etc</Filter>
     </ClCompile>
@@ -1076,6 +1070,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\LaserGhost_D.cpp">
       <Filter>02.GameObject\Monster\LaserGhost_D</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Talent_Slot_Frame.cpp">
+      <Filter>02.GameObject\UI\Window\Talent\Talent_Slot\Talent_Slot_Frame</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -28,8 +28,7 @@ private:
 
 private:
 	HRESULT							Ready_Components();
-	void							SetUp_RenderState();
-	void							Reset_RenderState();
+
 public:
 	static CBuff_Frame*				Create(LPDIRECT3DDEVICE9 pGraphic_Device);
 	virtual CGameObject*			Clone(void* pArg) override;

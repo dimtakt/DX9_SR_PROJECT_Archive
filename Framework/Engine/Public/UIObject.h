@@ -10,7 +10,7 @@ public:
 	{
 		_float		fX, fY, fZ, fSizeX, fSizeY;
 		_uint		iWinSizeX, iWinSizeY;
-
+		_uint		m_iLevel;
 	}UIOBJECT_DESC;
 protected:
 	CUIObject(LPDIRECT3DDEVICE9 pGraphic_Device);
@@ -19,6 +19,8 @@ protected:
 
 public:
  	const _float3	Get_WorldPos() { return m_vWorldPos; }
+	void			Update_Off() { m_bIsUpdate = false; }
+	void			Update_On() { m_bIsUpdate = true; }
 
 public:
 	virtual HRESULT Initialize_Prototype();
@@ -50,6 +52,8 @@ protected:
 
 	class CTransform*		m_pTransformCom = { nullptr };
 	RECT					m_vTexRect = {};
+
+	_bool					m_bIsUpdate = {};
 protected:
 	void					Begin();
 	void					End();
