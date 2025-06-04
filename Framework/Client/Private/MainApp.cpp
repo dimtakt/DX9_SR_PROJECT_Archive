@@ -69,8 +69,8 @@ HRESULT CMainApp::Initialize()
 	Ready_Key_Setting();
 	Ready_Font_Setting();
 
-	//if (FAILED(Ready_UI_Stting()))
-	//	return E_FAIL;
+	if (FAILED(Ready_UI_Stting()))
+		return E_FAIL;
 
 	return S_OK;
 }
