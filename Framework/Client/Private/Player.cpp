@@ -509,14 +509,14 @@ void CPlayer::OnCollision(CGameObject* pGameObject)
         break;
     }
 
-    /*case GAMEOBJ_TYPE::MONSTER_EFFECT:
+    case GAMEOBJ_TYPE::MONSTER_EFFECT:
     {
         if (!m_bIsHit) {
             CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CULHP, -5.f);
             m_bIsHit = true;
         }
         break;
-    }*/
+    }
         
     }
 }

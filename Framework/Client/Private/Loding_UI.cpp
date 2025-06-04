@@ -126,7 +126,7 @@ void CLoding_UI::Font_Render()
 		m_pGameInstance->Render_Font(TEXT("UI_Font_40"), szText, m_vTexRect, D3DXCOLOR(1.f, 1.f, 1.f, 1.f), DT_CENTER | DT_TOP);
 
 		_stprintf_s(szText, TEXT("두더지 기지"));
-		m_vTexRect.top = 150 + g_iWinSizeY * 0.5;
+		m_vTexRect.top = 100 + g_iWinSizeY * 0.5;
 		m_pGameInstance->Render_Font(TEXT("UI_Font_50"), szText, m_vTexRect, D3DXCOLOR(0.f, 0.f, 1.f, 1.f), DT_CENTER | DT_TOP);
 
 		_stprintf_s(szText, TEXT("당신은 탑의 운명을 바꾸기 위해 마을을 떠나 탑 아래로 내려갑니다."));
