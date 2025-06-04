@@ -16,6 +16,7 @@
 #include "Mole_A.h"
 #include "Dagger.h"
 #include "Client_Defines_Event.h"
+#include "ChapMap.h"
 
 CLevel_Stage1::CLevel_Stage1(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CLevel{ pGraphic_Device }
@@ -140,6 +141,7 @@ HRESULT CLevel_Stage1::Ready_Layer_Room(const _wstring& strLayerTag)
 	_int iIndex = 8;		//룸의 총 개수
 	_int iCount = 0;		//생성되는 룸 인덱스
 	_int iEventCheck = 0;	//이벤트 룸 생성된 개수 저장용
+	_int iEventRoomCreate = 1;		//이벤트 룸 생성되는 개수, 1이면 스테이지 전용 1개 / 2면 스테이지 전용 2개 , 이벤트룸있다는걸 보여주기 위해 1스테이지는 없는데 1 넣어둔 것.
 	_int iEventRoomIndex1 = static_cast<_int>(m_pGameInstance->Compute_Random((_float)iIndex - 4, (_float)iIndex));;	// 1,2 이벤트룸 생성될 룸인덱스 값
 	_int iEventRoomIndex2 = iEventRoomIndex1;
 	while (iEventRoomIndex2 == iEventRoomIndex1)

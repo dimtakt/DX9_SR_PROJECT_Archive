@@ -288,6 +288,7 @@ void CLevel_MapEdit::ImGui_MenuBar_Render()
 					m_pObject.push_back(pGameObject);
 				}
 			}
+			m_pObject_Desc.clear();
 		}
 		ImGuiFileDialog::Instance()->Close();
 	}
