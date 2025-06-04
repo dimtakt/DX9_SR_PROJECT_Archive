@@ -1,5 +1,6 @@
 #pragma once
 #include "../Default/framework.h"
+#include "Engine_Defines.h"
 #include <process.h>
 
 namespace Client
@@ -58,6 +59,25 @@ namespace Client
 		static constexpr float LODING = 0.2f;
 
 	};
+
+	inline _float Lerp(_float a, _float b, _float t)
+	{
+		return a + (b - a) * t;
+	}
+
+	inline _float3 Lerp(const _float3& a, const _float3& b, _float t)
+	{
+		return {
+			a.x + (b.x - a.x) * t,
+			a.y + (b.y - a.y) * t,
+			a.z + (b.z - a.z) * t
+		};
+	}
+
+	inline _float EaseInOutSine(_float t)
+	{
+		return -(cosf(D3DX_PI * t) - 1.f) * 0.5f;
+	}
 };
 
 extern short g_ScrollValue;
