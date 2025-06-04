@@ -5,12 +5,12 @@
 
 BEGIN(Client)
 
-class CPlayerEffect final : public CEffect
+class CGameEffect final : public CEffect
 {
 private:
-	CPlayerEffect(LPDIRECT3DDEVICE9 pGraphic_Device);
-	CPlayerEffect(const CPlayerEffect& Prototype);
-	virtual ~CPlayerEffect() = default;
+	CGameEffect(LPDIRECT3DDEVICE9 pGraphic_Device);
+	CGameEffect(const CGameEffect& Prototype);
+	virtual ~CGameEffect() = default;
 
 public:
 	virtual HRESULT Initialize_Prototype();
