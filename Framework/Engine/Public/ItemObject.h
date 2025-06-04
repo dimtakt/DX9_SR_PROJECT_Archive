@@ -30,7 +30,7 @@ public:
 	virtual HRESULT			Render();
 
 public:
-	const tagItemObjectDesc* Item_Info();
+	tagItemObjectDesc* Item_Info();
 
 protected:
 	_uint					m_iItemID = {};
@@ -47,7 +47,7 @@ protected:
 	class CTexture* m_pTextureCom = { nullptr };
 
 public:
-	virtual CGameObject* Clone(void* pArg) = 0;
+	virtual CGameObject*	Clone(void* pArg) = 0;
 	virtual void			Free();
 };
 END

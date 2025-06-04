@@ -69,8 +69,8 @@ HRESULT CMainApp::Initialize()
 	Ready_Key_Setting();
 	Ready_Font_Setting();
 
-	//if (FAILED(Ready_UI_Stting()))
-	//	return E_FAIL;
+	if (FAILED(Ready_UI_Stting()))
+		return E_FAIL;
 
 	return S_OK;
 }
@@ -586,7 +586,7 @@ HRESULT CMainApp::Ready_Texture_Setting()
 #pragma endregion
 #pragma region Prototype_Component_Window_Gacha
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Rect_GachaSlot"),
-		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/UI/Gacha/GachaSlot_%d.png"), 4))))
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/UI/Gacha/GachaSlot_%d.png"), 5))))
 		return E_FAIL;
 
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Rect_GachaFx"),

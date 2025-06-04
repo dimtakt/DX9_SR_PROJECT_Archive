@@ -60,6 +60,9 @@ void CGacha::Priority_Update(_float fTimeDelta)
 	if (!m_bIsOpen)
 		return;
 
+	if (!m_bIsReandom)
+		Rand_Itme();
+
 	__super::Priority_Update(fTimeDelta);
 }
 
@@ -193,6 +196,19 @@ HRESULT CGacha::Ready_Children()
 	Add_Child(pGameObject);
 
 	return S_OK;
+}
+
+void CGacha::Rand_Itme()
+{
+	int iTemp[5] = {};
+	CItem_Base* pItem = nullptr;
+	for (_int i = 0; i < 5; ++i)
+	{
+		iTemp[i] = m_pGameInstance->Rand(0, 8);
+		pItem = static_cast<CItem_Base*>(m_pGameInstance->Get_ItemObject(iTemp[i]));
+		static_cast<CGacha_Slot*>(m_vecChildren[i])->Push_Item(pItem);
+	}
+	m_bIsReandom = true;
 }
 
 CGacha* CGacha::Create(LPDIRECT3DDEVICE9 pGraphic_Device, LEVEL eLevel)

@@ -156,6 +156,16 @@ void CGameInstance::Seed_Random()
     srand(static_cast<unsigned int>(time(NULL)));
 }
 
+_float CGameInstance::Rand_Normal()
+{
+    return static_cast<_float>(rand()) / RAND_MAX;
+}
+
+_float CGameInstance::Rand(_float fMin, _float fMax)
+{
+    return fMin + Rand_Normal() * (fMax - fMin);
+}
+
 _float CGameInstance::Compute_Random_Normal()
 {
     return rand() / static_cast<_float>(RAND_MAX);
@@ -394,6 +404,26 @@ CBase* CGameInstance::find_ItemObject(_uint iIndex)
 CItemObject* CGameInstance::Get_ItemObject(_uint iIndex)
 {
     return m_pItem_Manager->Get_ItemObject(iIndex);
+}
+CItemObject* CGameInstance::Pop_Item()
+{
+    return m_pItem_Manager->Pop_Item();
+}
+CButton* CGameInstance::Pop_Slot()
+{
+    return m_pItem_Manager->Pop_Slot();
+}
+_uint CGameInstance::Pop_Item_Count()
+{
+    return m_pItem_Manager->Pop_Item_Count();
+}
+void CGameInstance::Pick_ItemSlot(CItemObject* pPickItem, CButton* pSlot, _uint iItemCount)
+{
+    m_pItem_Manager->Pick_ItemSlot(pPickItem, pSlot, iItemCount);
+}
+void CGameInstance::Pick_Reset()
+{
+    m_pItem_Manager->Pick_Reset();
 }
 #pragma endregion
 

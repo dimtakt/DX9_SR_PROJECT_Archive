@@ -340,6 +340,9 @@
     <Filter Include="02.GameObject\Monster\LaserGhost_D">
       <UniqueIdentifier>{1d6ba4a0-cf84-4e28-8ddf-6830f227f041}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\UI\Window\Gacha\Gacha_Slot\Selete">
+      <UniqueIdentifier>{54880f30-cb87-4b36-8ba3-c1b5a2dce555}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -726,6 +729,9 @@
     <ClInclude Include="..\public\Talent_Slot_Frame.h">
       <Filter>02.GameObject\UI\Window\Talent\Talent_Slot\Talent_Slot_Frame</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\Gacha_Slot_Selete.h">
+      <Filter>02.GameObject\UI\Window\Gacha\Gacha_Slot\Selete</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -1073,6 +1079,9 @@
     </ClCompile>
     <ClCompile Include="..\private\Talent_Slot_Frame.cpp">
       <Filter>02.GameObject\UI\Window\Talent\Talent_Slot\Talent_Slot_Frame</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Gacha_Slot_Selete.cpp">
+      <Filter>02.GameObject\UI\Window\Gacha\Gacha_Slot\Selete</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

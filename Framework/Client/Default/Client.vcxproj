@@ -171,6 +171,7 @@
     <ClInclude Include="..\public\Gacha_Pass.h" />
     <ClInclude Include="..\public\Gacha_Reroll.h" />
     <ClInclude Include="..\public\Gacha_Slot.h" />
+    <ClInclude Include="..\public\Gacha_Slot_Selete.h" />
     <ClInclude Include="..\public\LaserGhost_D.h" />
     <ClInclude Include="..\public\Talent.h" />
     <ClInclude Include="..\Public\Effect_Factory.h" />
@@ -296,6 +297,7 @@
     <ClCompile Include="..\private\Gacha_Pass.cpp" />
     <ClCompile Include="..\private\Gacha_Reroll.cpp" />
     <ClCompile Include="..\private\Gacha_Slot.cpp" />
+    <ClCompile Include="..\private\Gacha_Slot_Selete.cpp" />
     <ClCompile Include="..\Private\LaserGhost_D.cpp" />
     <ClCompile Include="..\private\Talent.cpp" />
     <ClCompile Include="..\Private\Effect_Factory.cpp" />

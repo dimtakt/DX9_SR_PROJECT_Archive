@@ -20,11 +20,18 @@ public:
 	virtual void					Late_Update(_float fTimeDelta) override;
 	virtual HRESULT					Render() override;
 
+public:
+	void							Push_Item(CItem_Base* pItem) { m_pSlotItem = pItem; }
 private:
 	LEVEL							m_eLevel = {};
-	_bool							m_bIsOver = {};
+	_bool							m_bIsPick = {};
 	_uint							m_iSlotIndex = {};
 	_int							m_iSlotItem_Tex = {};
+
+	CItem_Base*						m_pSlotItem = { nullptr };
+
+private:
+	void							Item_Selete();
 
 private:
 	HRESULT							Ready_Components();

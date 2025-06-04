@@ -30,21 +30,17 @@ public:
 	void							Add_Item(CItem_Base* pItem) { m_pSlotItem = pItem, m_iItemCount += 1; }
 	void							Release_Item() { m_pSlotItem = nullptr; }
 
-	_bool							IsKey_Down_Check();
-	_bool							IsKey_Up_Check();
-
 	CItem_Base*						Pop_Item();
 	void							Push_Item(CItem_Base* pItem);
 	_uint							Pop_Item_Count() { return m_iItemCount; }
 	void							Push_Item_Count(_uint iItemCount) { m_iItemCount = iItemCount; }
-	void							ItemRender();
 	_int							Slot_Info(ITEM_INFO eInfo);
 	void							Add_GradeCount(_int iValue);
 
 private:
 	LEVEL							m_eLevel = {};
 	_bool							m_bIsOver = {};
-
+	_bool							m_bIsPick = {};
 	_uint							m_iSlotIndex = {};
 	CItem_Base*						m_pSlotItem = { nullptr };
 
@@ -57,8 +53,11 @@ private:
 
 	_float							m_fItem_Angle = {};
 	_uint							m_iItemCount = {};
+
+	
 private:
 	void							Setting_Item();
+	void							Item_Selete();
 
 private:
 	HRESULT							Ready_Components();

@@ -25,6 +25,10 @@ public:
 	_float Compute_Random_Normal();
 	_float Compute_Random(_float fMin, _float fMax);
 	void Seed_Random();
+
+public:
+	_float Rand_Normal();
+	_float Rand(_float fMin, _float fMax);
 #pragma endregion
 
 #pragma region LEVEL_MANAGER
@@ -137,6 +141,11 @@ public:
 	HRESULT						Setting_Item(void* pArg, _uint iMaxItemIndex, _uint iLevelIndex, const _wstring& strItemBaseTag);
 	CBase*						find_ItemObject(_uint iIndex);
 	CItemObject*				Get_ItemObject(_uint iIndex);
+	class CItemObject*			Pop_Item();
+	class CButton*				Pop_Slot();
+	_uint						Pop_Item_Count();
+	void						Pick_ItemSlot(class CItemObject* pPickItem, class CButton* pSlot, _uint iItemCount);
+	void						Pick_Reset();
 #pragma endregion
 
 #pragma region EVENT_MANAGER
