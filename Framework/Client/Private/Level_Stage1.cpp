@@ -201,7 +201,7 @@ HRESULT CLevel_Stage1::Ready_Layer_Room(const _wstring& strLayerTag)
 			iEventCheck++;
 		}
 
-		// 룸매니저 투입
+		//// 룸매니저 투입
 		CRoom_Manager::GetInstance()->Add_Room(pRoom, ENUM_CLASS(LEVEL::LEVEL_STAGE1), strLayerTag);
 		iCount++; 
 	}

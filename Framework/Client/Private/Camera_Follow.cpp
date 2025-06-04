@@ -403,5 +403,10 @@ void CCamera_Follow::Free()
 	Safe_Release(m_pTransformCom);
 	Safe_Release(m_pTargetPlayerTransformCom);
 
+	for (auto& pObj : m_vRotateObjectsTransformCom)
+		Safe_Release(pObj);
+
+	m_vRotateObjectsTransformCom.clear();
+
 	__super::Free();
 } 

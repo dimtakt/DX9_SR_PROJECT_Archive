@@ -290,6 +290,7 @@ void CRoom_Manager::Clear(_uint iLevelIndex)
 	{
 		for (auto& pRoom : pair->second)
 		{
+			pRoom->Set_IsDead(true);
 			Safe_Release(pRoom);
 		}
 	}
