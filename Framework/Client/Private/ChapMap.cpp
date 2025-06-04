@@ -53,10 +53,17 @@ void CChapMap::Priority_Update(_float fTimeDelta)
 	if (m_pGameInstance->Get_CurrentLevel() == ENUM_CLASS(LEVEL::LEVEL_LOADING) || m_pGameInstance->Get_CurrentLevel() == ENUM_CLASS(LEVEL::LEVEL_LOGO) || m_pGameInstance->Get_CurrentLevel() == ENUM_CLASS(LEVEL::LEVEL_MAPEDIT))
 		return;
 		
-	if(m_pGameInstance->IsKeyDown('F'))
-		if(m_bRender)
+	if (m_pGameInstance->IsKeyDown('F'))
+	{
+		if (m_bRender == true)
+		{
 			m_bRender = false;
-
+		}
+		else
+		{
+			m_bRender = true;
+		}
+	}
 	__super::Priority_Update(fTimeDelta);
 }
 

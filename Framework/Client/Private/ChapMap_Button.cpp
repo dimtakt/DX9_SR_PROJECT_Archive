@@ -121,9 +121,9 @@ void CChapMap_Button::Click_Event()
 		
 		CRoom_Manager::GetInstance()->Clear(m_pGameInstance->Get_CurrentLevel());
 
-		//·¹º§ ¿ÀÇÂ ÅÍÁü
 		if (FAILED(m_pGameInstance->Open_Level(ENUM_CLASS(LEVEL::LEVEL_LOADING), CLevel_Loading::Create(m_pGraphic_Device, g_MapDB[m_iMapID].m_eMapIndex))))
 			return;
+		static_cast<CChapMap*>(m_pParent)->Click_MapID_Set(m_iMapID);
 
 	}
 } 
