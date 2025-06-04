@@ -2,7 +2,7 @@
 #include "GameInstance.h"
 #include "Object_Manager.h"
 #include "Effect.h"
-#include "PlayerEffect.h"
+#include "GameEffect.h"
 
 
 
@@ -22,7 +22,7 @@ HRESULT CEffect_Factory::Initialize()
 }
 
 // 벡터 위치, 쿼터니언 회전, 벡터 스케일 정보로 생성
-void CEffect_Factory::Create_Effect(const _wstring& strEffectTag, _float3 vPos, D3DXQUATERNION qRot, _float3 vScale, _bool isFlippedX)
+void CEffect_Factory::Create_Effect(GAMEOBJ_TYPE eType, const _wstring& strEffectTag, _float3 vPos, D3DXQUATERNION qRot, _float3 vScale, _bool isFlippedX)
 {
 	CEffect::EFFECT_DESC EffectDesc;
 	EffectDesc.strEffectTag = strEffectTag;
@@ -31,13 +31,13 @@ void CEffect_Factory::Create_Effect(const _wstring& strEffectTag, _float3 vPos, 
 	EffectDesc.vScale = vScale;
 
 	m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_STATIC), L"Layer_Effect",
-		ENUM_CLASS(LEVEL::LEVEL_STATIC), L"Prototype_GameObject_PlayerEffect", &EffectDesc);
+		ENUM_CLASS(LEVEL::LEVEL_STATIC), L"Prototype_GameObject_GameEffect", &EffectDesc);
 
 	return;
 }
 
 // 위치 정보가 담긴 행렬을 넣으면 해당 좌표에 생성
-void CEffect_Factory::Create_Effect(const _wstring& strEffectTag, _float4x4 matEffectWorld, _bool isFlippedX)
+void CEffect_Factory::Create_Effect(GAMEOBJ_TYPE eType, const _wstring& strEffectTag, _float4x4 matEffectWorld, _bool isFlippedX)
 {
 	CEffect::EFFECT_DESC EffectDesc;
 	EffectDesc.strEffectTag = strEffectTag;
@@ -45,13 +45,15 @@ void CEffect_Factory::Create_Effect(const _wstring& strEffectTag, _float4x4 matE
 	EffectDesc.isMatWorld = true;
 	EffectDesc.isFlippedX = isFlippedX;
 
+	EffectDesc.eType = eType;
+
 	m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_STATIC), L"Layer_Effect",
-		ENUM_CLASS(LEVEL::LEVEL_STATIC), L"Prototype_GameObject_PlayerEffect", &EffectDesc);
+		ENUM_CLASS(LEVEL::LEVEL_STATIC), L"Prototype_GameObject_GameEffect", &EffectDesc);
 	return;
 }
 
 // 기준이 될 행렬과 거기서 추가 변화를 줄 행렬을 넣으면 해당 좌표에 생성
-void CEffect_Factory::Create_Effect(const _wstring& strEffectTag, _float4x4 matEffectWorld, _float4x4 matOffsetWorld, _bool isFlippedX)
+void CEffect_Factory::Create_Effect(GAMEOBJ_TYPE eType, const _wstring& strEffectTag, _float4x4 matEffectWorld, _float4x4 matOffsetWorld, _bool isFlippedX)
 {
 	CEffect::EFFECT_DESC EffectDesc;
 	EffectDesc.strEffectTag = strEffectTag;
@@ -59,13 +61,15 @@ void CEffect_Factory::Create_Effect(const _wstring& strEffectTag, _float4x4 matE
 	EffectDesc.isMatWorld = true;
 	EffectDesc.isFlippedX = isFlippedX;
 
+	EffectDesc.eType = eType;
+
 	m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_STATIC), L"Layer_Effect",
-		ENUM_CLASS(LEVEL::LEVEL_STATIC), L"Prototype_GameObject_PlayerEffect", &EffectDesc);
+		ENUM_CLASS(LEVEL::LEVEL_STATIC), L"Prototype_GameObject_GameEffect", &EffectDesc);
 	return;
 }
 
 // + 생성 후 해당 객체의 Position 값만을 따라감
-void CEffect_Factory::Create_Effect(const _wstring& strEffectTag, _float4x4 matEffectWorld, _float4x4 matOffsetWorld, CTransform* pFollowTransformCom, _bool isFlippedX)
+void CEffect_Factory::Create_Effect(GAMEOBJ_TYPE eType, const _wstring& strEffectTag, _float4x4 matEffectWorld, _float4x4 matOffsetWorld, CTransform* pFollowTransformCom, _bool isFlippedX)
 {
 	CEffect::EFFECT_DESC EffectDesc;
 	EffectDesc.strEffectTag = strEffectTag;
@@ -74,13 +78,15 @@ void CEffect_Factory::Create_Effect(const _wstring& strEffectTag, _float4x4 matE
 	EffectDesc.isFlippedX = isFlippedX;
 	EffectDesc.pFollowTransformCom = pFollowTransformCom;
 
+	EffectDesc.eType = eType;
+
 	m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_STATIC), L"Layer_Effect",
-		ENUM_CLASS(LEVEL::LEVEL_STATIC), L"Prototype_GameObject_PlayerEffect", &EffectDesc);
+		ENUM_CLASS(LEVEL::LEVEL_STATIC), L"Prototype_GameObject_GameEffect", &EffectDesc);
 	return;
 }
 
 // + 생성 후 해당 단위벡터의 방향으로 날아감 (투사체)
-void CEffect_Factory::Create_Effect(const _wstring& strEffectTag, _float4x4 matEffectWorld, _float4x4 matOffsetWorld, _float3 vThrownDir, _float fThrownPower, _float fLifeTimeSec, _bool isFlippedX)
+void CEffect_Factory::Create_Effect(GAMEOBJ_TYPE eType, const _wstring& strEffectTag, _float4x4 matEffectWorld, _float4x4 matOffsetWorld, _float3 vThrownDir, _float fThrownPower, _float fLifeTimeSec, _bool isFlippedX)
 {
 	CEffect::EFFECT_DESC EffectDesc;
 	EffectDesc.strEffectTag = strEffectTag;
@@ -92,8 +98,10 @@ void CEffect_Factory::Create_Effect(const _wstring& strEffectTag, _float4x4 matE
 	EffectDesc.fThrownPower = fThrownPower;
 	EffectDesc.fLifeTimeSec = fLifeTimeSec;
 
+	EffectDesc.eType = eType;
+
 	m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_STATIC), L"Layer_Effect",
-		ENUM_CLASS(LEVEL::LEVEL_STATIC), L"Prototype_GameObject_PlayerEffect", &EffectDesc);
+		ENUM_CLASS(LEVEL::LEVEL_STATIC), L"Prototype_GameObject_GameEffect", &EffectDesc);
 	return;
 }
 

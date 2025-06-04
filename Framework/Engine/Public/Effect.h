@@ -28,6 +28,8 @@ public:
 		_float3 vThrownDir = {};
 		_float fThrownPower = 0.f;
 		_float fLifeTimeSec = 0.f;
+
+		GAMEOBJ_TYPE eType;
 	} EFFECT_DESC;
 
 protected:

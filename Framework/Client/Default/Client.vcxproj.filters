@@ -324,7 +324,7 @@
     </Filter>
     <Filter Include="02.GameObject\UI\Window\Talent\Talent_Slot\Talent_Slot_Frame">
       <UniqueIdentifier>{4da686ad-d4f2-4bef-a733-c3b531e78fc2}</UniqueIdentifier>
-	  </Filter>
+    </Filter>
     <Filter Include="02.GameObject\Object\Interaction\Normal\MapEditObject">
       <UniqueIdentifier>{2879c6c3-314f-4553-9bb7-3bda46e4769b}</UniqueIdentifier>
     </Filter>
@@ -567,7 +567,7 @@
     <ClInclude Include="..\Public\Effect_Factory.h">
       <Filter>02.GameObject\Effect\Factory</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\PlayerEffect.h">
+    <ClInclude Include="..\Public\GameEffect.h">
       <Filter>02.GameObject\Effect</Filter>
     </ClInclude>
     <ClInclude Include="..\public\ChapMap.h">
@@ -924,7 +924,7 @@
     <ClCompile Include="..\Private\Level_Stage2.cpp">
       <Filter>01.Levels\04. Dungeon\Stage2</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\PlayerEffect.cpp">
+    <ClCompile Include="..\Private\GameEffect.cpp">
       <Filter>02.GameObject\Effect</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Effect_Factory.cpp">

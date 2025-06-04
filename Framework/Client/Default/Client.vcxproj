@@ -189,7 +189,7 @@
     <ClInclude Include="..\Public\Monster_Factory.h" />
     <ClInclude Include="..\public\Oink_A.h" />
     <ClInclude Include="..\Public\Option_Button.h" />
-    <ClInclude Include="..\Public\PlayerEffect.h" />
+    <ClInclude Include="..\Public\GameEffect.h" />
     <ClInclude Include="..\Public\Potal.h" />
     <ClInclude Include="..\Public\Room_Manager.h" />
     <ClInclude Include="..\public\Sky.h" />
@@ -313,7 +313,7 @@
     <ClCompile Include="..\Private\Monster_Factory.cpp" />
     <ClCompile Include="..\private\Oink_A.cpp" />
     <ClCompile Include="..\Private\Option_Button.cpp" />
-    <ClCompile Include="..\Private\PlayerEffect.cpp" />
+    <ClCompile Include="..\Private\GameEffect.cpp" />
     <ClCompile Include="..\Private\Potal.cpp" />
     <ClCompile Include="..\Private\Room_Manager.cpp" />
     <ClCompile Include="..\private\Sky.cpp" />
