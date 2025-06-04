@@ -30,98 +30,125 @@ HRESULT CRoom::Initialize(void* pArg)
 
 void CRoom::Priority_Update(_float fTimeDelta)
 {
-	if (m_bIsActive)
+	if (!m_bDead) 
 	{
-		if (m_pTerrainBox != nullptr)
-			m_pTerrainBox->Priority_Update(fTimeDelta);
-
-		for (auto& obj : m_vObject)
+		if (m_bIsActive)
 		{
-			if (nullptr != obj)
-				obj->Priority_Update(fTimeDelta);
-		}
+			if (m_pTerrainBox != nullptr)
+				m_pTerrainBox->Priority_Update(fTimeDelta);
+			else if (m_pTerrainBox == nullptr || m_pTerrainBox->Get_IsDead())
+				Safe_Release(m_pTerrainBox);
 
-		for (auto it = m_vMonster.begin(); it != m_vMonster.end(); ) {
-			if ((*it)->Get_IsDead()) {
-				Safe_Release(*it);
-				it = m_vMonster.erase(it); 
+			for (auto it = m_vObject.begin(); it != m_vObject.end(); ) {
+				if ((*it) == nullptr || (*it)->Get_IsDead()) {
+					Safe_Release(*it);
+					it = m_vObject.erase(it);
+				}
+				else {
+					(*it)->Priority_Update(fTimeDelta);
+					++it;
+				}
 			}
-			else {
-				(*it)->Priority_Update(fTimeDelta);
-				++it;
+
+			for (auto it = m_vMonster.begin(); it != m_vMonster.end(); ) {
+				if ((*it) == nullptr || (*it)->Get_IsDead()) {
+					Safe_Release(*it);
+					it = m_vMonster.erase(it);
+				}
+				else {
+					(*it)->Priority_Update(fTimeDelta);
+					++it;
+				}
 			}
 		}
-
 	}
 }
 
 void CRoom::Update(_float fTimeDelta)
 {
-	if (m_bIsActive)
-	{
-		if (m_pTerrainBox != nullptr)
-			m_pTerrainBox->Update(fTimeDelta);
-
-		for (auto& obj : m_vObject)
+	if (!m_bDead) {
+		if (m_bIsActive)
 		{
-			if (nullptr != obj)
-				obj->Update(fTimeDelta);
-		}
+			if (m_pTerrainBox != nullptr)
+				m_pTerrainBox->Update(fTimeDelta);
+			else if (m_pTerrainBox == nullptr || m_pTerrainBox->Get_IsDead())
+				Safe_Release(m_pTerrainBox);
 
-		for (auto& obj : m_vMonster)
-		{
-			if(nullptr != obj)
-				obj->Update(fTimeDelta);
+			for (auto it = m_vObject.begin(); it != m_vObject.end(); ) {
+				if ((*it) == nullptr || (*it)->Get_IsDead()) {
+					Safe_Release(*it);
+					it = m_vObject.erase(it);
+				}
+				else {
+					(*it)->Update(fTimeDelta);
+					++it;
+				}
+			}
+
+			for (auto it = m_vMonster.begin(); it != m_vMonster.end(); ) {
+				if ((*it) == nullptr || (*it)->Get_IsDead()) {
+					Safe_Release(*it);
+					it = m_vMonster.erase(it);
+				}
+				else {
+					(*it)->Update(fTimeDelta);
+					++it;
+				}
+			}
 		}
 	}
-
 }
 
 void CRoom::Late_Update(_float fTimeDelta)
 {
-	if (m_bIsVisited)
+	if (!m_bDead)
 	{
-		if (m_pTerrainBox != nullptr)
-			m_pTerrainBox->Late_Update(fTimeDelta);
-		
-		for (auto it = m_vObject.begin(); it != m_vObject.end(); ) {
-			if ((*it) != nullptr && (*it)->Get_IsDead()) { 
-				Safe_Release(*it);
-				it = m_vObject.erase(it); // erase는 다음 이터레이터 반환
-			}
-			else {
-				if (nullptr != *it)
-					(*it)->Late_Update(fTimeDelta);
-				++it;
-			}
-		}
-
-		for (auto& obj : m_vPotal)
+		if (m_bIsVisited)
 		{
-			if (nullptr != obj)
-				obj->Late_Update(fTimeDelta);
+			if (m_pTerrainBox != nullptr)
+				m_pTerrainBox->Late_Update(fTimeDelta);
+
+			for (auto it = m_vObject.begin(); it != m_vObject.end(); ) {
+				if ((*it) != nullptr && (*it)->Get_IsDead()) {
+					Safe_Release(*it);
+					it = m_vObject.erase(it); // erase는 다음 이터레이터 반환
+				}
+				else {
+					if (nullptr != *it)
+						(*it)->Late_Update(fTimeDelta);
+					++it;
+				}
+			}
+
+			for (auto it = m_vPotal.begin(); it != m_vPotal.end(); ) {
+				if ((*it) == nullptr || (*it)->Get_IsDead()) { // 짝수인 경우 삭제
+					Safe_Release(*it);
+					it = m_vPotal.erase(it); // erase는 다음 이터레이터 반환
+				}
+				else {
+					if (nullptr != *it)
+						(*it)->Late_Update(fTimeDelta);
+					++it;
+				}
+			}
+
+		}
+		if (m_bIsActive)
+		{
+			for (auto it = m_vMonster.begin(); it != m_vMonster.end(); ) {
+				if ((*it) == nullptr || (*it)->Get_IsDead()) { // 짝수인 경우 삭제
+					Safe_Release(*it);
+					it = m_vMonster.erase(it); // erase는 다음 이터레이터 반환
+				}
+				else {
+					if (nullptr != *it)
+						(*it)->Late_Update(fTimeDelta);
+					++it;
+				}
+			}
 		}
 	}
-	if (m_bIsActive)
-	{
-
-		for (auto it = m_vMonster.begin(); it != m_vMonster.end(); ) {
-			if ((*it)->Get_IsDead()) { // 짝수인 경우 삭제
-				Safe_Release(*it);
-				it = m_vMonster.erase(it); // erase는 다음 이터레이터 반환
-			}
-			else {
-				if (nullptr != *it)
-					(*it)->Late_Update(fTimeDelta);
-				++it;
-			}
-		}
-		/*for (auto& obj : m_vMonster)
-		{
-			if (nullptr != obj)
-				obj->Late_Update(fTimeDelta);
-		}*/
-	}
+	
 }
 
 HRESULT CRoom::Render()
@@ -130,23 +157,32 @@ HRESULT CRoom::Render()
 	{
 		if (m_pTerrainBox != nullptr)
 			m_pTerrainBox->Render();
+		else if (m_pTerrainBox == nullptr || m_pTerrainBox->Get_IsDead())
+			Safe_Release(m_pTerrainBox);
 
-		for (auto& obj : m_vObject)
-		{
-			obj->Render();
-		}
-
-		for (auto& obj : m_vPotal)
-		{
-			obj->Render();
+		for (auto it = m_vObject.begin(); it != m_vObject.end(); ) {
+			if ((*it) == nullptr || (*it)->Get_IsDead()) {
+				Safe_Release(*it);
+				it = m_vObject.erase(it);
+			}
+			else {
+				(*it)->Render();
+				++it;
+			}
 		}
 	}
 
 	if (m_bIsActive)
 	{
-		for (auto& obj : m_vMonster)
-		{
-			obj->Render();
+		for (auto it = m_vMonster.begin(); it != m_vMonster.end(); ) {
+			if ((*it) == nullptr || (*it)->Get_IsDead()) {
+				Safe_Release(*it);
+				it = m_vMonster.erase(it);
+			}
+			else {
+				(*it)->Render();
+				++it;
+			}
 		}
 	}
 	return S_OK;
@@ -269,10 +305,9 @@ HRESULT CRoom::Load_From_File(_uint iLayerLevelIndex, const _wstring& strLayerTa
 				iLayerLevelIndex,
 				TEXT("Prototype_GameObject_TerrainBox"),
 				&tSrc);*/
-			CGameObject* pGameObject = dynamic_cast<CGameObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, iLayerLevelIndex, TEXT("Prototype_GameObject_TerrainBox"), &tSrc));
+			m_pTerrainBox = dynamic_cast<CTerrainBox*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, iLayerLevelIndex, TEXT("Prototype_GameObject_TerrainBox"), &tSrc));
 
 		/*	CGameObject* pGameObject = m_pGameInstance->Get_LastGameObject(iLayerLevelIndex, strLayerTag);*/
-			m_pTerrainBox = dynamic_cast<CTerrainBox*>(pGameObject);
 		}
 		else
 		{
@@ -401,18 +436,21 @@ void CRoom::Free()
 
 	for (auto& obj : m_vObject)
 	{
+		obj->Set_IsDead(true);
 		Safe_Release(obj);
 	}
 	m_vObject.clear();
 
 	for (auto& obj : m_vMonster)
 	{
+		obj->Set_IsDead(true);
 		Safe_Release(obj);
 	}
 	m_vMonster.clear();
 
 	for (auto& obj : m_vPotal)
 	{
+		obj->Set_IsDead(true);
 		Safe_Release(obj);
 
 	}
