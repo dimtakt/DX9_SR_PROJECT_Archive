@@ -22,7 +22,7 @@ HRESULT COink_A::Initialize(void* pArg)
 {
     __super::Initialize(pArg);
 
-    if (FAILED(this->Ready_Components()))
+    if (FAILED(this->Ready_Components(pArg)))
         return E_FAIL;
 
     
@@ -38,6 +38,9 @@ void COink_A::Priority_Update(_float fTimeDelta)
 
 void COink_A::Update(_float fTimeDelta)
 {    
+    if (!m_pTerrainBox || !m_pTransformCom || !m_pTextureCom)
+        return;
+
     _float fMinDist = 5.f;      // 원거리 공격 할 기준 거리
     _float fMaxDist = 12.f;     // 어그로가 풀리는 기준 거리
     _float fAtkDist = 2.f;     // 근접공격할 기준 거리
@@ -212,6 +215,8 @@ void COink_A::Late_Update(_float fTimeDelta)
 
 HRESULT COink_A::Render()
 {
+    if (!m_pTransformCom)
+        return S_OK;
     // 플레이어 위치에 따라 좌우반전 적용,
     // 단 공격 중 등의 경우에는 변경 X
     _uint iCurLevel = m_pGameInstance->GetInstance()->Get_CurrentLevel();
@@ -257,43 +262,45 @@ HRESULT COink_A::Render()
     return S_OK;
 }
 
-HRESULT COink_A::Ready_Components()
+HRESULT COink_A::Ready_Components(void* pArg)
 {
+    MONSTERDESC* desc = static_cast<MONSTERDESC*>(pArg);
+
     /* For.Com_Texture */
     // Idle
-    if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STAGE1), TEXT("Prototype_Component_Texture_Oink_A_Idle"),
+    if (FAILED(__super::Add_Component(desc->iLayerLevelIndex, TEXT("Prototype_Component_Texture_Oink_A_Idle"),
         TEXT("Com_Texture_Idle"), reinterpret_cast<CComponent**>(&m_pTextureCom_Idle))))
         return E_FAIL;
     // Move
-    if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STAGE1), TEXT("Prototype_Component_Texture_Oink_A_Move"),
+    if (FAILED(__super::Add_Component(desc->iLayerLevelIndex, TEXT("Prototype_Component_Texture_Oink_A_Move"),
         TEXT("Com_Texture_Move"), reinterpret_cast<CComponent**>(&m_pTextureCom_Move))))
-		return E_FAIL;
+        return E_FAIL;
     // Attack
-    if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STAGE1), TEXT("Prototype_Component_Texture_Oink_A_Attack"),
-		TEXT("Com_Texture_Attack"), reinterpret_cast<CComponent**>(&m_pTextureCom_Attack))))
-		return E_FAIL;
+    if (FAILED(__super::Add_Component(desc->iLayerLevelIndex, TEXT("Prototype_Component_Texture_Oink_A_Attack"),
+        TEXT("Com_Texture_Attack"), reinterpret_cast<CComponent**>(&m_pTextureCom_Attack))))
+        return E_FAIL;
     // ChargeReady
-    if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STAGE1), TEXT("Prototype_Component_Texture_Oink_A_ChargeReady"),
+    if (FAILED(__super::Add_Component(desc->iLayerLevelIndex, TEXT("Prototype_Component_Texture_Oink_A_ChargeReady"),
         TEXT("Com_Texture_ChargeReady"), reinterpret_cast<CComponent**>(&m_pTextureCom_ChargeReady))))
-		return E_FAIL;
+        return E_FAIL;
     // ChargeReady_Cycle
-    if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STAGE1), TEXT("Prototype_Component_Texture_Oink_A_ChargeReady_Cycle"),
-		TEXT("Com_Texture_ChargeReady_Cycle"), reinterpret_cast<CComponent**>(&m_pTextureCom_ChargeReady_Cycle))))
-		return E_FAIL;
+    if (FAILED(__super::Add_Component(desc->iLayerLevelIndex, TEXT("Prototype_Component_Texture_Oink_A_ChargeReady_Cycle"),
+        TEXT("Com_Texture_ChargeReady_Cycle"), reinterpret_cast<CComponent**>(&m_pTextureCom_ChargeReady_Cycle))))
+        return E_FAIL;
     // Charge_Cycle
-    if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STAGE1), TEXT("Prototype_Component_Texture_Oink_A_Charge_Cycle"),
-		TEXT("Com_Texture_Charge_Cycle"), reinterpret_cast<CComponent**>(&m_pTextureCom_Charge_Cycle))))
-		return E_FAIL;
+    if (FAILED(__super::Add_Component(desc->iLayerLevelIndex, TEXT("Prototype_Component_Texture_Oink_A_Charge_Cycle"),
+        TEXT("Com_Texture_Charge_Cycle"), reinterpret_cast<CComponent**>(&m_pTextureCom_Charge_Cycle))))
+        return E_FAIL;
     // Charge_Airborne
-    if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STAGE1), TEXT("Prototype_Component_Texture_Oink_A_Charge_Airborne"),
-		TEXT("Com_Texture_Charge_Airborne"), reinterpret_cast<CComponent**>(&m_pTextureCom_Charge_Airborne))))
-		return E_FAIL;
+    if (FAILED(__super::Add_Component(desc->iLayerLevelIndex, TEXT("Prototype_Component_Texture_Oink_A_Charge_Airborne"),
+        TEXT("Com_Texture_Charge_Airborne"), reinterpret_cast<CComponent**>(&m_pTextureCom_Charge_Airborne))))
+        return E_FAIL;
     // Charge_Down
-    if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STAGE1), TEXT("Prototype_Component_Texture_Oink_A_Charge_Down"),
-		TEXT("Com_Texture_Charge_Down"), reinterpret_cast<CComponent**>(&m_pTextureCom_Charge_Down))))
-		return E_FAIL;
+    if (FAILED(__super::Add_Component(desc->iLayerLevelIndex, TEXT("Prototype_Component_Texture_Oink_A_Charge_Down"),
+        TEXT("Com_Texture_Charge_Down"), reinterpret_cast<CComponent**>(&m_pTextureCom_Charge_Down))))
+        return E_FAIL;
     // Charge_End
-    if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STAGE1), TEXT("Prototype_Component_Texture_Oink_A_Charge_End"),
+    if (FAILED(__super::Add_Component(desc->iLayerLevelIndex, TEXT("Prototype_Component_Texture_Oink_A_Charge_End"),
         TEXT("Com_Texture_Charge_End"), reinterpret_cast<CComponent**>(&m_pTextureCom_Charge_End))))
 		return E_FAIL;
 

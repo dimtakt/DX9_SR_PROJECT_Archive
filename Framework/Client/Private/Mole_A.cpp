@@ -22,7 +22,7 @@ HRESULT CMole_A::Initialize(void* pArg)
 {
 	__super::Initialize(pArg);
 
-    if (FAILED(this->Ready_Components()))
+    if (FAILED(this->Ready_Components(pArg)))
         return E_FAIL;
 
 	return S_OK;
@@ -35,6 +35,9 @@ void CMole_A::Priority_Update(_float fTimeDelta)
 
 void CMole_A::Update(_float fTimeDelta)
 {
+    if (!m_pTerrainBox || !m_pTransformCom || !m_pTextureCom)
+        return;
+
     _float fMinDist = 6.f;      // 추적 상태로 변할 기준 거리
     _float fMaxDist = 12.f;     // 어그로가 풀리는 기준 거리
     _float fAtkDist = 1.5f;     // 근접공격할 기준 거리
@@ -172,6 +175,8 @@ void CMole_A::Late_Update(_float fTimeDelta)
 
 HRESULT CMole_A::Render()
 {
+    if (!m_pTransformCom)
+        return S_OK;
     // 플레이어 위치에 따라 좌우반전 적용,
     // 단 공격 중 등의 경우에는 변경 X
     _uint iCurLevel = m_pGameInstance->GetInstance()->Get_CurrentLevel();
@@ -218,27 +223,30 @@ HRESULT CMole_A::Render()
     return S_OK;
 }
 
-HRESULT CMole_A::Ready_Components()
+HRESULT CMole_A::Ready_Components(void* pArg)
 {
+
+    MONSTERDESC* desc = static_cast<MONSTERDESC*>(pArg);
+    
     /* For.Com_Texture */
     // Idle
-    if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STAGE1), TEXT("Prototype_Component_Texture_Mole_A_Idle"),
+    if (FAILED(__super::Add_Component(desc->iLayerLevelIndex, TEXT("Prototype_Component_Texture_Mole_A_Idle"),
         TEXT("Com_Texture_Idle"), reinterpret_cast<CComponent**>(&m_pTextureCom_Idle))))
         return E_FAIL;
     // Move
-    if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STAGE1), TEXT("Prototype_Component_Texture_Mole_A_Move"),
+    if (FAILED(__super::Add_Component(desc->iLayerLevelIndex, TEXT("Prototype_Component_Texture_Mole_A_Move"),
         TEXT("Com_Texture_Move"), reinterpret_cast<CComponent**>(&m_pTextureCom_Move))))
         return E_FAIL;
     // Down
-    if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STAGE1), TEXT("Prototype_Component_Texture_Mole_A_Down"),
+    if (FAILED(__super::Add_Component(desc->iLayerLevelIndex, TEXT("Prototype_Component_Texture_Mole_A_Down"),
         TEXT("Com_Texture_Down"), reinterpret_cast<CComponent**>(&m_pTextureCom_Down))))
         return E_FAIL;
     // Attack
-    if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STAGE1), TEXT("Prototype_Component_Texture_Mole_A_Attack"),
+    if (FAILED(__super::Add_Component(desc->iLayerLevelIndex, TEXT("Prototype_Component_Texture_Mole_A_Attack"),
         TEXT("Com_Texture_Attack"), reinterpret_cast<CComponent**>(&m_pTextureCom_Attack))))
         return E_FAIL;
     // Airborne
-    if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STAGE1), TEXT("Prototype_Component_Texture_Mole_A_Airborne"),
+    if (FAILED(__super::Add_Component(desc->iLayerLevelIndex, TEXT("Prototype_Component_Texture_Mole_A_Airborne"),
         TEXT("Com_Texture_Airborne"), reinterpret_cast<CComponent**>(&m_pTextureCom_Airborne))))
         return E_FAIL;
 
@@ -297,8 +305,6 @@ CGameObject* CMole_A::Clone(void* pArg)
 
 void CMole_A::Free()
 {
-    __super::Free();
-
     Safe_Release(m_pTextureCom_Idle);
     Safe_Release(m_pTextureCom_Move);
     Safe_Release(m_pTextureCom_Down);
@@ -306,4 +312,6 @@ void CMole_A::Free()
     Safe_Release(m_pTextureCom_Airborne);
 
 	Safe_Release(m_pAnimatorCom);
+
+    __super::Free();
 }

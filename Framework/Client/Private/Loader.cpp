@@ -19,7 +19,7 @@
 #include "Inventory.h"
 #include "Hud_Dash.h"
 #include "Tree.h"
-#include "Mountain.h"
+#include "MapEditObject.h"
 #include "Field_Hp.h"
 #include "Room.h"
 #include "Monster.h"
@@ -190,7 +190,7 @@ HRESULT CLoader::Loading_For_MapEdit_Level()
 
 	/* Prototype_GameObject_Interaction_Normal  */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_MAPEDIT), TEXT("Prototype_GameObject_Interaction_Normal"),
-		CInteraction_Normal::Create(m_pGraphic_Device))))
+		CMapEditObject::Create(m_pGraphic_Device))))
 		return E_FAIL;
 
 	lstrcpy(m_szLoadingText, TEXT("로딩이 완료되었습니다."));
@@ -310,7 +310,6 @@ HRESULT CLoader::Loading_For_Stage1_Level()
 		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Monster/LaserGhost_D/LaserGhost_Airborne%02d.png"), 3))))
 		return E_FAIL;
 
-
 	lstrcpy(m_szLoadingText, TEXT("모델을 로딩중입니다."));
 
 	lstrcpy(m_szLoadingText, TEXT("쉐이더를 로딩중입니다."));
@@ -321,10 +320,11 @@ HRESULT CLoader::Loading_For_Stage1_Level()
  	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STAGE1), TEXT("Prototype_GameObject_Camera_Follow"),
 		CCamera_Follow::Create(m_pGraphic_Device))))
 		return E_FAIL;
+
 	// Camera
-	/*if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STAGE1), TEXT("Prototype_GameObject_Camera_Mouse"),
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STAGE1), TEXT("Prototype_GameObject_Camera_Mouse"),
 		CCamera_Mouse::Create(m_pGraphic_Device))))
-		return E_FAIL;*/
+		return E_FAIL;
 
 	/* Prototype_GameObject_Land*/
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STAGE1), TEXT("Prototype_GameObject_Room"),
@@ -417,7 +417,65 @@ HRESULT CLoader::Loading_For_Stage2_Level()
 {
 	lstrcpy(m_szLoadingText, TEXT("텍스쳐를 로딩중입니다."));
 
-	
+	// Prototype_Component_Texture_Monster (Mole_A)
+	// Idle
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STAGE2), TEXT("Prototype_Component_Texture_Mole_A_Idle"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Monster/Mole_A/Duelist_Mole_Idle0%d.png"), 6))))
+		return E_FAIL;
+	// Move
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STAGE2), TEXT("Prototype_Component_Texture_Mole_A_Move"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Monster/Mole_A/Duelist_Mole_Move0%d.png"), 10))))
+		return E_FAIL;
+	// Down
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STAGE2), TEXT("Prototype_Component_Texture_Mole_A_Down"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Monster/Mole_A/Duelist_Mole_Down00.png"), 1))))
+		return E_FAIL;
+	// Attack
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STAGE2), TEXT("Prototype_Component_Texture_Mole_A_Attack"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Monster/Mole_A/Duelist_Mole_Attack0%d.png"), 6))))
+		return E_FAIL;
+	// Airborne
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STAGE2), TEXT("Prototype_Component_Texture_Mole_A_Airborne"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Monster/Mole_A/Duelist_Mole_Airborne00.png"), 1))))
+		return E_FAIL;
+
+	// Prototype_Component_Texture_Monster (Oink_A)
+	// Idle
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STAGE2), TEXT("Prototype_Component_Texture_Oink_A_Idle"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Monster/Oink_A/OinkChief_Idle%d.png"), 6))))
+		return E_FAIL;
+	// Move
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STAGE2), TEXT("Prototype_Component_Texture_Oink_A_Move"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Monster/Oink_A/OinkChief_Move%d.png"), 8))))
+		return E_FAIL;
+	// Attack
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STAGE2), TEXT("Prototype_Component_Texture_Oink_A_Attack"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Monster/Oink_A/OinkChief_Attack%d.png"), 9))))
+		return E_FAIL;
+	// ChargeReady
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STAGE2), TEXT("Prototype_Component_Texture_Oink_A_ChargeReady"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Monster/Oink_A/OinkChief_ChargeReady%d.png"), 3))))
+		return E_FAIL;
+	// ChargeReady_Cycle
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STAGE2), TEXT("Prototype_Component_Texture_Oink_A_ChargeReady_Cycle"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Monster/Oink_A/OinkChief_ChargeReady_Cycle%d.png"), 4))))
+		return E_FAIL;
+	// Charge_Cycle
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STAGE2), TEXT("Prototype_Component_Texture_Oink_A_Charge_Cycle"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Monster/Oink_A/OinkChief_Charge_Cycle%d.png"), 4))))
+		return E_FAIL;
+	// Charge_Airborne
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STAGE2), TEXT("Prototype_Component_Texture_Oink_A_Charge_Airborne"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Monster/Oink_A/OinkChief_Charge_Airborne%d.png"), 4))))
+		return E_FAIL;
+	// Charge_Down
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STAGE2), TEXT("Prototype_Component_Texture_Oink_A_Charge_Down"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Monster/Oink_A/OinkChief_Charge_Down0.png"), 1))))
+		return E_FAIL;
+	// Charge_End
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STAGE2), TEXT("Prototype_Component_Texture_Oink_A_Charge_End"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Monster/Oink_A/OinkChief_Charge_End%d.png"), 4))))
+		return E_FAIL;
 	
 	lstrcpy(m_szLoadingText, TEXT("모델을 로딩중입니다."));
 
@@ -445,10 +503,26 @@ HRESULT CLoader::Loading_For_Stage2_Level()
 		CTerrainBox::Create(m_pGraphic_Device))))
 		return E_FAIL;
 
-	
+	/* Prototype_GameObject_Monster */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STAGE2), TEXT("Prototype_GameObject_ShortMonster"),
+		CMonster::Create(m_pGraphic_Device))))
+		return E_FAIL;
 
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STAGE2), TEXT("Prototype_GameObject_Camera_Mouse"),
-		CCamera_Mouse::Create(m_pGraphic_Device))))
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STAGE2), TEXT("Prototype_GameObject_Monster_Mole_A"),
+		CMole_A::Create(m_pGraphic_Device))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STAGE2), TEXT("Prototype_GameObject_Monster_Oink_A"),
+		COink_A::Create(m_pGraphic_Device))))
+		return E_FAIL;
+
+	//Tree
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STAGE2), TEXT("Prototype_GameObject_Tree"),
+		CTree::Create(m_pGraphic_Device))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STAGE2), TEXT("Prototype_GameObject_Potal"),
+		CPotal::Create(m_pGraphic_Device))))
 		return E_FAIL;
 
 	
@@ -477,7 +551,6 @@ CLoader* CLoader::Create(LPDIRECT3DDEVICE9 pGraphic_Device, LEVEL eNextLevelID)
 
 void CLoader::Free()
 {  
-	__super::Free();
 
 	WaitForSingleObject(m_hThread, INFINITE);
 
@@ -487,4 +560,6 @@ void CLoader::Free()
 
 	Safe_Release(m_pGameInstance);
 	Safe_Release(m_pGraphic_Device);
+
+	__super::Free();
 }

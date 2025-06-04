@@ -4,6 +4,7 @@
 #include "Status_Frame_Mid.h"
 #include "Status_Frame_Down.h"
 #include "Hud_States_Frame.h"
+#include "ChapMap.h"
 CStatus_Window::CStatus_Window(LPDIRECT3DDEVICE9 pGraphic_Device) : CUIObject(pGraphic_Device)
 {
 }

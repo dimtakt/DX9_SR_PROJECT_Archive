@@ -38,13 +38,43 @@ HRESULT CStat_Manager::Initialize()
     m_fCurStats[static_cast<int>(STAT_INFO::CULDASH)] = 3.f; // 현재 대시 횟수
     m_fCurStats[static_cast<int>(STAT_INFO::REGENDASH)] = 0.2f; // 대시 회복 속도
     m_fCurStats[static_cast<int>(STAT_INFO::EXP)] = 0.f; // 현재 경험치
-    m_fCurStats[static_cast<int>(STAT_INFO::MAXSTATPOINT)] = 0.f; // 획득한 재능 포인트
-    m_fCurStats[static_cast<int>(STAT_INFO::CULSTATPOINT)] = 0.f; // 현재 재능 포인트
+    m_fCurStats[static_cast<int>(STAT_INFO::MAXSTATPOINT)] = 20.f; // 획득한 재능 포인트
+    m_fCurStats[static_cast<int>(STAT_INFO::CULSTATPOINT)] = 20.f; // 현재 재능 포인트
     m_fCurStats[static_cast<int>(STAT_INFO::LEVEL)] = 1.f; // 레벨
     m_fCurStats[static_cast<int>(STAT_INFO::GOLD)] = 0.f; // 보유 골드
     m_fCurStats[static_cast<int>(STAT_INFO::DICE)] = 3.f; // 주사위
 
     return S_OK;
+}
+
+void CStat_Manager::Cal_Stats(STAT_INFO eStat, float fValue)
+{
+    m_fCurStats[static_cast<int>(eStat)] += fValue;
+
+    if (eStat == STAT_INFO::EXP)
+    {
+        if (m_fCurStats[static_cast<int>(eStat)] >= 100.f)
+        {
+            m_fCurStats[static_cast<int>(eStat)] -= 100.f;
+            m_fCurStats[static_cast<int>(STAT_INFO::LEVEL)] += 1.f;
+        }
+
+    }
+    
+}
+
+void CStat_Manager::Interaction_Obj_Stat(GAMEOBJ_TYPE eType)
+{
+    if (eType == GAMEOBJ_TYPE::EXP)
+    {
+        m_fCurStats[static_cast<int>(STAT_INFO::LEVEL)] += 1.f;
+        m_fCurStats[static_cast<int>(STAT_INFO::EXP)] = 0.f;
+    }
+    else if (eType == GAMEOBJ_TYPE::HP)
+    {
+        m_fCurStats[static_cast<int>(STAT_INFO::MAXHP)] += 15.f;
+        m_fCurStats[static_cast<int>(STAT_INFO::CULHP)] += 15.f;
+    }
 }
 
 void CStat_Manager::Reset_CurStats()

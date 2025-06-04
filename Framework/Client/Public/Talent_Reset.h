@@ -33,6 +33,8 @@ private:
 
 	void							Font_Render();
 
+	_bool							Reset_Pick();
+
 public:
 	static CTalent_Reset*			Create(LPDIRECT3DDEVICE9 pGraphic_Device, LEVEL eLevel);
 	virtual CGameObject*			Clone(void* pArg) override;

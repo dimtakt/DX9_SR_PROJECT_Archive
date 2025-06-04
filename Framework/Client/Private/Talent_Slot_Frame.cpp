@@ -20,10 +20,10 @@ HRESULT CTalent_Slot_Frame::Initialize(void* pArg)
 
 	m_iIndex = Desc->fZ;
 
-	m_fSizeX = 470;
-	m_fSizeY = 470;
+	m_fSizeX = 390;
+	m_fSizeY = 390;
 	m_fX = 0;
-	m_fY = 0;
+	m_fY = -220;
 	m_fZ = UI_DEPTH::TALENT;
 	m_iWinSizeX = g_iWinSizeX;
 	m_iWinSizeY = g_iWinSizeY;
@@ -57,7 +57,7 @@ HRESULT CTalent_Slot_Frame::Render()
 {
 	SetUp_RenderState();
 
-	if (FAILED(m_pTextureCom->Bind_Texture(0)))
+	if (FAILED(m_pTextureCom->Bind_Texture(m_iIndex)))
 		return E_FAIL;
 	m_pVIBufferCom->Bind_Buffers();
 

@@ -22,6 +22,7 @@ public:
 
 public:
 	void							UI_Switch();
+	void							Slot_Reset();
 private:
 	LEVEL							m_eLevel = {};
 	CVIBuffer_Rect*					m_pVIBufferCom = { nullptr };

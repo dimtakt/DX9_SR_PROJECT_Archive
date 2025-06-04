@@ -11,7 +11,7 @@
 #include "json.hpp"
 #include "Tree.h"
 #include "TerrainBox.h"
-#include "Interaction_Normal.h"
+#include "MapEditObject.h"
 
 
 CLevel_MapEdit::CLevel_MapEdit(LPDIRECT3DDEVICE9 pGraphic_Device)
@@ -150,12 +150,13 @@ void CLevel_MapEdit::Imgui_Render()
 
 	ImGui_Object_MenBar();	
 
+	ImGui::End();
+
 	if (m_bPicking)
 	{
 		ImGui_Picking_Object_MenBar();	//선택된 오브젝트 전용 설정 값
 	}
 
-	ImGui::End();
 
 	ImGui_Interaction_Object_MenBar();
 
@@ -252,7 +253,7 @@ void CLevel_MapEdit::ImGui_MenuBar_Render()
 					CGameObject* pGameObject = m_pGameInstance->Get_LastGameObject(ENUM_CLASS(LEVEL::LEVEL_MAPEDIT), TEXT("Layer_MapEdit"));
 					m_pObject.push_back(pGameObject);
 				}
-				else												
+				else if(pDesc.eType == GAMEOBJ_TYPE::TERRAIN)
 				{
 					MAP_OBJECT_DESC tSrc{};
 					tSrc.iTextureIndex = pDesc.iTextureIndex;
@@ -263,6 +264,23 @@ void CLevel_MapEdit::ImGui_MenuBar_Render()
 						ENUM_CLASS(LEVEL::LEVEL_MAPEDIT), TEXT("Layer_MapEdit"),
 						ENUM_CLASS(LEVEL::LEVEL_MAPEDIT),
 						TEXT("Prototype_GameObject_TerrainBox"),
+						&tSrc);
+
+					CGameObject* pGameObject = m_pGameInstance->Get_LastGameObject(ENUM_CLASS(LEVEL::LEVEL_MAPEDIT), TEXT("Layer_MapEdit"));
+					m_pObject.push_back(pGameObject);
+				}
+				else
+				{
+					MAP_OBJECT_DESC tSrc{};
+					tSrc.iTextureIndex = pDesc.iTextureIndex;
+					tSrc.vPos = pDesc.vPos;
+					tSrc.vScale = pDesc.vScale;
+					tSrc.eType = pDesc.eType;
+
+					m_pGameInstance->Add_GameObject_ToLayer(
+						ENUM_CLASS(LEVEL::LEVEL_MAPEDIT), TEXT("Layer_MapEdit"),
+						ENUM_CLASS(LEVEL::LEVEL_MAPEDIT),
+						TEXT("Prototype_GameObject_Interaction_Normal"),
 						&tSrc);
 
 					CGameObject* pGameObject = m_pGameInstance->Get_LastGameObject(ENUM_CLASS(LEVEL::LEVEL_MAPEDIT), TEXT("Layer_MapEdit"));
@@ -299,13 +317,23 @@ void CLevel_MapEdit::ImGui_MenuBar_Render()
 						CTexture* pTexture = static_cast<CTexture*>(pObj->Find_Component(TEXT("Com_Texture")));
 						Desc.iTextureIndex = pTexture->Get_NumBindTexture(); //TEXTURE 
 					}
-					else //지형
+					else if (Desc.eType == GAMEOBJ_TYPE::TERRAIN)//지형
 					{
 						CTransform* pTransform = static_cast<CTransform*>(pObj->Find_Component(TEXT("Com_Transform_TerrainBox")));
 						Desc.vPos = pTransform->Get_State(STATE::POSITION); // POSITION 
 						Desc.vScale =  pTransform->Get_Scaled(); //SCALE 
 
 						CTexture* pTexture = static_cast<CTexture*>(pObj->Find_Component(TEXT("Com_Texture_Terrain_Top")));
+						Desc.iTextureIndex = pTexture->Get_NumBindTexture(); //TEXTURE 
+					}
+					else
+					{
+						CTransform* pTransform = static_cast<CTransform*>(pObj->Find_Component(TEXT("Com_Transform")));
+						Desc.vPos = pTransform->Get_State(STATE::POSITION); // POSITION 
+						Desc.vScale = pTransform->Get_Scaled(); //SCALE 
+						Desc.vRotate = pTransform->Get_RotationEuler(); //Rotate
+						Desc.eType = pObj->Get_ObjType();
+						CTexture* pTexture = static_cast<CTexture*>(pObj->Find_Component(TEXT("Com_Texture")));
 						Desc.iTextureIndex = pTexture->Get_NumBindTexture(); //TEXTURE 
 					}
 
@@ -496,13 +524,15 @@ void CLevel_MapEdit::ImGui_Scale_Render()
 
 void CLevel_MapEdit::ImGui_Picking_Object_MenBar()
 {
+	ImGui::Begin("Option");
+
 	ImGui_Delete_Object();
 
 	ImGui::SameLine(70.f,0.f);
 
 	ImGui_Picking_UnCheck();
 
-	if (ImGui::CollapsingHeader("Object Option", ImGuiTreeNodeFlags_DefaultOpen))   //?꾩껜 ?뱀뀡
+	if (ImGui::CollapsingHeader("Object Option", ImGuiTreeNodeFlags_DefaultOpen))   
 	{
 		ImGui_Picking_Object_Translates_Option();
 
@@ -511,6 +541,7 @@ void CLevel_MapEdit::ImGui_Picking_Object_MenBar()
 		ImGui_Picking_Object_Scale();
 	}
 
+	ImGui::End();
 }
 
 void CLevel_MapEdit::ImGui_Delete_Object()
@@ -700,6 +731,9 @@ void CLevel_MapEdit::ImGui_Picking_UnCheck()
 
 void CLevel_MapEdit::ImGui_Interaction_Object_MenBar()
 {
+
+	ImGui::Begin("Interaction  Editer");
+
 	if (ImGui::CollapsingHeader("Interaction Settings", ImGuiTreeNodeFlags_DefaultOpen))
 	{
 		ImGui_Transform_Render();
@@ -712,7 +746,7 @@ void CLevel_MapEdit::ImGui_Interaction_Object_MenBar()
 
 		ImGui::Text("Interaction Texture Index:");
 		ImGui::SetNextItemWidth(250);
-		ImGui::SliderInt("Texture", &iInteractionTexIndex, 0, 5); // 0~15 인덱스
+		ImGui::SliderInt("Texture", &iInteractionTexIndex, 0, 5); //  인덱스
 		ImGui::SameLine();
 		if (ImGui::Button("-"))
 			iInteractionTexIndex -= 1;
@@ -727,6 +761,7 @@ void CLevel_MapEdit::ImGui_Interaction_Object_MenBar()
 		if (ImGui::Button("Create Interaction"))   //버튼입력시 선택한 값으로 생성
 		{
 			MAP_OBJECT_DESC  tSrc{};
+			tSrc.eType = static_cast<GAMEOBJ_TYPE>(iInteractionTexIndex + 7);		//상호작용 타입 인덱스 7번부터
 			tSrc.iTextureIndex = iInteractionTexIndex;
 			tSrc.vPos = m_Translates;
 			tSrc.vScale = m_Scales;
@@ -742,6 +777,8 @@ void CLevel_MapEdit::ImGui_Interaction_Object_MenBar()
 			m_pObject.push_back(pGameObject); 
 		}
 	}
+
+	ImGui::End();
 }
 
 void CLevel_MapEdit::ImGui_Interaction_Texture_Render(int iTextureIndex)
@@ -875,8 +912,6 @@ void CLevel_MapEdit::Free()
 		m_pImgui_Manage = nullptr;
 	}
 
-	__super::Free();
-
 	for (auto& pair : m_ObjectTextureInfo)
 	{
 		if (pair.second.pTextureCom)
@@ -885,4 +920,14 @@ void CLevel_MapEdit::Free()
 		}
 	}
 	m_ObjectTextureInfo.clear();
+	
+	for (auto& pObj : m_pObject)
+	{
+		Safe_Release(pObj);
+	}
+	m_pObject.clear();
+
+	m_pObject_Desc.clear();
+
+	__super::Free();
 }

@@ -1,4 +1,3 @@
-
 #pragma once
 
 #include "Client_Defines.h"
@@ -12,12 +11,12 @@ END
 
 BEGIN(Client)
 
-class CMountain final : public CGameObject
+class CMapEditObject final : public CGameObject
 {
 private:
-	CMountain(LPDIRECT3DDEVICE9 pGraphic_Device);
-	CMountain(const CMountain& Prototype);
-	virtual ~CMountain() = default;
+	CMapEditObject(LPDIRECT3DDEVICE9 pGraphic_Device);
+	CMapEditObject(const CMapEditObject& Prototype);
+	virtual ~CMapEditObject() = default;
 
 public:
 	virtual HRESULT Initialize_Prototype() override;
@@ -27,6 +26,8 @@ public:
 	virtual void Late_Update(_float fTimeDelta) override;
 	virtual HRESULT Render() override;
 
+	void SetUp_RenderState();
+	void Reset_RenderState();
 private:
 	CVIBuffer_Rect* m_pVIBufferCom = { nullptr };
 	CTransform* m_pTransformCom = { nullptr };
@@ -38,7 +39,7 @@ private:
 	HRESULT Ready_Components();
 
 public:
-	static CMountain* Create(LPDIRECT3DDEVICE9 pGraphic_Device);
+	static CMapEditObject* Create(LPDIRECT3DDEVICE9 pGraphic_Device);
 	virtual CGameObject* Clone(void* pArg) override;
 	virtual void Free() override;
 };
