@@ -1,6 +1,6 @@
 #include "Button.h"
 #include "GameInstance.h"
-
+#include "ItemObject.h"
 CButton::CButton(LPDIRECT3DDEVICE9 pGraphic_Device) : CUIObject(pGraphic_Device)
 {
 }
@@ -41,6 +41,18 @@ void CButton::Late_Update(_float fTimeDelta)
 HRESULT CButton::Render()
 {
 	return S_OK;
+}
+
+void CButton::Push_Item(CItemObject* pItem)
+{
+}
+
+void CButton::Push_Item_Count(_uint iItemCount)
+{
+}
+
+void CButton::IsPick_off()
+{
 }
 
 _bool CButton::Check_Key_Down(HWND hWnd, _int iKey)

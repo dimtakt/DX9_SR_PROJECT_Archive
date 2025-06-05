@@ -43,12 +43,7 @@ private:
 	_bool		m_isRunOut = false;
 	_float3		m_vLockedOnPos = {};
 
-	CField_Hp*	m_pHpBar					= { nullptr };
 	//_int		m_iAtkCooldownFrames = 0;
-
-		// Ω∫≈» ¡§∫∏
-	_int		m_iCulHp					= 70;
-	_int		m_iMaxHp					= 70;
 	_float		m_fTurnDir					= 0.f;
 
 public:

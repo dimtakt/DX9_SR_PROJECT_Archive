@@ -34,6 +34,11 @@ private:
 	_float							m_fDash = {};
 	_bool							m_bIsRender = {};
 	_int							m_iIndex = {};
+
+	_float4x4						matOldTex = {};
+	DWORD							fOldFlags = {};
+	DWORD							OldTexCoordIndex = {};
+
 private:
 	HRESULT							Ready_Components();
 

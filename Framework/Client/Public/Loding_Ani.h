@@ -5,6 +5,7 @@
 BEGIN(Engine)
 class CVIBuffer_Rect;
 class CTexture;
+class CAnimator;
 END
 
 BEGIN(Client)
@@ -27,15 +28,12 @@ private:
 	LEVEL							m_eLevel = {};
 	CVIBuffer_Rect*					m_pVIBufferCom = { nullptr };
 	CTexture*						m_pTextureCom = { nullptr };
+	CAnimator*						m_pAnimatorCom = { nullptr };
 
 	_uint							m_iTexIndex = {};
 	_float							m_fSpeed = {};
 private:
 	HRESULT							Ready_Components();
-
-	void							SetUp_RenderState();
-	void							Reset_RenderState();
-
 public:
 	static CLoding_Ani*				Create(LPDIRECT3DDEVICE9 pGraphic_Device, LEVEL eLevel);
 	virtual CGameObject*			Clone(void* pArg) override;

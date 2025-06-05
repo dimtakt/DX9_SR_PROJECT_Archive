@@ -22,6 +22,8 @@ HRESULT CHud_Exp_Frame::Initialize_Prototype(LEVEL eLevel)
 
 HRESULT CHud_Exp_Frame::Initialize(void* pArg)
 {
+	UIOBJECT_DESC* Desc = static_cast<UIOBJECT_DESC*>(pArg);
+
 	m_fSizeX = g_iWinSizeX;
 	m_fSizeY = 9.f;
 	m_fX = m_fSizeX * 0.5f;
@@ -43,21 +45,32 @@ HRESULT CHud_Exp_Frame::Initialize(void* pArg)
 	if (FAILED(Ready_Children()))
 		return E_FAIL;
 
+	m_pGameInstance->Add_UIObject(Desc->m_iLevel, TEXT("Hud_Exp"), this);
+
 	return S_OK;
 }
 
 void CHud_Exp_Frame::Priority_Update(_float fTimeDelta)
 {
+	if (!m_bIsUpdate)
+		return;
+
 	__super::Priority_Update(fTimeDelta);
 }
 
 void CHud_Exp_Frame::Update(_float fTimeDelta)
 {
+	if (!m_bIsUpdate)
+		return;
+
 	__super::Update(fTimeDelta);
 }
 
 void CHud_Exp_Frame::Late_Update(_float fTimeDelta)
 {
+	if (!m_bIsUpdate)
+		return;
+
 	m_pGameInstance->Add_RenderGroup(RENDERGROUP::RG_UI, this);	
 
 	__super::Late_Update(fTimeDelta);
@@ -65,6 +78,7 @@ void CHud_Exp_Frame::Late_Update(_float fTimeDelta)
 
 HRESULT CHud_Exp_Frame::Render()
 {
+	m_pGraphic_Device->SetTexture(0, NULL);
 	Render_Buffer1();
 	Render_Buffer2();
 

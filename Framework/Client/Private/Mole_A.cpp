@@ -27,11 +27,15 @@ HRESULT CMole_A::Initialize(void* pArg)
         return E_FAIL;
 
     Ready_Object();
+
+    m_iMaxHp = 30;
+    m_iCulHp = 30;
 	return S_OK;
 }
 
 void CMole_A::Priority_Update(_float fTimeDelta)
 {
+    __super::Priority_Update(fTimeDelta);
     if (m_pHpBar != nullptr)
         m_pHpBar->Render_HP_Progress(m_pTransformCom, m_iCulHp, m_iMaxHp);
 

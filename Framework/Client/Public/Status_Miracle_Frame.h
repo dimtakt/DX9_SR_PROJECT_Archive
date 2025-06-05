@@ -34,9 +34,6 @@ private:
 	HRESULT							Ready_ChildPrototype(LEVEL eLevel);
 	HRESULT							Ready_Children();
 
-	void							SetUp_RenderState();
-	void							Reset_RenderState();
-
 public:
 	static CStatus_Miracle_Frame* Create(LPDIRECT3DDEVICE9 pGraphic_Device, LEVEL eLevel);
 	virtual CGameObject* Clone(void* pArg) override;

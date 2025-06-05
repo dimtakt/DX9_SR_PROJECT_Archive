@@ -16,7 +16,7 @@
 #include "Anim_Manager.h"
 #include "Item_Manager.h"
 #include "Event_Manager.h"
-
+#include "UIObject_Manager.h"
 IMPLEMENT_SINGLETON(CGameInstance)
 
 CGameInstance::CGameInstance()
@@ -87,23 +87,31 @@ HRESULT CGameInstance::Initialize_Engine(const ENGINE_DESC& EngineDesc, LPDIRECT
     if (nullptr == m_pEvent_Manager)
         return E_FAIL;
 
+    m_pUIObject_Manager = CUIObject_Manager::Create(EngineDesc.iNumLevels);
+    if (nullptr == m_pUIObject_Manager)
+        return E_FAIL;
+
     return S_OK;
 }
 
 void CGameInstance::Update_Engine(_float fTimeDelta)
 {
+    if (IsKeyDown(VK_TAB))
+        m_pCollision_Manager->Set_IsRender();
+    // 콜리전 충돌확인
+    m_pCollision_Manager->Check_RoomCollisions();
     m_pKey_Manager->Update(fTimeDelta);
+
     m_pObject_Manager->Priority_Update(fTimeDelta);
 
     m_pPicking->Update();
     // 콜리전 동기화
     m_pCollision_Manager->Update();
-    // 콜리전 충돌확인
-    m_pCollision_Manager->Check_RoomCollisions();
     m_pObject_Manager->Update(fTimeDelta);
+    m_pItem_Manager->Update();
     m_pObject_Manager->Late_Update(fTimeDelta);
-
     m_pLevel_Manager->Update(fTimeDelta);
+  
 }
 
 HRESULT CGameInstance::Clear_Resources(_uint iClearLevelID)
@@ -134,7 +142,8 @@ HRESULT CGameInstance::Draw()
         return E_FAIL;
 
     // 충돌체 시각화
-    m_pCollision_Manager->Render();
+    if(m_pCollision_Manager->Get_IsRender())
+        m_pCollision_Manager->Render();
 
     if (FAILED(m_pLevel_Manager->Render()))
         return E_FAIL;
@@ -150,6 +159,16 @@ void CGameInstance::Render_End(HWND hWnd)
 void CGameInstance::Seed_Random()
 {
     srand(static_cast<unsigned int>(time(NULL)));
+}
+
+_float CGameInstance::Rand_Normal()
+{
+    return static_cast<_float>(rand()) / RAND_MAX;
+}
+
+_float CGameInstance::Rand(_float fMin, _float fMax)
+{
+    return fMin + Rand_Normal() * (fMax - fMin);
 }
 
 _float CGameInstance::Compute_Random_Normal()
@@ -391,6 +410,26 @@ CItemObject* CGameInstance::Get_ItemObject(_uint iIndex)
 {
     return m_pItem_Manager->Get_ItemObject(iIndex);
 }
+CItemObject* CGameInstance::Pop_Item()
+{
+    return m_pItem_Manager->Pop_Item();
+}
+CButton* CGameInstance::Pop_Slot()
+{
+    return m_pItem_Manager->Pop_Slot();
+}
+_uint CGameInstance::Pop_Item_Count()
+{
+    return m_pItem_Manager->Pop_Item_Count();
+}
+void CGameInstance::Pick_ItemSlot(CItemObject* pPickItem, CButton* pSlot, _uint iItemCount)
+{
+    m_pItem_Manager->Pick_ItemSlot(pPickItem, pSlot, iItemCount);
+}
+void CGameInstance::Pick_Reset()
+{
+    m_pItem_Manager->Pick_Reset();
+}
 #pragma endregion
 
 #pragma region EVENT_MANAGER
@@ -408,6 +447,34 @@ void CGameInstance::Broadcast(_uint iTypeIndex, const EVENTDATA* pData)
 {
     m_pEvent_Manager->Broadcast(iTypeIndex, pData);
 }
+HRESULT CGameInstance::Add_UIObject(_uint iLevelIndex, const _wstring& strUITag, CUIObject* pUIObj)
+{
+    return m_pUIObject_Manager->Add_UIObject(iLevelIndex, strUITag, pUIObj);
+}
+void CGameInstance::Update_On(_uint iLevelIndex, const _wstring& strUITag)
+{
+    m_pUIObject_Manager->Update_On(iLevelIndex, strUITag);
+}
+void CGameInstance::Update_Off(_uint iLevelIndex, const _wstring& strUITag)
+{
+    m_pUIObject_Manager->Update_Off(iLevelIndex, strUITag);
+}
+void CGameInstance::All_Update_On()
+{
+    m_pUIObject_Manager->All_Update_On();
+}
+void CGameInstance::All_Update_Off()
+{
+    m_pUIObject_Manager->All_Update_Off();
+}
+void CGameInstance::Clear_UiObj(_uint iLevelIndex)
+{
+    m_pUIObject_Manager->Clear_UiObj(iLevelIndex);
+}
+CUIObject* CGameInstance::Find_UIObj(_uint iLevelIndex, const _wstring& strUITag)
+{
+    return m_pUIObject_Manager->Find_UIObj(iLevelIndex, strUITag);
+}
 #pragma endregion
 
 void CGameInstance::Release_Engine()
@@ -415,6 +482,7 @@ void CGameInstance::Release_Engine()
     
     Release();
     Safe_Release(m_pCollision_Manager);
+    Safe_Release(m_pUIObject_Manager);
     Safe_Release(m_pTimer_Manager);
     Safe_Release(m_pLevel_Manager);
     Safe_Release(m_pGraphic_Device);
@@ -429,7 +497,7 @@ void CGameInstance::Release_Engine()
     Safe_Release(m_pLight_Manager);
     Safe_Release(m_pAnimation_Manager);
     Safe_Release(m_pItem_Manager);//
-    
+  
 }
 
 void CGameInstance::Free()

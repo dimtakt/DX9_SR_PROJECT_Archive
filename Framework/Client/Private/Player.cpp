@@ -38,6 +38,7 @@ HRESULT CPlayer::Initialize(void* pArg)
     m_pGameInstance->Compute_TimeDelta(m_strTimerTag);
     m_pGameInstance->Subscribe(ENUM_CLASS(EVENT_TYPE::UICHANGE), this);
     Ready_Object();
+    m_dwHitTime = 0.f;
 	return S_OK;
 }
 
@@ -49,6 +50,14 @@ void CPlayer::Priority_Update(_float fTimeDelta)
 
     if (m_pHpBar != nullptr)
         m_pHpBar->Render_HP_Progress(m_pTransformCom, m_iCulHp, m_iMaxHp);
+
+    m_dwHitTime += 1.f;
+    if (m_dwHitTime >= 30.f)
+    {
+        m_dwHitTime = 0.f;
+        m_bIsHit = false;
+    }
+        
 
 }
 
@@ -170,7 +179,7 @@ void CPlayer::Update(_float fTimeDelta)
     // ***************************************
     // * [WASD] 이동
     // ***************************************
-
+    m_vOldPos = m_pTransformCom->Get_State(STATE::POSITION);
     // 상태전환
     if (m_pGameInstance->IsKeyHold('W') ||
         m_pGameInstance->IsKeyHold('S') ||
@@ -414,7 +423,7 @@ void CPlayer::Late_Update(_float fTimeDelta)
 
 HRESULT CPlayer::Render()
 {
-    //SetUp_RenderState();
+    SetUp_RenderState();
 
     _float fPointY = 0.f;       // 교차 평면의 기준이 될 Y값
     _float3 vRayPoint = {};     // fPointY 값 기준 마우스 Ray와 교차하는 좌표
@@ -452,7 +461,7 @@ HRESULT CPlayer::Render()
         m_isFlippedX = false;
     }
 
-    //Reset_RenderState();
+    Reset_RenderState();
 	return S_OK;
 }
 
@@ -467,24 +476,24 @@ void CPlayer::OnCollision(CGameObject* pGameObject)
 {
     switch (pGameObject->Get_ObjType())
     {
-    case GAMEOBJ_TYPE::MONSTER:
-    {
-        //pGameObject->Set_IsDead(true);
-        break;
-    }
     case GAMEOBJ_TYPE::POTAL:
     {
-        _float3 vPos;
-        CRoom_Manager::GetInstance()->Check_Potal_Coll(dynamic_cast<CPotal*>(pGameObject)->Get_PotalType(), vPos);
+        if (pGameObject->Get_IsActive()) {
+            _float3 vPos;
+            CRoom_Manager::GetInstance()->Check_Potal_Coll(dynamic_cast<CPotal*>(pGameObject)->Get_PotalType(), vPos);
 
-        m_pTransformCom->Set_State(STATE::POSITION, vPos);
+            m_pTransformCom->Set_State(STATE::POSITION, vPos);
+        }
+        
         break;
     }
     case GAMEOBJ_TYPE::END_POTAL:
     {
-        if (m_pGameInstance->IsKeyDown(VK_DOWN))
-        {
-            dynamic_cast<CChapMap*>(m_pGameInstance->Get_GameObject(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Layer_ChapMap")))->Open_Ui();
+        if (pGameObject->Get_IsActive()) {
+            if (m_pGameInstance->IsKeyDown(VK_DOWN))
+            {
+                dynamic_cast<CChapMap*>(m_pGameInstance->Get_GameObject(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Layer_ChapMap")))->Open_Ui();
+            }
         }
         break;
     }
@@ -496,7 +505,16 @@ void CPlayer::OnCollision(CGameObject* pGameObject)
     }
     case GAMEOBJ_TYPE::OBJECT:
     {
-        int a = 1;
+        m_pTransformCom->Set_State(STATE::POSITION, m_vOldPos);
+        break;
+    }
+
+    case GAMEOBJ_TYPE::MONSTER_EFFECT:
+    {
+        if (!m_bIsHit) {
+            CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CULHP, -5.f);
+            m_bIsHit = true;
+        }
         break;
     }
         
@@ -655,6 +673,7 @@ HRESULT CPlayer::Ready_Components(void* pArg)
     tColliderDesc.vScale = _float3(1.f, 3.f, 1.f);
     tColliderDesc.pOwner = this;
     tColliderDesc.pTransform = m_pTransformCom;
+    tColliderDesc.eType = m_eObjType;
     CCollider_OBB* pCol = dynamic_cast<CCollider_OBB*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::COMPONENT, ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Collider_OBB"), &tColliderDesc));
     m_pGameInstance->Add_Collider(pCol);
     return S_OK;
@@ -669,24 +688,26 @@ HRESULT CPlayer::Ready_Object()
 
 void CPlayer::SetUp_RenderState()
 {
-    m_pGraphic_Device->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
+    /*m_pGraphic_Device->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
     m_pGraphic_Device->SetRenderState(D3DRS_ALPHAREF, 200);
-    m_pGraphic_Device->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER);
+    m_pGraphic_Device->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER);*/
+    m_pGraphic_Device->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
 
-    m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_POINT);
+    /*m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_POINT);
     m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_POINT);
-    m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MIPFILTER, D3DTEXF_NONE);
+    m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MIPFILTER, D3DTEXF_NONE);*/
 }
 
 void CPlayer::Reset_RenderState()
 {
-    m_pGraphic_Device->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
+    //m_pGraphic_Device->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
+    m_pGraphic_Device->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);
 
-    m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_LINEAR);
+    /*m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_LINEAR);
     m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);
     m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MIPFILTER, D3DTEXF_LINEAR);
 
-    m_pGraphic_Device->SetTexture(0, NULL);
+    m_pGraphic_Device->SetTexture(0, NULL);*/
 }
 
 

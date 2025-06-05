@@ -30,11 +30,15 @@ HRESULT CLaserGhost_D::Initialize(void* pArg)
     //m_iAtkCooldownFrames = static_cast<_int>(m_pGameInstance->Compute_Random(0, 300));
     Ready_Object();
 
+    m_iMaxHp = 70;
+    m_iCulHp = 70;
+
     return S_OK;
 }
 
 void CLaserGhost_D::Priority_Update(_float fTimeDelta)
 {
+    __super::Priority_Update(fTimeDelta);
     if (m_pHpBar != nullptr)
         m_pHpBar->Render_HP_Progress(m_pTransformCom, m_iCulHp, m_iMaxHp);
 

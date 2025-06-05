@@ -2,7 +2,7 @@
 #include "GameInstance.h"
 
 #include "ItemObject.h"
-
+#include "Button.h"
 CItem_Manager::CItem_Manager(LPDIRECT3DDEVICE9 pGraphic_Device) : m_pGraphic_Device(pGraphic_Device), m_pGameInstance{ CGameInstance::GetInstance() }
 {
 	Safe_AddRef(m_pGraphic_Device);
@@ -14,9 +14,50 @@ HRESULT CItem_Manager::Initialize()
 	return S_OK;
 }
 
+void CItem_Manager::Update()
+{
+	if (m_pGameInstance->IsKeyUp(VK_LBUTTON) && m_pPickSlot != nullptr)
+	{
+		m_pPickSlot->IsPick_off();
+		Pick_Reset();
+	}
+}
+
+CItemObject* CItem_Manager::Pop_Item()
+{
+	return m_pPickItem;
+}
+
+CButton* CItem_Manager::Pop_Slot()
+{
+	return m_pPickSlot;
+}
+
+_uint CItem_Manager::Pop_Item_Count()
+{
+	return m_iItemCount;
+}
+
+void CItem_Manager::Pick_ItemSlot(CItemObject* pPickItem, CButton* pSlot, _uint iItemCount)
+{
+	m_pPickItem = pPickItem;
+	m_pPickSlot = pSlot;
+	m_iItemCount = iItemCount;
+}
+
+void CItem_Manager::Pick_Reset()
+{
+	m_pPickItem = nullptr;
+	m_pPickSlot = nullptr;
+	m_iItemCount = 0;
+}
+
 CItemObject* CItem_Manager::Get_ItemObject(_uint iIndex)
 {
-	return m_ItemObjects[iIndex];
+	CItemObject::ITEMOBJECT_DESC pDesc = *m_ItemObjects[iIndex]->Item_Info();
+	
+	CItemObject* pItemObject = dynamic_cast<CItemObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, m_iLevelIndex, m_strItemBaseTag, &pDesc));
+	return pItemObject;
 }
 
 CBase* CItem_Manager::find_ItemObject(_uint iIndex)
@@ -33,9 +74,11 @@ HRESULT CItem_Manager::Setting_Item(void* pArg, _uint MaxItemIndex, _uint iLevel
 	}
 
 	CItemObject* pItemObject = nullptr;
-
 	CItemObject::ITEMOBJECT_DESC* pDesc = static_cast<CItemObject::ITEMOBJECT_DESC*>(pArg);
 
+	
+	//CItemObject::ITEMOBJECT_DESC* pDesc = static_cast<CItemObject::ITEMOBJECT_DESC*>(pArg);
+	
 	for (_int i = 0; i < MaxItemIndex; ++i)
 	{
 		pItemObject = dynamic_cast<CItemObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, iLevelIndex, strItemBaseTag, &pDesc[i]));
@@ -46,6 +89,10 @@ HRESULT CItem_Manager::Setting_Item(void* pArg, _uint MaxItemIndex, _uint iLevel
 		}
 		m_ItemObjects.push_back(pItemObject);
 	}
+
+	m_iLevelIndex = iLevelIndex;
+	m_strItemBaseTag = strItemBaseTag;
+
 	return S_OK;
 }
 
@@ -69,6 +116,7 @@ void CItem_Manager::Free()
 		Safe_Release(pItemObject);
 	m_ItemObjects.clear();
 
+	m_pPickItem = nullptr;
 	Safe_Release(m_pGraphic_Device);
 	Safe_Release(m_pGameInstance);
 }

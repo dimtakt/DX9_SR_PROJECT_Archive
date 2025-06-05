@@ -29,11 +29,14 @@ HRESULT COink_A::Initialize(void* pArg)
     Ready_Object();
     m_iAtkCooldownFrames = static_cast<_int>(m_pGameInstance->Compute_Random(0, 300));
 
+    m_iMaxHp = 50;
+    m_iCulHp = 50;
     return S_OK;
 }
 
 void COink_A::Priority_Update(_float fTimeDelta)
 {
+    __super::Priority_Update(fTimeDelta);
     if (m_pHpBar != nullptr)
         m_pHpBar->Render_HP_Progress(m_pTransformCom, m_iCulHp, m_iMaxHp);
 

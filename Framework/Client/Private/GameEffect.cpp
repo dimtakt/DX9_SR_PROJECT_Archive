@@ -1,6 +1,7 @@
 #include "GameEffect.h"
 #include "GameInstance.h"
-
+#include "Stat_Manager.h"
+#include "Monster.h"
 CGameEffect::CGameEffect(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CEffect(pGraphic_Device)
 {
@@ -73,14 +74,15 @@ HRESULT CGameEffect::Initialize(void* pArg)
 							pDesc->matOriginWorld.m[3][2] };
 	m_vThrownDir = pDesc->vThrownDir;
 	m_fThrownPower = pDesc->fThrownPower;
-	m_fLifeTimeSec = pDesc->fLifeTimeSec;
+	m_fLifeTimeSec = pDesc->fLifeTimeSec + 0.4f;
 
 	m_iStackedFrame = 0;
 
 	CCollider_OBB::OBB_DESC tColliderDesc;
-	tColliderDesc.vScale = _float3(4.f, 3.f, 4.f);
+	tColliderDesc.vScale = _float3(3.f, 5.f, 3.f);
 	tColliderDesc.pOwner = this;
 	tColliderDesc.pTransform = m_pTransformCom;
+	tColliderDesc.eType = m_eObjType;
 	CCollider_OBB* pCol = dynamic_cast<CCollider_OBB*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::COMPONENT, ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Collider_OBB"), &tColliderDesc));
 	m_pGameInstance->Add_Collider(pCol);
 
@@ -89,14 +91,14 @@ HRESULT CGameEffect::Initialize(void* pArg)
 
 void CGameEffect::Priority_Update(_float fTimeDelta)
 {
-
+	if (m_pAnimatorCom->Get_IsLastFrame() &&
+		m_iStackedFrame >= m_fLifeTimeSec * 60.f)
+		m_bDead = true;
 }
 
 void CGameEffect::Update(_float fTimeDelta)
 {
-	if (m_pAnimatorCom->Get_IsLastFrame() &&
-		m_iStackedFrame >= m_fLifeTimeSec * 60.f)
-		m_bDead = true;
+	
 
 	// fDeltaAngle, fTimeDelta 사용하여 초마다 해당 각도씩 돌아가게
 	if (m_fDeltaAngle != 0)
@@ -247,17 +249,17 @@ void CGameEffect::Reset_RenderState()
 
 void CGameEffect::OnCollision(CGameObject* pGameObject)
 {
-	switch (pGameObject->Get_ObjType())
-	{
-	case GAMEOBJ_TYPE::MONSTER:
-	{
-		//pGameObject->Set_IsDead(true);
+	if (m_eObjType == GAMEOBJ_TYPE::PLAYER_EFFECT) {
+		switch (pGameObject->Get_ObjType())
+		{
+		case GAMEOBJ_TYPE::MONSTER:
+		{
+		
+		}
 
-		// 현재 이곳에서 플레이어, 몬스터 둘다 이펙트 처리하고있어서 분리 필요
-		break;
+		}
 	}
-
-	}
+	
 }
 
 

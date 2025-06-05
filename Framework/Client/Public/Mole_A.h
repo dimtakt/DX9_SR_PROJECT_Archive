@@ -38,12 +38,6 @@ private:
 
 	_bool		m_isFlippedX				= false;
 
-	CField_Hp*	m_pHpBar					= { nullptr };
-
-	// Ω∫≈» ¡§∫∏
-	_int		m_iCulHp					= 30;
-	_int		m_iMaxHp					= 30;
-
 public:
 	static CMole_A* Create(LPDIRECT3DDEVICE9 pGraphic_Device);
 	virtual CGameObject* Clone(void* pArg) override;

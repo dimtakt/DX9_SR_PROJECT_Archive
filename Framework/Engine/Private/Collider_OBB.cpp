@@ -30,6 +30,7 @@ HRESULT CCollider_OBB::Initialize(void* pArg)
 	m_pOwner = desc->pOwner;
 	m_pTransformRef = desc->pTransform;
 	m_vScale = desc->vScale;
+	m_eOwnerObjType = desc->eType;
 
 	return S_OK;
 }

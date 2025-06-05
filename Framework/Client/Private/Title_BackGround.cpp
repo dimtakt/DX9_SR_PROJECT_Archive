@@ -15,7 +15,7 @@ CTitle_BackGround::CTitle_BackGround(LPDIRECT3DDEVICE9 pGraphic_Device)
 }
 
 CTitle_BackGround::CTitle_BackGround(const CTitle_BackGround& Prototype)
-    : CUIObject{ Prototype }
+    : CUIObject(Prototype)
     , m_eLevel{ Prototype.m_eLevel }
 {
 }

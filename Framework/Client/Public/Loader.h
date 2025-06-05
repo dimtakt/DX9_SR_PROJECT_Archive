@@ -38,10 +38,15 @@ private:
 
 private:
 	HRESULT Loading_For_Logo_Level();
+	HRESULT Loading_For_Town_Level();
 	HRESULT Loading_For_MapEdit_Level();
 	HRESULT Loading_For_Stage1_Level();
 	HRESULT Loading_For_Stage2_Level();
-
+	HRESULT Loading_For_Stage3_Level();
+	HRESULT Loading_For_Stage4_Level();
+	HRESULT Loading_For_Boss1_Level();
+	HRESULT Loading_For_Shelter_Level();
+	HRESULT Loading_For_Boss2_Level();
 public:
 	static CLoader* Create(LPDIRECT3DDEVICE9 pGraphic_Device, LEVEL eNextLevelID);
 	virtual void Free() override;

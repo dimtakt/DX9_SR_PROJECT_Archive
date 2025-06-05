@@ -36,8 +36,7 @@ private:
 	_int							m_iBuff_Index = {};
 private:
 	HRESULT							Ready_Components();
-	void							SetUp_RenderState();
-	void							Reset_RenderState();
+
 public:
 	static CBuff_Icon*				Create(LPDIRECT3DDEVICE9 pGraphic_Device);
 	virtual CGameObject*			Clone(void* pArg) override;
