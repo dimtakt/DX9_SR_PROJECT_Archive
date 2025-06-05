@@ -286,46 +286,37 @@ HRESULT CRoom::Load_From_File(_uint iLayerLevelIndex, const _wstring& strLayerTa
 	}
 	ifile.close();
 
-	_bool bIsTerrain = false;
+	//_bool bIsTerrain = false;
 
 	for (auto& pDesc : m_Object_Desc)
 	{
-		if (pDesc.eType == GAMEOBJ_TYPE::OBJECT)
+		if (pDesc.eType == GAMEOBJ_TYPE::OBJECT || pDesc.eType == GAMEOBJ_TYPE::OBJECT_DECO)
 		{
 			MAP_OBJECT_DESC  tSrc{};
 			tSrc.iTextureIndex = pDesc.iTextureIndex;
 			tSrc.vPos = pDesc.vPos + m_ObjectOffset;
 			tSrc.vScale = pDesc.vScale;
 			tSrc.vRotate = pDesc.vRotate;
+			if (pDesc.eType == GAMEOBJ_TYPE::OBJECT_DECO)
+				tSrc.eType = GAMEOBJ_TYPE::OBJECT_DECO;
 
-			//if(FAILED(m_pGameInstance->Add_GameObject_ToLayer(
-			//	iLayerLevelIndex, strLayerTag,
-			//	iLayerLevelIndex,
-			//	TEXT("Prototype_GameObject_Tree"),
-			//	&tSrc)))
-			//	return E_FAIL;
 			CGameObject* pGameObject = dynamic_cast<CGameObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, iLayerLevelIndex, TEXT("Prototype_GameObject_Tree"), &tSrc));
-	/*		CGameObject* pGameObject = m_pGameInstance->Get_LastGameObject(iLayerLevelIndex, strLayerTag);*/
+
 			m_vObject.push_back(pGameObject);
 		}
 		else if (pDesc.eType == GAMEOBJ_TYPE::TERRAIN)
 		{
-			if (!bIsTerrain) {
+			/*if (!bIsTerrain) {*/
 				MAP_OBJECT_DESC tSrc{};
 				tSrc.iTextureIndex = pDesc.iTextureIndex;
 				tSrc.vPos = pDesc.vPos + m_ObjectOffset;
 				tSrc.vScale = pDesc.vScale;
+				tSrc.eType = pDesc.eType;
 
-				/*m_pGameInstance->Add_GameObject_ToLayer(
-					iLayerLevelIndex, strLayerTag,
-					iLayerLevelIndex,
-					TEXT("Prototype_GameObject_TerrainBox"),
-					&tSrc);*/
 				m_pTerrainBox = dynamic_cast<CTerrainBox*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, iLayerLevelIndex, TEXT("Prototype_GameObject_TerrainBox"), &tSrc));
 
-				/*	CGameObject* pGameObject = m_pGameInstance->Get_LastGameObject(iLayerLevelIndex, strLayerTag);*/
-				bIsTerrain = true;
-			}
+		/*		bIsTerrain = true;
+			}*/
 		}
 		else
 		{
@@ -335,11 +326,6 @@ HRESULT CRoom::Load_From_File(_uint iLayerLevelIndex, const _wstring& strLayerTa
 			tSrc.vScale = pDesc.vScale;
 			tSrc.vRotate = pDesc.vRotate;
 
-		/*	m_pGameInstance->Add_GameObject_ToLayer(
-				iLayerLevelIndex, strLayerTag,
-				ENUM_CLASS(LEVEL::LEVEL_STATIC),
-				TEXT("Prototype_GameObject_Interaction_Normal"),
-				&tSrc);*/
 
 			CGameObject* pGameObject = dynamic_cast<CGameObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_Interaction_Normal"), &tSrc));
 	/*		CGameObject* pGameObject = m_pGameInstance->Get_LastGameObject(iLayerLevelIndex, strLayerTag);*/

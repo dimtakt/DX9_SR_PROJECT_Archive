@@ -176,10 +176,12 @@ HRESULT CLevel_Stage2::Ready_Layer_Room(const _wstring& strLayerTag)
 	CRoom* pRoom = nullptr;
 	m_pGameInstance->Seed_Random();
 
-	_int iIndex = 8;
+	_int iIndex = 7;
 	_int iCount = 0;
 	_int iEventCheck = 0;
 	_int iEventRoomCreate = dynamic_cast<CChapMap*>(m_pGameInstance->Get_GameObject(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Layer_ChapMap")))->Get_Click_ID();
+	if (iEventRoomCreate == 2)
+		iIndex = 8; //이벤트룸 1개면 전체 룸 7개, 2개면 전체룸 8개
 	_int iEventRoomIndex1 = static_cast<_int>(m_pGameInstance->Compute_Random((_float)iIndex - 4, (_float)iIndex));;
 	_int iEventRoomIndex2 = static_cast<_int>(m_pGameInstance->Compute_Random((_float)iIndex - 4, (_float)iIndex));;
 
@@ -258,7 +260,7 @@ HRESULT CLevel_Stage2::Ready_Layer_Room(const _wstring& strLayerTag)
 			}
 			CMonster_Factory::GetInstance()->Add_Monsters(pRoom, DescList, CMonster_Factory::MONSTER_TYPE::MONSTER_LASERGHOST_D);
 		}
-		else //추후 이벤트룸 3이면 상점, 4면 석판,아티팩트 추가 예정
+		else if(iEventCheck < iEventRoomCreate)
 		{
 			pRoom->Load_From_File(ENUM_CLASS(LEVEL::LEVEL_STAGE2), strLayerTag, TEXT("../../data/Stage2_Event%d.txt"), iEventCheck, RoomX, RoomZ);			// 이벤트 룸 로드
 			iEventCheck++;
