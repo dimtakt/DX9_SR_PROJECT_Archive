@@ -26,6 +26,8 @@ HRESULT CGacha::Initialize_Prototype(LEVEL eLevel)
 
 HRESULT CGacha::Initialize(void* pArg)
 {
+	eGacha_Type = GACHA_TYPE::ALL;
+
 	m_fSizeX = g_iWinSizeX;
 	m_fSizeY = g_iWinSizeY;
 	m_fX = m_fSizeX * 0.5f;
@@ -62,9 +64,6 @@ void CGacha::Priority_Update(_float fTimeDelta)
 	if (!m_bIsOpen)
 		return;
 
-	if (!m_bIsReandom)
-		Rand_Itme(GACHA_TYPE::STONE);
-
 	__super::Priority_Update(fTimeDelta);
 }
 
@@ -81,6 +80,9 @@ void CGacha::Update(_float fTimeDelta)
 
 	if (!m_bIsOpen)
 		return;
+
+	if (!m_bIsRandom)
+		Rand_Itme(eGacha_Type);
 
 	if (m_pGameInstance->IsKeyDown(VK_ESCAPE))
 	{
@@ -124,7 +126,6 @@ void CGacha::UI_Switch()
 {
 	if (m_bIsOpen)
 	{
-		static_cast<CInventory*>(m_pGameInstance->Get_GameObject(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Layer_Inventory")))->Close_UI();
 		m_pGameInstance->All_Update_On();
 		m_bIsOpen = false;
 	}
@@ -138,9 +139,24 @@ void CGacha::UI_Switch()
 	}
 }
 
-void CGacha::Rand_Item_Set(GACHA_TYPE eType)
+void CGacha::Rand_Item_Set()
 {
-	Rand_Itme(eType);
+	Rand_Itme(eGacha_Type);
+}
+
+void CGacha::UI_Open(GACHA_TYPE eType)
+{
+	UI_Switch();
+	eGacha_Type = eType;
+}
+
+void CGacha::Release_Slot()
+{
+	for (size_t i = 0; i < 5; i++)
+	{
+		static_cast<CGacha_Slot*>(m_vecChildren[i])->Release_Item();
+	}
+
 }
 
 HRESULT CGacha::Ready_Components()
@@ -311,7 +327,7 @@ void CGacha::Rand_Itme(GACHA_TYPE eType)
 	case Client::CGacha::GACHA_TYPE::ALL:
 		for (_int i = 0; i < g_ItemDataBase.size(); ++i)
 		{
-			if(g_ItemDataBase[i].m_eType == ITEM_TYPE::ARTEFACT || g_ItemDataBase[i].m_eType == ITEM_TYPE::SKILLBOOK, g_ItemDataBase[i].m_eType == ITEM_TYPE::STONE)
+			if(g_ItemDataBase[i].m_eType != ITEM_TYPE::POTION)
 				vecIndex.push_back(g_ItemDataBase[i].m_iItemID);
 		}
 		break;
@@ -333,6 +349,23 @@ void CGacha::Rand_Itme(GACHA_TYPE eType)
 		break;
 	}
 	
+	for (auto iter = vecIndex.begin(); iter < vecIndex.end();)
+	{
+		_bool bErased = false;
+		_int iTemp = 0;
+		for (_int j = 0; j < m_pGameInstance->AcquiredItem_List().size(); ++j)
+		{
+			iTemp = m_pGameInstance->AcquiredItem_List()[j];
+			if (*(iter) == iTemp)
+			{
+				iter = vecIndex.erase(iter);
+				bErased = true;
+				break;
+			}
+		}
+		if (!bErased)
+			++iter;
+	}
 	for (_int i = 0; i < 100; ++i)
 	{
 		_int iIndex1 = m_pGameInstance->Rand(0, vecIndex.size());
@@ -344,10 +377,19 @@ void CGacha::Rand_Itme(GACHA_TYPE eType)
 
 	for (_int i = 0; i < 5; ++i)
 	{
-		pItem = static_cast<CItem_Base*>(m_pGameInstance->Get_ItemObject(vecIndex[i]));
-		static_cast<CGacha_Slot*>(m_vecChildren[i])->Push_Item_ReRoll(pItem);
+		if (vecIndex.size() > i)
+		{
+			pItem = static_cast<CItem_Base*>(m_pGameInstance->Get_ItemObject(vecIndex[i], false));
+
+			static_cast<CGacha_Slot*>(m_vecChildren[i])->Push_Item_ReRoll(pItem);
+		}
+		else
+		{
+			pItem = nullptr;
+			static_cast<CGacha_Slot*>(m_vecChildren[i])->Push_Item_ReRoll(pItem);
+		}
 	}
-	m_bIsReandom = true;
+	m_bIsRandom = true;
 }
 
 CGacha* CGacha::Create(LPDIRECT3DDEVICE9 pGraphic_Device, LEVEL eLevel)

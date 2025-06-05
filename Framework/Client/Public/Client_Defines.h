@@ -57,7 +57,9 @@ namespace Client
 		static constexpr float TALENT = 0.2f;
 		static constexpr float TALENT_Selete = 0.19f;
 
-
+		//Minimap
+		static constexpr float MiniMap = 0.18f;
+		
 		//Loding
 		static constexpr float LODING = 0.2f;
 
