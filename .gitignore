@@ -1,6 +1,8 @@
-<<<<<<< HEAD
 .vs/
 x64/
+
+*.txt
+*.json
 
 Client.exe
 Client.pdb
@@ -11,37 +13,10 @@ Engine.exp
 Engine.pdb
 Inc/
 Lib/
-
 Resources/
+data/
 copy.bat
 
 *.vcxproj merge=union
 *.vcxproj.filters merge=union
-=======
-.vs/
-x64/
-
-*.exe
-*.pdb
-*.dll
-*.lib
-*.exp
-
-# Framework/Client/Bin/Client.exe
-# Framework/Client/Bin/Client.pdb
-# Framework/Client/Bin/Engine.dll
-
-# Framework/Engine/Bin/Engine.dll
-# Framework/Engine/Bin/Engine.lib
-# Framework/Engine/Bin/Engine.exp
-# Framework/Engine/Bin/Engine.pdb
-Inc/
-Lib/
-
-Resources/
-copy.bat
-
-*.vcxproj merge=union
-*.vcxproj.filters merge=union
->>>>>>> dev
 *.sln merge=union
