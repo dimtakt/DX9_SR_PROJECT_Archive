@@ -74,7 +74,7 @@ HRESULT CGameEffect::Initialize(void* pArg)
 							pDesc->matOriginWorld.m[3][2] };
 	m_vThrownDir = pDesc->vThrownDir;
 	m_fThrownPower = pDesc->fThrownPower;
-	m_fLifeTimeSec = pDesc->fLifeTimeSec + 0.4f;
+	m_fLifeTimeSec = pDesc->fLifeTimeSec;
 
 	m_iStackedFrame = 0;
 
@@ -143,7 +143,7 @@ void CGameEffect::Update(_float fTimeDelta)
 		_float3 vTargetPos = m_pFollowTransformCom->Get_State(STATE::POSITION);
 		// Å¸°Ù¿¡¼­ m_vFollowOffset À» »¬¼ÀÇÏ¸é ÀÇµµÇÑ ÀÌÆåÆ®ÀÇ ÁÂÇ¥°¡ µÊ
 		_float3 vResultPos = vTargetPos - m_vFollowOffset;
-		std::cout << "vResultPos = " << vResultPos.x << ", " << vResultPos.y << ", " << vResultPos.z << std::endl;
+		//std::cout << "vResultPos = " << vResultPos.x << ", " << vResultPos.y << ", " << vResultPos.z << std::endl;
 		m_pTransformCom->Set_State(STATE::POSITION, vResultPos);
 	}
 

@@ -367,6 +367,9 @@
     <Filter Include="02.GameObject\UI\Window\Gacha\Gacha_FX">
       <UniqueIdentifier>{788cb07d-a84c-4143-9ceb-e2e33b3c7e63}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\Monster\Boss">
+      <UniqueIdentifier>{961807fe-6049-4ff4-b8ae-e1001345b58c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">

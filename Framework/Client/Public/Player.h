@@ -86,6 +86,7 @@ private:
 	_float3					m_vOldPos						= {};
 
 	_bool					m_bIsHit						= { false };
+	_bool					m_bIsStun						= false;
 	DWORD					m_dwHitTime						= {};
 
 private:

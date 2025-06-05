@@ -170,10 +170,10 @@ HRESULT CLoader::Loading_For_Logo_Level()
 		CTitle_BackGround::Create(m_pGraphic_Device, LEVEL::LEVEL_LOGO))))
 		return E_FAIL;
 
-	for (size_t i = 0; i < 100000000; i++)
-	{
-		int a = 1;
-	}
+	//for (size_t i = 0; i < 100000000; i++)
+	//{
+	//	int a = 1;
+	//}
 
 	lstrcpy(m_szLoadingText, TEXT("로딩이 완료되었습니다."));
 
@@ -430,10 +430,10 @@ HRESULT CLoader::Loading_For_Stage1_Level()
 	//	m_pGameInstance->Add_Room(pRoom, ENUM_CLASS(LEVEL::LEVEL_STAGE1), TEXT("Layer_Room"));
 	//}
 
-	for (size_t i = 0; i < 10000000000; i++)
-	{
-		int a = 1;
-	}
+	//for (size_t i = 0; i < 10000000000; i++)
+	//{
+	//	int a = 1;
+	//}
 
 	lstrcpy(m_szLoadingText, TEXT("로딩이 완료되었습니다."));
 

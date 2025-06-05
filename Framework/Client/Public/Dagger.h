@@ -37,7 +37,8 @@ public:
 private:
 	CVIBuffer_Rect*			m_pVIBufferCom					= { nullptr };
 	CTransform*				m_pTransformCom					= { nullptr };
-	CTexture*				m_pTextureCom					= { nullptr };
+	CTexture*				m_pTextureCom_Normal			= { nullptr };
+	CTexture*				m_pTextureCom_FuryReady			= { nullptr };
 	CAnimator*				m_pAnimatorCom					= { nullptr };
 
 	_bool					m_isFlippedX					= false;
