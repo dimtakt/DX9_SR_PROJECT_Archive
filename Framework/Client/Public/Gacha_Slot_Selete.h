@@ -1,16 +1,14 @@
 #pragma once
-#include "UIObject.h"
 #include "Client_Defines.h"
-BEGIN(Engine)
-class CVIBuffer_Rect;
-END
+#include "Button.h"
+
 BEGIN(Client)
-class CGacha final : public CUIObject
+class CGacha_Slot_Selete final : public CButton
 {
 private:
-									CGacha(LPDIRECT3DDEVICE9 pGraphic_Device);
-									CGacha(const CGacha& Prototype);
-	virtual							~CGacha() = default;
+	CGacha_Slot_Selete(LPDIRECT3DDEVICE9 pGraphic_Device);
+	CGacha_Slot_Selete(const CGacha_Slot_Selete& Prototype);
+	virtual							~CGacha_Slot_Selete() = default;
 
 public:
 	virtual HRESULT					Initialize_Prototype(LEVEL eLevel);
@@ -20,30 +18,21 @@ public:
 	virtual void					Late_Update(_float fTimeDelta) override;
 	virtual HRESULT					Render() override;
 
-public:
-	void							UI_Switch();
-	void							Rand_Item_Set();
-
 private:
 	LEVEL							m_eLevel = {};
-	CVIBuffer_Rect*					m_pVIBufferCom = { nullptr };
+	class CTexture* m_pSelete_TextureCom = { nullptr };
+	_bool							m_bIsOver = {};
 
-	_bool							m_bIsOpen = { false };
-	_bool							m_bIsReandom = { false };
 private:
 	HRESULT							Ready_Components();
 
 	HRESULT							Ready_ChildPrototype(LEVEL eLevel);
 	HRESULT							Ready_Children();
-
-	void							Ready_Fx();
-private:
-	void							Rand_Itme();
-
 public:
-	static CGacha*					Create(LPDIRECT3DDEVICE9 pGraphic_Device, LEVEL eLevel);
-	virtual CGameObject*			Clone(void* pArg) override;
+	static CGacha_Slot_Selete* Create(LPDIRECT3DDEVICE9 pGraphic_Device, LEVEL eLevel);
+	virtual CGameObject* Clone(void* pArg) override;
 	virtual void					Free() override;
 };
+
 END
 

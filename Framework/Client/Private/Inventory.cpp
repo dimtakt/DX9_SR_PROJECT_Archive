@@ -83,6 +83,7 @@ void CInventory::Priority_Update(_float fTimeDelta)
 	
 	if (!m_bIsOpen)
 		return;
+
 	__super::Priority_Update(fTimeDelta);
 
 }
@@ -97,9 +98,8 @@ void CInventory::Update(_float fTimeDelta)
 
 	if (!m_bIsOpen)
 		return;
-	Selete_Slot();
-	Set_Grade();
 
+	Set_Grade();
 	__super::Update(fTimeDelta);
 
 }
@@ -114,11 +114,9 @@ void CInventory::Late_Update(_float fTimeDelta)
 
 	if (!m_bIsOpen)
 		return;
-		m_pGameInstance->Add_RenderGroup(RENDERGROUP::RG_UI, this);
-		__super::Late_Update(fTimeDelta);
 
-	if (m_pPickSlot != nullptr)
-		m_pPickSlot->ItemRender();
+	m_pGameInstance->Add_RenderGroup(RENDERGROUP::RG_UI, this);
+	__super::Late_Update(fTimeDelta);
 }
 
 HRESULT CInventory::Render()
@@ -155,14 +153,6 @@ void CInventory::Add_Item_Inven(_uint ItemIndex)
 	}
 }
 
-_bool CInventory::Pick_Slot()
-{
-	if (m_pPickSlot != nullptr)
-		return true;
-	
-	return false;
-}
-
 void CInventory::Open_UI(_float fX, _float fY)
 {
 	m_bIsOpen = true;
@@ -179,45 +169,6 @@ void CInventory::Close_UI()
 	m_fX = m_iWinSizeX * 0.5;
 	m_fY = m_iWinSizeY * 0.5;
 	__super::Update_Position();
-}
-
-
-void CInventory::Selete_Slot()
-{
-	CItem_Base* pPopItem = { nullptr };
-
-	for (size_t i = 0; i < m_vecInventory.size(); ++i)
-	{
-		if (m_vecInventory[i]->IsKey_Down_Check())
-		{
-			pPopItem = m_vecInventory[i]->Pop_Item();
-
-			if (pPopItem != nullptr)
-				m_pPickSlot = m_vecInventory[i];
-		}
-
-		if (m_vecInventory[i]->IsKey_Up_Check() && m_pPickSlot != nullptr)
-		{
-			pPopItem = m_vecInventory[i]->Pop_Item();
-
-			if (pPopItem)
-			{
-				m_vecInventory[i]->Push_Item(m_pPickSlot->Pop_Item());
-				m_vecInventory[i]->Push_Item_Count(m_pPickSlot->Pop_Item_Count());
-				m_pPickSlot->Release_Item();
-				m_pPickSlot->Push_Item(pPopItem);
-			}
-			else
-			{
-				m_vecInventory[i]->Push_Item(m_pPickSlot->Pop_Item());
-				m_vecInventory[i]->Push_Item_Count(m_pPickSlot->Pop_Item_Count());
-				m_pPickSlot->Push_Item(pPopItem);
-			}
-		}
-	}
-
-	if (m_pGameInstance->IsKeyUp(VK_LBUTTON))
-		m_pPickSlot = nullptr;
 }
 
 void CInventory::Set_Grade()
@@ -368,8 +319,6 @@ void CInventory::Free()
 	for (auto& pItemObject : m_vecInventory)
 		Safe_Release(pItemObject);
 	m_vecInventory.clear();
-
-	m_pPickSlot = nullptr;
 
 	__super::Free();
 	Safe_Release(m_pVIBufferCom);
