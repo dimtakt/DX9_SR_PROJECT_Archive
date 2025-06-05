@@ -106,8 +106,6 @@ void CChapMap_Line::Late_Update(_float fTimeDelta)
 
 HRESULT CChapMap_Line::Render()
 {
-	SetUp_RenderState();
-
 	if (FAILED(m_pTextureCom->Bind_Texture(m_iTexIndex)))
 		return E_FAIL;
 	m_pVIBufferCom->Bind_Buffers();
@@ -116,7 +114,6 @@ HRESULT CChapMap_Line::Render()
 	m_pVIBufferCom->Render();
 	__super::End();
 
-	Reset_RenderState();
 	return S_OK;
 }
 
@@ -135,29 +132,6 @@ HRESULT CChapMap_Line::Ready_Components()
 		return E_FAIL;
 
 	return S_OK;
-}
-
-void CChapMap_Line::SetUp_RenderState()
-{
-	m_pGraphic_Device->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
-	m_pGraphic_Device->SetRenderState(D3DRS_ALPHAREF, 200);
-	m_pGraphic_Device->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER);
-
-	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_POINT);
-	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_POINT);
-	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MIPFILTER, D3DTEXF_NONE);
-
-}
-
-void CChapMap_Line::Reset_RenderState()
-{
-	m_pGraphic_Device->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
-
-	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_LINEAR);
-	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);
-	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MIPFILTER, D3DTEXF_LINEAR);
-
-	m_pGraphic_Device->SetTexture(0, NULL);
 }
 
 CChapMap_Line* CChapMap_Line::Create(LPDIRECT3DDEVICE9 pGraphic_Device)

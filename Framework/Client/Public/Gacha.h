@@ -7,6 +7,8 @@ END
 BEGIN(Client)
 class CGacha final : public CUIObject
 {
+public:
+	enum class GACHA_TYPE { ALL, ARTEFACT, STONE};
 private:
 									CGacha(LPDIRECT3DDEVICE9 pGraphic_Device);
 									CGacha(const CGacha& Prototype);
@@ -21,18 +23,24 @@ public:
 	virtual HRESULT					Render() override;
 
 public:
-	void							Open_Ui();
-	void							Close_Ui();
+	void							UI_Switch();
+	void							Rand_Item_Set(GACHA_TYPE eType);
+
 private:
 	LEVEL							m_eLevel = {};
 	CVIBuffer_Rect*					m_pVIBufferCom = { nullptr };
 
 	_bool							m_bIsOpen = { false };
+	_bool							m_bIsReandom = { false };
 private:
 	HRESULT							Ready_Components();
 
 	HRESULT							Ready_ChildPrototype(LEVEL eLevel);
 	HRESULT							Ready_Children();
+
+	void							Ready_Fx();
+private:
+	void							Rand_Itme(GACHA_TYPE eType);
 
 public:
 	static CGacha*					Create(LPDIRECT3DDEVICE9 pGraphic_Device, LEVEL eLevel);

@@ -74,8 +74,13 @@ namespace Client
 		ItemData(7, 7,ITEM_TYPE::POTION, ITEM_RARITY::RARE,TEXT("큰 재샙의 포션"), TEXT("HP 50% 회복"), 1),
 		ItemData(8, 8,ITEM_TYPE::POTION, ITEM_RARITY::RARE,TEXT("마나 재생의 포션"), TEXT("MP 30% 회복"), 2),
 		ItemData(9, 9,ITEM_TYPE::SKILLBOOK, ITEM_RARITY::NORMAL,TEXT("스킬북1"), TEXT("스킬북1"), 5),
-		ItemData(10, 10,ITEM_TYPE::SKILLBOOK, ITEM_RARITY::RARE,TEXT("스킬북2"), TEXT("스킬북2"), 5)
-
+		ItemData(10, 10,ITEM_TYPE::SKILLBOOK, ITEM_RARITY::NORMAL,TEXT("스킬북2"), TEXT("스킬북2"), 5),
+		ItemData(11, 11,ITEM_TYPE::STONE, ITEM_RARITY::EPIC,TEXT("사방"), TEXT(""), 3),
+		ItemData(12, 12,ITEM_TYPE::STONE, ITEM_RARITY::EPIC,TEXT("일자"), TEXT(""), 4),
+		ItemData(13, 13,ITEM_TYPE::STONE, ITEM_RARITY::LEGENDARY,TEXT("십자"), TEXT(""), 5),
+		ItemData(14, 14,ITEM_TYPE::STONE, ITEM_RARITY::RARE,TEXT("대일자"), TEXT(""), 6),
+		ItemData(15, 15,ITEM_TYPE::STONE, ITEM_RARITY::LEGENDARY,TEXT("위아래"), TEXT(""), 7),
+		ItemData(16, 16,ITEM_TYPE::STONE, ITEM_RARITY::RARE,TEXT("앞"), TEXT(""), 8)
 	};
 
 	const vector<Slate> g_SlateDataBase
@@ -89,7 +94,13 @@ namespace Client
 		//인덱스, 상대 or 고정, 회전 가능 여부, (X, Y, 값)
 		Slate(0, true, true, {{-1,-1,1,0},{1, -1,1,0}, {1,1,1,0}, {-1, 1, 1,0}}),
 		Slate(1, false, false, {{0,0,-3,24},{0,0,5,25},{0,0,2,26}, {0,0,1,27},{0,0,1,28},{0,0,1,29} }),
-		Slate(2, true, true, {{-1, 1,1,0},{-2, 2,1,0},{-3, 3,1,0}, {-4, 4,1,0}})
+		Slate(2, true, true, {{-1, 1,1,0},{-2, 2,1,0},{-3, 3,1,0}, {-4, 4,1,0}}),
+		Slate(3, true, true, {{-1,-1,1,0},{0, -1,1,0}, {1, -1,1,0}, {1, 0,1,0}, {1,1,1,0},{0, 1,1,0}, {-1, 0,1,0}, {-1, 1, 1,0}}),
+		Slate(4, true, true, {{0,-1,1,0},{0,1,1,0} }),
+		Slate(5, true, true, {{0, -1,1,0},{1, 0,1,0},{0, 1,1,0}, {-1, 0,1,0}}),
+		Slate(6, true, true, {{0,-2,2,0},{0, 2,2,0}}),
+		Slate(7, true, true, {{0,-1,2,0},{0,1,-1,0} }),
+		Slate(8, true, true, {{0, -2,2,0},{0, 2,-2,0}})
 	};
 
 	const vector<Potion> g_PotionDataBase

@@ -1,13 +1,13 @@
 #include "UIObject.h"
 #include "GameInstance.h"
 CUIObject::CUIObject(LPDIRECT3DDEVICE9 pGraphic_Device)
-	: CGameObject{ pGraphic_Device }
+	: CGameObject{ pGraphic_Device }, m_bIsUpdate(false)
 {
     D3DXMatrixIdentity(&m_ViewMatrix);
 }
 
 CUIObject::CUIObject(const CUIObject& Prototype)
-	: CGameObject( Prototype )
+	: CGameObject( Prototype ), m_bIsUpdate(true)
 {
 }
 

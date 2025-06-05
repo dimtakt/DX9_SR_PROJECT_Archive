@@ -63,10 +63,8 @@ void CInven_Slot_Selete::Late_Update(_float fTimeDelta)
 
 HRESULT CInven_Slot_Selete::Render()
 {
-    SetUp_RenderState();
     if (FAILED(CButton::Bind_ButtonTex_Single(g_hWnd, 8)))
         return E_FAIL;
-    Reset_RenderState();
     return S_OK;
 }
 
@@ -85,28 +83,6 @@ HRESULT CInven_Slot_Selete::Ready_Components()
         return E_FAIL;
 
     return S_OK;
-}
-
-void CInven_Slot_Selete::SetUp_RenderState()
-{
-    m_pGraphic_Device->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
-    m_pGraphic_Device->SetRenderState(D3DRS_ALPHAREF, 200);
-    m_pGraphic_Device->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER);
-
-    m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_POINT);
-    m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_POINT);
-    m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MIPFILTER, D3DTEXF_NONE);
-}
-
-void CInven_Slot_Selete::Reset_RenderState()
-{
-    m_pGraphic_Device->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
-
-    m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_LINEAR);
-    m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);
-    m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MIPFILTER, D3DTEXF_LINEAR);
-
-    m_pGraphic_Device->SetTexture(0, NULL);
 }
 
 HRESULT CInven_Slot_Selete::Ready_ChildPrototype(LEVEL eLevel)

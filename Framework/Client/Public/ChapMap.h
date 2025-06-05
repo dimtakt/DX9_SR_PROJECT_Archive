@@ -22,15 +22,18 @@ public:
 
 public:
 	void							Open_Ui();		//UI 출력 함수
+	void							UI_Switch();
+
 	const _int						Get_Click_ID() { return m_iInput_MapID; }
 
 	void							Player_Offset(_float fX, _float fY, _uint iLineIndex, _uint iMapIdex);
 	const _uint						Get_Player_Line() { return m_iPlayerLineIndex; };
 	const _uint						Get_Player_Map() { return m_iPlayerMapIndex; };
 	void							Click_MapID_Set(_uint iMapID) { m_iInput_MapID = iMapID; }
+
 private:
 	LEVEL							m_eLevel = {};
-	_bool							m_bRender = {};
+	_bool							m_bisOpen = {};
 
 	_int							m_iScrollValue = {};
 	_int							m_iMouseY = {};

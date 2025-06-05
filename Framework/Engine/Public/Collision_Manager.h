@@ -23,8 +23,12 @@ public:
 	void Render();
 	void Update();
 
+public:
+	_bool	Get_IsRender() { return m_bIsRender; }
+	void	Set_IsRender() { m_bIsRender = !m_bIsRender; }
 private:
-	vector<CCollider_OBB*> m_vColliders = {};
+	vector<CCollider_OBB*>	m_vColliders = {};
+	_bool					m_bIsRender = { true };
 public:
 	static CCollision_Manager* Create();
 	virtual void Free() override;

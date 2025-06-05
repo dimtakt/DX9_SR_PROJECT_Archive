@@ -35,9 +35,6 @@ private:
 
 private:
 	HRESULT							Ready_Components();
-	
-	void							SetUp_RenderState();
-	void							Reset_RenderState();
 
 	void							Update_Value();
 	void							Font_Render();

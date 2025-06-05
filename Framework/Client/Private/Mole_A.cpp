@@ -26,12 +26,21 @@ HRESULT CMole_A::Initialize(void* pArg)
     if (FAILED(this->Ready_Components(pArg)))
         return E_FAIL;
 
+    Ready_Object();
+
+    m_iMaxHp = 30;
+    m_iCulHp = 30;
 	return S_OK;
 }
 
 void CMole_A::Priority_Update(_float fTimeDelta)
 {
+    __super::Priority_Update(fTimeDelta);
+    if (m_pHpBar != nullptr)
+        m_pHpBar->Render_HP_Progress(m_pTransformCom, m_iCulHp, m_iMaxHp);
 
+    if (m_iCulHp <= 0)
+        m_bDead = true;
 }
 
 void CMole_A::Update(_float fTimeDelta)
@@ -266,11 +275,18 @@ HRESULT CMole_A::Ready_Components(void* pArg)
 	return S_OK;
 }
 
+HRESULT CMole_A::Ready_Object()
+{
+    m_pHpBar = dynamic_cast<CField_Hp*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_Field_Hp")));
+
+    return S_OK;
+}
+
 void CMole_A::OnCollision(CGameObject* pGameObject)
 {
     __super::OnCollision(pGameObject);
 
-    m_isTracking = true;
+    //m_isTracking = true;
 }
 
 CMole_A* CMole_A::Create(LPDIRECT3DDEVICE9 pGraphic_Device)

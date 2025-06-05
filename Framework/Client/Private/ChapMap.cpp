@@ -45,6 +45,8 @@ HRESULT CChapMap::Initialize(void* pArg)
 	if (FAILED(Ready_Children()))
 		return E_FAIL;
 
+	m_pGameInstance->Add_UIObject(ENUM_CLASS(m_eLevel), TEXT("UI_ChapMap"), this);
+
 	return S_OK;
 }
 
@@ -53,17 +55,12 @@ void CChapMap::Priority_Update(_float fTimeDelta)
 	if (m_pGameInstance->Get_CurrentLevel() == ENUM_CLASS(LEVEL::LEVEL_LOADING) || m_pGameInstance->Get_CurrentLevel() == ENUM_CLASS(LEVEL::LEVEL_LOGO) || m_pGameInstance->Get_CurrentLevel() == ENUM_CLASS(LEVEL::LEVEL_MAPEDIT))
 		return;
 		
-	if (m_pGameInstance->IsKeyDown('F'))
-	{
-		if (m_bRender == true)
-		{
-			m_bRender = false;
-		}
-		else
-		{
-			m_bRender = true;
-		}
-	}
+	if (!m_bIsUpdate)
+		return;
+	
+	if (!m_bisOpen)
+		return;
+
 	__super::Priority_Update(fTimeDelta);
 }
 
@@ -72,7 +69,13 @@ void CChapMap::Update(_float fTimeDelta)
 	if (m_pGameInstance->Get_CurrentLevel() == ENUM_CLASS(LEVEL::LEVEL_LOADING) || m_pGameInstance->Get_CurrentLevel() == ENUM_CLASS(LEVEL::LEVEL_LOGO) || m_pGameInstance->Get_CurrentLevel() == ENUM_CLASS(LEVEL::LEVEL_MAPEDIT))
 		return;
 
-	if (!m_bRender)
+	if (!m_bIsUpdate)
+		return;
+
+	/*if (m_pGameInstance->IsKeyDown('F'))
+		UI_Switch();*/
+
+	if (!m_bisOpen)
 		return;
 
 	Scroll_Map();
@@ -85,7 +88,10 @@ void CChapMap::Late_Update(_float fTimeDelta)
 	if (m_pGameInstance->Get_CurrentLevel() == ENUM_CLASS(LEVEL::LEVEL_LOADING) || m_pGameInstance->Get_CurrentLevel() == ENUM_CLASS(LEVEL::LEVEL_LOGO) || m_pGameInstance->Get_CurrentLevel() == ENUM_CLASS(LEVEL::LEVEL_MAPEDIT))
 		return;
 
-	if (!m_bRender)
+	if (!m_bIsUpdate)
+		return;
+
+	if (!m_bisOpen)
 		return;
 
 	__super::Late_Update(fTimeDelta);
@@ -103,9 +109,23 @@ void CChapMap::Open_Ui()
 	else
 		m_fY = -m_pPlayerSymbol->Player_OffsetPos() + 150;
 
-	m_bRender = true;
+	UI_Switch();
 
 	__super::Update_Position();
+}
+
+void CChapMap::UI_Switch()
+{
+	if (m_bisOpen)
+	{
+		m_pGameInstance->All_Update_On();
+		m_bisOpen = false;
+	}
+	else
+	{
+		m_bIsUpdate = true;
+		m_bisOpen = true;
+	}
 }
 
 void CChapMap::Player_Offset(_float fX, _float fY, _uint iLineIndex, _uint iMapIdex)
@@ -113,7 +133,7 @@ void CChapMap::Player_Offset(_float fX, _float fY, _uint iLineIndex, _uint iMapI
 	m_pPlayerSymbol->Player_Move(fX, fY);
 	m_iPlayerLineIndex = iLineIndex;
 	m_iPlayerMapIndex = iMapIdex;
-	m_bRender = false;
+	UI_Switch();
 }
 
 void CChapMap::Scroll_Map()

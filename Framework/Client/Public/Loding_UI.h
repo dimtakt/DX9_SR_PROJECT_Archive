@@ -7,6 +7,11 @@ END
 BEGIN(Client)
 class CLoding_UI final : public CUIObject
 {
+public:
+	typedef struct tagLoadingDesc
+	{
+		LEVEL			pNewLevel;
+	}LOADINGDESC;
 private:
 									CLoding_UI(LPDIRECT3DDEVICE9 pGraphic_Device);
 									CLoding_UI(const CLoding_UI& Prototype);
@@ -25,10 +30,10 @@ private:
 	CVIBuffer_Rect*					m_pVIBufferCom = { nullptr };
 
 private:
-	HRESULT							Ready_Components();
+	HRESULT							Ready_Components(void* pArg);
 
 	HRESULT							Ready_ChildPrototype(LEVEL eLevel);
-	HRESULT							Ready_Children();
+	HRESULT							Ready_Children(void* pArg);
 
 	void							Font_Render();
 

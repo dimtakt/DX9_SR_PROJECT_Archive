@@ -82,6 +82,12 @@ private:
 
 	CField_Hp*				m_pHpBar						= { nullptr };
 
+
+	_float3					m_vOldPos						= {};
+
+	_bool					m_bIsHit						= { false };
+	DWORD					m_dwHitTime						= {};
+
 private:
 	HRESULT Ready_Components(void* pArg);
 	HRESULT Ready_Object();					//필드 HP바 테스트용

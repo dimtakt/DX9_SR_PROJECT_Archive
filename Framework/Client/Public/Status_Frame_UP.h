@@ -34,9 +34,6 @@ private:
 	HRESULT							Ready_ChildPrototype(LEVEL eLevel);
 	HRESULT							Ready_Children();
 
-	void							SetUp_RenderState();
-	void							Reset_RenderState();
-
 	void							Font_Render();
 
 public:

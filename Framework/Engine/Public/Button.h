@@ -17,6 +17,10 @@ public:
 	virtual void				Late_Update(_float fTimeDelta);
 	virtual HRESULT				Render();
 
+public:
+	virtual void				Push_Item(class CItemObject* pItem);
+	virtual void				Push_Item_Count(_uint iItemCount);
+	virtual void				IsPick_off();
 protected:
 	virtual _bool				Check_Key_Down(HWND hWnd , _int iKey);
 	virtual _bool				Check_Key_UP(HWND hWnd, _int iKey);
@@ -28,8 +32,8 @@ protected:
 	HRESULT						Render_Button(_uint iTextureIndex);
 
 protected:
-	class CTexture* m_pTextureCom = {nullptr};
-	class CVIBuffer_Rect* m_pVIBufferCom = { nullptr };
+	class CTexture*				m_pTextureCom = {nullptr};
+	class CVIBuffer_Rect*		m_pVIBufferCom = { nullptr };
 
 public:
 	virtual CGameObject* Clone(void* pArg) = 0;

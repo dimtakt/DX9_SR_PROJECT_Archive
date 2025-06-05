@@ -29,8 +29,6 @@ private:
 	_uint							m_iIndex = {};
 private:
 	HRESULT							Ready_Components();
-	void							SetUp_RenderState();
-	void							Reset_RenderState();
 
 public:
 	static CTalent_Button_Selete* Create(LPDIRECT3DDEVICE9 pGraphic_Device);

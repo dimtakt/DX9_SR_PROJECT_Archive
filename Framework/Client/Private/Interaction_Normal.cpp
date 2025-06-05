@@ -182,6 +182,25 @@ HRESULT CInteraction_Normal::EXP_Initialize()
 
 HRESULT CInteraction_Normal::EXP_Priority_Update(_float fTimeDelta)
 {
+    if (m_pAnimatorCom_0->Check_State(TEXT("EXP_Fx")) && m_pAnimatorCom_0->Get_IsLastFrame())
+    {
+        m_bDead = true;
+        for (size_t i = 0; i < 10; i++)
+        {
+            _float3 vPos = m_pTransformCom->Get_State(STATE::POSITION);
+            CEXP_Ball::EXPBALLDESC desc{};
+            desc.fValue = 0.f;
+            desc.vPosition = _float3(
+                m_pGameInstance->Compute_Random(vPos.x - 3.f, vPos.x + 3.f)
+                , 3.f
+                , m_pGameInstance->Compute_Random(vPos.z - 3.f, vPos.z + 3.f)
+            );
+            CEXP_Ball* pEXP_Ball = dynamic_cast<CEXP_Ball*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_EXP_Ball"), &desc));
+            m_pGameInstance->Add_Direct_GameObject_ToLayer(m_pGameInstance->Get_CurrentLevel(), TEXT("Layer_Exp"), pEXP_Ball);
+        }
+
+    }
+
     return S_OK;
 }
 
@@ -192,19 +211,7 @@ HRESULT CInteraction_Normal::EXP_Update(_float fTimeDelta)
 
 HRESULT CInteraction_Normal::EXP_Late_Update(_float fTimeDelta)
 {
-    if (m_pAnimatorCom_0->Check_State(TEXT("EXP_Fx")) && m_pAnimatorCom_0->Get_IsLastFrame())
-    {
-        m_bDead = true;
-        for (size_t i = 0; i < 10; i++)
-        {
-            CEXP_Ball::EXPBALLDESC desc{};
-            desc.fValue = 0.f;
-            desc.vPosition = m_pTransformCom->Get_State(STATE::POSITION);
-            CEXP_Ball* pEXP_Ball = dynamic_cast<CEXP_Ball*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_EXP_Ball"), &desc));
-            m_pGameInstance->Add_Direct_GameObject_ToLayer(m_pGameInstance->Get_CurrentLevel(), TEXT("Layer_Exp"), pEXP_Ball);
-        }
-
-    }
+    
 
     return S_OK;
 }

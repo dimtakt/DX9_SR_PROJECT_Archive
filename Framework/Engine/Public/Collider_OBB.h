@@ -11,6 +11,7 @@ public:
     typedef struct tagOBB_Desc {
         CGameObject* pOwner;
         CTransform* pTransform; // 게임오브젝트의 Transform 참조
+        GAMEOBJ_TYPE eType;
         _float3 vScale;
     } OBB_DESC;
 
@@ -39,6 +40,8 @@ public:
     const _float3& Get_Center() const { return m_vWorldCenter; }
     const _float3* Get_Axis()   const { return m_vAxis; }      // RIGHT, LOOK, UP
     const _float3& Get_Extents()const { return m_vWorldExtents; }
+    const GAMEOBJ_TYPE Get_ObjType() { return m_eOwnerObjType; }
+    
 
 private:
     CTransform* m_pTransformRef = nullptr; 
@@ -47,7 +50,7 @@ private:
     _float3 m_vWorldExtents = {};
     _float3 m_vAxis[3] = {};
     _float3 m_vScale = {};
-
+    GAMEOBJ_TYPE m_eOwnerObjType = {};
 
 public:
     static CCollider_OBB* Create(LPDIRECT3DDEVICE9 pGraphic_Device);
