@@ -265,15 +265,6 @@
     <Filter Include="01.Levels\02. MapEdit">
       <UniqueIdentifier>{4b8e29b8-bfc5-4731-bed0-1f8a89a74abf}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01.Levels\04. Dungeon">
-      <UniqueIdentifier>{4e0547a5-20d4-4fce-ad1a-38c0f87a0263}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="01.Levels\04. Dungeon\Stage1">
-      <UniqueIdentifier>{8c937ec2-8640-4a1c-a652-f4d52468f321}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="01.Levels\04. Dungeon\Stage2">
-      <UniqueIdentifier>{ee486fd6-c2f0-46be-ace0-c71a1efa864a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObject\UI\Loding">
       <UniqueIdentifier>{cbf541aa-b9b4-4462-a616-049ae2b889be}</UniqueIdentifier>
     </Filter>
@@ -339,6 +330,33 @@
     </Filter>
     <Filter Include="02.GameObject\Monster\LaserGhost_D">
       <UniqueIdentifier>{1d6ba4a0-cf84-4e28-8ddf-6830f227f041}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Levels\04. Shelter">
+      <UniqueIdentifier>{0a1a79e9-8bcd-4c90-9a60-cb047e64d444}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Levels\05. Dungeon">
+      <UniqueIdentifier>{4e0547a5-20d4-4fce-ad1a-38c0f87a0263}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Levels\05. Dungeon\Stage1">
+      <UniqueIdentifier>{8c937ec2-8640-4a1c-a652-f4d52468f321}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Levels\05. Dungeon\Stage2">
+      <UniqueIdentifier>{ee486fd6-c2f0-46be-ace0-c71a1efa864a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Levels\05. Dungeon\Boss1">
+      <UniqueIdentifier>{66abd841-34dd-4d23-946a-3ccc75b1e692}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Levels\05. Dungeon\Boss2">
+      <UniqueIdentifier>{52e372df-2365-46fd-b92a-14f8638bf64d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Levels\05. Dungeon\Stage4">
+      <UniqueIdentifier>{e5294fce-d0b4-4f97-b8f3-d2e1a2fc33cf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Levels\05. Dungeon\Stage3">
+      <UniqueIdentifier>{3cdb7686-2d97-4444-9a1b-d543d8a38180}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Levels\03. Town">
+      <UniqueIdentifier>{d1d0aa64-5793-4d7d-9f83-eb298af11f6a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -505,7 +523,7 @@
       <Filter>02.GameObject\UI\Title\BackGround\Star_Wave</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Level_Stage1.h">
-      <Filter>01.Levels\04. Dungeon\Stage1</Filter>
+      <Filter>01.Levels\05. Dungeon\Stage1</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\TerrainBox.h">
       <Filter>02.GameObject\Terrain\TerrainBox</Filter>
@@ -595,7 +613,7 @@
       <Filter>02.GameObject\Monster\Oink_A</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Level_Stage2.h">
-      <Filter>01.Levels\04. Dungeon\Stage2</Filter>
+      <Filter>01.Levels\05. Dungeon\Stage2</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Stat_Manager.h">
       <Filter>04. Stat\Manager</Filter>
@@ -725,6 +743,24 @@
     </ClInclude>
     <ClInclude Include="..\public\Talent_Slot_Frame.h">
       <Filter>02.GameObject\UI\Window\Talent\Talent_Slot\Talent_Slot_Frame</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Level_Stage3.h">
+      <Filter>01.Levels\05. Dungeon\Stage3</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Level_Stage4.h">
+      <Filter>01.Levels\05. Dungeon\Stage4</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Level_Boss1.h">
+      <Filter>01.Levels\05. Dungeon\Boss1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Level_Boss2.h">
+      <Filter>01.Levels\05. Dungeon\Boss2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Level_Shelter.h">
+      <Filter>01.Levels\04. Shelter</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Level_Town.h">
+      <Filter>01.Levels\03. Town</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -865,7 +901,7 @@
       <Filter>02.GameObject\UI\Title\BackGround\Star_Wave</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Level_Stage1.cpp">
-      <Filter>01.Levels\04. Dungeon\Stage1</Filter>
+      <Filter>01.Levels\05. Dungeon\Stage1</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\TerrainBox.cpp">
       <Filter>02.GameObject\Terrain\TerrainBox</Filter>
@@ -919,7 +955,7 @@
       <Filter>01.Levels\02. MapEdit</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Level_Stage2.cpp">
-      <Filter>01.Levels\04. Dungeon\Stage2</Filter>
+      <Filter>01.Levels\05. Dungeon\Stage2</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\GameEffect.cpp">
       <Filter>02.GameObject\Effect</Filter>
@@ -1073,6 +1109,24 @@
     </ClCompile>
     <ClCompile Include="..\private\Talent_Slot_Frame.cpp">
       <Filter>02.GameObject\UI\Window\Talent\Talent_Slot\Talent_Slot_Frame</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Level_Stage3.cpp">
+      <Filter>01.Levels\05. Dungeon\Stage3</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Level_Stage4.cpp">
+      <Filter>01.Levels\05. Dungeon\Stage4</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Level_Boss1.cpp">
+      <Filter>01.Levels\05. Dungeon\Boss1</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Level_Boss2.cpp">
+      <Filter>01.Levels\05. Dungeon\Boss2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Level_Shelter.cpp">
+      <Filter>01.Levels\04. Shelter</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Level_Town.cpp">
+      <Filter>01.Levels\03. Town</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
