@@ -140,7 +140,7 @@ HRESULT CRenderer::Render_UI_Blend()
 	m_pGraphic_Device->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
 	m_pGraphic_Device->SetRenderState(D3DRS_BLENDOP, D3DBLENDOP_ADD);
 
-	for (auto& pRenderObject : m_RenderObjects[ENUM_CLASS(RENDERGROUP::RG_BLEND)])
+	for (auto& pRenderObject : m_RenderObjects[ENUM_CLASS(RENDERGROUP::RG_UI_BLEND)])
 	{
 		if (nullptr != pRenderObject)
 			pRenderObject->Render();
@@ -148,7 +148,7 @@ HRESULT CRenderer::Render_UI_Blend()
 		Safe_Release(pRenderObject);
 	}
 
-	m_RenderObjects[ENUM_CLASS(RENDERGROUP::RG_BLEND)].clear();
+	m_RenderObjects[ENUM_CLASS(RENDERGROUP::RG_UI_BLEND)].clear();
 	m_pGraphic_Device->SetRenderState(D3DRS_ALPHABLENDENABLE, FALSE);
 
 	return S_OK;

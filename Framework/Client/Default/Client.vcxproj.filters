@@ -79,9 +79,6 @@
     <Filter Include="96. ShaderFiles">
       <UniqueIdentifier>{c8d3c262-95d1-4d87-ab1d-775d72f463cf}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\UI\Title\BackGround\Star_Wave">
-      <UniqueIdentifier>{e537c5f7-17c1-46af-96cd-4f0792ac1b67}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObject\Room">
       <UniqueIdentifier>{f6d2f95f-05f3-469a-893b-d7822001c440}</UniqueIdentifier>
     </Filter>
@@ -367,6 +364,9 @@
     <Filter Include="02.GameObject\UI\Window\Gacha\Gacha_FX">
       <UniqueIdentifier>{788cb07d-a84c-4143-9ceb-e2e33b3c7e63}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\UI\Title\BackGround\Logo_Wave">
+      <UniqueIdentifier>{e537c5f7-17c1-46af-96cd-4f0792ac1b67}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -529,7 +529,7 @@
       <Filter>02.GameObject\UI\Title\BackGround\Star</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Title_Logo_Wave.h">
-      <Filter>02.GameObject\UI\Title\BackGround\Star_Wave</Filter>
+      <Filter>02.GameObject\UI\Title\BackGround\Logo_Wave</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Level_Stage1.h">
       <Filter>01.Levels\05. Dungeon\Stage1</Filter>
@@ -916,7 +916,7 @@
       <Filter>02.GameObject\UI\Title\BackGround\Star</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Title_Logo_Wave.cpp">
-      <Filter>02.GameObject\UI\Title\BackGround\Star_Wave</Filter>
+      <Filter>02.GameObject\UI\Title\BackGround\Logo_Wave</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Level_Stage1.cpp">
       <Filter>01.Levels\05. Dungeon\Stage1</Filter>

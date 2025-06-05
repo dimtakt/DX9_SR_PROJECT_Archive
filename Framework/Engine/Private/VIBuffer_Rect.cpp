@@ -13,8 +13,8 @@ CVIBuffer_Rect::CVIBuffer_Rect(const CVIBuffer_Rect& Prototype)
 HRESULT CVIBuffer_Rect::Initialize_Prototype()
 {
 	m_iNumVertices = 4;
-	m_iVertexStride = sizeof(VTXPOSTEX);
-	m_iFVF = D3DFVF_XYZ | D3DFVF_TEX1;
+	m_iVertexStride = sizeof(VTXNORTEX);
+	m_iFVF = D3DFVF_XYZ | D3DFVF_TEX1 | D3DFVF_NORMAL;
 	m_ePrimitiveType = D3DPT_TRIANGLELIST;
 	m_iNumPrimitive = 2;
 	m_iIndexStride = 2;
@@ -28,7 +28,7 @@ HRESULT CVIBuffer_Rect::Initialize_Prototype()
 
 
 	// 버텍스 버퍼
-	VTXPOSTEX* pVertices = { nullptr };
+	VTXNORTEX* pVertices = { nullptr };
 
 	m_pVB->Lock(0, 0, reinterpret_cast<void**>(&pVertices), 0);
 
@@ -44,9 +44,6 @@ HRESULT CVIBuffer_Rect::Initialize_Prototype()
 	m_pVertexPositions[3] = pVertices[3].vPosition = _float3(-0.5f, -0.5f, 0.f);
 	pVertices[3].vTexcoord = _float2(0.f, 1.f);
 
-	m_pVB->Unlock();
-
-
 	// 인덱스 버퍼
 	m_pIndices = new _uint[m_iNumIndices];
 
@@ -57,14 +54,34 @@ HRESULT CVIBuffer_Rect::Initialize_Prototype()
 
 	m_pIB->Lock(0, 0, reinterpret_cast<void**>(&pIndices), 0);
 
+	_float3		vSourDir, vDestDir, vNormal;
+
 	pIndices[0] = 0;
 	pIndices[1] = 1;
 	pIndices[2] = 2;
+
+	vSourDir = pVertices[1].vPosition - pVertices[0].vPosition;
+	vDestDir = pVertices[2].vPosition - pVertices[1].vPosition;
+	D3DXVec3Normalize(&vNormal, D3DXVec3Cross(&vNormal, &vSourDir, &vDestDir));
+
+	pVertices[0].vNormal += vNormal;
+	pVertices[1].vNormal += vNormal;
+	pVertices[2].vNormal += vNormal;
 
 	pIndices[3] = 0;
 	pIndices[4] = 2;
 	pIndices[5] = 3;
 
+	vSourDir = pVertices[2].vPosition - pVertices[0].vPosition;
+	vDestDir = pVertices[3].vPosition - pVertices[2].vPosition;
+	D3DXVec3Normalize(&vNormal, D3DXVec3Cross(&vNormal, &vSourDir, &vDestDir));
+
+	pVertices[0].vNormal += vNormal;
+	pVertices[2].vNormal += vNormal;
+	pVertices[3].vNormal += vNormal;
+
+
+	m_pVB->Unlock();
 	m_pIB->Unlock();
 
 	memcpy(m_pIndices, pIndices, m_iIndexStride * m_iNumIndices);
