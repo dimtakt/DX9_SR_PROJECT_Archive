@@ -179,6 +179,7 @@ HRESULT CLevel_Stage2::Ready_Layer_Room(const _wstring& strLayerTag)
 	_int iIndex = 7;
 	_int iCount = 0;
 	_int iEventCheck = 0;
+	_int iEventRoomType = 1; // 타입 전달, 1이면 shop, 2면 hp 스테이지 마다 값 변경 해줘야 함.
 	_int iEventRoomCreate = dynamic_cast<CChapMap*>(m_pGameInstance->Get_GameObject(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Layer_ChapMap")))->Get_Click_ID();
 	if (iEventRoomCreate == 2)
 		iIndex = 8; //이벤트룸 1개면 전체 룸 7개, 2개면 전체룸 8개
@@ -201,7 +202,7 @@ HRESULT CLevel_Stage2::Ready_Layer_Room(const _wstring& strLayerTag)
 		{
 			//if(상호작용 방이 아닌경우!)
 			//현재 정해진 ID값의 룸에 지형, 오브젝트 세팅 내부에서 지형 위치 자동 배치
-			pRoom->Load_From_File(ENUM_CLASS(LEVEL::LEVEL_STAGE2), strLayerTag, TEXT("../../data/Stage2_Map%d.txt"), iCount, RoomX, RoomZ);
+			pRoom->Load_From_File(ENUM_CLASS(LEVEL::LEVEL_STAGE2), strLayerTag, TEXT("../../data/Stage2_Map%d.txt"), iCount, RoomX, RoomZ, static_cast<ROOM_INFO>(0));
 
 			if (iCount == 0)
 			{
@@ -262,8 +263,9 @@ HRESULT CLevel_Stage2::Ready_Layer_Room(const _wstring& strLayerTag)
 		}
 		else if(iEventCheck < iEventRoomCreate)
 		{
-			pRoom->Load_From_File(ENUM_CLASS(LEVEL::LEVEL_STAGE2), strLayerTag, TEXT("../../data/Stage2_Event%d.txt"), iEventCheck, RoomX, RoomZ);			// 이벤트 룸 로드
+			pRoom->Load_From_File(ENUM_CLASS(LEVEL::LEVEL_STAGE2), strLayerTag, TEXT("../../data/Stage2_Event%d.txt"), iEventCheck, RoomX, RoomZ, static_cast<ROOM_INFO>(iEventRoomType));			// 이벤트 룸 로드
 			iEventCheck++;
+			iEventRoomType++;
 		}
 
 		// 룸매니저 투입

@@ -251,9 +251,23 @@ CPotal* CRoom::Find_Potal(POTAL_TYPE ePotal)
 	return nullptr;
 }
 
-HRESULT CRoom::Load_From_File(_uint iLayerLevelIndex, const _wstring& strLayerTag, const _tchar* pLoadFileTag, _int iIndex, _int RoomX , _int RoomZ)
+HRESULT CRoom::Load_From_File(_uint iLayerLevelIndex, const _wstring& strLayerTag, const _tchar* pLoadFileTag, _int iIndex, _int RoomX , _int RoomZ, ROOM_INFO Event)
 {
 	Compute_ObjectOffset(RoomX, RoomZ);
+
+	if (Event == ROOM_INFO::EVENT_NORMAL)
+		m_eRoomType = ROOM_INFO::EVENT_NORMAL;
+	else if (Event == ROOM_INFO::EVENT_SHOP)
+		m_eRoomType = ROOM_INFO::EVENT_SHOP;
+	else if (Event == ROOM_INFO::EVENT_HP)
+		m_eRoomType = ROOM_INFO::EVENT_HP;
+	else if (Event == ROOM_INFO::EVENT_ARTEFACT)
+		m_eRoomType = ROOM_INFO::EVENT_ARTEFACT;
+	else if (Event == ROOM_INFO::EVENT_EXP)
+		m_eRoomType = ROOM_INFO::EVENT_EXP;
+	else if (Event == ROOM_INFO::EVENT_STONE)
+		m_eRoomType = ROOM_INFO::EVENT_STONE;
+
 
 	/*m_iID = iIndex;*/
 	m_iRoomX = RoomX;
@@ -286,7 +300,7 @@ HRESULT CRoom::Load_From_File(_uint iLayerLevelIndex, const _wstring& strLayerTa
 	}
 	ifile.close();
 
-	//_bool bIsTerrain = false;
+	_bool bIsTerrain = false;
 
 	for (auto& pDesc : m_Object_Desc)
 	{
@@ -306,7 +320,7 @@ HRESULT CRoom::Load_From_File(_uint iLayerLevelIndex, const _wstring& strLayerTa
 		}
 		else if (pDesc.eType == GAMEOBJ_TYPE::TERRAIN)
 		{
-			/*if (!bIsTerrain) {*/
+			if (!bIsTerrain) {
 				MAP_OBJECT_DESC tSrc{};
 				tSrc.iTextureIndex = pDesc.iTextureIndex;
 				tSrc.vPos = pDesc.vPos + m_ObjectOffset;
@@ -315,8 +329,8 @@ HRESULT CRoom::Load_From_File(_uint iLayerLevelIndex, const _wstring& strLayerTa
 
 				m_pTerrainBox = dynamic_cast<CTerrainBox*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, iLayerLevelIndex, TEXT("Prototype_GameObject_TerrainBox"), &tSrc));
 
-		/*		bIsTerrain = true;
-			}*/
+				bIsTerrain = true;
+			}
 		}
 		else
 		{
