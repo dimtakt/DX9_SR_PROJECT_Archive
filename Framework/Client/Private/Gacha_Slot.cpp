@@ -42,7 +42,6 @@ HRESULT CGacha_Slot::Initialize(void* pArg)
 
 	m_pTransformCom->Scaling(m_fSizeX, m_fSizeY, 1.f);
 	__super::Update_Position();
-
 	if (FAILED(Ready_Children()))
 		return E_FAIL;
 
@@ -73,7 +72,7 @@ void CGacha_Slot::Late_Update(_float fTimeDelta)
 		__super::Late_Update(fTimeDelta);
 
 	if (m_pSlotItem != nullptr)
-		m_pSlotItem->Late_Update(fTimeDelta, m_pTransformCom->Get_State(STATE::POSITION));
+		m_pSlotItem->Late_Update(fTimeDelta, _float3{ m_pTransformCom->Get_State(STATE::POSITION).x, m_pTransformCom->Get_State(STATE::POSITION).y - 4, m_pTransformCom->Get_State(STATE::POSITION).z });
 	
 	if (m_bIsPick)
 		m_pSlotItem->IsSelete();

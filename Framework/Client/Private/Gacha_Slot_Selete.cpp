@@ -22,10 +22,10 @@ HRESULT CGacha_Slot_Selete::Initialize(void* pArg)
 {
     CUIObject::UIOBJECT_DESC* Desc = static_cast<UIOBJECT_DESC*>(pArg);
 
-    m_fSizeX = 76;
-    m_fSizeY = 76;
+    m_fSizeX = 86;
+    m_fSizeY = 86;
     m_fX = 0.f;
-    m_fY = 0.f;
+    m_fY = 4.f;
     m_fZ = UI_DEPTH::INVEN_SLOT_SELETE;
     m_iWinSizeX = g_iWinSizeX;
     m_iWinSizeY = g_iWinSizeY;

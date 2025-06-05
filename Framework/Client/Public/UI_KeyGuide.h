@@ -4,6 +4,7 @@
 
 BEGIN(Engine)
 class CVIBuffer_Rect;
+class CTexture;
 END
 
 BEGIN(Client)
@@ -23,6 +24,7 @@ public:
 
 private:
 	CVIBuffer_Rect*				m_pVIBufferCom = { nullptr };
+	CTexture*					m_pTextureCom = { nullptr };
 	_wstring					m_strKey = {};
 
 private:
