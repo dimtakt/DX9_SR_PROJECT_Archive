@@ -22,7 +22,7 @@ HRESULT CMinimap_Player::Initialize(void* pArg)
 	m_fSizeY = 64;
 	m_fX = 0;
 	m_fY = 0;
-	m_fZ = UI_DEPTH::MiniMap;
+	m_fZ = UI_DEPTH::MINIMAP_BUTTON;
 	m_iWinSizeX = g_iWinSizeX;
 	m_iWinSizeY = g_iWinSizeY;
 

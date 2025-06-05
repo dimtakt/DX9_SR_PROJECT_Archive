@@ -2,6 +2,9 @@
 #include "GameInstance.h"
 #include "Minimap_Icon.h"
 #include "Minimap_Player.h"
+#include "Room_Manager.h"
+#include "Minimap.h"
+#include "Minimap_Node.h"
 CMinimap_Button::CMinimap_Button(LPDIRECT3DDEVICE9 pGraphic_Device) : CButton(pGraphic_Device)
 {
 }
@@ -23,14 +26,20 @@ HRESULT CMinimap_Button::Initialize_Prototype(LEVEL eLevel)
 HRESULT CMinimap_Button::Initialize(void* pArg)
 {
 
-	UIOBJECT_DESC* Desc = static_cast<UIOBJECT_DESC*>(pArg);
+	MINIMAP_BUTTON_DESC* Desc = static_cast<MINIMAP_BUTTON_DESC*>(pArg);
+	
+	m_vRoomPos = Desc->vRoomPos;
+	m_iRoomID = Desc->RoomID;
+
 	m_fSpeed = m_pGameInstance->Rand(3, 6);
 
-	m_fSizeX = 50;
-	m_fSizeY = 50;
-	m_fX = -200 + Desc->fX * 50;
-	m_fY = -200 + Desc->fY * 50;
-	m_fZ = UI_DEPTH::MiniMap;
+	m_iEventType = Desc->fZ;
+
+	m_fSizeX = 64;
+	m_fSizeY = 64;
+	m_fX = Desc->fX * 64;
+	m_fY = Desc->fY * 64;
+	m_fZ = UI_DEPTH::MINIMAP_BUTTON;
 	m_iWinSizeX = g_iWinSizeX;
 	m_iWinSizeY = g_iWinSizeY;
 
@@ -44,7 +53,7 @@ HRESULT CMinimap_Button::Initialize(void* pArg)
 	m_pTransformCom->Scaling(m_fSizeX, m_fSizeY, 1.f);
 	__super::Update_Position();
 
-	if (FAILED(Ready_Children()))
+	if (FAILED(Ready_Children(Desc->fX, Desc->fY)))
 		return E_FAIL;
 
 	return S_OK;
@@ -65,17 +74,42 @@ void CMinimap_Button::Update(_float fTimeDelta)
 		m_iTexIndex = m_pGameInstance->Rand(0, 4);
 	}
 
+
+	if (CRoom_Manager::GetInstance()->Get_CurrentRoom() == CRoom_Manager::GetInstance()->Get_RoomByID(m_iRoomID))
+	{
+		m_bIsPlayer = true;
+		m_bClearRoom = true;
+	}
+	else
+	{
+		m_bIsPlayer = false;
+	}
+	if (!m_bClearRoom)
+		return;
+	if (Check_Key_Down(g_hWnd, VK_LBUTTON))
+	{
+		static_cast<CMinimap*>(m_pParent)->UI_Switch();
+		CRoom_Manager::GetInstance()->Enter_Room(m_iRoomID);
+		static_cast<CTransform*>(m_pGameInstance->Get_Component(m_pGameInstance->Get_CurrentLevel(), TEXT("Layer_Player"), TEXT("Com_Transform")))->Set_State(STATE::POSITION, m_vRoomPos);
+	}
+
 	CUIObject::Update(fTimeDelta);
 }
 
 void CMinimap_Button::Late_Update(_float fTimeDelta)
 {
+	if (!m_bClearRoom)
+		return;
+
 	m_pGameInstance->Add_RenderGroup(RENDERGROUP::RG_UI, this);
 
-	m_vecChildren[0]->Late_Update(fTimeDelta);
+	for (_int i = 0; i < m_vecChildren.size(); i++)
+	{
+		if (i == 1 && !m_bIsPlayer)
+			continue;
 
-	if (m_bIsPlayer)
-		m_vecChildren[1]->Late_Update(fTimeDelta);
+		m_vecChildren[i]->Late_Update(fTimeDelta);
+	}
 }
 
 HRESULT CMinimap_Button::Render()
@@ -114,25 +148,69 @@ HRESULT CMinimap_Button::Ready_ChildPrototype(LEVEL eLevel)
 		CMinimap_Player::Create(m_pGraphic_Device, eLevel))))
 		return E_FAIL;
 
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(eLevel), TEXT("Prototype_GameObject_UI_Minimap_Node"),
+		CMinimap_Node::Create(m_pGraphic_Device, eLevel))))
+		return E_FAIL;
+
 	return S_OK;
 }
 
-HRESULT CMinimap_Button::Ready_Children()
+HRESULT CMinimap_Button::Ready_Children(_float fX, _float fY)
 {
 	CUIObject* pGameObject = nullptr;
 
 	UIOBJECT_DESC Desc{};
 	
-	Desc.fZ = m_pGameInstance->Rand(0, 7);
+	Desc.fZ = m_iEventType;
+
 	pGameObject = dynamic_cast<CUIObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(m_eLevel), TEXT("Prototype_GameObject_UI_Minimap_Icon"),&Desc));
 	if (nullptr == pGameObject)
 		return E_FAIL;
 	Add_Child(pGameObject);
 
-	pGameObject = dynamic_cast<CUIObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(m_eLevel), TEXT("Prototype_GameObject_UI_Minimap_Player"), &Desc));
+	pGameObject = dynamic_cast<CUIObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(m_eLevel), TEXT("Prototype_GameObject_UI_Minimap_Player")));
 	if (nullptr == pGameObject)
 		return E_FAIL;
 	Add_Child(pGameObject);
+
+	vector<pair<_int, _int>> pTemp = CRoom_Manager::GetInstance()->Get_RoomIndex();
+
+
+	int fx1 = fX;
+	int fy1 = fY;
+
+	for (_int j = 0; j < pTemp.size(); ++j)
+	{
+		int fx2 = pTemp[j].first;
+		int fy2 = pTemp[j].second;
+
+		if (fx1 == fx2 && fy1 == fy2)	//자기자신 제외
+			continue;
+
+		if (abs(fx1 - fx2) >= 2 || abs(fy1 - fy2) >= 2)		//2칸 이상 제외
+			continue;
+
+		if (abs(fx1 - fx2) >= 1 && abs(fy1 - fy2) >= 1)		//대각선 제외
+			continue;
+
+
+		if (fx1 > fx2)		//왼쪽방
+			Desc.fZ = 0;
+		else if (fx1 < fx2)	//오른쪽방
+			Desc.fZ = 1;
+		else if (fy1 > fy2)	//윗방
+			Desc.fZ = 2;
+		else				//아래방
+			Desc.fZ = 3;
+
+		Desc.fX = fx1;
+		Desc.fY = fy1;
+
+		pGameObject = dynamic_cast<CUIObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(m_eLevel), TEXT("Prototype_GameObject_UI_Minimap_Node"), &Desc));
+		if (nullptr == pGameObject)
+			return E_FAIL;
+		Add_Child(pGameObject);
+	}
 
 	return S_OK;
 }

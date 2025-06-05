@@ -3,7 +3,7 @@
 #include "Minimap_Frame.h"
 #include "Minimap_Button.h"
 #include "Minimap_Node.h"
-
+#include "Room_Manager.h"
 CMinimap::CMinimap(LPDIRECT3DDEVICE9 pGraphic_Device) : CUIObject(pGraphic_Device)
 {
 }
@@ -78,6 +78,8 @@ void CMinimap::Update(_float fTimeDelta)
 	if (!m_bisOpen)
 		return;
 
+	vector<pair<_int, _int>> pTemp = CRoom_Manager::GetInstance()->Get_RoomIndex();
+	CRoom* pRoom = CRoom_Manager::GetInstance()->Get_CurrentRoom();
 	__super::Update(fTimeDelta);
 
 }
@@ -143,10 +145,6 @@ HRESULT CMinimap::Ready_ChildPrototype(LEVEL eLevel)
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(eLevel), TEXT("Prototype_GameObject_UI_Minimap_Frame"),
 		CMinimap_Frame::Create(m_pGraphic_Device, eLevel))))
 		return E_FAIL;
-	
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(eLevel), TEXT("Prototype_GameObject_UI_Minimap_Node"),
-		CMinimap_Node::Create(m_pGraphic_Device, eLevel))))
-		return E_FAIL;
 
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(eLevel), TEXT("Prototype_GameObject_UI_Minimap_Button"),
 		CMinimap_Button::Create(m_pGraphic_Device, eLevel))))
@@ -159,32 +157,33 @@ HRESULT CMinimap::Ready_Children()
 {
 	CUIObject* pGameObject = nullptr;
 
-	UIOBJECT_DESC Desc{};
+	CMinimap_Button::MINIMAP_BUTTON_DESC Desc{};
 
 	pGameObject = dynamic_cast<CUIObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(m_eLevel), TEXT("Prototype_GameObject_UI_Minimap_Frame")));
 	if (nullptr == pGameObject)
 		return E_FAIL;
 	Add_Child(pGameObject);
 	
-	pGameObject = dynamic_cast<CUIObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(m_eLevel), TEXT("Prototype_GameObject_UI_Minimap_Node")));
-	if (nullptr == pGameObject)
-		return E_FAIL;
-	Add_Child(pGameObject);
+	vector<pair<_int, _int>> pTemp = CRoom_Manager::GetInstance()->Get_RoomIndex();
 
-	for (_int i = 0; i < 8; ++i)
+	for (_int i = 0; i < pTemp.size(); ++i)
 	{
-		Desc.fX = i;
-		for (_int j = 0; j < 8; ++j)
-		{
+		Desc.fX = pTemp[i].first;
+		Desc.fY = pTemp[i].second;
+		Desc.vRoomPos = static_cast<CTransform*>(CRoom_Manager::GetInstance()->Find_Room(pTemp[i].first, pTemp[i].second)->Get_TerrainBox()->Find_Component(TEXT("Com_Transform_TerrainBox")))->Get_State(STATE::POSITION);
+		Desc.RoomID = CRoom_Manager::GetInstance()->Find_Room(pTemp[i].first, pTemp[i].second)->GetID();
 
-			Desc.fY = j;
-		
-			pGameObject = dynamic_cast<CUIObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(m_eLevel), TEXT("Prototype_GameObject_UI_Minimap_Button"),&Desc));
-			if (nullptr == pGameObject)
-				return E_FAIL;
-			Add_Child(pGameObject);
-		}
+		if (i == 0)
+			Desc.fZ = 99;
+		else
+			Desc.fZ = ENUM_CLASS(CRoom_Manager::GetInstance()->Find_Room(pTemp[i].first, pTemp[i].second)->Get_RoomType());
+
+		pGameObject = dynamic_cast<CUIObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(m_eLevel), TEXT("Prototype_GameObject_UI_Minimap_Button"), &Desc));
+		if (nullptr == pGameObject)
+			return E_FAIL;
+		Add_Child(pGameObject);
 	}
+
 	return S_OK;
 }
 
@@ -206,8 +205,8 @@ void CMinimap::Font_Render()
 
 	m_vTexRect.left = 0;
 	m_vTexRect.top = 0;
-	m_vTexRect.right = m_fSizeX + 2;
-	m_vTexRect.bottom = m_fSizeY - 130 + 2;
+	m_vTexRect.right = m_fSizeX + 1;
+	m_vTexRect.bottom = m_fSizeY - 130 + 1;
 
 	_stprintf_s(szText, TEXT("즉시 이동하려면 방을 클릭하세요."));
 	m_pGameInstance->Render_Font(TEXT("UI_Font_24_Minimap"), szText, m_vTexRect, D3DXCOLOR(0.f, 0.f, 0.f, 1.0f), DT_CENTER | DT_BOTTOM);
