@@ -79,16 +79,34 @@ HRESULT CLoader::Loading()
 	case LEVEL::LEVEL_LOGO:
 		hr = Loading_For_Logo_Level();
 		break;
+	case LEVEL::LEVEL_TOWN:
+		hr = Loading_For_Town_Level();
+		break;
 	case LEVEL::LEVEL_MAPEDIT:
 		hr = Loading_For_MapEdit_Level();
 		break;
 	case LEVEL::LEVEL_STAGE1:
 		hr = Loading_For_Stage1_Level();
 		break;
-
 	case LEVEL::LEVEL_STAGE2:
 		hr = Loading_For_Stage2_Level();
 		break;
+	case LEVEL::LEVEL_STAGE3:
+		hr = Loading_For_Stage3_Level();
+		break;
+	case LEVEL::LEVEL_STAGE4:
+		hr = Loading_For_Stage4_Level();
+		break;
+	case LEVEL::LEVEL_BOSS1:
+		hr = Loading_For_Boss1_Level();
+		break;
+	case LEVEL::LEVEL_SHELTER:
+		hr = Loading_For_Shelter_Level();
+		break;
+	case LEVEL::LEVEL_BOSS2:
+		hr = Loading_For_Boss2_Level();
+		break;
+	
 	}
 
 	if(FAILED(hr))
@@ -164,6 +182,11 @@ HRESULT CLoader::Loading_For_Logo_Level()
 	return S_OK;
 }
 
+HRESULT CLoader::Loading_For_Town_Level()
+{
+	return S_OK;
+}
+
 HRESULT CLoader::Loading_For_MapEdit_Level()
 {
 	lstrcpy(m_szLoadingText, TEXT("텍스쳐를 로딩중입니다."));
@@ -202,7 +225,7 @@ HRESULT CLoader::Loading_For_MapEdit_Level()
 	m_isFinished = true;
 	return S_OK;
 
-	return E_NOTIMPL;
+	return S_OK;
 }
 
 HRESULT CLoader::Loading_For_Stage1_Level()
@@ -545,6 +568,66 @@ HRESULT CLoader::Loading_For_Stage2_Level()
 	//lstrcpy(m_szLoadingText, m_pGameInstance->Ping());
 	m_isFinished = true;
 
+	return S_OK;
+}
+
+HRESULT CLoader::Loading_For_Stage3_Level()
+{
+	lstrcpy(m_szLoadingText, TEXT("텍스쳐를 로딩중입니다."));
+	lstrcpy(m_szLoadingText, TEXT("모델를 로딩중입니다."));
+
+	lstrcpy(m_szLoadingText, TEXT("쉐이더를 로딩중입니다."));
+
+	lstrcpy(m_szLoadingText, TEXT("게임오브젝트를 로딩중입니다."));
+	lstrcpy(m_szLoadingText, TEXT("로딩이 완료되었습니다."));
+	return S_OK;
+}
+
+HRESULT CLoader::Loading_For_Stage4_Level()
+{
+	lstrcpy(m_szLoadingText, TEXT("텍스쳐를 로딩중입니다."));
+	lstrcpy(m_szLoadingText, TEXT("모델를 로딩중입니다."));
+
+	lstrcpy(m_szLoadingText, TEXT("쉐이더를 로딩중입니다."));
+
+	lstrcpy(m_szLoadingText, TEXT("게임오브젝트를 로딩중입니다."));
+	lstrcpy(m_szLoadingText, TEXT("로딩이 완료되었습니다."));
+	return S_OK;
+}
+
+HRESULT CLoader::Loading_For_Boss1_Level()
+{
+	lstrcpy(m_szLoadingText, TEXT("텍스쳐를 로딩중입니다."));
+	lstrcpy(m_szLoadingText, TEXT("모델를 로딩중입니다."));
+
+	lstrcpy(m_szLoadingText, TEXT("쉐이더를 로딩중입니다."));
+
+	lstrcpy(m_szLoadingText, TEXT("게임오브젝트를 로딩중입니다."));
+	lstrcpy(m_szLoadingText, TEXT("로딩이 완료되었습니다."));
+	return S_OK;
+}
+
+HRESULT CLoader::Loading_For_Shelter_Level()
+{
+	lstrcpy(m_szLoadingText, TEXT("텍스쳐를 로딩중입니다."));
+	lstrcpy(m_szLoadingText, TEXT("모델를 로딩중입니다."));
+
+	lstrcpy(m_szLoadingText, TEXT("쉐이더를 로딩중입니다."));
+
+	lstrcpy(m_szLoadingText, TEXT("게임오브젝트를 로딩중입니다."));
+	lstrcpy(m_szLoadingText, TEXT("로딩이 완료되었습니다."));
+	return S_OK;
+}
+
+HRESULT CLoader::Loading_For_Boss2_Level()
+{
+	lstrcpy(m_szLoadingText, TEXT("텍스쳐를 로딩중입니다."));
+	lstrcpy(m_szLoadingText, TEXT("모델를 로딩중입니다."));
+
+	lstrcpy(m_szLoadingText, TEXT("쉐이더를 로딩중입니다."));
+
+	lstrcpy(m_szLoadingText, TEXT("게임오브젝트를 로딩중입니다."));
+	lstrcpy(m_szLoadingText, TEXT("로딩이 완료되었습니다."));
 	return S_OK;
 }
 

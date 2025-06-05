@@ -7,6 +7,12 @@
 #include "Level_MapEdit.h"
 #include "Level_Stage1.h"
 #include "Level_Stage2.h"
+#include "Level_Stage3.h"
+#include "Level_Stage4.h"
+#include "Level_Boss1.h"
+#include "Level_Boss2.h"
+#include "Level_Town.h"
+#include "Level_Shelter.h"
 #include "Loding_UI.h"
 
 CLevel_Loading::CLevel_Loading(LPDIRECT3DDEVICE9 pGraphic_Device)
@@ -43,11 +49,29 @@ void CLevel_Loading::Update(_float fTimeDelta)
 		case LEVEL::LEVEL_MAPEDIT:
 			pNewLevel = CLevel_MapEdit::Create(m_pGraphic_Device);
 			break;
+		case LEVEL::LEVEL_TOWN:
+			pNewLevel = CLevel_Town::Create(m_pGraphic_Device);
+			break;
 		case LEVEL::LEVEL_STAGE1:
 			pNewLevel = CLevel_Stage1::Create(m_pGraphic_Device);
 			break;
 		case LEVEL::LEVEL_STAGE2:
 			pNewLevel = CLevel_Stage2::Create(m_pGraphic_Device);
+			break;
+		case LEVEL::LEVEL_STAGE3:
+			pNewLevel = CLevel_Stage3::Create(m_pGraphic_Device);
+			break;
+		case LEVEL::LEVEL_STAGE4:
+			pNewLevel = CLevel_Stage4::Create(m_pGraphic_Device);
+			break;
+		case LEVEL::LEVEL_BOSS1:
+			pNewLevel = CLevel_Boss1::Create(m_pGraphic_Device);
+			break;
+		case LEVEL::LEVEL_SHELTER:
+			pNewLevel = CLevel_Shelter::Create(m_pGraphic_Device);
+			break;
+		case LEVEL::LEVEL_BOSS2:
+			pNewLevel = CLevel_Boss2::Create(m_pGraphic_Device);
 			break;
 		}
 
