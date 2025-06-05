@@ -30,6 +30,8 @@ public:
 
 	void						Open_UI(_float fX, _float fY);
 	void						Close_UI();
+	void						Push_Item_Slot(CItem_Base* pItem, _uint iCount);
+
 private:
 	CVIBuffer_Rect*				m_pVIBufferCom = { nullptr };
 	CTexture*					m_pTextureCom = { nullptr };

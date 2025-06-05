@@ -140,12 +140,14 @@ public:
 #pragma region ITEM_MANAGER
 	HRESULT						Setting_Item(void* pArg, _uint iMaxItemIndex, _uint iLevelIndex, const _wstring& strItemBaseTag);
 	CBase*						find_ItemObject(_uint iIndex);
-	CItemObject*				Get_ItemObject(_uint iIndex);
+	CItemObject*				Get_ItemObject(_uint iIndex, _bool isInven);
 	class CItemObject*			Pop_Item();
 	class CButton*				Pop_Slot();
+	const _uint					Pop_ISlot_Type();
 	_uint						Pop_Item_Count();
-	void						Pick_ItemSlot(class CItemObject* pPickItem, class CButton* pSlot, _uint iItemCount);
+	void						Pick_ItemSlot(class CItemObject* pPickItem, class CButton* pSlot, _uint iItemCount, _uint iSlottype);
 	void						Pick_Reset();
+	const vector<_int>			AcquiredItem_List();
 #pragma endregion
 
 #pragma region EVENT_MANAGER

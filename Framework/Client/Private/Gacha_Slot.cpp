@@ -96,15 +96,28 @@ void CGacha_Slot::Push_Item(CItemObject* pItem)
 
 void CGacha_Slot::Push_Item_ReRoll(CItemObject* pItem)
 {
-	Safe_Release(m_pSlotItem);
+	if(pItem != nullptr)
+		Safe_Release(m_pSlotItem);
+
 	m_pSlotItem = static_cast<CItem_Base*>(pItem);
+}
+
+void CGacha_Slot::Release_Item()
+{
+	if(m_pSlotItem != nullptr)
+		Safe_Release(m_pSlotItem);
+}
+
+void CGacha_Slot::Release_Pop()
+{
+	m_pSlotItem = nullptr;
 }
 
 void CGacha_Slot::Item_Selete()
 {
 	if(Check_Key_Down(g_hWnd, VK_LBUTTON) && m_pSlotItem != nullptr)
 	{
-		m_pGameInstance->Pick_ItemSlot(m_pSlotItem, this, 1);
+		m_pGameInstance->Pick_ItemSlot(m_pSlotItem, this, 1, 2);
 		m_bIsPick = true;
 	}
 }

@@ -24,7 +24,8 @@ public:
 	virtual void					Push_Item(CItemObject* pItem) override;
 	virtual void					IsPick_off() override { m_bIsPick = false; }
 	void							Push_Item_ReRoll(CItemObject* pItem);
-
+	void							Release_Item();
+	void							Release_Pop();
 private:
 	LEVEL							m_eLevel = {};
 	_bool							m_bIsPick = {};
@@ -35,7 +36,7 @@ private:
 
 private:
 	void							Item_Selete();
-
+	
 private:
 	HRESULT							Ready_Components();
 

@@ -167,6 +167,7 @@
     <ClInclude Include="..\Public\Client_Defines_Map.h" />
     <ClInclude Include="..\Public\Client_Struct.h" />
     <ClInclude Include="..\Public\EXP_Ball.h" />
+    <ClInclude Include="..\public\Field_Damage.h" />
     <ClInclude Include="..\public\Gacha.h" />
     <ClInclude Include="..\public\Gacha_Button_Icon.h" />
     <ClInclude Include="..\public\Gacha_FX.h" />
@@ -181,6 +182,12 @@
     <ClInclude Include="..\Public\Level_Stage3.h" />
     <ClInclude Include="..\Public\Level_Stage4.h" />
     <ClInclude Include="..\Public\Level_Town.h" />
+    <ClInclude Include="..\public\Minimap.h" />
+    <ClInclude Include="..\public\Minimap_Button.h" />
+    <ClInclude Include="..\public\Minimap_Frame.h" />
+    <ClInclude Include="..\public\Minimap_Icon.h" />
+    <ClInclude Include="..\public\Minimap_Node.h" />
+    <ClInclude Include="..\public\Minimap_Player.h" />
     <ClInclude Include="..\public\Talent.h" />
     <ClInclude Include="..\Public\Effect_Factory.h" />
     <ClInclude Include="..\public\ChapMap_MapSymbol.h" />
@@ -301,6 +308,7 @@
     <ClCompile Include="..\private\ChapMap_MapSymbol.cpp" />
     <ClCompile Include="..\private\ChapMap_PlayerSymbol.cpp" />
     <ClCompile Include="..\Private\EXP_Ball.cpp" />
+    <ClCompile Include="..\private\Field_Damage.cpp" />
     <ClCompile Include="..\private\Gacha.cpp" />
     <ClCompile Include="..\private\Gacha_Button_Icon.cpp" />
     <ClCompile Include="..\private\Gacha_FX.cpp" />
@@ -315,6 +323,12 @@
     <ClCompile Include="..\Private\Level_Stage3.cpp" />
     <ClCompile Include="..\Private\Level_Stage4.cpp" />
     <ClCompile Include="..\Private\Level_Town.cpp" />
+    <ClCompile Include="..\private\Minimap.cpp" />
+    <ClCompile Include="..\private\Minimap_Button.cpp" />
+    <ClCompile Include="..\private\Minimap_Frame.cpp" />
+    <ClCompile Include="..\private\Minimap_Icon.cpp" />
+    <ClCompile Include="..\private\Minimap_Node.cpp" />
+    <ClCompile Include="..\private\Minimap_Player.cpp" />
     <ClCompile Include="..\private\Talent.cpp" />
     <ClCompile Include="..\Private\Effect_Factory.cpp" />
     <ClCompile Include="..\Private\Exit_Button.cpp" />

@@ -3,6 +3,8 @@
 #include "Inven_Slot_Selete.h"
 #include "Client_Defines_Item.h"
 #include "Inventory.h"
+#include "Gacha.h"
+#include "Gacha_Slot.h"
 CInven_Slot::CInven_Slot(LPDIRECT3DDEVICE9 pGraphic_Device) : CButton{ pGraphic_Device }
 {
 }
@@ -64,7 +66,7 @@ void CInven_Slot::Update(_float fTimeDelta)
 		m_pSlotItem->IsRotation_Slate();
 
 	Item_Selete();
-
+	Setting_Item();
 	__super::Update(fTimeDelta);
 }
 
@@ -74,8 +76,6 @@ void CInven_Slot::Late_Update(_float fTimeDelta)
 		m_bIsOver = true;
 	else
 		m_bIsOver = false;
-
-	Setting_Item();
 
 	m_pGameInstance->Add_RenderGroup(RENDERGROUP::RG_UI, this);
 
@@ -138,77 +138,114 @@ void CInven_Slot::Setting_Item()
 		m_eItemType = ITEM_TYPE::ITEM_TYPE_END;
 		return;
 	}
-
-	m_eItemType = static_cast<ITEM_TYPE>(m_pSlotItem->Item_Info()->iItemType);
-	m_iItemValue = m_pSlotItem->Item_Info()->iItemValue;
-
-	switch (m_eItemType)
+	else if (m_pSlotItem != nullptr)
 	{
-	case ITEM_TYPE::ARTEFACT:
-		m_iSlotItem_MaxGrade = m_iItemValue;
-		switch (m_pSlotItem->Item_Info()->iRarity)
+		m_eItemType = static_cast<ITEM_TYPE>(m_pSlotItem->Item_Info()->iItemType);
+		m_iItemValue = m_pSlotItem->Item_Info()->iItemValue;
+
+		switch (m_eItemType)
 		{
-		case ENUM_CLASS(ITEM_RARITY::NORMAL):
-			m_iSlotItem_Tex = 2;
+		case ITEM_TYPE::ARTEFACT:
+			m_iSlotItem_MaxGrade = m_iItemValue;
+			switch (m_pSlotItem->Item_Info()->iRarity)
+			{
+			case ENUM_CLASS(ITEM_RARITY::NORMAL):
+				m_iSlotItem_Tex = 2;
+				break;
+			case ENUM_CLASS(ITEM_RARITY::RARE):
+				m_iSlotItem_Tex = 3;
+				break;
+			case ENUM_CLASS(ITEM_RARITY::EPIC):
+				m_iSlotItem_Tex = 4;
+				break;
+			case ENUM_CLASS(ITEM_RARITY::LEGENDARY):
+				m_iSlotItem_Tex = 5;
+				break;
+			}
 			break;
-		case ENUM_CLASS(ITEM_RARITY::RARE):
-			m_iSlotItem_Tex = 3;
+		case ITEM_TYPE::SKILLBOOK:
+			m_iSlotItem_MaxGrade = m_iItemValue;
+			switch (m_pSlotItem->Item_Info()->iRarity)
+			{
+			case ENUM_CLASS(ITEM_RARITY::NORMAL):
+				m_iSlotItem_Tex = 2;
+				break;
+			case ENUM_CLASS(ITEM_RARITY::RARE):
+				m_iSlotItem_Tex = 3;
+				break;
+			case ENUM_CLASS(ITEM_RARITY::EPIC):
+				m_iSlotItem_Tex = 4;
+				break;
+			case ENUM_CLASS(ITEM_RARITY::LEGENDARY):
+				m_iSlotItem_Tex = 5;
+				break;
+			}
 			break;
-		case ENUM_CLASS(ITEM_RARITY::EPIC):
-			m_iSlotItem_Tex = 4;
+		case ITEM_TYPE::STONE:
+			m_iSlotItem_Tex = 6;
 			break;
-		case ENUM_CLASS(ITEM_RARITY::LEGENDARY):
-			m_iSlotItem_Tex = 5;
+		case ITEM_TYPE::POTION:
+			m_iSlotItem_MaxGrade = g_PotionDataBase[m_iItemValue].m_iMaxPotion;
+			m_iSlotItem_Tex = 0;
 			break;
 		}
-		break;
-	case ITEM_TYPE::SKILLBOOK:
-		m_iSlotItem_MaxGrade = m_iItemValue;
-		switch (m_pSlotItem->Item_Info()->iRarity)
-		{
-		case ENUM_CLASS(ITEM_RARITY::NORMAL):
-			m_iSlotItem_Tex = 2;
-			break;
-		case ENUM_CLASS(ITEM_RARITY::RARE):
-			m_iSlotItem_Tex = 3;
-			break;
-		case ENUM_CLASS(ITEM_RARITY::EPIC):
-			m_iSlotItem_Tex = 4;
-			break;
-		case ENUM_CLASS(ITEM_RARITY::LEGENDARY):
-			m_iSlotItem_Tex = 5;
-			break;
-		}
-		break;
-	case ITEM_TYPE::STONE:
-		m_iSlotItem_Tex = 6;
-		break;
-	case ITEM_TYPE::POTION:
-		m_iSlotItem_MaxGrade = g_PotionDataBase[m_iItemValue].m_iMaxPotion;
-		m_iSlotItem_Tex = 0;
-		break;
 	}
 }
 
 void CInven_Slot::Item_Selete()
 {
+
 	if (Check_Key_Down(g_hWnd, VK_LBUTTON) && m_pSlotItem != nullptr)
 	{
-		m_pGameInstance->Pick_ItemSlot(m_pSlotItem, this, m_iItemCount);
+		m_pGameInstance->Pick_ItemSlot(m_pSlotItem, this, m_iItemCount, 1);
 		m_bIsPick = true;
 	}
 
-	
+
 	if (m_pGameInstance->Pop_Item() != nullptr && Check_Key_UP(g_hWnd, VK_LBUTTON))
 	{
-		m_pGameInstance->Pop_Slot()->Push_Item(m_pSlotItem);
-		m_pGameInstance->Pop_Slot()->Push_Item_Count(m_iItemCount);
-		m_pGameInstance->Pop_Slot()->IsPick_off();
-		m_pSlotItem = static_cast<CItem_Base*>(m_pGameInstance->Pop_Item());
-		m_iItemCount = m_pGameInstance->Pop_Item_Count();
+		if (m_pGameInstance->Pop_ISlot_Type() == 1)
+		{
+			m_pGameInstance->Pop_Slot()->Push_Item(m_pSlotItem);
+			m_pGameInstance->Pop_Slot()->Push_Item_Count(m_iItemCount);
+			m_pGameInstance->Pop_Slot()->IsPick_off();
+			m_pSlotItem = static_cast<CItem_Base*>(m_pGameInstance->Pop_Item());
+			m_iItemCount = m_pGameInstance->Pop_Item_Count();
+		}
+		else if (m_pGameInstance->Pop_ISlot_Type() == 2 && m_pSlotItem != nullptr)
+		{
+			static_cast<CInventory*>(m_pGameInstance->Get_GameObject(ENUM_CLASS(LEVEL::LEVEL_STATIC),
+				TEXT("Layer_Inventory")))->Push_Item_Slot(static_cast<CItem_Base*>(m_pGameInstance->Pop_Item()), 
+					m_pGameInstance->Pop_Item_Count());
 
-		m_pGameInstance->Pick_Reset();
-	}	
+			static_cast<CGacha_Slot*>(m_pGameInstance->Pop_Slot())->Release_Pop();
+
+			static_cast<CGacha*>(m_pGameInstance->Get_GameObject(ENUM_CLASS(LEVEL::LEVEL_STATIC),
+				TEXT("Layer_Gacha")))->Release_Slot();
+			static_cast<CGacha*>(m_pGameInstance->Get_GameObject(ENUM_CLASS(LEVEL::LEVEL_STATIC),
+				TEXT("Layer_Gacha")))->Random_off();
+			static_cast<CGacha*>(m_pGameInstance->Get_GameObject(ENUM_CLASS(LEVEL::LEVEL_STATIC),
+				TEXT("Layer_Gacha")))->UI_Switch();
+
+		}
+		else if (m_pGameInstance->Pop_ISlot_Type() == 2 && m_pSlotItem == nullptr)
+		{
+		
+			m_pSlotItem = static_cast<CItem_Base*>(m_pGameInstance->Pop_Item());
+			m_iItemCount = m_pGameInstance->Pop_Item_Count();
+
+			static_cast<CGacha_Slot*>(m_pGameInstance->Pop_Slot())->Release_Pop();
+
+			static_cast<CGacha*>(m_pGameInstance->Get_GameObject(ENUM_CLASS(LEVEL::LEVEL_STATIC),
+				TEXT("Layer_Gacha")))->Release_Slot();
+			static_cast<CGacha*>(m_pGameInstance->Get_GameObject(ENUM_CLASS(LEVEL::LEVEL_STATIC),
+				TEXT("Layer_Gacha")))->Random_off();
+			static_cast<CGacha*>(m_pGameInstance->Get_GameObject(ENUM_CLASS(LEVEL::LEVEL_STATIC),
+				TEXT("Layer_Gacha")))->UI_Switch();
+		}
+		m_pGameInstance->Pop_Slot()->IsPick_off();
+		
+	}
 	
 }
 
