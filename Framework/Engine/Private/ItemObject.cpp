@@ -36,7 +36,7 @@ HRESULT CItemObject::Render()
 	return S_OK;
 }
 
-const CItemObject::tagItemObjectDesc* CItemObject::Item_Info()
+CItemObject::tagItemObjectDesc* CItemObject::Item_Info()
 {
 	tagItemObjectDesc Desc{};
 

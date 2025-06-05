@@ -61,6 +61,7 @@ void CTalent_Slot_Icon::Priority_Update(_float fTimeDelta)
 
 void CTalent_Slot_Icon::Update(_float fTimeDelta)
 {
+	Special_Gift_Update();
 	CUIObject::Update(fTimeDelta);
 }
 
@@ -73,7 +74,6 @@ void CTalent_Slot_Icon::Late_Update(_float fTimeDelta)
 
 HRESULT CTalent_Slot_Icon::Render()
 {
-	SetUp_RenderState();
 	_int iTemp = static_cast<CTalent_Slot*>(m_pParent)->Get_Value();
 	if (m_iTexIdex == 0 && iTemp >= 10)
 	{
@@ -90,7 +90,6 @@ HRESULT CTalent_Slot_Icon::Render()
 		if (FAILED(CButton::Bind_ButtonTex_Single(g_hWnd, m_iTexIdex )))
 			return E_FAIL;
 	}
-	Reset_RenderState();
 	return S_OK;
 }
 
@@ -113,28 +112,6 @@ HRESULT CTalent_Slot_Icon::Ready_Components()
 
 
 	return S_OK;
-}
-
-void CTalent_Slot_Icon::SetUp_RenderState()
-{
-	m_pGraphic_Device->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
-	m_pGraphic_Device->SetRenderState(D3DRS_ALPHAREF, 200);
-	m_pGraphic_Device->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER);
-
-	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_POINT);
-	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_POINT);
-	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MIPFILTER, D3DTEXF_NONE);
-}
-
-void CTalent_Slot_Icon::Reset_RenderState()
-{
-	m_pGraphic_Device->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
-
-	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_LINEAR);
-	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);
-	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MIPFILTER, D3DTEXF_LINEAR);
-
-	m_pGraphic_Device->SetTexture(0, NULL);
 }
 
 HRESULT CTalent_Slot_Icon::Ready_ChildPrototype(LEVEL eLevel)
@@ -176,16 +153,54 @@ void CTalent_Slot_Icon::Special_Gift_Update()
 
 	if (m_bGiftCheck != m_bIsGetGift)
 	{
-	/*	switch (m_iIndex)
-		
+		switch (m_iIndex)
+		{
 		case 0:
 			if (m_iTexIdex == 0 && m_bIsGetGift == true)
 				CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CULDAMAGE, 10);
+			else if	(m_iTexIdex == 0 && m_bIsGetGift == false)
+				CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CULDAMAGE, -10);
+
+			if (m_iTexIdex == 1 && m_bIsGetGift == true)
+				CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CRITICALDAMAGE, 10);
+			else if (m_iTexIdex == 1 && m_bIsGetGift == false)
+				CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CRITICALDAMAGE, -10);
 			break;
 		case 1:
+			if (m_iTexIdex == 0 && m_bIsGetGift == true)
+				CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::MAXHP, 100);
+			else if (m_iTexIdex == 0 && m_bIsGetGift == false)
+				CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::MAXHP, -100);
+
+			if (m_iTexIdex == 1 && m_bIsGetGift == true)
+				CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::MAXDASH, 1);
+			else if (m_iTexIdex == 1 && m_bIsGetGift == false)
+				CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::MAXDASH, -1);
+			break;
 		case 2:
+			if (m_iTexIdex == 0 && m_bIsGetGift == true)
+				CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CULDAMAGE, 10);
+			else if (m_iTexIdex == 0 && m_bIsGetGift == false)
+				CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CULDAMAGE, -10);
+
+			if (m_iTexIdex == 1 && m_bIsGetGift == true)
+				CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CULDEF, 10);
+			else if (m_iTexIdex == 1 && m_bIsGetGift == false)
+				CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CULDEF, -10);
+			break;
 		case 3:
-		*/
+			if (m_iTexIdex == 0 && m_bIsGetGift == true)
+				CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CULMP, 10);
+			else if (m_iTexIdex == 0 && m_bIsGetGift == false)
+				CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CULMP, -10);
+
+			if (m_iTexIdex == 1 && m_bIsGetGift == true)
+				CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CULMP, 10);
+			else if (m_iTexIdex == 1 && m_bIsGetGift == false)
+				CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CULMP, -10);
+			break;
+		}
+		m_bGiftCheck = m_bIsGetGift;
 	}
 }
 

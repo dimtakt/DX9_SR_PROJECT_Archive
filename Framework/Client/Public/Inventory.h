@@ -27,7 +27,7 @@ public:
 public:
 	void						UI_Switch();
 	void						Add_Item_Inven(_uint ItemIndex);
-	_bool						Pick_Slot();
+
 	void						Open_UI(_float fX, _float fY);
 	void						Close_UI();
 private:
@@ -37,10 +37,7 @@ private:
 	_bool						m_bIsOpen = {};
 	vector<CInven_Slot*>		m_vecInventory = {};
 
-	CInven_Slot*				m_pPickSlot = { nullptr };
-
 private:
-	void						Selete_Slot();
 	void						Set_Grade();
 
 private:
@@ -49,12 +46,9 @@ private:
 	HRESULT						Ready_ChildPrototype(LEVEL eLevel);
 	HRESULT						Ready_Children();
 
-	void						SetUp_RenderState();
-	void						Reset_RenderState();
-
 public:
-	static CInventory* Create(LPDIRECT3DDEVICE9 pGraphic_Device, LEVEL eLevel);
-	virtual CGameObject* Clone(void* pArg) override;
+	static CInventory*			Create(LPDIRECT3DDEVICE9 pGraphic_Device, LEVEL eLevel);
+	virtual CGameObject*		Clone(void* pArg) override;
 	virtual void				Free() override;
 
 };

@@ -57,9 +57,6 @@ void CMirror_Button::Update(_float fTimeDelta)
 	if (Check_Key_Down(g_hWnd, VK_LBUTTON))
 		static_cast<CTalent*>(m_pTargetUI)->UI_Switch();
 
-	if (m_pGameInstance->IsKeyDown('P'))
-		static_cast<CTalent*>(m_pTargetUI)->UI_Switch();
-
 	CUIObject::Update(fTimeDelta);
 }
 
@@ -71,11 +68,8 @@ void CMirror_Button::Late_Update(_float fTimeDelta)
 
 HRESULT CMirror_Button::Render()
 {
-	SetUp_RenderState();
 	if (FAILED(CButton::Bind_ButtonTex_Double(g_hWnd, 0, 1)))
 		return E_FAIL;
-
-	Reset_RenderState();
 	return S_OK;
 }
 
@@ -94,28 +88,6 @@ HRESULT CMirror_Button::Ready_Components()
 		return E_FAIL;
 
 	return S_OK;
-}
-
-void CMirror_Button::SetUp_RenderState()
-{
-	m_pGraphic_Device->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
-	m_pGraphic_Device->SetRenderState(D3DRS_ALPHAREF, 200);
-	m_pGraphic_Device->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER);
-
-	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_POINT);
-	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_POINT);
-	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MIPFILTER, D3DTEXF_NONE);
-}
-
-void CMirror_Button::Reset_RenderState()
-{
-	m_pGraphic_Device->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
-
-	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_LINEAR);
-	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);
-	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MIPFILTER, D3DTEXF_LINEAR);
-
-	m_pGraphic_Device->SetTexture(0, NULL);
 }
 
 HRESULT CMirror_Button::Ready_ChildPrototype(LEVEL eLevel)

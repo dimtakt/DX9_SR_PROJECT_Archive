@@ -1,17 +1,9 @@
 #pragma once
 #include "UIObject.h"
 #include "Client_Defines.h"
-BEGIN(Engine)
-class CPlayerStats;
-END
+
 class CHud_Buff final : public CUIObject
 {
-public:
-	typedef struct tagHud_Buff
-	{
-		_float fX;
-		_float fY;
-	}UIHUD_BUFF_DESC;
 private:
 									CHud_Buff(LPDIRECT3DDEVICE9 pGraphic_Device);
 									CHud_Buff(const CHud_Buff& Prototype);
@@ -27,8 +19,7 @@ public:
 
 private:
 	LEVEL							m_eLevel = {};
-	CPlayerStats*					m_pPlayerStatsCom = { nullptr };
-
+	_uint							m_iIndex = {};
 private:
 	HRESULT							Ready_Components();
 

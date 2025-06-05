@@ -22,6 +22,8 @@ HRESULT CHud_States_Frame::Initialize_Prototype(LEVEL eLevel)
 
 HRESULT CHud_States_Frame::Initialize(void* pArg)
 {
+	UIOBJECT_DESC* Desc = static_cast<UIOBJECT_DESC*>(pArg);
+
 	m_fSizeX = 190.f;
 	m_fSizeY = 55.f;
 	m_fX = 20 + m_fSizeX * 0.5f;
@@ -42,21 +44,32 @@ HRESULT CHud_States_Frame::Initialize(void* pArg)
 	if (FAILED(Ready_Children()))
 		return E_FAIL;
 	
+	m_pGameInstance->Add_UIObject(Desc->m_iLevel, TEXT("Hud_States"), this);
+
 	return S_OK;
 }
 
 void CHud_States_Frame::Priority_Update(_float fTimeDelta)
 {
+	if (!m_bIsUpdate)
+		return;
+
 	__super::Priority_Update(fTimeDelta);
 }
 
 void CHud_States_Frame::Update(_float fTimeDelta)
 {
+	if (!m_bIsUpdate)
+		return;
+
 	__super::Update(fTimeDelta);
 }
 
 void CHud_States_Frame::Late_Update(_float fTimeDelta)
 {
+	if (!m_bIsUpdate)
+		return;
+
 	m_pGameInstance->Add_RenderGroup(RENDERGROUP::RG_UI, this);
 
 	__super::Late_Update(fTimeDelta);

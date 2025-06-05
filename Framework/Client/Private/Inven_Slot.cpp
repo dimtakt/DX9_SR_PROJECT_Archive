@@ -63,6 +63,8 @@ void CInven_Slot::Update(_float fTimeDelta)
 	if (CUIObject::isPick(g_hWnd) && m_pGameInstance->IsKeyDown('R') && m_pSlotItem != nullptr)
 		m_pSlotItem->IsRotation_Slate();
 
+	Item_Selete();
+
 	__super::Update(fTimeDelta);
 }
 
@@ -84,47 +86,28 @@ void CInven_Slot::Late_Update(_float fTimeDelta)
 	{
 		m_pSlotItem->Late_Update(fTimeDelta, m_pTransformCom->Get_State(STATE::POSITION));
 	}
+	
+	if (m_bIsPick)
+		m_pSlotItem->IsSelete();
 }
 
 HRESULT CInven_Slot::Render()
 {
-	SetUp_RenderState();
 	if (FAILED(CButton::Bind_ButtonTex_Single(g_hWnd, m_iSlotItem_Tex)))
 		return E_FAIL;
-	Reset_RenderState();
-
-	CInventory* pInven = static_cast<CInventory*>(m_pGameInstance->Get_GameObject(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Layer_Inventory")));
-	
-	if (m_pGameInstance->IsKeyHold(VK_LBUTTON) && m_bIsOver && pInven->Pick_Slot())
-		return S_OK;
 
 	Render_Font();
 	return S_OK;
 }
 
-_bool CInven_Slot::IsKey_Down_Check()
+void CInven_Slot::Push_Item(CItemObject* pItem)
 {
-	return 	Check_Key_Down(g_hWnd, VK_LBUTTON);
-}
-
-_bool CInven_Slot::IsKey_Up_Check()
-{
-	return 	Check_Key_UP(g_hWnd, VK_LBUTTON);
+	m_pSlotItem = static_cast<CItem_Base*>(pItem);
 }
 
 CItem_Base* CInven_Slot::Pop_Item()
 {
 	return m_pSlotItem;
-}
-
-void CInven_Slot::Push_Item(CItem_Base* pItem)
-{
-	m_pSlotItem = pItem;;
-}
-
-void CInven_Slot::ItemRender()
-{
-	m_pSlotItem->IsSelete();
 }
 
 _int CInven_Slot::Slot_Info(ITEM_INFO eInfo)
@@ -207,6 +190,28 @@ void CInven_Slot::Setting_Item()
 	}
 }
 
+void CInven_Slot::Item_Selete()
+{
+	if (Check_Key_Down(g_hWnd, VK_LBUTTON) && m_pSlotItem != nullptr)
+	{
+		m_pGameInstance->Pick_ItemSlot(m_pSlotItem, this, m_iItemCount);
+		m_bIsPick = true;
+	}
+
+	
+	if (m_pGameInstance->Pop_Item() != nullptr && Check_Key_UP(g_hWnd, VK_LBUTTON))
+	{
+		m_pGameInstance->Pop_Slot()->Push_Item(m_pSlotItem);
+		m_pGameInstance->Pop_Slot()->Push_Item_Count(m_iItemCount);
+		m_pGameInstance->Pop_Slot()->IsPick_off();
+		m_pSlotItem = static_cast<CItem_Base*>(m_pGameInstance->Pop_Item());
+		m_iItemCount = m_pGameInstance->Pop_Item_Count();
+
+		m_pGameInstance->Pick_Reset();
+	}	
+	
+}
+
 HRESULT CInven_Slot::Ready_Components()
 {
 	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_VIBuffer_Rect"),
@@ -222,28 +227,6 @@ HRESULT CInven_Slot::Ready_Components()
 		return E_FAIL;
 
 	return S_OK;
-}
-
-void CInven_Slot::SetUp_RenderState()
-{
-	m_pGraphic_Device->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
-	m_pGraphic_Device->SetRenderState(D3DRS_ALPHAREF, 200);
-	m_pGraphic_Device->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER);
-
-	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_POINT);
-	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_POINT);
-	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MIPFILTER, D3DTEXF_NONE);
-}
-
-void CInven_Slot::Reset_RenderState()
-{
-	m_pGraphic_Device->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
-
-	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_LINEAR);
-	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);
-	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MIPFILTER, D3DTEXF_LINEAR);
-
-	m_pGraphic_Device->SetTexture(0, NULL);
 }
 
 HRESULT CInven_Slot::Ready_ChildPrototype(LEVEL eLevel)
@@ -363,5 +346,6 @@ CGameObject* CInven_Slot::Clone(void* pArg)
 
 void CInven_Slot::Free()
 {
+	Safe_Release(m_pSlotItem);
 	__super::Free();
 }

@@ -34,15 +34,46 @@ void CCollision_Manager::Check_RoomCollisions()
       for (size_t i = 0; i < m_vColliders.size(); ++i)
     {
         for (size_t j = i + 1; j < m_vColliders.size(); ++j)
-        {
-            if (m_vColliders[i]->Get_Owner() != nullptr 
-                && m_vColliders[j]->Get_Owner() != nullptr
-                && m_vColliders[i]->Get_Owner()->Get_ObjType() != m_vColliders[j]->Get_Owner()->Get_ObjType() 
-                && Check_OBBtoOBB(m_vColliders[i], m_vColliders[j])
-                && Check_Y_Overlap(m_vColliders[i], m_vColliders[j]))
+        {  
+            if (m_vColliders[i] == nullptr || 
+                m_vColliders[j] == nullptr ||
+                m_vColliders[i]->Get_Owner() == nullptr ||
+                m_vColliders[j]->Get_Owner() == nullptr)
+                continue;
+
+            if (m_vColliders[i]->Get_Owner()->Get_ObjType() == m_vColliders[j]->Get_Owner()->Get_ObjType())
+                continue;
+            if (m_vColliders[i]->Get_Owner()->Get_ObjType() == GAMEOBJ_TYPE::PLAYER)
             {
-                m_vColliders[i]->Get_Owner()->OnCollision(m_vColliders[j]->Get_Owner());
-                m_vColliders[j]->Get_Owner()->OnCollision(m_vColliders[i]->Get_Owner());
+                if (m_vColliders[j]->Get_Owner()->Get_ObjType() == GAMEOBJ_TYPE::PLAYER_EFFECT)
+                    continue;
+            }
+
+            if (m_vColliders[j]->Get_Owner()->Get_ObjType() == GAMEOBJ_TYPE::PLAYER_EFFECT)
+            {
+                if (m_vColliders[i]->Get_Owner()->Get_ObjType() == GAMEOBJ_TYPE::PLAYER)
+                    continue;
+            }
+
+            if (m_vColliders[i]->Get_Owner()->Get_ObjType() == GAMEOBJ_TYPE::MONSTER)
+            {
+                if (m_vColliders[j]->Get_Owner()->Get_ObjType() == GAMEOBJ_TYPE::MONSTER_EFFECT)
+                    continue;
+            }
+
+            if (m_vColliders[j]->Get_Owner()->Get_ObjType() == GAMEOBJ_TYPE::MONSTER_EFFECT)
+            {
+                if (m_vColliders[i]->Get_Owner()->Get_ObjType() == GAMEOBJ_TYPE::MONSTER)
+                    continue;
+            }
+
+           
+
+
+            if (Check_OBBtoOBB(m_vColliders[i], m_vColliders[j]) && Check_Y_Overlap(m_vColliders[i], m_vColliders[j]))
+            {
+                    m_vColliders[i]->Get_Owner()->OnCollision(m_vColliders[j]->Get_Owner());
+                    m_vColliders[j]->Get_Owner()->OnCollision(m_vColliders[i]->Get_Owner());
             }
         }
     }

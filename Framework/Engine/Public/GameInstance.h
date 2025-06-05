@@ -25,6 +25,10 @@ public:
 	_float Compute_Random_Normal();
 	_float Compute_Random(_float fMin, _float fMax);
 	void Seed_Random();
+
+public:
+	_float Rand_Normal();
+	_float Rand(_float fMin, _float fMax);
 #pragma endregion
 
 #pragma region LEVEL_MANAGER
@@ -137,12 +141,28 @@ public:
 	HRESULT						Setting_Item(void* pArg, _uint iMaxItemIndex, _uint iLevelIndex, const _wstring& strItemBaseTag);
 	CBase*						find_ItemObject(_uint iIndex);
 	CItemObject*				Get_ItemObject(_uint iIndex);
+	class CItemObject*			Pop_Item();
+	class CButton*				Pop_Slot();
+	_uint						Pop_Item_Count();
+	void						Pick_ItemSlot(class CItemObject* pPickItem, class CButton* pSlot, _uint iItemCount);
+	void						Pick_Reset();
 #pragma endregion
 
 #pragma region EVENT_MANAGER
 	void Subscribe(_uint iTypeIndex, class IEventListener* pListener);
 	void Unsubscribe(_uint iTypeIndex, class IEventListener* pListener);
 	void Broadcast(_uint iTypeIndex, const EVENTDATA* pData);
+#pragma endregion
+
+#pragma region UIOBJECT_MANAGER
+	HRESULT				Add_UIObject(_uint iLevelIndex, const _wstring& strUITag, class CUIObject* pUIObj);
+	void				Update_On(_uint iLevelIndex, const _wstring& strUITag);
+	void				Update_Off(_uint iLevelIndex, const _wstring& strUITag);
+	void				All_Update_On();
+	void				All_Update_Off();			
+	void				Clear_UiObj(_uint iLevelIndex);
+	class CUIObject*	Find_UIObj(_uint iLevelIndex, const _wstring& strUITag);
+
 #pragma endregion
 
 private:
@@ -161,7 +181,7 @@ private:
 	class CAnim_Manager*		m_pAnimation_Manager = { nullptr };
 	class CItem_Manager*		m_pItem_Manager = { nullptr };
 	class CEvent_Manager*		m_pEvent_Manager = { nullptr };
-
+	class CUIObject_Manager*	m_pUIObject_Manager = { nullptr };
 public:
 	void Release_Engine();
 	virtual void Free() override;

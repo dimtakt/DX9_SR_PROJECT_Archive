@@ -23,6 +23,9 @@ HRESULT CHud_Dash::Initialize_Prototype(LEVEL eLevel)
 
 HRESULT CHud_Dash::Initialize(void* pArg)
 {
+
+    UIOBJECT_DESC* Desc = static_cast<UIOBJECT_DESC*>(pArg);
+
     m_fSizeX = 0;
     m_fSizeY = 0;
     m_fX = 30;
@@ -43,11 +46,16 @@ HRESULT CHud_Dash::Initialize(void* pArg)
     if (FAILED(Ready_Children()))
         return E_FAIL;
     
+    m_pGameInstance->Add_UIObject(Desc->m_iLevel, TEXT("Hud_Dash"), this);
+
     return S_OK;
 }
 
 void CHud_Dash::Priority_Update(_float fTimeDelta)
 {
+    if (!m_bIsUpdate)
+        return;
+
     m_iDashMaxValue = (int)CStat_Manager::GetInstance()->Get_CurStats()[ENUM_CLASS(STAT_INFO::MAXDASH)];
 
     if (m_iDashMaxValue > 5)
@@ -62,7 +70,9 @@ void CHud_Dash::Priority_Update(_float fTimeDelta)
 
 void CHud_Dash::Update(_float fTimeDelta)
 {
-    
+    if (!m_bIsUpdate)
+        return;
+
     if (m_iDashMaxValue > 0)
         for (_int i = 0; i < m_iDashMaxValue; ++i)
             m_vecChildren[i]->Update(fTimeDelta);
@@ -70,6 +80,9 @@ void CHud_Dash::Update(_float fTimeDelta)
 
 void CHud_Dash::Late_Update(_float fTimeDelta)
 {
+    if (!m_bIsUpdate)
+        return;
+
     if (m_iDashMaxValue > 0)
         for (_int i = 0; i < m_iDashMaxValue; ++i)
             m_vecChildren[i]->Late_Update(fTimeDelta);

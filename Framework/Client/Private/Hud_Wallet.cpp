@@ -23,6 +23,8 @@ HRESULT CHud_Wallet::Initialize_Prototype(LEVEL eLevel)
 
 HRESULT CHud_Wallet::Initialize(void* pArg)
 {
+	UIOBJECT_DESC* Desc = static_cast<UIOBJECT_DESC*>(pArg);
+
 	m_fSizeX = 0;
 	m_fSizeY = 0;
 	m_fX = g_iWinSizeX;
@@ -43,21 +45,32 @@ HRESULT CHud_Wallet::Initialize(void* pArg)
 	if (FAILED(Ready_Children()))
 		return E_FAIL;
 
+	m_pGameInstance->Add_UIObject(Desc->m_iLevel, TEXT("Hud_Wallet"), this);
+
 	return S_OK;
 }
 
 void CHud_Wallet::Priority_Update(_float fTimeDelta)
 {
+	if (!m_bIsUpdate)
+		return;
+
 	__super::Priority_Update(fTimeDelta);
 }
 
 void CHud_Wallet::Update(_float fTimeDelta)
 {
+	if (!m_bIsUpdate)
+		return;
+
 	__super::Update(fTimeDelta);
 }
 
 void CHud_Wallet::Late_Update(_float fTimeDelta)
 {
+	if (!m_bIsUpdate)
+		return;
+
 	__super::Late_Update(fTimeDelta);
 }
 

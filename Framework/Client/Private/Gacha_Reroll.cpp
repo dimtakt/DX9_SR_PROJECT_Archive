@@ -1,6 +1,8 @@
 #include "Gacha_Reroll.h"
 #include "GameInstance.h"
-
+#include "Gacha_Button_Icon.h"
+#include "Stat_Manager.h"
+#include "Gacha.h"
 CGacha_Reroll::CGacha_Reroll(LPDIRECT3DDEVICE9 pGraphic_Device) : CButton(pGraphic_Device)
 {
 }
@@ -51,6 +53,11 @@ void CGacha_Reroll::Priority_Update(_float fTimeDelta)
 
 void CGacha_Reroll::Update(_float fTimeDelta)
 {
+	if (Button_Pick() && m_pGameInstance->IsKeyDown(VK_LBUTTON) && CStat_Manager::GetInstance()->Get_CurStats()[ENUM_CLASS(STAT_INFO::DICE)] > 0)
+	{
+		static_cast<CGacha*>(m_pParent)->Rand_Item_Set(CGacha::GACHA_TYPE::ARTEFACT);
+		CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::DICE, -1);
+	}
 	CUIObject::Update(fTimeDelta);
 }
 
@@ -62,14 +69,11 @@ void CGacha_Reroll::Late_Update(_float fTimeDelta)
 
 HRESULT CGacha_Reroll::Render()
 {
-	SetUp_RenderState();
-
 	if (Button_Pick())
 		__super::Render_Button(1);
 	else
 		__super::Render_Button(0);
 	Font_Render();
-	Reset_RenderState();
 	return S_OK;
 }
 
@@ -91,33 +95,11 @@ HRESULT CGacha_Reroll::Ready_Components()
 	return S_OK;
 }
 
-void CGacha_Reroll::SetUp_RenderState()
-{
-	m_pGraphic_Device->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
-	m_pGraphic_Device->SetRenderState(D3DRS_ALPHAREF, 200);
-	m_pGraphic_Device->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER);
-
-	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_POINT);
-	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_POINT);
-	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MIPFILTER, D3DTEXF_NONE);
-}
-
-void CGacha_Reroll::Reset_RenderState()
-{
-	m_pGraphic_Device->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
-
-	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_LINEAR);
-	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);
-	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MIPFILTER, D3DTEXF_LINEAR);
-
-	m_pGraphic_Device->SetTexture(0, NULL);
-}
-
 HRESULT CGacha_Reroll::Ready_ChildPrototype(LEVEL eLevel)
 {
-//	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(eLevel), TEXT("Prototype_GameObject_UI_Talent_Progress"),
-//		CTalent_Progress::Create(m_pGraphic_Device))))
-//		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(eLevel), TEXT("Prototype_GameObject_UI_Gacha_Icon"),
+		CGacha_Button_Icon::Create(m_pGraphic_Device))))
+		return E_FAIL;
 
 	return S_OK;
 }
@@ -126,10 +108,10 @@ HRESULT CGacha_Reroll::Ready_Children()
 {
 	CUIObject* pGameObject = nullptr;
 
-	//pGameObject = dynamic_cast<CUIObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(m_eLevel), TEXT("Prototype_GameObject_UI_Talent_Progress")));
-	//if (nullptr == pGameObject)
-	//	return E_FAIL;
-	//Add_Child(pGameObject);
+	pGameObject = dynamic_cast<CUIObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(m_eLevel), TEXT("Prototype_GameObject_UI_Gacha_Icon")));
+	if (nullptr == pGameObject)
+		return E_FAIL;
+	Add_Child(pGameObject);
 
 
 	return S_OK;
@@ -137,15 +119,14 @@ HRESULT CGacha_Reroll::Ready_Children()
 
 void CGacha_Reroll::Font_Render()
 {
-	//TCHAR szText[64];
-	//m_vTexRect.left = 660 + m_fX - m_fSizeX * 0.5;
-	//m_vTexRect.top = 442 + m_fY - m_fSizeY * 0.5;
-	//m_vTexRect.right = 660 + m_fX + m_fSizeX * 0.5;
-	//m_vTexRect.bottom = 441 + m_fY + m_fSizeY * 0.5;
-
-	//_stprintf_s(szText, TEXT("초기화"));
-	//m_pGameInstance->Render_Font(TEXT("UI_Font_30"), szText, m_vTexRect, D3DXCOLOR(1.f, 1.f, 1.f, 1.0f), DT_CENTER | DT_TOP);
-
+	TCHAR szText[64];
+	CUIObject::Font_Rect_Update();
+	
+	_int iDice	= CStat_Manager::GetInstance()->Get_CurStats()[ENUM_CLASS(STAT_INFO::DICE)];
+	m_vTexRect.top += 88;
+	m_vTexRect.right += 35;
+	_stprintf_s(szText, TEXT("리롤 ( %d회)"), iDice);
+	m_pGameInstance->Render_Font(TEXT("UI_Font_22_Normal"), szText, m_vTexRect, D3DXCOLOR(1.f, 1.f, 1.f, 1.0f), DT_CENTER | DT_TOP);
 }
 
 _bool CGacha_Reroll::Button_Pick()

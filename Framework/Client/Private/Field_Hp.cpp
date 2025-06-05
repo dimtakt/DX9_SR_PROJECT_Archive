@@ -72,6 +72,7 @@ void CField_Hp::Late_Update(_float fTimeDelta)
 
 HRESULT CField_Hp::Render()
 {
+	m_pGraphic_Device->SetTexture(0, NULL);
 	m_pVIBufferCom->Bind_Buffers();
 	__super::Begin();
 	m_pVIBufferCom->Render();
