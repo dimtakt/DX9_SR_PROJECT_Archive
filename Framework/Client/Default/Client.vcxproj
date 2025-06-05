@@ -175,6 +175,12 @@
     <ClInclude Include="..\public\Gacha_Slot.h" />
     <ClInclude Include="..\public\Gacha_Slot_Selete.h" />
     <ClInclude Include="..\public\LaserGhost_D.h" />
+    <ClInclude Include="..\Public\Level_Boss1.h" />
+    <ClInclude Include="..\Public\Level_Boss2.h" />
+    <ClInclude Include="..\Public\Level_Shelter.h" />
+    <ClInclude Include="..\Public\Level_Stage3.h" />
+    <ClInclude Include="..\Public\Level_Stage4.h" />
+    <ClInclude Include="..\Public\Level_Town.h" />
     <ClInclude Include="..\public\Talent.h" />
     <ClInclude Include="..\Public\Effect_Factory.h" />
     <ClInclude Include="..\public\ChapMap_MapSymbol.h" />
@@ -303,6 +309,12 @@
     <ClCompile Include="..\private\Gacha_Slot.cpp" />
     <ClCompile Include="..\private\Gacha_Slot_Selete.cpp" />
     <ClCompile Include="..\Private\LaserGhost_D.cpp" />
+    <ClCompile Include="..\Private\Level_Boss1.cpp" />
+    <ClCompile Include="..\Private\Level_Boss2.cpp" />
+    <ClCompile Include="..\Private\Level_Shelter.cpp" />
+    <ClCompile Include="..\Private\Level_Stage3.cpp" />
+    <ClCompile Include="..\Private\Level_Stage4.cpp" />
+    <ClCompile Include="..\Private\Level_Town.cpp" />
     <ClCompile Include="..\private\Talent.cpp" />
     <ClCompile Include="..\Private\Effect_Factory.cpp" />
     <ClCompile Include="..\Private\Exit_Button.cpp" />

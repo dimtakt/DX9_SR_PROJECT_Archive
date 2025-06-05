@@ -96,18 +96,22 @@ HRESULT CGameInstance::Initialize_Engine(const ENGINE_DESC& EngineDesc, LPDIRECT
 
 void CGameInstance::Update_Engine(_float fTimeDelta)
 {
+    if (IsKeyDown(VK_TAB))
+        m_pCollision_Manager->Set_IsRender();
+    // 콜리전 충돌확인
+    m_pCollision_Manager->Check_RoomCollisions();
     m_pKey_Manager->Update(fTimeDelta);
+
     m_pObject_Manager->Priority_Update(fTimeDelta);
 
     m_pPicking->Update();
     // 콜리전 동기화
     m_pCollision_Manager->Update();
-    // 콜리전 충돌확인
-    m_pCollision_Manager->Check_RoomCollisions();
     m_pObject_Manager->Update(fTimeDelta);
     m_pItem_Manager->Update();
     m_pObject_Manager->Late_Update(fTimeDelta);
     m_pLevel_Manager->Update(fTimeDelta);
+  
 }
 
 HRESULT CGameInstance::Clear_Resources(_uint iClearLevelID)
@@ -138,7 +142,8 @@ HRESULT CGameInstance::Draw()
         return E_FAIL;
 
     // 충돌체 시각화
-    m_pCollision_Manager->Render();
+    if(m_pCollision_Manager->Get_IsRender())
+        m_pCollision_Manager->Render();
 
     if (FAILED(m_pLevel_Manager->Render()))
         return E_FAIL;

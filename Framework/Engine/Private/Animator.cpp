@@ -31,7 +31,7 @@ HRESULT CAnimator::Initialize(void* pArg)
 	m_strTimerTag = pDesc->strTimerTag;
 
 	// 타이머 생성
-	m_pGameInstance->Compute_TimeDelta(m_strTimerTag);
+	m_pGameInstance->Compute_TimeDelta(m_strTimerTag);	// 타이머 안 써서 관련된거 지워도 될듯
 	m_fElapsedTimesCheck = 0;
 	m_fElapsedTimes = 0;
 

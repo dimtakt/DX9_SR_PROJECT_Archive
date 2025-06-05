@@ -80,6 +80,8 @@ HRESULT CTree::Render()
 
 void CTree::SetUp_RenderState()
 {
+    m_pGraphic_Device->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
+
     m_pGraphic_Device->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
     m_pGraphic_Device->SetRenderState(D3DRS_ALPHAREF, 200);
     m_pGraphic_Device->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER);
@@ -98,6 +100,8 @@ void CTree::Reset_RenderState()
     m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MIPFILTER, D3DTEXF_LINEAR);
 
     m_pGraphic_Device->SetTexture(0, NULL);
+
+    m_pGraphic_Device->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);
 }
 
 HRESULT CTree::Ready_Components()

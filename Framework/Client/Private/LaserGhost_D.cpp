@@ -28,13 +28,22 @@ HRESULT CLaserGhost_D::Initialize(void* pArg)
 
     m_isRunOut = false;
     //m_iAtkCooldownFrames = static_cast<_int>(m_pGameInstance->Compute_Random(0, 300));
+    Ready_Object();
+
+    m_iMaxHp = 70;
+    m_iCulHp = 70;
 
     return S_OK;
 }
 
 void CLaserGhost_D::Priority_Update(_float fTimeDelta)
 {
+    __super::Priority_Update(fTimeDelta);
+    if (m_pHpBar != nullptr)
+        m_pHpBar->Render_HP_Progress(m_pTransformCom, m_iCulHp, m_iMaxHp);
 
+    if (m_iCulHp <= 0)
+        m_bDead = true;
 }
 
 void CLaserGhost_D::Update(_float fTimeDelta)
@@ -61,6 +70,7 @@ void CLaserGhost_D::Update(_float fTimeDelta)
     _float fMaxDist = 15.f;     // 어그로가 풀리는 기준 거리
 
     _float fLaserLifeTime = 2.f;    // 레이저 지속 시간
+    _float fLaserTurnAngle = 20.f;  // 레이저 회전 속도 (초당, degree 단위)
 
     //m_iAtkCooldownFrames++;
 
@@ -205,32 +215,6 @@ void CLaserGhost_D::Update(_float fTimeDelta)
             CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::MONSTER_EFFECT, L"Prototype_Component_Texture_LaserGhost_D_Effect_Attack_Cycle",
                 *m_pTransformCom->Get_WorldMatrix(), matMonsterWorld);
 
-            // 락온 좌표 시간에 따라 변화
-#pragma region Turning the m_vLockedOnPos // 수정필요, 적용안됨
-            _float fTurnSpeedRad = D3DXToRadian(30);
-            _float3 vTurnAxis = { 0, 1, 0 };
-            // 기준점 설정
-            _float4x4 matTrackTarget = *m_pTransformCom->Get_WorldMatrix();
-            // 원점으로 중심축 이동
-            _float4x4 matToOrigin;
-            D3DXMatrixTranslation(&matToOrigin,
-                -matTrackTarget._41,
-                -matTrackTarget._42,
-                -matTrackTarget._43);
-            // 축 기준 회전행렬
-            _float4x4 matRot;
-            D3DXMatrixRotationAxis(&matRot, &vTurnAxis, fTurnSpeedRad);
-            // 다시 제자리로
-            _float4x4 matFromOrigin;
-            D3DXMatrixTranslation(&matFromOrigin,
-                matTrackTarget._41,
-                matTrackTarget._42,
-                matTrackTarget._43);
-            // 다 합치기
-            _float4x4 matRotationTotal = matToOrigin * matRot * matFromOrigin;
-            // 반영
-            D3DXVec3TransformNormal(&m_vLockedOnPos, &m_vLockedOnPos, &matRotationTotal);
-#pragma endregion
             // 레이저용 세팅
 #pragma region Laser Setting Change
             D3DXMatrixScaling(&matScale, -1.f, 10.f, 10.f);
@@ -258,9 +242,19 @@ void CLaserGhost_D::Update(_float fTimeDelta)
 
             matMonsterWorld = matTransToOrigin * matScale * matRotateChild * matRotateChildtoPlayer * matTransReturn * matTransOffset * matTransAddition;
 #pragma endregion
+
+            // m_vLockedOnPos 와 m_pTransformCom->Get_State(STATE::POSITION), pTargetTransform->Get_State(STATE::POSITION) 의 비교
+            // 이후 플레이어와 가장 가까운 방향으로 회전
+
+            _float3 vCross, vNormal = vMonsterPos;
+            D3DXVec3Cross(&vCross, &m_vLockedOnPos, &vTargetPos);
+            m_fTurnDir = D3DXVec3Dot(&vCross, &vNormal);
+            m_fTurnDir = (m_fTurnDir > 0.f)? 1.f : -1.f;
+
+
             // 공격 이펙트 출력
             CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::MONSTER_EFFECT, L"Prototype_Component_Texture_LaserGhost_D_Effect_Laser_Progress",
-                *m_pTransformCom->Get_WorldMatrix(), matMonsterWorld, { 0, 0, 0 }, 0.f, fLaserLifeTime);
+                *m_pTransformCom->Get_WorldMatrix(), matMonsterWorld, { 0, 0, 0 }, 0.f, fLaserLifeTime, D3DXToRadian(fLaserTurnAngle * m_fTurnDir));
             // 세팅 리셋
 #pragma region Laser Setting Reset
             D3DXMatrixScaling(&matScale, -1.f, 1.f, 1.f);
@@ -315,7 +309,31 @@ void CLaserGhost_D::Update(_float fTimeDelta)
             vDiff *= fDistanceOffset;
             D3DXMatrixTranslation(&matTransAddition, vDiff.x, 0, vDiff.z);
 
-            matMonsterWorld = matTransToOrigin * matScale * matRotateChild * matRotateChildtoPlayer * matTransReturn * matTransOffset * matTransAddition;
+#pragma region Laser End Angle Calc
+            _float3 vTurnAxis = { 0, 1, 0 };
+            // 기준점 설정
+            _float4x4 matTrackTarget = *m_pTransformCom->Get_WorldMatrix();
+            // 원점으로 중심축 이동
+            _float4x4 matToOrigin;
+            D3DXMatrixTranslation(&matToOrigin,
+                -matTrackTarget._41,
+                -matTrackTarget._42,
+                -matTrackTarget._43);
+            // 축 기준 회전행렬
+            _float4x4 matRot;
+            D3DXMatrixRotationAxis(&matRot, &vTurnAxis, D3DXToRadian(fLaserTurnAngle * fLaserLifeTime * m_fTurnDir));
+            // 다시 제자리로
+            _float4x4 matFromOrigin;
+            D3DXMatrixTranslation(&matFromOrigin,
+                matTrackTarget._41,
+                matTrackTarget._42,
+                matTrackTarget._43);
+            // 다 합치기
+            _float4x4 matRotationTotal = matToOrigin * matRot * matFromOrigin;
+#pragma endregion
+
+
+            matMonsterWorld = matTransToOrigin * matScale * matRotateChild * matRotateChildtoPlayer * matTransReturn * matTransOffset * matTransAddition * matRotationTotal;
 #pragma endregion
             // 공격 끝 이펙트 출력
             CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::MONSTER_EFFECT, L"Prototype_Component_Texture_LaserGhost_D_Effect_Laser_End",
@@ -485,11 +503,18 @@ HRESULT CLaserGhost_D::Ready_Components(void* pArg)
     return S_OK;
 }
 
+HRESULT CLaserGhost_D::Ready_Object()
+{
+    m_pHpBar = dynamic_cast<CField_Hp*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_Field_Hp")));
+
+    return S_OK;
+}
+
 void CLaserGhost_D::OnCollision(CGameObject* pGameObject)
 {
     __super::OnCollision(pGameObject);
 
-    m_isTracking = true;
+    //m_isTracking = true;
 }
 
 CLaserGhost_D* CLaserGhost_D::Create(LPDIRECT3DDEVICE9 pGraphic_Device)

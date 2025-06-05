@@ -58,11 +58,11 @@ protected:
     _int m_iID = {};
     _bool m_bIsActive = false;
     _bool m_bIsVisited = false;
+    _bool m_bIsClear = false;
     CTerrainBox* m_pTerrainBox = { nullptr };
     // 맵툴 진행중이라 추후에 어떻게 처리할지 고민중
     vector<CGameObject*> m_vObject = {};
     vector<CMonster*> m_vMonster = {};
-    ROOM_STATE m_eRoomState = {};
     list<MAP_OBJECT_DESC> m_Object_Desc = {};
     vector<CPotal*> m_vPotal = {};
 

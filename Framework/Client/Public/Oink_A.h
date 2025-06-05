@@ -1,6 +1,7 @@
 #pragma once
 #include "Monster.h"
 #include "Client_Defines.h"
+#include "Field_Hp.h"
 
 BEGIN(Client)
 
@@ -21,6 +22,7 @@ public:
 
 private:
 	HRESULT Ready_Components(void* pArg);
+	HRESULT Ready_Object();
 
 public:
 	virtual void OnCollision(CGameObject* pGameObject) override;
@@ -37,6 +39,7 @@ private:
 	CTexture* m_pTextureCom_Charge_End			= { nullptr };
 
 	CAnimator* m_pAnimatorCom					= { nullptr };
+
 
 	_bool		m_isFlippedX					= false;
 	_int		m_iAtkCooldownFrames			= 0;

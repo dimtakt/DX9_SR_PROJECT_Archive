@@ -1,6 +1,7 @@
 #pragma once
 #include "Monster.h"
 #include "Client_Defines.h"
+#include "Field_Hp.h"
 
 BEGIN(Client)
 
@@ -21,6 +22,7 @@ public:
 
 private:
 	HRESULT Ready_Components(void* pArg);
+	HRESULT Ready_Object();
 
 public:
 	virtual void OnCollision(CGameObject* pGameObject) override;

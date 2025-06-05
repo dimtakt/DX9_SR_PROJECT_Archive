@@ -1,4 +1,5 @@
 #include "Stat_Manager.h"
+#include "GameInstance.h"
 
 IMPLEMENT_SINGLETON(CStat_Manager)
 
@@ -18,7 +19,7 @@ HRESULT CStat_Manager::Initialize()
     m_fOriginStats[static_cast<int>(STAT_INFO::CRITICALDAMAGE)] = 10.f; // 현재 치명타 피해
     m_fOriginStats[static_cast<int>(STAT_INFO::MAXDASH)] = 3.f; // 최대 대시 횟수
     m_fOriginStats[static_cast<int>(STAT_INFO::CULDASH)] = 3.f; // 현재 대시 횟수
-    m_fOriginStats[static_cast<int>(STAT_INFO::REGENDASH)] = 0.2f; // 대시 회복 속도
+    m_fOriginStats[static_cast<int>(STAT_INFO::REGENDASH)] = 1.2f; // 대시 회복 속도
     m_fOriginStats[static_cast<int>(STAT_INFO::EXP)] = 0.f; // 현재 경험치
     m_fOriginStats[static_cast<int>(STAT_INFO::MAXSTATPOINT)] = 0.f; // 획득한 재능 포인트
     m_fOriginStats[static_cast<int>(STAT_INFO::CULSTATPOINT)] = 0.f; // 현재 재능 포인트
@@ -36,7 +37,7 @@ HRESULT CStat_Manager::Initialize()
     m_fCurStats[static_cast<int>(STAT_INFO::CRITICALDAMAGE)] = 10.f; // 현재 치명타 피해
     m_fCurStats[static_cast<int>(STAT_INFO::MAXDASH)] = 3.f; // 최대 대시 횟수
     m_fCurStats[static_cast<int>(STAT_INFO::CULDASH)] = 3.f; // 현재 대시 횟수
-    m_fCurStats[static_cast<int>(STAT_INFO::REGENDASH)] = 0.2f; // 대시 회복 속도
+    m_fCurStats[static_cast<int>(STAT_INFO::REGENDASH)] = 1.2f; // 대시 회복 속도
     m_fCurStats[static_cast<int>(STAT_INFO::EXP)] = 0.f; // 현재 경험치
     m_fCurStats[static_cast<int>(STAT_INFO::MAXSTATPOINT)] = 20.f; // 획득한 재능 포인트
     m_fCurStats[static_cast<int>(STAT_INFO::CULSTATPOINT)] = 20.f; // 현재 재능 포인트
@@ -44,12 +45,37 @@ HRESULT CStat_Manager::Initialize()
     m_fCurStats[static_cast<int>(STAT_INFO::GOLD)] = 0.f; // 보유 골드
     m_fCurStats[static_cast<int>(STAT_INFO::DICE)] = 3.f; // 주사위
 
+    m_pGameInstance = CGameInstance::GetInstance();
+
+    Safe_AddRef(m_pGameInstance);
+
     return S_OK;
+}
+
+void CStat_Manager::Update(_float fTimeDelta)
+{
+    if (m_fCurStats[static_cast<int>(STAT_INFO::CULMP)] < m_fCurStats[static_cast<int>(STAT_INFO::MAXMP)])
+    {
+        m_fCurStats[static_cast<int>(STAT_INFO::CULMP)] += fTimeDelta;
+        if (m_fCurStats[static_cast<int>(STAT_INFO::CULMP)] >= m_fCurStats[static_cast<int>(STAT_INFO::MAXMP)])
+            m_fCurStats[static_cast<int>(STAT_INFO::CULMP)] == m_fCurStats[static_cast<int>(STAT_INFO::MAXMP)];
+    }
+
+    if (m_fCurStats[static_cast<int>(STAT_INFO::CULDASH)] < m_fCurStats[static_cast<int>(STAT_INFO::MAXDASH)])
+    {
+        m_fCurStats[static_cast<int>(STAT_INFO::CULDASH)] += fTimeDelta * m_fCurStats[static_cast<int>(STAT_INFO::REGENDASH)];
+        if (m_fCurStats[static_cast<int>(STAT_INFO::CULDASH)] >= m_fCurStats[static_cast<int>(STAT_INFO::MAXDASH)])
+            m_fCurStats[static_cast<int>(STAT_INFO::CULDASH)] == m_fCurStats[static_cast<int>(STAT_INFO::MAXDASH)];
+    }
+    
 }
 
 void CStat_Manager::Cal_Stats(STAT_INFO eStat, float fValue)
 {
     m_fCurStats[static_cast<int>(eStat)] += fValue;
+
+    if (m_fCurStats[static_cast<int>(eStat)] <= 0)
+        m_fCurStats[static_cast<int>(eStat)] = 0;
 
     if (eStat == STAT_INFO::EXP)
     {
@@ -85,7 +111,34 @@ void CStat_Manager::Reset_CurStats()
     }
 }
 
+_float CStat_Manager::Get_Damage(DAMAGE eDamage)
+{
+    _float fDamage = 0.f;
+    if (eDamage == DAMAGE::NORMAL)
+    {
+        fDamage = m_fCurStats[static_cast<int>(STAT_INFO::CULDAMAGE)];
+    }
+    else if (eDamage == DAMAGE::SPECIAL)
+    {
+        fDamage = m_fCurStats[static_cast<int>(STAT_INFO::CULDAMAGE)] + 10;
+    }
+    else if (eDamage == DAMAGE::DASH)
+    {
+        fDamage = m_fCurStats[static_cast<int>(STAT_INFO::CULDAMAGE)] + 5;
+    }
+    
+    _float fRand = m_pGameInstance->Compute_Random(0, 99);
+
+    if (fRand < m_fCurStats[static_cast<int>(STAT_INFO::CULCRITICAL)])
+    {
+        fDamage = fDamage * (1.0f + m_fCurStats[static_cast<int>(STAT_INFO::CRITICALDAMAGE)] / 100.0f);;
+    }
+
+    return fDamage;
+}
+
 void CStat_Manager::Free()
 {
+    Safe_Release(m_pGameInstance);
     DestroyInstance();
 }

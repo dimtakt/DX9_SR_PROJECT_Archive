@@ -1,6 +1,6 @@
 #include "Monster.h"
 #include "GameInstance.h"
-
+#include "Stat_Manager.h"
 CMonster::CMonster(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CGameObject{ pGraphic_Device }
 {
@@ -19,7 +19,7 @@ HRESULT CMonster::Initialize_Prototype()
 HRESULT CMonster::Initialize(void* pArg)
 {
 
-	if (FAILED(Ready_Components()))
+	if (FAILED(Ready_Components(pArg)))
 		return E_FAIL;
 
 	MONSTERDESC* desc = static_cast<MONSTERDESC*>(pArg);
@@ -36,11 +36,19 @@ HRESULT CMonster::Initialize(void* pArg)
 	Safe_AddRef(m_pTerrainBox);
 	m_eObjType = GAMEOBJ_TYPE::MONSTER;
 
+	m_dwHitTime = 0.f;
+
 	return S_OK;
 }
 
 void CMonster::Priority_Update(_float fTimeDelta)
 {
+	m_dwHitTime += 1.f;
+	if (m_dwHitTime >= 30.f)
+	{
+		m_dwHitTime = 0.f;
+		m_bIsHit = false;
+	}
 }
 
 void CMonster::Update(_float fTimeDelta)
@@ -75,8 +83,9 @@ HRESULT CMonster::Render()
 	return S_OK;
 }
 
-HRESULT CMonster::Ready_Components()
+HRESULT CMonster::Ready_Components(void* pArg)
 {
+	MONSTERDESC* desc = static_cast<MONSTERDESC*>(pArg);
 	
 	/* For.Com_VIBuffer*/
 	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_VIBuffer_Rect"),
@@ -84,9 +93,9 @@ HRESULT CMonster::Ready_Components()
 		return E_FAIL;
 
 	/* For.Com_Texture */
-	/*if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STAGE1), TEXT("Prototype_Component_Texture_Monster"),
+	if (FAILED(__super::Add_Component(desc->iLayerLevelIndex, TEXT("Prototype_Component_Texture_Monster"),
 		TEXT("Com_Texture_Monster"), reinterpret_cast<CComponent**>(&m_pTextureCom))))
-		return E_FAIL;*/
+		return E_FAIL;
 
 	/* For.Com_Transform */
 	CTransform::TRANSFORM_DESC		TransformDesc{};
@@ -123,17 +132,17 @@ void CMonster::Reset_RenderState()
 
 void CMonster::OnCollision(CGameObject* pGameObject)
 {
-	//CTransform* pTransform = dynamic_cast<CTransform*>(pGameObject->Find_Component(TEXT("Com_Transform")));
-	//switch (pGameObject->Get_ObjType())
-	//{
-	//case GAMEOBJ_TYPE::PLAYER:
-	//	{
-	//		/*_float3 vDir = m_pTransformCom->Get_State(STATE::POSITION) - pTransform->Get_State(STATE::POSITION);*/
-	//		//m_pTransformCom->Look_At(pTransform->Get_State(STATE::POSITION));
-	//		m_pTransformCom->Move_To(pTransform->Get_State(STATE::POSITION), 0.01f, 0.05f);
-	//		break;
-	//	}
-	//}
+	switch (pGameObject->Get_ObjType())
+	{
+	case GAMEOBJ_TYPE::PLAYER_EFFECT:
+		{
+		if (!m_bIsHit) {
+			m_iCulHp -= CStat_Manager::GetInstance()->Get_Damage(DAMAGE::NORMAL);
+			m_bIsHit = true;
+		}
+			break;
+		}
+	}
 }
 
 CMonster* CMonster::Create(LPDIRECT3DDEVICE9 pGraphic_Device)
@@ -170,4 +179,5 @@ void CMonster::Free()
 	Safe_Release(m_pTextureCom);
 	Safe_Release(m_pVIBufferCom);
 	Safe_Release(m_pTerrainBox);
+	Safe_Release(m_pHpBar);
 }
