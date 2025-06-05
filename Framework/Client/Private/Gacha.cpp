@@ -63,7 +63,7 @@ void CGacha::Priority_Update(_float fTimeDelta)
 		return;
 
 	if (!m_bIsReandom)
-		Rand_Itme();
+		Rand_Itme(GACHA_TYPE::STONE);
 
 	__super::Priority_Update(fTimeDelta);
 }
@@ -138,9 +138,9 @@ void CGacha::UI_Switch()
 	}
 }
 
-void CGacha::Rand_Item_Set()
+void CGacha::Rand_Item_Set(GACHA_TYPE eType)
 {
-	Rand_Itme();
+	Rand_Itme(eType);
 }
 
 HRESULT CGacha::Ready_Components()
@@ -251,6 +251,24 @@ void CGacha::Ready_Fx()
 	pGameObject = dynamic_cast<CUIObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(m_eLevel), TEXT("Prototype_GameObject_UI_Gacha_FX"), &Desc));
 	Add_Child(pGameObject);
 
+	Desc.fX = -300;
+	Desc.fY = 45;
+	Desc.fZ = 2;
+	pGameObject = dynamic_cast<CUIObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(m_eLevel), TEXT("Prototype_GameObject_UI_Gacha_FX"), &Desc));
+	Add_Child(pGameObject);
+
+	Desc.fX = -320;
+	Desc.fY = 30;
+	Desc.fZ = 4;
+	pGameObject = dynamic_cast<CUIObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(m_eLevel), TEXT("Prototype_GameObject_UI_Gacha_FX"), &Desc));
+	Add_Child(pGameObject);
+
+	Desc.fX = -340;
+	Desc.fY = 40;
+	Desc.fZ = 1;
+	pGameObject = dynamic_cast<CUIObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(m_eLevel), TEXT("Prototype_GameObject_UI_Gacha_FX"), &Desc));
+	Add_Child(pGameObject);
+
 	Desc.fX = -440;
 	Desc.fY = 80;
 	Desc.fZ = 4;
@@ -282,14 +300,51 @@ void CGacha::Ready_Fx()
 	Add_Child(pGameObject);
 }
 
-void CGacha::Rand_Itme()
+void CGacha::Rand_Itme(GACHA_TYPE eType)
 {
-	int iTemp[5] = {};
 	CItem_Base* pItem = nullptr;
+	vector<_int> vecIndex;
+	_int iTemp{};
+	
+	switch (eType)
+	{
+	case Client::CGacha::GACHA_TYPE::ALL:
+		for (_int i = 0; i < g_ItemDataBase.size(); ++i)
+		{
+			if(g_ItemDataBase[i].m_eType == ITEM_TYPE::ARTEFACT || g_ItemDataBase[i].m_eType == ITEM_TYPE::SKILLBOOK, g_ItemDataBase[i].m_eType == ITEM_TYPE::STONE)
+				vecIndex.push_back(g_ItemDataBase[i].m_iItemID);
+		}
+		break;
+
+	case Client::CGacha::GACHA_TYPE::ARTEFACT:
+		for (_int i = 0; i < g_ItemDataBase.size(); ++i)
+		{
+			if (g_ItemDataBase[i].m_eType == ITEM_TYPE::ARTEFACT || g_ItemDataBase[i].m_eType == ITEM_TYPE::SKILLBOOK)
+				vecIndex.push_back(g_ItemDataBase[i].m_iItemID);
+		}
+		break;
+
+	case Client::CGacha::GACHA_TYPE::STONE:
+		for (_int i = 0; i < g_ItemDataBase.size(); ++i)
+		{
+			if (g_ItemDataBase[i].m_eType == ITEM_TYPE::STONE)
+				vecIndex.push_back(g_ItemDataBase[i].m_iItemID);
+		}
+		break;
+	}
+	
+	for (_int i = 0; i < 100; ++i)
+	{
+		_int iIndex1 = m_pGameInstance->Rand(0, vecIndex.size());
+		_int iIndex2 = m_pGameInstance->Rand(0, vecIndex.size());
+		iTemp = vecIndex[iIndex1];
+		vecIndex[iIndex1] = vecIndex[iIndex2];
+		vecIndex[iIndex2] = iTemp;
+	}
+
 	for (_int i = 0; i < 5; ++i)
 	{
-		iTemp[i] = m_pGameInstance->Rand(0, 8);
-		pItem = static_cast<CItem_Base*>(m_pGameInstance->Get_ItemObject(iTemp[i]));
+		pItem = static_cast<CItem_Base*>(m_pGameInstance->Get_ItemObject(vecIndex[i]));
 		static_cast<CGacha_Slot*>(m_vecChildren[i])->Push_Item_ReRoll(pItem);
 	}
 	m_bIsReandom = true;

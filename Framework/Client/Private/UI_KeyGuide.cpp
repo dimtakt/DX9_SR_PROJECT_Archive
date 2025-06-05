@@ -52,26 +52,31 @@ void CUI_KeyGuide::Late_Update(_float fTimeDelta)
 
 HRESULT CUI_KeyGuide::Render()
 {
-	m_pGraphic_Device->SetTexture(0, NULL);
+	if (FAILED(m_pTextureCom->Bind_Texture(0)))
+		return E_FAIL;
+	
 	m_pVIBufferCom->Bind_Buffers();
 	__super::Begin();
 	m_pVIBufferCom->Render();
+	__super::End();
 	Font_Rect_Update();
 	m_pGameInstance->Render_Font(TEXT("UI_Font_18"), m_strKey, m_vTexRect, D3DXCOLOR(1.f, 1.f, 1.f, 1.f), DT_CENTER | DT_VCENTER | DT_SINGLELINE);
-
-	__super::End();
 
 	return S_OK;
 }
 
 HRESULT CUI_KeyGuide::Ready_Components()
 {
-	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Rect_UI_BalckRect"),
+	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_VIBuffer_Rect"),
 		TEXT("Com_VIBuffer"), reinterpret_cast<CComponent**>(&m_pVIBufferCom))))
 		return E_FAIL;
 
 	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Transform"),
 		TEXT("Com_Transform"), reinterpret_cast<CComponent**>(&m_pTransformCom))))
+		return E_FAIL;
+
+	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Rect_UI_Hud_KeyInputGuide"),
+		TEXT("Com_Texture"), reinterpret_cast<CComponent**>(&m_pTextureCom))))
 		return E_FAIL;
 
 	return S_OK;
@@ -105,4 +110,5 @@ void CUI_KeyGuide::Free()
 {
 	__super::Free();
 	Safe_Release(m_pVIBufferCom);
+	Safe_Release(m_pTextureCom);
 }
