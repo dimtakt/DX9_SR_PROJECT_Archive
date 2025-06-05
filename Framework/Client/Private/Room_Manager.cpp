@@ -216,6 +216,7 @@ HRESULT CRoom_Manager::Check_END_Potal(_uint iLayerLevelIndex, const _wstring& s
 		{
 			pRoom->Ready_Potal(iLayerLevelIndex, strLayerTag, _float3(0.f, 2.f, 0.f), POTAL_TYPE::END_POTAL);
 			m_bCheckEnd = true;    //스테이지 변경시 그부분에서 false로 초기화 해줘야 함.
+			pRoom->Set_RoomType(ROOM_INFO::EVENT_ENDPOTAL);
 		}
 	}
 	

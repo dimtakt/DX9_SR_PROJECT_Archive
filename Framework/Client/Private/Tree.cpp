@@ -44,7 +44,9 @@ HRESULT CTree::Initialize(void* pArg)
     m_iTextureIndex = pObject_Desc->iTextureIndex;
     m_pTextureCom->Bind_Texture(m_iTextureIndex);
     m_eObjType = GAMEOBJ_TYPE::OBJECT;
-
+    if (pObject_Desc->eType == GAMEOBJ_TYPE::OBJECT_DECO)
+        m_eObjType = GAMEOBJ_TYPE::OBJECT_DECO;
+    //후에 추가한건데 이전맵 데이터들 꼬일까봐 이렇게 처리해둠.
     return S_OK;
 }
 

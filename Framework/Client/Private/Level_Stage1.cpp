@@ -138,16 +138,8 @@ HRESULT CLevel_Stage1::Ready_Layer_Room(const _wstring& strLayerTag)
 	CRoom* pRoom = nullptr;
 	m_pGameInstance->Seed_Random();
 
-	_int iIndex = 8;		//룸의 총 개수
+	_int iIndex = 7;		//룸의 총 개수
 	_int iCount = 0;		//생성되는 룸 인덱스
-	_int iEventCheck = 0;	//이벤트 룸 생성된 개수 저장용
-	_int iEventRoomCreate = 1;		//이벤트 룸 생성되는 개수, 1이면 스테이지 전용 1개 / 2면 스테이지 전용 2개 , 이벤트룸있다는걸 보여주기 위해 1스테이지는 없는데 1 넣어둔 것.
-	_int iEventRoomIndex1 = static_cast<_int>(m_pGameInstance->Compute_Random((_float)iIndex - 4, (_float)iIndex));;	// 1,2 이벤트룸 생성될 룸인덱스 값
-	_int iEventRoomIndex2 = iEventRoomIndex1;
-	while (iEventRoomIndex2 == iEventRoomIndex1)
-	{
-		iEventRoomIndex2 = static_cast<_int>(m_pGameInstance->Compute_Random((_float)iIndex - 4, (_float)iIndex));;
-	}
 
 	vector<pair<_int, _int>> RoomIndex = CRoom_Manager::GetInstance()->Create_RandomRooms(iIndex-1); //지정하고 싶은 룸의 개수 - 1 ( 내부에서 0 0 디폴트로 저장함 )
 	//스테이지 1 이벤트는 상인, 골드
@@ -160,10 +152,9 @@ HRESULT CLevel_Stage1::Ready_Layer_Room(const _wstring& strLayerTag)
 		_int RoomX = RoomIndex[iCount].first;
 		_int RoomZ = RoomIndex[iCount].second;
 
-		if (iCount != iEventRoomIndex1 && iCount != iEventRoomIndex2) //if(상호작용 방이 아닌경우!)
-		{
+	
 			//현재 정해진 ID값의 룸에 지형, 오브젝트 세팅 내부에서 지형 위치 자동 배치
-			pRoom->Load_From_File(ENUM_CLASS(LEVEL::LEVEL_STAGE1), strLayerTag, TEXT("../../data/Stage2_Map%d.txt"), iCount, RoomX, RoomZ);
+			pRoom->Load_From_File(ENUM_CLASS(LEVEL::LEVEL_STAGE1), strLayerTag, TEXT("../../data/Stage1_Map%d.txt"), iCount, RoomX, RoomZ,static_cast<ROOM_INFO>(0));
 
 			if (iCount == 0)
 			{
@@ -222,12 +213,6 @@ HRESULT CLevel_Stage1::Ready_Layer_Room(const _wstring& strLayerTag)
 				DescList.push_back(tDesc);
 			}
 			CMonster_Factory::GetInstance()->Add_Monsters(pRoom, DescList, CMonster_Factory::MONSTER_TYPE::MONSTER_LASERGHOST_D);		
-		}
-		else  //상호작용 전용 룸일 경우 전용파일 읽어옴 , 몬스터배치 x
-		{
-			pRoom->Load_From_File(ENUM_CLASS(LEVEL::LEVEL_STAGE1), strLayerTag, TEXT("../../data/Stage2_Event%d.txt"), iEventCheck, RoomX, RoomZ);			
-			iEventCheck++;
-		}
 
 		//// 룸매니저 투입
 		CRoom_Manager::GetInstance()->Add_Room(pRoom, ENUM_CLASS(LEVEL::LEVEL_STAGE1), strLayerTag);

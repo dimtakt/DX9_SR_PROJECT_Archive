@@ -85,7 +85,7 @@ HRESULT CLevel_MapEdit::Ready_Texture_Info()
 		TEXT("Prototype_GameObject_Tree")));
 
 	OBJECT_TEXTURE_INFO ObjectInfo;
-	ObjectInfo.iTextureCount = 30;
+	ObjectInfo.iTextureCount = 60;
 	ObjectInfo.pTextureCom = static_cast<CTexture*>(m_pPreview->Find_Component(TEXT("Com_Texture")));
 	if (ObjectInfo.pTextureCom)
 		ObjectInfo.pTextureCom->AddRef();
@@ -106,7 +106,7 @@ HRESULT CLevel_MapEdit::Ready_Terrain_Texture_Info()
 		TEXT("Prototype_GameObject_TerrainBox")));
 
 	OBJECT_TEXTURE_INFO TerrainBoxInfo;
-	TerrainBoxInfo.iTextureCount = 25;
+	TerrainBoxInfo.iTextureCount = 53;
 	TerrainBoxInfo.pTextureCom = static_cast<CTexture*>(m_pPreview->Find_Component(TEXT("Com_Texture_Terrain_Top")));
 	if (TerrainBoxInfo.pTextureCom)
 		TerrainBoxInfo.pTextureCom->AddRef();
@@ -237,13 +237,15 @@ void CLevel_MapEdit::ImGui_MenuBar_Render()
 
 			for (auto& pDesc : m_pObject_Desc)
 			{
-				if (pDesc.eType == GAMEOBJ_TYPE::OBJECT)			
+				if (pDesc.eType == GAMEOBJ_TYPE::OBJECT || pDesc.eType == GAMEOBJ_TYPE::OBJECT_DECO)			
 				{
 					MAP_OBJECT_DESC  tSrc{};
 					tSrc.iTextureIndex = pDesc.iTextureIndex;
 					tSrc.vPos = pDesc.vPos;
 					tSrc.vScale = pDesc.vScale;
 					tSrc.vRotate = pDesc.vRotate;
+					if (pDesc.eType == GAMEOBJ_TYPE::OBJECT_DECO)
+						tSrc.eType = GAMEOBJ_TYPE::OBJECT_DECO;
 
 					m_pGameInstance->Add_GameObject_ToLayer(
 						ENUM_CLASS(LEVEL::LEVEL_MAPEDIT), TEXT("Layer_MapEdit"),
@@ -397,7 +399,7 @@ void CLevel_MapEdit::ImGui_Object_MenBar()
 
 		ImGui::Text("Object Texture Index:");
 		ImGui::SetNextItemWidth(250);
-		ImGui::SliderInt("Texture", &iObjectTexIndex, 0, 30); // 0~15 인덱스
+		ImGui::SliderInt("Texture", &iObjectTexIndex, 0, 60); // 0~15 인덱스
 		ImGui::SameLine();
 		if (ImGui::Button("-"))
 			iObjectTexIndex -= 1;
@@ -416,6 +418,9 @@ void CLevel_MapEdit::ImGui_Object_MenBar()
 			tSrc.vPos = m_Translates;
 			tSrc.vScale = m_Scales;
 			tSrc.vRotate = m_Rotates;
+			tSrc.eType = GAMEOBJ_TYPE::OBJECT;
+			if (28 <= iObjectTexIndex && iObjectTexIndex <= 38)
+				tSrc.eType = GAMEOBJ_TYPE::OBJECT_DECO;
 
 			m_pGameInstance->Add_GameObject_ToLayer(
 				ENUM_CLASS(LEVEL::LEVEL_MAPEDIT), TEXT("Layer_MapEdit"),
@@ -825,7 +830,7 @@ void CLevel_MapEdit::ImGui_Terrain_MenBar()
 	static int iTerrainTexIndex = 0;
 
 	ImGui::Text("Terrain Texture Index:");
-	ImGui::SliderInt("TopTexIdx", &iTerrainTexIndex, 0, 25); // 0~3 인덱스, 추후 연동
+	ImGui::SliderInt("TopTexIdx", &iTerrainTexIndex, 0, 55); // 0~3 인덱스, 추후 연동
 
 	// 위치 
 	ImGui_Terrain_Transform_Render();

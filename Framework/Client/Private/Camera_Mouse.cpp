@@ -130,7 +130,7 @@ void CCamera_Mouse::Key_Input(_float fTimeDelta)
 		m_pTransformCom->Go_Right(fTimeDelta);
 	}
 
-	if (m_pGameInstance->IsKeyDown(VK_SPACE))
+	if (m_pGameInstance->IsKeyDown('Q'))
 	{
 		if (m_bMouseMove)
 			m_bMouseMove = false;
