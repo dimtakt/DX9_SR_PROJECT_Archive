@@ -224,6 +224,7 @@ HRESULT CRoom_Manager::Check_END_Potal(_uint iLayerLevelIndex, const _wstring& s
 	{
 		pRoom->Ready_Potal(iLayerLevelIndex, strLayerTag, _float3(0.f, 2.f, 0.f), POTAL_TYPE::END_POTAL);
 		m_bCheckEnd = true;
+		pRoom->Set_RoomType(ROOM_INFO::EVENT_ENDPOTAL);
 	}
 
 	return S_OK;

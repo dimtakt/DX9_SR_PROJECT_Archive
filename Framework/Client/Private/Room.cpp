@@ -268,8 +268,6 @@ HRESULT CRoom::Load_From_File(_uint iLayerLevelIndex, const _wstring& strLayerTa
 	else if (Event == ROOM_INFO::EVENT_STONE)
 		m_eRoomType = ROOM_INFO::EVENT_STONE;
 
-
-	/*m_iID = iIndex;*/
 	m_iRoomX = RoomX;
 	m_iRoomZ = RoomZ;
 

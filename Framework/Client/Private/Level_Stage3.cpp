@@ -103,7 +103,7 @@ HRESULT CLevel_Stage3::Ready_Layer_UI(const _wstring& strLayerTag)
 	Desc.fX = 264.f;
 	Desc.fY = 100.f;
 	Desc.fZ = 2;
-	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_STAGE2), strLayerTag,
+	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_STAGE3), strLayerTag,
 		ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_Hud_Buff"), &Desc)))
 		return E_FAIL;
 
@@ -169,6 +169,7 @@ HRESULT CLevel_Stage3::Ready_Layer_Room(const _wstring& strLayerTag)
 	_int iEventCheck = 0; 
 	_int iEventRoomEventID = dynamic_cast<CChapMap*>(m_pGameInstance->Get_GameObject(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Layer_ChapMap")))->Get_Click_ID();
 	_int iEventRoomCreate = 2;
+	_int iNumber = 0; //읽어올 파일 번호
 
 	if (iEventRoomEventID != 0)
 		iIndex = 8; //이벤트룸 1개면 전체 룸 7개, 2개면 전체룸 8개
@@ -176,7 +177,7 @@ HRESULT CLevel_Stage3::Ready_Layer_Room(const _wstring& strLayerTag)
 	_int iEventRoomIndex1 = static_cast<_int>(m_pGameInstance->Compute_Random((_float)iIndex - 4, (_float)iIndex));;
 	_int iEventRoomIndex2 = iEventRoomIndex1;
 
-	while (iEventRoomIndex2 == iEventRoomIndex1) // 혹여나 랜덤으로 같은 위치 뽑히면 다시 돌리게 설정.
+	while (iEventRoomIndex2 <= iEventRoomIndex1) // 혹여나 랜덤으로 같은 위치 뽑히면 다시 돌리게 설정.
 	{
 		iEventRoomIndex2 = static_cast<_int>(m_pGameInstance->Compute_Random((_float)iIndex - 4, (_float)iIndex));;
 	}
@@ -196,11 +197,11 @@ HRESULT CLevel_Stage3::Ready_Layer_Room(const _wstring& strLayerTag)
 		{
 			//if(상호작용 방이 아닌경우!)
 			//현재 정해진 ID값의 룸에 지형, 오브젝트 세팅 내부에서 지형 위치 자동 배치
-			pRoom->Load_From_File(ENUM_CLASS(LEVEL::LEVEL_STAGE2), strLayerTag, TEXT("../../data/Stage3_Map%d.txt"), iCount, RoomX, RoomZ, static_cast<ROOM_INFO>(0));
+			pRoom->Load_From_File(ENUM_CLASS(LEVEL::LEVEL_STAGE3), strLayerTag, TEXT("../../data/Stage3_Map%d.txt"), iNumber, RoomX, RoomZ, static_cast<ROOM_INFO>(0));
 
 			if (iCount == 0)
 			{
-				CPlayer* pPlayer = dynamic_cast<CPlayer*>(m_pGameInstance->Get_GameObject(ENUM_CLASS(LEVEL::LEVEL_STAGE2), TEXT("Layer_Player")));
+				CPlayer* pPlayer = dynamic_cast<CPlayer*>(m_pGameInstance->Get_GameObject(ENUM_CLASS(LEVEL::LEVEL_STAGE3), TEXT("Layer_Player")));
 				pPlayer->Change_TerrainBox(dynamic_cast<CTerrainBox*>(pRoom->Get_TerrainBox()), iCount);
 
 				ROOMCHANGE EventDesc;
@@ -213,8 +214,8 @@ HRESULT CLevel_Stage3::Ready_Layer_Room(const _wstring& strLayerTag)
 			for (size_t i = 0; i < 5; i++)
 			{
 				CMonster::MONSTERDESC tDesc = {};
-				tDesc.iLayerLevelIndex = ENUM_CLASS(LEVEL::LEVEL_STAGE1);
-				tDesc.iPrototypeLevelIndex = ENUM_CLASS(LEVEL::LEVEL_STAGE1);
+				tDesc.iLayerLevelIndex = ENUM_CLASS(LEVEL::LEVEL_STAGE3);
+				tDesc.iPrototypeLevelIndex = ENUM_CLASS(LEVEL::LEVEL_STAGE3);
 				tDesc.strLayerTag = strLayerTag;
 				//tDesc.strPrototypeTag = TEXT("Prototype_GameObject_ShortMonster");
 				//tDesc.strPrototypeTag = TEXT("Prototype_GameObject_Monster_Mole_A");
@@ -228,8 +229,8 @@ HRESULT CLevel_Stage3::Ready_Layer_Room(const _wstring& strLayerTag)
 			for (size_t i = 0; i < 2; i++)	// ksta : 패턴 파악 위해 임시로 1만 바꿈, 원래값 5
 			{
 				CMonster::MONSTERDESC tDesc = {};
-				tDesc.iLayerLevelIndex = ENUM_CLASS(LEVEL::LEVEL_STAGE1);
-				tDesc.iPrototypeLevelIndex = ENUM_CLASS(LEVEL::LEVEL_STAGE1);
+				tDesc.iLayerLevelIndex = ENUM_CLASS(LEVEL::LEVEL_STAGE3);
+				tDesc.iPrototypeLevelIndex = ENUM_CLASS(LEVEL::LEVEL_STAGE3);
 				tDesc.strLayerTag = strLayerTag;
 				//tDesc.strPrototypeTag = TEXT("Prototype_GameObject_ShortMonster");
 				tDesc.strPrototypeTag = TEXT("Prototype_GameObject_Monster_Mole_A");
@@ -243,8 +244,8 @@ HRESULT CLevel_Stage3::Ready_Layer_Room(const _wstring& strLayerTag)
 			for (size_t i = 0; i < 2; i++)	// ksta : 패턴 파악 위해 임시로 1만 바꿈, 원래값 5
 			{
 				CMonster::MONSTERDESC tDesc = {};
-				tDesc.iLayerLevelIndex = ENUM_CLASS(LEVEL::LEVEL_STAGE1);
-				tDesc.iPrototypeLevelIndex = ENUM_CLASS(LEVEL::LEVEL_STAGE1);
+				tDesc.iLayerLevelIndex = ENUM_CLASS(LEVEL::LEVEL_STAGE3);
+				tDesc.iPrototypeLevelIndex = ENUM_CLASS(LEVEL::LEVEL_STAGE3);
 				tDesc.strLayerTag = strLayerTag;
 				//tDesc.strPrototypeTag = TEXT("Prototype_GameObject_ShortMonster");
 				//tDesc.strPrototypeTag = TEXT("Prototype_GameObject_Monster_Mole_A");
@@ -259,43 +260,42 @@ HRESULT CLevel_Stage3::Ready_Layer_Room(const _wstring& strLayerTag)
 		{
 			if (iEventRoomEventID == 3 && iEventCheck == 0)
 			{	//3스테이지_3_Event%d 파일명 이렇게 지어줄 예정 , 타입 따로 넘겨줘야해서..
-				pRoom->Load_From_File(ENUM_CLASS(LEVEL::LEVEL_STAGE2), strLayerTag, TEXT("../../data/Stage3_1_Event%d.txt"), iEventCheck, RoomX, RoomZ, ROOM_INFO::EVENT_SHOP);			
+				pRoom->Load_From_File(ENUM_CLASS(LEVEL::LEVEL_STAGE3), strLayerTag, TEXT("../../data/Stage3_1_Event%d.txt"), iEventCheck, RoomX, RoomZ, ROOM_INFO::EVENT_SHOP);			
 				iEventCheck++;
-				iCount--;
-				iIndex--; // 이벤트룸 만들어졌으니, 안읽은 일반룸 파일 읽게 처리, 방개수 또한 같이줄여줘야함(안줄이면 오버됨). 현재 iCount는 몇번째 파일을 읽는지의 용도일뿐!
+				iEventRoomIndex1 = 999;
 			}
 			else if (iEventRoomEventID ==3 && iEventCheck == 1)
 			{
-				pRoom->Load_From_File(ENUM_CLASS(LEVEL::LEVEL_STAGE2), strLayerTag, TEXT("../../data/Stage3_1_Event%d.txt"), iEventCheck, RoomX, RoomZ, ROOM_INFO::EVENT_HP);
+				pRoom->Load_From_File(ENUM_CLASS(LEVEL::LEVEL_STAGE3), strLayerTag, TEXT("../../data/Stage3_1_Event%d.txt"), iEventCheck, RoomX, RoomZ, ROOM_INFO::EVENT_HP);
 				iEventCheck++;
-				iCount--;
-				iIndex--;
+			
+				iEventRoomIndex2 = 999;
 			}
 			else if (iEventRoomEventID == 4 && iEventCheck == 0)
 			{
-				pRoom->Load_From_File(ENUM_CLASS(LEVEL::LEVEL_STAGE2), strLayerTag, TEXT("../../data/Stage3_2_Event%d.txt"), iEventCheck, RoomX, RoomZ, ROOM_INFO::EVENT_ARTEFACT);
+				pRoom->Load_From_File(ENUM_CLASS(LEVEL::LEVEL_STAGE3), strLayerTag, TEXT("../../data/Stage3_2_Event%d.txt"), iEventCheck, RoomX, RoomZ, ROOM_INFO::EVENT_ARTEFACT);
 				iEventCheck++;
-				iCount--;
-				iIndex--;
+			
+				iEventRoomIndex1 = 999;
 			}
 			else
 			{
-				pRoom->Load_From_File(ENUM_CLASS(LEVEL::LEVEL_STAGE2), strLayerTag, TEXT("../../data/Stage3_2_Event%d.txt"), iEventCheck, RoomX, RoomZ, ROOM_INFO::EVENT_STONE);
+				pRoom->Load_From_File(ENUM_CLASS(LEVEL::LEVEL_STAGE3), strLayerTag, TEXT("../../data/Stage3_2_Event%d.txt"), iEventCheck, RoomX, RoomZ, ROOM_INFO::EVENT_STONE);
 				iEventCheck++;
-				iCount--;
-				iIndex--;
+		
+				iEventRoomIndex2 = 999;
 			}
 
 		}
 
 		// 룸매니저 투입
-		CRoom_Manager::GetInstance()->Add_Room(pRoom, ENUM_CLASS(LEVEL::LEVEL_STAGE2), strLayerTag);
+		CRoom_Manager::GetInstance()->Add_Room(pRoom, ENUM_CLASS(LEVEL::LEVEL_STAGE3), strLayerTag);
 		iCount++;
 	}
 
 	for (size_t num = 0; num < iIndex; num++)
 	{
-		CRoom_Manager::GetInstance()->Check_Room(ENUM_CLASS(LEVEL::LEVEL_STAGE2), strLayerTag, num);
+		CRoom_Manager::GetInstance()->Check_Room(ENUM_CLASS(LEVEL::LEVEL_STAGE3), strLayerTag, num);
 	}
 
 
