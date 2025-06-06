@@ -50,12 +50,14 @@ public:
 	void Set_Damage(_float fDamage) { m_iCulHp += fDamage; }
 
 protected:
-	class CTransform* m_pTransformCom = { nullptr };
-	class CTexture* m_pTextureCom = { nullptr };
-	class CVIBuffer_Rect* m_pVIBufferCom = { nullptr };
-	CTerrainBox* m_pTerrainBox = { nullptr };
-	_bool m_isTracking = false;
-	_bool					m_bIsHit = { false };
+	class CTransform*		m_pTransformCom = { nullptr };
+	class CTexture*			m_pTextureCom = { nullptr };
+	class CVIBuffer_Rect*	m_pVIBufferCom = { nullptr };
+	CTerrainBox*			m_pTerrainBox = { nullptr };
+	_bool					m_isTracking = false;
+	_bool					m_bIsHit = false;
+	_bool					m_isSummoned = false;
+
 	DWORD					m_dwHitTime = {};
 
 	CField_Hp* m_pHpBar = { nullptr };

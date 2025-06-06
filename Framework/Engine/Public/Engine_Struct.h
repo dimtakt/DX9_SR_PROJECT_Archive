@@ -1,3 +1,4 @@
+#include "Engine_Enum.h"
 #ifndef Engine_Struct_h__
 #define Engine_Struct_h__
 
@@ -25,7 +26,7 @@ namespace Engine
 		D3DXVECTOR3		vTexcoord;
 	}VTXCUBETEX;
 
-	typedef struct tagVertexPositionNormalTexcoord
+	typedef struct tagVertexNorTex
 	{
 		D3DXVECTOR3		vPosition;
 		D3DXVECTOR3		vNormal;
@@ -38,6 +39,27 @@ namespace Engine
 		unsigned long	dwColor;
 	}VTXPOSCOL;
 
+	typedef struct tagLightDesc
+	{
+		LIGHT_TYPE eType;
+		float padding1[3];              //
+
+		D3DXVECTOR4 vDiffuse;
+		D3DXVECTOR4 vSpecular;
+		D3DXVECTOR4 vAmbient;
+
+		float fRange;
+		float fSpecPower = 32.f;
+
+		int padding2[2];                //
+	}LIGHTDESC;
+
+	typedef struct tagLightData
+	{
+		D3DXVECTOR3 vPosition = { 0.f, 0.f, 0.f };
+		D3DXVECTOR3 vDirection = { 0.f, -1.f, 0.f };
+		LIGHTDESC desc;
+	}LIGHTDATA;
 
 	//////////////////////
 	// Event

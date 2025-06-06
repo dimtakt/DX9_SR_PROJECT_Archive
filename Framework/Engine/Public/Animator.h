@@ -35,7 +35,7 @@ public:
 	virtual HRESULT Initialize_Prototype() override;
 	virtual HRESULT Initialize(void* pArg) override;
 	void Update_State();
-	_bool Change_State(const _wstring strStatetag, _bool isChangeCurFrame = true, _float fLoopTime = 0); // bool 인자 : 현재 출력중인 이미지 순서 초기화 할건지
+	_bool Change_State(const _wstring strStatetag, _bool isChangeCurFrame = true, _float fLoopTime = 0.f, _bool isChangeForce = false); // bool 인자 : 현재 출력중인 이미지 순서 초기화 할건지
 
 public:
 	HRESULT Add_State(const _wstring strStateTag, ANIMSTATE _state);

@@ -79,9 +79,6 @@
     <Filter Include="96. ShaderFiles">
       <UniqueIdentifier>{c8d3c262-95d1-4d87-ab1d-775d72f463cf}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\UI\Title\BackGround\Star_Wave">
-      <UniqueIdentifier>{e537c5f7-17c1-46af-96cd-4f0792ac1b67}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObject\Room">
       <UniqueIdentifier>{f6d2f95f-05f3-469a-893b-d7822001c440}</UniqueIdentifier>
     </Filter>
@@ -382,6 +379,21 @@
     <Filter Include="02.GameObject\UI\Field\Field_Damage">
       <UniqueIdentifier>{623a081a-151a-460f-98f4-a9076ac831f9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\UI\Title\BackGround\Logo_Wave">
+      <UniqueIdentifier>{e537c5f7-17c1-46af-96cd-4f0792ac1b67}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Light">
+      <UniqueIdentifier>{530d2877-3a4a-498e-aa66-92de2c43e883}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Light\Sun">
+      <UniqueIdentifier>{5781095c-8b67-42a0-9697-c551f45d3bbc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Light\Point">
+      <UniqueIdentifier>{4c95667e-4666-4993-896c-363522e3755c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Monster\Boss">
+      <UniqueIdentifier>{961807fe-6049-4ff4-b8ae-e1001345b58c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -544,7 +556,7 @@
       <Filter>02.GameObject\UI\Title\BackGround\Star</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Title_Logo_Wave.h">
-      <Filter>02.GameObject\UI\Title\BackGround\Star_Wave</Filter>
+      <Filter>02.GameObject\UI\Title\BackGround\Logo_Wave</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Level_Stage1.h">
       <Filter>01.Levels\05. Dungeon\Stage1</Filter>
@@ -816,6 +828,12 @@
     <ClInclude Include="..\public\Field_Font.h">
       <Filter>02.GameObject\UI\Field\Field_Damage</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Sun.h">
+      <Filter>02.GameObject\Light\Sun</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Point.h">
+      <Filter>02.GameObject\Light\Point</Filter>
+    </ClInclude>
     <ClInclude Include="..\public\Talent_Button_Tip.h">
       <Filter>02.GameObject\UI\Window\Talent\Talent_Slot\Talent_Slot_Etc\Selete_Button</Filter>
     </ClInclude>
@@ -955,7 +973,7 @@
       <Filter>02.GameObject\UI\Title\BackGround\Star</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Title_Logo_Wave.cpp">
-      <Filter>02.GameObject\UI\Title\BackGround\Star_Wave</Filter>
+      <Filter>02.GameObject\UI\Title\BackGround\Logo_Wave</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Level_Stage1.cpp">
       <Filter>01.Levels\05. Dungeon\Stage1</Filter>
@@ -1215,6 +1233,12 @@
     <ClCompile Include="..\private\Field_Font.cpp">
       <Filter>02.GameObject\UI\Field\Field_Damage</Filter>
     </ClCompile>
+    <ClCompile Include="..\Private\Sun.cpp">
+      <Filter>02.GameObject\Light\Sun</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Point.cpp">
+      <Filter>02.GameObject\Light\Point</Filter>
+    </ClCompile>
     <ClCompile Include="..\private\Talent_Button_Tip.cpp">
       <Filter>02.GameObject\UI\Window\Talent\Talent_Slot\Talent_Slot_Etc\Selete_Button</Filter>
     </ClCompile>
@@ -1227,6 +1251,12 @@
       <Filter>96. ShaderFiles</Filter>
     </FxCompile>
     <FxCompile Include="..\Bin\ShaderFiles\TitleFadeIn.hlsl">
+      <Filter>96. ShaderFiles</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Bin\ShaderFiles\TreeShader.hlsl">
+      <Filter>96. ShaderFiles</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Bin\ShaderFiles\LightShader.hlsl">
       <Filter>96. ShaderFiles</Filter>
     </FxCompile>
   </ItemGroup>

@@ -14,6 +14,7 @@
 #include "Mole_A.h"
 #include "Hud_Buff.h"
 #include "ChapMap.h"
+#include "Point.h"
 
 CLevel_Stage2::CLevel_Stage2(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CLevel{ pGraphic_Device }
@@ -25,13 +26,14 @@ HRESULT CLevel_Stage2::Initialize()
 	CRoom_Manager::GetInstance()->Clear(ENUM_CLASS(LEVEL::LEVEL_STAGE1));
 	g_hCursor = LoadCursorFromFile(L"Resources/Sephiria/UI/Cursor/Cursor_Combat.cur");
 
-	if (FAILED(Ready_Light()))
-		return E_FAIL;
-
+	
 	if (FAILED(Ready_Layer_BackGround(TEXT("Layer_BackGround"))))
 		return E_FAIL;
 
 	if (FAILED(Ready_Layer_Player(TEXT("Layer_Player"))))
+		return E_FAIL;
+
+	if (FAILED(Ready_Light(TEXT("Layer_Light"))))
 		return E_FAIL;
 
 	if (FAILED(Ready_Layer_Camera(TEXT("Layer_Camera"))))
@@ -58,27 +60,24 @@ HRESULT CLevel_Stage2::Render()
 	return S_OK;
 }
 
-HRESULT CLevel_Stage2::Ready_Light()
+HRESULT CLevel_Stage2::Ready_Light(const _wstring& strLayerTag)
 {
-	D3DLIGHT9	LightDesc;
-	ZeroMemory(&LightDesc, sizeof(D3DLIGHT9));
+	CPoint::POINTDESC desc{};
+	desc.pTargetTransform = dynamic_cast<CTransform*>(m_pGameInstance->Get_GameObject(ENUM_CLASS(LEVEL::LEVEL_STAGE2), TEXT("Layer_Player"))->Find_Component(TEXT("Com_Transform")));
+	desc.strLightID = TEXT("Player_Light");
+	desc.desc.eType = LIGHT_TYPE::POINT;
+	desc.desc.vDiffuse = _float4(1.f, 1.f, 1.f, 1.f);
+	desc.desc.vSpecular = _float4(1.f, 1.f, 1.f, 1.f);
+	desc.desc.vAmbient = _float4(0.01f, 0.01f, 0.01f, 1.f); // 기본 어두움 유지
+	desc.desc.fSpecPower = 64.f;
+	desc.desc.fRange = 15.f;
 
-	LightDesc.Type = D3DLIGHT_DIRECTIONAL;
-	//LightDesc.Position = _float3(10.f, 3.f, 5.f);
-	//LightDesc.Direction = _float3(1.f, -1.f, 1.f);
-	//LightDesc.Diffuse = D3DXCOLOR(1.f, 1.f, 1.f, 1.f);
-	//LightDesc.Ambient = D3DXCOLOR(1.f, 1.f, 1.f, 1.f);
-	LightDesc.Diffuse = { 1.f, 1.f, 1.f, 1.f };
-	LightDesc.Specular = { 1.f, 1.f, 1.f, 1.f };
-	LightDesc.Ambient = { 1.f, 1.f, 1.f, 1.f };
-
-	LightDesc.Direction = { 1.f, -1.f, 1.f };
-
-
-	if (FAILED(m_pGameInstance->Ready_Light(&LightDesc, 0)))
+	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_STAGE2), strLayerTag,
+		ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_Point"), &desc)))
 		return E_FAIL;
 
 	return S_OK;
+
 }
 
 HRESULT CLevel_Stage2::Ready_Layer_Camera(const _wstring& strLayerTag)
@@ -173,22 +172,34 @@ HRESULT CLevel_Stage2::Ready_Layer_UI(const _wstring& strLayerTag)
 
 HRESULT CLevel_Stage2::Ready_Layer_Room(const _wstring& strLayerTag)
 {
+
 	CRoom* pRoom = nullptr;
 	m_pGameInstance->Seed_Random();
 
 	_int iIndex = 7;
-	_int iCount = 0;
-	_int iEventCheck = 0;
-	_int iEventRoomType = 1; // 타입 전달, 1이면 shop, 2면 hp 스테이지 마다 값 변경 해줘야 함.
-	_int iEventRoomCreate = dynamic_cast<CChapMap*>(m_pGameInstance->Get_GameObject(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Layer_ChapMap")))->Get_Click_ID();
-	if (iEventRoomCreate == 2)
-		iIndex = 8; //이벤트룸 1개면 전체 룸 7개, 2개면 전체룸 8개
-	_int iEventRoomIndex1 = static_cast<_int>(m_pGameInstance->Compute_Random((_float)iIndex - 4, (_float)iIndex));;
-	_int iEventRoomIndex2 = static_cast<_int>(m_pGameInstance->Compute_Random((_float)iIndex - 4, (_float)iIndex));;
+	_int iCount = 0;		// 룸 생성 for문 돌리는 용도 + 데이터파일 0번부터 순차적으로 읽어오는 용도
+	_int iEventCheck = 0;	// 이벤트룸 데이터 0번부터 순차적으로 읽어오는 용도
+	_int iEventRoomEventID = dynamic_cast<CChapMap*>(m_pGameInstance->Get_GameObject(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Layer_ChapMap")))->Get_Click_ID();
+	_int iEventRoomCreate = 2;	// 이벤트룸 만드는거 최대 제한 2개.
 
+	if (iEventRoomEventID != 0)
+		iIndex = 8; //이벤트룸 1개면 전체 룸 7개, 2개면 전체룸 8개
+
+	_int iEventRoomIndex1 = static_cast<_int>(m_pGameInstance->Compute_Random((_float)iIndex - 4, (_float)iIndex));;
+	_int iEventRoomIndex2 = iEventRoomIndex1;
+
+	while (iEventRoomIndex2 == iEventRoomIndex1) // 혹여나 랜덤으로 이벤트룸이 같은 위치 뽑히면 다시 돌리게 설정.
+	{
+		iEventRoomIndex2 = static_cast<_int>(m_pGameInstance->Compute_Random((_float)iIndex - 4, (_float)iIndex));;
+	}
+
+	if (iEventRoomEventID == 1)
+	{
+		iEventRoomIndex2 = 999; // 2스테이지 왼쪽방은 이벤트 맵 1개라 제외처리.. 이러면 알아서 일반룸 7개 이벤트룸 1개 만들어줌.
+	}
 
 	vector<pair<_int, _int>> RoomIndex = CRoom_Manager::GetInstance()->Create_RandomRooms(iIndex - 1); //지정하고 싶은 룸의 개수 - 1 ( 내부에서 0 0 디폴트로 저장함 )
-	//while문 돌릴 인덱스값 정의 일반룸 5 + 상호룸 2 = 7  스테이지 1 이벤트는 상인, 골드
+	//while문 돌릴 인덱스값 정의 일반룸 6 + 상호룸 2 = 8
 	while (iCount < iIndex)
 	{
 
@@ -261,11 +272,30 @@ HRESULT CLevel_Stage2::Ready_Layer_Room(const _wstring& strLayerTag)
 			}
 			CMonster_Factory::GetInstance()->Add_Monsters(pRoom, DescList, CMonster_Factory::MONSTER_TYPE::MONSTER_LASERGHOST_D);
 		}
-		else if(iEventCheck < iEventRoomCreate)
+		else if (iEventCheck < iEventRoomCreate)
 		{
-			pRoom->Load_From_File(ENUM_CLASS(LEVEL::LEVEL_STAGE2), strLayerTag, TEXT("../../data/Stage2_Event%d.txt"), iEventCheck, RoomX, RoomZ, static_cast<ROOM_INFO>(iEventRoomType));			// 이벤트 룸 로드
-			iEventCheck++;
-			iEventRoomType++;
+			if(iEventRoomEventID == 1 && iEventCheck == 0)
+			{	//3스테이지_3_Event%d 파일명 이렇게 지어줄 예정 , 타입 따로 넘겨줘야해서..
+				pRoom->Load_From_File(ENUM_CLASS(LEVEL::LEVEL_STAGE2), strLayerTag, TEXT("../../data/Stage2_1_Event%d.txt"), iEventCheck, RoomX, RoomZ, ROOM_INFO::EVENT_SHOP);
+				iEventCheck++;
+				iCount--;
+				iIndex--; // 이벤트룸 만들어졌으니, 안읽은 일반룸 파일 읽게 처리, 방개수 또한 같이줄여줘야함(안줄이면 오버됨). 현재 iCount는 몇번째 파일을 읽는지의 용도일뿐!
+			}
+			else if(iEventRoomEventID == 2 && iEventCheck == 0)
+			{
+				pRoom->Load_From_File(ENUM_CLASS(LEVEL::LEVEL_STAGE2), strLayerTag, TEXT("../../data/Stage2_2_Event%d.txt"), iEventCheck, RoomX, RoomZ, ROOM_INFO::EVENT_SHOP);
+				iEventCheck++;
+				iCount--;
+				iIndex--;
+			}
+			else if (iEventRoomEventID == 2 && iEventCheck == 1)
+			{
+				pRoom->Load_From_File(ENUM_CLASS(LEVEL::LEVEL_STAGE2), strLayerTag, TEXT("../../data/Stage2_2_Event%d.txt"), iEventCheck, RoomX, RoomZ, ROOM_INFO::EVENT_HP);
+				iEventCheck++;
+				iCount--;
+				iIndex--;
+			}
+
 		}
 
 		// 룸매니저 투입

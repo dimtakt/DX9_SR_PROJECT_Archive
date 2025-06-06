@@ -33,7 +33,10 @@
 #include "EXP_Ball.h"
 #include "Gacha.h"
 #include "Minimap.h"
+#include "Sun.h"
+#include "Point.h"
 #include "Field_Font.h"
+
 CMainApp::CMainApp()
 	: m_pGameInstance{ CGameInstance::GetInstance() }
 {
@@ -128,6 +131,8 @@ HRESULT CMainApp::Ready_Static_Setting()
 	if (FAILED(Ready_GameObject_Setting()))
 		return E_FAIL;
 
+	if (FAILED(Ready_Shader_Setting()))
+		return E_FAIL;
 	return S_OK;
 }
 
@@ -232,6 +237,18 @@ HRESULT CMainApp::Ready_GameObject_Setting()
 		return E_FAIL;
 #pragma endregion
 
+#pragma region Prototype_GameObject_Sun
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_Sun"),
+		CSun::Create(m_pGraphic_Device))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region Prototype_GameObject_Point
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_Point"),
+		CPoint::Create(m_pGraphic_Device))))
+		return E_FAIL;
+#pragma endregion
+
 	return S_OK;
 }
 
@@ -247,7 +264,7 @@ HRESULT CMainApp::Ready_Texture_Setting()
 
 	//나무 텍스처 추가
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Tree"),
-		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/BleakSwordDX/Object/Tree/ForestTrees_%d.png"), 60))))
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/BleakSwordDX/Object/Tree/ForestTrees_%d.png"), 74))))
 		return E_FAIL;
 
 	/* Prototype_Component_Texture_Sky */
@@ -333,6 +350,9 @@ HRESULT CMainApp::Ready_Texture_Setting()
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Weapon_Dagger"),
 		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Player_Weapon/Weapon_Dagger0.png"), 1))))
 		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Weapon_Dagger_FuryReady"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Player_Weapon/Weapon_Dagger_FuryReady0.png"), 1))))
+		return E_FAIL;
 
 
 
@@ -376,15 +396,15 @@ HRESULT CMainApp::Ready_Texture_Setting()
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_LaserGhost_D_Effect_AttackReady"),
 		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Monster/LaserGhost_D/Effects/LaserGhost_FX_AttackReady%02d.png"), 28))))
 		return E_FAIL;
-	// ksta : temp. 이펙트 분할 및 적용 끝나면 바로 아래 하나 if문 삭제할 것.
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_LaserGhost_D_Effect_Laser"),
-		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Monster/LaserGhost_D/Effects/Laser/Ghost_LaserAti_Laser_%02d.png"), 11))))
-		return E_FAIL;
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_LaserGhost_D_Effect_Laser_Progress"),
 		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Monster/LaserGhost_D/Effects/Laser/SaparateByState/Ghost_LaserAti_Laser_Progress_%02d.png"), 6))))
 		return E_FAIL;
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_LaserGhost_D_Effect_Laser_End"),
 		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Monster/LaserGhost_D/Effects/Laser/SaparateByState/Ghost_LaserAti_Laser_End_%02d.png"), 5))))
+		return E_FAIL;
+	// LaserGhost_Summon_Effect
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_LaserGhost_D_Summon"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Monster/LaserGhost_D/Effects_Summon/LaserGhost_Summon%02d.png"), 14))))
 		return E_FAIL;
 
 	// ---
@@ -794,6 +814,19 @@ HRESULT CMainApp::Ready_Animation_Setting()
 	return S_OK;
 }
 
+HRESULT CMainApp::Ready_Shader_Setting()
+{
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Shader_Tree"),
+		CShader::Create(m_pGraphic_Device, TEXT("../Bin/ShaderFiles/TreeShader.hlsl")))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Shader_Light"),
+		CShader::Create(m_pGraphic_Device, TEXT("../Bin/ShaderFiles/LightShader.hlsl")))))
+		return E_FAIL;
+
+	return S_OK;
+}
+
 void CMainApp::Ready_Key_Setting()
 {
 	m_pGameInstance->AddTrackingKey(VK_UP);
@@ -819,6 +852,7 @@ void CMainApp::Ready_Key_Setting()
 	m_pGameInstance->AddTrackingKey('Z');
 	m_pGameInstance->AddTrackingKey('R');
 	m_pGameInstance->AddTrackingKey('F');
+	m_pGameInstance->AddTrackingKey('B');
 	m_pGameInstance->AddTrackingKey(VK_F1);
 	// 임시 테스트용
 #if _DEBUG
