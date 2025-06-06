@@ -33,6 +33,8 @@
 #include "EXP_Ball.h"
 #include "Gacha.h"
 #include "Minimap.h"
+#include "Sun.h"
+#include "Point.h"
 CMainApp::CMainApp()
 	: m_pGameInstance{ CGameInstance::GetInstance() }
 {
@@ -127,6 +129,8 @@ HRESULT CMainApp::Ready_Static_Setting()
 	if (FAILED(Ready_GameObject_Setting()))
 		return E_FAIL;
 
+	if (FAILED(Ready_Shader_Setting()))
+		return E_FAIL;
 	return S_OK;
 }
 
@@ -225,6 +229,18 @@ HRESULT CMainApp::Ready_GameObject_Setting()
 #pragma region Prototype_Component_Minimap
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_Minimap"),
 		CMinimap::Create(m_pGraphic_Device, LEVEL::LEVEL_STATIC))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region Prototype_GameObject_Sun
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_Sun"),
+		CSun::Create(m_pGraphic_Device))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region Prototype_GameObject_Point
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_Point"),
+		CPoint::Create(m_pGraphic_Device))))
 		return E_FAIL;
 #pragma endregion
 
@@ -790,6 +806,19 @@ HRESULT CMainApp::Ready_Animation_Setting()
 	return S_OK;
 }
 
+HRESULT CMainApp::Ready_Shader_Setting()
+{
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Shader_Tree"),
+		CShader::Create(m_pGraphic_Device, TEXT("../Bin/ShaderFiles/TreeShader.hlsl")))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Shader_Light"),
+		CShader::Create(m_pGraphic_Device, TEXT("../Bin/ShaderFiles/LightShader.hlsl")))))
+		return E_FAIL;
+
+	return S_OK;
+}
+
 void CMainApp::Ready_Key_Setting()
 {
 	m_pGameInstance->AddTrackingKey(VK_UP);
@@ -815,6 +844,7 @@ void CMainApp::Ready_Key_Setting()
 	m_pGameInstance->AddTrackingKey('Z');
 	m_pGameInstance->AddTrackingKey('R');
 	m_pGameInstance->AddTrackingKey('F');
+	m_pGameInstance->AddTrackingKey('B');
 	// 임시 테스트용
 #if _DEBUG
 	m_pGameInstance->AddTrackingKey('J');

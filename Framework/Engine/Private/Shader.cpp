@@ -49,7 +49,7 @@ void CShader::End()
 	m_pEffect->End();
 }
 
-HRESULT CShader::Set_Float(const char* pParamName, float fValue)
+HRESULT CShader::Set_Float(const char* pParamName, _float fValue)
 {
 	{
 		if (nullptr == m_pEffect || nullptr == pParamName)
@@ -57,6 +57,31 @@ HRESULT CShader::Set_Float(const char* pParamName, float fValue)
 
 		return m_pEffect->SetFloat(pParamName, fValue);
 	}
+}
+
+HRESULT CShader::Set_Vector(const char* pParamName, const _float4* pValue)
+{
+	if (nullptr == m_pEffect || nullptr == pParamName || nullptr == pValue)
+		return E_FAIL;
+
+	return m_pEffect->SetVector(pParamName, pValue);
+}
+HRESULT CShader::Set_Vector(const _wstring& strConstantName, const D3DXVECTOR4* pVector)
+{
+	string strAnsi(strConstantName.begin(), strConstantName.end());
+	return m_pEffect->SetVector(strAnsi.c_str(), pVector);
+}
+
+HRESULT CShader::Set_Float(const _wstring& strConstantName, _float fValue)
+{
+	string strAnsi(strConstantName.begin(), strConstantName.end());
+	return m_pEffect->SetFloat(strAnsi.c_str(), fValue);
+}
+
+HRESULT CShader::Set_Int(const _wstring& strConstantName, _int iValue)
+{
+	string strAnsi(strConstantName.begin(), strConstantName.end());
+	return m_pEffect->SetInt(strAnsi.c_str(), iValue);
 }
 
 CShader* CShader::Create(LPDIRECT3DDEVICE9 pGraphic_Device, const _tchar* pShaderFilePath)
