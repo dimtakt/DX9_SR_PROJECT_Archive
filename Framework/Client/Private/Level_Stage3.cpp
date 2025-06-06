@@ -120,7 +120,7 @@ HRESULT CLevel_Stage3::Ready_Light(const _wstring& strLayerTag)
 	desc.desc.vSpecular = _float4(1.f, 1.f, 1.f, 1.f);
 	desc.desc.vAmbient = _float4(0.01f, 0.01f, 0.01f, 1.f); // 기본 어두움 유지
 	desc.desc.fSpecPower = 64.f;
-	desc.desc.fRange = 8.f;
+	desc.desc.fRange = 15.f;
 
 	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_STAGE2), strLayerTag,
 		ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_Point"), &desc)))
