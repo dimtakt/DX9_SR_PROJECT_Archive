@@ -80,7 +80,7 @@ private:
 
 	_bool					m_isReadyFury					= false;
 
-	CField_Hp*				m_pHpBar						= { nullptr };
+	//CField_Hp*				m_pHpBar						= { nullptr };
 
 
 	_float3					m_vOldPos						= {};
@@ -92,6 +92,7 @@ private:
 private:
 	HRESULT Ready_Components(void* pArg);
 	HRESULT Ready_Object();					//필드 HP바 테스트용
+	HRESULT Render_Font();					//필드 폰트 테스트용
 	void SetUp_RenderState();
 	void Reset_RenderState();
 

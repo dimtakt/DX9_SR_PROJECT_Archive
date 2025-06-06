@@ -7,7 +7,7 @@ CTitle_Logo_Wave::CTitle_Logo_Wave(LPDIRECT3DDEVICE9 pGraphic_Device)
 }
 
 CTitle_Logo_Wave::CTitle_Logo_Wave(const CTitle_Logo_Wave& Prototype)
-    : CUIObject( Prototype )
+    : CUIObject{ Prototype }
 {
 }
 
@@ -22,7 +22,7 @@ HRESULT CTitle_Logo_Wave::Initialize(void* pArg)
     m_fSizeY = 100.f * 1.5f;
     m_fX = 0.f;
     m_fY = 230.f;
-    m_fZ = 0.1f;
+    m_fZ = 0.0f;
     m_iWinSizeX = g_iWinSizeX;
     m_iWinSizeY = g_iWinSizeY;
 
@@ -55,7 +55,7 @@ void CTitle_Logo_Wave::Late_Update(_float fTimeDelta)
 
 HRESULT CTitle_Logo_Wave::Render()
 {
-    //SetUp_RenderState();
+    SetUp_RenderState();
 
     if (FAILED(m_pTextureCom_Title_Logo_Wave->Bind_Texture(0)))
         return E_FAIL;
@@ -84,7 +84,7 @@ HRESULT CTitle_Logo_Wave::Render()
 
     __super::End();
 
-    //Reset_RenderState();
+    Reset_RenderState();
 
     return S_OK;
 }
@@ -114,21 +114,12 @@ HRESULT CTitle_Logo_Wave::Ready_Components()
 
 void CTitle_Logo_Wave::SetUp_RenderState()
 {
-    // 알파 블렌딩 활성화
-    m_pGraphic_Device->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
-    m_pGraphic_Device->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
-    m_pGraphic_Device->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
-
-    // 알파 테스트로 투명한 배경 제거
-    m_pGraphic_Device->SetRenderState(D3DRS_ALPHAREF, 80);  // 이 값보다 낮은 알파는 버림
+    m_pGraphic_Device->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
 }
 
 void CTitle_Logo_Wave::Reset_RenderState()
 {
-    // 색을 섞어서 처리(알파블렌딩)
-    m_pGraphic_Device->SetRenderState(D3DRS_ALPHABLENDENABLE, FALSE);
-
-    m_pGraphic_Device->SetRenderState(D3DRS_ALPHAREF, 200);
+    m_pGraphic_Device->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
 }
 
 CTitle_Logo_Wave* CTitle_Logo_Wave::Create(LPDIRECT3DDEVICE9 pGraphic_Device)

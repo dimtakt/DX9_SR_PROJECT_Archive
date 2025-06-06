@@ -34,7 +34,7 @@ public:
     virtual void Exit();
     virtual void Activate();
     virtual void Deactivate();
-    HRESULT Load_From_File(_uint iLayerLevelIndex, const _wstring& strLayerTag, const _tchar* pLoadFileTag, _int iIndex, _int RoomX, _int RoomZ);
+    HRESULT Load_From_File(_uint iLayerLevelIndex, const _wstring& strLayerTag, const _tchar* pLoadFileTag, _int iIndex, _int RoomX, _int RoomZ, ROOM_INFO Event);
     HRESULT Ready_Potal(_uint iLayerLevelIndex, const _wstring& strLayerTag, _float3 vOffset, POTAL_TYPE eType);
     CPotal* Find_Potal(POTAL_TYPE ePotal);
 
@@ -46,6 +46,8 @@ public:
     vector<CMonster*> Get_MonsterList() { return m_vMonster; }
     _int Get_RoomX() { return m_iRoomX; }
     _int Get_RoomZ() { return m_iRoomZ; }
+    void Set_RoomType(ROOM_INFO eType) { m_eRoomType = eType; }
+    ROOM_INFO Get_RoomType() { return m_eRoomType; }
 
 public:
     void Add_TerrainBox(class CTerrainBox* pTerrainBox){m_pTerrainBox = pTerrainBox;}
@@ -70,6 +72,8 @@ protected:
     _int m_iRoomZ = {};
 
     _float3 m_ObjectOffset = {};
+
+    ROOM_INFO m_eRoomType = {};
 
 public:
     static CRoom* Create(LPDIRECT3DDEVICE9 pGraphic_Device);

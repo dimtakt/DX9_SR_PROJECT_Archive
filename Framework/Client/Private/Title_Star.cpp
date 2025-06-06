@@ -22,7 +22,7 @@ HRESULT CTitle_Star::Initialize(void* pArg)
     m_fSizeY = 90.f * 2.5f;
     m_fX = 0.f;
     m_fY = -120.f;
-    m_fZ = 0.1f;
+    m_fZ = 0.0f;
     m_iWinSizeX = g_iWinSizeX;
     m_iWinSizeY = g_iWinSizeY;
 
@@ -55,7 +55,7 @@ void CTitle_Star::Late_Update(_float fTimeDelta)
 
 HRESULT CTitle_Star::Render()
 {
-    //SetUp_RenderState();
+    SetUp_RenderState();
 
     if (FAILED(m_pTextureCom_Title_Star->Bind_Texture(0)))
         return E_FAIL;
@@ -80,7 +80,7 @@ HRESULT CTitle_Star::Render()
     m_pShaderCom_Title_Star->End();
 
     __super::End();
-    //Reset_RenderState();
+    Reset_RenderState();
 
     return S_OK;
 }
@@ -110,21 +110,12 @@ HRESULT CTitle_Star::Ready_Components()
 
 void CTitle_Star::SetUp_RenderState()
 {
-    // 알파 블렌딩 활성화
-    m_pGraphic_Device->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
-    m_pGraphic_Device->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
-    m_pGraphic_Device->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
-
-    // 알파 테스트로 투명한 배경 제거
-    m_pGraphic_Device->SetRenderState(D3DRS_ALPHAREF, 80);  // 이 값보다 낮은 알파는 버림
-
+    m_pGraphic_Device->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
 }
 
 void CTitle_Star::Reset_RenderState()
 {
-    // 색을 섞어서 처리(알파블렌딩)
-    m_pGraphic_Device->SetRenderState(D3DRS_ALPHABLENDENABLE, FALSE);
-    m_pGraphic_Device->SetRenderState(D3DRS_ALPHAREF, 200);
+    m_pGraphic_Device->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
 }
 
 CTitle_Star* CTitle_Star::Create(LPDIRECT3DDEVICE9 pGraphic_Device)

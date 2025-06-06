@@ -12,6 +12,7 @@ namespace Client
 	enum class OBJECT_TYPE { TREE, ROCK, TYPE_END };
 	enum class STAT_INFO { MAXHP, CULHP, MAXMP, CULMP, CULDEF, CULDAMAGE, CULCRITICAL, CRITICALDAMAGE, MAXDASH, CULDASH, REGENDASH, EXP, MAXSTATPOINT, CULSTATPOINT, LEVEL, GOLD, DICE, FURYREADY, STAT_END };
 
+	enum class ROOM_INFO { EVENT_NORMAL,  EVENT_SHOP, EVENT_HP, EVENT_EXP,  EVENT_ARTEFACT, EVENT_STONE, EVENT_ENDPOTAL, EVENT_END };
 	enum class EVENT_TYPE { PLAYERTSTATCHANGE, UICHANGE, ROOMCHANGE, EVENT_END };
 	enum class POTAL_TYPE { LEFT, RIGHT, UP, DOWN, END_POTAL, POTAL_END };
 
@@ -32,6 +33,7 @@ namespace Client
 		//FILED
 		static constexpr float FILED_HP = 0.3f;
 		static constexpr float FILED_HP_FRAME = 0.4f;
+		static constexpr float FILED_FONT = 0.29;
 
 		//INVEN
 		static constexpr float INVEN_SLOT_SELETE = 0.1f;
@@ -56,6 +58,9 @@ namespace Client
 		static constexpr float TALENT = 0.2f;
 		static constexpr float TALENT_Selete = 0.19f;
 
+		//Minimap
+		static constexpr float MiniMap = 0.18f;
+		static constexpr float MINIMAP_BUTTON = 0.17f;
 
 		//Loding
 		static constexpr float LODING = 0.2f;

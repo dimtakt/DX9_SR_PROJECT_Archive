@@ -44,31 +44,31 @@ HRESULT CInventory::Initialize(void* pArg)
 
 	m_pGameInstance->Add_UIObject(ENUM_CLASS(m_eLevel), TEXT("UI_Inven"), this);
 
-	CItemObject* pItem = m_pGameInstance->Get_ItemObject(0);
+	CItemObject* pItem = m_pGameInstance->Get_ItemObject(0, true);
 	m_vecInventory[0]->Add_Item(static_cast<CItem_Base*>(pItem));
 
-	pItem = m_pGameInstance->Get_ItemObject(1);
+	pItem = m_pGameInstance->Get_ItemObject(1,true);
 	m_vecInventory[1]->Add_Item(static_cast<CItem_Base*>(pItem));
 
-	pItem = m_pGameInstance->Get_ItemObject(2);
+	pItem = m_pGameInstance->Get_ItemObject(2, true);
 	m_vecInventory[2]->Add_Item(static_cast<CItem_Base*>(pItem));
 
-	pItem = m_pGameInstance->Get_ItemObject(3);
+	pItem = m_pGameInstance->Get_ItemObject(3, true);
 	m_vecInventory[3]->Add_Item(static_cast<CItem_Base*>(pItem));
 
-	pItem = m_pGameInstance->Get_ItemObject(4);
+	pItem = m_pGameInstance->Get_ItemObject(4, true);
 	m_vecInventory[4]->Add_Item(static_cast<CItem_Base*>(pItem));
 
-	pItem = m_pGameInstance->Get_ItemObject(5);
+	pItem = m_pGameInstance->Get_ItemObject(5, true);
 	m_vecInventory[5]->Add_Item(static_cast<CItem_Base*>(pItem));
 
-	pItem = m_pGameInstance->Get_ItemObject(6);
+	pItem = m_pGameInstance->Get_ItemObject(6, true);
 	m_vecInventory[6]->Add_Item(static_cast<CItem_Base*>(pItem));
 
-	pItem = m_pGameInstance->Get_ItemObject(7);
+	pItem = m_pGameInstance->Get_ItemObject(7, true);
 	m_vecInventory[7]->Add_Item(static_cast<CItem_Base*>(pItem));
 
-	pItem = m_pGameInstance->Get_ItemObject(8);
+	pItem = m_pGameInstance->Get_ItemObject(8, true);
 	m_vecInventory[8]->Add_Item(static_cast<CItem_Base*>(pItem));
 	return S_OK;
 }
@@ -135,7 +135,7 @@ HRESULT CInventory::Render()
 void CInventory::UI_Switch()
 {
 	if (m_bIsOpen)
-		m_bIsOpen = false;
+		Close_UI();
 	else
 		m_bIsOpen = true;
 
@@ -144,7 +144,7 @@ void CInventory::UI_Switch()
 
 void CInventory::Add_Item_Inven(_uint ItemIndex)
 {
-	CItemObject* pItem = m_pGameInstance->Get_ItemObject(ItemIndex);
+	CItemObject* pItem = m_pGameInstance->Get_ItemObject(ItemIndex, true);
 
 	for (size_t i = 0; i < m_vecInventory.size(); ++i)
 	{
@@ -157,8 +157,8 @@ void CInventory::Open_UI(_float fX, _float fY)
 {
 	m_bIsOpen = true;
 
-	m_fX += fX;
-	m_fY += fY;
+	m_fX = m_iWinSizeX * 0.5 + fX;
+	m_fY = m_iWinSizeY * 0.5 + fY;
 	__super::Update_Position();
 }
 
@@ -169,6 +169,19 @@ void CInventory::Close_UI()
 	m_fX = m_iWinSizeX * 0.5;
 	m_fY = m_iWinSizeY * 0.5;
 	__super::Update_Position();
+}
+
+void CInventory::Push_Item_Slot(CItem_Base* pItem, _uint iCount)
+{
+	for (_int i = 0; i < m_vecInventory.size(); i++)
+	{
+		if (m_vecInventory[i]->Pop_Item() == nullptr)
+		{
+			m_vecInventory[i]->Push_Item(pItem);
+			m_vecInventory[i]->Push_Item_Count(iCount);
+			return;
+		}
+	}
 }
 
 void CInventory::Set_Grade()
@@ -191,14 +204,16 @@ void CInventory::Set_Grade()
 			_int MyY = i / 6;
 
 			_int YouIndex = 0;
+			_int iX = 0;
+			_int iY = 0;
+		
+			CItem_Base* pItem = m_vecInventory[i]->Pop_Item();
+
+			_int iAngle = pItem->Item_Info()->fAngle;
+			_int iValue = g_SlateDataBase[iIndex].m_vecGardeValue[j].m_iValue;
 
 			if (g_SlateDataBase[iIndex].m_bRelative)								//석판 좌표 타입 체크
 			{
-				_int iX = 0;
-				_int iY = 0;
-				_int iAngle = m_vecInventory[i]->Pop_Item()->Item_Info()->fAngle;
-				_int iValue = g_SlateDataBase[iIndex].m_vecGardeValue[j].m_iValue;
-
 				switch (iAngle)
 				{
 				case 0:

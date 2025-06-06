@@ -23,6 +23,7 @@ public:
 	CRoom* Get_CurrentRoom();
 	CRoom* Get_RoomByID(_int iRoomID);
 	CRoom* Find_Room(_int iRoomIndexX, _int iRoomIndexZ);
+	vector<pair<_int, _int>> Get_RoomIndex() { return m_RoomIndex; }
 
 
 	void Clear(_uint iLevelIndex);

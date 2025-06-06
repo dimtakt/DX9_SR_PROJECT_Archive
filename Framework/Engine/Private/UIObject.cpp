@@ -141,6 +141,14 @@ void CUIObject::Font_Rect_Update()
         m_vTexRect.right = (m_pParent->Get_WorldPos().x + m_fX) + m_fSizeX * 0.5;
         m_vTexRect.bottom = (m_pParent->Get_WorldPos().y + m_fY) + m_fSizeX * 0.5;
     }
+    else
+    {
+        m_vTexRect.left = m_fX - m_fSizeX * 0.5;
+        m_vTexRect.top = m_fY - m_fSizeX * 0.5;
+        m_vTexRect.right = m_fX + m_fSizeX * 0.5;
+        m_vTexRect.bottom = m_fY + m_fSizeX * 0.5;
+
+    }
 }
 
 void CUIObject::Free()

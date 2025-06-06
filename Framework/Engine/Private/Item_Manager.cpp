@@ -38,11 +38,17 @@ _uint CItem_Manager::Pop_Item_Count()
 	return m_iItemCount;
 }
 
-void CItem_Manager::Pick_ItemSlot(CItemObject* pPickItem, CButton* pSlot, _uint iItemCount)
+const _uint CItem_Manager::Pop_ISlot_Type()
+{
+	return m_iSlotType;
+}
+
+void CItem_Manager::Pick_ItemSlot(CItemObject* pPickItem, CButton* pSlot, _uint iItemCount, _uint iSlottype)
 {
 	m_pPickItem = pPickItem;
 	m_pPickSlot = pSlot;
 	m_iItemCount = iItemCount;
+	m_iSlotType = iSlottype;
 }
 
 void CItem_Manager::Pick_Reset()
@@ -50,10 +56,15 @@ void CItem_Manager::Pick_Reset()
 	m_pPickItem = nullptr;
 	m_pPickSlot = nullptr;
 	m_iItemCount = 0;
+	m_iSlotType = 0;
 }
 
-CItemObject* CItem_Manager::Get_ItemObject(_uint iIndex)
+CItemObject* CItem_Manager::Get_ItemObject(_uint iIndex, _bool isInven)
 {
+	if (isInven)
+		if (m_ItemObjects[iIndex]->Item_Info()->iItemType != 2)
+			m_vecAcquiredItems.push_back(m_ItemObjects[iIndex]->Item_Info()->iItemID);
+
 	CItemObject::ITEMOBJECT_DESC pDesc = *m_ItemObjects[iIndex]->Item_Info();
 	
 	CItemObject* pItemObject = dynamic_cast<CItemObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, m_iLevelIndex, m_strItemBaseTag, &pDesc));
