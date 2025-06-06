@@ -5,6 +5,7 @@
 #include "Room_Manager.h"
 #include "Minimap.h"
 #include "Minimap_Node.h"
+#include "Player.h"
 CMinimap_Button::CMinimap_Button(LPDIRECT3DDEVICE9 pGraphic_Device) : CButton(pGraphic_Device)
 {
 }
@@ -74,7 +75,10 @@ void CMinimap_Button::Update(_float fTimeDelta)
 		m_iTexIndex = m_pGameInstance->Rand(0, 4);
 	}
 
-
+	if (m_pGameInstance->IsKeyDown(VK_F1))
+	{
+		m_bClearRoom = true;
+	}
 	if (CRoom_Manager::GetInstance()->Get_CurrentRoom() == CRoom_Manager::GetInstance()->Get_RoomByID(m_iRoomID))
 	{
 		m_bIsPlayer = true;
@@ -90,6 +94,7 @@ void CMinimap_Button::Update(_float fTimeDelta)
 	{
 		static_cast<CMinimap*>(m_pParent)->UI_Switch();
 		CRoom_Manager::GetInstance()->Enter_Room(m_iRoomID);
+		static_cast<CPlayer*>(m_pGameInstance->Get_GameObject(m_pGameInstance->Get_CurrentLevel(), TEXT("Layer_Player")))->Change_TerrainBox(CRoom_Manager::GetInstance()->Get_RoomByID(m_iRoomID)->Get_TerrainBox(), m_iRoomID);
 		static_cast<CTransform*>(m_pGameInstance->Get_Component(m_pGameInstance->Get_CurrentLevel(), TEXT("Layer_Player"), TEXT("Com_Transform")))->Set_State(STATE::POSITION, m_vRoomPos);
 	}
 

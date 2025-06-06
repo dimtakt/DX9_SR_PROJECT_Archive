@@ -190,8 +190,8 @@ HRESULT CMinimap::Ready_Children()
 void CMinimap::Font_Render()
 {
 	TCHAR szText[64];
-	m_vTexRect.left = 212;
-	m_vTexRect.top = 132;
+	m_vTexRect.left = 210+1;
+	m_vTexRect.top = 130+1;
 	m_vTexRect.right = m_fSizeX;
 	m_vTexRect.bottom = m_fSizeY;
 

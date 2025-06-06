@@ -8,6 +8,7 @@
 #include "Stat_Manager.h"
 #include "ChapMap.h"
 #include "EXP_Ball.h"
+#include "Field_Font.h"
 
 CPlayer::CPlayer(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CGameObject{ pGraphic_Device }
@@ -594,9 +595,10 @@ void CPlayer::OnCollision(CGameObject* pGameObject)
             
             _float3 vResult = vPlayerPos + vStunDir * 0.2f;    // 밀려날 정도 테스트
             m_pTransformCom->Set_State(STATE::POSITION, vResult);
+            Render_Font();
         }
         break;
-    }
+    }  
         
     }
 }
@@ -766,6 +768,19 @@ HRESULT CPlayer::Ready_Object()
     //m_pHpBar = dynamic_cast<CField_Hp*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_Field_Hp")));
 
     return S_OK;
+}
+
+HRESULT CPlayer::Render_Font()
+{
+    CField_Font::FIELD_FONT_DESC Desc = {};
+
+    Desc.eType = CField_Font::FIELD_FONT_TYPE::PLAYER_DAMAGE;   //데미지 타입
+    Desc.iValue = 65;                                           //넣을 수치 값
+    Desc.pTransform = m_pTransformCom;                          //현재 객체 트랜스폼
+
+    if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(m_pGameInstance->Get_CurrentLevel(), TEXT("Layer_Field_Font"),
+        ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_Field_Font"), &Desc)))
+        return E_FAIL;
 }
 
 void CPlayer::SetUp_RenderState()
