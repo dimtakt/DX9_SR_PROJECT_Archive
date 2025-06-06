@@ -85,7 +85,7 @@ HRESULT CLevel_MapEdit::Ready_Texture_Info()
 		TEXT("Prototype_GameObject_Tree")));
 
 	OBJECT_TEXTURE_INFO ObjectInfo;
-	ObjectInfo.iTextureCount = 60;
+	ObjectInfo.iTextureCount = 80;
 	ObjectInfo.pTextureCom = static_cast<CTexture*>(m_pPreview->Find_Component(TEXT("Com_Texture")));
 	if (ObjectInfo.pTextureCom)
 		ObjectInfo.pTextureCom->AddRef();
@@ -399,7 +399,7 @@ void CLevel_MapEdit::ImGui_Object_MenBar()
 
 		ImGui::Text("Object Texture Index:");
 		ImGui::SetNextItemWidth(250);
-		ImGui::SliderInt("Texture", &iObjectTexIndex, 0, 60); // 0~15 ¿Œµ¶Ω∫
+		ImGui::SliderInt("Texture", &iObjectTexIndex, 0, 80); // 0~15 ¿Œµ¶Ω∫
 		ImGui::SameLine();
 		if (ImGui::Button("-"))
 			iObjectTexIndex -= 1;
