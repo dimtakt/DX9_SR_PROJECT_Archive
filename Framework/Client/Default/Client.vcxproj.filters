@@ -364,6 +364,21 @@
     <Filter Include="02.GameObject\UI\Window\Gacha\Gacha_FX">
       <UniqueIdentifier>{788cb07d-a84c-4143-9ceb-e2e33b3c7e63}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\UI\Window\Minimap">
+      <UniqueIdentifier>{10602e4a-b2e4-46ae-9829-c72860dbc917}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\UI\Window\Minimap\Minimap_Frame">
+      <UniqueIdentifier>{66310aaa-abcf-4ca9-90ec-030e5b89628c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\UI\Window\Minimap\Minimap_Button">
+      <UniqueIdentifier>{13278261-c1b4-4702-8cfe-03c249c20e25}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\UI\Window\Minimap\Minimap_Button\Icon">
+      <UniqueIdentifier>{398d56e6-8dbb-44fb-b69d-e60ee7f21a70}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\UI\Field\Field_Damage">
+      <UniqueIdentifier>{623a081a-151a-460f-98f4-a9076ac831f9}</UniqueIdentifier>
+    </Filter>
     <Filter Include="02.GameObject\UI\Title\BackGround\Logo_Wave">
       <UniqueIdentifier>{e537c5f7-17c1-46af-96cd-4f0792ac1b67}</UniqueIdentifier>
     </Filter>
@@ -375,6 +390,9 @@
     </Filter>
     <Filter Include="02.GameObject\Light\Point">
       <UniqueIdentifier>{4c95667e-4666-4993-896c-363522e3755c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Monster\Boss">
+      <UniqueIdentifier>{961807fe-6049-4ff4-b8ae-e1001345b58c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -789,11 +807,35 @@
     <ClInclude Include="..\public\Gacha_FX.h">
       <Filter>02.GameObject\UI\Window\Gacha\Gacha_FX</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\Minimap.h">
+      <Filter>02.GameObject\UI\Window\Minimap</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Minimap_Frame.h">
+      <Filter>02.GameObject\UI\Window\Minimap\Minimap_Frame</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Minimap_Button.h">
+      <Filter>02.GameObject\UI\Window\Minimap\Minimap_Button</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Minimap_Player.h">
+      <Filter>02.GameObject\UI\Window\Minimap\Minimap_Button\Icon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Minimap_Icon.h">
+      <Filter>02.GameObject\UI\Window\Minimap\Minimap_Button\Icon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Minimap_Node.h">
+      <Filter>02.GameObject\UI\Window\Minimap\Minimap_Button</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Field_Font.h">
+      <Filter>02.GameObject\UI\Field\Field_Damage</Filter>
+    </ClInclude>
     <ClInclude Include="..\Public\Sun.h">
       <Filter>02.GameObject\Light\Sun</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Point.h">
       <Filter>02.GameObject\Light\Point</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Talent_Button_Tip.h">
+      <Filter>02.GameObject\UI\Window\Talent\Talent_Slot\Talent_Slot_Etc\Selete_Button</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1170,11 +1212,35 @@
     <ClCompile Include="..\private\Gacha_FX.cpp">
       <Filter>02.GameObject\UI\Window\Gacha\Gacha_FX</Filter>
     </ClCompile>
+    <ClCompile Include="..\private\Minimap.cpp">
+      <Filter>02.GameObject\UI\Window\Minimap</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Minimap_Frame.cpp">
+      <Filter>02.GameObject\UI\Window\Minimap\Minimap_Frame</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Minimap_Button.cpp">
+      <Filter>02.GameObject\UI\Window\Minimap\Minimap_Button</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Minimap_Icon.cpp">
+      <Filter>02.GameObject\UI\Window\Minimap\Minimap_Button\Icon</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Minimap_Player.cpp">
+      <Filter>02.GameObject\UI\Window\Minimap\Minimap_Button\Icon</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Minimap_Node.cpp">
+      <Filter>02.GameObject\UI\Window\Minimap\Minimap_Button</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Field_Font.cpp">
+      <Filter>02.GameObject\UI\Field\Field_Damage</Filter>
+    </ClCompile>
     <ClCompile Include="..\Private\Sun.cpp">
       <Filter>02.GameObject\Light\Sun</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Point.cpp">
       <Filter>02.GameObject\Light\Point</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Talent_Button_Tip.cpp">
+      <Filter>02.GameObject\UI\Window\Talent\Talent_Slot\Talent_Slot_Etc\Selete_Button</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

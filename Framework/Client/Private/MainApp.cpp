@@ -32,8 +32,11 @@
 #include "Talent.h"
 #include "EXP_Ball.h"
 #include "Gacha.h"
+#include "Minimap.h"
 #include "Sun.h"
 #include "Point.h"
+#include "Field_Font.h"
+
 CMainApp::CMainApp()
 	: m_pGameInstance{ CGameInstance::GetInstance() }
 {
@@ -187,6 +190,9 @@ HRESULT CMainApp::Ready_GameObject_Setting()
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_Field_Hp"),
 		CField_Hp::Create(m_pGraphic_Device, LEVEL::LEVEL_STATIC))))
 		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_Field_Font"),
+		CField_Font::Create(m_pGraphic_Device, LEVEL::LEVEL_STATIC))))
+		return E_FAIL;
 #pragma endregion
 
 #pragma region Prototype_GameObject_Window
@@ -225,6 +231,12 @@ HRESULT CMainApp::Ready_GameObject_Setting()
 		return E_FAIL;
 #pragma endregion
 
+#pragma region Prototype_Component_Minimap
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_Minimap"),
+		CMinimap::Create(m_pGraphic_Device, LEVEL::LEVEL_STATIC))))
+		return E_FAIL;
+#pragma endregion
+
 #pragma region Prototype_GameObject_Sun
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_Sun"),
 		CSun::Create(m_pGraphic_Device))))
@@ -243,7 +255,7 @@ HRESULT CMainApp::Ready_GameObject_Setting()
 HRESULT CMainApp::Ready_Texture_Setting()
 {
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_TerrainBox_Top"),
-		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/BleakSwordDX/Terrain/Forest/ArenaTex_%d.png"), 25))))
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/BleakSwordDX/Terrain/Forest/ArenaTex_%d.png"), 53))))
 		return E_FAIL;
 	/* Prototype_Component_Texture_TerrainBox_Side */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_TerrainBox_Side"),
@@ -252,7 +264,7 @@ HRESULT CMainApp::Ready_Texture_Setting()
 
 	//나무 텍스처 추가
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Tree"),
-		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/BleakSwordDX/Object/Tree/ForestTrees_%d.png"), 28))))
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/BleakSwordDX/Object/Tree/ForestTrees_%d.png"), 74))))
 		return E_FAIL;
 
 	/* Prototype_Component_Texture_Sky */
@@ -338,6 +350,9 @@ HRESULT CMainApp::Ready_Texture_Setting()
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Weapon_Dagger"),
 		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Player_Weapon/Weapon_Dagger0.png"), 1))))
 		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Weapon_Dagger_FuryReady"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Player_Weapon/Weapon_Dagger_FuryReady0.png"), 1))))
+		return E_FAIL;
 
 
 
@@ -381,15 +396,15 @@ HRESULT CMainApp::Ready_Texture_Setting()
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_LaserGhost_D_Effect_AttackReady"),
 		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Monster/LaserGhost_D/Effects/LaserGhost_FX_AttackReady%02d.png"), 28))))
 		return E_FAIL;
-	// ksta : temp. 이펙트 분할 및 적용 끝나면 바로 아래 하나 if문 삭제할 것.
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_LaserGhost_D_Effect_Laser"),
-		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Monster/LaserGhost_D/Effects/Laser/Ghost_LaserAti_Laser_%02d.png"), 11))))
-		return E_FAIL;
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_LaserGhost_D_Effect_Laser_Progress"),
 		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Monster/LaserGhost_D/Effects/Laser/SaparateByState/Ghost_LaserAti_Laser_Progress_%02d.png"), 6))))
 		return E_FAIL;
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_LaserGhost_D_Effect_Laser_End"),
 		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Monster/LaserGhost_D/Effects/Laser/SaparateByState/Ghost_LaserAti_Laser_End_%02d.png"), 5))))
+		return E_FAIL;
+	// LaserGhost_Summon_Effect
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_LaserGhost_D_Summon"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Monster/LaserGhost_D/Effects_Summon/LaserGhost_Summon%02d.png"), 14))))
 		return E_FAIL;
 
 	// ---
@@ -413,7 +428,11 @@ HRESULT CMainApp::Ready_Texture_Setting()
 	vRectCol = { 1.0f, 0.647f, 0.0f, 1.0f };
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Rect_UI_OrangeRect"), CVIBuffer_Rect::Create(m_pGraphic_Device, vRectCol))))
 		return E_FAIL;
-	
+
+	vRectCol = { 0.737f, 0.506f, 0.349f, 1.0f };
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Rect_UI_BrownRect"), CVIBuffer_Rect::Create(m_pGraphic_Device, vRectCol))))
+		return E_FAIL;
+
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Rect_UI_Hud_KeyInputGuide"),
 		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/UI/Default/KeyGD.png"), 1))))
 		return E_FAIL;
@@ -694,6 +713,45 @@ HRESULT CMainApp::Ready_Texture_Setting()
 		return E_FAIL;
 #pragma endregion
 
+#pragma region Prototype_Component_Minimap
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Rect_Minimap"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/UI/Minimap/Minimap.png"), 1))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Rect_Minimap_Icon_DownStair"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/UI/Minimap/MapIcon_DownStair_%d.png"), 4))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Rect_Minimap_Icon_UpStair"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/UI/Minimap/MapIcon_UpStair_0.png"), 4))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Rect_Enemy"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/UI/Minimap/MapIcon_Enemy_%d.png"), 4))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Rect_Hp"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/UI/Minimap/MapIcon_HP_%d.png"), 4))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Rect_Luck"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/UI/Minimap/MapIcon_Luck_%d.png"), 4))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Rect_MaxHp"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/UI/Minimap/MapIcon_MaxHP_%d.png"), 4))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Rect_Sephirite"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/UI/Minimap/MapIcon_Sephirite_%d.png"), 4))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Rect_Shop"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/UI/Minimap/MapIcon_Shop_%d.png"), 4))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Rect_Arrow"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/UI/Minimap/Multi_Arrow_UI_00.png"), 1))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Rect_Map_Tile"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/UI/Minimap/Map_Slot_Big_%d.png"), 8))))
+		return E_FAIL;
+
+#pragma endregion
+
+
+
 	return S_OK;
 }
 
@@ -794,6 +852,8 @@ void CMainApp::Ready_Key_Setting()
 	m_pGameInstance->AddTrackingKey('Z');
 	m_pGameInstance->AddTrackingKey('R');
 	m_pGameInstance->AddTrackingKey('F');
+	m_pGameInstance->AddTrackingKey('B');
+	m_pGameInstance->AddTrackingKey(VK_F1);
 	// 임시 테스트용
 #if _DEBUG
 	m_pGameInstance->AddTrackingKey('J');
@@ -830,6 +890,20 @@ void CMainApp::Ready_Font_Setting()
 		MSG_BOX(TEXT("FAILED to Font"));
 
 	if (FAILED(m_pGameInstance->Ready_Font(TEXT("UI_Font_22_Normal"), TEXT("../Bin/Resources/Font/Galmuri9.ttf"), TEXT("Galmuri9 Regular"), 0, 22, 500)))
+		MSG_BOX(TEXT("FAILED to Font"));
+
+
+
+	if (FAILED(m_pGameInstance->Ready_Font(TEXT("UI_Font_26_Damage"), TEXT("../Bin/Resources/Font/Galmuri9.ttf"), TEXT("Galmuri9 Regular"), 0, 26, 700)))
+		MSG_BOX(TEXT("FAILED to Font"));
+	if (FAILED(m_pGameInstance->Ready_Font(TEXT("UI_Font_22_Damage"), TEXT("../Bin/Resources/Font/Galmuri9.ttf"), TEXT("Galmuri9 Regular"), 0, 22, 700)))
+		MSG_BOX(TEXT("FAILED to Font"));
+
+
+	if (FAILED(m_pGameInstance->Ready_Font(TEXT("UI_Font_28_Minimap"), TEXT("../Bin/Resources/Font/Galmuri9.ttf"), TEXT("Galmuri9 Regular"), 28, 26, 700)))
+		MSG_BOX(TEXT("FAILED to Font"));
+
+	if (FAILED(m_pGameInstance->Ready_Font(TEXT("UI_Font_24_Minimap"), TEXT("../Bin/Resources/Font/Galmuri9.ttf"), TEXT("Galmuri9 Regular"), 14, 18, 600)))
 		MSG_BOX(TEXT("FAILED to Font"));
 
 	if (FAILED(m_pGameInstance->Ready_Font(TEXT("UI_Font_22"), TEXT("../Bin/Resources/Font/Galmuri9.ttf"), TEXT("Galmuri9 Regular"), 0, 22, 700)))

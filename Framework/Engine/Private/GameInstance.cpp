@@ -96,7 +96,7 @@ HRESULT CGameInstance::Initialize_Engine(const ENGINE_DESC& EngineDesc, LPDIRECT
 
 void CGameInstance::Update_Engine(_float fTimeDelta)
 {
-    if (IsKeyDown(VK_TAB))
+    if (IsKeyDown('B'))
         m_pCollision_Manager->Set_IsRender();
     // 콜리전 충돌확인
     m_pCollision_Manager->Check_RoomCollisions();
@@ -433,9 +433,9 @@ CBase* CGameInstance::find_ItemObject(_uint iIndex)
     return m_pItem_Manager->find_ItemObject(iIndex);
 }
 
-CItemObject* CGameInstance::Get_ItemObject(_uint iIndex)
+CItemObject* CGameInstance::Get_ItemObject(_uint iIndex, _bool isInven)
 {
-    return m_pItem_Manager->Get_ItemObject(iIndex);
+    return m_pItem_Manager->Get_ItemObject(iIndex, isInven);
 }
 CItemObject* CGameInstance::Pop_Item()
 {
@@ -445,17 +445,25 @@ CButton* CGameInstance::Pop_Slot()
 {
     return m_pItem_Manager->Pop_Slot();
 }
+const _uint CGameInstance::Pop_ISlot_Type()
+{
+    return m_pItem_Manager->Pop_ISlot_Type();
+}
 _uint CGameInstance::Pop_Item_Count()
 {
     return m_pItem_Manager->Pop_Item_Count();
 }
-void CGameInstance::Pick_ItemSlot(CItemObject* pPickItem, CButton* pSlot, _uint iItemCount)
+void CGameInstance::Pick_ItemSlot(CItemObject* pPickItem, CButton* pSlot, _uint iItemCount, _uint iSlottype)
 {
-    m_pItem_Manager->Pick_ItemSlot(pPickItem, pSlot, iItemCount);
+    m_pItem_Manager->Pick_ItemSlot(pPickItem, pSlot, iItemCount, iSlottype);
 }
 void CGameInstance::Pick_Reset()
 {
     m_pItem_Manager->Pick_Reset();
+}
+const vector<_int> CGameInstance::AcquiredItem_List()
+{
+    return m_pItem_Manager->AcquiredItem_List();
 }
 #pragma endregion
 
@@ -474,6 +482,9 @@ void CGameInstance::Broadcast(_uint iTypeIndex, const EVENTDATA* pData)
 {
     m_pEvent_Manager->Broadcast(iTypeIndex, pData);
 }
+#pragma endregion
+
+#pragma region UI_MANAGER
 HRESULT CGameInstance::Add_UIObject(_uint iLevelIndex, const _wstring& strUITag, CUIObject* pUIObj)
 {
     return m_pUIObject_Manager->Add_UIObject(iLevelIndex, strUITag, pUIObj);

@@ -5,9 +5,10 @@ CItemObject::CItemObject(LPDIRECT3DDEVICE9 pGraphic_Device) : CUIObject(pGraphic
 {
 }
 
-CItemObject::CItemObject(const CItemObject& Prototype) : CUIObject(Prototype), m_iItemID{ Prototype.m_iItemID }, m_iItemType{ Prototype.m_iItemType }, m_iRarity{ Prototype.m_iRarity }, m_szName{ Prototype.m_szName }, m_szDescription{ Prototype.m_szDescription }
+CItemObject::CItemObject(const CItemObject& Prototype) : CUIObject(Prototype), m_iItemID{ Prototype.m_iItemID }, m_iItemType{ Prototype.m_iItemType }, 
+m_iRarity{ Prototype.m_iRarity }, m_szName{ Prototype.m_szName }, m_szDescription{ Prototype.m_szDescription },
+m_iItemTextureID(Prototype.m_iItemTextureID), m_iItemValue(Prototype.m_iItemValue), m_fAngle(Prototype.m_fAngle)
 {
-
 }
 HRESULT CItemObject::Initialize(void* pArg)
 {

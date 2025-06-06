@@ -36,7 +36,8 @@ HRESULT CMole_A::Initialize(void* pArg)
 void CMole_A::Priority_Update(_float fTimeDelta)
 {
     __super::Priority_Update(fTimeDelta);
-    if (m_pHpBar != nullptr)
+    if (m_pHpBar != nullptr &&
+        m_isSummoned)
         m_pHpBar->Render_HP_Progress(m_pTransformCom, m_iCulHp, m_iMaxHp);
 
     if (m_iCulHp <= 0)
@@ -45,12 +46,18 @@ void CMole_A::Priority_Update(_float fTimeDelta)
 
 void CMole_A::Update(_float fTimeDelta)
 {
+    if (m_bDead)
+        return;
+
+
     _float fMinDist = 6.f;      // 추적 상태로 변할 기준 거리
     _float fMaxDist = 12.f;     // 어그로가 풀리는 기준 거리
     _float fAtkDist = 1.5f;     // 근접공격할 기준 거리
 
 
 
+    // 아래에서 사용할 변수들
+#pragma region Variables Setting
 
     _uint iCurLevel = CGameInstance::GetInstance()->Get_CurrentLevel();
 
@@ -66,11 +73,10 @@ void CMole_A::Update(_float fTimeDelta)
     // ********* matMonster 구하기
     _float4x4 matMonsterWorld = *m_pTransformCom->Get_WorldMatrix();
 
-    
-    
-    // *** 상태 분기 정리
-    _float fPointY = 0.f;       // 교차 평면의 기준이 될 Y값
-    
+#pragma endregion
+
+    // **** 이펙트 크기조절용 초기설정
+#pragma region Effect Setting
 
     // 이펙트용
     // 1. 원점으로 이동
@@ -110,7 +116,38 @@ void CMole_A::Update(_float fTimeDelta)
 
     matMonsterWorld = matTransToOrigin * matScale * matRotateChild * matRotateChildtoPlayer * matTransReturn * matTransAddition;
 
+#pragma endregion
+    // ***********************
 
+
+    // 최초 소환
+#pragma region Summon States
+
+    if (m_pAnimatorCom->Get_CurStateTag() == L"Summon_Standby")
+    {
+        m_pAnimatorCom->Change_State(L"Summon", true, 0.5f);
+    }
+    else if (m_pAnimatorCom->Get_CurStateTag() == L"Summon")
+    {
+        if (!m_pAnimatorCom->Change_State(L"Summon_End"))
+        {
+            _int iCnt = m_pAnimatorCom->Get_CurStackedFrame();
+            _float fY = max(-0.005f * (float)pow(iCnt, 2) + 4.5f, 0.2f);
+            m_pTerrainBox->SetUp_OnTerrainBox(m_pTransformCom, _float3(0.05f, fY, 0.05f));
+        }
+        else
+            m_isSummoned = true;
+    }
+    else if (m_pAnimatorCom->Get_CurStateTag() == L"Summon_End")
+    {
+        m_pAnimatorCom->Change_State(L"Idle");
+    }
+
+#pragma endregion
+
+    
+    // 행동 분기
+#pragma region Other States
 
     // 거리가 아주 가깝다면 공격 상태
     if (fDistance <= fAtkDist)
@@ -159,20 +196,25 @@ void CMole_A::Update(_float fTimeDelta)
     {
         if (m_pAnimatorCom->Change_State(L"Attack_Standby"));
     }
+
+
     
+    if (m_pAnimatorCom->Get_CurStateTag() == L"Airborne")
+        m_pAnimatorCom->Change_State(L"Attack_Standby");
+
+
     if (m_pAnimatorCom->Get_CurStateTag() == L"Attack_Standby")
         m_pAnimatorCom->Change_State(L"Idle");
-    
+
+#pragma endregion
 
 
 
-    if (m_pTerrainBox != nullptr) {
+    if (m_pTerrainBox != nullptr &&
+        !(m_pAnimatorCom->Get_CurStateTag() == L"Summon_Standby" ||
+        m_pAnimatorCom->Get_CurStateTag() == L"Summon")) {
         m_pTerrainBox->SetUp_OnTerrainBox(m_pTransformCom, _float3(0.05f, 0.2f, 0.05f));
     }
-
-    //if (m_isTracking)           m_pAnimatorCom->Change_State(L"Move");
-    //else                        m_pAnimatorCom->Change_State(L"Idle");
-    // m_isTracking = false;
 }
 
 void CMole_A::Late_Update(_float fTimeDelta)
@@ -265,6 +307,10 @@ HRESULT CMole_A::Ready_Components(void* pArg)
         TEXT("Com_Animator"), reinterpret_cast<CComponent**>(&m_pAnimatorCom), &StartAnimStateDesc)))
         return E_FAIL;
 	// State 삽입
+    m_pAnimatorCom->Add_State(L"Summon_Standby",{ nullptr, 90 /* 나중에 랜덤값 삽입 */, false});  // 소환 딜레이용
+    m_pAnimatorCom->Add_State(L"Summon",        { m_pTextureCom_Down, 4, false });      // 소환
+    m_pAnimatorCom->Add_State(L"Summon_End",    { m_pTextureCom_Down, 4, false });      // 6
+    
     m_pAnimatorCom->Add_State(L"Idle",          { m_pTextureCom_Idle, 4, true });       // 6
 	m_pAnimatorCom->Add_State(L"Move",          { m_pTextureCom_Move, 4, true });       // 10
 	m_pAnimatorCom->Add_State(L"Down",          { m_pTextureCom_Down, 4, false });      // 1
@@ -287,6 +333,39 @@ void CMole_A::OnCollision(CGameObject* pGameObject)
     __super::OnCollision(pGameObject);
 
     //m_isTracking = true;
+
+
+    switch (pGameObject->Get_ObjType())
+    {
+    case GAMEOBJ_TYPE::PLAYER_EFFECT:
+        if (!m_bIsHit) {
+            wstring strStateTag = {};
+            _float fPointY = 0.f;       // 교차 평면의 기준이 될 Y값
+            _float3 vRayPoint = {};     // fPointY 값 기준 마우스 Ray와 교차하는 좌표
+            m_pGameInstance->Get_IntersectAtY(fPointY, vRayPoint);
+
+            _float3 vThisPos = {};    // 플레이어 좌표
+            vThisPos = m_pTransformCom->Get_State(STATE::POSITION);
+
+            //strStateTag = (vRayPoint.z > vPlayerPos.z)?     L"Idle_Upper":
+                                                            //L"Idle_Lower";
+
+            //m_pAnimatorCom->Change_State(strStateTag, true, 2);
+            m_pAnimatorCom->Change_State(L"Airborne", false, 0.5, true);
+
+
+            CTransform* pEnemyTransform = dynamic_cast<CTransform*>(pGameObject->Find_Component(L"Com_Transform"));
+            _float3 vEnemyPos = pEnemyTransform->Get_State(STATE::POSITION);
+            _float3 vStunDir = vThisPos - vEnemyPos;
+            D3DXVec3Normalize(&vStunDir, &vStunDir);
+
+            _float3 vResult = vThisPos + vStunDir * 0.5f;    // 밀려날 정도 테스트
+            m_pTransformCom->Set_State(STATE::POSITION, vResult);
+
+            m_bIsHit = true;
+        }
+    }
+
 }
 
 CMole_A* CMole_A::Create(LPDIRECT3DDEVICE9 pGraphic_Device)

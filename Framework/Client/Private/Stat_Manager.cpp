@@ -84,9 +84,12 @@ void CStat_Manager::Cal_Stats(STAT_INFO eStat, float fValue)
             m_fCurStats[static_cast<int>(eStat)] -= 100.f;
             m_fCurStats[static_cast<int>(STAT_INFO::LEVEL)] += 1.f;
         }
-
     }
-    
+}
+
+void CStat_Manager::Set_Stats(STAT_INFO eStat, float fValue)
+{
+    m_fCurStats[static_cast<int>(eStat)] = fValue;
 }
 
 void CStat_Manager::Interaction_Obj_Stat(GAMEOBJ_TYPE eType)

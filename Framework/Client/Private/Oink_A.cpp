@@ -27,6 +27,7 @@ HRESULT COink_A::Initialize(void* pArg)
         return E_FAIL;
 
     Ready_Object();
+    
     m_iAtkCooldownFrames = static_cast<_int>(m_pGameInstance->Compute_Random(0, 300));
 
     m_iMaxHp = 50;
@@ -37,7 +38,8 @@ HRESULT COink_A::Initialize(void* pArg)
 void COink_A::Priority_Update(_float fTimeDelta)
 {
     __super::Priority_Update(fTimeDelta);
-    if (m_pHpBar != nullptr)
+    if (m_pHpBar != nullptr &&
+        m_isSummoned)
         m_pHpBar->Render_HP_Progress(m_pTransformCom, m_iCulHp, m_iMaxHp);
 
     if (m_iCulHp <= 0)
@@ -49,6 +51,7 @@ void COink_A::Update(_float fTimeDelta)
     if (m_bDead)
         return;
 
+    
     _float fMinDist = 5.f;      // 원거리 공격 할 기준 거리
     _float fMaxDist = 12.f;     // 어그로가 풀리는 기준 거리
     _float fAtkDist = 2.f;     // 근접공격할 기준 거리
@@ -60,6 +63,8 @@ void COink_A::Update(_float fTimeDelta)
     m_iAtkCooldownFrames++;
 
 
+    // 아래에서 사용할 변수들
+#pragma region Variables Setting
 
     _uint iCurLevel = CGameInstance::GetInstance()->Get_CurrentLevel();
 
@@ -75,8 +80,10 @@ void COink_A::Update(_float fTimeDelta)
     // ********* matMonster 구하기
     _float4x4 matMonsterWorld = *m_pTransformCom->Get_WorldMatrix();
 
+#pragma endregion
 
-
+    // **** 이펙트 크기조절용 초기설정
+#pragma region Effect Setting
 
     // 이펙트용
     // 1. 원점으로 이동
@@ -116,10 +123,39 @@ void COink_A::Update(_float fTimeDelta)
 
     matMonsterWorld = matTransToOrigin * matScale * matRotateChild * matRotateChildtoPlayer * matTransReturn * matTransAddition;
 
+#pragma endregion
+    // ***********************
 
 
+    // 최초 소환
+#pragma region Summon States
 
-    // ksta : 여기에 분기 추가 필요
+    if (m_pAnimatorCom->Get_CurStateTag() == L"Summon_Standby")
+    {
+        m_pAnimatorCom->Change_State(L"Summon", true, 0.5f);
+    }
+    else if (m_pAnimatorCom->Get_CurStateTag() == L"Summon")
+    {
+        if (!m_pAnimatorCom->Change_State(L"Summon_End"))
+        {
+            _int iCnt = m_pAnimatorCom->Get_CurStackedFrame();
+            _float fY = max(-0.005f * (float)pow(iCnt, 2) + 4.5f, 0.2f);
+            m_pTerrainBox->SetUp_OnTerrainBox(m_pTransformCom, _float3(0.05f, fY, 0.05f));
+        }
+        else
+            m_isSummoned = true;
+    }
+    else if (m_pAnimatorCom->Get_CurStateTag() == L"Summon_End")
+    {
+        m_pAnimatorCom->Change_State(L"Idle");
+    }
+
+#pragma endregion
+
+
+    // 행동 분기
+#pragma region Other States
+
     if (!(m_pAnimatorCom->Get_CurStateTag() == L"ChargeReady" ||
         m_pAnimatorCom->Get_CurStateTag() == L"ChargeReady_Cycle" ||
         m_pAnimatorCom->Get_CurStateTag() == L"ChargeEnd" ||
@@ -198,22 +234,22 @@ void COink_A::Update(_float fTimeDelta)
 
 
 
+    if (m_pAnimatorCom->Get_CurStateTag() == L"Charge_Airborne")
+        m_pAnimatorCom->Change_State(L"Attack_Standby");
+
     // 딜레이 Exit 역할
     if (m_pAnimatorCom->Get_CurStateTag() == L"Attack_Standby")
         m_pAnimatorCom->Change_State(L"Idle");
 
+#pragma endregion
 
 
 
-
-
-    if (m_pTerrainBox != nullptr) {
+    if (m_pTerrainBox != nullptr &&
+        !(m_pAnimatorCom->Get_CurStateTag() == L"Summon_Standby" ||
+            m_pAnimatorCom->Get_CurStateTag() == L"Summon")) {
         m_pTerrainBox->SetUp_OnTerrainBox(m_pTransformCom, _float3(0.05f, 0.2f, 0.05f));
     }
-
-    //if (m_isTracking)           m_pAnimatorCom->Change_State(L"Move");
-	//else                        m_pAnimatorCom->Change_State(L"Idle");
-	//m_isTracking = false;
 }
 
 void COink_A::Late_Update(_float fTimeDelta)
@@ -326,6 +362,10 @@ HRESULT COink_A::Ready_Components(void* pArg)
         return E_FAIL;
 
     // State 삽입
+    m_pAnimatorCom->Add_State(L"Summon_Standby",        { nullptr, 90 /* 나중에 랜덤값 삽입 */, false });  // 소환 딜레이용
+    m_pAnimatorCom->Add_State(L"Summon",                { m_pTextureCom_Charge_Down, 4, false });      // 소환
+    m_pAnimatorCom->Add_State(L"Summon_End",            { m_pTextureCom_Charge_Down, 4, false });      // 6
+
     m_pAnimatorCom->Add_State(L"Idle",                  { m_pTextureCom_Idle, 4, true });
 	m_pAnimatorCom->Add_State(L"Move",                  { m_pTextureCom_Move, 4, true });
 	m_pAnimatorCom->Add_State(L"Attack",                { m_pTextureCom_Attack, 6, false });
@@ -351,6 +391,39 @@ HRESULT COink_A::Ready_Object()
 void COink_A::OnCollision(CGameObject* pGameObject)
 {
 	__super::OnCollision(pGameObject);
+
+
+    switch (pGameObject->Get_ObjType())
+    {
+    case GAMEOBJ_TYPE::PLAYER_EFFECT:
+        if (!m_bIsHit) {
+            wstring strStateTag = {};
+            _float fPointY = 0.f;       // 교차 평면의 기준이 될 Y값
+            _float3 vRayPoint = {};     // fPointY 값 기준 마우스 Ray와 교차하는 좌표
+            m_pGameInstance->Get_IntersectAtY(fPointY, vRayPoint);
+
+            _float3 vThisPos = {};    // 플레이어 좌표
+            vThisPos = m_pTransformCom->Get_State(STATE::POSITION);
+
+            //strStateTag = (vRayPoint.z > vPlayerPos.z)?     L"Idle_Upper":
+                                                            //L"Idle_Lower";
+
+            //m_pAnimatorCom->Change_State(strStateTag, true, 2);
+            m_pAnimatorCom->Change_State(L"Charge_Airborne", false, 0.5, true);
+
+
+            CTransform* pEnemyTransform = dynamic_cast<CTransform*>(pGameObject->Find_Component(L"Com_Transform"));
+            _float3 vEnemyPos = pEnemyTransform->Get_State(STATE::POSITION);
+            _float3 vStunDir = vThisPos - vEnemyPos;
+            D3DXVec3Normalize(&vStunDir, &vStunDir);
+
+            _float3 vResult = vThisPos + vStunDir * 0.5f;    // 밀려날 정도 테스트
+            m_pTransformCom->Set_State(STATE::POSITION, vResult);
+
+            m_bIsHit = true;
+        }
+    }
+
 
 	//m_isTracking = true;
 }
