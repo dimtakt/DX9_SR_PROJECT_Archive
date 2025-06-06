@@ -18,8 +18,8 @@ HRESULT CMinimap_Player::Initialize_Prototype(LEVEL eLevel)
 
 HRESULT CMinimap_Player::Initialize(void* pArg)
 {
-	m_fSizeX = 64;
-	m_fSizeY = 64;
+	m_fSizeX = 96;
+	m_fSizeY = 96;
 	m_fX = 0;
 	m_fY = 0;
 	m_fZ = UI_DEPTH::MINIMAP_BUTTON;

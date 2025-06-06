@@ -813,8 +813,11 @@
     <ClInclude Include="..\public\Minimap_Node.h">
       <Filter>02.GameObject\UI\Window\Minimap\Minimap_Button</Filter>
     </ClInclude>
-    <ClInclude Include="..\public\Field_Damage.h">
+    <ClInclude Include="..\public\Field_Font.h">
       <Filter>02.GameObject\UI\Field\Field_Damage</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Talent_Button_Tip.h">
+      <Filter>02.GameObject\UI\Window\Talent\Talent_Slot\Talent_Slot_Etc\Selete_Button</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1209,8 +1212,11 @@
     <ClCompile Include="..\private\Minimap_Node.cpp">
       <Filter>02.GameObject\UI\Window\Minimap\Minimap_Button</Filter>
     </ClCompile>
-    <ClCompile Include="..\private\Field_Damage.cpp">
+    <ClCompile Include="..\private\Field_Font.cpp">
       <Filter>02.GameObject\UI\Field\Field_Damage</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Talent_Button_Tip.cpp">
+      <Filter>02.GameObject\UI\Window\Talent\Talent_Slot\Talent_Slot_Etc\Selete_Button</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

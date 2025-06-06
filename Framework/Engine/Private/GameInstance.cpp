@@ -455,6 +455,9 @@ void CGameInstance::Broadcast(_uint iTypeIndex, const EVENTDATA* pData)
 {
     m_pEvent_Manager->Broadcast(iTypeIndex, pData);
 }
+#pragma endregion
+
+#pragma region UI_MANAGER
 HRESULT CGameInstance::Add_UIObject(_uint iLevelIndex, const _wstring& strUITag, CUIObject* pUIObj)
 {
     return m_pUIObject_Manager->Add_UIObject(iLevelIndex, strUITag, pUIObj);

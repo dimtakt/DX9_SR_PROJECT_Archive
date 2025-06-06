@@ -33,6 +33,7 @@ namespace Client
 		//FILED
 		static constexpr float FILED_HP = 0.3f;
 		static constexpr float FILED_HP_FRAME = 0.4f;
+		static constexpr float FILED_FONT = 0.29;
 
 		//INVEN
 		static constexpr float INVEN_SLOT_SELETE = 0.1f;

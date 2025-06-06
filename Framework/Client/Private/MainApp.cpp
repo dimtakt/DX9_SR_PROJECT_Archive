@@ -33,6 +33,7 @@
 #include "EXP_Ball.h"
 #include "Gacha.h"
 #include "Minimap.h"
+#include "Field_Font.h"
 CMainApp::CMainApp()
 	: m_pGameInstance{ CGameInstance::GetInstance() }
 {
@@ -183,6 +184,9 @@ HRESULT CMainApp::Ready_GameObject_Setting()
 #pragma region Prototype_GameObject_Field_UI
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_Field_Hp"),
 		CField_Hp::Create(m_pGraphic_Device, LEVEL::LEVEL_STATIC))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_Field_Font"),
+		CField_Font::Create(m_pGraphic_Device, LEVEL::LEVEL_STATIC))))
 		return E_FAIL;
 #pragma endregion
 
@@ -815,6 +819,7 @@ void CMainApp::Ready_Key_Setting()
 	m_pGameInstance->AddTrackingKey('Z');
 	m_pGameInstance->AddTrackingKey('R');
 	m_pGameInstance->AddTrackingKey('F');
+	m_pGameInstance->AddTrackingKey(VK_F1);
 	// 임시 테스트용
 #if _DEBUG
 	m_pGameInstance->AddTrackingKey('J');
@@ -852,7 +857,15 @@ void CMainApp::Ready_Font_Setting()
 
 	if (FAILED(m_pGameInstance->Ready_Font(TEXT("UI_Font_22_Normal"), TEXT("../Bin/Resources/Font/Galmuri9.ttf"), TEXT("Galmuri9 Regular"), 0, 22, 500)))
 		MSG_BOX(TEXT("FAILED to Font"));
-	
+
+
+
+	if (FAILED(m_pGameInstance->Ready_Font(TEXT("UI_Font_26_Damage"), TEXT("../Bin/Resources/Font/Galmuri9.ttf"), TEXT("Galmuri9 Regular"), 0, 26, 700)))
+		MSG_BOX(TEXT("FAILED to Font"));
+	if (FAILED(m_pGameInstance->Ready_Font(TEXT("UI_Font_22_Damage"), TEXT("../Bin/Resources/Font/Galmuri9.ttf"), TEXT("Galmuri9 Regular"), 0, 22, 700)))
+		MSG_BOX(TEXT("FAILED to Font"));
+
+
 	if (FAILED(m_pGameInstance->Ready_Font(TEXT("UI_Font_28_Minimap"), TEXT("../Bin/Resources/Font/Galmuri9.ttf"), TEXT("Galmuri9 Regular"), 28, 26, 700)))
 		MSG_BOX(TEXT("FAILED to Font"));
 
