@@ -71,7 +71,7 @@ HRESULT CGameInstance::Initialize_Engine(const ENGINE_DESC& EngineDesc, LPDIRECT
     if (nullptr == m_pFont_Manager)
         return E_FAIL;
 
-    m_pLight_Manager = CLight_Manager::Create(*ppOut);
+    m_pLight_Manager = CLight_Manager::Create();
     if (nullptr == m_pLight_Manager)
         return E_FAIL;
 
@@ -377,10 +377,37 @@ void CGameInstance::Render_Font(const wstring& strFontTag,
 }
 #pragma endregion
 
-HRESULT CGameInstance::Ready_Light(const D3DLIGHT9* pLightInfo, const _uint& iIndex)
+#pragma region LIGHT_MANAGEr
+
+void CGameInstance::Add_Light(const _wstring& strID, const LIGHTDATA& data)
 {
-    return m_pLight_Manager->Ready_Light(pLightInfo, iIndex);
+    return m_pLight_Manager->Add_Light(strID, data);
 }
+void CGameInstance::Remove_Light(const _wstring& strID)
+{
+    return Remove_Light(strID);
+}
+const unordered_map<_wstring, LIGHTDATA>& CGameInstance::Get_Lights() const
+{
+    return m_pLight_Manager->Get_Lights();
+}
+const LIGHTDATA* CGameInstance::Get_Light(const _wstring& strID) const
+{
+    return m_pLight_Manager->Get_Light(strID);
+}
+void CGameInstance::Update_LightDirection(const _wstring& strID, const D3DXVECTOR3& vDir)
+{
+    return m_pLight_Manager->Update_LightDirection(strID, vDir);
+}
+void CGameInstance::Update_LightPosition(const _wstring& strID, const D3DXVECTOR3& vPos)
+{
+    return m_pLight_Manager->Update_LightPosition(strID, vPos);
+}
+void CGameInstance::Apply_ToShader(CShader* pShader, const vector<_wstring>& vecKeys)
+{
+    return m_pLight_Manager->Apply_ToShader(pShader, vecKeys);
+}
+#pragma endregion
 
 
 #pragma region ANIMATION_MANAGER

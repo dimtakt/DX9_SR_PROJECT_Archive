@@ -21,72 +21,81 @@ HRESULT CVIBuffer_Rect::Initialize_Prototype()
 	m_iNumIndices = 6;
 	m_eIndexFormat = D3DFMT_INDEX16;
 
-	m_pVertexPositions = new _float3[m_iNumVertices];
-
+#pragma region VERTEX_BUFFER
 	if (FAILED(m_pGraphic_Device->CreateVertexBuffer(m_iVertexStride * m_iNumVertices, 0, m_iFVF, D3DPOOL_MANAGED, &m_pVB, nullptr)))
 		return E_FAIL;
 
-
-	// ¹öÅØ½º ¹öÆÛ
 	VTXNORTEX* pVertices = { nullptr };
+	m_pVertexPositions = new _float3[m_iNumVertices];
 
-	m_pVB->Lock(0, 0, reinterpret_cast<void**>(&pVertices), 0);
+	m_pVB->Lock(0, /*m_iNumVertices * m_iVertexStride*/0, reinterpret_cast<void**>(&pVertices), 0);
 
 	m_pVertexPositions[0] = pVertices[0].vPosition = _float3(-0.5f, 0.5f, 0.f);
 	pVertices[0].vTexcoord = _float2(0.f, 0.f);
-
+	pVertices[0].vNormal = _float3(0.f, 0.f, 0.f);
 	m_pVertexPositions[1] = pVertices[1].vPosition = _float3(0.5f, 0.5f, 0.f);
 	pVertices[1].vTexcoord = _float2(1.f, 0.f);
-
+	pVertices[1].vNormal = _float3(0.f, 0.f, 0.f);
 	m_pVertexPositions[2] = pVertices[2].vPosition = _float3(0.5f, -0.5f, 0.f);
 	pVertices[2].vTexcoord = _float2(1.f, 1.f);
-
+	pVertices[2].vNormal = _float3(0.f, 0.f, 0.f);
 	m_pVertexPositions[3] = pVertices[3].vPosition = _float3(-0.5f, -0.5f, 0.f);
 	pVertices[3].vTexcoord = _float2(0.f, 1.f);
+	pVertices[3].vNormal = _float3(0.f, 0.f, 0.f);
 
-	// ÀÎµ¦½º ¹öÆÛ
-	m_pIndices = new _uint[m_iNumIndices];
+#pragma endregion 
+
+
+#pragma region INDEX_BUFFER
 
 	if (FAILED(m_pGraphic_Device->CreateIndexBuffer(m_iIndexStride * m_iNumIndices, 0, m_eIndexFormat, D3DPOOL_MANAGED, &m_pIB, nullptr)))
 		return E_FAIL;
 
 	_ushort* pIndices = { nullptr };
+	m_pIndices = new _ushort[m_iNumIndices];
+	ZeroMemory(m_pIndices, sizeof(_ushort) * m_iNumIndices);
 
 	m_pIB->Lock(0, 0, reinterpret_cast<void**>(&pIndices), 0);
-
-	_float3		vSourDir, vDestDir, vNormal;
 
 	pIndices[0] = 0;
 	pIndices[1] = 1;
 	pIndices[2] = 2;
 
-	vSourDir = pVertices[1].vPosition - pVertices[0].vPosition;
-	vDestDir = pVertices[2].vPosition - pVertices[1].vPosition;
-	D3DXVec3Normalize(&vNormal, D3DXVec3Cross(&vNormal, &vSourDir, &vDestDir));
-
-	pVertices[0].vNormal += vNormal;
-	pVertices[1].vNormal += vNormal;
-	pVertices[2].vNormal += vNormal;
-
 	pIndices[3] = 0;
 	pIndices[4] = 2;
 	pIndices[5] = 3;
 
-	vSourDir = pVertices[2].vPosition - pVertices[0].vPosition;
-	vDestDir = pVertices[3].vPosition - pVertices[2].vPosition;
-	D3DXVec3Normalize(&vNormal, D3DXVec3Cross(&vNormal, &vSourDir, &vDestDir));
+	_float3 vSourDir, vDestDir, vNormal;
 
+	// »ï°¢Çü 1 (0,1,2)
+	vSourDir = pVertices[2].vPosition - pVertices[1].vPosition;
+	vDestDir = pVertices[1].vPosition - pVertices[0].vPosition;
+	D3DXVec3Cross(&vNormal, &vSourDir, &vDestDir);
+	D3DXVec3Normalize(&vNormal, &vNormal);
+	pVertices[0].vNormal += vNormal;
+	pVertices[1].vNormal += vNormal;
+	pVertices[2].vNormal += vNormal;
+
+	// »ï°¢Çü 2 (0,2,3)
+	vSourDir = pVertices[3].vPosition - pVertices[2].vPosition;
+	vDestDir = pVertices[2].vPosition - pVertices[0].vPosition;
+	D3DXVec3Cross(&vNormal, &vSourDir, &vDestDir);
+	D3DXVec3Normalize(&vNormal, &vNormal);
 	pVertices[0].vNormal += vNormal;
 	pVertices[2].vNormal += vNormal;
 	pVertices[3].vNormal += vNormal;
 
+	for (size_t i = 0; i < m_iNumVertices; i++)
+		D3DXVec3Normalize(&pVertices[i].vNormal, &pVertices[i].vNormal);
 
 	m_pVB->Unlock();
 	m_pIB->Unlock();
 
-	memcpy(m_pIndices, pIndices, m_iIndexStride * m_iNumIndices);
+	memcpy(m_pIndices, pIndices, sizeof(_ushort) * m_iNumIndices);
 
-    return S_OK;
+#pragma endregion 
+
+	return S_OK;
 }
 
 HRESULT CVIBuffer_Rect::Initialize_Prototype(D3DXCOLOR vColor)
@@ -155,7 +164,7 @@ HRESULT CVIBuffer_Rect::Initialize(void* pArg)
 
 void CVIBuffer_Rect::ChangeUV_FlipX(_bool isFlipped)
 {
-	VTXPOSTEX* pVertices = nullptr;
+	VTXNORTEX* pVertices = nullptr;
 	if (FAILED(m_pVB->Lock(0, 0, reinterpret_cast<void**>(&pVertices), 0)))
 		return;
 
@@ -179,7 +188,7 @@ void CVIBuffer_Rect::ChangeUV_FlipX(_bool isFlipped)
 
 void CVIBuffer_Rect::ResetUV_FlipX()
 {
-	VTXPOSTEX* pVertices = nullptr;
+	VTXNORTEX* pVertices = nullptr;
 	if (FAILED(m_pVB->Lock(0, 0, reinterpret_cast<void**>(&pVertices), 0)))
 		return;
 

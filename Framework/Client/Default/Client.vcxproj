@@ -181,6 +181,8 @@
     <ClInclude Include="..\Public\Level_Stage3.h" />
     <ClInclude Include="..\Public\Level_Stage4.h" />
     <ClInclude Include="..\Public\Level_Town.h" />
+    <ClInclude Include="..\Public\Point.h" />
+    <ClInclude Include="..\Public\Sun.h" />
     <ClInclude Include="..\public\Talent.h" />
     <ClInclude Include="..\Public\Effect_Factory.h" />
     <ClInclude Include="..\public\ChapMap_MapSymbol.h" />
@@ -315,6 +317,8 @@
     <ClCompile Include="..\Private\Level_Stage3.cpp" />
     <ClCompile Include="..\Private\Level_Stage4.cpp" />
     <ClCompile Include="..\Private\Level_Town.cpp" />
+    <ClCompile Include="..\Private\Point.cpp" />
+    <ClCompile Include="..\Private\Sun.cpp" />
     <ClCompile Include="..\private\Talent.cpp" />
     <ClCompile Include="..\Private\Effect_Factory.cpp" />
     <ClCompile Include="..\Private\Exit_Button.cpp" />
@@ -411,6 +415,14 @@
     <Image Include="small.ico" />
   </ItemGroup>
   <ItemGroup>
+    <FxCompile Include="..\Bin\ShaderFiles\LightShader.hlsl">
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">2.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Effect</ShaderType>
+    </FxCompile>
+    <FxCompile Include="..\Bin\ShaderFiles\TreeShader.hlsl">
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">2.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Effect</ShaderType>
+    </FxCompile>
     <FxCompile Include="..\Bin\ShaderFiles\LogoRipple.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Effect</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>

@@ -75,8 +75,8 @@ HRESULT CLevel_Stage2::Ready_Light()
 	LightDesc.Direction = { 1.f, -1.f, 1.f };
 
 
-	if (FAILED(m_pGameInstance->Ready_Light(&LightDesc, 0)))
-		return E_FAIL;
+	/*if (FAILED(m_pGameInstance->Ready_Light(&LightDesc, 0)))
+		return E_FAIL;*/
 
 	return S_OK;
 }

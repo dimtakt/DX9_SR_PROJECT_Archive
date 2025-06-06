@@ -367,6 +367,15 @@
     <Filter Include="02.GameObject\UI\Title\BackGround\Logo_Wave">
       <UniqueIdentifier>{e537c5f7-17c1-46af-96cd-4f0792ac1b67}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\Light">
+      <UniqueIdentifier>{530d2877-3a4a-498e-aa66-92de2c43e883}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Light\Sun">
+      <UniqueIdentifier>{5781095c-8b67-42a0-9697-c551f45d3bbc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Light\Point">
+      <UniqueIdentifier>{4c95667e-4666-4993-896c-363522e3755c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -780,6 +789,12 @@
     <ClInclude Include="..\public\Gacha_FX.h">
       <Filter>02.GameObject\UI\Window\Gacha\Gacha_FX</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Sun.h">
+      <Filter>02.GameObject\Light\Sun</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Point.h">
+      <Filter>02.GameObject\Light\Point</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -1155,6 +1170,12 @@
     <ClCompile Include="..\private\Gacha_FX.cpp">
       <Filter>02.GameObject\UI\Window\Gacha\Gacha_FX</Filter>
     </ClCompile>
+    <ClCompile Include="..\Private\Sun.cpp">
+      <Filter>02.GameObject\Light\Sun</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Point.cpp">
+      <Filter>02.GameObject\Light\Point</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="..\Bin\ShaderFiles\LogoRipple.hlsl">
@@ -1164,6 +1185,12 @@
       <Filter>96. ShaderFiles</Filter>
     </FxCompile>
     <FxCompile Include="..\Bin\ShaderFiles\TitleFadeIn.hlsl">
+      <Filter>96. ShaderFiles</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Bin\ShaderFiles\TreeShader.hlsl">
+      <Filter>96. ShaderFiles</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Bin\ShaderFiles\LightShader.hlsl">
       <Filter>96. ShaderFiles</Filter>
     </FxCompile>
   </ItemGroup>

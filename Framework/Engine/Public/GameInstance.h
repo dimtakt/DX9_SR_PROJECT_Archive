@@ -128,7 +128,13 @@ public:
 #pragma endregion
 	
 #pragma region LIGHT_MANAGER
-	HRESULT	Ready_Light(const D3DLIGHT9* pLightInfo, const _uint& iIndex);
+	void Add_Light(const _wstring& strID, const LIGHTDATA& data);
+	void Remove_Light(const _wstring& strID);
+	const unordered_map<_wstring, LIGHTDATA>& Get_Lights() const;
+	const LIGHTDATA* Get_Light(const _wstring& strID) const;
+	void Update_LightDirection(const _wstring& strID, const D3DXVECTOR3& vDir);
+	void Update_LightPosition(const _wstring& strID, const D3DXVECTOR3& vPos);
+	void Apply_ToShader(CShader* pShader, const vector<_wstring>& vecKeys);
 #pragma endregion
 
 #pragma region ANIMATION_MANAGER

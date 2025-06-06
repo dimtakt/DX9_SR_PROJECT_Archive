@@ -32,6 +32,8 @@
 #include "Talent.h"
 #include "EXP_Ball.h"
 #include "Gacha.h"
+#include "Sun.h"
+#include "Point.h"
 CMainApp::CMainApp()
 	: m_pGameInstance{ CGameInstance::GetInstance() }
 {
@@ -126,6 +128,8 @@ HRESULT CMainApp::Ready_Static_Setting()
 	if (FAILED(Ready_GameObject_Setting()))
 		return E_FAIL;
 
+	if (FAILED(Ready_Shader_Setting()))
+		return E_FAIL;
 	return S_OK;
 }
 
@@ -218,6 +222,18 @@ HRESULT CMainApp::Ready_GameObject_Setting()
 #pragma region Prototype_GameObject_Loding_EXP_Ball
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_EXP_Ball"),
 		CEXP_Ball::Create(m_pGraphic_Device))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region Prototype_GameObject_Sun
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_Sun"),
+		CSun::Create(m_pGraphic_Device))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region Prototype_GameObject_Point
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_Point"),
+		CPoint::Create(m_pGraphic_Device))))
 		return E_FAIL;
 #pragma endregion
 
@@ -735,6 +751,19 @@ HRESULT CMainApp::Ready_Animation_Setting()
 	if (FAILED(m_pGameInstance->Insert_Animation(L"Player_Parry", CAnim_Player_Parry::Create())))
 		return E_FAIL;
 	if (FAILED(m_pGameInstance->Insert_Animation(L"Player_Fury", CAnim_Player_Fury::Create())))
+		return E_FAIL;
+
+	return S_OK;
+}
+
+HRESULT CMainApp::Ready_Shader_Setting()
+{
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Shader_Tree"),
+		CShader::Create(m_pGraphic_Device, TEXT("../Bin/ShaderFiles/TreeShader.hlsl")))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Shader_Light"),
+		CShader::Create(m_pGraphic_Device, TEXT("../Bin/ShaderFiles/LightShader.hlsl")))))
 		return E_FAIL;
 
 	return S_OK;
