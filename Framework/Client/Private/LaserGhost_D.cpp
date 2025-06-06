@@ -158,7 +158,7 @@ void CLaserGhost_D::Update(_float fTimeDelta)
             matMonsterWorld = matTransToOrigin * matScale * matRotateChild * matRotateChildtoPlayer * matTransReturn * matTransOffset * matTransAddition;
 #pragma endregion
 
-            CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::MONSTER_EFFECT, L"Prototype_Component_Texture_LaserGhost_D_Summon",
+            CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::NORMAL_EFFECT, L"Prototype_Component_Texture_LaserGhost_D_Summon",
                 *m_pTransformCom->Get_WorldMatrix(), matMonsterWorld);
 
 #pragma region Reset Effect Matrix Setting
@@ -208,7 +208,7 @@ void CLaserGhost_D::Update(_float fTimeDelta)
         {
             if (m_pAnimatorCom->Change_State(L"AttackReady"))
             {
-                CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::MONSTER_EFFECT, L"Prototype_Component_Texture_LaserGhost_D_Effect_AttackReady",
+                CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::NORMAL_EFFECT, L"Prototype_Component_Texture_LaserGhost_D_Effect_AttackReady",
                     *m_pTransformCom->Get_WorldMatrix(), matMonsterWorld);
                 m_vLockedOnPos = vTargetPos;
                 m_isTracking = false;
@@ -252,7 +252,7 @@ void CLaserGhost_D::Update(_float fTimeDelta)
     {
         if (m_pAnimatorCom->Change_State(L"Attack_Start"))
         {
-            CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::MONSTER_EFFECT, L"Prototype_Component_Texture_LaserGhost_D_Effect_Attack_Start",
+            CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::NORMAL_EFFECT, L"Prototype_Component_Texture_LaserGhost_D_Effect_Attack_Start",
                 *m_pTransformCom->Get_WorldMatrix(), matMonsterWorld);
         }
     }
@@ -260,7 +260,7 @@ void CLaserGhost_D::Update(_float fTimeDelta)
     {
         if (m_pAnimatorCom->Change_State(L"Attack_Cycle", true, fLaserLifeTime))
         {
-            CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::MONSTER_EFFECT, L"Prototype_Component_Texture_LaserGhost_D_Effect_Attack_Cycle",
+            CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::NORMAL_EFFECT, L"Prototype_Component_Texture_LaserGhost_D_Effect_Attack_Cycle",
                 *m_pTransformCom->Get_WorldMatrix(), matMonsterWorld);
 
             // 레이저용 세팅
@@ -330,7 +330,7 @@ void CLaserGhost_D::Update(_float fTimeDelta)
 
         if (m_pAnimatorCom->Change_State(L"Attack_End"))
         {
-            CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::MONSTER_EFFECT, L"Prototype_Component_Texture_LaserGhost_D_Effect_Attack_End",
+            CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::NORMAL_EFFECT, L"Prototype_Component_Texture_LaserGhost_D_Effect_Attack_End",
                 *m_pTransformCom->Get_WorldMatrix(), matMonsterWorld, true);
             // 레이저용 세팅
 #pragma region Laser Setting Change
