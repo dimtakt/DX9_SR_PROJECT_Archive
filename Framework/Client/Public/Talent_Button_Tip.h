@@ -7,12 +7,12 @@ class CTexture;
 END
 
 BEGIN(Client)
-class CTalent_Icon_Selete final : public CUIObject
+class CTalent_Button_Tip final : public CUIObject
 {
 private:
-									CTalent_Icon_Selete(LPDIRECT3DDEVICE9 pGraphic_Device);
-									CTalent_Icon_Selete(const CTalent_Icon_Selete& Prototype);
-	virtual							~CTalent_Icon_Selete() = default;
+									CTalent_Button_Tip(LPDIRECT3DDEVICE9 pGraphic_Device);
+									CTalent_Button_Tip(const CTalent_Button_Tip& Prototype);
+	virtual							~CTalent_Button_Tip() = default;
 
 public:
 	virtual HRESULT					Initialize_Prototype() override;
@@ -26,11 +26,13 @@ private:
 	CVIBuffer_Rect*					m_pVIBufferCom = { nullptr };
 	CTexture*						m_pTextureCom = { nullptr };
 
+	_uint							m_iIndex = {};
 private:
 	HRESULT							Ready_Components();
-
+	void							Font_Render();
+	void							Tooltip_SizePosSet();
 public:
-	static CTalent_Icon_Selete*		Create(LPDIRECT3DDEVICE9 pGraphic_Device);
+	static CTalent_Button_Tip*		Create(LPDIRECT3DDEVICE9 pGraphic_Device);
 	virtual CGameObject*			Clone(void* pArg) override;
 	virtual void					Free() override;
 };
