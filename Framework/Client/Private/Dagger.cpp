@@ -1,6 +1,7 @@
 #include "Dagger.h"
 
 #include "GameInstance.h"
+#include "Stat_Manager.h"
 
 CDagger::CDagger(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CGameObject{ pGraphic_Device }
@@ -56,6 +57,14 @@ void CDagger::Update(_float fTimeDelta)
 	
 	// 플레이어에 붙어서 이동 및 커서방향에 맞게 돌도록 처리
 	Follow_Player();
+
+
+	CStat_Manager* pStats = CStat_Manager::GetInstance();
+	if (pStats->Get_CurStats()[ENUM_CLASS(STAT_INFO::FURYREADY)])
+		m_pAnimatorCom->Change_State(L"FuryReady");
+	else
+		m_pAnimatorCom->Change_State(L"Normal");
+
 	
 	_float3 vPos = {}, vRight = {}, vUp = {}, vLook = {};    // 단검 좌표
 	vPos  = m_pTransformCom->Get_State(STATE::POSITION);
@@ -112,7 +121,10 @@ HRESULT	CDagger::Ready_Components(void* pArg)
 
 	/* For Com_Texture */
 	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Weapon_Dagger"),
-		TEXT("Com_Texture"), reinterpret_cast<CComponent**>(&m_pTextureCom))))
+		TEXT("Com_Texture_Normal"), reinterpret_cast<CComponent**>(&m_pTextureCom_Normal))))
+		return E_FAIL;
+	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Weapon_Dagger_FuryReady"),
+		TEXT("Com_Texture_FuryReady"), reinterpret_cast<CComponent**>(&m_pTextureCom_FuryReady))))
 		return E_FAIL;
 
 
@@ -135,7 +147,8 @@ HRESULT	CDagger::Ready_Components(void* pArg)
 		TEXT("Com_Animator"), reinterpret_cast<CComponent**>(&m_pAnimatorCom), &StartAnimStateDesc)))
 		return E_FAIL;
 
-	m_pAnimatorCom->Add_State(L"Idle", { m_pTextureCom, 4, true });
+	m_pAnimatorCom->Add_State(L"Normal",		{ m_pTextureCom_Normal, 4, true });
+	m_pAnimatorCom->Add_State(L"FuryReady",		{ m_pTextureCom_FuryReady, 4, true });
 
 
 	DAGGERDESC* pDesc = static_cast<DAGGERDESC*>(pArg);
@@ -309,7 +322,8 @@ void CDagger::Free()
 {
 	Safe_Release(m_pVIBufferCom);
 	Safe_Release(m_pTransformCom);
-	Safe_Release(m_pTextureCom);
+	Safe_Release(m_pTextureCom_Normal);
+	Safe_Release(m_pTextureCom_FuryReady);
 	Safe_Release(m_pAnimatorCom);
 
 	__super::Free();

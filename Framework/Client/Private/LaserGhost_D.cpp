@@ -28,7 +28,7 @@ HRESULT CLaserGhost_D::Initialize(void* pArg)
 
     m_isRunOut = false;
     //m_iAtkCooldownFrames = static_cast<_int>(m_pGameInstance->Compute_Random(0, 300));
-    Ready_Object();
+
 
     m_iMaxHp = 70;
     m_iCulHp = 70;
@@ -74,7 +74,8 @@ void CLaserGhost_D::Update(_float fTimeDelta)
 
     //m_iAtkCooldownFrames++;
 
-
+    // 아래에서 사용할 변수들
+#pragma region Variables Setting
 
     _uint iCurLevel = CGameInstance::GetInstance()->Get_CurrentLevel();
 
@@ -90,8 +91,10 @@ void CLaserGhost_D::Update(_float fTimeDelta)
     // ********* matMonster 구하기
     _float4x4 matMonsterWorld = *m_pTransformCom->Get_WorldMatrix();
 
+#pragma endregion
 
-
+    // **** 이펙트 크기조절용 초기설정
+#pragma region Effect Setting
 
     // 이펙트용
     // 1. 원점으로 이동
@@ -123,7 +126,7 @@ void CLaserGhost_D::Update(_float fTimeDelta)
     // 5. 거기에 추가 이동 (y축 오프셋 후 플레이어 방향)
     _float4x4 matTransOffset = {};
     D3DXMatrixIdentity(&matTransOffset);
-    D3DXMatrixTranslation(&matTransOffset, 0, -0.12f, 0);
+    //D3DXMatrixTranslation(&matTransOffset, 0, -0.12f, 0);
 
     _float4x4 matTransAddition = {};
     D3DXMatrixIdentity(&matTransAddition);
@@ -136,8 +139,53 @@ void CLaserGhost_D::Update(_float fTimeDelta)
 
     matMonsterWorld = matTransToOrigin * matScale * matRotateChild * matRotateChildtoPlayer * matTransReturn * matTransOffset * matTransAddition;
 
+#pragma endregion
+    // ***********************
 
 
+    // 최초 소환
+#pragma region Summon States
+
+    if (m_pAnimatorCom->Get_CurStateTag() == L"Summon_Standby")
+    {
+        if (m_pAnimatorCom->Change_State(L"Summon_Ready"))
+        {
+#pragma region Summon Effect Matrix Setting
+            D3DXMatrixScaling(&matScale, -2.4f, 1.5f, 1.5f);
+            D3DXMatrixRotationX(&matRotateChild, D3DXToRadian(-90));
+            D3DXMatrixTranslation(&matTransOffset, 0, (m_pTransformCom->Get_Scaled().y / -2.6f), 0);
+
+            matMonsterWorld = matTransToOrigin * matScale * matRotateChild * matRotateChildtoPlayer * matTransReturn * matTransOffset * matTransAddition;
+#pragma endregion
+
+            CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::NORMAL_EFFECT, L"Prototype_Component_Texture_LaserGhost_D_Summon",
+                *m_pTransformCom->Get_WorldMatrix(), matMonsterWorld);
+
+#pragma region Reset Effect Matrix Setting
+            D3DXMatrixIdentity(&matScale);
+            D3DXMatrixIdentity(&matRotateChild);
+            D3DXMatrixIdentity(&matTransOffset);
+
+            matMonsterWorld = matTransToOrigin * matScale * matRotateChild * matRotateChildtoPlayer * matTransReturn * matTransOffset * matTransAddition;
+#pragma endregion
+
+        }
+    }
+    else if (m_pAnimatorCom->Get_CurStateTag() == L"Summon_Ready")
+    {
+        m_pAnimatorCom->Change_State(L"Summon");
+    }
+    else if (m_pAnimatorCom->Get_CurStateTag() == L"Summon")
+    {
+        //Ready_Object();
+        m_pAnimatorCom->Change_State(L"Idle");
+    }
+
+#pragma endregion
+
+
+    // 행동 분기
+#pragma region Other States
 
     if (!(m_pAnimatorCom->Get_CurStateTag() == L"AttackReady" ||
         m_pAnimatorCom->Get_CurStateTag() == L"Attack_Start" ||
@@ -160,7 +208,7 @@ void CLaserGhost_D::Update(_float fTimeDelta)
         {
             if (m_pAnimatorCom->Change_State(L"AttackReady"))
             {
-                CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::MONSTER_EFFECT, L"Prototype_Component_Texture_LaserGhost_D_Effect_AttackReady",
+                CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::NORMAL_EFFECT, L"Prototype_Component_Texture_LaserGhost_D_Effect_AttackReady",
                     *m_pTransformCom->Get_WorldMatrix(), matMonsterWorld);
                 m_vLockedOnPos = vTargetPos;
                 m_isTracking = false;
@@ -204,7 +252,7 @@ void CLaserGhost_D::Update(_float fTimeDelta)
     {
         if (m_pAnimatorCom->Change_State(L"Attack_Start"))
         {
-            CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::MONSTER_EFFECT, L"Prototype_Component_Texture_LaserGhost_D_Effect_Attack_Start",
+            CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::NORMAL_EFFECT, L"Prototype_Component_Texture_LaserGhost_D_Effect_Attack_Start",
                 *m_pTransformCom->Get_WorldMatrix(), matMonsterWorld);
         }
     }
@@ -212,7 +260,7 @@ void CLaserGhost_D::Update(_float fTimeDelta)
     {
         if (m_pAnimatorCom->Change_State(L"Attack_Cycle", true, fLaserLifeTime))
         {
-            CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::MONSTER_EFFECT, L"Prototype_Component_Texture_LaserGhost_D_Effect_Attack_Cycle",
+            CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::NORMAL_EFFECT, L"Prototype_Component_Texture_LaserGhost_D_Effect_Attack_Cycle",
                 *m_pTransformCom->Get_WorldMatrix(), matMonsterWorld);
 
             // 레이저용 세팅
@@ -282,7 +330,7 @@ void CLaserGhost_D::Update(_float fTimeDelta)
 
         if (m_pAnimatorCom->Change_State(L"Attack_End"))
         {
-            CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::MONSTER_EFFECT, L"Prototype_Component_Texture_LaserGhost_D_Effect_Attack_End",
+            CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::NORMAL_EFFECT, L"Prototype_Component_Texture_LaserGhost_D_Effect_Attack_End",
                 *m_pTransformCom->Get_WorldMatrix(), matMonsterWorld, true);
             // 레이저용 세팅
 #pragma region Laser Setting Change
@@ -365,25 +413,20 @@ void CLaserGhost_D::Update(_float fTimeDelta)
         
 
 
-
-        
+    if (m_pAnimatorCom->Get_CurStateTag() == L"Airborne")
+        m_pAnimatorCom->Change_State(L"Attack_Standby");
 
     // 딜레이 Exit 역할
     if (m_pAnimatorCom->Get_CurStateTag() == L"Attack_Standby")
         m_pAnimatorCom->Change_State(L"Idle");
 
-
-
+#pragma endregion
 
 
 
     if (m_pTerrainBox != nullptr) {
         m_pTerrainBox->SetUp_OnTerrainBox(m_pTransformCom, _float3(0.05f, 0.2f, 0.05f));
     }
-
-    //if (m_isTracking)           m_pAnimatorCom->Change_State(L"Move");
-    //else                        m_pAnimatorCom->Change_State(L"Idle");
-    //m_isTracking = false;
 }
 
 void CLaserGhost_D::Late_Update(_float fTimeDelta)
@@ -438,6 +481,8 @@ HRESULT CLaserGhost_D::Render()
         m_isFlippedX = false;
     }
 
+    Reset_RenderState();
+
     return S_OK;
 }
 
@@ -490,6 +535,10 @@ HRESULT CLaserGhost_D::Ready_Components(void* pArg)
         return E_FAIL;
     
     // State 삽입
+    m_pAnimatorCom->Add_State(L"Summon_Standby",{ nullptr, 90 /* 나중에 랜덤값 삽입 */, false});  // 소환 딜레이용
+    m_pAnimatorCom->Add_State(L"Summon_Ready",  { nullptr, 30, false});  // 소환 시작 모션
+    m_pAnimatorCom->Add_State(L"Summon",        { m_pTextureCom_Idle, 4, false});   // 소환
+
     m_pAnimatorCom->Add_State(L"Idle",          { m_pTextureCom_Idle, 4, true });           // 14
     m_pAnimatorCom->Add_State(L"Move",          { m_pTextureCom_Move, 4, true });           // 14
     m_pAnimatorCom->Add_State(L"Down",          { m_pTextureCom_Down, 4, true });           // 3
@@ -499,6 +548,9 @@ HRESULT CLaserGhost_D::Ready_Components(void* pArg)
     m_pAnimatorCom->Add_State(L"Attack_End",    { m_pTextureCom_Attack_End, 4, false });    // 8
     m_pAnimatorCom->Add_State(L"Airborne",      { m_pTextureCom_Airborne, 4, false });      // 3
     m_pAnimatorCom->Add_State(L"Attack_Standby",{ m_pTextureCom_Idle, 4, false });          // 14
+
+
+
 
     return S_OK;
 }
@@ -515,6 +567,38 @@ void CLaserGhost_D::OnCollision(CGameObject* pGameObject)
     __super::OnCollision(pGameObject);
 
     //m_isTracking = true;
+
+
+    switch (pGameObject->Get_ObjType())
+    {
+    case GAMEOBJ_TYPE::PLAYER_EFFECT:
+        if (!m_bIsHit) {
+            wstring strStateTag = {};
+            _float fPointY = 0.f;       // 교차 평면의 기준이 될 Y값
+            _float3 vRayPoint = {};     // fPointY 값 기준 마우스 Ray와 교차하는 좌표
+            m_pGameInstance->Get_IntersectAtY(fPointY, vRayPoint);
+
+            _float3 vThisPos = {};    // 플레이어 좌표
+            vThisPos = m_pTransformCom->Get_State(STATE::POSITION);
+
+            //strStateTag = (vRayPoint.z > vPlayerPos.z)?     L"Idle_Upper":
+                                                            //L"Idle_Lower";
+
+            //m_pAnimatorCom->Change_State(strStateTag, true, 2);
+            m_pAnimatorCom->Change_State(L"Airborne", false, 0.5, true); // 도중 Exit 불가 State라 상태변환이 안됨
+
+
+            CTransform* pEnemyTransform = dynamic_cast<CTransform*>(pGameObject->Find_Component(L"Com_Transform"));
+            _float3 vEnemyPos = pEnemyTransform->Get_State(STATE::POSITION);
+            _float3 vStunDir = vThisPos - vEnemyPos;
+            D3DXVec3Normalize(&vStunDir, &vStunDir);
+
+            _float3 vResult = vThisPos + vStunDir * 0.5f;    // 밀려날 정도 테스트
+            m_pTransformCom->Set_State(STATE::POSITION, vResult);
+
+            m_bIsHit = true;
+        }
+    }
 }
 
 CLaserGhost_D* CLaserGhost_D::Create(LPDIRECT3DDEVICE9 pGraphic_Device)

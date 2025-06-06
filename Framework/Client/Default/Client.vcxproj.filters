@@ -391,6 +391,9 @@
     <Filter Include="02.GameObject\Light\Point">
       <UniqueIdentifier>{4c95667e-4666-4993-896c-363522e3755c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\Monster\Boss">
+      <UniqueIdentifier>{961807fe-6049-4ff4-b8ae-e1001345b58c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">

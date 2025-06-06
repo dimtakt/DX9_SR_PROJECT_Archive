@@ -55,7 +55,7 @@ protected:
 	class CVIBuffer_Rect* m_pVIBufferCom = { nullptr };
 	CTerrainBox* m_pTerrainBox = { nullptr };
 	_bool m_isTracking = false;
-	_bool					m_bIsHit = { false };
+	_bool					m_bIsHit = false;
 	DWORD					m_dwHitTime = {};
 
 	CField_Hp* m_pHpBar = { nullptr };
