@@ -31,7 +31,7 @@ HRESULT CAnimator::Initialize(void* pArg)
 	m_strTimerTag = pDesc->strTimerTag;
 
 	// 타이머 생성
-	m_pGameInstance->Compute_TimeDelta(m_strTimerTag);	// 타이머 안 써서 관련된거 지워도 될듯
+	//m_pGameInstance->Compute_TimeDelta(m_strTimerTag);	// 타이머 못 써서 관련된거 지워도 될듯
 	m_fElapsedTimesCheck = 0;
 	m_fElapsedTimes = 0;
 
@@ -91,37 +91,42 @@ HRESULT CAnimator::Add_State(const _wstring strStateTag, ANIMSTATE _state)
 	return S_OK;
 }
 
-_bool CAnimator::Change_State(const _wstring strStateTag, _bool isChangeCurFrame, _float fLoopTime)
+_bool CAnimator::Change_State(const _wstring strStateTag, _bool isChangeCurFrame, _float fLoopTime, _bool isChangeForce)
 {
-	if (!(m_fElapsedTimes >= m_fElapsedTimesCheck))
-		return false;
-
-	// 이미 해당 State라면 return
-	if (strStateTag == m_strCurStateTag)
-		return false;
-
-	ANIMSTATE* pTmpState = Find_State(strStateTag);
-
-	// 즉시 전이가 가능한 State인 경우 전이,
-	// 즉시 전이가 불가능한 State인 경우 마지막으로 전환된 지 충분한 시간이 지난 경우에만 전이
-
-	if (nullptr == pTmpState)
+	if (!isChangeForce)
 	{
-		std::wcout << "[CAnimator::Change_State] Failed to Change State. Can't find State : \"" << strStateTag << "\"." << std::endl;
-		return false;
+		if (!(m_fElapsedTimes >= m_fElapsedTimesCheck))
+			return false;
+
+		// 이미 해당 State라면 return
+		if (strStateTag == m_strCurStateTag)
+			return false;
+
+		ANIMSTATE* pTmpState = Find_State(strStateTag);
+
+		// 즉시 전이가 가능한 State인 경우 전이,
+		// 즉시 전이가 불가능한 State인 경우 마지막으로 전환된 지 충분한 시간이 지난 경우에만 전이
+
+		if (nullptr == pTmpState)
+		{
+			std::wcout << "[CAnimator::Change_State] Failed to Change State. Can't find State : \"" << strStateTag << "\"." << std::endl;
+			return false;
+		}
+
+		_uint iTextureMaxFrame;
+		if (m_pCurState->pTextureCom != nullptr)
+			iTextureMaxFrame = m_pCurState->pTextureCom->Get_NumTextures();
+		else
+			iTextureMaxFrame = 1;
+
+		if (!(m_iStackedFrames / m_pCurState->iFramePerImage >= iTextureMaxFrame) &&	// 프레임이 충분히 지났는지
+			!m_pCurState->isExitable)													// 도중 전이가 가능한지
+			return false;
 	}
 
-	_uint iTextureMaxFrame;
-	if (m_pCurState->pTextureCom != nullptr)
-		iTextureMaxFrame = m_pCurState->pTextureCom->Get_NumTextures();
-	else
-		iTextureMaxFrame = 1;
-
-	if (!(m_iStackedFrames / m_pCurState->iFramePerImage >= iTextureMaxFrame) &&	// 프레임이 충분히 지났는지
-		!m_pCurState->isExitable)													// 도중 전이가 가능한지
-		return false;
 	
 
+	ANIMSTATE* pTmpState = Find_State(strStateTag);
 
 	m_pPrevState = m_pCurState;
 	m_strPrevStateTag = m_strCurStateTag;

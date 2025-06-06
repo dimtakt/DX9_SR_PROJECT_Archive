@@ -17,6 +17,8 @@
 #include "Dagger.h"
 #include "Client_Defines_Event.h"
 #include "ChapMap.h"
+#include "Sun.h"
+#include "Point.h"
 
 CLevel_Stage1::CLevel_Stage1(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CLevel{ pGraphic_Device }
@@ -27,13 +29,14 @@ HRESULT CLevel_Stage1::Initialize()
 {
 	g_hCursor = LoadCursorFromFile(L"Resources/Sephiria/UI/Cursor/Cursor_Combat.cur");
 
-	if (FAILED(Ready_Light()))
-		return E_FAIL;
-
+	
 	if (FAILED(Ready_Layer_BackGround(TEXT("Layer_BackGround"))))
 		return E_FAIL;
 
 	if (FAILED(Ready_Layer_Player(TEXT("Layer_Player"))))
+		return E_FAIL;
+
+	if (FAILED(Ready_Light(TEXT("Layer_Light"))))
 		return E_FAIL;
 
 	if (FAILED(Ready_Layer_Camera(TEXT("Layer_Camera"))))
@@ -53,11 +56,6 @@ HRESULT CLevel_Stage1::Initialize()
 
 void CLevel_Stage1::Update(_float fTimeDelta)
 {
-	if (m_pGameInstance->IsKeyDown(VK_RETURN))
-	{
- 		if(FAILED(m_pGameInstance->Open_Level(ENUM_CLASS(LEVEL::LEVEL_LOADING), CLevel_Loading::Create(m_pGraphic_Device, LEVEL::LEVEL_STAGE2))))
-			return;
-	}
 }
 
 HRESULT CLevel_Stage1::Render()
@@ -67,24 +65,20 @@ HRESULT CLevel_Stage1::Render()
 	return S_OK;
 }
 
-HRESULT CLevel_Stage1::Ready_Light()
-{
-	D3DLIGHT9	LightDesc;
-	ZeroMemory(&LightDesc, sizeof(D3DLIGHT9));
+HRESULT CLevel_Stage1::Ready_Light(const _wstring& strLayerTag)
+{	
+	CPoint::POINTDESC desc{};
+	desc.pTargetTransform = dynamic_cast<CTransform*>(m_pGameInstance->Get_GameObject(ENUM_CLASS(LEVEL::LEVEL_STAGE1), TEXT("Layer_Player"))->Find_Component(TEXT("Com_Transform")));
+	desc.strLightID = TEXT("Player_Light");
+	desc.desc.eType = LIGHT_TYPE::POINT;
+	desc.desc.vDiffuse = _float4(1.f, 1.f, 1.f, 1.f);
+	desc.desc.vSpecular = _float4(1.f, 1.f, 1.f, 1.f);
+	desc.desc.vAmbient = _float4(0.01f, 0.01f, 0.01f, 1.f); // 기본 어두움 유지
+	desc.desc.fSpecPower = 64.f;
+	desc.desc.fRange = 15.f;
 
-	LightDesc.Type = D3DLIGHT_DIRECTIONAL;
-	//LightDesc.Position = _float3(10.f, 3.f, 5.f);
-	//LightDesc.Direction = _float3(1.f, -1.f, 1.f);
-	//LightDesc.Diffuse = D3DXCOLOR(1.f, 1.f, 1.f, 1.f);
-	//LightDesc.Ambient = D3DXCOLOR(1.f, 1.f, 1.f, 1.f);
-	LightDesc.Diffuse = { 1.f, 1.f, 1.f, 1.f };
-	LightDesc.Specular = { 1.f, 1.f, 1.f, 1.f };
-	LightDesc.Ambient = { 1.f, 1.f, 1.f, 1.f };
-
-	LightDesc.Direction = { 1.f, -1.f, 1.f };
-
-
-	if (FAILED(m_pGameInstance->Ready_Light(&LightDesc, 0)))
+	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_STAGE1), strLayerTag,
+		ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_Point"), &desc)))
 		return E_FAIL;
 
 	return S_OK;
@@ -319,6 +313,10 @@ HRESULT CLevel_Stage1::Ready_Layer_UI(const _wstring& strLayerTag)
 	Desc.fZ = 2;
 	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_STAGE1), strLayerTag,
 		ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_Hud_Buff"), &Desc)))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_STAGE1), strLayerTag,
+		ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_Minimap"), &Desc)))
 		return E_FAIL;
 
 	return S_OK;

@@ -7,6 +7,7 @@
 #include "Player.h"
 #include "ChapMap.h"
 #include "Monster_Factory.h"
+#include "Point.h"
 
 CLevel_Stage4::CLevel_Stage4(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CLevel{ pGraphic_Device }
@@ -18,7 +19,7 @@ HRESULT CLevel_Stage4::Initialize()
 	CRoom_Manager::GetInstance()->Clear(ENUM_CLASS(LEVEL::LEVEL_STAGE3));
 	g_hCursor = LoadCursorFromFile(L"Resources/Sephiria/UI/Cursor/Cursor_Combat.cur");
 
-	if (FAILED(Ready_Light()))
+	if (FAILED(Ready_Light(TEXT("Layer_Light"))))
 		return E_FAIL;
 
 	if (FAILED(Ready_Layer_BackGround(TEXT("Layer_BackGround"))))
@@ -109,24 +110,20 @@ HRESULT CLevel_Stage4::Ready_Layer_UI(const _wstring& strLayerTag)
 	return S_OK;
 }
 
-HRESULT CLevel_Stage4::Ready_Light()
+HRESULT CLevel_Stage4::Ready_Light(const _wstring& strLayerTag)
 {
-	D3DLIGHT9	LightDesc;
-	ZeroMemory(&LightDesc, sizeof(D3DLIGHT9));
+	CPoint::POINTDESC desc{};
+	desc.pTargetTransform = dynamic_cast<CTransform*>(m_pGameInstance->Get_GameObject(ENUM_CLASS(LEVEL::LEVEL_STAGE2), TEXT("Layer_Player"))->Find_Component(TEXT("Com_Transform")));
+	desc.strLightID = TEXT("Player_Light");
+	desc.desc.eType = LIGHT_TYPE::POINT;
+	desc.desc.vDiffuse = _float4(1.f, 1.f, 1.f, 1.f);
+	desc.desc.vSpecular = _float4(1.f, 1.f, 1.f, 1.f);
+	desc.desc.vAmbient = _float4(0.01f, 0.01f, 0.01f, 1.f); // 기본 어두움 유지
+	desc.desc.fSpecPower = 64.f;
+	desc.desc.fRange = 15.f;
 
-	LightDesc.Type = D3DLIGHT_DIRECTIONAL;
-	//LightDesc.Position = _float3(10.f, 3.f, 5.f);
-	//LightDesc.Direction = _float3(1.f, -1.f, 1.f);
-	//LightDesc.Diffuse = D3DXCOLOR(1.f, 1.f, 1.f, 1.f);
-	//LightDesc.Ambient = D3DXCOLOR(1.f, 1.f, 1.f, 1.f);
-	LightDesc.Diffuse = { 1.f, 1.f, 1.f, 1.f };
-	LightDesc.Specular = { 1.f, 1.f, 1.f, 1.f };
-	LightDesc.Ambient = { 1.f, 1.f, 1.f, 1.f };
-
-	LightDesc.Direction = { 1.f, -1.f, 1.f };
-
-
-	if (FAILED(m_pGameInstance->Ready_Light(&LightDesc, 0)))
+	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_STAGE2), strLayerTag,
+		ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_Point"), &desc)))
 		return E_FAIL;
 
 	return S_OK;

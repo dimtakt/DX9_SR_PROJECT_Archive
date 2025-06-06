@@ -32,8 +32,8 @@ private:
 	_bool					m_bisSelete{};
 
 public:
-	static CItem_Base* Create(LPDIRECT3DDEVICE9 pGraphic_Device);
-	virtual CGameObject* Clone(void* pArg) override;
+	static CItem_Base*		Create(LPDIRECT3DDEVICE9 pGraphic_Device);
+	virtual CGameObject*	Clone(void* pArg) override;
 	virtual void			Free() override;
 };
 END

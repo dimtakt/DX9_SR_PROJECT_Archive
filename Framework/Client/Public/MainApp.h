@@ -33,6 +33,7 @@ private:
 	HRESULT Ready_Model_Setting();
 	HRESULT Ready_ETC_Setting();
 	HRESULT Ready_Animation_Setting();
+	HRESULT Ready_Shader_Setting();
 	void Ready_Key_Setting();
 	void Ready_Font_Setting();
 	HRESULT Ready_Item_Setting();

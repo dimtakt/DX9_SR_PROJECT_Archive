@@ -22,7 +22,7 @@ HRESULT CTitle_Logo::Initialize(void* pArg)
     m_fSizeY = 100.f*1.5f;
     m_fX = 0.f;
     m_fY = 100.f;
-    m_fZ = 0.1f;
+    m_fZ = 0.0f;
     m_iWinSizeX = g_iWinSizeX;
     m_iWinSizeY = g_iWinSizeY;
 

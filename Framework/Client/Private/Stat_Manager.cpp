@@ -20,7 +20,7 @@ HRESULT CStat_Manager::Initialize()
     m_fOriginStats[static_cast<int>(STAT_INFO::MAXDASH)] = 3.f; // 최대 대시 횟수
     m_fOriginStats[static_cast<int>(STAT_INFO::CULDASH)] = 3.f; // 현재 대시 횟수
     m_fOriginStats[static_cast<int>(STAT_INFO::REGENDASH)] = 1.2f; // 대시 회복 속도
-    m_fOriginStats[static_cast<int>(STAT_INFO::EXP)] = 0.f; // 현재 경험치
+    m_fOriginStats[static_cast<int>(STAT_INFO::EXP)] = 0.f; // 현재 경험치6
     m_fOriginStats[static_cast<int>(STAT_INFO::MAXSTATPOINT)] = 0.f; // 획득한 재능 포인트
     m_fOriginStats[static_cast<int>(STAT_INFO::CULSTATPOINT)] = 0.f; // 현재 재능 포인트
     m_fOriginStats[static_cast<int>(STAT_INFO::LEVEL)] = 1.f; // 레벨
@@ -84,9 +84,12 @@ void CStat_Manager::Cal_Stats(STAT_INFO eStat, float fValue)
             m_fCurStats[static_cast<int>(eStat)] -= 100.f;
             m_fCurStats[static_cast<int>(STAT_INFO::LEVEL)] += 1.f;
         }
-
     }
-    
+}
+
+void CStat_Manager::Set_Stats(STAT_INFO eStat, float fValue)
+{
+    m_fCurStats[static_cast<int>(eStat)] = fValue;
 }
 
 void CStat_Manager::Interaction_Obj_Stat(GAMEOBJ_TYPE eType)
@@ -134,7 +137,8 @@ _float CStat_Manager::Get_Damage(DAMAGE eDamage)
         fDamage = fDamage * (1.0f + m_fCurStats[static_cast<int>(STAT_INFO::CRITICALDAMAGE)] / 100.0f);;
     }
 
-    return fDamage;
+    //return fDamage;
+    return 1000.f;
 }
 
 void CStat_Manager::Free()

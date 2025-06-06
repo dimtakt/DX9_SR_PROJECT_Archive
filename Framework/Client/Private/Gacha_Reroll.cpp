@@ -55,7 +55,7 @@ void CGacha_Reroll::Update(_float fTimeDelta)
 {
 	if (Button_Pick() && m_pGameInstance->IsKeyDown(VK_LBUTTON) && CStat_Manager::GetInstance()->Get_CurStats()[ENUM_CLASS(STAT_INFO::DICE)] > 0)
 	{
-		static_cast<CGacha*>(m_pParent)->Rand_Item_Set(CGacha::GACHA_TYPE::ARTEFACT);
+		static_cast<CGacha*>(m_pParent)->Rand_Item_Set();
 		CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::DICE, -1);
 	}
 	CUIObject::Update(fTimeDelta);

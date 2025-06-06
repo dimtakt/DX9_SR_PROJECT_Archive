@@ -8,6 +8,7 @@
 #include "Stat_Manager.h"
 #include "ChapMap.h"
 #include "EXP_Ball.h"
+#include "Field_Font.h"
 
 CPlayer::CPlayer(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CGameObject{ pGraphic_Device }
@@ -48,18 +49,32 @@ void CPlayer::Priority_Update(_float fTimeDelta)
     _int m_iCulHp = CStat_Manager::GetInstance()->Get_CurStats()[ENUM_CLASS(STAT_INFO::CULHP)];
     _int m_iMaxHp = CStat_Manager::GetInstance()->Get_CurStats()[ENUM_CLASS(STAT_INFO::MAXHP)];
 
-    if (m_pHpBar != nullptr)
-        m_pHpBar->Render_HP_Progress(m_pTransformCom, m_iCulHp, m_iMaxHp);
+    /*if (m_pHpBar != nullptr)
+        m_pHpBar->Render_HP_Progress(m_pTransformCom, m_iCulHp, m_iMaxHp);*/
 
-    m_dwHitTime += 1.f;
+
+    // isHit  은 무적 관리,
+    // IsStun 은 경직 관리
+    if (m_bIsHit)
+        m_dwHitTime += 1.f;
+
+    if (m_dwHitTime >= 20.f)
+    {
+        m_bIsStun = false;
+    }
     if (m_dwHitTime >= 30.f)
     {
         m_dwHitTime = 0.f;
         m_bIsHit = false;
     }
-        
 
+
+    //if (m_bIsHit)       std::wcout << "TRUE" << std::endl;
+    //else                std::wcout << "FALSE" << std::endl; // 왜 TRUE인데도 공격이 잘 되지??
+    //
+    //std::wcout << m_pAnimatorCom->Get_CurStateTag() << std::endl;
 }
+
 
 void CPlayer::Update(_float fTimeDelta)
 {    
@@ -67,6 +82,13 @@ void CPlayer::Update(_float fTimeDelta)
     if (m_pTerrainBox != nullptr) {
         m_pTerrainBox->SetUp_OnTerrainBox(m_pTransformCom, _float3(0.f, 0.2f, 0.f));
     }
+
+    // 경직 중이라면 Update 실행 X (키 조작 불가)
+    if (m_bIsStun)
+        return;
+
+    // 아래에서 사용할 변수들
+#pragma region Variables Setting
 
     _float fPointY = 0.f;       // 교차 평면의 기준이 될 Y값
     _float3 vRayPoint = {};     // fPointY 값 기준 마우스 Ray와 교차하는 좌표
@@ -76,24 +98,17 @@ void CPlayer::Update(_float fTimeDelta)
     vPlayerPos = m_pTransformCom->Get_State(STATE::POSITION);
 
     _wstring strCurStateTag = m_pAnimatorCom->Get_CurStateTag();
-    
-    // ******** 상태 변화 분기들
 
     wstring strStateTag = {}; // 임시 저장용 현재 상태
     CStat_Manager* pPlayerStat = CStat_Manager::GetInstance();
 
-    
-    // *** 무기 트랜스폼 관련 변수설정
     _float4x4 matPlayerWorld = *m_pTransformCom->Get_WorldMatrix();
     CStat_Manager* pStats =  CStat_Manager::GetInstance();
 
+#pragma endregion
 
-    // *** 걍 차근차근 해보자 ***
-
-    // "크자이" 순서
-    // 단, 로컬 회전을 원하므로 먼저 원점으로 이동 후 회전
-    // 단, 순서에 맞게 회전 전 크기조절
-    // 이후 재이동, 후 추가이동 자유롭게
+    // **** 이펙트 크기조절용 초기설정
+#pragma region Effect Setting
 
     // 1. 원점으로 이동
     _float4x4 matTransToOrigin = {};
@@ -132,12 +147,15 @@ void CPlayer::Update(_float fTimeDelta)
 
     matPlayerWorld = matTransToOrigin * matScale * matRotateChild * matRotateChildtoCursor * matTransReturn * matTransAddition;
    
+#pragma endregion
     // ***********************
 
 
     // ***************************************
     // * [마우스 좌클] 일반 공격
     // ***************************************
+#pragma region [Mouse L] Basic Attack
+
     if (m_pGameInstance->IsKeyDown(VK_LBUTTON))
     {
         // 이전 상태 공격 + 현재 상태 비공격 + 1번째 공격한 지 0.3f초 이하
@@ -165,20 +183,30 @@ void CPlayer::Update(_float fTimeDelta)
             CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::PLAYER_EFFECT, L"Prototype_Component_Texture_Effect_Blade0_Swing0",
                 *m_pTransformCom->Get_WorldMatrix(), matPlayerWorld, m_pTransformCom);
 
-        std::cout << "[Player::Update] PlayerPos : " << vPlayerPos.x << ", " << vPlayerPos.y << ", " << vPlayerPos.z << std::endl;
+        //std::cout << "[Player::Update] PlayerPos : " << vPlayerPos.x << ", " << vPlayerPos.y << ", " << vPlayerPos.z << std::endl;
     }
 
+#pragma endregion
+
+#pragma region Transform Change
+    // [일반 공격 이동]
     if (m_pAnimatorTransCom->Get_CurStateTag() == L"Attack")
     {
         _float3 playerPos = vPlayerPos;
-        playerPos += m_vCursorDir * fTimeDelta * 10.f * (-0.5 * cosf(0.69f * m_pAnimatorCom->Get_CurStackedFrame()) + 1);        // 커서 방향으로 이동
+        playerPos += m_vCursorDir * fTimeDelta * 10.f * (-0.5f * cosf(0.69f * m_pAnimatorCom->Get_CurStackedFrame()) + 1.f);        // 커서 방향으로 이동
         m_pTransformCom->Set_State(STATE::POSITION, playerPos);
     }
+
+#pragma endregion
+
+
 
 
     // ***************************************
     // * [WASD] 이동
     // ***************************************
+#pragma region [WASD] Moving
+
     m_vOldPos = m_pTransformCom->Get_State(STATE::POSITION);
     // 상태전환
     if (m_pGameInstance->IsKeyHold('W') ||
@@ -224,7 +252,13 @@ void CPlayer::Update(_float fTimeDelta)
                 m_pAnimatorCom->Change_State(L"Idle_Lower", true);
         }
     }
+
+#pragma endregion
+
+#pragma region Transform Change
+
     // [이동 이동]
+
     if (!(m_pAnimatorTransCom->Get_CurStateTag() == L"Dash" ||
         m_pAnimatorTransCom->Get_CurStateTag() == L"Parry" ||
         m_pAnimatorTransCom->Get_CurStateTag() == L"Fury" ||
@@ -255,10 +289,14 @@ void CPlayer::Update(_float fTimeDelta)
             m_vDashDir = m_vCursorDir;
     }
 
+#pragma endregion
+
     
     // ***************************************
-    // * [좌 Shift] 대쉬
+    // * [Space] 대쉬
     // ***************************************
+#pragma region [Space] Dash
+
     if (m_pGameInstance->IsKeyDown(VK_SPACE))
     {
         // 스페이스바 누를 시 Dash 상태로 바꾸기 시도
@@ -268,6 +306,7 @@ void CPlayer::Update(_float fTimeDelta)
             D3DXVec3Normalize(&m_vDashDir, &m_vDashDir);
             pStats->Cal_Stats(STAT_INFO::CULDASH, -1);
             // 무적 설정..
+            m_bIsHit = true;
         }
     }
     else
@@ -278,18 +317,26 @@ void CPlayer::Update(_float fTimeDelta)
         }
     }
 
+#pragma endregion
+
+#pragma region Transform Change
+
     // [Dash 이동]
     if (m_pAnimatorTransCom->Get_CurStateTag() == L"Dash")
     {
         _float3 playerPos = vPlayerPos;
-        playerPos += m_vDashDir * 30.f * (-0.04 * pow((fTimeDelta - 5), 2) + 1);        // 마지막으로 누른 방향으로 이동
+        playerPos += m_vDashDir * 30.f * (-0.04f * pow((fTimeDelta - 5.f), 2.f) + 1.f);        // 마지막으로 누른 방향으로 이동
         m_pTransformCom->Set_State(STATE::POSITION, playerPos);
     }
         
+#pragma endregion
+
 
     // ***************************************
     // * [마우스 우클] 임시 : 패리, 퓨리 (PARRY, FURY)
     // ***************************************
+#pragma region [Mouse R] Parry, Fury
+
     if (m_pGameInstance->IsKeyDown(VK_RBUTTON))
     {
         if ((m_pAnimatorCom->Get_CurStateTag() != L"Attack_Lower" &&
@@ -298,7 +345,7 @@ void CPlayer::Update(_float fTimeDelta)
             m_pAnimatorCom->Get_CurStateTag() != L"Attack_Upper2") &&
             (m_pAnimatorTransCom->Get_CurStateTag() != L"Parry"))
         {
-            if (m_isReadyFury)
+            if (pStats->Get_CurStats()[ENUM_CLASS(STAT_INFO::FURYREADY)])
             {
                 if(m_pAnimatorTransCom->Change_State(L"Fury"))
                 {
@@ -311,6 +358,7 @@ void CPlayer::Update(_float fTimeDelta)
                                                                 L"Fury_Lower";
                 m_pAnimatorCom->Change_State(strStateTag);
                 m_isReadyFury = false;
+                pStats->Set_Stats(STAT_INFO::FURYREADY, false);
             }
             else if (m_pAnimatorTransCom->Get_CurStateTag() == L"Idle" &&
                 pStats->Get_CurStats()[ENUM_CLASS(STAT_INFO::CULMP)] >= 10)
@@ -343,6 +391,10 @@ void CPlayer::Update(_float fTimeDelta)
         m_pAnimatorTransCom->Change_State(L"Idle");
     }
 
+#pragma endregion
+    
+#pragma region Transform Change (Parry)
+
     // [Parry 이동]
     if (m_pAnimatorTransCom->Get_CurStateTag() == L"Parry")
     {
@@ -352,10 +404,13 @@ void CPlayer::Update(_float fTimeDelta)
             playerPos += m_vCursorDir * fTimeDelta * 15.f * (-1 * cosf(0.4f * m_pAnimatorCom->Get_CurStackedFrame() - 0.7) + 1);        // 커서 방향으로 이동
             m_pTransformCom->Set_State(STATE::POSITION, playerPos);
             // 무적 설정...
-            
+            m_bIsHit = true;
             // 공격 막는 데에 성공 시 Fury_Ready로 넘어갈 준비
             if (m_pGameInstance->IsKeyDown('M'))    // ksta : 조건은 나중에 수정
+            {
                 m_isReadyFury = true;
+                pStats->Set_Stats(STAT_INFO::FURYREADY, true);
+            }
         }
     }
     else
@@ -363,16 +418,21 @@ void CPlayer::Update(_float fTimeDelta)
         // 무적 해제...
     }
     
+#pragma endregion   
+
+#pragma region Transform Change (Fury)
+
     // [Fury 이동]
     if (m_pAnimatorTransCom->Get_CurStateTag() == L"Fury")
     {
         if (m_pAnimatorCom->Get_CurStackedFrame() >= 6)
         {
             _float3 playerPos = vPlayerPos;
-            playerPos += m_vCursorDir * fTimeDelta * 14.f * (-1 * cosf(0.4f * m_pAnimatorCom->Get_CurStackedFrame() - 0.7) + 1);        // 커서 방향으로 이동
+            playerPos += m_vCursorDir * fTimeDelta * 14.f * (-1 * cosf(0.4f * m_pAnimatorCom->Get_CurStackedFrame() - 0.7f) + 1.f);        // 커서 방향으로 이동
             m_pTransformCom->Set_State(STATE::POSITION, playerPos);
             
             // 무적 설정...
+            m_bIsHit = true;
         }
     }
     else
@@ -380,12 +440,9 @@ void CPlayer::Update(_float fTimeDelta)
         // 무적 해제...
     }
 
+#pragma endregion
 
 
-
-
-
-    // ************************************
 
 
 
@@ -514,9 +571,34 @@ void CPlayer::OnCollision(CGameObject* pGameObject)
         if (!m_bIsHit) {
             CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CULHP, -5.f);
             m_bIsHit = true;
+            m_bIsStun = true;
+
+            _wstring strStateTag = {};
+            _float fPointY = 0.f;       // 교차 평면의 기준이 될 Y값
+            _float3 vRayPoint = {};     // fPointY 값 기준 마우스 Ray와 교차하는 좌표
+            m_pGameInstance->Get_IntersectAtY(fPointY, vRayPoint);
+
+            _float3 vPlayerPos = {};    // 플레이어 좌표
+            vPlayerPos = m_pTransformCom->Get_State(STATE::POSITION);
+            
+            //strStateTag = (vRayPoint.z > vPlayerPos.z)?     L"Idle_Upper":
+                                                            //L"Idle_Lower";
+
+            //m_pAnimatorCom->Change_State(strStateTag, true, 2);
+            m_pAnimatorCom->Change_State(L"Air", false, 0.2, true);
+
+
+            CTransform* pEnemyTransform = dynamic_cast<CTransform*>(pGameObject->Find_Component(L"Com_Transform"));
+            _float3 vEnemyPos = pEnemyTransform->Get_State(STATE::POSITION);
+            _float3 vStunDir = vPlayerPos - vEnemyPos;
+            D3DXVec3Normalize(&vStunDir, &vStunDir);
+            
+            _float3 vResult = vPlayerPos + vStunDir * 0.2f;    // 밀려날 정도 테스트
+            m_pTransformCom->Set_State(STATE::POSITION, vResult);
+            Render_Font();
         }
         break;
-    }
+    }  
         
     }
 }
@@ -638,6 +720,8 @@ HRESULT CPlayer::Ready_Components(void* pArg)
     m_pAnimatorCom->Add_State(L"Down",              { m_pTextureCom_Down, 4, true });
     m_pAnimatorCom->Add_State(L"Idle_Lower",        { m_pTextureCom_Idle_Lower, 4, true, m_pGameInstance->Find_Animation(L"Player_Idle") });
     m_pAnimatorCom->Add_State(L"Idle_Upper",        { m_pTextureCom_Idle_Upper, 4, true, m_pGameInstance->Find_Animation(L"Player_Idle") });
+    //m_pAnimatorCom->Add_State(L"Idle_Lower_Damaged",{ m_pTextureCom_Idle_Lower, 4, false });
+    //m_pAnimatorCom->Add_State(L"Idle_Upper_Damaged",{ m_pTextureCom_Idle_Upper, 4, false });
     m_pAnimatorCom->Add_State(L"Move_Lower",        { m_pTextureCom_Move_Lower, 4, true });
     m_pAnimatorCom->Add_State(L"Move_Upper",        { m_pTextureCom_Move_Upper, 4, true });
     m_pAnimatorCom->Add_State(L"Attack_Lower",      { m_pTextureCom_Attack_Lower, 3, false, m_pGameInstance->Find_Animation(L"Player_Attack") });
@@ -681,9 +765,22 @@ HRESULT CPlayer::Ready_Components(void* pArg)
 
 HRESULT CPlayer::Ready_Object()
 {
-    m_pHpBar = dynamic_cast<CField_Hp*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_Field_Hp")));
+    //m_pHpBar = dynamic_cast<CField_Hp*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_Field_Hp")));
 
     return S_OK;
+}
+
+HRESULT CPlayer::Render_Font()
+{
+    CField_Font::FIELD_FONT_DESC Desc = {};
+
+    Desc.eType = CField_Font::FIELD_FONT_TYPE::PLAYER_DAMAGE;   //데미지 타입
+    Desc.iValue = 65;                                           //넣을 수치 값
+    Desc.pTransform = m_pTransformCom;                          //현재 객체 트랜스폼
+
+    if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(m_pGameInstance->Get_CurrentLevel(), TEXT("Layer_Field_Font"),
+        ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_Field_Font"), &Desc)))
+        return E_FAIL;
 }
 
 void CPlayer::SetUp_RenderState()
@@ -764,7 +861,7 @@ void CPlayer::Free()
     Safe_Release(m_pAnimatorTransCom);
     Safe_Release(m_pTerrainBox);
     
-    Safe_Release(m_pHpBar);
+    //Safe_Release(m_pHpBar);
     
     CEffect_Factory::GetInstance()->Free();
 

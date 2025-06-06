@@ -24,7 +24,11 @@ public:
 
 
 public:
-	HRESULT Set_Float(const char* pParamName, float fValue);
+	HRESULT Set_Float(const char* pParamName, _float fValue);
+	HRESULT Set_Vector(const char* pParamName, const _float4* pValue);
+	HRESULT Set_Vector(const _wstring& strConstantName, const D3DXVECTOR4* pVector);
+	HRESULT Set_Float(const _wstring& strConstantName, _float fValue);
+	HRESULT Set_Int(const _wstring& strConstantName, _int iValue);
 	
 
 private:

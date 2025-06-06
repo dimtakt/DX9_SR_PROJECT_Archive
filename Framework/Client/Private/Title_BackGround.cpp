@@ -36,7 +36,7 @@ HRESULT CTitle_BackGround::Initialize(void* pArg)
     m_fSizeY = g_iWinSizeY*5;
     m_fX = g_iWinSizeX >> 1;
     m_fY = 330.f;
-    m_fZ = 0.1f;
+    m_fZ = 0.0f;
     m_iWinSizeX = g_iWinSizeX;
     m_iWinSizeY = g_iWinSizeY;
 
@@ -80,23 +80,23 @@ HRESULT CTitle_BackGround::Render()
 
     __super::Begin();
 
-    if (FAILED(m_pShaderCom->Bind_Matrix("g_WorldMatrix", m_pTransformCom->Get_WorldMatrix())))
-        return E_FAIL;
-    if (FAILED(m_pShaderCom->Bind_Matrix("g_ViewMatrix", &m_ViewMatrix)))
-        return E_FAIL;
-    if (FAILED(m_pShaderCom->Bind_Matrix("g_ProjMatrix", &m_ProjMatrix)))
-        return E_FAIL;
+    //if (FAILED(m_pShaderCom->Bind_Matrix("g_WorldMatrix", m_pTransformCom->Get_WorldMatrix())))
+    //    return E_FAIL;
+    //if (FAILED(m_pShaderCom->Bind_Matrix("g_ViewMatrix", &m_ViewMatrix)))
+    //    return E_FAIL;
+    //if (FAILED(m_pShaderCom->Bind_Matrix("g_ProjMatrix", &m_ProjMatrix)))
+    //    return E_FAIL;
 
     m_pTextureCom_Title_Back->Bind_Texture(m_pShaderCom, "g_Texture", 0);
 
-    m_pShaderCom->Begin(0);
+    //m_pShaderCom->Begin(0);
 
-    _float fTime = static_cast<_float>(GetTickCount()) * 0.001f;
-    m_pShaderCom->Set_Float("g_Time", fTime);
+    //_float fTime = static_cast<_float>(GetTickCount()) * 0.001f;
+    //m_pShaderCom->Set_Float("g_Time", fTime);
 
     m_pVIBufferCom->Render();
 
-    m_pShaderCom->End();
+    //m_pShaderCom->End();
 
     __super::End();
     return S_OK;

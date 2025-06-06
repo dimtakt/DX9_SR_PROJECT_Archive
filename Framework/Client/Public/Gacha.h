@@ -23,15 +23,20 @@ public:
 	virtual HRESULT					Render() override;
 
 public:
-	void							UI_Switch();
-	void							Rand_Item_Set(GACHA_TYPE eType);
+	void							UI_Open(GACHA_TYPE eType);
 
+	void							UI_Switch();
+	void							Rand_Item_Set();
+	void							Random_off() { m_bIsRandom = false; }
+	void							Release_Slot();
 private:
 	LEVEL							m_eLevel = {};
 	CVIBuffer_Rect*					m_pVIBufferCom = { nullptr };
 
 	_bool							m_bIsOpen = { false };
-	_bool							m_bIsReandom = { false };
+	_bool							m_bIsRandom = { false };
+
+	GACHA_TYPE						eGacha_Type = {};
 private:
 	HRESULT							Ready_Components();
 
