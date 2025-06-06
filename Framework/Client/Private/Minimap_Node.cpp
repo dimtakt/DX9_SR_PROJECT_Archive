@@ -20,11 +20,38 @@ HRESULT CMinimap_Node::Initialize(void* pArg)
 {
 	UIOBJECT_DESC* Desc = static_cast<UIOBJECT_DESC*>(pArg);
 
+	m_fX = Desc->fX;
+	m_fY = Desc->fY;
 
-	m_fSizeX = 3;
-	m_fSizeY = 100;
-	m_fX = 0;
-	m_fY = 0;
+	switch (int(Desc->fZ))
+	{
+	case 0:
+		m_fSizeX = 32;
+		m_fSizeY = 3;
+		m_fX -= 32;
+		m_fY = 0;
+		break;
+	case 1:
+		m_fSizeX = 32;
+		m_fSizeY = 3;
+		m_fX += 32;
+		m_fY = 0;
+		break;
+	case 2:
+		m_fSizeX = 3;
+		m_fSizeY = 32;
+		m_fX = 0;
+		m_fY -= 32;
+		break;
+	case 3:
+		m_fSizeX = 3;
+		m_fSizeY = 32;
+		m_fX = 0;
+		m_fY += 32;
+		break;
+
+	}
+
 	m_fZ = UI_DEPTH::MiniMap;
 	m_iWinSizeX = g_iWinSizeX;
 	m_iWinSizeY = g_iWinSizeY;

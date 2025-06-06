@@ -25,7 +25,7 @@ HRESULT CMinimap_Icon::Initialize(void* pArg)
 	m_fSizeY = 64;
 	m_fX = 0;
 	m_fY = 0;
-	m_fZ = UI_DEPTH::MiniMap;
+	m_fZ = UI_DEPTH::MINIMAP_BUTTON;
 	m_iWinSizeX = g_iWinSizeX;
 	m_iWinSizeY = g_iWinSizeY;
 
@@ -92,24 +92,26 @@ HRESULT CMinimap_Icon::Ready_Components()
 
 _wstring CMinimap_Icon::Value_Text()
 {
+	// 	enum class ROOM_INFO { EVENT_NORMAL,  EVENT_SHOP, EVENT_HP, EVENT_EXP,  EVENT_ARTEFACT, EVENT_STONE, EVENT_ENDPOTAL, EVENT_END };
+
 	switch (m_iValue)
 	{
-	case 0:
-		return TEXT("Prototype_Component_Texture_Rect_Minimap_Icon_DownStair");
-	case 1:
+	case 99:
 		return TEXT("Prototype_Component_Texture_Rect_Minimap_Icon_UpStair");
-	case 2:
+	case 0:
 		return TEXT("Prototype_Component_Texture_Rect_Enemy");
-	case 3:
-		return TEXT("Prototype_Component_Texture_Rect_Hp");
-	case 4:
-		return TEXT("Prototype_Component_Texture_Rect_Luck");
-	case 5:
-		return TEXT("Prototype_Component_Texture_Rect_MaxHp");
-	case 6:
-		return TEXT("Prototype_Component_Texture_Rect_Sephirite");
-	case 7:
+	case 1:
 		return TEXT("Prototype_Component_Texture_Rect_Shop");
+	case 2:
+		return TEXT("Prototype_Component_Texture_Rect_Hp");
+	case 3:
+		return TEXT("Prototype_Component_Texture_Rect_Luck");
+	case 4:
+		return TEXT("Prototype_Component_Texture_Rect_Sephirite");
+	case 5:
+		return TEXT("Prototype_Component_Texture_Rect_Sephirite");
+	case 6:
+		return TEXT("Prototype_Component_Texture_Rect_Minimap_Icon_DownStair");
 	}
 }
 

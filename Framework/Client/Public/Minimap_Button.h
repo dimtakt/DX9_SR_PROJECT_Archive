@@ -5,6 +5,12 @@
 BEGIN(Client)
 class CMinimap_Button final : public CButton
 {
+public:
+	typedef struct tagMinimap_Button :public CUIObject::UIOBJECT_DESC
+	{
+		_int		RoomID;
+		_float3		vRoomPos;
+	}MINIMAP_BUTTON_DESC;
 private:
 									CMinimap_Button(LPDIRECT3DDEVICE9 pGraphic_Device);
 									CMinimap_Button(const CMinimap_Button& Prototype);
@@ -23,15 +29,17 @@ private:
 	_int							m_iTexIndex = {};
 	_float							m_fFrame = {};
 	_float							m_fSpeed = {};
-	_float							m_iValue = {};
-
+	_uint							m_iEventType = {};
+	_float3							m_vRoomPos = {};
+	_int							m_iRoomID = {};
+	_int							m_bClearRoom = {false };
 	_bool							m_bIsPlayer = { false };
 private:
 	HRESULT							Ready_Components();
 
 	HRESULT							Ready_ChildPrototype(LEVEL eLevel);
-	HRESULT							Ready_Children();
-
+	HRESULT							Ready_Children(_float fX, _float fY);
+		
 	_bool							Button_Pick();
 
 public:

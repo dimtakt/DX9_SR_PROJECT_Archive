@@ -59,7 +59,8 @@ namespace Client
 
 		//Minimap
 		static constexpr float MiniMap = 0.18f;
-		
+		static constexpr float MINIMAP_BUTTON = 0.17f;
+
 		//Loding
 		static constexpr float LODING = 0.2f;
 
