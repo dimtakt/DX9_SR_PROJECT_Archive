@@ -26,7 +26,7 @@ HRESULT CMole_A::Initialize(void* pArg)
     if (FAILED(this->Ready_Components(pArg)))
         return E_FAIL;
 
-
+    Ready_Object();
 
     m_iMaxHp = 30;
     m_iCulHp = 30;
@@ -36,7 +36,8 @@ HRESULT CMole_A::Initialize(void* pArg)
 void CMole_A::Priority_Update(_float fTimeDelta)
 {
     __super::Priority_Update(fTimeDelta);
-    if (m_pHpBar != nullptr)
+    if (m_pHpBar != nullptr &&
+        m_isSummoned)
         m_pHpBar->Render_HP_Progress(m_pTransformCom, m_iCulHp, m_iMaxHp);
 
     if (m_iCulHp <= 0)
@@ -131,13 +132,14 @@ void CMole_A::Update(_float fTimeDelta)
         if (!m_pAnimatorCom->Change_State(L"Summon_End"))
         {
             _int iCnt = m_pAnimatorCom->Get_CurStackedFrame();
-            _float fY = max(-0.005f * (float)pow(iCnt, 2) + 4.5f, 0.2f );
+            _float fY = max(-0.005f * (float)pow(iCnt, 2) + 4.5f, 0.2f);
             m_pTerrainBox->SetUp_OnTerrainBox(m_pTransformCom, _float3(0.05f, fY, 0.05f));
         }
+        else
+            m_isSummoned = true;
     }
     else if (m_pAnimatorCom->Get_CurStateTag() == L"Summon_End")
     {
-        Ready_Object();
         m_pAnimatorCom->Change_State(L"Idle");
     }
 

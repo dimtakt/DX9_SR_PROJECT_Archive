@@ -26,6 +26,8 @@ HRESULT CLaserGhost_D::Initialize(void* pArg)
     if (FAILED(this->Ready_Components(pArg)))
         return E_FAIL;
 
+    Ready_Object();
+
     m_isRunOut = false;
     //m_iAtkCooldownFrames = static_cast<_int>(m_pGameInstance->Compute_Random(0, 300));
 
@@ -39,7 +41,8 @@ HRESULT CLaserGhost_D::Initialize(void* pArg)
 void CLaserGhost_D::Priority_Update(_float fTimeDelta)
 {
     __super::Priority_Update(fTimeDelta);
-    if (m_pHpBar != nullptr)
+    if (m_pHpBar != nullptr &&
+        m_isSummoned)
         m_pHpBar->Render_HP_Progress(m_pTransformCom, m_iCulHp, m_iMaxHp);
 
     if (m_iCulHp <= 0)
@@ -173,11 +176,11 @@ void CLaserGhost_D::Update(_float fTimeDelta)
     }
     else if (m_pAnimatorCom->Get_CurStateTag() == L"Summon_Ready")
     {
-        m_pAnimatorCom->Change_State(L"Summon");
+        if (m_pAnimatorCom->Change_State(L"Summon"))
+            m_isSummoned = true;
     }
     else if (m_pAnimatorCom->Get_CurStateTag() == L"Summon")
     {
-        Ready_Object();
         m_pAnimatorCom->Change_State(L"Idle");
     }
 
