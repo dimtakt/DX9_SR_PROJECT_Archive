@@ -184,8 +184,8 @@ HRESULT CLevel_Town::Ready_Layer_Room(const _wstring& strLayerTag)
 		// 룸매니저 투입
 		CRoom_Manager::GetInstance()->Add_Room(pRoom, ENUM_CLASS(LEVEL::LEVEL_TOWN), strLayerTag);
 	
-
-
+		// 포탈 설치
+		CRoom_Manager::GetInstance()->Check_SpecialRoom(LEVEL::LEVEL_TOWN, strLayerTag, 0); //마을은 룸인덱스 0 한개
 	
 		//CRoom_Manager::GetInstance()->Check_Room(ENUM_CLASS(LEVEL::LEVEL_TOWN), strLayerTag, iNumber);
 		// 쉼터, 마을 전용 포탈 생성 함수 만들어줘야할거 같음.

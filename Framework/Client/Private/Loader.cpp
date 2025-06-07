@@ -191,6 +191,52 @@ HRESULT CLoader::Loading_For_Logo_Level()
 
 HRESULT CLoader::Loading_For_Town_Level()
 {
+	lstrcpy(m_szLoadingText, TEXT("텍스쳐를 로딩중입니다."));
+
+	lstrcpy(m_szLoadingText, TEXT("모델를 로딩중입니다."));
+
+	lstrcpy(m_szLoadingText, TEXT("쉐이더를 로딩중입니다."));
+
+	lstrcpy(m_szLoadingText, TEXT("게임오브젝트를 로딩중입니다."));
+	///* Prototype_GameObject_Camera*/
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_TOWN), TEXT("Prototype_GameObject_Camera_Follow"),
+		CCamera_Follow::Create(m_pGraphic_Device))))
+		return E_FAIL;
+
+	/* Prototype_GameObject_Land*/
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_TOWN), TEXT("Prototype_GameObject_Room"),
+		CRoom::Create(m_pGraphic_Device))))
+		return E_FAIL;
+
+	/* Prototype_GameObject_Sky */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_TOWN), TEXT("Prototype_GameObject_Sky"),
+		CSky::Create(m_pGraphic_Device))))
+		return E_FAIL;
+
+	/* Prototype_GameObject_TerrainBox*/
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_TOWN), TEXT("Prototype_GameObject_TerrainBox"),
+		CTerrainBox::Create(m_pGraphic_Device))))
+		return E_FAIL;
+
+	//Tree
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_TOWN), TEXT("Prototype_GameObject_Tree"),
+		CTree::Create(m_pGraphic_Device))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_TOWN), TEXT("Prototype_GameObject_Potal"),
+		CPotal::Create(m_pGraphic_Device))))
+		return E_FAIL;
+
+
+	for (size_t i = 0; i < 10000000000; i++)
+	{
+		int a = 1;
+	}
+
+	lstrcpy(m_szLoadingText, TEXT("로딩이 완료되었습니다."));
+
+	m_isFinished = true;
+
 	return S_OK;
 }
 
@@ -438,10 +484,10 @@ HRESULT CLoader::Loading_For_Stage1_Level()
 	//}
 
 
-	/*for (size_t i = 0; i < 10000000000; i++)
+	for (size_t i = 0; i < 10000000000; i++)
 	{
 		int a = 1;
-	}*/
+	}
 
 
 	lstrcpy(m_szLoadingText, TEXT("로딩이 완료되었습니다."));

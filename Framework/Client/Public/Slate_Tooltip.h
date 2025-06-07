@@ -1,13 +1,15 @@
 #pragma once
-#include "UIObject.h"
+#include "Tooltip.h"
 #include "Client_Defines.h"
+#include "Item_Base.h"
+
 BEGIN(Engine)
 class CVIBuffer_Rect;
 class CTexture;
 END
 
 BEGIN(Client)
-class CSlate_Tooltip final : public CUIObject
+class CSlate_Tooltip final : public CTooltip
 {
 private:
 									CSlate_Tooltip(LPDIRECT3DDEVICE9 pGraphic_Device);
@@ -28,6 +30,11 @@ private:
 	CTexture*						m_pTextureCom = { nullptr };
 private:
 	HRESULT							Ready_Components();
+
+	HRESULT							Ready_ChildPrototype(LEVEL eLevel);
+	HRESULT							Ready_Children();
+
+	void							Render_Font();
 
 public:
 	static CSlate_Tooltip*			Create(LPDIRECT3DDEVICE9 pGraphic_Device, LEVEL eLevel);
