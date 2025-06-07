@@ -1,6 +1,6 @@
 #include "Room.h"
 #include "GameInstance.h"
-
+#include "Stat_Manager.h"
 CRoom::CRoom(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CGameObject { pGraphic_Device }
 {
@@ -95,6 +95,9 @@ void CRoom::Update(_float fTimeDelta)
 					++it;
 				}
 			}
+			if(m_vMonster.size() == 0)
+				CStat_Manager::GetInstance()->Set_Battle(FALSE);
+
 		}
 	}
 }
@@ -368,7 +371,7 @@ void CRoom::Enter()
 {
 	m_bIsActive = true;
 	m_bIsVisited = true;
-
+	CStat_Manager::GetInstance()->Set_Battle(TRUE);
 	for (auto& pMonster : m_vMonster)
 	{
 		if (pMonster != nullptr) {
