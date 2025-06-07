@@ -144,8 +144,8 @@ _float CStat_Manager::Get_Damage(DAMAGE eDamage)
         fDamage = fDamage * (1.0f + m_fCurStats[static_cast<int>(STAT_INFO::CRITICALDAMAGE)] / 100.0f);;
     }
 
-    //return fDamage;
-    return 1000.f;
+    return fDamage;
+    //return 1000.f;
 }
 
 
