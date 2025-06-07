@@ -27,7 +27,7 @@ public:
 	virtual HRESULT					Render() override;
 
 public:
-	void							Add_Item(CItem_Base* pItem) { m_pSlotItem = pItem, m_iItemCount += 1; }
+	void							Add_Item(CItem_Base* pItem);
 	void							Release_Item() { m_pSlotItem = nullptr; }
 
 	virtual void					Push_Item(CItemObject* pItem) override;

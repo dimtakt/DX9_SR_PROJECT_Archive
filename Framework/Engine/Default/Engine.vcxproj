@@ -199,6 +199,7 @@ call Copy.bat</Command>
     <ClInclude Include="..\public\Texture.h" />
     <ClInclude Include="..\Public\Timer.h" />
     <ClInclude Include="..\Public\Timer_Manager.h" />
+    <ClInclude Include="..\public\Tooltip.h" />
     <ClInclude Include="..\Public\Transform.h" />
     <ClInclude Include="..\Public\UIObject.h" />
     <ClInclude Include="..\public\UIObject_Manager.h" />
@@ -236,6 +237,7 @@ call Copy.bat</Command>
     <ClCompile Include="..\private\PlayerStats.cpp" />
     <ClCompile Include="..\private\ProgressBar.cpp" />
     <ClCompile Include="..\Private\Shader.cpp" />
+    <ClCompile Include="..\private\Tooltip.cpp" />
     <ClCompile Include="..\Private\UIObject.cpp" />
     <ClCompile Include="..\private\UIObject_Manager.cpp" />
     <ClCompile Include="..\Private\VIBuffer_Cube.cpp" />

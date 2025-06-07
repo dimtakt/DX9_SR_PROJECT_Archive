@@ -48,7 +48,7 @@ void CMonster::Priority_Update(_float fTimeDelta)
 		m_dwHitTime += 1.f;
 	}
 
-	if (m_dwHitTime >= 30.f)
+	if (m_dwHitTime >= 10.f)
 	{
 		m_dwHitTime = 0.f;
 		m_bIsHit = false;
@@ -97,9 +97,9 @@ HRESULT CMonster::Ready_Components(void* pArg)
 		return E_FAIL;
 
 	/* For.Com_Texture */
-	if (FAILED(__super::Add_Component(desc->iLayerLevelIndex, TEXT("Prototype_Component_Texture_Monster"),
-		TEXT("Com_Texture_Monster"), reinterpret_cast<CComponent**>(&m_pTextureCom))))
-		return E_FAIL;
+	//if (FAILED(__super::Add_Component(desc->iLayerLevelIndex, TEXT("Prototype_Component_Texture_Monster"),
+	//	TEXT("Com_Texture_Monster"), reinterpret_cast<CComponent**>(&m_pTextureCom))))
+	//	return E_FAIL;
 
 	/* For.Com_Transform */
 	CTransform::TRANSFORM_DESC		TransformDesc{};
@@ -142,10 +142,7 @@ void CMonster::OnCollision(CGameObject* pGameObject)
 		{
 		if (!m_bIsHit)
 		{
-			m_iCulHp -= CStat_Manager::GetInstance()->Get_Damage(DAMAGE::NORMAL);
 			//m_bIsHit = true;
-
-
 		}
 			break;
 		}

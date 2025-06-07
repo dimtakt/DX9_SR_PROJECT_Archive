@@ -108,6 +108,9 @@ void CRoom::Late_Update(_float fTimeDelta)
 			if (m_pTerrainBox != nullptr)
 				m_pTerrainBox->Late_Update(fTimeDelta);
 
+			/*if (m_pFogPlane != nullptr)
+				m_pFogPlane->Late_Update(fTimeDelta);*/
+
 			for (auto it = m_vObject.begin(); it != m_vObject.end(); ) {
 				if ((*it) != nullptr && (*it)->Get_IsDead()) {
 					Safe_Release(*it);
@@ -133,7 +136,7 @@ void CRoom::Late_Update(_float fTimeDelta)
 							{
 								// collider
 								CCollider_OBB::OBB_DESC tColliderDesc;
-								tColliderDesc.vScale = _float3(1.f, 3.f, 1.f);
+								tColliderDesc.vScale = _float3(0.5f, 1.f, 0.5f);
 								tColliderDesc.pOwner = (*it);
 								tColliderDesc.pTransform = dynamic_cast<CTransform*>((*it)->Find_Component(TEXT("Com_Transform")));
 								tColliderDesc.eType = (*it)->Get_ObjType();
@@ -329,6 +332,8 @@ HRESULT CRoom::Load_From_File(_uint iLayerLevelIndex, const _wstring& strLayerTa
 
 				m_pTerrainBox = dynamic_cast<CTerrainBox*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, iLayerLevelIndex, TEXT("Prototype_GameObject_TerrainBox"), &tSrc));
 
+				//m_pFogPlane = dynamic_cast<CFogPlane*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_FogPlane"), &tSrc));
+
 				bIsTerrain = true;
 			}
 		}
@@ -370,7 +375,7 @@ void CRoom::Enter()
 			pMonster->Set_IsActive(true);
 			// collider
 			CCollider_OBB::OBB_DESC tColliderDesc;
-			tColliderDesc.vScale = _float3(1.f, 3.f, 1.f);
+			tColliderDesc.vScale = _float3(0.5f, 1.f, 0.5f);
 			tColliderDesc.pOwner = pMonster;
 			tColliderDesc.pTransform = pMonster->Get_Transform();
 			tColliderDesc.eType = pMonster->Get_ObjType();
@@ -386,7 +391,7 @@ void CRoom::Enter()
 			pObject->Set_IsActive(true);
 			// collider
 			CCollider_OBB::OBB_DESC tColliderDesc;
-			tColliderDesc.vScale = _float3(1.0f, 3.f, 1.0f);
+			tColliderDesc.vScale = _float3(0.5f, 1.f, 0.5f);
 			tColliderDesc.pOwner = pObject;
 			tColliderDesc.pTransform = dynamic_cast<CTransform*>(pObject->Find_Component(TEXT("Com_Transform")));
 			tColliderDesc.eType = pObject->Get_ObjType();;

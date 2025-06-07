@@ -225,7 +225,7 @@ void CTalent_Slot::Font_Render()
 	case 1:
 		m_vTexRect.left -= 45;
 		m_vTexRect.right -= 45;
-		_stprintf_s(szText, TEXT("+%d"), m_iCulValue * 5);
+		_stprintf_s(szText, TEXT("+%d"), m_iCulValue * 2);
 		m_pGameInstance->Render_Font(TEXT("UI_Font_25_Normal"), szText, m_vTexRect, D3DXCOLOR(0.f, 1.f, 0.f, 1.0f), DT_CENTER | DT_TOP);
 		m_vTexRect.left += 65;
 		m_vTexRect.right += 65;
@@ -243,7 +243,7 @@ void CTalent_Slot::Font_Render()
 	case 3:
 		m_vTexRect.left -= 45;
 		m_vTexRect.right -= 45;
-		_stprintf_s(szText, TEXT("+%d"), m_iCulValue * 5);
+		_stprintf_s(szText, TEXT("+%d"), m_iCulValue);
 		m_pGameInstance->Render_Font(TEXT("UI_Font_25_Normal"), szText, m_vTexRect, D3DXCOLOR(0.f, 1.f, 0.f, 1.0f), DT_CENTER | DT_TOP);
 		m_vTexRect.left += 65;
 		m_vTexRect.right += 65;
@@ -284,16 +284,16 @@ void CTalent_Slot::Player_State_Update()
 			CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CULCRITICAL, m_iCulValue);
 			break;
 		case 1:
-			CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::MAXHP, -m_iPreValue * 5);
-			CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::MAXHP, m_iCulValue * 5) ;
+			CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::MAXHP, -m_iPreValue * 2);
+			CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::MAXHP, m_iCulValue * 2) ;
 			break;
 		case 2:
 			CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CULDEF, -m_iPreValue);
 			CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CULDEF, m_iCulValue);
 			break;
 		case 3:
-			CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::MAXMP, -m_iPreValue * 5);
-			CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::MAXMP, m_iCulValue * 5);
+			CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::MAXMP, -m_iPreValue);
+			CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::MAXMP, m_iCulValue);
 
 			break;
 		}

@@ -15,6 +15,9 @@ public:
 	virtual HRESULT Initialize_Prototype();
 	virtual HRESULT Initialize(void* pArg);
 
+public:
+	_bool Get_IsDead() { return m_bDead; }
+
 protected:
 	LPDIRECT3DDEVICE9			m_pGraphic_Device = { nullptr };
 	class CGameInstance*		m_pGameInstance = { nullptr };

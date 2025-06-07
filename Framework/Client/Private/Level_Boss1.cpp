@@ -6,6 +6,7 @@
 #include "Camera_Follow.h"
 #include "Dagger.h"
 #include "Player.h"
+#include "Monster_Factory.h"
 
 CLevel_Boss1::CLevel_Boss1(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CLevel{ pGraphic_Device }
@@ -201,22 +202,68 @@ HRESULT CLevel_Boss1::Ready_Layer_Room(const _wstring& strLayerTag)
 
 			//여기에 몬스터 배치, 아래는 이전 스테이지에서 몬스터 배치 하는 방식, 참고할려면 참고해서 배치하기!
 
-			//list<CMonster::MONSTERDESC> DescList;
-			//for (size_t i = 0; i < 2; i++)	// ksta : 패턴 파악 위해 임시로 1만 바꿈, 원래값 5
-			//{
-			//	CMonster::MONSTERDESC tDesc = {};
-			//	tDesc.iLayerLevelIndex = ENUM_CLASS(LEVEL::LEVEL_BOSS1);
-			//	tDesc.iPrototypeLevelIndex = ENUM_CLASS(LEVEL::LEVEL_BOSS1);
-			//	tDesc.strLayerTag = strLayerTag;
-			//	//tDesc.strPrototypeTag = TEXT("Prototype_GameObject_ShortMonster");
-			//	tDesc.strPrototypeTag = TEXT("Prototype_GameObject_Monster_Mole_A");
-			//	//tDesc.strPrototypeTag = TEXT("Prototype_GameObject_Monster_Oink_A");
-			//	//tDesc.strPrototypeTag = TEXT("Prototype_GameObject_Monster_LaserGhost_D");
-			//	tDesc.pTerrainBox = pRoom->Get_TerrainBox();
-			//	DescList.push_back(tDesc);
-			//}
+			list<CMonster::MONSTERDESC> DescList;
+			for (size_t i = 0; i < 2; i++)
+			{
+				//CMonster::MONSTERDESC tDesc = {};
+				//tDesc.iLayerLevelIndex = ENUM_CLASS(LEVEL::LEVEL_BOSS1);
+				//tDesc.iPrototypeLevelIndex = ENUM_CLASS(LEVEL::LEVEL_BOSS1);
+				//tDesc.strLayerTag = strLayerTag;
+				////tDesc.strPrototypeTag = TEXT("Prototype_GameObject_ShortMonster");
+				//tDesc.strPrototypeTag = TEXT("Prototype_GameObject_Monster_Mole_A");
+				////tDesc.strPrototypeTag = TEXT("Prototype_GameObject_Monster_Oink_A");
+				////tDesc.strPrototypeTag = TEXT("Prototype_GameObject_Monster_LaserGhost_D");
+				//tDesc.pTerrainBox = pRoom->Get_TerrainBox();
+				//DescList.push_back(tDesc);
+
+		
+
+
+			}
+
+			CMonster::MONSTERDESC tDesc = {};
+			tDesc.iLayerLevelIndex = ENUM_CLASS(LEVEL::LEVEL_BOSS1);
+			tDesc.iPrototypeLevelIndex = ENUM_CLASS(LEVEL::LEVEL_BOSS1);
+			tDesc.strLayerTag = strLayerTag;
+			//tDesc.strPrototypeTag = TEXT("Prototype_GameObject_ShortMonster");
+			//tDesc.strPrototypeTag = TEXT("Prototype_GameObject_Monster_Mole_A");
+			//tDesc.strPrototypeTag = TEXT("Prototype_GameObject_Monster_Oink_A");
+			//tDesc.strPrototypeTag = TEXT("Prototype_GameObject_Monster_LaserGhost_D");
+			tDesc.pTerrainBox = pRoom->Get_TerrainBox();
+
+
+			tDesc.strPrototypeTag = TEXT("Prototype_GameObject_Boss_Erma_Body");
+			DescList.push_back(tDesc);
+			CMonster_Factory::GetInstance()->Add_Monsters(pRoom, DescList, CMonster_Factory::MONSTER_TYPE::MONSTER_BOSS_ERMA_BODY);
+			DescList.clear();
+
+			tDesc.strPrototypeTag = TEXT("Prototype_GameObject_Boss_Erma_Hand_L");
+			DescList.push_back(tDesc);
+			CMonster_Factory::GetInstance()->Add_Monsters(pRoom, DescList, CMonster_Factory::MONSTER_TYPE::MONSTER_BOSS_ERMA_HAND_L);
+			DescList.clear();
+
+			tDesc.strPrototypeTag = TEXT("Prototype_GameObject_Boss_Erma_Hand_R");
+			DescList.push_back(tDesc);
+			CMonster_Factory::GetInstance()->Add_Monsters(pRoom, DescList, CMonster_Factory::MONSTER_TYPE::MONSTER_BOSS_ERMA_HAND_R);
+			DescList.clear();
+
+			tDesc.strPrototypeTag = TEXT("Prototype_GameObject_Boss_Erma_Head");
+			DescList.push_back(tDesc);
+			CMonster_Factory::GetInstance()->Add_Monsters(pRoom, DescList, CMonster_Factory::MONSTER_TYPE::MONSTER_BOSS_ERMA_HEAD);
+			DescList.clear();
+
+			tDesc.strPrototypeTag = TEXT("Prototype_GameObject_Boss_Erma");
+			DescList.push_back(tDesc);
+			CMonster_Factory::GetInstance()->Add_Monsters(pRoom, DescList, CMonster_Factory::MONSTER_TYPE::MONSTER_BOSS_ERMA);
+			DescList.clear();
+
 			//CMonster_Factory::GetInstance()->Add_Monsters(pRoom, DescList, CMonster_Factory::MONSTER_TYPE::MONSTER_MOLE_A);
 			//DescList.clear();
+
+
+
+
+
 
 
 			// 룸매니저 투입
