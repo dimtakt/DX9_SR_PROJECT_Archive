@@ -3,6 +3,7 @@
 #include "Talent_Icon_Selete.h"
 #include "Talent_Slot.h"
 #include "Stat_Manager.h"
+#include "Talent_Button_Tip.h"
 CTalent_Slot_Icon::CTalent_Slot_Icon(LPDIRECT3DDEVICE9 pGraphic_Device) : CButton(pGraphic_Device)
 {
 }
@@ -120,6 +121,9 @@ HRESULT CTalent_Slot_Icon::Ready_ChildPrototype(LEVEL eLevel)
 		CTalent_Icon_Selete::Create(m_pGraphic_Device))))
 		return E_FAIL;
 
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(eLevel), TEXT("Prototype_GameObject_UI_Talent_Button_Tip"),
+		CTalent_Button_Tip::Create(m_pGraphic_Device))))
+		return E_FAIL;
 
 	return S_OK;
 }
@@ -127,8 +131,18 @@ HRESULT CTalent_Slot_Icon::Ready_ChildPrototype(LEVEL eLevel)
 HRESULT CTalent_Slot_Icon::Ready_Children()
 {
 	CUIObject* pGameObject = nullptr;
+	CUIObject::UIOBJECT_DESC Desc = {};
+
 
 	pGameObject = dynamic_cast<CUIObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(m_eLevel), TEXT("Prototype_GameObject_UI_Talent_Icon_Selete")));
+	if (nullptr == pGameObject)
+		return E_FAIL;
+	Add_Child(pGameObject);
+
+	Desc.fZ = m_iIndex;
+	Desc.fX = m_iTexIdex;
+
+	pGameObject = dynamic_cast<CUIObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(m_eLevel), TEXT("Prototype_GameObject_UI_Talent_Button_Tip"), &Desc));
 	if (nullptr == pGameObject)
 		return E_FAIL;
 	Add_Child(pGameObject);
@@ -157,20 +171,20 @@ void CTalent_Slot_Icon::Special_Gift_Update()
 		{
 		case 0:
 			if (m_iTexIdex == 0 && m_bIsGetGift == true)
-				CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CULDAMAGE, 10);
+				CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CRITICALDAMAGE, 20);
 			else if	(m_iTexIdex == 0 && m_bIsGetGift == false)
-				CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CULDAMAGE, -10);
+				CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CRITICALDAMAGE, -20);
 
 			if (m_iTexIdex == 1 && m_bIsGetGift == true)
-				CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CRITICALDAMAGE, 10);
+				CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CULCRITICAL, 20);
 			else if (m_iTexIdex == 1 && m_bIsGetGift == false)
-				CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CRITICALDAMAGE, -10);
+				CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CULCRITICAL, -20);
 			break;
 		case 1:
 			if (m_iTexIdex == 0 && m_bIsGetGift == true)
-				CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::MAXHP, 100);
+				CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::REGENDASH, 1.2f);
 			else if (m_iTexIdex == 0 && m_bIsGetGift == false)
-				CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::MAXHP, -100);
+				CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::REGENDASH, -1.2f);
 
 			if (m_iTexIdex == 1 && m_bIsGetGift == true)
 				CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::MAXDASH, 1);
@@ -179,9 +193,9 @@ void CTalent_Slot_Icon::Special_Gift_Update()
 			break;
 		case 2:
 			if (m_iTexIdex == 0 && m_bIsGetGift == true)
-				CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CULDAMAGE, 10);
+				CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::MAXHP, 20);
 			else if (m_iTexIdex == 0 && m_bIsGetGift == false)
-				CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CULDAMAGE, -10);
+				CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::MAXHP, -20);
 
 			if (m_iTexIdex == 1 && m_bIsGetGift == true)
 				CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CULDEF, 10);
@@ -190,14 +204,20 @@ void CTalent_Slot_Icon::Special_Gift_Update()
 			break;
 		case 3:
 			if (m_iTexIdex == 0 && m_bIsGetGift == true)
-				CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CULMP, 10);
+				CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CULDAMAGE, 10);
 			else if (m_iTexIdex == 0 && m_bIsGetGift == false)
-				CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CULMP, -10);
+				CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CULDAMAGE, -10);
 
 			if (m_iTexIdex == 1 && m_bIsGetGift == true)
-				CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CULMP, 10);
+			{
+				CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CULMP, 20);
+				CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CULHP, 10);
+			}
 			else if (m_iTexIdex == 1 && m_bIsGetGift == false)
-				CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CULMP, -10);
+			{
+				CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CULMP, -20);
+				CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CULHP, -10);
+			}
 			break;
 		}
 		m_bGiftCheck = m_bIsGetGift;

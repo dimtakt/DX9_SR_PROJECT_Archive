@@ -14,6 +14,8 @@ public:
 		_int					iItemTextureID;
 		_int					iItemValue;		//0이면 등급 없음
 		_float					fAngle;
+		_int					iArtefact_Value;
+
 	}ITEMOBJECT_DESC;
 
 protected:
@@ -40,7 +42,7 @@ protected:
 	_uint					m_iItemValue = {};
 	_wstring				m_szName = {};
 	_wstring				m_szDescription = {};
-
+	_int					m_iArtefact_Value = {};
 	_float					m_fAngle = {};
 
 	class CVIBuffer_Rect* m_pVIBufferCom = { nullptr };

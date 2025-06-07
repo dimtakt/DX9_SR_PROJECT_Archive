@@ -62,6 +62,11 @@ HRESULT CMinimap_Button::Initialize(void* pArg)
 
 void CMinimap_Button::Priority_Update(_float fTimeDelta)
 {
+	if (CRoom_Manager::GetInstance()->Get_CurrentRoom() == CRoom_Manager::GetInstance()->Get_RoomByID(m_iRoomID))
+	{
+		m_bIsPlayer = true;
+		m_bClearRoom = true;
+	}
 	CUIObject::Priority_Update(fTimeDelta);
 }
 
@@ -79,11 +84,7 @@ void CMinimap_Button::Update(_float fTimeDelta)
 	{
 		m_bClearRoom = true;
 	}
-	if (CRoom_Manager::GetInstance()->Get_CurrentRoom() == CRoom_Manager::GetInstance()->Get_RoomByID(m_iRoomID))
-	{
-		m_bIsPlayer = true;
-		m_bClearRoom = true;
-	}
+
 	else
 	{
 		m_bIsPlayer = false;
@@ -187,7 +188,7 @@ HRESULT CMinimap_Button::Ready_Children(_float fX, _float fY)
 	for (_int j = 0; j < pTemp.size(); ++j)
 	{
 		int fx2 = pTemp[j].first;
-		int fy2 = pTemp[j].second;
+		int fy2 = -pTemp[j].second;
 
 		if (fx1 == fx2 && fy1 == fy2)	//자기자신 제외
 			continue;

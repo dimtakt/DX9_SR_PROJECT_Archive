@@ -54,14 +54,14 @@ HRESULT CMinimap::Initialize(void* pArg)
 
 void CMinimap::Priority_Update(_float fTimeDelta)
 {
+
+	__super::Priority_Update(fTimeDelta);
 	if (m_pGameInstance->Get_CurrentLevel() == ENUM_CLASS(LEVEL::LEVEL_LOADING) || m_pGameInstance->Get_CurrentLevel() == ENUM_CLASS(LEVEL::LEVEL_LOGO) || m_pGameInstance->Get_CurrentLevel() == ENUM_CLASS(LEVEL::LEVEL_MAPEDIT))
 		return;
 	if (!m_bIsUpdate)
 		return;
 	if (!m_bisOpen)
 		return;
-
-	__super::Priority_Update(fTimeDelta);
 }
 
 void CMinimap::Update(_float fTimeDelta)
@@ -169,7 +169,7 @@ HRESULT CMinimap::Ready_Children()
 	for (_int i = 0; i < pTemp.size(); ++i)
 	{
 		Desc.fX = pTemp[i].first;
-		Desc.fY = pTemp[i].second;
+		Desc.fY = -pTemp[i].second;
 		Desc.vRoomPos = static_cast<CTransform*>(CRoom_Manager::GetInstance()->Find_Room(pTemp[i].first, pTemp[i].second)->Get_TerrainBox()->Find_Component(TEXT("Com_Transform_TerrainBox")))->Get_State(STATE::POSITION);
 		Desc.RoomID = CRoom_Manager::GetInstance()->Find_Room(pTemp[i].first, pTemp[i].second)->GetID();
 

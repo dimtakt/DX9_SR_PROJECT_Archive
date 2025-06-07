@@ -36,7 +36,10 @@
 #include "Sun.h"
 #include "Point.h"
 #include "Field_Font.h"
-
+#include "Artefact_Tooltip.h"
+#include "Potion_Tooltip.h"
+#include "Slate_Tooltip.h"
+#include "Item_Tooltip_Mid.h"
 CMainApp::CMainApp()
 	: m_pGameInstance{ CGameInstance::GetInstance() }
 {
@@ -249,6 +252,22 @@ HRESULT CMainApp::Ready_GameObject_Setting()
 		return E_FAIL;
 #pragma endregion
 
+#pragma region Prototype_GameObject_Tooltip
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_Artefact_Tooltip"),
+		CArtefact_Tooltip::Create(m_pGraphic_Device, LEVEL::LEVEL_STATIC))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_Slate_Tooltip"),
+		CSlate_Tooltip::Create(m_pGraphic_Device, LEVEL::LEVEL_STATIC))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_Potion_Tooltip"),
+		CPotion_Tooltip::Create(m_pGraphic_Device, LEVEL::LEVEL_STATIC))))
+		return E_FAIL;
+
+#pragma endregion
+
+
 	return S_OK;
 }
 
@@ -421,6 +440,10 @@ HRESULT CMainApp::Ready_Texture_Setting()
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Rect_UI_BalckRect"), CVIBuffer_Rect::Create(m_pGraphic_Device, vRectCol))))
 		return E_FAIL;
 
+	vRectCol = { 1.0f, 0.f, 0.f, 0.8f };
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Rect_UI_Alpha_Black"), CVIBuffer_Rect::Create(m_pGraphic_Device, vRectCol))))
+		return E_FAIL;
+
 	vRectCol = { 1.f, 1.f, 1.f, 1.f };
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Rect_UI_WhiteRect"), CVIBuffer_Rect::Create(m_pGraphic_Device, vRectCol))))
 		return E_FAIL;
@@ -437,6 +460,9 @@ HRESULT CMainApp::Ready_Texture_Setting()
 		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/UI/Default/KeyGD.png"), 1))))
 		return E_FAIL;
 
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Rect_Tooltip"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/UI/Tooltip/Tooltip_%d.png"), 2))))
+		return E_FAIL;
 #pragma endregion
 #pragma region Prototype_Component_Hud_States_Texture
 	vRectCol = { 0.816, 0.255, 0.267, 1.f };
@@ -747,7 +773,15 @@ HRESULT CMainApp::Ready_Texture_Setting()
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Rect_Map_Tile"),
 		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/UI/Minimap/Map_Slot_Big_%d.png"), 8))))
 		return E_FAIL;
+#pragma endregion
 
+#pragma region Prototype_Component_Tooltip
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Rect_Item_Tooltip"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/UI/Tooltip/Item_ToolTip_%d.png"), 3))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Rect_Item_Tooltip_Stone"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/UI/Tooltip/Item_Tolltip_Stone.png"), 1))))
+		return E_FAIL;
 #pragma endregion
 
 
@@ -922,6 +956,8 @@ void CMainApp::Ready_Font_Setting()
 		MSG_BOX(TEXT("FAILED to Font"));
 	if (FAILED(m_pGameInstance->Ready_Font(TEXT("UI_Font_16"), TEXT("../Bin/Resources/Font/Galmuri9.ttf"), TEXT("Galmuri9 Regular"), 0, 16, 900)))
 		MSG_BOX(TEXT("FAILED to Font"));
+	if (FAILED(m_pGameInstance->Ready_Font(TEXT("UI_Font_16_Tooltip"), TEXT("../Bin/Resources/Font/Galmuri9.ttf"), TEXT("Galmuri9 Regular"), 0, 16, 600)))
+		MSG_BOX(TEXT("FAILED to Font"));
 	if (FAILED(m_pGameInstance->Ready_Font(TEXT("UI_Font_14"), TEXT("../Bin/Resources/Font/Galmuri9.ttf"), TEXT("Galmuri9 Regular"), 0, 14, 900)))
 		MSG_BOX(TEXT("FAILED to Font"));
 	if (FAILED(m_pGameInstance->Ready_Font(TEXT("UI_Font_12"), TEXT("../Bin/Resources/Font/Galmuri9.ttf"), TEXT("Galmuri9 Regular"), 14, 13, 700)))
@@ -943,6 +979,7 @@ HRESULT CMainApp::Ready_Item_Setting()
 		pDesc[i].szDescription = g_ItemDataBase[i].m_szDescription;
 		pDesc[i].szName = g_ItemDataBase[i].m_szName;
 		pDesc[i].iItemValue = g_ItemDataBase[i].m_iItemValue;
+		pDesc[i].iArtefact_Value = g_ItemDataBase[i].m_iARTEFACT_Value;
 	}
 
 	m_pGameInstance->Setting_Item(pDesc, g_ItemDataBase.size(), ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_Item"));

@@ -49,6 +49,13 @@ HRESULT CStat_Manager::Initialize()
 
     Safe_AddRef(m_pGameInstance);
 
+    m_mapHasItem.emplace(TEXT("Snow Hamer"), false);
+    m_mapHasItem.emplace(TEXT("Yellow Planet"), false);
+    m_mapHasItem.emplace(TEXT("Red Planet"), false);
+    m_mapHasItem.emplace(TEXT("Bule Planet"), false);
+    m_mapHasItem.emplace(TEXT("Ice Bolt"), false);
+    m_mapHasItem.emplace(TEXT("Lightning Bolt"), false);
+
     return S_OK;
 }
 
@@ -139,6 +146,17 @@ _float CStat_Manager::Get_Damage(DAMAGE eDamage)
 
     //return fDamage;
     return 1000.f;
+}
+
+
+const _bool CStat_Manager::Get_HasItem(_wstring szEffectTag)
+{
+    return m_mapHasItem.find(szEffectTag)->second;
+}
+
+void CStat_Manager::HasItem(_wstring szEffectTag, _bool bHasItme)
+{
+    m_mapHasItem.find(szEffectTag)->second = bHasItme;
 }
 
 void CStat_Manager::Free()

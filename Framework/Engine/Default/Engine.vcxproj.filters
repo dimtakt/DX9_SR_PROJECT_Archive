@@ -169,6 +169,9 @@
     <Filter Include="01.Utility\03.GameObject\UIObject\Manager">
       <UniqueIdentifier>{0cb5b356-d749-4e14-a502-a0fe57e69e54}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01.Utility\03.GameObject\UIObject\Tooltip">
+      <UniqueIdentifier>{79e8c43f-affd-4d36-b0a1-88c4000be8f5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Public\Engine_Macro.h">
@@ -327,6 +330,9 @@
     <ClInclude Include="..\public\UIObject_Manager.h">
       <Filter>01.Utility\03.GameObject\UIObject\Manager</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\Tooltip.h">
+      <Filter>01.Utility\03.GameObject\UIObject\Tooltip</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\Base.cpp">
@@ -463,6 +469,9 @@
     </ClCompile>
     <ClCompile Include="..\private\UIObject_Manager.cpp">
       <Filter>01.Utility\03.GameObject\UIObject\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Tooltip.cpp">
+      <Filter>01.Utility\03.GameObject\UIObject\Tooltip</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
