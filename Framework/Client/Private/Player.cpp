@@ -207,7 +207,6 @@ void CPlayer::Update(_float fTimeDelta)
     // ***************************************
 #pragma region [WASD] Moving
 
-    m_vOldPos = m_pTransformCom->Get_State(STATE::POSITION);
     // 상태전환
     if (m_pGameInstance->IsKeyHold('W') ||
         m_pGameInstance->IsKeyHold('S') ||
@@ -562,40 +561,51 @@ void CPlayer::OnCollision(CGameObject* pGameObject)
     }
     case GAMEOBJ_TYPE::OBJECT:
     {
-        m_pTransformCom->Set_State(STATE::POSITION, m_vOldPos);
+
+        _float3 vPlayerPos = m_pTransformCom->Get_State(STATE::POSITION);
+
+        CTransform* pObjectTransform = dynamic_cast<CTransform*>(pGameObject->Find_Component(L"Com_Transform"));
+        _float3 vObjectPos = pObjectTransform->Get_State(STATE::POSITION);
+
+        _float3 vPushDir = vPlayerPos - vObjectPos;
+        _float fDist = D3DXVec3Length(&vPushDir);
+
+        if (fDist < 0.001f)
+            break;
+
+        D3DXVec3Normalize(&vPushDir, &vPushDir);
+
+        const _float fMinDistance = 2.0f; 
+        _float fOverlap = fMinDistance - fDist;
+
+        if (fOverlap > 0.f)
+        {
+            _float3 vTargetPos = vPlayerPos + vPushDir * fOverlap;
+
+            _float fLerpSpeed = 0.25f;
+            _float3 vNewPos;
+            vNewPos.x = vPlayerPos.x + (vTargetPos.x - vPlayerPos.x) * fLerpSpeed;
+            vNewPos.y = vPlayerPos.y + (vTargetPos.y - vPlayerPos.y) * fLerpSpeed;
+            vNewPos.z = vPlayerPos.z + (vTargetPos.z - vPlayerPos.z) * fLerpSpeed;
+
+            m_pTransformCom->Set_State(STATE::POSITION, vNewPos);
+        }
         break;
     }
 
     case GAMEOBJ_TYPE::MONSTER_EFFECT:
     {
         if (!m_bIsHit) {
-            CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CULHP, -5.f);
-            m_bIsHit = true;
-            m_bIsStun = true;
-
-            _wstring strStateTag = {};
-            _float fPointY = 0.f;       // 교차 평면의 기준이 될 Y값
-            _float3 vRayPoint = {};     // fPointY 값 기준 마우스 Ray와 교차하는 좌표
-            m_pGameInstance->Get_IntersectAtY(fPointY, vRayPoint);
-
             _float3 vPlayerPos = {};    // 플레이어 좌표
             vPlayerPos = m_pTransformCom->Get_State(STATE::POSITION);
-            
-            //strStateTag = (vRayPoint.z > vPlayerPos.z)?     L"Idle_Upper":
-                                                            //L"Idle_Lower";
-
-            //m_pAnimatorCom->Change_State(strStateTag, true, 2);
-            m_pAnimatorCom->Change_State(L"Air", false, 0.2, true);
-
 
             CTransform* pEnemyTransform = dynamic_cast<CTransform*>(pGameObject->Find_Component(L"Com_Transform"));
             _float3 vEnemyPos = pEnemyTransform->Get_State(STATE::POSITION);
             _float3 vStunDir = vPlayerPos - vEnemyPos;
             D3DXVec3Normalize(&vStunDir, &vStunDir);
-            
+
             _float3 vResult = vPlayerPos + vStunDir * 0.2f;    // 밀려날 정도 테스트
             m_pTransformCom->Set_State(STATE::POSITION, vResult);
-            Render_Font();
         }
         break;
     }  
@@ -622,6 +632,24 @@ void CPlayer::OnEvent(_uint iTypeindex, const EVENTDATA* pData)
 
     //    }
     //}
+}
+
+void CPlayer::Hit()
+{
+    m_bIsHit = true;
+    m_bIsStun = true;
+
+    _wstring strStateTag = {};
+    _float fPointY = 0.f;       // 교차 평면의 기준이 될 Y값
+    _float3 vRayPoint = {};     // fPointY 값 기준 마우스 Ray와 교차하는 좌표
+    m_pGameInstance->Get_IntersectAtY(fPointY, vRayPoint);
+
+    //strStateTag = (vRayPoint.z > vPlayerPos.z)?     L"Idle_Upper":
+                                                    //L"Idle_Lower";
+
+    //m_pAnimatorCom->Change_State(strStateTag, true, 2);
+    m_pAnimatorCom->Change_State(L"Air", false, 0.2, true);
+    Render_Font();
 }
 
 

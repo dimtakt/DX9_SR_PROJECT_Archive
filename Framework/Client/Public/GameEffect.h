@@ -22,7 +22,7 @@ public:
 
 private:
 	HRESULT Ready_Components();
-	void Ready_Collision(EFFECT_DESC desc);
+	void Ready_Collision();
 	void SetUp_RenderState();
 	void Reset_RenderState();
 
@@ -35,7 +35,6 @@ private:
 	CTransform* m_pTransformCom = { nullptr };
 	CTexture* m_pTextureCom = { nullptr };
 	CAnimator* m_pAnimatorCom = { nullptr };
-
 public:
 	static CGameObject* Create(LPDIRECT3DDEVICE9 pGraphic_Device);
 	CGameObject* Clone(void* pArg);

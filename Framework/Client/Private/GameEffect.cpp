@@ -2,6 +2,7 @@
 #include "GameInstance.h"
 #include "Stat_Manager.h"
 #include "Monster.h"
+#include "Player.h"
 CGameEffect::CGameEffect(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CEffect(pGraphic_Device)
 {
@@ -28,7 +29,6 @@ HRESULT CGameEffect::Initialize(void* pArg)
 	m_isFlippedX = pDesc->isFlippedX;
 	m_eObjType = pDesc->eType;
 	m_fDeltaAngle = pDesc->fDeltaAngle;
-
 
 	if (FAILED(Ready_Components()))
 		return E_FAIL;
@@ -78,7 +78,7 @@ HRESULT CGameEffect::Initialize(void* pArg)
 
 	m_iStackedFrame = 0;
 
-	Ready_Collision(*pDesc);
+	Ready_Collision();
 
 	return S_OK;
 }
@@ -215,10 +215,10 @@ HRESULT CGameEffect::Ready_Components()
 	return S_OK;
 }
 
-void CGameEffect::Ready_Collision(EFFECT_DESC desc)
+void CGameEffect::Ready_Collision()
 {
 
-	if (desc.eType == GAMEOBJ_TYPE::MONSTER_EFFECT || desc.eType == GAMEOBJ_TYPE::PLAYER_EFFECT)
+	if (m_eObjType == GAMEOBJ_TYPE::MONSTER_EFFECT || m_eObjType == GAMEOBJ_TYPE::PLAYER_EFFECT)
 	{
 
 		CCollider_OBB::OBB_DESC tColliderDesc;
@@ -226,51 +226,51 @@ void CGameEffect::Ready_Collision(EFFECT_DESC desc)
 		tColliderDesc.pTransform = m_pTransformCom;
 		tColliderDesc.eType = m_eObjType;
 		
-		if (desc.eType == GAMEOBJ_TYPE::PLAYER_EFFECT)
+		if (m_eObjType == GAMEOBJ_TYPE::PLAYER_EFFECT)
 		{
 			//플레이어 공격 관련 이펙트
-			if (desc.strEffectTag == TEXT("Prototype_Component_Texture_Effect_Blade0_Swing1"))
+			if (m_strEffectTag == TEXT("Prototype_Component_Texture_Effect_Blade0_Swing1"))
 			{
 				tColliderDesc.vScale = _float3(0.8f, 0.7f, 0.9f);
 			}
-			else if (desc.strEffectTag == TEXT("Prototype_Component_Texture_Effect_Blade0_Swing0"))
+			else if (m_strEffectTag == TEXT("Prototype_Component_Texture_Effect_Blade0_Swing0"))
 			{
 				tColliderDesc.vScale = _float3(0.8f, 0.7f, 0.9f);
 			}
-			else if (desc.strEffectTag == TEXT("Prototype_Component_Texture_Effect_Blade0_NFury"))
+			else if (m_strEffectTag == TEXT("Prototype_Component_Texture_Effect_Blade0_NFury"))
 			{
 				tColliderDesc.vScale = _float3(0.8f, 0.7f, 0.9f);
 			}
-			else if (desc.strEffectTag == TEXT("Prototype_Component_Texture_Effect_Blade0_NFury_Back"))
+			else if (m_strEffectTag == TEXT("Prototype_Component_Texture_Effect_Blade0_NFury_Back"))
 			{
 				tColliderDesc.vScale = _float3(0.8f, 0.7f, 0.9f);
 			}
-			else if (desc.strEffectTag == TEXT("Prototype_Component_Texture_Effect_Blade0_Parry"))
+			else if (m_strEffectTag == TEXT("Prototype_Component_Texture_Effect_Blade0_Parry"))
 			{
 				tColliderDesc.vScale = _float3(0.8f, 0.7f, 0.9f);
 			}
 		}
 		else {
 			// 레이저 고스트
-			if (desc.strEffectTag == TEXT("Prototype_Component_Texture_LaserGhost_D_Effect_Laser_Progress"))
+			if (m_strEffectTag == TEXT("Prototype_Component_Texture_LaserGhost_D_Effect_Laser_Progress"))
 			{
 				tColliderDesc.vScale = _float3(1.f, 1.f, 1.f);
 			}
-			else if (desc.strEffectTag == TEXT("Prototype_Component_Texture_LaserGhost_D_Effect_Laser_End"))
+			else if (m_strEffectTag == TEXT("Prototype_Component_Texture_LaserGhost_D_Effect_Laser_End"))
 			{
 				tColliderDesc.vScale = _float3(1.f, 1.f, 1.f);
 			}
 			// 두더지
-			else if (desc.strEffectTag == TEXT("Prototype_Component_Texture_Mole_A_Effect_Swing"))
+			else if (m_strEffectTag == TEXT("Prototype_Component_Texture_Mole_A_Effect_Swing"))
 			{
 				tColliderDesc.vScale = _float3(1.f, 1.f, 1.f);
 			}
 			// 돼지
-			else if (desc.strEffectTag == TEXT("Prototype_Component_Texture_Oink_A_Effect_Swing"))
+			else if (m_strEffectTag == TEXT("Prototype_Component_Texture_Oink_A_Effect_Swing"))
 			{
 				tColliderDesc.vScale = _float3(1.f, 1.f, 1.f);
 			}
-			else if (desc.strEffectTag == TEXT("Prototype_Component_Texture_Oink_A_Effect_SpinSwing"))
+			else if (m_strEffectTag == TEXT("Prototype_Component_Texture_Oink_A_Effect_SpinSwing"))
 			{
 				tColliderDesc.vScale = _float3(1.f, 1.f, 1.f);
 			}
@@ -311,14 +311,71 @@ void CGameEffect::Reset_RenderState()
 void CGameEffect::OnCollision(CGameObject* pGameObject)
 {
 	if (m_eObjType == GAMEOBJ_TYPE::PLAYER_EFFECT) {
-		switch (pGameObject->Get_ObjType())
+		if (pGameObject->Get_ObjType() == GAMEOBJ_TYPE::MONSTER)
 		{
-		case GAMEOBJ_TYPE::MONSTER:
-		{
-		
+			CMonster* pMonster = dynamic_cast<CMonster*>(pGameObject);
+			if (!pMonster->Get_IsHit())
+			{
+				//플레이어 공격 관련 이펙트
+				if (m_strEffectTag == TEXT("Prototype_Component_Texture_Effect_Blade0_Swing1"))
+				{
+					pMonster->Set_Damage(-(CStat_Manager::GetInstance()->Get_Damage(DAMAGE::NORMAL)));
+				}
+				else if (m_strEffectTag == TEXT("Prototype_Component_Texture_Effect_Blade0_Swing0"))
+				{
+					pMonster->Set_Damage(-(CStat_Manager::GetInstance()->Get_Damage(DAMAGE::NORMAL)));
+				}
+				else if (m_strEffectTag == TEXT("Prototype_Component_Texture_Effect_Blade0_NFury"))
+				{
+					pMonster->Set_Damage(-(CStat_Manager::GetInstance()->Get_Damage(DAMAGE::SPECIAL)));
+				}
+				else if (m_strEffectTag == TEXT("Prototype_Component_Texture_Effect_Blade0_NFury_Back"))
+				{
+					pMonster->Set_Damage(-(CStat_Manager::GetInstance()->Get_Damage(DAMAGE::SPECIAL)));
+				}
+				else if (m_strEffectTag == TEXT("Prototype_Component_Texture_Effect_Blade0_Parry"))
+				{
+					pMonster->Set_Damage(-(CStat_Manager::GetInstance()->Get_Damage(DAMAGE::SPECIAL)));
+				}
+				pMonster->Set_IsHit(TRUE);
+			}
 		}
+	}
+	else if (m_eObjType == GAMEOBJ_TYPE::MONSTER_EFFECT)
+	{
+		if (pGameObject->Get_ObjType() == GAMEOBJ_TYPE::PLAYER)
+		{
+
+			CPlayer* pPlayer = dynamic_cast<CPlayer*>(pGameObject);
+			if (!pPlayer->Get_IsHit())
+			{
+				if (m_strEffectTag == TEXT("Prototype_Component_Texture_LaserGhost_D_Effect_Laser_Progress"))
+				{
+					CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CULHP, -20.f);
+				}
+				else if (m_strEffectTag == TEXT("Prototype_Component_Texture_LaserGhost_D_Effect_Laser_End"))
+				{
+					CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CULHP, -1.f);
+				}
+				// 두더지
+				else if (m_strEffectTag == TEXT("Prototype_Component_Texture_Mole_A_Effect_Swing"))
+				{
+					CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CULHP, -7.f);
+				}
+				// 돼지
+				else if (m_strEffectTag == TEXT("Prototype_Component_Texture_Oink_A_Effect_Swing"))
+				{
+					CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CULHP, -10.f);
+				}
+				else if (m_strEffectTag == TEXT("Prototype_Component_Texture_Oink_A_Effect_SpinSwing"))
+				{
+					CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CULHP, -15.f);
+				}
+				pPlayer->Hit();
+			}
 
 		}
+		
 	}
 	
 }

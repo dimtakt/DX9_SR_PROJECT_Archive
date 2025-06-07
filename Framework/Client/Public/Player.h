@@ -44,6 +44,10 @@ public:
 	void ChangeStat(STAT_INFO eStat, float fValue);
 	virtual void OnEvent(_uint iTypeindex, const EVENTDATA* pData);
 
+public:
+	void Hit();
+	_bool Get_IsHit() { return m_bIsHit; }
+
 private:
 	CVIBuffer_Rect*			m_pVIBufferCom					= { nullptr };
 	CTransform*				m_pTransformCom					= { nullptr };
@@ -81,9 +85,6 @@ private:
 	_bool					m_isReadyFury					= false;
 
 	//CField_Hp*				m_pHpBar						= { nullptr };
-
-
-	_float3					m_vOldPos						= {};
 
 	_bool					m_bIsHit						= { false };
 	_bool					m_bIsStun						= false;
