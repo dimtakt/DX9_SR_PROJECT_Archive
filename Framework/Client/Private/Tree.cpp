@@ -21,6 +21,8 @@ HRESULT CTree::Initialize_Prototype()
 
 HRESULT CTree::Initialize(void* pArg)
 {
+    if (pArg == nullptr)
+        return S_OK;
 
     MAP_OBJECT_DESC* pObject_Desc = static_cast<MAP_OBJECT_DESC*>(pArg);
     auto it = find(m_vecTree.begin(), m_vecTree.end(), pObject_Desc->iTextureIndex);
@@ -29,12 +31,6 @@ HRESULT CTree::Initialize(void* pArg)
 
     if (FAILED(Ready_Components()))
         return E_FAIL;
-
-    if (pArg == nullptr)
-    {
-        m_pTransformCom->Set_State(STATE::POSITION, _float3(0.f, 0.f, 0.f));
-        return S_OK;
-    }
 
     m_pTransformCom->Set_State(STATE::POSITION, pObject_Desc->vPos);
 
