@@ -2,6 +2,7 @@
 #include "GameInstance.h"
 #include "Item_Tooltip_Mid.h"
 #include "Item_Tooltip_Bottom.h"
+#include "Button.h"
 CArtefact_Tooltip::CArtefact_Tooltip(LPDIRECT3DDEVICE9 pGraphic_Device) : CTooltip(pGraphic_Device)
 {
 }
@@ -122,11 +123,13 @@ HRESULT CArtefact_Tooltip::Ready_Children()
 {
 	CUIObject* pGameObject = nullptr;
 
-	pGameObject = dynamic_cast<CUIObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(m_eLevel), TEXT("Prototype_GameObject_UI_ArteFact_Tooltip_Mid")));
+	UIOBJECT_DESC Desc{};
+	Desc.fZ = 0;
+	pGameObject = dynamic_cast<CUIObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(m_eLevel), TEXT("Prototype_GameObject_UI_ArteFact_Tooltip_Mid"), &Desc));
 	if (nullptr == pGameObject)
 		return E_FAIL;
 	Add_Child(pGameObject);
-	pGameObject = dynamic_cast<CUIObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(m_eLevel), TEXT("Prototype_GameObject_UI_ArteFact_Tooltip_Bottom")));
+	pGameObject = dynamic_cast<CUIObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(m_eLevel), TEXT("Prototype_GameObject_UI_ArteFact_Tooltip_Bottom"), &Desc));
 	if (nullptr == pGameObject)
 		return E_FAIL;
 	Add_Child(pGameObject);
@@ -136,22 +139,15 @@ HRESULT CArtefact_Tooltip::Ready_Children()
 
 void CArtefact_Tooltip::Render_Font()
 {
+	TCHAR szText[MAX_PATH];
+	D3DXCOLOR TexColor{};
+
 	Font_Rect_Update();
 	CUIObject::Font_Rect_Update();
 
 	_uint iItemID = m_pItemObject->Item_Info()->iItemID;
 
 	m_vTexRect.left -= 30;
-	m_vTexRect.right -= 30;
-	m_pGameInstance->Render_Font(TEXT("UI_Font_22_Damage"), g_ItemDataBase[iItemID].m_szName, m_vTexRect, D3DXCOLOR(1.f, 1.f, 1.f, 1.f), DT_CENTER | DT_VCENTER | DT_SINGLELINE);
-	
-	CUIObject::Font_Rect_Update();
-	m_vTexRect.top += 220;
-	m_vTexRect.left += 50;
-	TCHAR szText[MAX_PATH];
-	D3DXCOLOR TexColor{};
-
-
 	switch (g_ItemDataBase[iItemID].m_eRarity)
 	{
 	case ITEM_RARITY::NORMAL:
@@ -171,25 +167,41 @@ void CArtefact_Tooltip::Render_Font()
 		TexColor = D3DXCOLOR(1.f, 1.f, 0.f, 1.f);
 		break;
 	}
+	m_vTexRect.right -= 30;
+	m_pGameInstance->Render_Font(TEXT("UI_Font_22_Damage"), g_ItemDataBase[iItemID].m_szName, m_vTexRect, TexColor, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
+	
+	CUIObject::Font_Rect_Update();
+	m_vTexRect.top += 220;
+	m_vTexRect.left += 50;
 
 	m_pGameInstance->Render_Font(TEXT("UI_Font_16_Tooltip"), szText, m_vTexRect, TexColor, DT_LEFT | DT_TOP);
 
-	if (g_ItemDataBase[iItemID].m_eType == ITEM_TYPE::ARTEFACT)
+	if (g_ItemEffect[g_ItemDataBase[iItemID].m_iARTEFACT_Value].m_eType == ITEM_EFFECT::VALUE_TYPE)
 	{
 		for (_int i = 0; i < g_ItemEffect[g_ItemDataBase[iItemID].m_iARTEFACT_Value].m_vecValue.size(); ++i)
 		{
 			m_vTexRect.top += 20;
 			_stprintf_s(szText, TEXT(""));
-	//		_tcscpy_s(szText, g_ItemEffect[g_ItemDataBase[iItemID].m_iARTEFACT_Value].m_vecValue[i].m_eStat);
+			_tcscpy_s(szText, g_ItemEffect[g_ItemDataBase[iItemID].m_iARTEFACT_Value].m_vecValue[i].m_szText.c_str());
+			
+			_float iStat_Value = g_ItemEffect[g_ItemDataBase[iItemID].m_iARTEFACT_Value].m_vecValue[i].m_fStat_Value1;
+			_float iUP_Value = g_ItemEffect[g_ItemDataBase[iItemID].m_iARTEFACT_Value].m_vecValue[i].m_fStat_Value2;
 
-			_wstring szSlay = TEXT(" - ");
-			_int iTemp = g_ItemEffect[g_ItemDataBase[iItemID].m_iARTEFACT_Value].m_vecValue[0].m_fStat_Value1;
+			iStat_Value = iStat_Value + iUP_Value * static_cast<CButton*>(m_pParent)->Get_Value();
+			
+			_stprintf_s(szText, szText, int(iStat_Value));
 
-			//_wstring szSlay = g_ItemDataBase[iItemID].m_szDescription;
-
-			m_pGameInstance->Render_Font(TEXT("UI_Font_16_Tooltip"), szSlay, m_vTexRect, D3DXCOLOR(1.f, 1.f, 1.f, 1.f), DT_LEFT | DT_TOP);
+			m_pGameInstance->Render_Font(TEXT("UI_Font_16_Tooltip"), szText, m_vTexRect, D3DXCOLOR(1.f, 1.f, 1.f, 1.f), DT_LEFT | DT_TOP);
 		}
 	}
+	else
+	{
+		m_vTexRect.top += 20;
+		m_pGameInstance->Render_Font(TEXT("UI_Font_16_Tooltip"), g_ItemEffect[g_ItemDataBase[iItemID].m_iARTEFACT_Value].m_vecValue[0].m_szText, m_vTexRect, D3DXCOLOR(1.f, 1.f, 1.f, 1.f), DT_LEFT | DT_TOP);
+	}
+
+	m_vTexRect.top += 70;
+	m_pGameInstance->Render_Font(TEXT("UI_Font_16_Tooltip"), g_ItemDataBase[iItemID].m_szDescription, m_vTexRect, D3DXCOLOR(0.5f, 0.5f, 0.5f, 1.f), DT_LEFT | DT_TOP);
 	return;
 
 }
