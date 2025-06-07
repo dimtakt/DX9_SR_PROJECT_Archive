@@ -151,15 +151,44 @@ void CArtefact_Tooltip::Render_Font()
 	TCHAR szText[MAX_PATH];
 	D3DXCOLOR TexColor{};
 
-	_stprintf_s(szText, TEXT("[레전더리]"));
-	m_pGameInstance->Render_Font(TEXT("UI_Font_16_Tooltip"), szText, m_vTexRect, D3DXCOLOR(1.f, 1.f, 1.f, 1.f), DT_LEFT | DT_TOP);
+
+	switch (g_ItemDataBase[iItemID].m_eRarity)
+	{
+	case ITEM_RARITY::NORMAL:
+		_stprintf_s(szText, TEXT("[일반]"));
+		TexColor = D3DXCOLOR(1.f, 1.f, 1.f, 1.f);
+		break;
+	case ITEM_RARITY::RARE:
+		_stprintf_s(szText, TEXT("[고급]"));
+		TexColor = D3DXCOLOR(0.f, 1.f, 0.f, 1.f);
+		break;
+	case ITEM_RARITY::EPIC:
+		_stprintf_s(szText, TEXT("[희귀]"));
+		TexColor = D3DXCOLOR(0.f, 0.f, 1.f, 1.f);
+		break;
+	case ITEM_RARITY::LEGENDARY:
+		_stprintf_s(szText, TEXT("[전설]"));
+		TexColor = D3DXCOLOR(1.f, 1.f, 0.f, 1.f);
+		break;
+	}
+
+	m_pGameInstance->Render_Font(TEXT("UI_Font_16_Tooltip"), szText, m_vTexRect, TexColor, DT_LEFT | DT_TOP);
 
 	if (g_ItemDataBase[iItemID].m_eType == ITEM_TYPE::ARTEFACT)
 	{
-		_int tTemp = g_ItemEffect[g_ItemDataBase[iItemID].m_iARTEFACT_Value].m_vecValue[0].m_fStat_Value1;
-		m_vTexRect.top += 20;
-		_wstring szSrc = g_ItemDataBase[iItemID].m_szDescription;
-		m_pGameInstance->Render_Font(TEXT("UI_Font_16_Tooltip"), szText, m_vTexRect, D3DXCOLOR(1.f, 1.f, 1.f, 1.f), DT_LEFT | DT_TOP);
+		for (_int i = 0; i < g_ItemEffect[g_ItemDataBase[iItemID].m_iARTEFACT_Value].m_vecValue.size(); ++i)
+		{
+			m_vTexRect.top += 20;
+			_stprintf_s(szText, TEXT(""));
+	//		_tcscpy_s(szText, g_ItemEffect[g_ItemDataBase[iItemID].m_iARTEFACT_Value].m_vecValue[i].m_eStat);
+
+			_wstring szSlay = TEXT(" - ");
+			_int iTemp = g_ItemEffect[g_ItemDataBase[iItemID].m_iARTEFACT_Value].m_vecValue[0].m_fStat_Value1;
+
+			//_wstring szSlay = g_ItemDataBase[iItemID].m_szDescription;
+
+			m_pGameInstance->Render_Font(TEXT("UI_Font_16_Tooltip"), szSlay, m_vTexRect, D3DXCOLOR(1.f, 1.f, 1.f, 1.f), DT_LEFT | DT_TOP);
+		}
 	}
 	return;
 
