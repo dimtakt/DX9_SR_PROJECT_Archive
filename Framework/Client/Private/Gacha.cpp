@@ -75,8 +75,8 @@ void CGacha::Update(_float fTimeDelta)
 	if (!m_bIsUpdate)
 		return;
 
-	if (m_pGameInstance->IsKeyDown(VK_UP))
-		UI_Switch();
+	/*if (m_pGameInstance->IsKeyDown(VK_UP))
+		UI_Switch();*/
 
 	if (!m_bIsOpen)
 		return;

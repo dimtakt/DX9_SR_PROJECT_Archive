@@ -40,6 +40,8 @@
 #include "Potion_Tooltip.h"
 #include "Slate_Tooltip.h"
 #include "Item_Tooltip_Mid.h"
+#include "FogPlane.h"
+
 CMainApp::CMainApp()
 	: m_pGameInstance{ CGameInstance::GetInstance() }
 {
@@ -267,6 +269,11 @@ HRESULT CMainApp::Ready_GameObject_Setting()
 
 #pragma endregion
 
+#pragma region Prototype_GameObject_FogPlane
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_FogPlane"),
+		CFogPlane::Create(m_pGraphic_Device))))
+		return E_FAIL;
+#pragma endregion
 
 	return S_OK;
 }
@@ -274,14 +281,14 @@ HRESULT CMainApp::Ready_GameObject_Setting()
 HRESULT CMainApp::Ready_Texture_Setting()
 {
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_TerrainBox_Top"),
-		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/BleakSwordDX/Terrain/Forest/ArenaTex_%d.png"), 53))))
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/BleakSwordDX/Terrain/Forest/ArenaTex_%d.png"), 54))))
 		return E_FAIL;
 	/* Prototype_Component_Texture_TerrainBox_Side */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_TerrainBox_Side"),
 		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/BleakSwordDX/Terrain/Basic/BaseArenaTex.png"), 1))))
 		return E_FAIL;
 
-	//나무 텍스처 추가
+	//텍스처 추가
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Tree"),
 		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/BleakSwordDX/Object/Tree/ForestTrees_%d.png"), 74))))
 		return E_FAIL;
@@ -784,7 +791,13 @@ HRESULT CMainApp::Ready_Texture_Setting()
 		return E_FAIL;
 #pragma endregion
 
+#pragma region FOG
+	// Fog
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Fog"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Fog/Fog.jpg"), 1))))
+		return E_FAIL;
 
+#pragma endregion
 
 	return S_OK;
 }
@@ -856,6 +869,10 @@ HRESULT CMainApp::Ready_Shader_Setting()
 
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Shader_Light"),
 		CShader::Create(m_pGraphic_Device, TEXT("../Bin/ShaderFiles/LightShader.hlsl")))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Shader_Fog"),
+		CShader::Create(m_pGraphic_Device, TEXT("../Bin/ShaderFiles/FogShader.hlsl")))))
 		return E_FAIL;
 
 	return S_OK;

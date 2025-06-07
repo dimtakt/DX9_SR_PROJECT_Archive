@@ -102,6 +102,19 @@ vector<pair<_int, _int>> CRoom_Manager::Create_RandomRooms(_int iRoomMax)
 	return vector<pair<_int, _int>>(m_RoomIndex);
 }
 
+void CRoom_Manager::Create_SpecialRoom(LEVEL eLevel)
+{
+	if (eLevel == LEVEL::LEVEL_BOSS1 || eLevel == LEVEL::LEVEL_BOSS2)
+	{
+		m_RoomIndex.push_back({ 0, 0 });
+		m_RoomIndex.push_back({ 0, 1 });		//보스룸은 룸인덱스 고정 
+	}
+	else if (eLevel == LEVEL::LEVEL_SHELTER || eLevel == LEVEL::LEVEL_TOWN)
+	{
+		m_RoomIndex.push_back({ 0,0 });
+	}
+}
+
 HRESULT CRoom_Manager::Check_Room(_uint iLayerLevelIndex, const _wstring& strLayerTag, _int iRoomID)
 {
 	CRoom* pRoom = Get_RoomByID(iRoomID);
@@ -117,7 +130,7 @@ HRESULT CRoom_Manager::Check_Room(_uint iLayerLevelIndex, const _wstring& strLay
 
 		if(iNeighborRoomX == X - 1 && iNeighborRoomZ == Z)
 		{
-			//현재 찾은 ID의 룸에 포탈 생성 함수 자동 호출, _float3는 오프셋값 그 룸이 가지고 있는 지형을 중심 기줌으로 포탈의 위치를 -40.f 준것
+			//현재 찾은 ID의 룸에 포탈 생성 함수 자동 호출, _float3는 오프셋값 그 룸이 가지고 있는 지형을 중심 기줌으로 포탈의 위치를 - 준것
 			pRoom->Ready_Potal(iLayerLevelIndex, strLayerTag, _float3(-10.f, 2.f, 0.f), POTAL_TYPE::LEFT);
 		}
 
@@ -137,7 +150,7 @@ HRESULT CRoom_Manager::Check_Room(_uint iLayerLevelIndex, const _wstring& strLay
 		}
 	}
 
-	if (!m_bCheckEnd)
+	if (!m_bCheckEnd && iLayerLevelIndex != 8)  //임시로 보스룸 테스트 전용에서 앤드포탈 안생기게 처리해둔 것.
 		Check_END_Potal(iLayerLevelIndex, strLayerTag, iRoomID);
 
 	return S_OK;
@@ -224,6 +237,7 @@ HRESULT CRoom_Manager::Check_END_Potal(_uint iLayerLevelIndex, const _wstring& s
 	{
 		pRoom->Ready_Potal(iLayerLevelIndex, strLayerTag, _float3(0.f, 2.f, 0.f), POTAL_TYPE::END_POTAL);
 		m_bCheckEnd = true;
+		pRoom->Set_RoomType(ROOM_INFO::EVENT_ENDPOTAL);
 	}
 
 	return S_OK;

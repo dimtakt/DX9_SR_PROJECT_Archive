@@ -397,6 +397,15 @@
     <Filter Include="02.GameObject\UI\Tooltip\Tooltip_Etc">
       <UniqueIdentifier>{486b2230-8fef-4ef7-b801-f8c0cc14c5b1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\Plane">
+      <UniqueIdentifier>{232e5b7a-9a98-40d7-a0d2-f94fa7228438}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Plane\Fog">
+      <UniqueIdentifier>{34c5f726-5ea9-4522-a6b4-a60a8dd0cb26}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Monster\Boss\Erma">
+      <UniqueIdentifier>{358e0392-ab0d-468d-86f3-d5b7761dc51e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -855,6 +864,24 @@
     <ClInclude Include="..\public\Item_Tooltip_Bottom.h">
       <Filter>02.GameObject\UI\Tooltip\Tooltip_Etc</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\FogPlane.h">
+      <Filter>02.GameObject\Plane\Fog</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Erma.h">
+      <Filter>02.GameObject\Monster\Boss\Erma</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Erma_Body.h">
+      <Filter>02.GameObject\Monster\Boss\Erma</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Erma_Hand_L.h">
+      <Filter>02.GameObject\Monster\Boss\Erma</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Erma_Hand_R.h">
+      <Filter>02.GameObject\Monster\Boss\Erma</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Erma_Head.h">
+      <Filter>02.GameObject\Monster\Boss\Erma</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -1275,6 +1302,24 @@
     <ClCompile Include="..\private\Item_Tooltip_Bottom.cpp">
       <Filter>02.GameObject\UI\Tooltip\Tooltip_Etc</Filter>
     </ClCompile>
+    <ClCompile Include="..\Private\FogPlane.cpp">
+      <Filter>02.GameObject\Plane\Fog</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Erma.cpp">
+      <Filter>02.GameObject\Monster\Boss\Erma</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Erma_Body.cpp">
+      <Filter>02.GameObject\Monster\Boss\Erma</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Erma_Hand_L.cpp">
+      <Filter>02.GameObject\Monster\Boss\Erma</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Erma_Hand_R.cpp">
+      <Filter>02.GameObject\Monster\Boss\Erma</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Erma_Head.cpp">
+      <Filter>02.GameObject\Monster\Boss\Erma</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="..\Bin\ShaderFiles\LogoRipple.hlsl">
@@ -1290,6 +1335,9 @@
       <Filter>96. ShaderFiles</Filter>
     </FxCompile>
     <FxCompile Include="..\Bin\ShaderFiles\LightShader.hlsl">
+      <Filter>96. ShaderFiles</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Bin\ShaderFiles\FogShader.hlsl">
       <Filter>96. ShaderFiles</Filter>
     </FxCompile>
   </ItemGroup>

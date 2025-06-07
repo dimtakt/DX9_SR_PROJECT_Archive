@@ -17,7 +17,11 @@ public:
 
 private:
 	_bool Check_OBBtoOBB(CCollider_OBB* pA, CCollider_OBB* pB);
+	_bool Check_3DOBBto3DOBB(CCollider_OBB* pA, CCollider_OBB* pB);
 	_bool Check_Y_Overlap(CCollider_OBB* pA, CCollider_OBB* pB);
+
+public:
+	void Remove_Collider(CCollider_OBB* pTarget);
 
 public:
 	void Render();
