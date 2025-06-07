@@ -47,8 +47,12 @@ HRESULT CPotal::Initialize(void* pArg)
     m_iTextureIndex = pObject_Desc->iTextureIndex;
     m_pTextureCom->Bind_Texture(m_iTextureIndex);
     m_eDirType = pObject_Desc->ePotalType;
+
     if (m_eDirType == POTAL_TYPE::END_POTAL)
         m_eObjType = GAMEOBJ_TYPE::END_POTAL;
+
+    if (m_eDirType == POTAL_TYPE::STAGE_POTAL)
+        m_eObjType = GAMEOBJ_TYPE::STAGE_POTAL;
 
     return S_OK;
 }

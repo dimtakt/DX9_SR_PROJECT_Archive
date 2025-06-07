@@ -1,6 +1,6 @@
 #include "Room.h"
 #include "GameInstance.h"
-
+#include "Stat_Manager.h"
 CRoom::CRoom(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CGameObject { pGraphic_Device }
 {
@@ -95,6 +95,9 @@ void CRoom::Update(_float fTimeDelta)
 					++it;
 				}
 			}
+			if(m_vMonster.size() == 0)
+				CStat_Manager::GetInstance()->Set_Battle(FALSE);
+
 		}
 	}
 }
@@ -222,7 +225,10 @@ HRESULT CRoom::Ready_Objects(void* pArg)
 HRESULT CRoom::Ready_Potal(_uint iLayerLevelIndex, const _wstring& strLayerTag, _float3 vOffset, POTAL_TYPE eType)
 {
 	OBJECT_INTERACTION_DESC pDesc{};
-	pDesc.ePotalType = eType;
+	if (iLayerLevelIndex == ENUM_CLASS(LEVEL::LEVEL_BOSS1) || iLayerLevelIndex == ENUM_CLASS(LEVEL::LEVEL_BOSS2))
+		pDesc.ePotalType = POTAL_TYPE::BOSS_POTAL;
+	else
+		pDesc.ePotalType = eType;
 	pDesc.iTextureIndex = 0;
 	pDesc.vScale = { 1.f, 1.f, 1.f };
 	pDesc.vRotate = { 0.f, 0.f, 0.f };
@@ -241,7 +247,24 @@ HRESULT CRoom::Ready_Potal(_uint iLayerLevelIndex, const _wstring& strLayerTag, 
 
 	m_vPotal.push_back(pPotal);
 
-	return E_NOTIMPL;
+	return S_OK;
+}
+
+HRESULT CRoom::Ready_Stage_Potal(_uint iLayerLevelIndex, const _wstring& strLayerTag, _float3 vOffset, POTAL_TYPE eType)
+{
+	OBJECT_INTERACTION_DESC pDesc{};
+	pDesc.ePotalType = eType;
+	pDesc.iTextureIndex = 0;
+	pDesc.vScale = { 1.f, 1.f, 1.f };
+	pDesc.vRotate = { 0.f, 0.f, 0.f };
+	CTransform* pTransform = static_cast<CTransform*>(m_pTerrainBox->Find_Component(TEXT("Com_Transform_TerrainBox")));
+	pDesc.vPos = pTransform->Get_State(STATE::POSITION) + vOffset;
+
+	CPotal* pPotal = dynamic_cast<CPotal*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, iLayerLevelIndex, TEXT("Prototype_GameObject_Potal"), &pDesc));
+
+	m_vPotal.push_back(pPotal);
+
+	return S_OK;
 }
 
 CPotal* CRoom::Find_Potal(POTAL_TYPE ePotal)
@@ -257,6 +280,7 @@ CPotal* CRoom::Find_Potal(POTAL_TYPE ePotal)
 HRESULT CRoom::Load_From_File(_uint iLayerLevelIndex, const _wstring& strLayerTag, const _tchar* pLoadFileTag, _int iIndex, _int RoomX , _int RoomZ, ROOM_INFO Event)
 {
 	Compute_ObjectOffset(RoomX, RoomZ);
+
 	if (Event == ROOM_INFO::EVENT_BOSS)
 		m_ObjectOffset * 2;
 
@@ -364,11 +388,25 @@ void CRoom::Compute_ObjectOffset(_int x, _int z)
 	m_ObjectOffset = { fX, 0.f, fZ };
 }
 
+CMonster* CRoom::Find_Monster(MONSTER_TYPE eType)
+{
+
+	for (auto& pMonster : m_vMonster)
+	{
+		if (pMonster->Get_MonsterType() == eType)
+		{
+			return pMonster;
+		}
+	}
+
+	return nullptr;
+}
+
 void CRoom::Enter()
 {
 	m_bIsActive = true;
 	m_bIsVisited = true;
-
+	CStat_Manager::GetInstance()->Set_Battle(TRUE);
 	for (auto& pMonster : m_vMonster)
 	{
 		if (pMonster != nullptr) {

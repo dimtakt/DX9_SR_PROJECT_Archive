@@ -75,11 +75,11 @@ void CGacha::Update(_float fTimeDelta)
 	if (!m_bIsUpdate)
 		return;
 
-	if (m_pGameInstance->IsKeyDown(VK_UP))
+	/*if (m_pGameInstance->IsKeyDown(VK_UP))
 	{
-		static_cast<CGacha*>(m_pGameInstance->Find_UIObj(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("UI_Gacha")))->UI_Open(GACHA_TYPE::STONE);
+		dynamic_cast<CGacha*>(m_pGameInstance->Find_UIObj(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("UI_Gacha")))->UI_Open(CGacha::GACHA_TYPE::STONE);
+	}*/
 		//UI_Switch();
-	}
 	if (!m_bIsOpen)
 		return;
 
