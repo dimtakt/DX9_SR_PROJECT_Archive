@@ -4,7 +4,7 @@
 #include "Client_Struct.h"
 #include "Stat_Manager.h"
 #include "EXP_Ball.h"
-
+#include "Gacha.h"
 CInteraction_Normal::CInteraction_Normal(LPDIRECT3DDEVICE9 pGraphic_Device)
     : CGameObject{ pGraphic_Device }
 {
@@ -654,14 +654,22 @@ void CInteraction_Normal::OnCollision(CGameObject* pGameObject)
         {
             if (pGameObject->Get_ObjType() == GAMEOBJ_TYPE::PLAYER)
             {
-
+                if (m_pGameInstance->IsKeyDown('F'))
+                {   
+                    dynamic_cast<CGacha*>(m_pGameInstance->Find_UIObj(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("UI_Gacha")))->UI_Open(CGacha::GACHA_TYPE::STONE);
+                    //m_bActive = FALSE;
+                }
             }
         }
         else if (m_eObjType == GAMEOBJ_TYPE::ATIFACT)
         {
             if (pGameObject->Get_ObjType() == GAMEOBJ_TYPE::PLAYER)
             {
-
+                if (m_pGameInstance->IsKeyDown('F'))
+                {
+                    dynamic_cast<CGacha*>(m_pGameInstance->Find_UIObj(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("UI_Gacha")))->UI_Open(CGacha::GACHA_TYPE::ARTEFACT);
+                    //m_bActive = FALSE;
+                }
             }
         }
         else

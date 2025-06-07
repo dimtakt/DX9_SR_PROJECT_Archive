@@ -150,9 +150,27 @@ HRESULT CRoom_Manager::Check_Room(_uint iLayerLevelIndex, const _wstring& strLay
 		}
 	}
 
-	if (!m_bCheckEnd && iLayerLevelIndex != 8)  //임시로 보스룸 테스트 전용에서 앤드포탈 안생기게 처리해둔 것.
+	if (!m_bCheckEnd )  
 		Check_END_Potal(iLayerLevelIndex, strLayerTag, iRoomID);
 
+	return S_OK;
+}
+
+HRESULT CRoom_Manager::Check_SpecialRoom(LEVEL eLevel, const _wstring& strLayerTag, _int iRoomID)
+{
+	if (eLevel == LEVEL::LEVEL_SHELTER || eLevel == LEVEL::LEVEL_TOWN)
+	{
+		CRoom* pRoom = Get_RoomByID(iRoomID);
+
+		pRoom->Ready_Stage_Potal(ENUM_CLASS(eLevel), strLayerTag, _float3(0.f, 2.f, 9.f), POTAL_TYPE::STAGE_POTAL);
+	}
+	else if (eLevel == LEVEL::LEVEL_BOSS1 || eLevel == LEVEL::LEVEL_BOSS2)
+	{
+		CRoom* pRoom = Get_RoomByID(iRoomID);
+
+		pRoom->Ready_Stage_Potal(ENUM_CLASS(eLevel), strLayerTag, _float3(0.f, 2.f, 0.f), POTAL_TYPE::STAGE_POTAL);
+	}
+	
 	return S_OK;
 }
 
@@ -190,6 +208,21 @@ HRESULT CRoom_Manager::Check_Potal_Coll(POTAL_TYPE ePotalType, _float3& vNextPos
 		Z -= 1;
 		ePotal = POTAL_TYPE::UP;
 		vOffset.z = -2.f;
+	}
+	else if (ePotalType == POTAL_TYPE::BOSS_POTAL)
+	{
+		CRoom* pNeighborRoom = Find_Room(0, 1);
+		Enter_Room(pNeighborRoom->GetID());
+		pRoom->Exit();
+		CPlayer* pPlayer = dynamic_cast<CPlayer*>(m_pGameInstance->Get_GameObject(m_iCurrentLevelID, TEXT("Layer_Player")));
+		pPlayer->Change_TerrainBox(pNeighborRoom->Get_TerrainBox(), 99);
+
+		ROOMCHANGE EventDesc;
+		EventDesc.vPosition = dynamic_cast<CTransform*>(pNeighborRoom->Get_TerrainBox()->Find_Component(TEXT("Com_Transform_TerrainBox")))->Get_State(STATE::POSITION);
+		m_pGameInstance->Broadcast(ENUM_CLASS(EVENT_TYPE::ROOMCHANGE), &EventDesc);
+		vNextPos = EventDesc.vPosition - _float3(0.f, 0.f, 12.f);
+		return S_OK;
+
 	}
 	for (auto& Room : m_RoomIndex)
 	{
@@ -314,6 +347,12 @@ void CRoom_Manager::Clear(_uint iLevelIndex)
 	CRoom_Manager::RoomIndexReset();
 	m_bCheckEnd = false;
 
+}
+
+CMonster* CRoom_Manager::Find_CurrentRoom_Monster(MONSTER_TYPE eType)
+{
+	CRoom* pRoom = Get_CurrentRoom();
+	return pRoom->Find_Monster(eType);
 }
 
 void CRoom_Manager::Free()

@@ -82,9 +82,31 @@ void CInven_Slot::Late_Update(_float fTimeDelta)
 
 	m_pGameInstance->Add_RenderGroup(RENDERGROUP::RG_UI, this);
 
-	if (m_bIsOver)
-		__super::Late_Update(fTimeDelta);
+	if (m_bIsOver && m_pSlotItem != nullptr)
+	{
 
+		m_vecChildren[3]->Late_Update(fTimeDelta);
+		//ARTEFACT, STONE, POTION, SKILLBOOK
+		switch (m_pSlotItem->Item_Info()->iItemType)
+		{
+		case 0:
+			m_vecChildren[0]->Late_Update(fTimeDelta);
+			break;
+		case 1:
+			m_vecChildren[1]->Late_Update(fTimeDelta);
+			break;
+		case 2:
+			m_vecChildren[2]->Late_Update(fTimeDelta);
+			break;
+		case 3:
+			m_vecChildren[0]->Late_Update(fTimeDelta);
+			break;
+		}
+	}
+	else if(m_bIsOver)
+	{
+		m_vecChildren[3]->Late_Update(fTimeDelta);
+	}
 	if (m_pSlotItem != nullptr)
 	{
 		m_pSlotItem->Late_Update(fTimeDelta, m_pTransformCom->Get_State(STATE::POSITION));
@@ -92,6 +114,8 @@ void CInven_Slot::Late_Update(_float fTimeDelta)
 	
 	if (m_bIsPick)
 		m_pSlotItem->IsSelete();
+
+	m_iValue = m_iSlotGradeCount;
 }
 
 HRESULT CInven_Slot::Render()
@@ -107,7 +131,10 @@ void CInven_Slot::Add_Item(CItem_Base* pItem)
 {
 	m_pSlotItem = pItem;
 	m_iItemCount += 1;
-	static_cast<CTooltip*>(m_vecChildren[0])->Change_Item(pItem);
+	for (_int i = 0; i < 3; ++i)
+	{
+		static_cast<CTooltip*>(m_vecChildren[i])->Change_Item(pItem);
+	}
 }
 
 void CInven_Slot::Push_Item(CItemObject* pItem)
@@ -136,6 +163,7 @@ _int CInven_Slot::Slot_Info(ITEM_INFO eInfo)
 void CInven_Slot::Add_GradeCount(_int iValue)
 {
 	m_iSlotGradeCount += iValue;
+	
 }
 
 void CInven_Slot::Setting_Item()
@@ -290,6 +318,16 @@ HRESULT CInven_Slot::Ready_Children()
 	CUIObject* pGameObject = nullptr;
 
 	pGameObject = dynamic_cast<CUIObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(m_eLevel), TEXT("Prototype_GameObject_Artefact_Tooltip")));
+	if (nullptr == pGameObject)
+		return E_FAIL;
+	Add_Child(pGameObject);
+
+	pGameObject = dynamic_cast<CUIObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(m_eLevel), TEXT("Prototype_GameObject_Slate_Tooltip")));
+	if (nullptr == pGameObject)
+		return E_FAIL;
+	Add_Child(pGameObject);
+
+	pGameObject = dynamic_cast<CUIObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(m_eLevel), TEXT("Prototype_GameObject_Potion_Tooltip")));
 	if (nullptr == pGameObject)
 		return E_FAIL;
 	Add_Child(pGameObject);

@@ -180,7 +180,6 @@ HRESULT CLevel_Boss1::Ready_Layer_Room(const _wstring& strLayerTag)
 
 	CRoom_Manager::GetInstance()->Create_SpecialRoom(LEVEL::LEVEL_BOSS1); // 보스룸의 인덱스는 무조건 고정적으로 넣어주고자 함. 랜덤X
 
-	//while문 돌릴 인덱스값 정의 일반룸 6 + 상호룸 2 = 8
 	while (iCount < iIndex)
 	{
 
@@ -202,60 +201,60 @@ HRESULT CLevel_Boss1::Ready_Layer_Room(const _wstring& strLayerTag)
 
 			//여기에 몬스터 배치, 아래는 이전 스테이지에서 몬스터 배치 하는 방식, 참고할려면 참고해서 배치하기!
 
-			list<CMonster::MONSTERDESC> DescList;
-			for (size_t i = 0; i < 2; i++)
-			{
-				//CMonster::MONSTERDESC tDesc = {};
-				//tDesc.iLayerLevelIndex = ENUM_CLASS(LEVEL::LEVEL_BOSS1);
-				//tDesc.iPrototypeLevelIndex = ENUM_CLASS(LEVEL::LEVEL_BOSS1);
-				//tDesc.strLayerTag = strLayerTag;
-				////tDesc.strPrototypeTag = TEXT("Prototype_GameObject_ShortMonster");
-				//tDesc.strPrototypeTag = TEXT("Prototype_GameObject_Monster_Mole_A");
-				////tDesc.strPrototypeTag = TEXT("Prototype_GameObject_Monster_Oink_A");
-				////tDesc.strPrototypeTag = TEXT("Prototype_GameObject_Monster_LaserGhost_D");
-				//tDesc.pTerrainBox = pRoom->Get_TerrainBox();
-				//DescList.push_back(tDesc);
+			//list<CMonster::MONSTERDESC> DescList;
+			//for (size_t i = 0; i < 2; i++)
+			//{
+			//	//CMonster::MONSTERDESC tDesc = {};
+			//	//tDesc.iLayerLevelIndex = ENUM_CLASS(LEVEL::LEVEL_BOSS1);
+			//	//tDesc.iPrototypeLevelIndex = ENUM_CLASS(LEVEL::LEVEL_BOSS1);
+			//	//tDesc.strLayerTag = strLayerTag;
+			//	////tDesc.strPrototypeTag = TEXT("Prototype_GameObject_ShortMonster");
+			//	//tDesc.strPrototypeTag = TEXT("Prototype_GameObject_Monster_Mole_A");
+			//	////tDesc.strPrototypeTag = TEXT("Prototype_GameObject_Monster_Oink_A");
+			//	////tDesc.strPrototypeTag = TEXT("Prototype_GameObject_Monster_LaserGhost_D");
+			//	//tDesc.pTerrainBox = pRoom->Get_TerrainBox();
+			//	//DescList.push_back(tDesc);
 
 		
 
 
-			}
+			//}
 
-			CMonster::MONSTERDESC tDesc = {};
-			tDesc.iLayerLevelIndex = ENUM_CLASS(LEVEL::LEVEL_BOSS1);
-			tDesc.iPrototypeLevelIndex = ENUM_CLASS(LEVEL::LEVEL_BOSS1);
-			tDesc.strLayerTag = strLayerTag;
-			//tDesc.strPrototypeTag = TEXT("Prototype_GameObject_ShortMonster");
-			//tDesc.strPrototypeTag = TEXT("Prototype_GameObject_Monster_Mole_A");
-			//tDesc.strPrototypeTag = TEXT("Prototype_GameObject_Monster_Oink_A");
-			//tDesc.strPrototypeTag = TEXT("Prototype_GameObject_Monster_LaserGhost_D");
-			tDesc.pTerrainBox = pRoom->Get_TerrainBox();
+			//CMonster::MONSTERDESC tDesc = {};
+			//tDesc.iLayerLevelIndex = ENUM_CLASS(LEVEL::LEVEL_BOSS1);
+			//tDesc.iPrototypeLevelIndex = ENUM_CLASS(LEVEL::LEVEL_BOSS1);
+			//tDesc.strLayerTag = strLayerTag;
+			////tDesc.strPrototypeTag = TEXT("Prototype_GameObject_ShortMonster");
+			////tDesc.strPrototypeTag = TEXT("Prototype_GameObject_Monster_Mole_A");
+			////tDesc.strPrototypeTag = TEXT("Prototype_GameObject_Monster_Oink_A");
+			////tDesc.strPrototypeTag = TEXT("Prototype_GameObject_Monster_LaserGhost_D");
+			//tDesc.pTerrainBox = pRoom->Get_TerrainBox();
 
 
-			tDesc.strPrototypeTag = TEXT("Prototype_GameObject_Boss_Erma_Body");
-			DescList.push_back(tDesc);
-			CMonster_Factory::GetInstance()->Add_Monsters(pRoom, DescList, CMonster_Factory::MONSTER_TYPE::MONSTER_BOSS_ERMA_BODY);
-			DescList.clear();
+			//tDesc.strPrototypeTag = TEXT("Prototype_GameObject_Boss_Erma_Body");
+			//DescList.push_back(tDesc);
+			//CMonster_Factory::GetInstance()->Add_Monsters(pRoom, DescList, CMonster_Factory::MONSTER_TYPE::MONSTER_BOSS_ERMA_BODY);
+			//DescList.clear();
 
-			tDesc.strPrototypeTag = TEXT("Prototype_GameObject_Boss_Erma_Hand_L");
-			DescList.push_back(tDesc);
-			CMonster_Factory::GetInstance()->Add_Monsters(pRoom, DescList, CMonster_Factory::MONSTER_TYPE::MONSTER_BOSS_ERMA_HAND_L);
-			DescList.clear();
+			//tDesc.strPrototypeTag = TEXT("Prototype_GameObject_Boss_Erma_Hand_L");
+			//DescList.push_back(tDesc);
+			//CMonster_Factory::GetInstance()->Add_Monsters(pRoom, DescList, CMonster_Factory::MONSTER_TYPE::MONSTER_BOSS_ERMA_HAND_L);
+			//DescList.clear();
 
-			tDesc.strPrototypeTag = TEXT("Prototype_GameObject_Boss_Erma_Hand_R");
-			DescList.push_back(tDesc);
-			CMonster_Factory::GetInstance()->Add_Monsters(pRoom, DescList, CMonster_Factory::MONSTER_TYPE::MONSTER_BOSS_ERMA_HAND_R);
-			DescList.clear();
+			//tDesc.strPrototypeTag = TEXT("Prototype_GameObject_Boss_Erma_Hand_R");
+			//DescList.push_back(tDesc);
+			//CMonster_Factory::GetInstance()->Add_Monsters(pRoom, DescList, CMonster_Factory::MONSTER_TYPE::MONSTER_BOSS_ERMA_HAND_R);
+			//DescList.clear();
 
-			tDesc.strPrototypeTag = TEXT("Prototype_GameObject_Boss_Erma_Head");
-			DescList.push_back(tDesc);
-			CMonster_Factory::GetInstance()->Add_Monsters(pRoom, DescList, CMonster_Factory::MONSTER_TYPE::MONSTER_BOSS_ERMA_HEAD);
-			DescList.clear();
+			//tDesc.strPrototypeTag = TEXT("Prototype_GameObject_Boss_Erma_Head");
+			//DescList.push_back(tDesc);
+			//CMonster_Factory::GetInstance()->Add_Monsters(pRoom, DescList, CMonster_Factory::MONSTER_TYPE::MONSTER_BOSS_ERMA_HEAD);
+			//DescList.clear();
 
-			tDesc.strPrototypeTag = TEXT("Prototype_GameObject_Boss_Erma");
-			DescList.push_back(tDesc);
-			CMonster_Factory::GetInstance()->Add_Monsters(pRoom, DescList, CMonster_Factory::MONSTER_TYPE::MONSTER_BOSS_ERMA);
-			DescList.clear();
+			//tDesc.strPrototypeTag = TEXT("Prototype_GameObject_Boss_Erma");
+			//DescList.push_back(tDesc);
+			//CMonster_Factory::GetInstance()->Add_Monsters(pRoom, DescList, CMonster_Factory::MONSTER_TYPE::MONSTER_BOSS_ERMA);
+			//DescList.clear();
 
 			//CMonster_Factory::GetInstance()->Add_Monsters(pRoom, DescList, CMonster_Factory::MONSTER_TYPE::MONSTER_MOLE_A);
 			//DescList.clear();
@@ -271,11 +270,9 @@ HRESULT CLevel_Boss1::Ready_Layer_Room(const _wstring& strLayerTag)
 			iCount++;
 	}
 
-	for (size_t num = 0; num < iIndex; num++)
-	{
-		CRoom_Manager::GetInstance()->Check_Room(ENUM_CLASS(LEVEL::LEVEL_BOSS1), strLayerTag, num);
-	}
-
+		CRoom_Manager::GetInstance()->Check_Room(ENUM_CLASS(LEVEL::LEVEL_BOSS1), strLayerTag, 0);	//첫번째룸 포탈 설치 ( 보스방으로 이어짐 )
+		CRoom_Manager::GetInstance()->Check_SpecialRoom(LEVEL::LEVEL_BOSS1, strLayerTag, 1);		//보스룸 포탈 설치, 보스 잡으면 중앙에 생기게끔
+	
 
 	return S_OK;
 }
