@@ -148,6 +148,7 @@
     <ClInclude Include="..\public\Animations\Anim_Player_Fury.h" />
     <ClInclude Include="..\public\Animations\Anim_Player_Idle.h" />
     <ClInclude Include="..\Public\Animations\Anim_Player_Parry.h" />
+    <ClInclude Include="..\public\Artefact_Tooltip.h" />
     <ClInclude Include="..\Public\BackGround.h" />
     <ClInclude Include="..\Public\Buff_Frame.h" />
     <ClInclude Include="..\Public\Buff_Icon.h" />
@@ -166,6 +167,11 @@
     <ClInclude Include="..\Public\Client_Defines_Item.h" />
     <ClInclude Include="..\Public\Client_Defines_Map.h" />
     <ClInclude Include="..\Public\Client_Struct.h" />
+    <ClInclude Include="..\public\Erma.h" />
+    <ClInclude Include="..\public\Erma_Body.h" />
+    <ClInclude Include="..\public\Erma_Hand_L.h" />
+    <ClInclude Include="..\public\Erma_Hand_R.h" />
+    <ClInclude Include="..\public\Erma_Head.h" />
     <ClInclude Include="..\Public\EXP_Ball.h" />
     <ClInclude Include="..\public\Field_Font.h" />
     <ClInclude Include="..\Public\FogPlane.h" />
@@ -176,6 +182,8 @@
     <ClInclude Include="..\public\Gacha_Reroll.h" />
     <ClInclude Include="..\public\Gacha_Slot.h" />
     <ClInclude Include="..\public\Gacha_Slot_Selete.h" />
+    <ClInclude Include="..\public\Item_Tooltip_Bottom.h" />
+    <ClInclude Include="..\public\Item_Tooltip_Mid.h" />
     <ClInclude Include="..\public\LaserGhost_D.h" />
     <ClInclude Include="..\Public\Level_Boss1.h" />
     <ClInclude Include="..\Public\Level_Boss2.h" />
@@ -190,6 +198,8 @@
     <ClInclude Include="..\public\Minimap_Node.h" />
     <ClInclude Include="..\public\Minimap_Player.h" />
     <ClInclude Include="..\Public\Point.h" />
+    <ClInclude Include="..\public\Potion_Tooltip.h" />
+    <ClInclude Include="..\public\Slate_Tooltip.h" />
     <ClInclude Include="..\Public\Sun.h" />
     <ClInclude Include="..\public\Talent.h" />
     <ClInclude Include="..\Public\Effect_Factory.h" />
@@ -297,6 +307,7 @@
     <ClCompile Include="..\Private\Animations\Anim_Player_Attack2.cpp" />
     <ClCompile Include="..\private\Animations\Anim_Player_Idle.cpp" />
     <ClCompile Include="..\Private\Animations\Anim_Player_Parry.cpp" />
+    <ClCompile Include="..\private\Artefact_Tooltip.cpp" />
     <ClCompile Include="..\Private\BackGround.cpp" />
     <ClCompile Include="..\Private\Buff_Frame.cpp" />
     <ClCompile Include="..\Private\Buff_Icon.cpp" />
@@ -311,6 +322,11 @@
     <ClCompile Include="..\private\ChapMap_Line.cpp" />
     <ClCompile Include="..\private\ChapMap_MapSymbol.cpp" />
     <ClCompile Include="..\private\ChapMap_PlayerSymbol.cpp" />
+    <ClCompile Include="..\private\Erma.cpp" />
+    <ClCompile Include="..\private\Erma_Body.cpp" />
+    <ClCompile Include="..\private\Erma_Hand_L.cpp" />
+    <ClCompile Include="..\private\Erma_Hand_R.cpp" />
+    <ClCompile Include="..\private\Erma_Head.cpp" />
     <ClCompile Include="..\Private\EXP_Ball.cpp" />
     <ClCompile Include="..\private\Field_Font.cpp" />
     <ClCompile Include="..\Private\FogPlane.cpp" />
@@ -321,6 +337,8 @@
     <ClCompile Include="..\private\Gacha_Reroll.cpp" />
     <ClCompile Include="..\private\Gacha_Slot.cpp" />
     <ClCompile Include="..\private\Gacha_Slot_Selete.cpp" />
+    <ClCompile Include="..\private\Item_Tooltip_Bottom.cpp" />
+    <ClCompile Include="..\private\Item_Tooltip_Mid.cpp" />
     <ClCompile Include="..\Private\LaserGhost_D.cpp" />
     <ClCompile Include="..\Private\Level_Boss1.cpp" />
     <ClCompile Include="..\Private\Level_Boss2.cpp" />
@@ -335,6 +353,8 @@
     <ClCompile Include="..\private\Minimap_Node.cpp" />
     <ClCompile Include="..\private\Minimap_Player.cpp" />
     <ClCompile Include="..\Private\Point.cpp" />
+    <ClCompile Include="..\private\Potion_Tooltip.cpp" />
+    <ClCompile Include="..\private\Slate_Tooltip.cpp" />
     <ClCompile Include="..\Private\Sun.cpp" />
     <ClCompile Include="..\private\Talent.cpp" />
     <ClCompile Include="..\Private\Effect_Factory.cpp" />

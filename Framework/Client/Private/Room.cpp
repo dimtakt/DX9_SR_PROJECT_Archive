@@ -257,6 +257,8 @@ CPotal* CRoom::Find_Potal(POTAL_TYPE ePotal)
 HRESULT CRoom::Load_From_File(_uint iLayerLevelIndex, const _wstring& strLayerTag, const _tchar* pLoadFileTag, _int iIndex, _int RoomX , _int RoomZ, ROOM_INFO Event)
 {
 	Compute_ObjectOffset(RoomX, RoomZ);
+	if (Event == ROOM_INFO::EVENT_BOSS)
+		m_ObjectOffset * 2;
 
 	if (Event == ROOM_INFO::EVENT_NORMAL)
 		m_eRoomType = ROOM_INFO::EVENT_NORMAL;
@@ -271,8 +273,6 @@ HRESULT CRoom::Load_From_File(_uint iLayerLevelIndex, const _wstring& strLayerTa
 	else if (Event == ROOM_INFO::EVENT_STONE)
 		m_eRoomType = ROOM_INFO::EVENT_STONE;
 
-
-	/*m_iID = iIndex;*/
 	m_iRoomX = RoomX;
 	m_iRoomZ = RoomZ;
 

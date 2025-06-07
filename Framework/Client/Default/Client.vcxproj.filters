@@ -175,9 +175,6 @@
     <Filter Include="02.GameObject\Item">
       <UniqueIdentifier>{a0442a2f-455c-4da5-bb1a-a161cd6ce207}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\Item\Item_Effect">
-      <UniqueIdentifier>{286956f5-0755-4a12-9e84-f1f4d3be7523}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObject\UI\Window\Inventory\Inven_Slot">
       <UniqueIdentifier>{88764adf-be53-44bb-a7d2-7dbd9862d95a}</UniqueIdentifier>
     </Filter>
@@ -394,11 +391,20 @@
     <Filter Include="02.GameObject\Monster\Boss">
       <UniqueIdentifier>{961807fe-6049-4ff4-b8ae-e1001345b58c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\UI\Tooltip">
+      <UniqueIdentifier>{4ccfad01-fae4-49a5-afc6-fea20bea8f68}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\UI\Tooltip\Tooltip_Etc">
+      <UniqueIdentifier>{486b2230-8fef-4ef7-b801-f8c0cc14c5b1}</UniqueIdentifier>
+    </Filter>
     <Filter Include="02.GameObject\Plane">
       <UniqueIdentifier>{232e5b7a-9a98-40d7-a0d2-f94fa7228438}</UniqueIdentifier>
     </Filter>
     <Filter Include="02.GameObject\Plane\Fog">
       <UniqueIdentifier>{34c5f726-5ea9-4522-a6b4-a60a8dd0cb26}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Monster\Boss\Erma">
+      <UniqueIdentifier>{358e0392-ab0d-468d-86f3-d5b7761dc51e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -843,8 +849,38 @@
     <ClInclude Include="..\public\Talent_Button_Tip.h">
       <Filter>02.GameObject\UI\Window\Talent\Talent_Slot\Talent_Slot_Etc\Selete_Button</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\Slate_Tooltip.h">
+      <Filter>02.GameObject\UI\Tooltip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Artefact_Tooltip.h">
+      <Filter>02.GameObject\UI\Tooltip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Potion_Tooltip.h">
+      <Filter>02.GameObject\UI\Tooltip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Item_Tooltip_Mid.h">
+      <Filter>02.GameObject\UI\Tooltip\Tooltip_Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Item_Tooltip_Bottom.h">
+      <Filter>02.GameObject\UI\Tooltip\Tooltip_Etc</Filter>
+    </ClInclude>
     <ClInclude Include="..\Public\FogPlane.h">
       <Filter>02.GameObject\Plane\Fog</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Erma.h">
+      <Filter>02.GameObject\Monster\Boss\Erma</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Erma_Body.h">
+      <Filter>02.GameObject\Monster\Boss\Erma</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Erma_Hand_L.h">
+      <Filter>02.GameObject\Monster\Boss\Erma</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Erma_Hand_R.h">
+      <Filter>02.GameObject\Monster\Boss\Erma</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Erma_Head.h">
+      <Filter>02.GameObject\Monster\Boss\Erma</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1251,8 +1287,38 @@
     <ClCompile Include="..\private\Talent_Button_Tip.cpp">
       <Filter>02.GameObject\UI\Window\Talent\Talent_Slot\Talent_Slot_Etc\Selete_Button</Filter>
     </ClCompile>
+    <ClCompile Include="..\private\Artefact_Tooltip.cpp">
+      <Filter>02.GameObject\UI\Tooltip</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Potion_Tooltip.cpp">
+      <Filter>02.GameObject\UI\Tooltip</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Slate_Tooltip.cpp">
+      <Filter>02.GameObject\UI\Tooltip</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Item_Tooltip_Mid.cpp">
+      <Filter>02.GameObject\UI\Tooltip\Tooltip_Etc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Item_Tooltip_Bottom.cpp">
+      <Filter>02.GameObject\UI\Tooltip\Tooltip_Etc</Filter>
+    </ClCompile>
     <ClCompile Include="..\Private\FogPlane.cpp">
       <Filter>02.GameObject\Plane\Fog</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Erma.cpp">
+      <Filter>02.GameObject\Monster\Boss\Erma</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Erma_Body.cpp">
+      <Filter>02.GameObject\Monster\Boss\Erma</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Erma_Hand_L.cpp">
+      <Filter>02.GameObject\Monster\Boss\Erma</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Erma_Hand_R.cpp">
+      <Filter>02.GameObject\Monster\Boss\Erma</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Erma_Head.cpp">
+      <Filter>02.GameObject\Monster\Boss\Erma</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -63,7 +63,7 @@ protected:
 
 	DWORD					m_dwHitTime = {};
 
-	CField_Hp* m_pHpBar = { nullptr };
+	CField_Hp* m_pHpBar		= { nullptr };
 
 	// Ω∫≈» ¡§∫∏
 	_int		m_iCulHp = {};

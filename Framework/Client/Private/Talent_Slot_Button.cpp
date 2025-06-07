@@ -3,6 +3,7 @@
 #include "Talent_Button_Selete.h"
 #include "Talent_Slot.h"
 #include "Stat_Manager.h"
+#include "Talent_Button_Icon.h"
 CTalent_Slot_Button::CTalent_Slot_Button(LPDIRECT3DDEVICE9 pGraphic_Device) : CButton(pGraphic_Device)
 {
 }
@@ -127,7 +128,6 @@ HRESULT CTalent_Slot_Button::Ready_ChildPrototype(LEVEL eLevel)
 		CTalent_Button_Selete::Create(m_pGraphic_Device))))
 		return E_FAIL;
 
-
 	return S_OK;
 }
 
@@ -142,8 +142,6 @@ HRESULT CTalent_Slot_Button::Ready_Children()
 	if (nullptr == pGameObject)
 		return E_FAIL;
 	Add_Child(pGameObject);
-
-
 
 	return S_OK;
 }
