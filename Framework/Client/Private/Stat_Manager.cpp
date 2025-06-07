@@ -151,7 +151,11 @@ _float CStat_Manager::Get_Damage(DAMAGE eDamage)
 
 const _bool CStat_Manager::Get_HasItem(_wstring szEffectTag)
 {
-    return m_mapHasItem.find(szEffectTag)->second;
+    auto iter = m_mapHasItem.find(szEffectTag);
+    if (iter == m_mapHasItem.end())
+        return false;
+
+    return iter->second;
 }
 
 void CStat_Manager::HasItem(_wstring szEffectTag, _bool bHasItme)

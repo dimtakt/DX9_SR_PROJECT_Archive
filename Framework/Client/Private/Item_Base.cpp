@@ -92,9 +92,10 @@ HRESULT CItem_Base::Render()
 	else
 	{
 		if (m_bIsTooltip)
+		{
 			if (FAILED(Tooltip_Render()))
 				return E_FAIL;
-
+		}
 		m_bIsTooltip = false;
 		m_bIsTooltip_Render = false;
 	}

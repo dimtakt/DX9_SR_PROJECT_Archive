@@ -1,13 +1,15 @@
 #pragma once
-#include "UIObject.h"
+#include "Tooltip.h"
 #include "Client_Defines.h"
+#include "Item_Base.h"
+
 BEGIN(Engine)
 class CVIBuffer_Rect;
 class CTexture;
 END
 
 BEGIN(Client)
-class CPotion_Tooltip final : public CUIObject
+class CPotion_Tooltip final : public CTooltip
 {
 private:
 									CPotion_Tooltip(LPDIRECT3DDEVICE9 pGraphic_Device);
@@ -29,6 +31,10 @@ private:
 private:
 	HRESULT							Ready_Components();
 
+	HRESULT							Ready_ChildPrototype(LEVEL eLevel);
+	HRESULT							Ready_Children();
+
+	void							Render_Font();
 public:
 	static CPotion_Tooltip*			Create(LPDIRECT3DDEVICE9 pGraphic_Device, LEVEL eLevel);
 	virtual CGameObject*			Clone(void* pArg) override;
