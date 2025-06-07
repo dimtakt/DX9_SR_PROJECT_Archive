@@ -9,6 +9,7 @@
 #include "ChapMap.h"
 #include "EXP_Ball.h"
 #include "Field_Font.h"
+#include "Level_Loading.h"
 
 CPlayer::CPlayer(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CGameObject{ pGraphic_Device }
@@ -550,6 +551,21 @@ void CPlayer::OnCollision(CGameObject* pGameObject)
             {
                 dynamic_cast<CChapMap*>(m_pGameInstance->Get_GameObject(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Layer_ChapMap")))->Open_Ui();
             }
+        }
+        break;
+    }
+    case GAMEOBJ_TYPE::STAGE_POTAL:
+    {
+        if (m_pGameInstance->IsKeyDown(VK_DOWN)) // 특정 키 입력시 다음 스테이지 넘어가게 설정
+        {
+            _uint CurrentLevel = m_pGameInstance->Get_CurrentLevel();
+
+            if (CurrentLevel == ENUM_CLASS(LEVEL::LEVEL_TOWN))  //타운일 때
+                m_pGameInstance->Open_Level(static_cast<_uint>(LEVEL::LEVEL_LOADING), CLevel_Loading::Create(m_pGraphic_Device, LEVEL::LEVEL_STAGE1));
+            else if (CurrentLevel == ENUM_CLASS(LEVEL::LEVEL_BOSS1))
+                m_pGameInstance->Open_Level(static_cast<_uint>(LEVEL::LEVEL_LOADING), CLevel_Loading::Create(m_pGraphic_Device, LEVEL::LEVEL_SHELTER)); 
+            else if (CurrentLevel == ENUM_CLASS(LEVEL::LEVEL_SHELTER))
+                m_pGameInstance->Open_Level(static_cast<_uint>(LEVEL::LEVEL_LOADING), CLevel_Loading::Create(m_pGraphic_Device, LEVEL::LEVEL_BOSS2));
         }
         break;
     }

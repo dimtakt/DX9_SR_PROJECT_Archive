@@ -37,6 +37,7 @@ public:
     virtual void Deactivate();
     HRESULT Load_From_File(_uint iLayerLevelIndex, const _wstring& strLayerTag, const _tchar* pLoadFileTag, _int iIndex, _int RoomX, _int RoomZ, ROOM_INFO Event);
     HRESULT Ready_Potal(_uint iLayerLevelIndex, const _wstring& strLayerTag, _float3 vOffset, POTAL_TYPE eType);
+    HRESULT Ready_Stage_Potal(_uint iLayerLevelIndex, const _wstring& strLayerTag, _float3 vOffset, POTAL_TYPE eType);
     CPotal* Find_Potal(POTAL_TYPE ePotal);
 
 public:

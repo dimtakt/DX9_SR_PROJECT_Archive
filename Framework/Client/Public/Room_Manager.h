@@ -19,6 +19,7 @@ public:
 	vector<pair<_int, _int>> Create_RandomRooms(_int iRoomMax);
 	void Create_SpecialRoom(LEVEL eLevel);
 	HRESULT Check_Room(_uint iLayerLevelIndex, const _wstring& strLayerTag, _int iRoomID);
+	HRESULT Check_SpecialRoom(LEVEL eLevel, const _wstring& strLayerTag, _int iRoomID);
 	HRESULT Check_Potal_Coll(POTAL_TYPE ePotalType, _float3 &vNextPos);
 	HRESULT Check_END_Potal(_uint iLayerLevelIndex, const _wstring& strLayerTag, _int iRoomID);
 	CRoom* Get_CurrentRoom();
