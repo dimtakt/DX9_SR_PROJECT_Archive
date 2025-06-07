@@ -403,6 +403,9 @@
     <Filter Include="02.GameObject\Plane\Fog">
       <UniqueIdentifier>{34c5f726-5ea9-4522-a6b4-a60a8dd0cb26}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\Monster\Boss\Erma">
+      <UniqueIdentifier>{358e0392-ab0d-468d-86f3-d5b7761dc51e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -864,6 +867,21 @@
     <ClInclude Include="..\Public\FogPlane.h">
       <Filter>02.GameObject\Plane\Fog</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\Erma.h">
+      <Filter>02.GameObject\Monster\Boss\Erma</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Erma_Body.h">
+      <Filter>02.GameObject\Monster\Boss\Erma</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Erma_Hand_L.h">
+      <Filter>02.GameObject\Monster\Boss\Erma</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Erma_Hand_R.h">
+      <Filter>02.GameObject\Monster\Boss\Erma</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Erma_Head.h">
+      <Filter>02.GameObject\Monster\Boss\Erma</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -1286,6 +1304,21 @@
     </ClCompile>
     <ClCompile Include="..\Private\FogPlane.cpp">
       <Filter>02.GameObject\Plane\Fog</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Erma.cpp">
+      <Filter>02.GameObject\Monster\Boss\Erma</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Erma_Body.cpp">
+      <Filter>02.GameObject\Monster\Boss\Erma</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Erma_Hand_L.cpp">
+      <Filter>02.GameObject\Monster\Boss\Erma</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Erma_Hand_R.cpp">
+      <Filter>02.GameObject\Monster\Boss\Erma</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Erma_Head.cpp">
+      <Filter>02.GameObject\Monster\Boss\Erma</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
