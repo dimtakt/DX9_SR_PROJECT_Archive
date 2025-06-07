@@ -561,7 +561,7 @@ void CPlayer::OnCollision(CGameObject* pGameObject)
         break;
     }
     case GAMEOBJ_TYPE::OBJECT:
-    {
+    { 
         m_pTransformCom->Set_State(STATE::POSITION, m_vOldPos);
         break;
     }

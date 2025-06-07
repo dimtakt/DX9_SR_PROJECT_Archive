@@ -186,12 +186,12 @@ HRESULT CLevel_Stage2::Ready_Layer_Room(const _wstring& strLayerTag)
 	if (iEventRoomEventID != 0)
 		iIndex = 8; //이벤트룸 1개면 전체 룸 7개, 2개면 전체룸 8개
 
-	_int iEventRoomIndex1 = static_cast<_int>(m_pGameInstance->Compute_Random((_float)iIndex - 4, (_float)iIndex));;
+	_int iEventRoomIndex1 = static_cast<_int>(m_pGameInstance->Compute_Random((_float)iIndex - 4, (_float)iIndex-1));;
 	_int iEventRoomIndex2 = iEventRoomIndex1;
 
 	while (iEventRoomIndex2 <= iEventRoomIndex1) // 혹여나 랜덤으로 이벤트룸이 같은 위치 뽑히면 다시 돌리게 설정.
 	{
-		iEventRoomIndex2 = static_cast<_int>(m_pGameInstance->Compute_Random((_float)iIndex - 4, (_float)iIndex));;
+		iEventRoomIndex2 = static_cast<_int>(m_pGameInstance->Compute_Random((_float)iIndex - 4, (_float)iIndex-1));;
 	}
 
 	if (iEventRoomEventID != 2)
@@ -279,22 +279,19 @@ HRESULT CLevel_Stage2::Ready_Layer_Room(const _wstring& strLayerTag)
 			{	//3스테이지_3_Event%d 파일명 이렇게 지어줄 예정 , 타입 따로 넘겨줘야해서..
 				pRoom->Load_From_File(ENUM_CLASS(LEVEL::LEVEL_STAGE2), strLayerTag, TEXT("../../data/Stage2_1_Event%d.txt"), iEventCheck, RoomX, RoomZ, ROOM_INFO::EVENT_SHOP);
 				iEventCheck++;
-			
-				iEventRoomIndex1 = 999; // 카운트 줄고 돌아갔을 때 안걸리게 변경.
+	
 			}
 			else if(iEventRoomEventID == 2 && iEventCheck == 0)
 			{
 				pRoom->Load_From_File(ENUM_CLASS(LEVEL::LEVEL_STAGE2), strLayerTag, TEXT("../../data/Stage2_2_Event%d.txt"), iEventCheck, RoomX, RoomZ, ROOM_INFO::EVENT_SHOP);
 				iEventCheck++;
 		
-				iEventRoomIndex1 = 999;
 			}
 			else if (iEventRoomEventID == 2 && iEventCheck == 1)
 			{
 				pRoom->Load_From_File(ENUM_CLASS(LEVEL::LEVEL_STAGE2), strLayerTag, TEXT("../../data/Stage2_2_Event%d.txt"), iEventCheck, RoomX, RoomZ, ROOM_INFO::EVENT_HP);
 				iEventCheck++;
 			
-				iEventRoomIndex2 = 999;
 			}
 		}
 

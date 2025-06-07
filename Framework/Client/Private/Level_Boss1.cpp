@@ -177,7 +177,7 @@ HRESULT CLevel_Boss1::Ready_Layer_Room(const _wstring& strLayerTag)
 	_int iRoomX = 0;
 	_int iRoomZ = 0;
 
-	CRoom_Manager::GetInstance()->Create_BossRoom();  // 보스룸의 인덱스는 무조건 고정적으로 넣어주고자 함. 랜덤X
+	CRoom_Manager::GetInstance()->Create_SpecialRoom(LEVEL::LEVEL_BOSS1); // 보스룸의 인덱스는 무조건 고정적으로 넣어주고자 함. 랜덤X
 
 	//while문 돌릴 인덱스값 정의 일반룸 6 + 상호룸 2 = 8
 	while (iCount < iIndex)
