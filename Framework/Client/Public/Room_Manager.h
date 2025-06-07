@@ -17,7 +17,7 @@ public:
 	HRESULT Add_Room(class CRoom* pRoom, _uint iLayerLevelIndex, const _wstring& strLayerTag);
 	HRESULT Enter_Room(_int iRoomID);
 	vector<pair<_int, _int>> Create_RandomRooms(_int iRoomMax);
-	void Create_BossRoom();
+	void Create_SpecialRoom(LEVEL eLevel);
 	HRESULT Check_Room(_uint iLayerLevelIndex, const _wstring& strLayerTag, _int iRoomID);
 	HRESULT Check_Potal_Coll(POTAL_TYPE ePotalType, _float3 &vNextPos);
 	HRESULT Check_END_Potal(_uint iLayerLevelIndex, const _wstring& strLayerTag, _int iRoomID);
