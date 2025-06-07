@@ -367,6 +367,20 @@ void CRoom::Compute_ObjectOffset(_int x, _int z)
 	m_ObjectOffset = { fX, 0.f, fZ };
 }
 
+CMonster* CRoom::Find_Monster(MONSTER_TYPE eType)
+{
+
+	for (auto& pMonster : m_vMonster)
+	{
+		if (pMonster->Get_MonsterType() == eType)
+		{
+			return pMonster;
+		}
+	}
+
+	return nullptr;
+}
+
 void CRoom::Enter()
 {
 	m_bIsActive = true;

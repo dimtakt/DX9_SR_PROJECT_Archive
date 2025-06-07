@@ -30,6 +30,7 @@ HRESULT CMole_A::Initialize(void* pArg)
 
     m_iMaxHp = 30;
     m_iCulHp = 30;
+    m_eMonsterType = MONSTER_TYPE::MOLE;
 	return S_OK;
 }
 

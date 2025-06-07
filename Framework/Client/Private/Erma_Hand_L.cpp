@@ -55,7 +55,7 @@ HRESULT CErma_Hand_L::Initialize(void* pArg)
     // юс╫ц
     m_iMaxHp = 500;
     m_iCulHp = 500;
-
+    m_eMonsterType = MONSTER_TYPE::ERMA_HAND_L;
     return S_OK;
 }
 
