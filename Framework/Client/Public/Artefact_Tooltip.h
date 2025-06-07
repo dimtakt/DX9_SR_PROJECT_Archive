@@ -1,21 +1,22 @@
 #pragma once
-#include "UIObject.h"
+#include "Tooltip.h"
 #include "Client_Defines.h"
+#include "Item_Base.h"
 BEGIN(Engine)
 class CVIBuffer_Rect;
 class CTexture;
 END
 
 BEGIN(Client)
-class CTalent_Button_Tip final : public CUIObject
+class CArtefact_Tooltip final : public CTooltip
 {
 private:
-									CTalent_Button_Tip(LPDIRECT3DDEVICE9 pGraphic_Device);
-									CTalent_Button_Tip(const CTalent_Button_Tip& Prototype);
-	virtual							~CTalent_Button_Tip() = default;
+									CArtefact_Tooltip(LPDIRECT3DDEVICE9 pGraphic_Device);
+									CArtefact_Tooltip(const CArtefact_Tooltip& Prototype);
+	virtual							~CArtefact_Tooltip() = default;
 
 public:
-	virtual HRESULT					Initialize_Prototype() override;
+	virtual HRESULT					Initialize_Prototype(LEVEL eLevel);
 	virtual HRESULT					Initialize(void* pArg) override;
 	virtual void					Priority_Update(_float fTimeDelta) override;
 	virtual void					Update(_float fTimeDelta) override;
@@ -23,16 +24,19 @@ public:
 	virtual HRESULT					Render() override;
 
 private:
+	LEVEL							m_eLevel = {};
 	CVIBuffer_Rect*					m_pVIBufferCom = { nullptr };
 	CTexture*						m_pTextureCom = { nullptr };
 
-	_uint							m_iIndex = {};
 private:
 	HRESULT							Ready_Components();
-	void							Font_Render();
-	void							Tooltip_SizePosSet();
+
+	HRESULT							Ready_ChildPrototype(LEVEL eLevel);
+	HRESULT							Ready_Children();
+
+	void							Render_Font();
 public:
-	static CTalent_Button_Tip*		Create(LPDIRECT3DDEVICE9 pGraphic_Device);
+	static CArtefact_Tooltip*		Create(LPDIRECT3DDEVICE9 pGraphic_Device, LEVEL eLevel);
 	virtual CGameObject*			Clone(void* pArg) override;
 	virtual void					Free() override;
 };

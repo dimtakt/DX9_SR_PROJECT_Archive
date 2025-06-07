@@ -22,11 +22,14 @@ public:
 	void Reset_CurStats(); // 원본값으로 복원시켜주는 함수
 	_float Get_Damage(DAMAGE eDamage);
 
-
+	const _bool Get_HasItem(_wstring szEffectTag);
+	void HasItem(_wstring szEffectTag, _bool bHasItme);
 private:
 	float m_fOriginStats[static_cast<int>(STAT_INFO::STAT_END)] = {};
 	float m_fCurStats[static_cast<int>(STAT_INFO::STAT_END)] = {};
 	CGameInstance* m_pGameInstance = { nullptr };
+
+	map<_wstring, _bool>	m_mapHasItem;
 
 public:
 	virtual void Free() override;

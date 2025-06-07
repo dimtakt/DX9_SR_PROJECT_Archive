@@ -5,6 +5,7 @@
 #include "Inventory.h"
 #include "Gacha.h"
 #include "Gacha_Slot.h"
+#include "Tooltip.h"
 CInven_Slot::CInven_Slot(LPDIRECT3DDEVICE9 pGraphic_Device) : CButton{ pGraphic_Device }
 {
 }
@@ -57,7 +58,8 @@ void CInven_Slot::Priority_Update(_float fTimeDelta)
 		m_iItemCount = 0;
 
 	m_iSlotGradeCount = 0;
-	__super::Priority_Update(fTimeDelta);
+	if (m_bIsOver)
+		__super::Priority_Update(fTimeDelta);
 }
 
 void CInven_Slot::Update(_float fTimeDelta)
@@ -67,7 +69,8 @@ void CInven_Slot::Update(_float fTimeDelta)
 
 	Item_Selete();
 	Setting_Item();
-	__super::Update(fTimeDelta);
+	if (m_bIsOver)
+		__super::Update(fTimeDelta);
 }
 
 void CInven_Slot::Late_Update(_float fTimeDelta)
@@ -98,6 +101,13 @@ HRESULT CInven_Slot::Render()
 
 	Render_Font();
 	return S_OK;
+}
+
+void CInven_Slot::Add_Item(CItem_Base* pItem)
+{
+	m_pSlotItem = pItem;
+	m_iItemCount += 1;
+	static_cast<CTooltip*>(m_vecChildren[0])->Change_Item(pItem);
 }
 
 void CInven_Slot::Push_Item(CItemObject* pItem)
@@ -279,10 +289,16 @@ HRESULT CInven_Slot::Ready_Children()
 {
 	CUIObject* pGameObject = nullptr;
 
+	pGameObject = dynamic_cast<CUIObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(m_eLevel), TEXT("Prototype_GameObject_Artefact_Tooltip")));
+	if (nullptr == pGameObject)
+		return E_FAIL;
+	Add_Child(pGameObject);
+
 	pGameObject = dynamic_cast<CUIObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(m_eLevel), TEXT("Prototype_GameObject_UI_Inven_Slot_Selete")));
 	if (nullptr == pGameObject)
 		return E_FAIL;
 	Add_Child(pGameObject);
+
 
 	return S_OK;
 }

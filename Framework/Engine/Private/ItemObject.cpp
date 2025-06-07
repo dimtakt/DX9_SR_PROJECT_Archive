@@ -49,6 +49,7 @@ CItemObject::tagItemObjectDesc* CItemObject::Item_Info()
 	Desc.szDescription = m_szDescription;
 	Desc.iItemValue = m_iItemValue;
 	Desc.fAngle = m_fAngle;
+	Desc.iArtefact_Value = m_iArtefact_Value;
 	return &Desc;
 }
 

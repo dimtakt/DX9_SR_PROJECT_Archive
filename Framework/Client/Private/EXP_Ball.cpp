@@ -32,7 +32,7 @@ HRESULT CEXP_Ball::Initialize(void* pArg)
 
     // collider
     CCollider_OBB::OBB_DESC tColliderDesc;
-    tColliderDesc.vScale = _float3(1.f, 2.f, 1.f);
+    tColliderDesc.vScale = _float3(1.f, 1.f, 1.f);
     tColliderDesc.pOwner = this;
     tColliderDesc.pTransform = m_pTransformCom;
     tColliderDesc.eType = m_eObjType;

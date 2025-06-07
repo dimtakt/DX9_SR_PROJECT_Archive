@@ -58,6 +58,7 @@ HRESULT CTalent_Icon_Selete::Render()
 
 	__super::Begin();
 	m_pVIBufferCom->Render();
+	__super::End();
 	return S_OK;
 }
 

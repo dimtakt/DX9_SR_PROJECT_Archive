@@ -49,6 +49,9 @@ public:
 public:
 	void Set_Damage(_float fDamage) { m_iCulHp += fDamage; }
 
+public:
+	_bool Get_IsHit() { return m_bIsHit; }
+	void Set_IsHit(_bool bHit) { m_bIsHit = bHit; }
 protected:
 	class CTransform*		m_pTransformCom = { nullptr };
 	class CTexture*			m_pTextureCom = { nullptr };

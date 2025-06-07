@@ -599,7 +599,7 @@ void CLaserGhost_D::OnCollision(CGameObject* pGameObject)
             _float3 vResult = vThisPos + vStunDir * 0.5f;    // 밀려날 정도 테스트
             m_pTransformCom->Set_State(STATE::POSITION, vResult);
 
-            m_bIsHit = true;
+            //m_bIsHit = true;
         }
     }
 }

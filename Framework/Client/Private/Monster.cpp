@@ -48,7 +48,7 @@ void CMonster::Priority_Update(_float fTimeDelta)
 		m_dwHitTime += 1.f;
 	}
 
-	if (m_dwHitTime >= 30.f)
+	if (m_dwHitTime >= 10.f)
 	{
 		m_dwHitTime = 0.f;
 		m_bIsHit = false;
@@ -142,10 +142,7 @@ void CMonster::OnCollision(CGameObject* pGameObject)
 		{
 		if (!m_bIsHit)
 		{
-			m_iCulHp -= CStat_Manager::GetInstance()->Get_Damage(DAMAGE::NORMAL);
 			//m_bIsHit = true;
-
-
 		}
 			break;
 		}
