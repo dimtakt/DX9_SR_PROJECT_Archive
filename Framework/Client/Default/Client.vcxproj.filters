@@ -394,6 +394,12 @@
     <Filter Include="02.GameObject\Monster\Boss">
       <UniqueIdentifier>{961807fe-6049-4ff4-b8ae-e1001345b58c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\Plane">
+      <UniqueIdentifier>{232e5b7a-9a98-40d7-a0d2-f94fa7228438}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Plane\Fog">
+      <UniqueIdentifier>{34c5f726-5ea9-4522-a6b4-a60a8dd0cb26}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -837,6 +843,9 @@
     <ClInclude Include="..\public\Talent_Button_Tip.h">
       <Filter>02.GameObject\UI\Window\Talent\Talent_Slot\Talent_Slot_Etc\Selete_Button</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\FogPlane.h">
+      <Filter>02.GameObject\Plane\Fog</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -1242,6 +1251,9 @@
     <ClCompile Include="..\private\Talent_Button_Tip.cpp">
       <Filter>02.GameObject\UI\Window\Talent\Talent_Slot\Talent_Slot_Etc\Selete_Button</Filter>
     </ClCompile>
+    <ClCompile Include="..\Private\FogPlane.cpp">
+      <Filter>02.GameObject\Plane\Fog</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="..\Bin\ShaderFiles\LogoRipple.hlsl">
@@ -1257,6 +1269,9 @@
       <Filter>96. ShaderFiles</Filter>
     </FxCompile>
     <FxCompile Include="..\Bin\ShaderFiles\LightShader.hlsl">
+      <Filter>96. ShaderFiles</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Bin\ShaderFiles\FogShader.hlsl">
       <Filter>96. ShaderFiles</Filter>
     </FxCompile>
   </ItemGroup>

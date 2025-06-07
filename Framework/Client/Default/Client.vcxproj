@@ -168,6 +168,7 @@
     <ClInclude Include="..\Public\Client_Struct.h" />
     <ClInclude Include="..\Public\EXP_Ball.h" />
     <ClInclude Include="..\public\Field_Font.h" />
+    <ClInclude Include="..\Public\FogPlane.h" />
     <ClInclude Include="..\public\Gacha.h" />
     <ClInclude Include="..\public\Gacha_Button_Icon.h" />
     <ClInclude Include="..\public\Gacha_FX.h" />
@@ -312,6 +313,7 @@
     <ClCompile Include="..\private\ChapMap_PlayerSymbol.cpp" />
     <ClCompile Include="..\Private\EXP_Ball.cpp" />
     <ClCompile Include="..\private\Field_Font.cpp" />
+    <ClCompile Include="..\Private\FogPlane.cpp" />
     <ClCompile Include="..\private\Gacha.cpp" />
     <ClCompile Include="..\private\Gacha_Button_Icon.cpp" />
     <ClCompile Include="..\private\Gacha_FX.cpp" />
@@ -431,6 +433,10 @@
     <Image Include="small.ico" />
   </ItemGroup>
   <ItemGroup>
+    <FxCompile Include="..\Bin\ShaderFiles\FogShader.hlsl">
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">2.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Effect</ShaderType>
+    </FxCompile>
     <FxCompile Include="..\Bin\ShaderFiles\LightShader.hlsl">
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">2.0</ShaderModel>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Effect</ShaderType>

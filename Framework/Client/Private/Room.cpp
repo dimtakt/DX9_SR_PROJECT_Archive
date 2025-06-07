@@ -108,6 +108,9 @@ void CRoom::Late_Update(_float fTimeDelta)
 			if (m_pTerrainBox != nullptr)
 				m_pTerrainBox->Late_Update(fTimeDelta);
 
+			/*if (m_pFogPlane != nullptr)
+				m_pFogPlane->Late_Update(fTimeDelta);*/
+
 			for (auto it = m_vObject.begin(); it != m_vObject.end(); ) {
 				if ((*it) != nullptr && (*it)->Get_IsDead()) {
 					Safe_Release(*it);
@@ -328,6 +331,8 @@ HRESULT CRoom::Load_From_File(_uint iLayerLevelIndex, const _wstring& strLayerTa
 				tSrc.eType = pDesc.eType;
 
 				m_pTerrainBox = dynamic_cast<CTerrainBox*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, iLayerLevelIndex, TEXT("Prototype_GameObject_TerrainBox"), &tSrc));
+
+				//m_pFogPlane = dynamic_cast<CFogPlane*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_FogPlane"), &tSrc));
 
 				bIsTerrain = true;
 			}
