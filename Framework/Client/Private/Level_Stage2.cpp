@@ -11,7 +11,6 @@
 #include "Room_Manager.h"
 #include "Monster_Factory.h"
 #include "Dagger.h"
-#include "Mole_A.h"
 #include "Hud_Buff.h"
 #include "ChapMap.h"
 #include "Point.h"

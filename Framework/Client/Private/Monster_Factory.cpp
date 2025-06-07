@@ -7,6 +7,11 @@
 #include "Mole_A.h"
 #include "Oink_A.h"
 #include "LaserGhost_D.h"
+#include "Erma.h"
+#include "Erma_Body.h"
+#include "Erma_Hand_L.h"
+#include "Erma_Hand_R.h"
+#include "Erma_Head.h"
 
 IMPLEMENT_SINGLETON(CMonster_Factory)
 
@@ -41,6 +46,24 @@ HRESULT CMonster_Factory::Add_Monsters(CRoom* pRoom, list<CMonster::MONSTERDESC>
 			break;
 		case CMonster_Factory::MONSTER_TYPE::MONSTER_LASERGHOST_D:
 			pMonster = dynamic_cast<CLaserGhost_D*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, desc.iPrototypeLevelIndex, desc.strPrototypeTag, &desc));
+			break;
+
+
+		/* Erma */
+		case CMonster_Factory::MONSTER_TYPE::MONSTER_BOSS_ERMA:
+			pMonster = dynamic_cast<CErma*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, desc.iPrototypeLevelIndex, desc.strPrototypeTag, &desc));
+			break;
+		case CMonster_Factory::MONSTER_TYPE::MONSTER_BOSS_ERMA_BODY:
+			pMonster = dynamic_cast<CErma_Body*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, desc.iPrototypeLevelIndex, desc.strPrototypeTag, &desc));
+			break;
+		case CMonster_Factory::MONSTER_TYPE::MONSTER_BOSS_ERMA_HAND_L:
+			pMonster = dynamic_cast<CErma_Hand_L*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, desc.iPrototypeLevelIndex, desc.strPrototypeTag, &desc));
+			break;
+		case CMonster_Factory::MONSTER_TYPE::MONSTER_BOSS_ERMA_HAND_R:
+			pMonster = dynamic_cast<CErma_Hand_R*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, desc.iPrototypeLevelIndex, desc.strPrototypeTag, &desc));
+			break;
+		case CMonster_Factory::MONSTER_TYPE::MONSTER_BOSS_ERMA_HEAD:
+			pMonster = dynamic_cast<CErma_Head*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, desc.iPrototypeLevelIndex, desc.strPrototypeTag, &desc));
 			break;
 		default:
 			break;

@@ -394,6 +394,9 @@
     <Filter Include="02.GameObject\Monster\Boss">
       <UniqueIdentifier>{961807fe-6049-4ff4-b8ae-e1001345b58c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\Monster\Boss\Erma">
+      <UniqueIdentifier>{358e0392-ab0d-468d-86f3-d5b7761dc51e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -837,6 +840,21 @@
     <ClInclude Include="..\public\Talent_Button_Tip.h">
       <Filter>02.GameObject\UI\Window\Talent\Talent_Slot\Talent_Slot_Etc\Selete_Button</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\Erma.h">
+      <Filter>02.GameObject\Monster\Boss\Erma</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Erma_Body.h">
+      <Filter>02.GameObject\Monster\Boss\Erma</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Erma_Hand_L.h">
+      <Filter>02.GameObject\Monster\Boss\Erma</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Erma_Hand_R.h">
+      <Filter>02.GameObject\Monster\Boss\Erma</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Erma_Head.h">
+      <Filter>02.GameObject\Monster\Boss\Erma</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -1241,6 +1259,21 @@
     </ClCompile>
     <ClCompile Include="..\private\Talent_Button_Tip.cpp">
       <Filter>02.GameObject\UI\Window\Talent\Talent_Slot\Talent_Slot_Etc\Selete_Button</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Erma.cpp">
+      <Filter>02.GameObject\Monster\Boss\Erma</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Erma_Body.cpp">
+      <Filter>02.GameObject\Monster\Boss\Erma</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Erma_Hand_L.cpp">
+      <Filter>02.GameObject\Monster\Boss\Erma</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Erma_Hand_R.cpp">
+      <Filter>02.GameObject\Monster\Boss\Erma</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Erma_Head.cpp">
+      <Filter>02.GameObject\Monster\Boss\Erma</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
