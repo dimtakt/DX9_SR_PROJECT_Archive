@@ -1,6 +1,6 @@
 #include "Room.h"
 #include "GameInstance.h"
-
+#include "Stat_Manager.h"
 CRoom::CRoom(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CGameObject { pGraphic_Device }
 {
@@ -95,6 +95,9 @@ void CRoom::Update(_float fTimeDelta)
 					++it;
 				}
 			}
+			if(m_vMonster.size() == 0)
+				CStat_Manager::GetInstance()->Set_Battle(FALSE);
+
 		}
 	}
 }
@@ -385,11 +388,25 @@ void CRoom::Compute_ObjectOffset(_int x, _int z)
 	m_ObjectOffset = { fX, 0.f, fZ };
 }
 
+CMonster* CRoom::Find_Monster(MONSTER_TYPE eType)
+{
+
+	for (auto& pMonster : m_vMonster)
+	{
+		if (pMonster->Get_MonsterType() == eType)
+		{
+			return pMonster;
+		}
+	}
+
+	return nullptr;
+}
+
 void CRoom::Enter()
 {
 	m_bIsActive = true;
 	m_bIsVisited = true;
-
+	CStat_Manager::GetInstance()->Set_Battle(TRUE);
 	for (auto& pMonster : m_vMonster)
 	{
 		if (pMonster != nullptr) {

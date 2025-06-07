@@ -1,6 +1,7 @@
 #pragma once
 #include "GameInstance.h"
 #include "Room.h"
+#include "Monster.h"
 
 BEGIN(Client)
 
@@ -29,6 +30,9 @@ public:
 
 
 	void Clear(_uint iLevelIndex);
+
+public:
+	CMonster* Find_CurrentRoom_Monster(MONSTER_TYPE eType);
 
 private:
 	CGameInstance* m_pGameInstance = { nullptr };

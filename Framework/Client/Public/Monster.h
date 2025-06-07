@@ -52,6 +52,7 @@ public:
 public:
 	_bool Get_IsHit() { return m_bIsHit; }
 	void Set_IsHit(_bool bHit) { m_bIsHit = bHit; }
+	const MONSTER_TYPE Get_MonsterType() { return m_eMonsterType; }
 protected:
 	class CTransform*		m_pTransformCom = { nullptr };
 	class CTexture*			m_pTextureCom = { nullptr };
@@ -60,7 +61,7 @@ protected:
 	_bool					m_isTracking = false;
 	_bool					m_bIsHit = false;
 	_bool					m_isSummoned = false;
-
+	MONSTER_TYPE			m_eMonsterType = {};
 	DWORD					m_dwHitTime = {};
 
 	CField_Hp* m_pHpBar		= { nullptr };

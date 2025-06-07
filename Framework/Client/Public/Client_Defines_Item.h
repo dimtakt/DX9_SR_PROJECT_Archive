@@ -36,6 +36,7 @@ namespace Client
 		struct TypeValue
 		{
 			STAT_INFO		m_eStat;					//올릴 스탯 타입
+			_wstring		m_szText;					//효과 텍스트
 			_float			m_fStat_Value1;				//올릴 스탯량
 			_float			m_fStat_Value2;				//1별마다 올라갈 스탯량
 		};
@@ -87,14 +88,14 @@ namespace Client
 
 	const vector<ItemData> g_ItemDataBase
 	{
-		ItemData(0, 0, ITEM_TYPE::ARTEFACT, ITEM_RARITY::LEGENDARY, TEXT("아그마 투영검"), TEXT("공격력"), 7, 0),
-		ItemData(1, 1, ITEM_TYPE::ARTEFACT, ITEM_RARITY::RARE,TEXT("금빛 망토"), TEXT("대쉬 횟수"), 2, 1),
-		ItemData(2, 2, ITEM_TYPE::ARTEFACT, ITEM_RARITY::LEGENDARY,TEXT("스타 루비"), TEXT("최대 HP"), 2, 2),
+		ItemData(0, 0, ITEM_TYPE::ARTEFACT, ITEM_RARITY::LEGENDARY, TEXT("아그마 투영검"), TEXT("에너지는 대칭적인 형태로만 드러난다."), 7, 0),
+		ItemData(1, 1, ITEM_TYPE::ARTEFACT, ITEM_RARITY::RARE,TEXT("금빛 망토"), TEXT("이 망토는 왜 안쪽까지 금빛일까?"), 2, 1),
+		ItemData(2, 2, ITEM_TYPE::ARTEFACT, ITEM_RARITY::LEGENDARY,TEXT("스타 루비"), TEXT("새로운 삶을 위하여."), 2, 2),
 		ItemData(3, 3,ITEM_TYPE::POTION, ITEM_RARITY::NORMAL,TEXT("재생의 포션"), TEXT("HP 20% 회복"), 0),
-		ItemData(4, 4,ITEM_TYPE::POTION, ITEM_RARITY::RARE,TEXT("큰 재샙의 포션"), TEXT("HP 50% 회복"), 1),
+		ItemData(4, 4,ITEM_TYPE::POTION, ITEM_RARITY::EPIC,TEXT("큰 재샙의 포션"), TEXT("HP 50% 회복"), 1),
 		ItemData(5, 5,ITEM_TYPE::POTION, ITEM_RARITY::RARE,TEXT("마나 재생의 포션"), TEXT("MP 30% 회복"), 2),
-		ItemData(6, 6,ITEM_TYPE::ARTEFACT, ITEM_RARITY::NORMAL,TEXT("배고니아 향 주머니"), TEXT("공격력"), 1, 3),
-		ItemData(7, 7,ITEM_TYPE::ARTEFACT, ITEM_RARITY::NORMAL,TEXT("방패술 교본"), TEXT("공격력"), 1, 4),
+		ItemData(6, 6,ITEM_TYPE::ARTEFACT, ITEM_RARITY::NORMAL,TEXT("베고니아 향 주머니"), TEXT("자연스러운 꽃향기가 납니다."), 1, 3),
+		ItemData(7, 7,ITEM_TYPE::ARTEFACT, ITEM_RARITY::NORMAL,TEXT("방패술 교본"), TEXT("어린 동물 필독서"), 1, 4),
 		ItemData(8, 8,ITEM_TYPE::STONE,	  ITEM_RARITY::NORMAL,TEXT("건조"), TEXT(""), 0),
 		ItemData(9, 9,ITEM_TYPE::STONE,   ITEM_RARITY::NORMAL,TEXT("근사"), TEXT(""), 1),
 		ItemData(10, 10,ITEM_TYPE::STONE, ITEM_RARITY::NORMAL,TEXT("기사도"), TEXT(""), 2),
@@ -140,39 +141,39 @@ namespace Client
 		ItemData(50, 50,ITEM_TYPE::STONE, ITEM_RARITY::LEGENDARY,TEXT("압축"), TEXT(""), 42),
 		ItemData(51, 51,ITEM_TYPE::STONE, ITEM_RARITY::LEGENDARY,TEXT("과거"), TEXT(""), 43),
 		ItemData(52, 52,ITEM_TYPE::STONE, ITEM_RARITY::LEGENDARY,TEXT("단절"), TEXT(""), 44),
-		ItemData(53, 54,ITEM_TYPE::ARTEFACT, ITEM_RARITY::NORMAL,TEXT("부정한 붕대"), TEXT("치명타 확률, 공격력"), 3, 5),
-		ItemData(54, 55,ITEM_TYPE::ARTEFACT, ITEM_RARITY::NORMAL,TEXT("압박 밴드"), TEXT("대시 회복 속도"), 2, 6),
-		ItemData(55, 56,ITEM_TYPE::ARTEFACT, ITEM_RARITY::RARE,TEXT("열망의 부적"), TEXT("치명타 확률"), 3, 7),
-		ItemData(56, 56,ITEM_TYPE::ARTEFACT, ITEM_RARITY::RARE,TEXT("힘의 부적"), TEXT("공격력"), 3, 8),
-		ItemData(57, 57,ITEM_TYPE::ARTEFACT, ITEM_RARITY::RARE,TEXT("은 접시"), TEXT("공격력, 치명타 데미지"), 2, 9),
-		ItemData(58, 58,ITEM_TYPE::ARTEFACT, ITEM_RARITY::RARE,TEXT("경고 문서"), TEXT("대시 회복 속도"), 1, 10),
-		ItemData(59, 69,ITEM_TYPE::ARTEFACT, ITEM_RARITY::LEGENDARY,TEXT("눈보라 망치"), TEXT("7초 마다 대시 쉬 주변 적에게 망치를 날림"), 6, 11),
-		ItemData(60, 60,ITEM_TYPE::ARTEFACT, ITEM_RARITY::RARE,TEXT("노란 행성"), TEXT("노란 행성 소환"), 6, 12),
-		ItemData(61, 61,ITEM_TYPE::ARTEFACT, ITEM_RARITY::RARE,TEXT("붉은 행성"), TEXT("붉은 행성 소환"), 6, 13),
-		ItemData(62, 62,ITEM_TYPE::ARTEFACT, ITEM_RARITY::RARE,TEXT("푸른 행성"), TEXT("푸른 행성 소환"), 6, 14),
-		ItemData(63, 63,ITEM_TYPE::SKILLBOOK, ITEM_RARITY::RARE,TEXT("아이스 볼트"), TEXT("아이스 볼트 마법 획득"), 1, 15),
-		ItemData(64, 64,ITEM_TYPE::SKILLBOOK, ITEM_RARITY::NORMAL,TEXT("라이트닝 볼트"), TEXT("라이트닝 볼트 마법 획득"), 1, 16),
+		ItemData(53, 54,ITEM_TYPE::ARTEFACT, ITEM_RARITY::NORMAL,TEXT("부정한 붕대"), TEXT("춤추는 그을은 연기처럼."), 3, 5),
+		ItemData(54, 55,ITEM_TYPE::ARTEFACT, ITEM_RARITY::NORMAL,TEXT("압박 밴드"), TEXT("더 빠르게 움직일 수 있는 것 같다."), 2, 6),
+		ItemData(55, 56,ITEM_TYPE::ARTEFACT, ITEM_RARITY::RARE,TEXT("열망의 부적"), TEXT("바라건대 이 몸에 강인한 영혼을."), 3, 7),
+		ItemData(56, 56,ITEM_TYPE::ARTEFACT, ITEM_RARITY::RARE,TEXT("힘의 부적"), TEXT("믿음직스럽지 않게 '힘'이라 적혀 있다."), 3, 8),
+		ItemData(57, 57,ITEM_TYPE::ARTEFACT, ITEM_RARITY::RARE,TEXT("은접시"), TEXT("피가 그 열쇠다."), 2, 9),
+		ItemData(58, 58,ITEM_TYPE::ARTEFACT, ITEM_RARITY::RARE,TEXT("경고 문서"), TEXT("상인연합 긴급 공문"), 1, 10),
+		ItemData(59, 69,ITEM_TYPE::ARTEFACT, ITEM_RARITY::LEGENDARY,TEXT("눈보라 망치"), TEXT("푸른 불 용광로 옆에 놓여있었다."), 6, 11),
+		ItemData(60, 60,ITEM_TYPE::ARTEFACT, ITEM_RARITY::RARE,TEXT("노란 행성"), TEXT("도서관에 전시되어 있던 노란 행성"), 6, 12),
+		ItemData(61, 61,ITEM_TYPE::ARTEFACT, ITEM_RARITY::RARE,TEXT("붉은 행성"), TEXT("도서관에 전시되어 있던 붉은 행성"), 6, 13),
+		ItemData(62, 62,ITEM_TYPE::ARTEFACT, ITEM_RARITY::RARE,TEXT("푸른 행성"), TEXT("도서관에 전시되어 있던 푸른 행성"), 6, 14),
+		ItemData(63, 63,ITEM_TYPE::SKILLBOOK, ITEM_RARITY::RARE,TEXT("아이스 볼트"), TEXT("아이스 볼트 마법이 적혀있는 책"), 1, 15),
+		ItemData(64, 64,ITEM_TYPE::SKILLBOOK, ITEM_RARITY::NORMAL,TEXT("라이트닝 볼트"), TEXT("라이트닝 볼트 마법이 적혀있는 책"), 1, 16),
 	};
 	
 	const vector<Item_Effect> g_ItemEffect
 	{
-		Item_Effect(0, ITEM_EFFECT::VALUE_TYPE, {{STAT_INFO::CULDAMAGE, 2, 2}}),
-		Item_Effect(1, ITEM_EFFECT::VALUE_TYPE, {{STAT_INFO::MAXDASH, 1, 1}}),
-		Item_Effect(2, ITEM_EFFECT::VALUE_TYPE, {{STAT_INFO::MAXHP, 10, 15}}),
-		Item_Effect(3, ITEM_EFFECT::VALUE_TYPE, {{STAT_INFO::CULDAMAGE, 5, 10}}),
-		Item_Effect(4, ITEM_EFFECT::VALUE_TYPE, {{STAT_INFO::CULDEF, 5, 10}}),
-		Item_Effect(5, ITEM_EFFECT::VALUE_TYPE, {{STAT_INFO::CULCRITICAL, 1, 3}, {STAT_INFO::CULDAMAGE, 1, 2}}),
-		Item_Effect(6, ITEM_EFFECT::VALUE_TYPE, {{STAT_INFO::REGENDASH, 1.2f, 1.2f}}),
-		Item_Effect(7, ITEM_EFFECT::VALUE_TYPE, {{STAT_INFO::CULCRITICAL, 3, 5}}),
-		Item_Effect(8, ITEM_EFFECT::VALUE_TYPE, {{STAT_INFO::CULDAMAGE, 2, 2}}),
-		Item_Effect(9, ITEM_EFFECT::VALUE_TYPE, {{STAT_INFO::CULDAMAGE, 2, 5}, {STAT_INFO::CRITICALDAMAGE, 2, 5}}),
-		Item_Effect(10, ITEM_EFFECT::VALUE_TYPE, {{STAT_INFO::REGENDASH, 2.f, 2.f}}),
-		Item_Effect(11, ITEM_EFFECT::SPAWN_TYPE, {{STAT_INFO::STAT_END, 0, 0}}, TEXT("Snow Hamer")),
-		Item_Effect(12, ITEM_EFFECT::SPAWN_TYPE, {{STAT_INFO::STAT_END, 0, 0}}, TEXT("Yellow Planet")),
-		Item_Effect(13, ITEM_EFFECT::SPAWN_TYPE, {{STAT_INFO::STAT_END, 0, 0}}, TEXT("Red Planet")),
-		Item_Effect(14, ITEM_EFFECT::SPAWN_TYPE, {{STAT_INFO::STAT_END, 0, 0}}, TEXT("Bule Planet")),
-		Item_Effect(15, ITEM_EFFECT::SKILLBOOK_TYPE, {{STAT_INFO::STAT_END, 0, 0}}, TEXT("Ice Bolt")),
-		Item_Effect(16, ITEM_EFFECT::SKILLBOOK_TYPE, {{STAT_INFO::STAT_END, 0, 0}}, TEXT("Lightning Bolt")),
+		Item_Effect(0, ITEM_EFFECT::VALUE_TYPE, {{STAT_INFO::CULDAMAGE, TEXT("공격력 증가 +%d"),2, 2}}),
+		Item_Effect(1, ITEM_EFFECT::VALUE_TYPE, {{STAT_INFO::MAXDASH, TEXT("최대 대쉬 횟수 증가 +%d"),1, 1}}),
+		Item_Effect(2, ITEM_EFFECT::VALUE_TYPE, {{STAT_INFO::MAXHP,TEXT("최대 체력 증가 +%d%%"), 10, 15}}),
+		Item_Effect(3, ITEM_EFFECT::VALUE_TYPE, {{STAT_INFO::CULDAMAGE, TEXT("공격력 증가 +%d"), 5, 10}}),
+		Item_Effect(4, ITEM_EFFECT::VALUE_TYPE, {{STAT_INFO::CULDEF,TEXT("방어력 +%d"), 5, 10}}),
+		Item_Effect(5, ITEM_EFFECT::VALUE_TYPE, {{STAT_INFO::CULCRITICAL,TEXT("크리티컬 확률 증가 +%d%%"), 1, 3}, {STAT_INFO::CULDAMAGE, TEXT("공격력 증가 %d"), 1, 2}}),
+		Item_Effect(6, ITEM_EFFECT::VALUE_TYPE, {{STAT_INFO::REGENDASH,TEXT("대쉬 회복 속도 증가 +%d%%"), 10.f, 10.f}}),
+		Item_Effect(7, ITEM_EFFECT::VALUE_TYPE, {{STAT_INFO::CULCRITICAL,TEXT("크리티컬 확률 증가 +%d%%"), 3, 5}}),
+		Item_Effect(8, ITEM_EFFECT::VALUE_TYPE, {{STAT_INFO::CULDAMAGE,TEXT("공격력 증가 +%d"), 2, 2}}),
+		Item_Effect(9, ITEM_EFFECT::VALUE_TYPE, {{STAT_INFO::CULDAMAGE,TEXT("공격력 증가 +%d"), 2, 5}, {STAT_INFO::CRITICALDAMAGE,TEXT("크리티컬 데미지 증가 +%d%%"), 2, 5}}),
+		Item_Effect(10, ITEM_EFFECT::VALUE_TYPE, {{STAT_INFO::REGENDASH, TEXT("대쉬 회복 속도 증가 +%d%%"),2.f, 2.f}}),
+		Item_Effect(11, ITEM_EFFECT::SPAWN_TYPE, {{STAT_INFO::STAT_END,TEXT("7초 마다 대시 쉬 주변 적에게 망치를 날림"), 0, 0}}, TEXT("Snow Hamer")),
+		Item_Effect(12, ITEM_EFFECT::SPAWN_TYPE, {{STAT_INFO::STAT_END,TEXT("노란 행성 소환"), 0, 0}}, TEXT("Yellow Planet")),
+		Item_Effect(13, ITEM_EFFECT::SPAWN_TYPE, {{STAT_INFO::STAT_END,TEXT("붉은 행성 소환"), 0, 0}}, TEXT("Red Planet")),
+		Item_Effect(14, ITEM_EFFECT::SPAWN_TYPE, {{STAT_INFO::STAT_END,TEXT("푸른 행성 소환"), 0, 0}}, TEXT("Bule Planet")),
+		Item_Effect(15, ITEM_EFFECT::SKILLBOOK_TYPE, {{STAT_INFO::STAT_END,TEXT("아이슬 볼트 획득"), 0, 0}}, TEXT("Ice Bolt")),
+		Item_Effect(16, ITEM_EFFECT::SKILLBOOK_TYPE, {{STAT_INFO::STAT_END,TEXT("라이트닝 볼트 획득"), 0, 0}}, TEXT("Lightning Bolt")),
 	};
 
 	const vector<Slate> g_SlateDataBase

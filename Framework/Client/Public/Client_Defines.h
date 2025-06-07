@@ -18,6 +18,8 @@ namespace Client
 
 	enum class DAMAGE { NORMAL, SPECIAL, DASH, DAMAGE_END };
 
+	enum class MONSTER_TYPE { MOLE, OINK, LASERGHOST, ERMA, ERMA_BODY, ERMA_HAND_L, ERMA_HAND_R, ERMA_HEAD };
+
 	struct UI_DEPTH {
 		//KEY_GUIDE
 		static constexpr float KEY_GUIDE = 0.15f;

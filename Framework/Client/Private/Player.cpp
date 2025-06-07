@@ -159,32 +159,36 @@ void CPlayer::Update(_float fTimeDelta)
 
     if (m_pGameInstance->IsKeyDown(VK_LBUTTON))
     {
-        // 이전 상태 공격 + 현재 상태 비공격 + 1번째 공격한 지 0.3f초 이하
-        if (!   (strCurStateTag == L"Attack_Upper" ||
-                strCurStateTag == L"Attack_Lower"   ) &&
+        if (!CStat_Manager::GetInstance()->Get_UIOpen()) {
+
+            // 이전 상태 공격 + 현재 상태 비공격 + 1번째 공격한 지 0.3f초 이하
+            if (!(strCurStateTag == L"Attack_Upper" ||
+                strCurStateTag == L"Attack_Lower") &&
                 m_fStackedTime <= 0.3f)
-        {
-            // 2번째 공격으로.
-            strStateTag = (vRayPoint.z > vPlayerPos.z)?     L"Attack_Upper2" :
-                                                            L"Attack_Lower2";
+            {
+                // 2번째 공격으로.
+                strStateTag = (vRayPoint.z > vPlayerPos.z) ? L"Attack_Upper2" :
+                    L"Attack_Lower2";
 
-            // 바꾸는 데에 성공시 2타공격 이펙트 출력
+                // 바꾸는 데에 성공시 2타공격 이펙트 출력
+                if (m_pAnimatorCom->Change_State(strStateTag, true))
+                    CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::PLAYER_EFFECT, L"Prototype_Component_Texture_Effect_Blade0_Swing1",
+                        *m_pTransformCom->Get_WorldMatrix(), matPlayerWorld, m_pTransformCom, true);
+            }
+
+            // 1번째 공격으로.
+            strStateTag = (vRayPoint.z > vPlayerPos.z) ? L"Attack_Upper" :
+                L"Attack_Lower";
+            m_pAnimatorTransCom->Change_State(L"Attack");
+
+            // 바꾸는 데에 성공시 1타공격 이펙트 출력
             if (m_pAnimatorCom->Change_State(strStateTag, true))
-                CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::PLAYER_EFFECT, L"Prototype_Component_Texture_Effect_Blade0_Swing1",
-                    *m_pTransformCom->Get_WorldMatrix(), matPlayerWorld, m_pTransformCom, true);
+                CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::PLAYER_EFFECT, L"Prototype_Component_Texture_Effect_Blade0_Swing0",
+                    *m_pTransformCom->Get_WorldMatrix(), matPlayerWorld, m_pTransformCom);
+
+            //std::cout << "[Player::Update] PlayerPos : " << vPlayerPos.x << ", " << vPlayerPos.y << ", " << vPlayerPos.z << std::endl;
         }
-
-        // 1번째 공격으로.
-        strStateTag = (vRayPoint.z > vPlayerPos.z) ?    L"Attack_Upper" :
-                                                        L"Attack_Lower";
-        m_pAnimatorTransCom->Change_State(L"Attack");
-
-        // 바꾸는 데에 성공시 1타공격 이펙트 출력
-        if (m_pAnimatorCom->Change_State(strStateTag, true))
-            CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::PLAYER_EFFECT, L"Prototype_Component_Texture_Effect_Blade0_Swing0",
-                *m_pTransformCom->Get_WorldMatrix(), matPlayerWorld, m_pTransformCom);
-
-        //std::cout << "[Player::Update] PlayerPos : " << vPlayerPos.x << ", " << vPlayerPos.y << ", " << vPlayerPos.z << std::endl;
+        
     }
 
 #pragma endregion
@@ -214,22 +218,24 @@ void CPlayer::Update(_float fTimeDelta)
         m_pGameInstance->IsKeyHold('A') ||
         m_pGameInstance->IsKeyHold('D'))
     {
-        // 이전에 Move 이었다면 프레임 초기화X
-        if (vRayPoint.z > vPlayerPos.z)                 // 상단
-        {
-            if (strCurStateTag == L"Move_Lower" ||
-                strCurStateTag == L"Move_Upper")
-                m_pAnimatorCom->Change_State(L"Move_Upper", false);
-            else
-                m_pAnimatorCom->Change_State(L"Move_Upper", true);
-        }
-        else                                            // 하단
-        {
-            if (strCurStateTag == L"Move_Lower" ||
-                strCurStateTag == L"Move_Upper")
-                m_pAnimatorCom->Change_State(L"Move_Lower", false);
-            else
-                m_pAnimatorCom->Change_State(L"Move_Lower", true);
+        if (!CStat_Manager::GetInstance()->Get_UIOpen()) {
+            // 이전에 Move 이었다면 프레임 초기화X
+            if (vRayPoint.z > vPlayerPos.z)                 // 상단
+            {
+                if (strCurStateTag == L"Move_Lower" ||
+                    strCurStateTag == L"Move_Upper")
+                    m_pAnimatorCom->Change_State(L"Move_Upper", false);
+                else
+                    m_pAnimatorCom->Change_State(L"Move_Upper", true);
+            }
+            else                                            // 하단
+            {
+                if (strCurStateTag == L"Move_Lower" ||
+                    strCurStateTag == L"Move_Upper")
+                    m_pAnimatorCom->Change_State(L"Move_Lower", false);
+                else
+                    m_pAnimatorCom->Change_State(L"Move_Lower", true);
+            }
         }
     }
     else
@@ -264,29 +270,39 @@ void CPlayer::Update(_float fTimeDelta)
         m_pAnimatorTransCom->Get_CurStateTag() == L"Fury" ||
         m_pAnimatorTransCom->Get_CurStateTag() == L"Attack" ))
     {
-        if (m_pGameInstance->IsKeyHold('W'))
-            {m_pTransformCom->Go_Straight(fTimeDelta);   m_vDashDir = { 0, 0, 1 };}
-        if (m_pGameInstance->IsKeyHold('S'))
-            {m_pTransformCom->Go_Backward(fTimeDelta);   m_vDashDir = { 0, 0, -1 };}
-        if (m_pGameInstance->IsKeyHold('A'))
-            {m_pTransformCom->Go_Left(fTimeDelta);       m_vDashDir = { -1, 0, 0 };}
-        if (m_pGameInstance->IsKeyHold('D'))
-            {m_pTransformCom->Go_Right(fTimeDelta);      m_vDashDir = { 1, 0, 0 };}
+        if (!CStat_Manager::GetInstance()->Get_UIOpen()) {
+            if (m_pGameInstance->IsKeyHold('W'))
+            {
+                m_pTransformCom->Go_Straight(fTimeDelta);   m_vDashDir = { 0, 0, 1 };
+            }
+            if (m_pGameInstance->IsKeyHold('S'))
+            {
+                m_pTransformCom->Go_Backward(fTimeDelta);   m_vDashDir = { 0, 0, -1 };
+            }
+            if (m_pGameInstance->IsKeyHold('A'))
+            {
+                m_pTransformCom->Go_Left(fTimeDelta);       m_vDashDir = { -1, 0, 0 };
+            }
+            if (m_pGameInstance->IsKeyHold('D'))
+            {
+                m_pTransformCom->Go_Right(fTimeDelta);      m_vDashDir = { 1, 0, 0 };
+            }
 
-        if (m_pGameInstance->IsKeyHold('A') && m_pGameInstance->IsKeyHold('W'))
-            m_vDashDir = { -1, 0, 1 };
-        if (m_pGameInstance->IsKeyHold('W') && m_pGameInstance->IsKeyHold('D'))
-            m_vDashDir = { 1, 0, 1 };
-        if (m_pGameInstance->IsKeyHold('D') && m_pGameInstance->IsKeyHold('S'))
-            m_vDashDir = { 1, 0, -1 };
-        if (m_pGameInstance->IsKeyHold('S') && m_pGameInstance->IsKeyHold('A'))
-            m_vDashDir = { -1, 0, -1 };
+            if (m_pGameInstance->IsKeyHold('A') && m_pGameInstance->IsKeyHold('W'))
+                m_vDashDir = { -1, 0, 1 };
+            if (m_pGameInstance->IsKeyHold('W') && m_pGameInstance->IsKeyHold('D'))
+                m_vDashDir = { 1, 0, 1 };
+            if (m_pGameInstance->IsKeyHold('D') && m_pGameInstance->IsKeyHold('S'))
+                m_vDashDir = { 1, 0, -1 };
+            if (m_pGameInstance->IsKeyHold('S') && m_pGameInstance->IsKeyHold('A'))
+                m_vDashDir = { -1, 0, -1 };
 
-        if (!(m_pGameInstance->IsKeyHold('A') ||
-            m_pGameInstance->IsKeyHold('S') ||
-            m_pGameInstance->IsKeyHold('W') ||
-            m_pGameInstance->IsKeyHold('D')))
-            m_vDashDir = m_vCursorDir;
+            if (!(m_pGameInstance->IsKeyHold('A') ||
+                m_pGameInstance->IsKeyHold('S') ||
+                m_pGameInstance->IsKeyHold('W') ||
+                m_pGameInstance->IsKeyHold('D')))
+                m_vDashDir = m_vCursorDir;
+        }
     }
 
 #pragma endregion
@@ -299,14 +315,16 @@ void CPlayer::Update(_float fTimeDelta)
 
     if (m_pGameInstance->IsKeyDown(VK_SPACE))
     {
-        // 스페이스바 누를 시 Dash 상태로 바꾸기 시도
-        if (pStats->Get_CurStats()[ENUM_CLASS(STAT_INFO::CULDASH)] >= 1 &&
-            m_pAnimatorTransCom->Change_State(L"Dash"))
-        {
-            D3DXVec3Normalize(&m_vDashDir, &m_vDashDir);
-            pStats->Cal_Stats(STAT_INFO::CULDASH, -1);
-            // 무적 설정..
-            m_bIsHit = true;
+        if (!CStat_Manager::GetInstance()->Get_UIOpen()) {
+            // 스페이스바 누를 시 Dash 상태로 바꾸기 시도
+            if (pStats->Get_CurStats()[ENUM_CLASS(STAT_INFO::CULDASH)] >= 1 &&
+                m_pAnimatorTransCom->Change_State(L"Dash"))
+            {
+                D3DXVec3Normalize(&m_vDashDir, &m_vDashDir);
+                pStats->Cal_Stats(STAT_INFO::CULDASH, -1);
+                // 무적 설정..
+                m_bIsHit = true;
+            }
         }
     }
     else
@@ -339,50 +357,52 @@ void CPlayer::Update(_float fTimeDelta)
 
     if (m_pGameInstance->IsKeyDown(VK_RBUTTON))
     {
-        if ((m_pAnimatorCom->Get_CurStateTag() != L"Attack_Lower" &&
-            m_pAnimatorCom->Get_CurStateTag() != L"Attack_Upper" &&
-            m_pAnimatorCom->Get_CurStateTag() != L"Attack_Lower2" &&
-            m_pAnimatorCom->Get_CurStateTag() != L"Attack_Upper2") &&
-            (m_pAnimatorTransCom->Get_CurStateTag() != L"Parry"))
-        {
-            if (pStats->Get_CurStats()[ENUM_CLASS(STAT_INFO::FURYREADY)])
+        if (!CStat_Manager::GetInstance()->Get_UIOpen()) {
+            if ((m_pAnimatorCom->Get_CurStateTag() != L"Attack_Lower" &&
+                m_pAnimatorCom->Get_CurStateTag() != L"Attack_Upper" &&
+                m_pAnimatorCom->Get_CurStateTag() != L"Attack_Lower2" &&
+                m_pAnimatorCom->Get_CurStateTag() != L"Attack_Upper2") &&
+                (m_pAnimatorTransCom->Get_CurStateTag() != L"Parry"))
             {
-                if(m_pAnimatorTransCom->Change_State(L"Fury"))
+                if (pStats->Get_CurStats()[ENUM_CLASS(STAT_INFO::FURYREADY)])
                 {
-                    CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::PLAYER_EFFECT, L"Prototype_Component_Texture_Effect_Blade0_NFury",
-                        *m_pTransformCom->Get_WorldMatrix(), matPlayerWorld, m_pTransformCom, true);
-                    CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::PLAYER_EFFECT, L"Prototype_Component_Texture_Effect_Blade0_NFury_Back",
-                        *m_pTransformCom->Get_WorldMatrix(), matPlayerWorld, m_pTransformCom, true);
+                    if (m_pAnimatorTransCom->Change_State(L"Fury"))
+                    {
+                        CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::PLAYER_EFFECT, L"Prototype_Component_Texture_Effect_Blade0_NFury",
+                            *m_pTransformCom->Get_WorldMatrix(), matPlayerWorld, m_pTransformCom, true);
+                        CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::PLAYER_EFFECT, L"Prototype_Component_Texture_Effect_Blade0_NFury_Back",
+                            *m_pTransformCom->Get_WorldMatrix(), matPlayerWorld, m_pTransformCom, true);
+                    }
+                    strStateTag = (vRayPoint.z > vPlayerPos.z) ? L"Fury_Upper" :
+                        L"Fury_Lower";
+                    m_pAnimatorCom->Change_State(strStateTag);
+                    m_isReadyFury = false;
+                    pStats->Set_Stats(STAT_INFO::FURYREADY, false);
                 }
-                strStateTag = (vRayPoint.z > vPlayerPos.z)?     L"Fury_Upper":
-                                                                L"Fury_Lower";
-                m_pAnimatorCom->Change_State(strStateTag);
-                m_isReadyFury = false;
-                pStats->Set_Stats(STAT_INFO::FURYREADY, false);
-            }
-            else if (m_pAnimatorTransCom->Get_CurStateTag() == L"Idle" &&
-                pStats->Get_CurStats()[ENUM_CLASS(STAT_INFO::CULMP)] >= 10)
-            {
-                if (m_pAnimatorTransCom->Change_State(L"Parry"))
+                else if (m_pAnimatorTransCom->Get_CurStateTag() == L"Idle" &&
+                    pStats->Get_CurStats()[ENUM_CLASS(STAT_INFO::CULMP)] >= 10)
                 {
-                    // Parry 시에만 재조정
-                    fDistanceOffset = 0.f;
-                    vDiffResult = vDiff * fDistanceOffset;
-                    D3DXMatrixTranslation(&matTransAddition, vDiffResult.x, 0, vDiffResult.z);
-                    matPlayerWorld = matTransToOrigin * matScale * matRotateChild * matRotateChildtoCursor * matTransReturn * matTransAddition;
+                    if (m_pAnimatorTransCom->Change_State(L"Parry"))
+                    {
+                        // Parry 시에만 재조정
+                        fDistanceOffset = 0.f;
+                        vDiffResult = vDiff * fDistanceOffset;
+                        D3DXMatrixTranslation(&matTransAddition, vDiffResult.x, 0, vDiffResult.z);
+                        matPlayerWorld = matTransToOrigin * matScale * matRotateChild * matRotateChildtoCursor * matTransReturn * matTransAddition;
 
-                    // 이펙트 적용
-                    CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::PLAYER_EFFECT, L"Prototype_Component_Texture_Effect_Blade0_Parry",
-                        *m_pTransformCom->Get_WorldMatrix(), matPlayerWorld, m_pTransformCom, true);
-                    
-                    // 다시 초기값대로 초기화
-                    fDistanceOffset = 1.2f;
-                    vDiffResult = vDiff * fDistanceOffset;
-                    D3DXMatrixTranslation(&matTransAddition, vDiffResult.x, 0, vDiffResult.z);
-                    matPlayerWorld = matTransToOrigin * matScale * matRotateChild * matRotateChildtoCursor * matTransReturn * matTransAddition;
+                        // 이펙트 적용
+                        CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::PLAYER_EFFECT, L"Prototype_Component_Texture_Effect_Blade0_Parry",
+                            *m_pTransformCom->Get_WorldMatrix(), matPlayerWorld, m_pTransformCom, true);
+
+                        // 다시 초기값대로 초기화
+                        fDistanceOffset = 1.2f;
+                        vDiffResult = vDiff * fDistanceOffset;
+                        D3DXMatrixTranslation(&matTransAddition, vDiffResult.x, 0, vDiffResult.z);
+                        matPlayerWorld = matTransToOrigin * matScale * matRotateChild * matRotateChildtoCursor * matTransReturn * matTransAddition;
+                    }
+                    if (m_pAnimatorCom->Change_State(L"Parry"))
+                        pStats->Cal_Stats(STAT_INFO::CULMP, -10);
                 }
-                if (m_pAnimatorCom->Change_State(L"Parry"))
-                    pStats->Cal_Stats(STAT_INFO::CULMP, -10);
             }
         }
     }
@@ -408,8 +428,10 @@ void CPlayer::Update(_float fTimeDelta)
             // 공격 막는 데에 성공 시 Fury_Ready로 넘어갈 준비
             if (m_pGameInstance->IsKeyDown('M'))    // ksta : 조건은 나중에 수정
             {
-                m_isReadyFury = true;
-                pStats->Set_Stats(STAT_INFO::FURYREADY, true);
+                if (!CStat_Manager::GetInstance()->Get_UIOpen()) {
+                    m_isReadyFury = true;
+                    pStats->Set_Stats(STAT_INFO::FURYREADY, true);
+                }
             }
         }
     }
@@ -547,9 +569,11 @@ void CPlayer::OnCollision(CGameObject* pGameObject)
     case GAMEOBJ_TYPE::END_POTAL:
     {
         if (pGameObject->Get_IsActive()) {
-            if (m_pGameInstance->IsKeyDown(VK_DOWN))
-            {
-                dynamic_cast<CChapMap*>(m_pGameInstance->Get_GameObject(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Layer_ChapMap")))->Open_Ui();
+            if (!CStat_Manager::GetInstance()->Get_UIOpen()) {
+                if (m_pGameInstance->IsKeyDown(VK_DOWN))
+                {
+                    dynamic_cast<CChapMap*>(m_pGameInstance->Get_GameObject(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Layer_ChapMap")))->Open_Ui();
+                }
             }
         }
         break;

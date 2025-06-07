@@ -58,6 +58,9 @@ public:
     void Insert_ID(_int iID){m_iID = iID;}
     void Compute_ObjectOffset(_int x, _int z);
 
+public:
+    CMonster* Find_Monster(MONSTER_TYPE eType);
+
 protected:
     _int m_iID = {};
     _bool m_bIsActive = false;

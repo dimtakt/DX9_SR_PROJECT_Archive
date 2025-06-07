@@ -18,11 +18,30 @@ HRESULT CItem_Tooltip_Mid::Initialize_Prototype(LEVEL eLevel)
 
 HRESULT CItem_Tooltip_Mid::Initialize(void* pArg)
 {
+	UIOBJECT_DESC* Desc = static_cast<UIOBJECT_DESC*>(pArg);
 
-	m_fSizeX = 350;
-	m_fSizeY = 350;
-	m_fX = 0;
-	m_fY = 97;
+	switch ((int)Desc->fZ)
+	{
+	case 0:
+		m_fSizeX = 350;
+		m_fSizeY = 350;
+		m_fX = 0;
+		m_fY = 97;
+		break;
+	case 1:
+		m_fSizeX = 350;
+		m_fSizeY = 350;
+		m_fX = 0;
+		m_fY = 97;
+		break;
+	case 2:
+		m_fSizeX = 350;
+		m_fSizeY = 170;
+		m_fX = 0;
+		m_fY = 67;
+		break;
+	}
+
 	m_fZ = UI_DEPTH::TOOLTIP;
 	m_iWinSizeX = g_iWinSizeX;
 	m_iWinSizeY = g_iWinSizeY;
