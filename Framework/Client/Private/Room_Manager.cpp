@@ -102,6 +102,13 @@ vector<pair<_int, _int>> CRoom_Manager::Create_RandomRooms(_int iRoomMax)
 	return vector<pair<_int, _int>>(m_RoomIndex);
 }
 
+void CRoom_Manager::Create_BossRoom()
+{
+	m_RoomIndex.push_back({ 0, 0 });
+
+	m_RoomIndex.push_back({ 0, 1 });
+}
+
 HRESULT CRoom_Manager::Check_Room(_uint iLayerLevelIndex, const _wstring& strLayerTag, _int iRoomID)
 {
 	CRoom* pRoom = Get_RoomByID(iRoomID);
@@ -137,7 +144,7 @@ HRESULT CRoom_Manager::Check_Room(_uint iLayerLevelIndex, const _wstring& strLay
 		}
 	}
 
-	if (!m_bCheckEnd)
+	if (!m_bCheckEnd && iLayerLevelIndex != 8)  //임시로 보스룸 테스트 전용에서 앤드포탈 안생기게 처리해둔 것.
 		Check_END_Potal(iLayerLevelIndex, strLayerTag, iRoomID);
 
 	return S_OK;

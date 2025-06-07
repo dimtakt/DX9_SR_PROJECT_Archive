@@ -577,9 +577,8 @@ HRESULT CLoader::Loading_For_Stage3_Level()
 {
 	lstrcpy(m_szLoadingText, TEXT("텍스쳐를 로딩중입니다."));
 
-
 	// Prototype_Component_Texture_Monster (Mole_A)
-	// Idle
+		// Idle
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STAGE3), TEXT("Prototype_Component_Texture_Mole_A_Idle"),
 		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Monster/Mole_A/Duelist_Mole_Idle0%d.png"), 6))))
 		return E_FAIL;
@@ -718,7 +717,46 @@ HRESULT CLoader::Loading_For_Boss1_Level()
 	lstrcpy(m_szLoadingText, TEXT("쉐이더를 로딩중입니다."));
 
 	lstrcpy(m_szLoadingText, TEXT("게임오브젝트를 로딩중입니다."));
+
+	///* Prototype_GameObject_Camera*/
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_BOSS1), TEXT("Prototype_GameObject_Camera_Follow"),
+		CCamera_Follow::Create(m_pGraphic_Device))))
+		return E_FAIL;
+
+	/* Prototype_GameObject_Land*/
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_BOSS1), TEXT("Prototype_GameObject_Room"),
+		CRoom::Create(m_pGraphic_Device))))
+		return E_FAIL;
+
+	/* Prototype_GameObject_Sky */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_BOSS1), TEXT("Prototype_GameObject_Sky"),
+		CSky::Create(m_pGraphic_Device))))
+		return E_FAIL;
+
+	/* Prototype_GameObject_TerrainBox*/
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_BOSS1), TEXT("Prototype_GameObject_TerrainBox"),
+		CTerrainBox::Create(m_pGraphic_Device))))
+		return E_FAIL;
+
+	//Tree
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_BOSS1), TEXT("Prototype_GameObject_Tree"),
+		CTree::Create(m_pGraphic_Device))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_BOSS1), TEXT("Prototype_GameObject_Potal"),
+		CPotal::Create(m_pGraphic_Device))))
+		return E_FAIL;
+
+
+	for (size_t i = 0; i < 10000000000; i++)
+	{
+		int a = 1;
+	}
+
 	lstrcpy(m_szLoadingText, TEXT("로딩이 완료되었습니다."));
+
+	m_isFinished = true;
+
 	return S_OK;
 }
 
