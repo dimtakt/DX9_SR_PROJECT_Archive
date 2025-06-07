@@ -27,18 +27,23 @@ HRESULT CErma_Hand_R::Initialize(void* pArg)
     MONSTERDESC* desc = static_cast<MONSTERDESC*>(pArg);
 
     CTransform* pTerrainTransform = dynamic_cast<CTransform*>(desc->pTerrainBox->Find_Component(TEXT("Com_Transform_TerrainBox")));
+    m_pTerrainTransformCom = pTerrainTransform;
     _float3 fTerrainPos = pTerrainTransform->Get_State(STATE::POSITION);
     _float3 fTerrainScale = pTerrainTransform->Get_Scaled();
 
     // 위치 정해지는 부분. from __super
     m_pTransformCom->Set_State(STATE::POSITION, _float3(
-        fTerrainPos.x + 4.f,
+        fTerrainPos.x + 6.f,
         0.f,
-        fTerrainPos.z + fTerrainScale.z / 2 - 3.f));
+        fTerrainPos.z + fTerrainScale.z / 2 - 4.5f));
 
     // 크기 조정
-    m_pTransformCom->Scaling(3.f, 3.f, 3.f);
+    m_pTransformCom->Scaling(4.5f, 4.5f, 4.5f);
 
+
+
+    // ksta : 테스트중.. 패턴 완성 후 삭제
+    PlayPattern(PATTERN_HAND_R::PT_LASER);
 
 
 
@@ -67,14 +72,20 @@ void CErma_Hand_R::Update(_float fTimeDelta)
 {
     // Update
     // 
-    
+
+
+    // Idle
+    // Strike   // 7s (420)
+    // Laser    // 10s (600)
 
     // 아래에서 사용할 변수들
 #pragma region Variables Setting
 
-    _uint iCurLevel = CGameInstance::GetInstance()->Get_CurrentLevel();
+    _uint iCurLevel = m_pGameInstance->Get_CurrentLevel();
 
     CTransform* pTargetTransform = dynamic_cast<CTransform*>(m_pGameInstance->GetInstance()->Get_Component(iCurLevel, TEXT("Layer_Player"), TEXT("Com_Transform")));
+    _float3 vTerrainPos = m_pTerrainTransformCom->Get_State(STATE::POSITION);
+    _float3 vTerrainScale = m_pTerrainTransformCom->Get_Scaled();
 
     _float3 vMonsterPos = m_pTransformCom->Get_State(STATE::POSITION);
     _float3 vTargetPos = pTargetTransform->Get_State(STATE::POSITION);
@@ -82,9 +93,12 @@ void CErma_Hand_R::Update(_float fTimeDelta)
     _float3 vDiff = -vMonsterPos + vTargetPos;
     _float fDistance = D3DXVec3Length(&vDiff);
 
+    _int iCurPatternFrame = m_pAnimatorPatternCom->Get_CurStackedFrame();
 
     // ********* matMonster 구하기
     _float4x4 matMonsterWorld = *m_pTransformCom->Get_WorldMatrix();
+
+    _float3 vTerrainOffset = { 0.f, 1.f, 0.f };
 
 #pragma endregion
 
@@ -100,12 +114,12 @@ void CErma_Hand_R::Update(_float fTimeDelta)
     // 2. 크기
     _float4x4 matScale = {};
     D3DXMatrixIdentity(&matScale);
-    D3DXMatrixScaling(&matScale, -1.3f, 1.f, 1.f);
+    D3DXMatrixScaling(&matScale, -1.f, 1.f, 1.f);
 
     // 3. 자전
     _float4x4 matRotateChild = {};
     D3DXMatrixIdentity(&matRotateChild);
-    //D3DXMatrixRotationX(&matRotateChild, D3DXToRadian(-90)); // 안되면 -90도도 해보기
+    D3DXMatrixRotationX(&matRotateChild, D3DXToRadian(-90)); // 안되면 -90도도 해보기
 
     _float4x4 matRotateChildtoPlayer = {};
     D3DXMatrixIdentity(&matRotateChildtoPlayer);
@@ -132,13 +146,252 @@ void CErma_Hand_R::Update(_float fTimeDelta)
 #pragma endregion
     // ***********************
 
+    if (m_isPatternPlaying)
+    {
+
+        switch (m_ePattern)
+        {
+        case Client::CErma_Hand_R::PATTERN_HAND_R::PT_IDLE:
+        {
+
+        }
+            break;
+        case Client::CErma_Hand_R::PATTERN_HAND_R::PT_STRIKE:
+        {
+#pragma region PT_STRIKE Pattern
+            // 트래킹 상태일 때 추적 
+            if (m_isTracking)
+                m_pTransformCom->Move_To(vTargetPos, fTimeDelta * 4.f, 0.01f);
+
+            _float fROffset = 80;
+
+            if (IS_BETWEEN(iCurPatternFrame, 0 + fROffset, 40 + fROffset))
+            {
+                _int iFrame = iCurPatternFrame - (0 + fROffset);
+                m_isTracking = true;
+                _float fY = -0.00125 * pow((iFrame - 40), 2) + 2;
+                m_pTerrainBox->SetUp_OnTerrainBox(m_pTransformCom, _float3(0.0f, fY, 0.0f) + vTerrainOffset);
+            }
+            else if (IS_BETWEEN(iCurPatternFrame, 40 + fROffset, 100 + fROffset))
+            {
+                _int iFrame = iCurPatternFrame - (40 + fROffset);
+                // tracking..
+                m_pTerrainBox->SetUp_OnTerrainBox(m_pTransformCom, _float3(0.0f, 2.f, 0.0f) + vTerrainOffset);
+            }
+            else if (IS_BETWEEN(iCurPatternFrame, 100 + fROffset, 110 + fROffset))
+            {
+                _int iFrame = iCurPatternFrame - (100 + fROffset);
+                m_isTracking = false;
+                _float fY = -0.02 * pow((iFrame), 2) + 2;
+                m_pTerrainBox->SetUp_OnTerrainBox(m_pTransformCom, _float3(0.0f, fY, 0.0f) + vTerrainOffset);
+            }
+            else if (IS_BETWEEN(iCurPatternFrame, 110 + fROffset, 160 + fROffset))
+            {
+                _int iFrame = iCurPatternFrame - (110 + fROffset);
+                m_pTerrainBox->SetUp_OnTerrainBox(m_pTransformCom, vTerrainOffset);
+            }
+            else if (IS_BETWEEN(iCurPatternFrame, 0 + 160 + fROffset, 40 + 160 + fROffset))
+            {
+                _int iFrame = iCurPatternFrame - (0 + 160 + fROffset);
+                m_isTracking = true;
+                _float fY = -0.00125 * pow((iFrame - 40), 2) + 2;
+                m_pTerrainBox->SetUp_OnTerrainBox(m_pTransformCom, _float3(0.0f, fY, 0.0f) + vTerrainOffset);
+            }
+            else if (IS_BETWEEN(iCurPatternFrame, 40 + 160 + fROffset, 100 + 160 + fROffset))
+            {
+                _int iFrame = iCurPatternFrame - (40 + 160 + fROffset);
+                // tracking..
+                m_pTerrainBox->SetUp_OnTerrainBox(m_pTransformCom, _float3(0.0f, 2.f, 0.0f) + vTerrainOffset);
+            }
+            else if (IS_BETWEEN(iCurPatternFrame, 100 + 160 + fROffset, 110 + 160 + fROffset))
+            {
+                _int iFrame = iCurPatternFrame - (100 + 160 + fROffset);
+                m_isTracking = false;
+                _float fY = -0.02 * pow((iFrame), 2) + 2;
+                m_pTerrainBox->SetUp_OnTerrainBox(m_pTransformCom, _float3(0.0f, fY, 0.0f) + vTerrainOffset);
+            }
+            else if (IS_BETWEEN(iCurPatternFrame, 110 + 160 + fROffset, 160 + 160 + fROffset))
+            {
+                _int iFrame = iCurPatternFrame - (110 + 160 + fROffset);
+                m_pTerrainBox->SetUp_OnTerrainBox(m_pTransformCom, vTerrainOffset);
+            }
+            else
+            {
+                _float3 vPos = {
+                    vTerrainPos.x + 10.f,
+                    0.f,
+                    vTerrainPos.z + vTerrainScale.z / 2 - 6.f
+                };
+
+                m_pTransformCom->Move_To(vPos + vTerrainPos + vTerrainOffset, fTimeDelta * 10.f, 0.01f);
+                m_pTerrainBox->SetUp_OnTerrainBox(m_pTransformCom, vTerrainOffset);
+
+                if (iCurPatternFrame == 479)
+                {
+                    m_isPatternPlaying = false;
+                    m_ePattern = PATTERN_HAND_R::PT_IDLE;
+                    m_pAnimatorPatternCom->Change_State(L"Idle");
+                }
+            }
+#pragma endregion
+        }
+        break;
+        case Client::CErma_Hand_R::PATTERN_HAND_R::PT_LASER:
+        {
+#pragma region PT_LASER Pattern
+            _bool isLaserEnd = false;
+
+            // Pattern
+            if (iCurPatternFrame == 0)
+                m_pAnimatorCom->Change_State(L"LaserStart");
+            if (IS_BETWEEN(iCurPatternFrame, 0, 50))
+            {
+                _float3 vPos = {
+                    vTerrainPos.x + vTerrainScale.x / 2,
+                    0.f,
+                    vTerrainPos.z - vTerrainScale.z / 2
+                };
+                m_pTransformCom->Move_To(vPos + vTerrainOffset, fTimeDelta * 20.f, 0.01f);
+                m_pTerrainBox->SetUp_OnTerrainBox(m_pTransformCom, vTerrainOffset);
+            }
+            else if (IS_BETWEEN(iCurPatternFrame, 50, 350))
+            {
+                _int iFrame = iCurPatternFrame - 50;
+                _float3 vPos = {
+                    vTerrainPos.x + vTerrainScale.x / 2,
+                    0.f,
+                    vTerrainPos.z - vTerrainScale.z / 2.f + vTerrainScale.z * iFrame / 300.f
+                };
+                m_pTransformCom->Move_To(vPos + vTerrainOffset, fTimeDelta * 3.f, 0.01f);
+                m_pTerrainBox->SetUp_OnTerrainBox(m_pTransformCom, vTerrainOffset);
+            }
+            else if (IS_BETWEEN(iCurPatternFrame, 350, 550))
+            {
+                _int iFrame = iCurPatternFrame - 350;
+                _float3 vPos = {
+                    vTerrainPos.x + vTerrainScale.x / 2,
+                    0.f,
+                    vTerrainPos.z + vTerrainScale.z / 2.f - vTerrainScale.z * iFrame / 300.f
+                };
+                m_pTransformCom->Move_To(vPos + vTerrainOffset, fTimeDelta * 3.f, 0.01f);
+                m_pTerrainBox->SetUp_OnTerrainBox(m_pTransformCom, vTerrainOffset);
+            }
+            else
+            {
+                isLaserEnd = true;
+
+                _float3 vPos = {
+                    vTerrainPos.x + vTerrainScale.x / 2 - 4.5f,
+                    0.f,
+                    vTerrainPos.z
+                };
+                m_pTransformCom->Move_To(vPos + vTerrainOffset, fTimeDelta * 4.f, 0.01f);
+                m_pTerrainBox->SetUp_OnTerrainBox(m_pTransformCom, vTerrainOffset);
+
+                if (iCurPatternFrame == 599)
+                {
+                    m_isPatternPlaying = false;
+                    m_ePattern = PATTERN_HAND_R::PT_IDLE;
+                    m_pAnimatorPatternCom->Change_State(L"Idle");
+                }
+            }
+            
+#pragma region Laser Effect Setting
+
+                D3DXMatrixIdentity(&matScale);
+                D3DXMatrixScaling(&matScale, -0.75f, 6.f, 0.75f);
+
+                D3DXMatrixIdentity(&matRotateChild);
+                _float4x4 matRotateChild2 = {};
+                D3DXMatrixIdentity(&matRotateChild2);
+                D3DXMatrixRotationX(&matRotateChild, D3DXToRadian(-90)); // 안되면 -90도도 해보기
+                D3DXMatrixRotationY(&matRotateChild2, D3DXToRadian(90)); // 안되면 -90도도 해보기
+
+                D3DXMatrixIdentity(&matTransAddition);
+                D3DXMatrixTranslation(&matTransAddition, -13.5f, 0, 0);
+
+                matMonsterWorld = matTransToOrigin * matScale * matRotateChild * matRotateChild2 * matRotateChildtoPlayer * matTransReturn * matTransAddition;
+#pragma endregion
+            // Effect
+            if (iCurPatternFrame == 81)
+            {
+                CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::MONSTER_EFFECT, L"Prototype_Component_Boss_Erma_BigGolem_LaserStart",
+                    *m_pTransformCom->Get_WorldMatrix(), matMonsterWorld, m_pTransformCom);
+
+            }
+            else if (IS_BETWEEN(iCurPatternFrame, 100, 550) &&
+                (iCurPatternFrame - 1) % 9 == 0)
+            {
+                CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::MONSTER_EFFECT, L"Prototype_Component_Boss_Erma_BigGolem_LaserProgress",
+                    *m_pTransformCom->Get_WorldMatrix(), matMonsterWorld, m_pTransformCom);
+            }
+            else if (iCurPatternFrame == 550)
+            {
+                CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::MONSTER_EFFECT, L"Prototype_Component_Boss_Erma_BigGolem_LaserEnd",
+                    *m_pTransformCom->Get_WorldMatrix(), matMonsterWorld, m_pTransformCom);
+            }
+#pragma region Effect Reset
+
+                D3DXMatrixIdentity(&matScale);
+                D3DXMatrixScaling(&matScale, -1.f, 1.f, 1.f);
+
+                D3DXMatrixIdentity(&matRotateChild);
+                D3DXMatrixRotationX(&matRotateChild, D3DXToRadian(-90)); // 안되면 -90도도 해보기
+
+                D3DXMatrixIdentity(&matTransAddition);
+
+                matMonsterWorld = matTransToOrigin * matScale * matRotateChild * matRotateChildtoPlayer * matTransReturn * matTransAddition;
+
+#pragma endregion
+
+            if (m_pAnimatorCom->Get_CurStateTag() == L"LaserStart")
+                m_pAnimatorCom->Change_State(L"LaserProgress_Start");
+            else if (m_pAnimatorCom->Get_CurStateTag() == L"LaserProgress_Start")
+                m_pAnimatorCom->Change_State(L"LaserProgress_Cycle");
+            else if (m_pAnimatorCom->Get_CurStateTag() == L"LaserProgress_Cycle" &&
+                isLaserEnd)
+                m_pAnimatorCom->Change_State(L"Laser_End");
+            else if (m_pAnimatorCom->Get_CurStateTag() == L"Laser_End")
+                m_pAnimatorCom->Change_State(L"Idle");
+
+#pragma endregion
+        }
+            break;
+        default:
+            break;
+        }
+
+    }
+    else
+    {
+        _float3 vDefaultPos = {
+            vTerrainPos.x + 10.f,
+            0.f,
+            vTerrainPos.z + vTerrainScale.z / 2 - 6.f
+        };
+        m_pTransformCom->Move_To(vDefaultPos + vTerrainPos + vTerrainOffset, fTimeDelta * 10.f, 0.01f);
+    }
 
 
 
 
 
-    if (m_pTerrainBox != nullptr) {
-        m_pTerrainBox->SetUp_OnTerrainBox(m_pTransformCom, _float3(0.05f, 0.5f, 0.05f));
+
+
+
+
+
+
+    // 이걸 이용해서 Y축 값 바꿔야함
+    //m_pTerrainBox->SetUp_OnTerrainBox(m_pTransformCom, _float3(0.05f, 0.5f, 0.05f));
+
+
+
+
+
+    if (m_pTerrainBox != nullptr &&
+        !m_isPatternPlaying) {
+        m_pTerrainBox->SetUp_OnTerrainBox(m_pTransformCom, vTerrainOffset);
     }
 }
 
@@ -154,13 +407,15 @@ HRESULT CErma_Hand_R::Render()
 
     m_pVIBufferCom->ChangeUV_FlipX(true);
 
+    SetUp_RenderState();
+
     m_pTransformCom->Bind_Matrix();
 
     m_pAnimatorCom->Update_State(); // Bind_Texture
+    m_pAnimatorPatternCom->Update_State(); // Bind_Texture
 
     m_pVIBufferCom->Bind_Buffers();
 
-    SetUp_RenderState();
 
     m_pVIBufferCom->Render();
 
@@ -179,23 +434,23 @@ HRESULT CErma_Hand_R::Ready_Components(void* pArg)
 
     // 컴포넌트 추가
     /* For.Com_Texture */
-    // Normal
+    // Normal (1)
     if (FAILED(__super::Add_Component(desc->iLayerLevelIndex, TEXT("Prototype_Component_Boss_Erma_BigGolem_Hand_Normal"),
         TEXT("Com_Texture_Normal"), reinterpret_cast<CComponent**>(&m_pTextureCom_Normal))))
         return E_FAIL;
-    // LaserStart
+    // LaserStart (5)
     if (FAILED(__super::Add_Component(desc->iLayerLevelIndex, TEXT("Prototype_Component_Boss_Erma_BigGolem_Hand_LaserStart"),
         TEXT("Com_Texture_LaserStart"), reinterpret_cast<CComponent**>(&m_pTextureCom_LaserStart))))
         return E_FAIL;
-    // LaserProgress_Start
+    // LaserProgress_Start (5)
     if (FAILED(__super::Add_Component(desc->iLayerLevelIndex, TEXT("Prototype_Component_Boss_Erma_BigGolem_Hand_LaserProgress_Start"),
         TEXT("Com_Texture_LaserProgress_Start"), reinterpret_cast<CComponent**>(&m_pTextureCom_LaserProgress_Start))))
         return E_FAIL;
-    // LaserProgress_Cycle
+    // LaserProgress_Cycle (4)
     if (FAILED(__super::Add_Component(desc->iLayerLevelIndex, TEXT("Prototype_Component_Boss_Erma_BigGolem_Hand_LaserProgress_Cycle"),
         TEXT("Com_Texture_LaserProgress_Cycle"), reinterpret_cast<CComponent**>(&m_pTextureCom_LaserProgress_Cycle))))
         return E_FAIL;
-    // Laser_End
+    // Laser_End (4)
     if (FAILED(__super::Add_Component(desc->iLayerLevelIndex, TEXT("Prototype_Component_Boss_Erma_BigGolem_Hand_LaserEnd"),
         TEXT("Com_Texture_Laser_End"), reinterpret_cast<CComponent**>(&m_pTextureCom_Laser_End))))
         return E_FAIL;
@@ -216,10 +471,24 @@ HRESULT CErma_Hand_R::Ready_Components(void* pArg)
 
     // State 삽입
     m_pAnimatorCom->Add_State(L"Idle",                  { m_pTextureCom_Normal, 4, true });
-    m_pAnimatorCom->Add_State(L"LaserStart",            { m_pTextureCom_LaserStart, 4, false });
+    m_pAnimatorCom->Add_State(L"LaserStart",            { m_pTextureCom_LaserStart, 16, false });
     m_pAnimatorCom->Add_State(L"LaserProgress_Start",   { m_pTextureCom_LaserProgress_Start, 4, false });
     m_pAnimatorCom->Add_State(L"LaserProgress_Cycle",   { m_pTextureCom_LaserProgress_Cycle, 4, true });
-    m_pAnimatorCom->Add_State(L"Laser_End",             { m_pTextureCom_Laser_End, 4, false });
+    m_pAnimatorCom->Add_State(L"Laser_End",             { m_pTextureCom_Laser_End, 8, false });
+
+
+    CAnimator::ANIMSTATE_DESC StartAnimStateDesc2{};
+    StartAnimStateDesc2.strTimerTag = L"Animator_Boss_Arma_Hand_R_Pattern";   // 해당 애니메이터가 타이머에서 사용할 태그 key값
+    StartAnimStateDesc2.pParentTransform = nullptr;
+    StartAnimStateDesc2.pChildTransform = nullptr;
+
+    if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Animator"),
+        TEXT("Com_AnimatorPattern"), reinterpret_cast<CComponent**>(&m_pAnimatorPatternCom), &StartAnimStateDesc)))
+        return E_FAIL;
+
+    m_pAnimatorPatternCom->Add_State(L"Idle", { nullptr, 4, true });
+    m_pAnimatorPatternCom->Add_State(L"Strike", { nullptr, 480, true });    // 8s
+    m_pAnimatorPatternCom->Add_State(L"Laser", { nullptr, 600, true });    // 10s
 
     // ..
 
@@ -244,6 +513,38 @@ void CErma_Hand_R::OnCollision(CGameObject* pGameObject)
     case GAMEOBJ_TYPE::PLAYER_EFFECT:
         break;
     }
+}
+
+void CErma_Hand_R::PlayPattern(PATTERN_HAND_R ePattern)
+{
+    if (m_isPatternPlaying == true)
+        return;
+
+
+
+    _float fPatternTime = 0.f;
+    _wstring strPatternTag = {};
+
+    switch (ePattern)
+    {
+    case Client::CErma_Hand_R::PATTERN_HAND_R::PT_STRIKE:  
+        fPatternTime = 8.f;
+        strPatternTag = L"Strike";  // 이거 확인하고 패턴마다 바뀌도록,
+        //그리고 이게 패턴 switch 문 내에서 현재 프레임 구분의 조건이 되도록만들어야 함
+        break;
+    case Client::CErma_Hand_R::PATTERN_HAND_R::PT_LASER:    
+        fPatternTime = 10.f;
+        strPatternTag = L"Laser";
+        break;
+    default:
+        break;
+    }
+
+
+
+    m_isPatternPlaying = true;
+    m_ePattern = ePattern;
+    m_pAnimatorPatternCom->Change_State(strPatternTag, true, fPatternTime, true);
 }
 
 CErma_Hand_R* CErma_Hand_R::Create(LPDIRECT3DDEVICE9 pGraphic_Device)

@@ -7,6 +7,15 @@ BEGIN(Client)
 
 class CErma_Hand_R final : public CMonster
 {
+public:
+	enum class PATTERN_HAND_R
+	{
+		PT_IDLE,
+		PT_STRIKE,	// 주먹으로 내려찍는 패턴
+		PT_LASER,	// 주먹을 펴고 레이저를 쏘는 패턴
+		PT_END
+	};
+
 private:
 	CErma_Hand_R(LPDIRECT3DDEVICE9 pGraphic_Device);
 	CErma_Hand_R(const CErma_Hand_R& Prototype);
@@ -27,23 +36,30 @@ private:
 public:
 	virtual void OnCollision(CGameObject* pGameObject) override;
 
+public:
+	void PlayPattern(PATTERN_HAND_R ePattern);
+
 private:
 	// 각종 컴포넌트들
-	CTexture* m_pTextureCom_Normal					= { nullptr };
-	CTexture* m_pTextureCom_LaserStart				= { nullptr };
-	CTexture* m_pTextureCom_LaserProgress_Start		= { nullptr };
-	CTexture* m_pTextureCom_LaserProgress_Cycle		= { nullptr };
-	CTexture* m_pTextureCom_Laser_End				= { nullptr };
+	CTexture* m_pTextureCom_Normal = { nullptr };
+	CTexture* m_pTextureCom_LaserStart = { nullptr };
+	CTexture* m_pTextureCom_LaserProgress_Start = { nullptr };
+	CTexture* m_pTextureCom_LaserProgress_Cycle = { nullptr };
+	CTexture* m_pTextureCom_Laser_End = { nullptr };
 
-
+	CTransform* m_pTerrainTransformCom = { nullptr };
 
 	CAnimator* m_pAnimatorCom = { nullptr };
+	CAnimator* m_pAnimatorPatternCom = { nullptr };
 
 
 	// 로컬 변수들
 
-	_int		iPhase = 0;
-	_int		iPattern = 0;
+	_int			m_iPhase = 0;
+	PATTERN_HAND_R	m_ePattern = PATTERN_HAND_R::PT_IDLE;
+
+	_bool			m_isPatternPlaying = false;
+
 
 
 public:
