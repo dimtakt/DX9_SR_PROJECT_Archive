@@ -136,7 +136,7 @@ void CRoom::Late_Update(_float fTimeDelta)
 							{
 								// collider
 								CCollider_OBB::OBB_DESC tColliderDesc;
-								tColliderDesc.vScale = _float3(1.f, 3.f, 1.f);
+								tColliderDesc.vScale = _float3(0.5f, 1.f, 0.5f);
 								tColliderDesc.pOwner = (*it);
 								tColliderDesc.pTransform = dynamic_cast<CTransform*>((*it)->Find_Component(TEXT("Com_Transform")));
 								tColliderDesc.eType = (*it)->Get_ObjType();
@@ -375,7 +375,7 @@ void CRoom::Enter()
 			pMonster->Set_IsActive(true);
 			// collider
 			CCollider_OBB::OBB_DESC tColliderDesc;
-			tColliderDesc.vScale = _float3(1.f, 3.f, 1.f);
+			tColliderDesc.vScale = _float3(0.5f, 1.f, 0.5f);
 			tColliderDesc.pOwner = pMonster;
 			tColliderDesc.pTransform = pMonster->Get_Transform();
 			tColliderDesc.eType = pMonster->Get_ObjType();
@@ -391,7 +391,7 @@ void CRoom::Enter()
 			pObject->Set_IsActive(true);
 			// collider
 			CCollider_OBB::OBB_DESC tColliderDesc;
-			tColliderDesc.vScale = _float3(1.0f, 3.f, 1.0f);
+			tColliderDesc.vScale = _float3(0.5f, 1.f, 0.5f);
 			tColliderDesc.pOwner = pObject;
 			tColliderDesc.pTransform = dynamic_cast<CTransform*>(pObject->Find_Component(TEXT("Com_Transform")));
 			tColliderDesc.eType = pObject->Get_ObjType();;

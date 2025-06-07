@@ -22,11 +22,13 @@ public:
 
 private:
 	HRESULT Ready_Components();
+	void Ready_Collision(EFFECT_DESC desc);
 	void SetUp_RenderState();
 	void Reset_RenderState();
 
 public:
 	virtual void OnCollision(CGameObject* pGameObject) override;
+	
 
 private:
 	CVIBuffer_Rect* m_pVIBufferCom = { nullptr };

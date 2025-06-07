@@ -78,13 +78,7 @@ HRESULT CGameEffect::Initialize(void* pArg)
 
 	m_iStackedFrame = 0;
 
-	CCollider_OBB::OBB_DESC tColliderDesc;
-	tColliderDesc.vScale = _float3(3.f, 5.f, 3.f);
-	tColliderDesc.pOwner = this;
-	tColliderDesc.pTransform = m_pTransformCom;
-	tColliderDesc.eType = m_eObjType;
-	CCollider_OBB* pCol = dynamic_cast<CCollider_OBB*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::COMPONENT, ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Collider_OBB"), &tColliderDesc));
-	m_pGameInstance->Add_Collider(pCol);
+	Ready_Collision(*pDesc);
 
 	return S_OK;
 }
@@ -219,6 +213,73 @@ HRESULT CGameEffect::Ready_Components()
 	m_pAnimatorCom->Add_State(L"Effect", { m_pTextureCom, 5, false });
 
 	return S_OK;
+}
+
+void CGameEffect::Ready_Collision(EFFECT_DESC desc)
+{
+
+	if (desc.eType == GAMEOBJ_TYPE::MONSTER_EFFECT || desc.eType == GAMEOBJ_TYPE::PLAYER_EFFECT)
+	{
+
+		CCollider_OBB::OBB_DESC tColliderDesc;
+		tColliderDesc.pOwner = this;
+		tColliderDesc.pTransform = m_pTransformCom;
+		tColliderDesc.eType = m_eObjType;
+		
+		if (desc.eType == GAMEOBJ_TYPE::PLAYER_EFFECT)
+		{
+			//플레이어 공격 관련 이펙트
+			if (desc.strEffectTag == TEXT("Prototype_Component_Texture_Effect_Blade0_Swing1"))
+			{
+				tColliderDesc.vScale = _float3(0.8f, 0.7f, 0.9f);
+			}
+			else if (desc.strEffectTag == TEXT("Prototype_Component_Texture_Effect_Blade0_Swing0"))
+			{
+				tColliderDesc.vScale = _float3(0.8f, 0.7f, 0.9f);
+			}
+			else if (desc.strEffectTag == TEXT("Prototype_Component_Texture_Effect_Blade0_NFury"))
+			{
+				tColliderDesc.vScale = _float3(0.8f, 0.7f, 0.9f);
+			}
+			else if (desc.strEffectTag == TEXT("Prototype_Component_Texture_Effect_Blade0_NFury_Back"))
+			{
+				tColliderDesc.vScale = _float3(0.8f, 0.7f, 0.9f);
+			}
+			else if (desc.strEffectTag == TEXT("Prototype_Component_Texture_Effect_Blade0_Parry"))
+			{
+				tColliderDesc.vScale = _float3(0.8f, 0.7f, 0.9f);
+			}
+		}
+		else {
+			// 레이저 고스트
+			if (desc.strEffectTag == TEXT("Prototype_Component_Texture_LaserGhost_D_Effect_Laser_Progress"))
+			{
+				tColliderDesc.vScale = _float3(1.f, 1.f, 1.f);
+			}
+			else if (desc.strEffectTag == TEXT("Prototype_Component_Texture_LaserGhost_D_Effect_Laser_End"))
+			{
+				tColliderDesc.vScale = _float3(1.f, 1.f, 1.f);
+			}
+			// 두더지
+			else if (desc.strEffectTag == TEXT("Prototype_Component_Texture_Mole_A_Effect_Swing"))
+			{
+				tColliderDesc.vScale = _float3(1.f, 1.f, 1.f);
+			}
+			// 돼지
+			else if (desc.strEffectTag == TEXT("Prototype_Component_Texture_Oink_A_Effect_Swing"))
+			{
+				tColliderDesc.vScale = _float3(1.f, 1.f, 1.f);
+			}
+			else if (desc.strEffectTag == TEXT("Prototype_Component_Texture_Oink_A_Effect_SpinSwing"))
+			{
+				tColliderDesc.vScale = _float3(1.f, 1.f, 1.f);
+			}
+		}
+
+		CCollider_OBB* pCol = dynamic_cast<CCollider_OBB*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::COMPONENT, ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Collider_OBB"), &tColliderDesc));
+		m_pGameInstance->Add_Collider(pCol);
+	}
+	
 }
 
 void CGameEffect::SetUp_RenderState()

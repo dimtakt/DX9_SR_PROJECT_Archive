@@ -37,108 +37,168 @@ HRESULT CCollider_OBB::Initialize(void* pArg)
 
 void CCollider_OBB::Update_Collider()
 {
+	//if (!m_pTransformRef)
+	//	return;
+
+	//if (m_pOwner == nullptr || m_pOwner->Get_IsDead())
+	//{
+	//	m_bDead = true;
+	//	return;
+	//}
+
+	//// 1. 방향 벡터 추출
+	//m_vAxis[0] = m_pTransformRef->Get_State(STATE::RIGHT);
+	//m_vAxis[1] = m_pTransformRef->Get_State(STATE::UP);
+	//m_vAxis[2] = m_pTransformRef->Get_State(STATE::LOOK);
+
+	//// 2. 정규화
+	//D3DXVec3Normalize(&m_vAxis[0], &m_vAxis[0]);
+	//D3DXVec3Normalize(&m_vAxis[1], &m_vAxis[1]);
+	//D3DXVec3Normalize(&m_vAxis[2], &m_vAxis[2]);
+
+	//// 3. 반크기 (scale만 적용)
+	//_float3 vScale = m_pTransformRef->Get_Scaled();
+	//m_vWorldExtents.x = (vScale.x * m_vScale.x) * 0.5f;
+	//m_vWorldExtents.y = (vScale.y * m_vScale.y) * 0.5f;
+	//m_vWorldExtents.z = (vScale.z * m_vScale.z) * 0.5f;
+
+	//// 4. 중심 보정
+	//m_vWorldCenter = m_pTransformRef->Get_State(STATE::POSITION);
+
 	if (!m_pTransformRef)
 		return;
 
-	if (m_pOwner->Get_IsDead())
+	if (m_pOwner == nullptr || m_pOwner->Get_IsDead())
 	{
+		m_bDead = true;
 		return;
 	}
 
-	// 1. 방향 벡터 추출
+	// 1. 회전 포함 축 벡터 (3D 축 사용)
 	m_vAxis[0] = m_pTransformRef->Get_State(STATE::RIGHT);
 	m_vAxis[1] = m_pTransformRef->Get_State(STATE::UP);
 	m_vAxis[2] = m_pTransformRef->Get_State(STATE::LOOK);
 
-	// 2. 정규화
 	D3DXVec3Normalize(&m_vAxis[0], &m_vAxis[0]);
 	D3DXVec3Normalize(&m_vAxis[1], &m_vAxis[1]);
 	D3DXVec3Normalize(&m_vAxis[2], &m_vAxis[2]);
 
-	// 3. 반크기 (scale만 적용)
-	//_float3 vScale = m_pTransformRef->Get_Scaled();
-	m_vWorldExtents.x = m_vScale.x * 0.5f;
-	m_vWorldExtents.y = m_vScale.y * 0.5f;
-	m_vWorldExtents.z = m_vScale.z * 0.5f;
+	// 2. 스케일 계산 (보정 포함)
+	_float3 vScale = m_pTransformRef->Get_Scaled();
 
-	// 4. 중심 보정
+	m_vWorldExtents.x = max(vScale.x * m_vScale.x * 0.5f, 0.0001f);
+	m_vWorldExtents.y = max(vScale.y * m_vScale.y * 0.5f, 0.0001f);
+	m_vWorldExtents.z = max(vScale.z * m_vScale.z * 0.5f, 0.0001f);
+
+	// 3. 중심 위치
 	m_vWorldCenter = m_pTransformRef->Get_State(STATE::POSITION);
 
 }
 
 HRESULT CCollider_OBB::Render()
 {
-	if (!m_pGraphic_Device)
-		return E_FAIL;
+	//if (!m_pGraphic_Device)
+	//	return E_FAIL;
 
-	// 1. 꼭짓점 좌표 계산 (XZ 평면 기준, 정밀 오차 보정)
+	//// 1. 꼭짓점 좌표 계산 (XZ 평면 기준, 정밀 오차 보정)
+	//const _float3& vCenter = m_vWorldCenter;
+	//const _float3& vRight = m_vAxis[0]; // 정규화된 X축
+	//const _float3& vLook = m_vAxis[2]; // 정규화된 Z축
+
+	//const _float fExtentX = m_vWorldExtents.x;
+	//const _float fExtentZ = m_vWorldExtents.z;
+
+	//_float3 vCorner[5]; // 5개로 닫음 (마지막은 0번)
+
+	//// 시계 방향 정점 계산
+	//vCorner[0] = vCenter + (-vRight * fExtentX) + (-vLook * fExtentZ);
+	//vCorner[1] = vCenter + (vRight * fExtentX) + (-vLook * fExtentZ);
+	//vCorner[2] = vCenter + (vRight * fExtentX) + (vLook * fExtentZ);
+	//vCorner[3] = vCenter + (-vRight * fExtentX) + (vLook * fExtentZ);
+	//vCorner[4] = vCorner[0]; // 사각형 닫기
+
+	//// 2. 정점 구조체 정의 (위치 + 색상)
+	//struct VertexColor
+	//{
+	//	_float3 vPos;
+	//	D3DCOLOR dwColor;
+	//};
+
+	//VertexColor vLine[5];
+	//for (int i = 0; i < 5; ++i)
+	//{
+	//	vLine[i].vPos = vCorner[i];
+	//	vLine[i].dwColor = D3DCOLOR_ARGB(255, 255, 0, 0); // 빨간색
+	//}
+
+	//_float4x4 matWorld;
+	//D3DXMatrixIdentity(&matWorld);
+	//m_pGraphic_Device->SetTransform(D3DTS_WORLD, &matWorld);
+
+
+
+	//m_pGraphic_Device->SetRenderState(D3DRS_ZENABLE, FALSE);
+	//m_pGraphic_Device->SetTexture(0, nullptr);
+	//m_pGraphic_Device->SetPixelShader(nullptr);
+	//m_pGraphic_Device->SetVertexShader(nullptr);
+
+	//m_pGraphic_Device->SetFVF(D3DFVF_XYZ | D3DFVF_DIFFUSE);
+	//m_pGraphic_Device->DrawPrimitiveUP(D3DPT_LINESTRIP, 4, vLine, sizeof(VertexColor));
+
+
+	//m_pGraphic_Device->SetRenderState(D3DRS_ZENABLE, TRUE);
 	const _float3& vCenter = m_vWorldCenter;
-	const _float3& vRight = m_vAxis[0]; // 정규화된 X축
-	const _float3& vLook = m_vAxis[2]; // 정규화된 Z축
+	const _float3& vRight = m_vAxis[0];   // X축
+	const _float3& vUp = m_vAxis[1];   // Y축
+	const _float3& vLook = m_vAxis[2];   // Z축
 
 	const _float fExtentX = m_vWorldExtents.x;
+	const _float fExtentY = m_vWorldExtents.y;
 	const _float fExtentZ = m_vWorldExtents.z;
 
-	_float3 vCorner[5]; // 5개로 닫음 (마지막은 0번)
+	// 8개 꼭짓점 계산
+	_float3 vCorners[8];
+	int i = 0;
+	for (int dx = -1; dx <= 1; dx += 2)
+		for (int dy = -1; dy <= 1; dy += 2)
+			for (int dz = -1; dz <= 1; dz += 2)
+			{
+				vCorners[i++] = vCenter
+					+ dx * fExtentX * vRight
+					+ dy * fExtentY * vUp
+					+ dz * fExtentZ * vLook;
+			}
 
-	// 시계 방향 정점 계산
-	vCorner[0] = vCenter + (-vRight * fExtentX) + (-vLook * fExtentZ);
-	vCorner[1] = vCenter + (vRight * fExtentX) + (-vLook * fExtentZ);
-	vCorner[2] = vCenter + (vRight * fExtentX) + (vLook * fExtentZ);
-	vCorner[3] = vCenter + (-vRight * fExtentX) + (vLook * fExtentZ);
-	vCorner[4] = vCorner[0]; // 사각형 닫기
+	// 정점 구조체 정의
+	struct VertexColor { 
+		_float3 vPos; 
+		D3DCOLOR dwColor; };
 
-	// 2. 정점 구조체 정의 (위치 + 색상)
-	struct VertexColor
-	{
-		_float3 vPos;
-		D3DCOLOR dwColor;
-	};
 
-	VertexColor vLine[5];
-	for (int i = 0; i < 5; ++i)
-	{
-		vLine[i].vPos = vCorner[i];
-		vLine[i].dwColor = D3DCOLOR_ARGB(255, 255, 0, 0); // 빨간색
-	}
+	VertexColor vLine[24];
+	D3DCOLOR color = D3DCOLOR_ARGB(255, 255, 0, 0);
 
+	auto SetLine = [&](int idx, int a, int b)
+		{
+			vLine[idx * 2 + 0] = { vCorners[a], color };
+			vLine[idx * 2 + 1] = { vCorners[b], color };
+		};
+
+	// 12개 라인 설정 (선 연결)
+	SetLine(0, 0, 1); SetLine(1, 1, 3); SetLine(2, 3, 2); SetLine(3, 2, 0); // 아래면
+	SetLine(4, 4, 5); SetLine(5, 5, 7); SetLine(6, 7, 6); SetLine(7, 6, 4); // 윗면
+	SetLine(8, 0, 4); SetLine(9, 1, 5); SetLine(10, 2, 6); SetLine(11, 3, 7); // 옆면
+
+	m_pGraphic_Device->SetRenderState(D3DRS_ZENABLE, FALSE);
 	_float4x4 matWorld;
 	D3DXMatrixIdentity(&matWorld);
 	m_pGraphic_Device->SetTransform(D3DTS_WORLD, &matWorld);
-
-	/*D3DXMATRIX matView, matProj, matVP;
-	m_pGraphic_Device->GetTransform(D3DTS_VIEW, &matView);
-	m_pGraphic_Device->GetTransform(D3DTS_PROJECTION, &matProj);
-	D3DXMatrixMultiply(&matVP, &matView, &matProj);
-
-	for (int i = 0; i < 5; ++i)
-	{
-		D3DXVec3TransformCoord(&vLine[i].vPos, &vLine[i].vPos, &matVP);
-	}*/
-
-	// 3. 그래픽 장치 상태 설정
-	m_pGraphic_Device->SetRenderState(D3DRS_ZENABLE, FALSE);
-	/*m_pGraphic_Device->SetRenderState(D3DRS_LIGHTING, FALSE);
-	m_pGraphic_Device->SetRenderState(D3DRS_ALPHABLENDENABLE, FALSE);
-	m_pGraphic_Device->SetRenderState(D3DRS_FOGENABLE, FALSE);*/
-	m_pGraphic_Device->SetTexture(0, nullptr);
-	m_pGraphic_Device->SetPixelShader(nullptr);
-	m_pGraphic_Device->SetVertexShader(nullptr);
-
-	// 4. 선 그리기
 	m_pGraphic_Device->SetFVF(D3DFVF_XYZ | D3DFVF_DIFFUSE);
-	m_pGraphic_Device->DrawPrimitiveUP(D3DPT_LINESTRIP, 4, vLine, sizeof(VertexColor));
-
-	// 5. 상태 복구
+	m_pGraphic_Device->DrawPrimitiveUP(D3DPT_LINELIST, 12, vLine, sizeof(VertexColor));
 	m_pGraphic_Device->SetRenderState(D3DRS_ZENABLE, TRUE);
+	
 
-	//Render_AttachedDebugBox(
-	//	m_pGraphic_Device,
-	//	m_vWorldCenter,
-	//	m_vAxis[0], // Right
-	//	m_vAxis[2], // Look
-	//	m_vWorldExtents * 2.f // 전체 크기
-	//);
+
 
 	return S_OK;
 }
@@ -172,30 +232,14 @@ void CCollider_OBB::Render_AttachedDebugBox(LPDIRECT3DDEVICE9 pDevice, const _fl
 		vLine[i].dwColor = color;
 	}
 
-	// 5. View * Projection 적용
-	//D3DXMATRIX matView, matProj, matVP;
+
 	_float4x4 matWorld;
 	D3DXMatrixIdentity(&matWorld);
-	//pDevice->GetTransform(D3DTS_VIEW, &matView);
 	m_pGraphic_Device->SetTransform(D3DTS_WORLD, &matWorld);
-	//pDevice->GetTransform(D3DTS_PROJECTION, &matProj);
-	//D3DXMatrixMultiply(&matVP, &matView, &matProj);
 
-	//for (int i = 0; i < 5; ++i)
-	//	D3DXVec3TransformCoord(&vLine[i].vPos, &vLine[i].vPos, &matVP);
-
-	//// 6. 렌더 상태 설정
-	//pDevice->SetRenderState(D3DRS_ZENABLE, FALSE);
-	//pDevice->SetRenderState(D3DRS_LIGHTING, FALSE);
-	//pDevice->SetTexture(0, nullptr);
-	//pDevice->SetPixelShader(nullptr);
-	//pDevice->SetVertexShader(nullptr);
 
 	pDevice->SetFVF(D3DFVF_XYZ | D3DFVF_DIFFUSE);
 	pDevice->DrawPrimitiveUP(D3DPT_LINESTRIP, 4, vLine, sizeof(VertexColor));
-
-	// 7. 상태 복원
-	pDevice->SetRenderState(D3DRS_ZENABLE, TRUE);
 }
 
 CCollider_OBB* CCollider_OBB::Create(LPDIRECT3DDEVICE9 pGraphic_Device)
