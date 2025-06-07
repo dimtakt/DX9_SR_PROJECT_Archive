@@ -35,6 +35,8 @@ HRESULT CItem_Base::Initialize(void* pArg)
 	m_szDescription = Desc->szDescription;
 	m_iItemTextureID = Desc->iItemTextureID;
 	m_iItemValue = Desc->iItemValue;
+	m_iArtefact_Value = Desc->iArtefact_Value;
+
 
 	if (FAILED(Ready_Componet()))
 		return E_FAIL;
@@ -47,6 +49,7 @@ HRESULT CItem_Base::Initialize(void* pArg)
 
 void CItem_Base::Priority_Update(_float fTimeDelta)
 {
+	m_bIsTooltip = false;
 }
 
 void CItem_Base::Update(_float fTimeDelta)
@@ -67,17 +70,34 @@ void CItem_Base::Late_Update(_float fTimeDelta, _float3 fPos)
 
 HRESULT CItem_Base::Render()
 {
+	
 	if (FAILED(m_pTextureCom->Bind_Texture(m_iItemTextureID)))
 		return E_FAIL;
 	m_pVIBufferCom->Bind_Buffers();
-
-	if (FAILED(Default_Render()))
-		return E_FAIL;
-
-	if (m_bisSelete)
-		if (FAILED(Selete_Render()))
+	
+	if (!m_bIsTooltip_Render)
+	{
+		if (FAILED(Default_Render()))
 			return E_FAIL;
 
+		if (m_bisSelete)
+			if (FAILED(Selete_Render()))
+				return E_FAIL;
+		if (m_bIsTooltip)
+			m_bIsTooltip_Render = true;
+		else
+			m_bIsTooltip_Render = false;
+
+	}
+	else
+	{
+		if (m_bIsTooltip)
+			if (FAILED(Tooltip_Render()))
+				return E_FAIL;
+
+		m_bIsTooltip = false;
+		m_bIsTooltip_Render = false;
+	}
 	return S_OK;
 }
 
@@ -95,6 +115,13 @@ void CItem_Base::IsRotation_Slate()
 		if (m_fAngle >= 360.f)
 			m_fAngle = 0.f;
 	}
+}
+
+void CItem_Base::IsTooltip(_float3 TooltipPos)
+{
+	m_vTooltipPos = TooltipPos;
+	m_bIsTooltip = true;
+	m_pGameInstance->Add_RenderGroup(RENDERGROUP::RG_UI_BLEND, this);
 }
 
 
@@ -120,6 +147,17 @@ HRESULT CItem_Base::Selete_Render()
 	m_pVIBufferCom->Render();
 	__super::End();
 	m_pTransformCom->Scaling(m_fSizeX, m_fSizeY, 1.f);
+	return S_OK;
+}
+
+HRESULT CItem_Base::Tooltip_Render()
+{
+	m_pTransformCom->Rotation(_float3{ 0.f,0.f,-1.f }, D3DXToRadian(0));
+	m_pTransformCom->Set_State(STATE::POSITION, m_vTooltipPos);
+	__super::Begin();
+	m_pVIBufferCom->Render();
+	__super::End();
+
 	return S_OK;
 }
 

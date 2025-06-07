@@ -64,6 +64,7 @@ namespace Client
 
 		//Tooltip
 		static constexpr float TOOLTIP = 0.f;
+
 		//Loding
 		static constexpr float LODING = 0.2f;
 
