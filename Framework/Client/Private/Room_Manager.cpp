@@ -316,6 +316,12 @@ void CRoom_Manager::Clear(_uint iLevelIndex)
 
 }
 
+CMonster* CRoom_Manager::Find_CurrentRoom_Monster(MONSTER_TYPE eType)
+{
+	CRoom* pRoom = Get_CurrentRoom();
+	return pRoom->Find_Monster(eType);
+}
+
 void CRoom_Manager::Free()
 {
 	for (auto& pair : m_mRooms)

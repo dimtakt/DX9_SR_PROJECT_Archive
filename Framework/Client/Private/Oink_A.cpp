@@ -32,6 +32,7 @@ HRESULT COink_A::Initialize(void* pArg)
 
     m_iMaxHp = 50;
     m_iCulHp = 50;
+    m_eMonsterType = MONSTER_TYPE::OINK;
     return S_OK;
 }
 

@@ -34,7 +34,7 @@ HRESULT CLaserGhost_D::Initialize(void* pArg)
 
     m_iMaxHp = 70;
     m_iCulHp = 70;
-
+    m_eMonsterType = MONSTER_TYPE::LASERGHOST;
     return S_OK;
 }
 

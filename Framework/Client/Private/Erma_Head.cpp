@@ -48,7 +48,7 @@ HRESULT CErma_Head::Initialize(void* pArg)
     // юс╫ц
     m_iMaxHp = 500;
     m_iCulHp = 500;
-
+    m_eMonsterType = MONSTER_TYPE::ERMA_HEAD;
     return S_OK;
 }
 
