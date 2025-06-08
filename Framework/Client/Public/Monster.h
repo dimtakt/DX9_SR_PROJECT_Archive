@@ -39,6 +39,7 @@ public:
 	HRESULT Ready_Components(void* pArg);
 	void SetUp_RenderState();
 	void Reset_RenderState();
+	void Ready_ExpBall();
 
 public:
 	virtual void OnCollision(CGameObject* pGameObject) override;
