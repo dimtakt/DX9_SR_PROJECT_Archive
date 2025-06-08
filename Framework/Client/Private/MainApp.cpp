@@ -41,7 +41,7 @@
 #include "Slate_Tooltip.h"
 #include "Item_Tooltip_Mid.h"
 #include "FogPlane.h"
-
+#include "Hud_LevelUp.h"
 CMainApp::CMainApp()
 	: m_pGameInstance{ CGameInstance::GetInstance() }
 {
@@ -189,6 +189,10 @@ HRESULT CMainApp::Ready_GameObject_Setting()
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_Hud_Buff"),
 		CHud_Buff::Create(m_pGraphic_Device, LEVEL::LEVEL_STATIC))))
 		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_Hud_LevelUp"),
+		CHud_LevelUp::Create(m_pGraphic_Device, LEVEL::LEVEL_STATIC))))
+		return E_FAIL;
 #pragma endregion
 
 #pragma region Prototype_GameObject_Field_UI
@@ -266,7 +270,6 @@ HRESULT CMainApp::Ready_GameObject_Setting()
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_Potion_Tooltip"),
 		CPotion_Tooltip::Create(m_pGraphic_Device, LEVEL::LEVEL_STATIC))))
 		return E_FAIL;
-
 #pragma endregion
 
 #pragma region Prototype_GameObject_FogPlane
@@ -469,6 +472,10 @@ HRESULT CMainApp::Ready_Texture_Setting()
 
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Rect_Tooltip"),
 		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/UI/Tooltip/Tooltip_%d.png"), 2))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Rect_LevelUp"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/UI/Default/LVUP%d.png"), 13))))
 		return E_FAIL;
 #pragma endregion
 #pragma region Prototype_Component_Hud_States_Texture
@@ -1048,6 +1055,10 @@ HRESULT CMainApp::Ready_UI_Stting()
 
 	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Layer_Button"),
 		ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_Hud_Button"))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Layer_LevelUp"),
+		ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_Hud_LevelUp"))))
 		return E_FAIL;
 
 	return S_OK;
