@@ -3,6 +3,7 @@
 #include "Item_Tooltip_Mid.h"
 #include "Item_Tooltip_Bottom.h"
 #include "Button.h"
+#include "Artefact_Tier_Icon.h"
 CArtefact_Tooltip::CArtefact_Tooltip(LPDIRECT3DDEVICE9 pGraphic_Device) : CTooltip(pGraphic_Device)
 {
 }
@@ -53,10 +54,47 @@ void CArtefact_Tooltip::Priority_Update(_float fTimeDelta)
 
 void CArtefact_Tooltip::Update(_float fTimeDelta)
 {
-	if (m_pItemObject == nullptr)
+	if (m_pItemObject == nullptr )
 		return;
 
-	__super::Update(fTimeDelta);
+	if (m_pOldItem != m_pItemObject)
+	{
+		for (auto iter = m_vecChildren.begin() + 2; iter != m_vecChildren.end(); ++iter)
+		{
+			Safe_Release(*(iter));
+		}
+		m_vecChildren.erase(m_vecChildren.begin() + 2, m_vecChildren.end());
+		m_pOldItem = m_pItemObject;
+		m_bTier = false;
+	}
+
+	if (m_pItemObject->Item_Info()->iItemValue != 0 && !m_bTier)
+	{
+		m_iUpgradeValue = static_cast<CButton*>(m_pParent)->Get_Value();
+		CUIObject* pGameObject = nullptr;
+		UIOBJECT_DESC Desc{};
+		Desc.fZ = m_pItemObject->Item_Info()->iItemValue;
+		for (_int i = 0; i < m_pItemObject->Item_Info()->iItemValue; ++i)
+		{
+			Desc.fX = i;
+			pGameObject = dynamic_cast<CUIObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(m_eLevel), TEXT("Prototype_GameObject_UI_ArteFact_Tier"), &Desc.fX));
+			if (nullptr == pGameObject)
+				return;
+			Add_Child(pGameObject);
+		}
+		m_bTier = true;
+	}
+	if (m_bTier)
+	{
+		for (_int i = 2; i < m_vecChildren.size(); ++i)
+		{
+			if (i < m_iUpgradeValue + 2)
+				static_cast<CArtefact_Tier_Icon*>(m_vecChildren[i])->Set_Textuer(1);
+			else
+				static_cast<CArtefact_Tier_Icon*>(m_vecChildren[i])->Set_Textuer(0);
+		}
+	}
+__super::Update(fTimeDelta);
 }
 
 void CArtefact_Tooltip::Late_Update(_float fTimeDelta)
@@ -64,8 +102,9 @@ void CArtefact_Tooltip::Late_Update(_float fTimeDelta)
 	if (m_pItemObject == nullptr)
 		return;
 
-	__super::Late_Update(fTimeDelta);
-	
+	for (_int i = 0; i < 2; ++i)
+		m_vecChildren[i]->Late_Update(fTimeDelta);
+		
 	m_pGameInstance->Add_RenderGroup(RENDERGROUP::RG_UI_BLEND, this);
 
 	_float3 vRenderPos;
@@ -77,6 +116,11 @@ void CArtefact_Tooltip::Late_Update(_float fTimeDelta)
 	if (m_pItemObject != nullptr)
 		static_cast<CItem_Base*>(m_pItemObject)->IsTooltip(vRenderPos);
 
+	if (1 < m_vecChildren.size())
+	{
+		for (_int i = 2; i < m_vecChildren.size(); ++i)
+			m_vecChildren[i]->Late_Update(fTimeDelta);
+	}
 }
 
 HRESULT CArtefact_Tooltip::Render()
@@ -120,6 +164,11 @@ HRESULT CArtefact_Tooltip::Ready_ChildPrototype(LEVEL eLevel)
 		CItem_Tooltip_Bottom::Create(m_pGraphic_Device, eLevel))))
 		return E_FAIL;
 
+
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(eLevel), TEXT("Prototype_GameObject_UI_ArteFact_Tier"),
+		CArtefact_Tier_Icon::Create(m_pGraphic_Device, eLevel))))
+		return E_FAIL;
+
 	return S_OK;
 }
 
@@ -137,6 +186,7 @@ HRESULT CArtefact_Tooltip::Ready_Children()
 	if (nullptr == pGameObject)
 		return E_FAIL;
 	Add_Child(pGameObject);
+
 
 	return S_OK;
 }

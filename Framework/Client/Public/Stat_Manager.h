@@ -24,6 +24,7 @@ public:
 	_float Get_Monster_Damage(_float fDamage);
 	const _bool Get_HasItem(_wstring szEffectTag);
 	void HasItem(_wstring szEffectTag, _bool bHasItme);
+	void HasItem_Reset();
 
 public:
 	_bool Get_Battle() { return m_bBattle; }

@@ -5,6 +5,7 @@
 #include "Gacha_Pass.h"
 #include "Gacha_Reroll.h"
 #include "Gacha_FX.h"
+#include "Stat_Manager.h"
 
 CGacha::CGacha(LPDIRECT3DDEVICE9 pGraphic_Device) : CUIObject(pGraphic_Device)
 {
@@ -92,7 +93,7 @@ void CGacha::Update(_float fTimeDelta)
 		static_cast<CInventory*>(m_pGameInstance->Get_GameObject(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Layer_Inventory")))->Close_UI();
 		m_pGameInstance->All_Update_On();
 		m_bIsOpen = false;
-
+		CStat_Manager::GetInstance()->Set_UIOpen(false);
 		return;
 	}
 	
@@ -131,6 +132,7 @@ void CGacha::UI_Switch()
 	{
 		m_pGameInstance->All_Update_On();
 		m_bIsOpen = false;
+		CStat_Manager::GetInstance()->Set_UIOpen(false);
 	}
 	else
 	{
@@ -139,6 +141,7 @@ void CGacha::UI_Switch()
 		static_cast<CInventory*>(m_pGameInstance->Get_GameObject(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Layer_Inventory")))->Open_UI(250, 0);
 		m_bIsUpdate = true;
 		m_bIsOpen = true;
+		CStat_Manager::GetInstance()->Set_UIOpen(true);
 	}
 }
 
@@ -151,6 +154,7 @@ void CGacha::UI_Open(GACHA_TYPE eType)
 {
 	UI_Switch();
 	m_eGacha_Type = eType;
+	CStat_Manager::GetInstance()->Set_UIOpen(true);
 }
 
 void CGacha::Release_Slot()

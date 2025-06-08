@@ -63,8 +63,10 @@ void CHud_LevelUp::Update(_float fTimeDelta)
 {
 	if (m_pGameInstance->Get_CurrentLevel() == ENUM_CLASS(LEVEL::LEVEL_LOADING) || m_pGameInstance->Get_CurrentLevel() == ENUM_CLASS(LEVEL::LEVEL_LOGO) || m_pGameInstance->Get_CurrentLevel() == ENUM_CLASS(LEVEL::LEVEL_MAPEDIT))
 		return;
+
 	if (!m_bIsUpdate)
 		return;
+
 	if (CStat_Manager::GetInstance()->Get_CurStats()[ENUM_CLASS(STAT_INFO::LEVELUPPOINT)] <= 0)
 		return;
 	if (static_cast<CGacha*>(m_pGameInstance->Find_UIObj(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("UI_Gacha")))->Get_Item_Check())

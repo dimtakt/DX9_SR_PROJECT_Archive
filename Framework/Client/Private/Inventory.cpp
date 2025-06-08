@@ -1,7 +1,7 @@
 #include "Inventory.h"
 #include "GameInstance.h"
 #include "Item_Base.h"
-
+#include "Stat_Manager.h"
 CInventory::CInventory(LPDIRECT3DDEVICE9 pGraphic_Device) : CUIObject(pGraphic_Device)
 {
 }
@@ -42,31 +42,36 @@ HRESULT CInventory::Initialize(void* pArg)
 	if (FAILED(Ready_Children()))
 		return E_FAIL;
 
+	for (_int i = 0; i < ENUM_CLASS(STAT_INFO::STAT_END); ++i)
+	{
+		m_fInvenStats[i] = 0;
+	}
+
 	m_pGameInstance->Add_UIObject(ENUM_CLASS(m_eLevel), TEXT("UI_Inven"), this);
 	CItemObject* pItem = nullptr;
 	pItem = m_pGameInstance->Get_ItemObject(0, true);
 	m_vecInventory[0]->Add_Item(static_cast<CItem_Base*>(pItem));
-//
-//	pItem = m_pGameInstance->Get_ItemObject(1,true);
-//	m_vecInventory[1]->Add_Item(static_cast<CItem_Base*>(pItem));
-//
-//	pItem = m_pGameInstance->Get_ItemObject(2, true);
-//	m_vecInventory[2]->Add_Item(static_cast<CItem_Base*>(pItem));
-//
-//	pItem = m_pGameInstance->Get_ItemObject(3, true);
-//	m_vecInventory[3]->Add_Item(static_cast<CItem_Base*>(pItem));
-//
-//	pItem = m_pGameInstance->Get_ItemObject(4, true);
-//	m_vecInventory[4]->Add_Item(static_cast<CItem_Base*>(pItem));
-//
-//	pItem = m_pGameInstance->Get_ItemObject(5, true);
-//	m_vecInventory[5]->Add_Item(static_cast<CItem_Base*>(pItem));
-//
-//	pItem = m_pGameInstance->Get_ItemObject(6, true);
-//	m_vecInventory[6]->Add_Item(static_cast<CItem_Base*>(pItem));
-//
-//	pItem = m_pGameInstance->Get_ItemObject(7, true);
-//	m_vecInventory[7]->Add_Item(static_cast<CItem_Base*>(pItem));
+	
+	pItem = m_pGameInstance->Get_ItemObject(1,true);
+	m_vecInventory[1]->Add_Item(static_cast<CItem_Base*>(pItem));
+	
+	pItem = m_pGameInstance->Get_ItemObject(2, true);
+	m_vecInventory[2]->Add_Item(static_cast<CItem_Base*>(pItem));
+	
+	pItem = m_pGameInstance->Get_ItemObject(3, true);
+	m_vecInventory[3]->Add_Item(static_cast<CItem_Base*>(pItem));
+	
+	pItem = m_pGameInstance->Get_ItemObject(4, true);
+	m_vecInventory[4]->Add_Item(static_cast<CItem_Base*>(pItem));
+	
+	pItem = m_pGameInstance->Get_ItemObject(5, true);
+	m_vecInventory[5]->Add_Item(static_cast<CItem_Base*>(pItem));
+	
+	pItem = m_pGameInstance->Get_ItemObject(6, true);
+	m_vecInventory[6]->Add_Item(static_cast<CItem_Base*>(pItem));
+	
+	pItem = m_pGameInstance->Get_ItemObject(7, true);
+	m_vecInventory[7]->Add_Item(static_cast<CItem_Base*>(pItem));
 
 	pItem = m_pGameInstance->Get_ItemObject(8, true);
 	m_vecInventory[8]->Add_Item(static_cast<CItem_Base*>(pItem));
@@ -83,7 +88,7 @@ void CInventory::Priority_Update(_float fTimeDelta)
 	
 	if (!m_bIsOpen)
 		return;
-
+	
 	__super::Priority_Update(fTimeDelta);
 
 }
@@ -92,15 +97,15 @@ void CInventory::Update(_float fTimeDelta)
 {
 	if (m_pGameInstance->Get_CurrentLevel() == ENUM_CLASS(LEVEL::LEVEL_LOADING) || m_pGameInstance->Get_CurrentLevel() == ENUM_CLASS(LEVEL::LEVEL_LOGO) || m_pGameInstance->Get_CurrentLevel() == ENUM_CLASS(LEVEL::LEVEL_MAPEDIT))
 		return;
-
+	Set_Grade();
+	StatToPlayer();
+	__super::Update(fTimeDelta);
 	if (!m_bIsUpdate)
 		return;
 
 	if (!m_bIsOpen)
 		return;
 
-	Set_Grade();
-	__super::Update(fTimeDelta);
 
 }
 
@@ -135,11 +140,15 @@ HRESULT CInventory::Render()
 void CInventory::UI_Switch()
 {
 	if (m_bIsOpen)
+	{
 		Close_UI();
+		CStat_Manager::GetInstance()->Set_UIOpen(false);
+	}
 	else
+	{
 		m_bIsOpen = true;
-
-
+		CStat_Manager::GetInstance()->Set_UIOpen(true);
+	}
 }
 
 void CInventory::Add_Item_Inven(_uint ItemIndex)
@@ -160,6 +169,8 @@ void CInventory::Open_UI(_float fX, _float fY)
 	m_fX = m_iWinSizeX * 0.5 + fX;
 	m_fY = m_iWinSizeY * 0.5 + fY;
 	__super::Update_Position();
+
+	CStat_Manager::GetInstance()->Set_UIOpen(true);
 }
 
 void CInventory::Close_UI()
@@ -169,6 +180,7 @@ void CInventory::Close_UI()
 	m_fX = m_iWinSizeX * 0.5;
 	m_fY = m_iWinSizeY * 0.5;
 	__super::Update_Position();
+	CStat_Manager::GetInstance()->Set_UIOpen(false);
 }
 
 void CInventory::Push_Item_Slot(CItem_Base* pItem, _uint iCount)
@@ -186,6 +198,11 @@ void CInventory::Push_Item_Slot(CItem_Base* pItem, _uint iCount)
 
 void CInventory::Set_Grade()
 {
+	for (size_t i = 0; i < m_vecInventory.size(); ++i)
+	{
+		m_vecInventory[i]->Reset_GradeCount();
+	}
+	
 	for (size_t i = 0; i < m_vecInventory.size(); ++i)
 	{
 		if (m_vecInventory[i]->Pop_Item() == nullptr)
@@ -251,6 +268,55 @@ void CInventory::Set_Grade()
 			}
 
 		}
+	}
+}
+
+void CInventory::StatToPlayer()
+{
+	for (_int i = 0; i < ENUM_CLASS(STAT_INFO::STAT_END); ++i)
+	{
+		CStat_Manager::GetInstance()->Cal_Stats(static_cast<STAT_INFO>(i), -m_fInvenStats[i]);
+		m_fInvenStats[i] = 0;
+	}
+	CStat_Manager::GetInstance()->HasItem_Reset();
+
+	for (_int i = 0; i < m_vecInventory.size(); ++i)
+	{
+		if (m_vecInventory[i]->Pop_Item() == nullptr)
+			continue;
+
+		if (m_vecInventory[i]->Pop_Item()->Item_Info()->iItemType == ENUM_CLASS(ITEM_TYPE::STONE))
+			continue;
+		
+		if (m_vecInventory[i]->Pop_Item()->Item_Info()->iItemType == ENUM_CLASS(ITEM_TYPE::POTION))
+			continue;
+
+		_uint iItem_Effect = m_vecInventory[i]->Pop_Item()->Item_Info()->iArtefact_Value;
+		if(g_ItemEffect[iItem_Effect].m_eType == ITEM_EFFECT::VALUE_TYPE)
+		{
+			for (_int j = 0; j < g_ItemEffect[iItem_Effect].m_vecValue.size(); ++j)
+			{
+				STAT_INFO eStat = g_ItemEffect[iItem_Effect].m_vecValue[j].m_eStat;
+				_float fValue1 = g_ItemEffect[iItem_Effect].m_vecValue[j].m_fStat_Value1;
+				_float fValue2 = g_ItemEffect[iItem_Effect].m_vecValue[j].m_fStat_Value2;
+				_float fGarde = static_cast<CInven_Slot*>(m_vecInventory[i])->Get_SlotGrade();
+
+				m_fInvenStats[ENUM_CLASS(eStat)] = fValue1 + fGarde * fValue2;
+			}
+		}
+		else if (g_ItemEffect[iItem_Effect].m_eType == ITEM_EFFECT::SKILLBOOK_TYPE)
+		{
+			CStat_Manager::GetInstance()->HasItem(g_ItemEffect[iItem_Effect].m_szEffectTag, true);
+		}
+		else if (g_ItemEffect[iItem_Effect].m_eType == ITEM_EFFECT::SPAWN_TYPE)
+		{
+			CStat_Manager::GetInstance()->HasItem(g_ItemEffect[iItem_Effect].m_szEffectTag, true);
+		}	
+	}
+
+	for (_int i = 0; i < ENUM_CLASS(STAT_INFO::STAT_END); ++i)
+	{
+		CStat_Manager::GetInstance()->Cal_Stats(static_cast<STAT_INFO>(i), m_fInvenStats[i]);
 	}
 }
 
