@@ -33,6 +33,7 @@ private:
 	_int							m_iSlotItem_Tex = {};
 
 	CItem_Base*						m_pSlotItem = { nullptr };
+	CItem_Base*						m_pOldSlotItem = { nullptr };
 
 private:
 	void							Item_Selete();

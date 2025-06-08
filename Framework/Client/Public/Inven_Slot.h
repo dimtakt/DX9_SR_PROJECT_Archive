@@ -43,6 +43,7 @@ private:
 	_bool							m_bIsOver = {};
 	_bool							m_bIsPick = {};
 	_uint							m_iSlotIndex = {};
+	CItem_Base*						m_pOldSlotItem = { nullptr };
 	CItem_Base*						m_pSlotItem = { nullptr };
 
 	_uint							m_iSlotItem_Tex = {};		//아이템 텍스처

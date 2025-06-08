@@ -1,5 +1,5 @@
 #pragma once
-#include "Tooltip.h"
+#include "UIObject.h"
 #include "Client_Defines.h"
 #include "Item_Base.h"
 
@@ -9,12 +9,12 @@ class CTexture;
 END
 
 BEGIN(Client)
-class CPotion_Tooltip final : public CTooltip
+class CSlate_Tooltip_Slot final : public CUIObject
 {
 private:
-									CPotion_Tooltip(LPDIRECT3DDEVICE9 pGraphic_Device);
-									CPotion_Tooltip(const CPotion_Tooltip& Prototype);
-	virtual							~CPotion_Tooltip() = default;
+									CSlate_Tooltip_Slot(LPDIRECT3DDEVICE9 pGraphic_Device);
+									CSlate_Tooltip_Slot(const CSlate_Tooltip_Slot& Prototype);
+	virtual							~CSlate_Tooltip_Slot() = default;
 
 public:
 	virtual HRESULT					Initialize_Prototype(LEVEL eLevel);
@@ -24,20 +24,22 @@ public:
 	virtual void					Late_Update(_float fTimeDelta) override;
 	virtual HRESULT					Render() override;
 
+public:
+	void							Set_Vlaue(_int iValue) { m_iValue = iValue; }
+	void							Set_Item(CItemObject* pItem) { m_pItemObject = pItem; }
 private:
 	LEVEL							m_eLevel = {};
 	CVIBuffer_Rect*					m_pVIBufferCom = { nullptr };
 	CTexture*						m_pTextureCom = { nullptr };
+	CItemObject*					m_pItemObject = { nullptr };
+
+	_int							m_iValue = {};
 private:
 	HRESULT							Ready_Components();
-
-	HRESULT							Ready_ChildPrototype(LEVEL eLevel);
-	HRESULT							Ready_Children();
-
 	void							Render_Font();
-	void							Render_Pos();
+
 public:
-	static CPotion_Tooltip*			Create(LPDIRECT3DDEVICE9 pGraphic_Device, LEVEL eLevel);
+	static CSlate_Tooltip_Slot*		Create(LPDIRECT3DDEVICE9 pGraphic_Device, LEVEL eLevel);
 	virtual CGameObject*			Clone(void* pArg) override;
 	virtual void					Free() override;
 };
