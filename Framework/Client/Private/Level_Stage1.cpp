@@ -161,38 +161,38 @@ HRESULT CLevel_Stage1::Ready_Layer_Room(const _wstring& strLayerTag)
 			}
 
 
-			////CMole_A* pMonster = nullptr;
-			//list<CMonster::MONSTERDESC> DescList;
-			//for (size_t i = 0; i < 5; i++)
-			//{
-			//	CMonster::MONSTERDESC tDesc = {};
-			//	tDesc.iLayerLevelIndex = ENUM_CLASS(LEVEL::LEVEL_STAGE1);
-			//	tDesc.iPrototypeLevelIndex = ENUM_CLASS(LEVEL::LEVEL_STAGE1);
-			//	tDesc.strLayerTag = strLayerTag;
-			//	//tDesc.strPrototypeTag = TEXT("Prototype_GameObject_ShortMonster");
-			//	//tDesc.strPrototypeTag = TEXT("Prototype_GameObject_Monster_Mole_A");
-			//	tDesc.strPrototypeTag = TEXT("Prototype_GameObject_Monster_Oink_A");
-			//	//tDesc.strPrototypeTag = TEXT("Prototype_GameObject_Monster_LaserGhost_D");
-			//	tDesc.pTerrainBox = pRoom->Get_TerrainBox();
-			//	DescList.push_back(tDesc);
-			//}
-			//CMonster_Factory::GetInstance()->Add_Monsters(pRoom, DescList, CMonster_Factory::MONSTER_TYPE::MONSTER_OINK_A);
-			//DescList.clear();
-			//for (size_t i = 0; i < 2; i++)	// ksta : 패턴 파악 위해 임시로 1만 바꿈, 원래값 5
-			//{
-			//	CMonster::MONSTERDESC tDesc = {};
-			//	tDesc.iLayerLevelIndex = ENUM_CLASS(LEVEL::LEVEL_STAGE1);
-			//	tDesc.iPrototypeLevelIndex = ENUM_CLASS(LEVEL::LEVEL_STAGE1);
-			//	tDesc.strLayerTag = strLayerTag;
-			//	//tDesc.strPrototypeTag = TEXT("Prototype_GameObject_ShortMonster");
-			//	tDesc.strPrototypeTag = TEXT("Prototype_GameObject_Monster_Mole_A");
-			//	//tDesc.strPrototypeTag = TEXT("Prototype_GameObject_Monster_Oink_A");
-			//	//tDesc.strPrototypeTag = TEXT("Prototype_GameObject_Monster_LaserGhost_D");
-			//	tDesc.pTerrainBox = pRoom->Get_TerrainBox();
-			//	DescList.push_back(tDesc);
-			//}
-			//CMonster_Factory::GetInstance()->Add_Monsters(pRoom, DescList, CMonster_Factory::MONSTER_TYPE::MONSTER_MOLE_A);
-			//DescList.clear();
+			//CMole_A* pMonster = nullptr;
+			list<CMonster::MONSTERDESC> DescList;
+			for (size_t i = 0; i < 5; i++)
+			{
+				CMonster::MONSTERDESC tDesc = {};
+				tDesc.iLayerLevelIndex = ENUM_CLASS(LEVEL::LEVEL_STAGE1);
+				tDesc.iPrototypeLevelIndex = ENUM_CLASS(LEVEL::LEVEL_STAGE1);
+				tDesc.strLayerTag = strLayerTag;
+				//tDesc.strPrototypeTag = TEXT("Prototype_GameObject_ShortMonster");
+				//tDesc.strPrototypeTag = TEXT("Prototype_GameObject_Monster_Mole_A");
+				tDesc.strPrototypeTag = TEXT("Prototype_GameObject_Monster_Oink_A");
+				//tDesc.strPrototypeTag = TEXT("Prototype_GameObject_Monster_LaserGhost_D");
+				tDesc.pTerrainBox = pRoom->Get_TerrainBox();
+				DescList.push_back(tDesc);
+			}
+			CMonster_Factory::GetInstance()->Add_Monsters(pRoom, DescList, CMonster_Factory::MONSTER_TYPE::MONSTER_OINK_A);
+			DescList.clear();
+			for (size_t i = 0; i < 2; i++)	// ksta : 패턴 파악 위해 임시로 1만 바꿈, 원래값 5
+			{
+				CMonster::MONSTERDESC tDesc = {};
+				tDesc.iLayerLevelIndex = ENUM_CLASS(LEVEL::LEVEL_STAGE1);
+				tDesc.iPrototypeLevelIndex = ENUM_CLASS(LEVEL::LEVEL_STAGE1);
+				tDesc.strLayerTag = strLayerTag;
+				//tDesc.strPrototypeTag = TEXT("Prototype_GameObject_ShortMonster");
+				tDesc.strPrototypeTag = TEXT("Prototype_GameObject_Monster_Mole_A");
+				//tDesc.strPrototypeTag = TEXT("Prototype_GameObject_Monster_Oink_A");
+				//tDesc.strPrototypeTag = TEXT("Prototype_GameObject_Monster_LaserGhost_D");
+				tDesc.pTerrainBox = pRoom->Get_TerrainBox();
+				DescList.push_back(tDesc);
+			}
+			CMonster_Factory::GetInstance()->Add_Monsters(pRoom, DescList, CMonster_Factory::MONSTER_TYPE::MONSTER_MOLE_A);
+			DescList.clear();
 			//for (size_t i = 0; i < 2; i++)	// ksta : 패턴 파악 위해 임시로 1만 바꿈, 원래값 5
 			//{
 			//	CMonster::MONSTERDESC tDesc = {};

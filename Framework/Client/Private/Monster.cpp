@@ -1,6 +1,7 @@
 #include "Monster.h"
 #include "GameInstance.h"
 #include "Stat_Manager.h"
+#include "EXP_Ball.h"
 CMonster::CMonster(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CGameObject{ pGraphic_Device }
 {
@@ -53,6 +54,12 @@ void CMonster::Priority_Update(_float fTimeDelta)
 		m_dwHitTime = 0.f;
 		m_bIsHit = false;
 	}
+
+	if (m_iCulHp <= 0) {
+		m_bDead = true;
+		Ready_ExpBall();
+	}
+		
 }
 
 void CMonster::Update(_float fTimeDelta)
@@ -131,6 +138,19 @@ void CMonster::Reset_RenderState()
 {
 	m_pGraphic_Device->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);
 	m_pGraphic_Device->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
+
+}
+
+void CMonster::Ready_ExpBall()
+{
+	if(m_pTransformCom != nullptr && m_bDead)
+	{
+		CEXP_Ball::EXPBALLDESC desc{};
+		desc.fValue = m_pGameInstance->Compute_Random(8.f, 20.f);
+		desc.vPosition = m_pTransformCom->Get_State(STATE::POSITION);
+		CEXP_Ball* pEXP_Ball = dynamic_cast<CEXP_Ball*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_EXP_Ball"), &desc));
+		m_pGameInstance->Add_Direct_GameObject_ToLayer(m_pGameInstance->Get_CurrentLevel(), TEXT("Layer_Exp"), pEXP_Ball);
+	}
 
 }
 

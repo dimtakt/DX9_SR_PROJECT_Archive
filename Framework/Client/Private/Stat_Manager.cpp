@@ -26,6 +26,7 @@ HRESULT CStat_Manager::Initialize()
     m_fOriginStats[static_cast<int>(STAT_INFO::LEVEL)] = 1.f; // 레벨
     m_fOriginStats[static_cast<int>(STAT_INFO::GOLD)] = 0.f; // 보유 골드
     m_fOriginStats[static_cast<int>(STAT_INFO::DICE)] = 3.f; // 주사위
+    m_fOriginStats[static_cast<int>(STAT_INFO::LEVELUPPOINT)] = 0.f; // 주사위
 
     m_fCurStats[static_cast<int>(STAT_INFO::MAXHP)] = 200.f; // 최대 생명력
     m_fCurStats[static_cast<int>(STAT_INFO::CULHP)] = 200.f; // 현재 생명력
@@ -44,6 +45,7 @@ HRESULT CStat_Manager::Initialize()
     m_fCurStats[static_cast<int>(STAT_INFO::LEVEL)] = 1.f; // 레벨
     m_fCurStats[static_cast<int>(STAT_INFO::GOLD)] = 0.f; // 보유 골드
     m_fCurStats[static_cast<int>(STAT_INFO::DICE)] = 3.f; // 주사위
+    m_fCurStats[static_cast<int>(STAT_INFO::LEVELUPPOINT)] = 0.f; // 주사위
 
     m_pGameInstance = CGameInstance::GetInstance();
 
@@ -90,6 +92,7 @@ void CStat_Manager::Cal_Stats(STAT_INFO eStat, float fValue)
         {
             m_fCurStats[static_cast<int>(eStat)] -= 100.f;
             m_fCurStats[static_cast<int>(STAT_INFO::LEVEL)] += 1.f;
+            m_fCurStats[static_cast<int>(STAT_INFO::LEVELUPPOINT)] += 1.f;
         }
     }
 }
