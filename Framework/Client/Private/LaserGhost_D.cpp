@@ -44,9 +44,6 @@ void CLaserGhost_D::Priority_Update(_float fTimeDelta)
     if (m_pHpBar != nullptr &&
         m_isSummoned)
         m_pHpBar->Render_HP_Progress(m_pTransformCom, m_iCulHp, m_iMaxHp);
-
-    if (m_iCulHp <= 0)
-        m_bDead = true;
 }
 
 void CLaserGhost_D::Update(_float fTimeDelta)
