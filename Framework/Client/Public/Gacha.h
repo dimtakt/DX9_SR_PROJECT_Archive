@@ -24,11 +24,12 @@ public:
 
 public:
 	void							UI_Open(GACHA_TYPE eType);
-	const _bool						Get_Item_Check() {	return m_bIsRandom;}
+	const _bool						Get_Item_Check() {	return m_bIsGet;}
 
 	void							UI_Switch();
 	void							Rand_Item_Set();
 	void							Random_off() { m_bIsRandom = false; }
+	void							Get_off() { m_bIsGet = false; }
 	void							Release_Slot();
 private:
 	LEVEL							m_eLevel = {};
@@ -36,6 +37,7 @@ private:
 
 	_bool							m_bIsOpen = { false };
 	_bool							m_bIsRandom = { false };
+	_bool							m_bIsGet = { false };
 
 	GACHA_TYPE						m_eOldGacha_Type = {};
 	GACHA_TYPE						m_eGacha_Type = {};

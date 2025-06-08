@@ -82,6 +82,7 @@ void CStat_Manager::Update(_float fTimeDelta)
 void CStat_Manager::Cal_Stats(STAT_INFO eStat, float fValue)
 {
     m_fCurStats[static_cast<int>(eStat)] += fValue;
+    
 
     if (m_fCurStats[static_cast<int>(eStat)] <= 0)
         m_fCurStats[static_cast<int>(eStat)] = 0;
@@ -124,7 +125,7 @@ void CStat_Manager::Reset_CurStats()
     }
 }
 
-_float CStat_Manager::Get_Damage(DAMAGE eDamage)
+_float CStat_Manager::Get_Player_Damage(DAMAGE eDamage)
 {
     _float fDamage = 0.f;
     if (eDamage == DAMAGE::NORMAL)
@@ -149,6 +150,11 @@ _float CStat_Manager::Get_Damage(DAMAGE eDamage)
 
     return fDamage;
     //return 1000.f;
+}
+
+_float CStat_Manager::Get_Monster_Damage(_float fDamage)
+{
+    return ((100.f - m_fCurStats[static_cast<int>(STAT_INFO::CULDEF)]) / 100.f) * fDamage;;
 }
 
 
