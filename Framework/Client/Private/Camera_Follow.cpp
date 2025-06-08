@@ -58,7 +58,7 @@ HRESULT CCamera_Follow::Initialize(void* pArg)
 
 	m_vCamTransitionStartPos = {};
 	m_vCamTransitionTargetPos = {};
-	m_fCamTransitionDuration = 1.0f;
+	m_fCamTransitionDuration = 0.4f;
 	m_fCamTransitionTimer = 0.f;
 	m_bCameraTransition = false;
 
@@ -88,52 +88,16 @@ HRESULT CCamera_Follow::Render()
 void CCamera_Follow::OnEvent(_uint iTypeindex, const EVENTDATA* pData)
 {
 	if (static_cast<EVENT_TYPE>(iTypeindex) == EVENT_TYPE::ROOMCHANGE) {
-		//auto pRoom = static_cast<const ROOMCHANGE*>(pData);
-		//m_vTerrainPos = pRoom->vPosition;
-		////// 기존 코드 삭제!
-		// m_pTransformCom->Set_State(STATE::POSITION, m_vTerrainPos);
-
-		/*auto pRoom = static_cast<const ROOMCHANGE*>(pData);
-		m_vTerrainPos = pRoom->vPosition;
-
-		m_vCamTransitionStartPos = m_pTransformCom->Get_State(STATE::POSITION);
-
-		_float3 vPlayerPos = m_pTargetPlayerTransformCom->Get_State(STATE::POSITION);
-		_float fZRatio = (vPlayerPos.z - m_fZMin) / (m_fZMax - m_fZMin);
-		fZRatio = max(0.f, min(fZRatio, 1.f));
-
-		_float fYOffset = Lerp(4.5f, 8.5f, fZRatio);
-		_float fZTargetOffset = Lerp(8.0f, 10.5f, fZRatio);
-
-		m_vCamTransitionTargetPos = {
-			vPlayerPos.x,
-			vPlayerPos.y + fYOffset,
-			vPlayerPos.z - fZTargetOffset
-		};
-
-		m_bCameraTransition = true;
-		m_fCamTransitionTimer = 0.f;*/
-
 		auto pRoom = static_cast<const ROOMCHANGE*>(pData);
 		m_vTerrainPos = pRoom->vPosition;
 
 		m_vCamTransitionStartPos = m_pTransformCom->Get_State(STATE::POSITION);
+		m_vCamTransitionTargetPos = m_vCamTransitionStartPos + _float3(0.f, 5.f, -10.f); // 줌아웃
 
-		_float3 vPlayerPos = m_pTargetPlayerTransformCom->Get_State(STATE::POSITION);
-		_float fZRatio = (vPlayerPos.z - m_fZMin) / (m_fZMax - m_fZMin);
-		fZRatio = max(0.f, min(fZRatio, 1.f));
-
-		_float fYOffset = Lerp(4.5f, 8.5f, fZRatio);
-		_float fZTargetOffset = Lerp(8.0f, 10.5f, fZRatio);
-
-		m_vCamTransitionTargetPos = {
-			vPlayerPos.x,
-			vPlayerPos.y + fYOffset,
-			vPlayerPos.z - fZTargetOffset
-		};
-
+		m_fCamTransitionTimer = 0.f;
+		m_fCamTransitionDuration = 0.4f;
 		m_bCameraTransition = true;
-		m_fCamTransitionTimer = 1.f;
+		m_eCamTransitionState = CAM_TRANS_STATE::ZOOM_OUT;
 	}
 }
 
@@ -189,109 +153,33 @@ void CCamera_Follow::Move_Angle(_float fAngle, _float fTimeDelta)
 
 void CCamera_Follow::Follow_Target(_float fTimeDelta)
 {
-	/*_float3		vPlayerPosition = m_pTargetPlayerTransformCom->Get_State(STATE::POSITION);
-	_float3		vPosition = m_pTransformCom->Get_State(STATE::POSITION);
-
-	_float4x4	matRotY;
-	D3DXMatrixRotationY(&matRotY, D3DXToRadian(m_fCurrentAngle));
-
-	_float3 vRotatedOffset;
-	D3DXVec3TransformCoord(&vRotatedOffset, &m_vOffset, &matRotY);
-
-	_float3 vCameraPos = vPlayerPosition + vRotatedOffset;
-	m_pTransformCom->Set_State(STATE::POSITION, vCameraPos);
-	m_pTransformCom->Look_At(vPlayerPosition);*/
-
-	//_float3 vPlayerPos = m_pTargetPlayerTransformCom->Get_State(STATE::POSITION);
-	//_float3 vCameraRight = m_pTransformCom->Get_State(STATE::RIGHT);
-	//_float3 vCameraUp = m_pTransformCom->Get_State(STATE::UP);
-	//_float3 vCameraLook = m_pTransformCom->Get_State(STATE::LOOK);
-	//_float3 vCameraPos = m_pTransformCom->Get_State(STATE::POSITION);
-
-	//if (m_bCameraTransition)
-	//{
-	//	m_fCamTransitionTimer += fTimeDelta;
-	//	_float fT = m_fCamTransitionTimer / m_fCamTransitionDuration;
-	//	if (fT >= 1.f)
-	//	{
-	//		fT = 1.f;
-	//		m_bCameraTransition = false;
-	//	}
-
-	//	_float3 vNewCamPos = Lerp(m_vCamTransitionStartPos, m_vCamTransitionTargetPos, fT);
-	//	_float3 vLookAtPos = m_pTargetPlayerTransformCom->Get_State(STATE::POSITION);
-	//	_float3 vLook = vLookAtPos - vNewCamPos;
-	//	D3DXVec3Normalize(&vLook, &vLook);
-
-	//	_float3 vRight, vUp, vTemp{ 0.f, 1.f, 0.f };
-	//	D3DXVec3Cross(&vRight, &vTemp, &vLook);
-	//	D3DXVec3Normalize(&vRight, &vRight);
-	//	D3DXVec3Cross(&vUp, &vLook, &vRight);
-	//	D3DXVec3Normalize(&vUp, &vUp);
-
-	//	m_pTransformCom->Set_State(STATE::RIGHT, vRight);
-	//	m_pTransformCom->Set_State(STATE::UP, vUp);
-	//	m_pTransformCom->Set_State(STATE::LOOK, vLook);
-	//	m_pTransformCom->Set_State(STATE::POSITION, vNewCamPos);
-	//	return;
-	//}
-
-	//// 일반 추적 로직
-	//_float3 vPlayerPos = m_pTargetPlayerTransformCom->Get_State(STATE::POSITION);
-	//_float3 vCameraPos = m_pTransformCom->Get_State(STATE::POSITION);
-
-	//_float fZRatio = (vPlayerPos.z - m_fZMin) / (m_fZMax - m_fZMin);
-	//fZRatio = max(0.f, min(fZRatio, 1.f));
-
-	//_float fYOffset = Lerp(4.5f, 8.5f, fZRatio);
-	//_float fZTargetOffset = Lerp(8.0f, 10.5f, fZRatio);
-
-	//_float fTargetZ = vPlayerPos.z - fZTargetOffset;
-	//_float fZDeadZone = 1.5f;
-	//_float fFinalZ = (fabsf(vCameraPos.z - fTargetZ) > fZDeadZone)
-	//	? Lerp(vCameraPos.z, fTargetZ, fTimeDelta * 2.f)
-	//	: vCameraPos.z;
-
-	//_float fTargetX = vPlayerPos.x;
-	//_float fXDeadZone = 1.5f;
-	//_float fFinalX = (fabsf(vCameraPos.x - fTargetX) > fXDeadZone)
-	//	? Lerp(vCameraPos.x, fTargetX, fTimeDelta * 2.f)
-	//	: vCameraPos.x;
-
-	//_float3 vNewCameraPos = { fFinalX, vPlayerPos.y + fYOffset, fFinalZ };
-	//_float3 vLook = vPlayerPos - vNewCameraPos;
-	//D3DXVec3Normalize(&vLook, &vLook);
-
-	//_float3 vRight, vUp, vTemp{ 0.f, 1.f, 0.f };
-	//D3DXVec3Cross(&vRight, &vTemp, &vLook);
-	//D3DXVec3Normalize(&vRight, &vRight);
-	//D3DXVec3Cross(&vUp, &vLook, &vRight);
-	//D3DXVec3Normalize(&vUp, &vUp);
-
-	//m_pTransformCom->Set_State(STATE::RIGHT, vRight);
-	//m_pTransformCom->Set_State(STATE::UP, vUp);
-	//m_pTransformCom->Set_State(STATE::LOOK, vLook);
-	//m_pTransformCom->Set_State(STATE::POSITION, vNewCameraPos);
-	if (m_bCameraTransition)
+	if (m_bFirstFrame)
 	{
-		m_fCamTransitionTimer += fTimeDelta;
-		_float fT = m_fCamTransitionTimer / m_fCamTransitionDuration;
-		if (fT >= 1.f)
-		{
-			fT = 1.f;
-			m_bCameraTransition = false;
-		}
+		m_bFirstFrame = false;
 
-		// 가속 보간 적용
-		_float fEaseT = EaseInOutSine(fT);
-		_float3 vNewCamPos = Lerp(m_vCamTransitionStartPos, m_vCamTransitionTargetPos, fEaseT);
+		_float3 vPlayerPos = m_pTargetPlayerTransformCom->Get_State(STATE::POSITION);
 
-		_float3 vLookAtPos = m_pTargetPlayerTransformCom->Get_State(STATE::POSITION);
-		_float3 vLook = vLookAtPos - vNewCamPos;
+		// 초기 ZRatio 계산 및 고정
+		m_fCurrentZRatio = (vPlayerPos.z - m_fZMin) / (m_fZMax - m_fZMin);
+		m_fCurrentZRatio = max(0.f, min(m_fCurrentZRatio, 1.f));
+
+		_float fYOffset = Lerp(6.5f, 10.5f, m_fCurrentZRatio);
+		_float fZTargetOffset = Lerp(10.0f, 12.5f, m_fCurrentZRatio);
+
+		_float3 vStartPos = {
+			vPlayerPos.x,
+			vPlayerPos.y + fYOffset,
+			vPlayerPos.z - fZTargetOffset
+		};
+		m_pTransformCom->Set_State(STATE::POSITION, vStartPos);
+
+		// 초기 Look 방향 고정
+		_float3 vLook = vPlayerPos - vStartPos;
 		D3DXVec3Normalize(&vLook, &vLook);
 
-		_float3 vRight, vUp, vTemp{ 0.f, 1.f, 0.f };
-		D3DXVec3Cross(&vRight, &vTemp, &vLook);
+		_float3 vUp = { 0.f, 1.f, 0.f };
+		_float3 vRight;
+		D3DXVec3Cross(&vRight, &vUp, &vLook);
 		D3DXVec3Normalize(&vRight, &vRight);
 		D3DXVec3Cross(&vUp, &vLook, &vRight);
 		D3DXVec3Normalize(&vUp, &vUp);
@@ -299,6 +187,82 @@ void CCamera_Follow::Follow_Target(_float fTimeDelta)
 		m_pTransformCom->Set_State(STATE::RIGHT, vRight);
 		m_pTransformCom->Set_State(STATE::UP, vUp);
 		m_pTransformCom->Set_State(STATE::LOOK, vLook);
+
+		// 바로 return하여 보간 스킵 (첫 프레임만)
+		return;
+	}
+
+	if (m_bCameraTransition)
+	{
+		m_fCamTransitionTimer += fTimeDelta;
+		_float fT = m_fCamTransitionTimer / m_fCamTransitionDuration;
+		fT = min(fT, 1.f);
+
+		_float3 vNewCamPos;
+
+		switch (m_eCamTransitionState)
+		{
+		case CAM_TRANS_STATE::ZOOM_OUT:
+			vNewCamPos = Lerp(m_vCamTransitionStartPos, m_vCamTransitionTargetPos, EaseInOutSine(fT));
+
+			if (fT >= 1.f)
+			{
+				// 실제 포탈 위치로 순간이동 + 줌인 준비
+				_float3 vPlayerPos = m_pTargetPlayerTransformCom->Get_State(STATE::POSITION);
+				_float fZRatio = (vPlayerPos.z - m_fZMin) / (m_fZMax - m_fZMin);
+				fZRatio = max(0.f, min(fZRatio, 1.f));
+
+				_float fYOffset = Lerp(4.5f, 8.5f, fZRatio);
+				_float fZTargetOffset = Lerp(8.0f, 10.5f, fZRatio);
+
+				m_vCamTransitionStartPos = vNewCamPos;
+				m_vCamTransitionTargetPos = {
+					vPlayerPos.x,
+					vPlayerPos.y + fYOffset,
+					vPlayerPos.z - fZTargetOffset
+				};
+
+				m_fCamTransitionTimer = 0.f;
+				m_fCamTransitionDuration = 0.4f;
+				m_eCamTransitionState = CAM_TRANS_STATE::ZOOM_IN_AFTER_TELEPORT;
+			}
+			break;
+
+		case CAM_TRANS_STATE::ZOOM_IN_AFTER_TELEPORT:
+			vNewCamPos = Lerp(m_vCamTransitionStartPos, m_vCamTransitionTargetPos, EaseInOutSine(fT));
+			if (fT >= 1.f)
+			{
+				m_bCameraTransition = false;
+				m_eCamTransitionState = CAM_TRANS_STATE::NONE;
+			}
+			break;
+
+		default:
+			break;
+		}
+
+		// 회전 완화
+		_float3 vPlayerPos = m_pTargetPlayerTransformCom->Get_State(STATE::POSITION);
+		_float3 vTargetLook = vPlayerPos - vNewCamPos;
+		D3DXVec3Normalize(&vTargetLook, &vTargetLook);
+
+		_float3 vCurLook = m_pTransformCom->Get_State(STATE::LOOK);
+		D3DXVec3Normalize(&vCurLook, &vCurLook);
+
+		_float fTurnSpeed = 5.f;
+		_float3 vNewLook = Lerp(vCurLook, vTargetLook, fTimeDelta * fTurnSpeed);
+		D3DXVec3Normalize(&vNewLook, &vNewLook);
+
+		_float3 vUp = { 0.f, 1.f, 0.f };
+		_float3 vRight;
+		D3DXVec3Cross(&vRight, &vUp, &vNewLook);
+		D3DXVec3Normalize(&vRight, &vRight);
+		D3DXVec3Cross(&vUp, &vNewLook, &vRight);
+		D3DXVec3Normalize(&vUp, &vUp);
+
+		m_pTransformCom->Set_State(STATE::RIGHT, vRight);
+		m_pTransformCom->Set_State(STATE::UP, vUp);
+		m_pTransformCom->Set_State(STATE::LOOK, vNewLook);
 		m_pTransformCom->Set_State(STATE::POSITION, vNewCamPos);
 		return;
 	}
@@ -307,14 +271,12 @@ void CCamera_Follow::Follow_Target(_float fTimeDelta)
 	_float3 vPlayerPos = m_pTargetPlayerTransformCom->Get_State(STATE::POSITION);
 	_float3 vCameraPos = m_pTransformCom->Get_State(STATE::POSITION);
 
-	// 실제 ZRatio 계산
+	// Z 비율
 	_float fTargetZRatio = (vPlayerPos.z - m_fZMin) / (m_fZMax - m_fZMin);
 	fTargetZRatio = max(0.f, min(fTargetZRatio, 1.f));
-
-	// 부드럽게 따라가기
 	m_fCurrentZRatio = Lerp(m_fCurrentZRatio, fTargetZRatio, fTimeDelta * 2.f);
 
-	// 이걸로 보간값 계산
+	// 보간 위치 계산
 	_float fYOffset = Lerp(4.5f, 8.5f, m_fCurrentZRatio);
 	_float fZTargetOffset = Lerp(8.0f, 10.5f, m_fCurrentZRatio);
 
@@ -331,18 +293,28 @@ void CCamera_Follow::Follow_Target(_float fTimeDelta)
 		: vCameraPos.x;
 
 	_float3 vNewCameraPos = { fFinalX, vPlayerPos.y + fYOffset, fFinalZ };
-	_float3 vLook = vPlayerPos - vNewCameraPos;
-	D3DXVec3Normalize(&vLook, &vLook);
 
-	_float3 vRight, vUp, vTemp{ 0.f, 1.f, 0.f };
-	D3DXVec3Cross(&vRight, &vTemp, &vLook);
+	// 회전 보간
+	_float3 vTargetLook = vPlayerPos - vNewCameraPos;
+	D3DXVec3Normalize(&vTargetLook, &vTargetLook);
+
+	_float3 vCurLook = m_pTransformCom->Get_State(STATE::LOOK);
+	D3DXVec3Normalize(&vCurLook, &vCurLook);
+
+	_float fTurnSpeed = 5.f;
+	_float3 vNewLook = Lerp(vCurLook, vTargetLook, fTimeDelta * fTurnSpeed);
+	D3DXVec3Normalize(&vNewLook, &vNewLook);
+
+	_float3 vUp = { 0.f, 1.f, 0.f };
+	_float3 vRight;
+	D3DXVec3Cross(&vRight, &vUp, &vNewLook);
 	D3DXVec3Normalize(&vRight, &vRight);
-	D3DXVec3Cross(&vUp, &vLook, &vRight);
+	D3DXVec3Cross(&vUp, &vNewLook, &vRight);
 	D3DXVec3Normalize(&vUp, &vUp);
 
 	m_pTransformCom->Set_State(STATE::RIGHT, vRight);
 	m_pTransformCom->Set_State(STATE::UP, vUp);
-	m_pTransformCom->Set_State(STATE::LOOK, vLook);
+	m_pTransformCom->Set_State(STATE::LOOK, vNewLook);
 	m_pTransformCom->Set_State(STATE::POSITION, vNewCameraPos);
 
 
