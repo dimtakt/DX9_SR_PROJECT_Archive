@@ -7,6 +7,16 @@ BEGIN(Client)
 
 class CErma_Body final : public CMonster
 {
+public:
+	enum class PATTERN_BODY
+	{
+		PT_IDLE,
+		PT_MISSILE_L,	// 미사일 발사
+		PT_MISSILE_R,	// 미사일 발사
+
+		PT_END
+	};
+
 private:
 	CErma_Body(LPDIRECT3DDEVICE9 pGraphic_Device);
 	CErma_Body(const CErma_Body& Prototype);
@@ -27,20 +37,26 @@ private:
 public:
 	virtual void OnCollision(CGameObject* pGameObject) override;
 
+public:
+	void PlayPattern(PATTERN_BODY ePattern);
+
 private:
 	// 각종 컴포넌트들
 	CTexture* m_pTextureCom_Body			= { nullptr };
 	CTexture* m_pTextureCom_Body_Broken		= { nullptr };
 
+	CTransform* m_pTerrainTransformCom = { nullptr };
 
-
-	CAnimator* m_pAnimatorCom = { nullptr };
+	CAnimator* m_pAnimatorCom			= { nullptr };
+	CAnimator* m_pAnimatorPatternCom	= { nullptr };
 
 
 	// 로컬 변수들
 
-	_int		iPhase = 0;
-	_int		iPattern = 0;
+	_int			m_iPhase		= 0;
+	PATTERN_BODY	m_ePattern		= PATTERN_BODY::PT_IDLE;
+
+	_bool			m_isPatternPlaying = false;
 
 
 public:

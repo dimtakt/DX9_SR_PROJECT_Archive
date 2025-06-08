@@ -233,6 +233,7 @@ void CErma_Hand_L::Update(_float fTimeDelta)
                 {
                     m_isPatternPlaying = false;
                     m_ePattern = PATTERN_HAND_L::PT_IDLE;
+                    m_pAnimatorPatternCom->Change_State(L"Idle");
                 }
             }
 
