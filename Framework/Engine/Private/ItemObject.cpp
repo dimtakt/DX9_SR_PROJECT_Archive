@@ -12,6 +12,18 @@ m_iItemTextureID(Prototype.m_iItemTextureID), m_iItemValue(Prototype.m_iItemValu
 }
 HRESULT CItemObject::Initialize(void* pArg)
 {
+	m_pDesc = new ITEMOBJECT_DESC;
+
+	m_pDesc->iItemID = m_iItemID;
+	m_pDesc->iItemTextureID = m_iItemTextureID;
+	m_pDesc->iItemType = m_iItemType;
+	m_pDesc->iRarity = m_iRarity;
+	m_pDesc->szName = m_szName;
+	m_pDesc->szDescription = m_szDescription;
+	m_pDesc->iItemValue = m_iItemValue;
+	m_pDesc->fAngle = m_fAngle;
+	m_pDesc->iArtefact_Value = m_iArtefact_Value;
+
 	return S_OK;
 }
 
@@ -37,20 +49,22 @@ HRESULT CItemObject::Render()
 	return S_OK;
 }
 
-CItemObject::tagItemObjectDesc* CItemObject::Item_Info()
+CItemObject::tagItemObjectDesc*  CItemObject::Item_Info()
 {
-	tagItemObjectDesc Desc{};
+	delete m_pDesc;
+	m_pDesc = nullptr;
+	m_pDesc = new ITEMOBJECT_DESC;
 
-	Desc.iItemID = m_iItemID;
-	Desc.iItemTextureID = m_iItemTextureID;
-	Desc.iItemType = m_iItemType;
-	Desc.iRarity = m_iRarity;
-	Desc.szName = m_szName;
-	Desc.szDescription = m_szDescription;
-	Desc.iItemValue = m_iItemValue;
-	Desc.fAngle = m_fAngle;
-	Desc.iArtefact_Value = m_iArtefact_Value;
-	return &Desc;
+	m_pDesc->iItemID = m_iItemID;
+	m_pDesc->iItemTextureID = m_iItemTextureID;
+	m_pDesc->iItemType = m_iItemType;
+	m_pDesc->iRarity = m_iRarity;
+	m_pDesc->szName = m_szName;
+	m_pDesc->szDescription = m_szDescription;
+	m_pDesc->iItemValue = m_iItemValue;
+	m_pDesc->fAngle = m_fAngle;
+	m_pDesc->iArtefact_Value = m_iArtefact_Value;
+	return m_pDesc;
 }
 
 void CItemObject::Free()
@@ -60,5 +74,6 @@ void CItemObject::Free()
 	Safe_Release(m_pTransformCom);
 	Safe_Release(m_pTextureCom);
 	Safe_Release(m_pVIBufferCom);
-
+	delete m_pDesc;
+	m_pDesc = nullptr;
 }

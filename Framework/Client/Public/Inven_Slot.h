@@ -30,10 +30,13 @@ public:
 	void							Add_Item(CItem_Base* pItem);
 	void							Release_Item() { m_pSlotItem = nullptr; }
 
+	const _int						Get_SlotGrade() { return m_iSlotGradeCount; }
 	virtual void					Push_Item(CItemObject* pItem) override;
 	virtual void					Push_Item_Count(_uint iItemCount) override { m_iItemCount = iItemCount; }
 	virtual void					IsPick_off() override { m_bIsPick = false; }
 	
+	void							Reset_GradeCount() { m_iSlotGradeCount= 0; }
+
 	CItem_Base*						Pop_Item();
 	_uint							Pop_Item_Count() { return m_iItemCount; }
 	_int							Slot_Info(ITEM_INFO eInfo);

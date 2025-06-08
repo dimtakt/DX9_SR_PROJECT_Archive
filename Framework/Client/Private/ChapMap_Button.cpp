@@ -6,6 +6,7 @@
 #include "ChapMap_Line.h"
 #include "Level_Loading.h"
 #include "Room_Manager.h"
+#include "Stat_Manager.h"
 CChapMap_Button::CChapMap_Button(LPDIRECT3DDEVICE9 pGraphic_Device) : CButton{ pGraphic_Device }
 {
 }
@@ -121,7 +122,7 @@ void CChapMap_Button::Click_Event()
 		if (FAILED(m_pGameInstance->Open_Level(ENUM_CLASS(LEVEL::LEVEL_LOADING), CLevel_Loading::Create(m_pGraphic_Device, g_MapDB[m_iMapID].m_eMapIndex))))
 			return;
 		static_cast<CChapMap*>(m_pParent)->Click_MapID_Set(m_iMapID);
-
+		CStat_Manager::GetInstance()->Set_UIOpen(false);
 	}
 } 
 

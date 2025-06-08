@@ -28,6 +28,10 @@ private:
 	CVIBuffer_Rect*					m_pVIBufferCom = { nullptr };
 	CTexture*						m_pTextureCom = { nullptr };
 
+	_bool							m_bTier = { false };
+	_int							m_iUpgradeValue = {};
+
+	CItemObject*					m_pOldItem = {nullptr};
 private:
 	HRESULT							Ready_Components();
 

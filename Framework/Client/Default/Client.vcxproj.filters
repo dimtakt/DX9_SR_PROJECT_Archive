@@ -891,6 +891,9 @@
     <ClInclude Include="..\public\Hud_LevelUp.h">
       <Filter>02.GameObject\UI\HUD\HUD_LevelUp</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\Artefact_Tier_Icon.h">
+      <Filter>02.GameObject\UI\Tooltip\Tooltip_Etc</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -1334,6 +1337,9 @@
     </ClCompile>
     <ClCompile Include="..\private\Hud_LevelUp.cpp">
       <Filter>02.GameObject\UI\HUD\HUD_LevelUp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Artefact_Tier_Icon.cpp">
+      <Filter>02.GameObject\UI\Tooltip\Tooltip_Etc</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
