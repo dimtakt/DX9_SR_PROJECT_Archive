@@ -25,7 +25,7 @@ public:
 	virtual HRESULT					Render() override;
 
 private:
-	LEVEL							m_eLevel;
+	LEVEL							m_eLevel = {};
 	CVIBuffer_Rect*					m_pVIBufferCom = { nullptr };
 	CTexture*						m_pTextureCom = { nullptr };
 private:
@@ -35,7 +35,9 @@ private:
 	HRESULT							Ready_Children();
 
 	void							Render_Font();
+	void							Render_Pos();
 
+	void							Set_UpGrade();
 public:
 	static CSlate_Tooltip*			Create(LPDIRECT3DDEVICE9 pGraphic_Device, LEVEL eLevel);
 	virtual CGameObject*			Clone(void* pArg) override;

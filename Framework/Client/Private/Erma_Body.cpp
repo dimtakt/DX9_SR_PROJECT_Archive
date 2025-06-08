@@ -28,6 +28,7 @@ HRESULT CErma_Body::Initialize(void* pArg)
     MONSTERDESC* desc = static_cast<MONSTERDESC*>(pArg);
 
     CTransform* pTerrainTransform = dynamic_cast<CTransform*>(desc->pTerrainBox->Find_Component(TEXT("Com_Transform_TerrainBox")));
+    m_pTerrainTransformCom = pTerrainTransform;
     _float3 fTerrainPos = pTerrainTransform->Get_State(STATE::POSITION);
     _float3 fTerrainScale = pTerrainTransform->Get_Scaled();
 
@@ -40,6 +41,7 @@ HRESULT CErma_Body::Initialize(void* pArg)
     // 크기 조정
     m_pTransformCom->Scaling(9.f, 4.5f, 4.5f);
 
+    PlayPattern(PATTERN_BODY::PT_MISSILE_R);
 
 
 
@@ -75,6 +77,261 @@ void CErma_Body::Update(_float fTimeDelta)
     // 
 
 
+    // Idle
+    // Missile  // 5s (300)
+
+
+    // 아래에서 사용할 변수들
+#pragma region Variables Setting
+
+    _uint iCurLevel = m_pGameInstance->Get_CurrentLevel();
+
+    CTransform* pTargetTransform = dynamic_cast<CTransform*>(m_pGameInstance->GetInstance()->Get_Component(iCurLevel, TEXT("Layer_Player"), TEXT("Com_Transform")));
+    _float3 vTerrainPos = m_pTerrainTransformCom->Get_State(STATE::POSITION);
+    _float3 vTerrainScale = m_pTerrainTransformCom->Get_Scaled();
+
+    _float3 vMonsterPos = m_pTransformCom->Get_State(STATE::POSITION);
+    _float3 vTargetPos = pTargetTransform->Get_State(STATE::POSITION);
+
+    _float3 vDiff = -vMonsterPos + vTargetPos;
+    _float fDistance = D3DXVec3Length(&vDiff);
+
+    _int iCurPatternFrame = m_pAnimatorPatternCom->Get_CurStackedFrame();
+
+    // ********* matMonster 구하기
+    _float4x4 matMonsterWorld = *m_pTransformCom->Get_WorldMatrix();
+
+    _float3 vTerrainOffset = { 0.f, 1.f, 0.f };
+
+#pragma endregion
+
+    // **** 이펙트 크기조절용 초기설정
+#pragma region Effect Setting
+
+    // 이펙트용
+    // 1. 원점으로 이동
+    _float4x4 matTransToOrigin = {};
+    D3DXMatrixIdentity(&matTransToOrigin);
+    D3DXMatrixTranslation(&matTransToOrigin, -matMonsterWorld._41, -matMonsterWorld._42, -matMonsterWorld._43);
+
+    // 2. 크기
+    _float4x4 matScale = {};
+    D3DXMatrixIdentity(&matScale);
+    D3DXMatrixScaling(&matScale, -1.f, 1.f, 1.f);
+
+    // 3. 자전
+    _float4x4 matRotateChild = {};
+    D3DXMatrixIdentity(&matRotateChild);
+    //D3DXMatrixRotationX(&matRotateChild, D3DXToRadian(-90)); // 안되면 -90도도 해보기
+
+    _float4x4 matRotateChildtoPlayer = {};
+    D3DXMatrixIdentity(&matRotateChildtoPlayer);
+    _float fAngle = atan2f(vTargetPos.x - vMonsterPos.x, vTargetPos.z - vMonsterPos.z);
+    _float fDegree = D3DXToDegree(fAngle) + 180;
+    //D3DXMatrixRotationY(&matRotateChildtoPlayer, D3DXToRadian(fDegree));
+
+    // 4. 원래 위치(몬스터)로 재이동
+    _float4x4 matTransReturn = {};
+    D3DXMatrixIdentity(&matTransReturn);
+    D3DXMatrixTranslation(&matTransReturn, matMonsterWorld._41, matMonsterWorld._42, matMonsterWorld._43);
+
+    // 5. 거기에 추가 이동 (플레이어 방향)
+    _float4x4 matTransAddition = {};
+    D3DXMatrixIdentity(&matTransAddition);
+    //_float3 vDiff = -vPlayerPos + vMonsterPos;       // 플레이어 위치에서 마우스 교차좌표로 가는 벡터
+    D3DXVec3Normalize(&vDiff, &vDiff);              // 를 단위벡터화, 안되면 vDiff 순서 바꿔보기
+    _float fDistanceOffset = 1.0f;                   // ** ksta : 중점으로부터 떨어져 있을 거리 **
+    vDiff *= fDistanceOffset;
+    //D3DXMatrixTranslation(&matTransAddition, vDiff.x, 0, vDiff.z);
+
+    matMonsterWorld = matTransToOrigin * matScale * matRotateChild * matRotateChildtoPlayer * matTransReturn * matTransAddition;
+
+#pragma endregion
+    // ***********************
+
+    if (m_isPatternPlaying)
+    {
+        switch (m_ePattern)
+        {
+        case Client::CErma_Body::PATTERN_BODY::PT_IDLE:
+        {
+
+        }
+            break;
+        case Client::CErma_Body::PATTERN_BODY::PT_MISSILE_L:
+        {
+#pragma region PT_MISSILE_L Pattern
+            // 0~300
+            // 5프레임 간격으로 미사일 조준 및 발사?
+            
+            // 이펙트 두 개 생성
+            // 하나는 맵 구석에서 발사하는 미사일 이펙트
+            // 하나는 조준점 이펙트
+            
+            if (IS_BETWEEN(iCurPatternFrame, 10, 60))
+            {
+                if (iCurPatternFrame % 5 == 0)
+                {
+                    _float fRandX = m_pGameInstance->Compute_Random(-1.f, 1.f);
+                    _float fRandZ = m_pGameInstance->Compute_Random(-1.f, 1.f);
+
+                    CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::NORMAL_EFFECT, L"Prototype_Component_Boss_Erma_Missile_Upper",
+                        { vTerrainPos.x - vTerrainScale.x / 2 + fRandX,
+                        vTerrainPos.y + 3,
+                        vTerrainPos.z - vTerrainScale.z / 2 + fRandZ },
+                        { 0, 0, 0, 1 },
+                        { 2.f, 12.46f, 2.f });
+                    CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::NORMAL_EFFECT, L"Prototype_Component_Boss_Erma_Missile_Upper_Light",
+                        { vTerrainPos.x - vTerrainScale.x / 2 + fRandX,
+                        vTerrainPos.y + 3,
+                        vTerrainPos.z - vTerrainScale.z / 2 + fRandZ },
+                        { 0, 0, 0, 1 },
+                        { 2.f, 12.46f, 2.f });
+
+                }
+            }
+
+            if (IS_BETWEEN(iCurPatternFrame, 30, 80))
+            {
+                if (iCurPatternFrame % 5 == 0)
+                {
+                    _int iCount = (iCurPatternFrame - 30) / 5;  // 0 ~ 9
+
+                    D3DXQUATERNION qRot = { 0 ,0, 0, 1 };
+                    _float3 vAxis = { 1, 0, 0 };
+                    D3DXQuaternionRotationAxis(&qRot, &vAxis, D3DXToRadian(-90));
+
+                    CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::NORMAL_EFFECT, L"Prototype_Component_Boss_Erma_Missile_Alert",
+                        { vTerrainPos.x - 5 + iCount * 1.1f,
+                        vTerrainPos.y + 1.01f,
+                        vTerrainPos.z + vTerrainScale.z / 2 - 2.8f * (1 + iCount)},
+                        qRot,
+                        { 4.2f, 2.8f, 2.8f });
+                }
+            }
+
+            if (IS_BETWEEN(iCurPatternFrame, 80, 130))
+            {
+                if (iCurPatternFrame % 5 == 0)
+                {
+                    _int iCount = (iCurPatternFrame - 80) / 5;  // 0 ~ 9
+
+                    CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::NORMAL_EFFECT, L"Prototype_Component_Boss_Erma_Missile_Lower",
+                        { vTerrainPos.x - 5 + iCount * 1.1f,
+                        vTerrainPos.y + 5.f,
+                        vTerrainPos.z + vTerrainScale.z / 2 - 2.8f * (1 + iCount) },
+                        {0, 0, 0, 1},
+                        { 5.f, 10.f, 5.f });
+                    CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::NORMAL_EFFECT, L"Prototype_Component_Boss_Erma_Missile_Lower_Light",
+                        { vTerrainPos.x - 5 + iCount * 1.1f,
+                        vTerrainPos.y + 5.f,
+                        vTerrainPos.z + vTerrainScale.z / 2 - 2.8f * (1 + iCount) },
+                        { 0, 0, 0, 1 },
+                        { 5.f, 10.f, 5.f });
+                }
+            }
+
+            if (iCurPatternFrame == 299)
+            {
+                m_isPatternPlaying = false;
+                m_ePattern = PATTERN_BODY::PT_IDLE;
+                m_pAnimatorPatternCom->Change_State(L"Idle");
+            }
+
+#pragma endregion
+        }
+            break;
+        case Client::CErma_Body::PATTERN_BODY::PT_MISSILE_R:
+        {
+#pragma region PT_MISSILE_R Pattern
+            // 0~300
+            // 5프레임 간격으로 미사일 조준 및 발사?
+
+            // 이펙트 두 개 생성
+            // 하나는 맵 구석에서 발사하는 미사일 이펙트
+            // 하나는 조준점 이펙트
+
+            if (IS_BETWEEN(iCurPatternFrame, 10, 60))
+            {
+                if (iCurPatternFrame % 5 == 0)
+                {
+                    _float fRandX = m_pGameInstance->Compute_Random(-1.f, 1.f);
+                    _float fRandZ = m_pGameInstance->Compute_Random(-1.f, 1.f);
+
+                    CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::NORMAL_EFFECT, L"Prototype_Component_Boss_Erma_Missile_Upper",
+                        { vTerrainPos.x + vTerrainScale.x / 2 + fRandX,
+                        vTerrainPos.y + 3,
+                        vTerrainPos.z - vTerrainScale.z / 2 + fRandZ },
+                        { 0, 0, 0, 1 },
+                        { 2.f, 12.46f, 2.f });
+                    CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::NORMAL_EFFECT, L"Prototype_Component_Boss_Erma_Missile_Upper_Light",
+                        { vTerrainPos.x + vTerrainScale.x / 2 + fRandX,
+                        vTerrainPos.y + 3,
+                        vTerrainPos.z - vTerrainScale.z / 2 + fRandZ },
+                        { 0, 0, 0, 1 },
+                        { 2.f, 12.46f, 2.f });
+
+                }
+            }
+
+            if (IS_BETWEEN(iCurPatternFrame, 30, 80))
+            {
+                if (iCurPatternFrame % 5 == 0)
+                {
+                    _int iCount = (iCurPatternFrame - 30) / 5;  // 0 ~ 9
+
+                    D3DXQUATERNION qRot = { 0 ,0, 0, 1 };
+                    _float3 vAxis = { 1, 0, 0 };
+                    D3DXQuaternionRotationAxis(&qRot, &vAxis, D3DXToRadian(-90));
+
+                    CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::NORMAL_EFFECT, L"Prototype_Component_Boss_Erma_Missile_Alert",
+                        { vTerrainPos.x + 5 - iCount * 1.1f,
+                        vTerrainPos.y + 1.01f,
+                        vTerrainPos.z + vTerrainScale.z / 2 - 2.8f * (1 + iCount) },
+                        qRot,
+                        { 4.2f, 2.8f, 2.8f });
+                }
+            }
+
+            if (IS_BETWEEN(iCurPatternFrame, 80, 130))
+            {
+                if (iCurPatternFrame % 5 == 0)
+                {
+                    _int iCount = (iCurPatternFrame - 80) / 5;  // 0 ~ 9
+
+                    CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::NORMAL_EFFECT, L"Prototype_Component_Boss_Erma_Missile_Lower",
+                        { vTerrainPos.x + 5 - iCount * 1.1f,
+                        vTerrainPos.y + 5.f,
+                        vTerrainPos.z + vTerrainScale.z / 2 - 2.8f * (1 + iCount) },
+                        { 0, 0, 0, 1 },
+                        { 5.f, 10.f, 5.f });
+                    CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::NORMAL_EFFECT, L"Prototype_Component_Boss_Erma_Missile_Lower_Light",
+                        { vTerrainPos.x + 5 - iCount * 1.1f,
+                        vTerrainPos.y + 5.f,
+                        vTerrainPos.z + vTerrainScale.z / 2 - 2.8f * (1 + iCount) },
+                        { 0, 0, 0, 1 },
+                        { 5.f, 10.f, 5.f });
+                }
+            }
+
+            if (iCurPatternFrame == 299)
+            {
+                m_isPatternPlaying = false;
+                m_ePattern = PATTERN_BODY::PT_IDLE;
+                m_pAnimatorPatternCom->Change_State(L"Idle");
+            }
+
+#pragma endregion
+        }
+        break;
+        default:
+            break;
+        }
+    }
+
+
+
+
     if (m_pTerrainBox != nullptr) {
         m_pTerrainBox->SetUp_OnTerrainBox(m_pTransformCom, _float3(0.05f, 0.7f, 0.05f));
     }
@@ -95,6 +352,7 @@ HRESULT CErma_Body::Render()
     m_pTransformCom->Bind_Matrix();
 
     m_pAnimatorCom->Update_State(); // Bind_Texture
+    m_pAnimatorPatternCom->Update_State(); // Bind_Texture
 
     m_pVIBufferCom->Bind_Buffers();
 
@@ -140,6 +398,20 @@ HRESULT CErma_Body::Ready_Components(void* pArg)
     m_pAnimatorCom->Add_State(L"Broken",    { m_pTextureCom_Body_Broken, 4, true });
 
 
+    CAnimator::ANIMSTATE_DESC StartAnimStateDesc2{};
+    StartAnimStateDesc2.strTimerTag = L"Animator_Boss_Arma_Body_Pattern";   // 해당 애니메이터가 타이머에서 사용할 태그 key값
+    StartAnimStateDesc2.pParentTransform = nullptr;
+    StartAnimStateDesc2.pChildTransform = nullptr;
+
+    if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Animator"),
+        TEXT("Com_AnimatorPattern"), reinterpret_cast<CComponent**>(&m_pAnimatorPatternCom), &StartAnimStateDesc)))
+        return E_FAIL;
+
+    m_pAnimatorPatternCom->Add_State(L"Idle",       { nullptr, 4, true });
+    m_pAnimatorPatternCom->Add_State(L"Missile",    { nullptr, 300, true });    // 5s
+
+    // ..
+
 
 
 
@@ -162,6 +434,36 @@ void CErma_Body::OnCollision(CGameObject* pGameObject)
     case GAMEOBJ_TYPE::PLAYER_EFFECT:
         break;
     }
+}
+
+void CErma_Body::PlayPattern(PATTERN_BODY ePattern)
+{
+    if (m_isPatternPlaying == true)
+        return;
+
+
+    _float fPatternTime = 0.f;
+    _wstring strPatternTag = {};
+
+    switch (ePattern)
+    {
+    case Client::CErma_Body::PATTERN_BODY::PT_MISSILE_L:
+        fPatternTime = 5.f;
+        strPatternTag = L"Missile";
+        break;
+    case Client::CErma_Body::PATTERN_BODY::PT_MISSILE_R:
+        fPatternTime = 5.f;
+        strPatternTag = L"Missile";
+        break;
+    default:
+        break;
+    }
+
+
+
+    m_isPatternPlaying = true;
+    m_ePattern = ePattern;
+    m_pAnimatorPatternCom->Change_State(strPatternTag, true, fPatternTime, true);
 }
 
 CErma_Body* CErma_Body::Create(LPDIRECT3DDEVICE9 pGraphic_Device)

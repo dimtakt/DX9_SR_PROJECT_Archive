@@ -17,11 +17,21 @@ HRESULT CUI_KeyGuide::Initialize_Prototype(const _wstring& strPrototypeTag)
 
 HRESULT CUI_KeyGuide::Initialize(void* pArg)
 {
-	m_fSizeX = 28;
-	m_fSizeY = 28;
-	m_fX = -m_fSizeX * 0.5;
-	m_fY = m_fSizeY * 0.5;
+	UIOBJECT_DESC* Desc = static_cast<UIOBJECT_DESC*>(pArg);
+	m_fSizeX = 25;
+	m_fSizeY = 25;
+	if (Desc == nullptr)
+	{
+		m_fX = -m_fSizeX * 0.5;
+		m_fY = m_fSizeY * 0.5;
+	}
+	else
+	{
+		m_fX = Desc->fX;
+		m_fY = Desc->fY;
+	}
 	m_fZ = UI_DEPTH::KEY_GUIDE;
+
 	m_iWinSizeX = g_iWinSizeX;
 	m_iWinSizeY = g_iWinSizeY;
 
@@ -47,7 +57,7 @@ void CUI_KeyGuide::Update(_float fTimeDelta)
 
 void CUI_KeyGuide::Late_Update(_float fTimeDelta)
 {
-	m_pGameInstance->Add_RenderGroup(RENDERGROUP::RG_UI, this);
+	m_pGameInstance->Add_RenderGroup(RENDERGROUP::RG_UI_BLEND, this);
 }
 
 HRESULT CUI_KeyGuide::Render()

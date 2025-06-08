@@ -2,6 +2,7 @@
 #include "GameInstance.h"
 #include "Stat_Manager.h"
 #include "EXP_Ball.h"
+#include "Field_Font.h"
 CMonster::CMonster(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CGameObject{ pGraphic_Device }
 {
@@ -163,6 +164,26 @@ void CMonster::OnCollision(CGameObject* pGameObject)
 			break;
 		}
 	}
+}
+
+void CMonster::Set_Damage(_float fDamage)
+{
+	m_iCulHp += fDamage;
+	
+	Render_Font(static_cast<int>(fDamage * -1));
+}
+
+HRESULT CMonster::Render_Font(_int iDamage)
+{
+	CField_Font::FIELD_FONT_DESC Desc = {};
+
+	Desc.eType = CField_Font::FIELD_FONT_TYPE::MONSTER_DAMAGE;
+	Desc.iValue = iDamage;
+	Desc.pTransform = m_pTransformCom;
+
+	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(m_pGameInstance->Get_CurrentLevel(), TEXT("Layer_Field_Font"),
+		ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_Field_Font"), &Desc)))
+		return E_FAIL;
 }
 
 CMonster* CMonster::Create(LPDIRECT3DDEVICE9 pGraphic_Device)

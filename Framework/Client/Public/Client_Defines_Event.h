@@ -17,5 +17,5 @@ namespace Client
 	typedef struct tagActionEvent : public EVENTDATA
 	{
 		_wstring strActionName;
-	};
+	}ACTIONEVENT;
 }

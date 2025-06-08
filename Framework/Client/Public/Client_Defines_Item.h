@@ -92,7 +92,7 @@ namespace Client
 		ItemData(1, 1, ITEM_TYPE::ARTEFACT, ITEM_RARITY::RARE,TEXT("금빛 망토"), TEXT("이 망토는 왜 안쪽까지 금빛일까?"), 2, 1),
 		ItemData(2, 2, ITEM_TYPE::ARTEFACT, ITEM_RARITY::LEGENDARY,TEXT("스타 루비"), TEXT("새로운 삶을 위하여."), 2, 2),
 		ItemData(3, 3,ITEM_TYPE::POTION, ITEM_RARITY::NORMAL,TEXT("재생의 포션"), TEXT("HP 20% 회복"), 0),
-		ItemData(4, 4,ITEM_TYPE::POTION, ITEM_RARITY::EPIC,TEXT("큰 재샙의 포션"), TEXT("HP 50% 회복"), 1),
+		ItemData(4, 4,ITEM_TYPE::POTION, ITEM_RARITY::EPIC,TEXT("큰 재생의 포션"), TEXT("HP 50% 회복"), 1),
 		ItemData(5, 5,ITEM_TYPE::POTION, ITEM_RARITY::RARE,TEXT("마나 재생의 포션"), TEXT("MP 30% 회복"), 2),
 		ItemData(6, 6,ITEM_TYPE::ARTEFACT, ITEM_RARITY::NORMAL,TEXT("베고니아 향 주머니"), TEXT("자연스러운 꽃향기가 납니다."), 1, 3),
 		ItemData(7, 7,ITEM_TYPE::ARTEFACT, ITEM_RARITY::NORMAL,TEXT("방패술 교본"), TEXT("어린 동물 필독서"), 1, 4),
@@ -178,11 +178,11 @@ namespace Client
 
 	const vector<Slate> g_SlateDataBase
 	{
-		//	0	1	2	3	4	5			//			(-1, -2)				
-		//	6	7	8	9	10	11			//			(-1, -1)	(0, -1)		(1, -1)		(2. -1)	
-		//	12	13	14	15	16	17			//			(-1, 0)		(0, 0)		(1, 0)			
+		//	0	1	2	3	4	5			//(-2, -2)	(-1, -2)	(0, -2)		(1, -2)		(2, -2)		(3, -2)				
+		//	6	7	8	9	10	11			//(-2, -1)	(-1, -1)	(0, -1)		(1, -1)		(2. -1)	
+		//	12	13	14	15	16	17			//(-2, 0)	(-1, 0)		(0, 0)		(1, 0)			
 		//	18	19	20	21	22	23			//(-2, 1)	(-1, 1)		(0, 1)		(1, 1) 
-		//	24	25	26	27	28	29			//									(1, 2)
+		//	24	25	26	27	28	29			//(-2, 2)							(1, 2)
 
 		//인덱스, 상대 or 고정, 회전 가능 여부, (X, Y, 값)
 		Slate(0, true, true,	{{0,-1,1,0},{0, 1,1,0}}),
