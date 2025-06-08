@@ -574,7 +574,7 @@ void CPlayer::OnCollision(CGameObject* pGameObject)
     {
         if (pGameObject->Get_IsActive()) {
             if (!CStat_Manager::GetInstance()->Get_UIOpen()) {
-                if (m_pGameInstance->IsKeyDown(VK_DOWN))
+                if (m_pGameInstance->IsKeyDown('F'))
                 {
                     dynamic_cast<CChapMap*>(m_pGameInstance->Get_GameObject(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Layer_ChapMap")))->Open_Ui();
                 }
@@ -584,7 +584,7 @@ void CPlayer::OnCollision(CGameObject* pGameObject)
     }
     case GAMEOBJ_TYPE::STAGE_POTAL:
     {
-        if (m_pGameInstance->IsKeyDown(VK_DOWN)) // 특정 키 입력시 다음 스테이지 넘어가게 설정
+        if (m_pGameInstance->IsKeyDown('F'))
         {
             _uint CurrentLevel = m_pGameInstance->Get_CurrentLevel();
 
