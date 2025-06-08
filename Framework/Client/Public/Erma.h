@@ -5,6 +5,13 @@
 
 BEGIN(Client)
 
+
+class CErma_Body;
+class CErma_Hand_L;
+class CErma_Hand_R;
+class CErma_Head;
+
+
 class CErma final : public CMonster
 {
 private:
@@ -44,10 +51,10 @@ private:
 	
 
 	// 본체가 컨트롤할 것.
-	CGameObject* m_pObj_Body					= { nullptr };
-	CGameObject* m_pObj_Hand_L					= { nullptr };
-	CGameObject* m_pObj_Hand_R					= { nullptr };
-	CGameObject* m_pObj_Head					= { nullptr };
+	CErma_Body* m_pObj_Body					= { nullptr };
+	CErma_Hand_L* m_pObj_Hand_L				= { nullptr };
+	CErma_Hand_R* m_pObj_Hand_R				= { nullptr };
+	CErma_Head* m_pObj_Head					= { nullptr };
 
 
 	
