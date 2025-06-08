@@ -284,7 +284,7 @@ HRESULT CMainApp::Ready_GameObject_Setting()
 HRESULT CMainApp::Ready_Texture_Setting()
 {
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_TerrainBox_Top"),
-		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/BleakSwordDX/Terrain/Forest/ArenaTex_%d.png"), 54))))
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/BleakSwordDX/Terrain/Forest/ArenaTex_%d.png"), 55))))
 		return E_FAIL;
 	/* Prototype_Component_Texture_TerrainBox_Side */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_TerrainBox_Side"),
@@ -293,7 +293,7 @@ HRESULT CMainApp::Ready_Texture_Setting()
 
 	//텍스처 추가
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Tree"),
-		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/BleakSwordDX/Object/Tree/ForestTrees_%d.png"), 74))))
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/BleakSwordDX/Object/Tree/ForestTrees_%d.png"), 83))))
 		return E_FAIL;
 
 	/* Prototype_Component_Texture_Sky */

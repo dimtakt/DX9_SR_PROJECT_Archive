@@ -15,7 +15,7 @@ CLevel_Boss1::CLevel_Boss1(LPDIRECT3DDEVICE9 pGraphic_Device)
 
 HRESULT CLevel_Boss1::Initialize()
 {
-	//CRoom_Manager::GetInstance()->Clear(ENUM_CLASS(LEVEL::LEVEL_STAGE4));
+	CRoom_Manager::GetInstance()->Clear(ENUM_CLASS(LEVEL::LEVEL_STAGE4));
 	g_hCursor = LoadCursorFromFile(L"Resources/Sephiria/UI/Cursor/Cursor_Combat.cur");
 
 
@@ -85,8 +85,8 @@ HRESULT CLevel_Boss1::Ready_Layer_Camera(const _wstring& strLayerTag)
 		ENUM_CLASS(LEVEL::LEVEL_BOSS1), TEXT("Prototype_GameObject_Camera_Follow"), &desc)))
 		return E_FAIL;
 
-	//if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_STAGE2), strLayerTag,
-	//	ENUM_CLASS(LEVEL::LEVEL_STAGE2), TEXT("Prototype_GameObject_Camera_Mouse"))))
+	//if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_BOSS1), strLayerTag,
+	//	ENUM_CLASS(LEVEL::LEVEL_BOSS1), TEXT("Prototype_GameObject_Camera_Mouse"))))
 	//	return E_FAIL;
 
 	return S_OK;
