@@ -29,7 +29,7 @@ HRESULT CEXP_Ball::Initialize(void* pArg)
     EXPBALLDESC* pDesc = static_cast<EXPBALLDESC*>(pArg);
     m_fEXPValue = pDesc->fValue;
     m_pTransformCom->Set_State(STATE::POSITION, pDesc->vPosition);
-
+    m_pTransformCom->Scaling(0.3f, 0.3f, 0.3f);
     // collider
     CCollider_OBB::OBB_DESC tColliderDesc;
     tColliderDesc.vScale = _float3(1.f, 1.f, 1.f);
