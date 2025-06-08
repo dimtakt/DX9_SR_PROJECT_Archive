@@ -406,6 +406,9 @@
     <Filter Include="02.GameObject\Monster\Boss\Erma">
       <UniqueIdentifier>{358e0392-ab0d-468d-86f3-d5b7761dc51e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\UI\HUD\HUD_LevelUp">
+      <UniqueIdentifier>{de80ac6d-f6bb-4678-ac16-b6100d7e6301}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -885,6 +888,9 @@
     <ClInclude Include="..\public\Slate_Tooltip_Slot.h">
       <Filter>02.GameObject\UI\Tooltip\Tooltip_Etc</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\Hud_LevelUp.h">
+      <Filter>02.GameObject\UI\HUD\HUD_LevelUp</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -1325,6 +1331,9 @@
     </ClCompile>
     <ClCompile Include="..\private\Slate_Tooltip_Slot.cpp">
       <Filter>02.GameObject\UI\Tooltip\Tooltip_Etc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Hud_LevelUp.cpp">
+      <Filter>02.GameObject\UI\HUD\HUD_LevelUp</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
