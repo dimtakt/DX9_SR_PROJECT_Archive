@@ -6,6 +6,8 @@
 #include "Erma_Hand_R.h"
 #include "Erma_Head.h"
 
+#include "Room_Manager.h"
+
 CErma::CErma(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CMonster{ pGraphic_Device }
 {
@@ -39,19 +41,7 @@ HRESULT CErma::Initialize(void* pArg)
     m_pTransformCom->Set_State(STATE::POSITION, _float3(
         fTerrainPos.x,
         0.f,
-        fTerrainPos.z + fTerrainScale.z / 2 - 5));
-
-
-
-    // Erma가 각 부속 객체들을 제어하도록 연결
-
-    //m_pObj_Body->Set_IsDead(true);
-    //m_pObj_Hand_L->Set_IsDead(true);
-    //m_pObj_Hand_R->Set_IsDead(true);
-    //m_pObj_Head->Set_IsDead(true);		
-
-
-
+        fTerrainPos.z + fTerrainScale.z / 2 - 7.5));
 
 
     m_isSummoned = true;
@@ -71,6 +61,13 @@ void CErma::Priority_Update(_float fTimeDelta)
     if (m_pHpBar != nullptr &&
         m_isSummoned)
         m_pHpBar->Render_HP_Progress(m_pTransformCom, m_iCulHp, m_iMaxHp);
+
+    // Erma가 각 부속 객체들을 제어하도록 연결
+    if (m_pObj_Body == nullptr)     m_pObj_Body     = dynamic_cast<CErma_Body*>     (CRoom_Manager::GetInstance()->Find_CurrentRoom_Monster(MONSTER_TYPE::ERMA_BODY));
+    if (m_pObj_Hand_L == nullptr)   m_pObj_Hand_L   = dynamic_cast<CErma_Hand_L*>   (CRoom_Manager::GetInstance()->Find_CurrentRoom_Monster(MONSTER_TYPE::ERMA_HAND_L));
+    if (m_pObj_Hand_R == nullptr)   m_pObj_Hand_R   = dynamic_cast<CErma_Hand_R*>   (CRoom_Manager::GetInstance()->Find_CurrentRoom_Monster(MONSTER_TYPE::ERMA_HAND_R));
+    if (m_pObj_Head == nullptr)     m_pObj_Head     = dynamic_cast<CErma_Head*>     (CRoom_Manager::GetInstance()->Find_CurrentRoom_Monster(MONSTER_TYPE::ERMA_HEAD));
+
 
     if (m_iCulHp <= 0)
         m_bDead = true;
@@ -184,6 +181,7 @@ HRESULT CErma::Render()
     if (!m_pTransformCom)
         return S_OK;
 
+    SetUp_RenderState();
 
     m_pTransformCom->Bind_Matrix();
 
@@ -191,7 +189,6 @@ HRESULT CErma::Render()
 
     m_pVIBufferCom->Bind_Buffers();
 
-    SetUp_RenderState();
 
     m_pVIBufferCom->Render();
 

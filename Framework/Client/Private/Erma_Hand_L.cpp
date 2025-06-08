@@ -35,17 +35,17 @@ HRESULT CErma_Hand_L::Initialize(void* pArg)
     m_pTransformCom->Set_State(STATE::POSITION, _float3(
         vTerrainPos.x - 4.f,
         0.f,
-        vTerrainPos.z + vTerrainScale.z / 2 - 3.f));
+        vTerrainPos.z + vTerrainScale.z / 2 - 4.5f));
 
     // 크기 조정
-    m_pTransformCom->Scaling(3.f, 3.f, 3.f);
+    m_pTransformCom->Scaling(4.5f, 4.5f, 4.5f);
 
 
 
 
 
     // ksta : 테스트중.. 패턴 완성 후 삭제
-    PlayPattern(PATTERN_HAND_L::PT_STRIKE);
+    PlayPattern(PATTERN_HAND_L::PT_LASER);
 
 
 
@@ -95,7 +95,7 @@ void CErma_Hand_L::Update(_float fTimeDelta)
     _float3 vDiff = -vMonsterPos + vTargetPos;
     _float fDistance = D3DXVec3Length(&vDiff);
 
-    _int iCurPatternFrame = m_pAnimatorCom->Get_CurStackedFrame();
+    _int iCurPatternFrame = m_pAnimatorPatternCom->Get_CurStackedFrame();
 
     // ********* matMonster 구하기
     _float4x4 matMonsterWorld = *m_pTransformCom->Get_WorldMatrix();
@@ -154,7 +154,9 @@ void CErma_Hand_L::Update(_float fTimeDelta)
         switch (m_ePattern)
         {
         case Client::CErma_Hand_L::PATTERN_HAND_L::PT_IDLE:
+        {
 
+        }
             break;
         case Client::CErma_Hand_L::PATTERN_HAND_L::PT_STRIKE:
         {   
@@ -162,86 +164,242 @@ void CErma_Hand_L::Update(_float fTimeDelta)
 
             // 트래킹 상태일 때 추적 
             if (m_isTracking)
-                m_pTransformCom->Move_To(vTargetPos, fTimeDelta * 2.f, 0.01f);
+                m_pTransformCom->Move_To(vTargetPos, fTimeDelta * 4.f, 0.01f);
 
-            if (0 <= iCurPatternFrame && iCurPatternFrame <= 40)
+            _float fROffset = 80;
+
+            if (IS_BETWEEN(iCurPatternFrame , 0, 40))
             {
                 _int iFrame = iCurPatternFrame - (0);
                 m_isTracking = true;
                 _float fY = -0.00125 * pow((iFrame - 40), 2) + 2;
                 m_pTerrainBox->SetUp_OnTerrainBox(m_pTransformCom, _float3(0.0f, fY, 0.0f) + vTerrainOffset);
             }
-            else if (40 < iCurPatternFrame && iCurPatternFrame <= 120)
+            else if (IS_BETWEEN(iCurPatternFrame, 40, 100))
             {
                 _int iFrame = iCurPatternFrame - (40);
                 // tracking..
                 m_pTerrainBox->SetUp_OnTerrainBox(m_pTransformCom, _float3(0.0f, 2.f, 0.0f) + vTerrainOffset);
             }
-            else if (120 < iCurPatternFrame && iCurPatternFrame <= 130)
+            else if (IS_BETWEEN(iCurPatternFrame, 100, 110))
             {
-                _int iFrame = iCurPatternFrame - (120);
+                _int iFrame = iCurPatternFrame - (100);
                 m_isTracking = false;
                 _float fY = -0.02 * pow((iFrame), 2) + 2;
                 m_pTerrainBox->SetUp_OnTerrainBox(m_pTransformCom, _float3(0.0f, fY, 0.0f) + vTerrainOffset);
             }
-            else if (130 < iCurPatternFrame && iCurPatternFrame <= 180)
+            else if (IS_BETWEEN(iCurPatternFrame, 110, 160))
             {
-                _int iFrame = iCurPatternFrame - (130); 
+                _int iFrame = iCurPatternFrame - (110); 
                 m_pTerrainBox->SetUp_OnTerrainBox(m_pTransformCom, vTerrainOffset);
             }
-            else if (0 + 180 < iCurPatternFrame && iCurPatternFrame <= 40 + 180)
+            else if (IS_BETWEEN(iCurPatternFrame, 0 + 160, 40 + 160))
             {
-                _int iFrame = iCurPatternFrame - (0 + 180);
+                _int iFrame = iCurPatternFrame - (0 + 160);
                 m_isTracking = true;
                 _float fY = -0.00125 * pow((iFrame - 40), 2) + 2;
                 m_pTerrainBox->SetUp_OnTerrainBox(m_pTransformCom, _float3(0.0f, fY, 0.0f) + vTerrainOffset);
             }
-            else if (40 + 180 < iCurPatternFrame && iCurPatternFrame <= 120 + 180)
+            else if (IS_BETWEEN(iCurPatternFrame, 40 + 160, 100 + 160))
             {
-                _int iFrame = iCurPatternFrame - (40 + 180);
+                _int iFrame = iCurPatternFrame - (40 + 160);
                 // tracking..
                 m_pTerrainBox->SetUp_OnTerrainBox(m_pTransformCom, _float3(0.0f, 2.f, 0.0f) + vTerrainOffset);
             }
-            else if (120 + 180 < iCurPatternFrame && iCurPatternFrame <= 130 + 180)
+            else if (IS_BETWEEN(iCurPatternFrame, 100 + 160, 110 + 160))
             {
-                _int iFrame = iCurPatternFrame - (120 + 180);
+                _int iFrame = iCurPatternFrame - (100 + 160);
                 m_isTracking = false;
                 _float fY = -0.02 * pow((iFrame), 2) + 2;
                 m_pTerrainBox->SetUp_OnTerrainBox(m_pTransformCom, _float3(0.0f, fY, 0.0f) + vTerrainOffset);
             }
-            else if (130 + 180 < iCurPatternFrame && iCurPatternFrame <= 180 + 180)
+            else if (IS_BETWEEN(iCurPatternFrame, 110 + 160, 160 + 160))
             {
-                _int iFrame = iCurPatternFrame - (130 + 180);
+                _int iFrame = iCurPatternFrame - (110 + 160);
                 m_pTerrainBox->SetUp_OnTerrainBox(m_pTransformCom, vTerrainOffset);
             }
             else
             {
                 _float3 vPos = {
-                    vTerrainPos.x - 4.f,
+                    vTerrainPos.x - 10.f,
                     0.f,
-                    vTerrainPos.z + vTerrainScale.z / 2 - 3.f
+                    vTerrainPos.z + vTerrainScale.z / 2 - 6.f
                 };
 
-                m_pTransformCom->Move_To(vPos + vTerrainPos + vTerrainOffset, fTimeDelta * 4.f, 0.01f);
+                m_pTransformCom->Move_To(vPos + vTerrainPos + vTerrainOffset, fTimeDelta * 10.f, 0.01f);
                 m_pTerrainBox->SetUp_OnTerrainBox(m_pTransformCom, vTerrainOffset);
                 
-                if (iCurPatternFrame == 449)
+                if (iCurPatternFrame == 479)
+                {
                     m_isPatternPlaying = false;
+                    m_ePattern = PATTERN_HAND_L::PT_IDLE;
+                }
             }
-
-
 
 #pragma endregion
         }
             break;
         case Client::CErma_Hand_L::PATTERN_HAND_L::PT_LASER:
+        {
+#pragma region PT_LASER Pattern
+            _bool isLaserEnd = false;
+
+            // Pattern
+            if (iCurPatternFrame == 0)
+                m_pAnimatorCom->Change_State(L"LaserStart");
+            if (IS_BETWEEN(iCurPatternFrame, 0, 50))
+            {
+                _float3 vPos = {
+                    vTerrainPos.x - vTerrainScale.x / 2,
+                    0.f,
+                    vTerrainPos.z + vTerrainScale.z / 2
+                };
+                m_pTransformCom->Move_To(vPos + vTerrainOffset, fTimeDelta * 20.f, 0.01f);
+                m_pTerrainBox->SetUp_OnTerrainBox(m_pTransformCom, vTerrainOffset);
+            }
+            else if (IS_BETWEEN(iCurPatternFrame, 50, 200))
+            {
+                _int iFrame = iCurPatternFrame - 50;
+                _float3 vPos = {
+                    vTerrainPos.x - vTerrainScale.x / 2,
+                    0.f,
+                    vTerrainPos.z + vTerrainScale.z / 2.f - vTerrainScale.z * iFrame / 150.f 
+                };
+                m_pTransformCom->Move_To(vPos + vTerrainOffset, fTimeDelta * 3.f, 0.01f);
+                m_pTerrainBox->SetUp_OnTerrainBox(m_pTransformCom, vTerrainOffset);
+            }
+            else if (IS_BETWEEN(iCurPatternFrame, 200, 350))
+            {
+                _int iFrame = iCurPatternFrame - 200;
+                _float3 vPos = {
+                    vTerrainPos.x - vTerrainScale.x / 2,
+                    0.f,
+                    vTerrainPos.z - vTerrainScale.z / 2.f + vTerrainScale.z * iFrame / 150.f
+                };
+                m_pTransformCom->Move_To(vPos + vTerrainOffset, fTimeDelta * 3.f, 0.01f);
+                m_pTerrainBox->SetUp_OnTerrainBox(m_pTransformCom, vTerrainOffset);
+            }
+            else if (IS_BETWEEN(iCurPatternFrame, 350, 500))
+            {
+                _int iFrame = iCurPatternFrame - 350;
+                _float3 vPos = {
+                    vTerrainPos.x - vTerrainScale.x / 2,
+                    0.f,
+                    vTerrainPos.z + vTerrainScale.z / 2.f - vTerrainScale.z * iFrame / 150.f
+                };
+                m_pTransformCom->Move_To(vPos + vTerrainOffset, fTimeDelta * 3.f, 0.01f);
+                m_pTerrainBox->SetUp_OnTerrainBox(m_pTransformCom, vTerrainOffset);
+            }
+            else if (IS_BETWEEN(iCurPatternFrame, 500, 550))
+            {
+                _int iFrame = iCurPatternFrame - 500;
+                _float3 vPos = {
+                    vTerrainPos.x - vTerrainScale.x / 2,
+                    0.f,
+                    vTerrainPos.z - vTerrainScale.z / 2.f + vTerrainScale.z * iFrame / 150.f
+                };
+                m_pTransformCom->Move_To(vPos + vTerrainOffset, fTimeDelta * 3.f, 0.01f);
+                m_pTerrainBox->SetUp_OnTerrainBox(m_pTransformCom, vTerrainOffset);
+            }
+            else
+            {
+                isLaserEnd = true;
+
+                _float3 vPos = {
+                    vTerrainPos.x - vTerrainScale.x / 2 + 4.5f,
+                    0.f,
+                    vTerrainPos.z
+                };
+                m_pTransformCom->Move_To(vPos + vTerrainOffset, fTimeDelta * 4.f, 0.01f);
+                m_pTerrainBox->SetUp_OnTerrainBox(m_pTransformCom, vTerrainOffset);
+
+                if (iCurPatternFrame == 599)
+                {
+                    m_isPatternPlaying = false;
+                    m_ePattern = PATTERN_HAND_L::PT_IDLE;
+                    m_pAnimatorPatternCom->Change_State(L"Idle");
+                }
+            }
+
+#pragma region Laser Effect Setting
+
+            D3DXMatrixIdentity(&matScale);
+            D3DXMatrixScaling(&matScale, -0.75f, 6.f, 0.75f);
+
+            D3DXMatrixIdentity(&matRotateChild);
+            _float4x4 matRotateChild2 = {};
+            D3DXMatrixIdentity(&matRotateChild2);
+            D3DXMatrixRotationX(&matRotateChild, D3DXToRadian(-90)); // 안되면 -90도도 해보기
+            D3DXMatrixRotationY(&matRotateChild2, D3DXToRadian(-90)); // 안되면 -90도도 해보기
+
+            D3DXMatrixIdentity(&matTransAddition);
+            D3DXMatrixTranslation(&matTransAddition, 13.5f, 0, 0);
+
+            matMonsterWorld = matTransToOrigin * matScale * matRotateChild * matRotateChild2 * matRotateChildtoPlayer * matTransReturn * matTransAddition;
+#pragma endregion
+            // Effect
+            if (iCurPatternFrame == 81)
+            {
+                CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::MONSTER_EFFECT, L"Prototype_Component_Boss_Erma_BigGolem_LaserStart",
+                    *m_pTransformCom->Get_WorldMatrix(), matMonsterWorld, m_pTransformCom);
+
+            }
+            else if (IS_BETWEEN(iCurPatternFrame, 100, 550) &&
+                (iCurPatternFrame - 1) % 9 == 0)
+            {
+                CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::MONSTER_EFFECT, L"Prototype_Component_Boss_Erma_BigGolem_LaserProgress",
+                    *m_pTransformCom->Get_WorldMatrix(), matMonsterWorld, m_pTransformCom);
+            }
+            else if (iCurPatternFrame == 550)
+            {
+                CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::MONSTER_EFFECT, L"Prototype_Component_Boss_Erma_BigGolem_LaserEnd",
+                    *m_pTransformCom->Get_WorldMatrix(), matMonsterWorld, m_pTransformCom);
+            }
+#pragma region Effect Reset
+
+            D3DXMatrixIdentity(&matScale);
+            D3DXMatrixScaling(&matScale, -1.f, 1.f, 1.f);
+
+            D3DXMatrixIdentity(&matRotateChild);
+            D3DXMatrixRotationX(&matRotateChild, D3DXToRadian(-90)); // 안되면 -90도도 해보기
+
+            D3DXMatrixIdentity(&matTransAddition);
+
+            matMonsterWorld = matTransToOrigin * matScale * matRotateChild * matRotateChildtoPlayer * matTransReturn * matTransAddition;
+
+#pragma endregion
+
+
+
+
+
+            if (m_pAnimatorCom->Get_CurStateTag() == L"LaserStart")
+                m_pAnimatorCom->Change_State(L"LaserProgress_Start");
+            else if (m_pAnimatorCom->Get_CurStateTag() == L"LaserProgress_Start")
+                m_pAnimatorCom->Change_State(L"LaserProgress_Cycle");
+            else if (m_pAnimatorCom->Get_CurStateTag() == L"LaserProgress_Cycle" &&
+                isLaserEnd)
+                m_pAnimatorCom->Change_State(L"Laser_End");
+            else if (m_pAnimatorCom->Get_CurStateTag() == L"Laser_End")
+                m_pAnimatorCom->Change_State(L"Idle");
+#pragma endregion
+        }
             break;
         default:
             break;
         }
 
     }
+    else
+    {
+        _float3 vDefaultPos = {
+            vTerrainPos.x - 10.f,
+            0.f,
+            vTerrainPos.z + vTerrainScale.z / 2 - 6.f
+        };
+        m_pTransformCom->Move_To(vDefaultPos + vTerrainPos + vTerrainOffset, fTimeDelta * 10.f, 0.01f);
 
+    }
 
 
 
@@ -278,14 +436,15 @@ HRESULT CErma_Hand_L::Render()
     if (!m_pTransformCom)
         return S_OK;
 
+    SetUp_RenderState();
 
     m_pTransformCom->Bind_Matrix();
 
     m_pAnimatorCom->Update_State(); // Bind_Texture
+    m_pAnimatorPatternCom->Update_State(); // Bind_Texture
 
     m_pVIBufferCom->Bind_Buffers();
 
-    SetUp_RenderState();
 
     m_pVIBufferCom->Render();
 
@@ -356,7 +515,7 @@ HRESULT CErma_Hand_L::Ready_Components(void* pArg)
         return E_FAIL;
 
     m_pAnimatorPatternCom->Add_State(L"Idle",       { nullptr, 4, true });
-    m_pAnimatorPatternCom->Add_State(L"Strike",       { nullptr, 450, true });    // 7.5s
+    m_pAnimatorPatternCom->Add_State(L"Strike",       { nullptr, 480, true });    // 8s
     m_pAnimatorPatternCom->Add_State(L"Laser",       { nullptr, 600, true });    // 10s
 
     // ..
@@ -387,21 +546,32 @@ void CErma_Hand_L::OnCollision(CGameObject* pGameObject)
 
 void CErma_Hand_L::PlayPattern(PATTERN_HAND_L ePattern)
 {
+    if (m_isPatternPlaying == true)
+        return;
+
+
     _float fPatternTime = 0.f;
+    _wstring strPatternTag = {};
 
     switch (ePattern)
     {
-    case Client::CErma_Hand_L::PATTERN_HAND_L::PT_STRIKE:   fPatternTime = 7.5f;
+    case Client::CErma_Hand_L::PATTERN_HAND_L::PT_STRIKE:
+        fPatternTime = 8.f;
+        strPatternTag = L"Strike";  // 이거 확인하고 패턴마다 바뀌도록,
+        //그리고 이게 패턴 switch 문 내에서 현재 프레임 구분의 조건이 되도록만들어야 함
         break;
-    case Client::CErma_Hand_L::PATTERN_HAND_L::PT_LASER:    fPatternTime = 10.f;
+    case Client::CErma_Hand_L::PATTERN_HAND_L::PT_LASER:
+        fPatternTime = 10.f;
+        strPatternTag = L"Laser";
         break;
     default:
         break;
     }
 
+
     m_isPatternPlaying = true;
     m_ePattern = ePattern;
-    m_pAnimatorPatternCom->Change_State(L"Idle", true, fPatternTime, true);
+    m_pAnimatorPatternCom->Change_State(strPatternTag, true, fPatternTime, true);
 }
 
 CErma_Hand_L* CErma_Hand_L::Create(LPDIRECT3DDEVICE9 pGraphic_Device)

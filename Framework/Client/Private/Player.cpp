@@ -91,7 +91,7 @@ void CPlayer::Update(_float fTimeDelta)
     // 아래에서 사용할 변수들
 #pragma region Variables Setting
 
-    _float fPointY = 0.f;       // 교차 평면의 기준이 될 Y값
+    _float fPointY = m_pTransformCom->Get_State(STATE::POSITION).y - m_pTransformCom->Get_Scaled().y/2.0f;       // 교차 평면의 기준이 될 Y값
     _float3 vRayPoint = {};     // fPointY 값 기준 마우스 Ray와 교차하는 좌표
     m_pGameInstance->Get_IntersectAtY(fPointY, vRayPoint);
 
@@ -173,7 +173,7 @@ void CPlayer::Update(_float fTimeDelta)
                 // 바꾸는 데에 성공시 2타공격 이펙트 출력
                 if (m_pAnimatorCom->Change_State(strStateTag, true))
                     CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::PLAYER_EFFECT, L"Prototype_Component_Texture_Effect_Blade0_Swing1",
-                        *m_pTransformCom->Get_WorldMatrix(), matPlayerWorld, m_pTransformCom, true);
+                        *m_pTransformCom->Get_WorldMatrix(), matPlayerWorld, m_pTransformCom, 0.f, true);
             }
 
             // 1번째 공격으로.
@@ -184,7 +184,7 @@ void CPlayer::Update(_float fTimeDelta)
             // 바꾸는 데에 성공시 1타공격 이펙트 출력
             if (m_pAnimatorCom->Change_State(strStateTag, true))
                 CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::PLAYER_EFFECT, L"Prototype_Component_Texture_Effect_Blade0_Swing0",
-                    *m_pTransformCom->Get_WorldMatrix(), matPlayerWorld, m_pTransformCom);
+                    *m_pTransformCom->Get_WorldMatrix(), matPlayerWorld, m_pTransformCom, 0.f);
 
             //std::cout << "[Player::Update] PlayerPos : " << vPlayerPos.x << ", " << vPlayerPos.y << ", " << vPlayerPos.z << std::endl;
         }
@@ -369,9 +369,9 @@ void CPlayer::Update(_float fTimeDelta)
                     if (m_pAnimatorTransCom->Change_State(L"Fury"))
                     {
                         CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::PLAYER_EFFECT, L"Prototype_Component_Texture_Effect_Blade0_NFury",
-                            *m_pTransformCom->Get_WorldMatrix(), matPlayerWorld, m_pTransformCom, true);
+                            *m_pTransformCom->Get_WorldMatrix(), matPlayerWorld, m_pTransformCom, 0.f, true);
                         CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::PLAYER_EFFECT, L"Prototype_Component_Texture_Effect_Blade0_NFury_Back",
-                            *m_pTransformCom->Get_WorldMatrix(), matPlayerWorld, m_pTransformCom, true);
+                            *m_pTransformCom->Get_WorldMatrix(), matPlayerWorld, m_pTransformCom, 0.f, true);
                     }
                     strStateTag = (vRayPoint.z > vPlayerPos.z) ? L"Fury_Upper" :
                         L"Fury_Lower";
@@ -392,7 +392,7 @@ void CPlayer::Update(_float fTimeDelta)
 
                         // 이펙트 적용
                         CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::PLAYER_EFFECT, L"Prototype_Component_Texture_Effect_Blade0_Parry",
-                            *m_pTransformCom->Get_WorldMatrix(), matPlayerWorld, m_pTransformCom, true);
+                            *m_pTransformCom->Get_WorldMatrix(), matPlayerWorld, m_pTransformCom, 0.f, true);
 
                         // 다시 초기값대로 초기화
                         fDistanceOffset = 1.2f;
@@ -490,6 +490,9 @@ void CPlayer::Update(_float fTimeDelta)
     m_pGameInstance->Compute_TimeDelta(m_strTimerTag);
     m_fStackedTime += m_pGameInstance->Get_TimeDelta(m_strTimerTag);
 
+
+
+    std::cout << "[Player::Update] PlayerPos : " << vPlayerPos.x << ", " << vPlayerPos.y << ", " << vPlayerPos.z << std::endl;
 }
 
 
