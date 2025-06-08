@@ -200,6 +200,7 @@
     <ClInclude Include="..\Public\Point.h" />
     <ClInclude Include="..\public\Potion_Tooltip.h" />
     <ClInclude Include="..\public\Slate_Tooltip.h" />
+    <ClInclude Include="..\public\Slate_Tooltip_Slot.h" />
     <ClInclude Include="..\Public\Sun.h" />
     <ClInclude Include="..\public\Talent.h" />
     <ClInclude Include="..\Public\Effect_Factory.h" />
@@ -355,6 +356,7 @@
     <ClCompile Include="..\Private\Point.cpp" />
     <ClCompile Include="..\private\Potion_Tooltip.cpp" />
     <ClCompile Include="..\private\Slate_Tooltip.cpp" />
+    <ClCompile Include="..\private\Slate_Tooltip_Slot.cpp" />
     <ClCompile Include="..\Private\Sun.cpp" />
     <ClCompile Include="..\private\Talent.cpp" />
     <ClCompile Include="..\Private\Effect_Factory.cpp" />

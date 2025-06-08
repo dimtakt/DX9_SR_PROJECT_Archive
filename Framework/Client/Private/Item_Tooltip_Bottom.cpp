@@ -32,7 +32,7 @@ HRESULT CItem_Tooltip_Bottom::Initialize(void* pArg)
 		m_fSizeX = 350;
 		m_fSizeY = 350;
 		m_fX = 0;
-		m_fY = 170;
+		m_fY = 240;
 		break;
 	case 2:
 		m_fSizeX = 350;

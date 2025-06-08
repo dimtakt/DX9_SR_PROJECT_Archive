@@ -26,7 +26,7 @@ HRESULT CGacha::Initialize_Prototype(LEVEL eLevel)
 
 HRESULT CGacha::Initialize(void* pArg)
 {
-	eGacha_Type = GACHA_TYPE::ALL;
+	m_eGacha_Type = GACHA_TYPE::ALL;
 
 	m_fSizeX = g_iWinSizeX;
 	m_fSizeY = g_iWinSizeY;
@@ -71,20 +71,21 @@ void CGacha::Update(_float fTimeDelta)
 {
 	if (m_pGameInstance->Get_CurrentLevel() == ENUM_CLASS(LEVEL::LEVEL_LOADING) || m_pGameInstance->Get_CurrentLevel() == ENUM_CLASS(LEVEL::LEVEL_LOGO) || m_pGameInstance->Get_CurrentLevel() == ENUM_CLASS(LEVEL::LEVEL_MAPEDIT))
 		return;
-	
+
 	if (!m_bIsUpdate)
 		return;
 
-	/*if (m_pGameInstance->IsKeyDown(VK_UP))
-	{
-		dynamic_cast<CGacha*>(m_pGameInstance->Find_UIObj(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("UI_Gacha")))->UI_Open(CGacha::GACHA_TYPE::STONE);
-	}*/
-		//UI_Switch();
 	if (!m_bIsOpen)
 		return;
 
+	if (m_eOldGacha_Type != m_eGacha_Type)
+	{
+		Rand_Itme(m_eGacha_Type);
+		m_eOldGacha_Type = m_eGacha_Type;
+	}
+
 	if (!m_bIsRandom)
-		Rand_Itme(eGacha_Type);
+		Rand_Itme(m_eGacha_Type);
 
 	if (m_pGameInstance->IsKeyDown(VK_ESCAPE))
 	{
@@ -143,13 +144,13 @@ void CGacha::UI_Switch()
 
 void CGacha::Rand_Item_Set()
 {
-	Rand_Itme(eGacha_Type);
+	Rand_Itme(m_eGacha_Type);
 }
 
 void CGacha::UI_Open(GACHA_TYPE eType)
 {
 	UI_Switch();
-	eGacha_Type = eType;
+	m_eGacha_Type = eType;
 }
 
 void CGacha::Release_Slot()
@@ -372,9 +373,13 @@ void CGacha::Rand_Itme(GACHA_TYPE eType)
 	{
 		_int iIndex1 = m_pGameInstance->Rand(0, vecIndex.size());
 		_int iIndex2 = m_pGameInstance->Rand(0, vecIndex.size());
-		iTemp = vecIndex[iIndex1];
-		vecIndex[iIndex1] = vecIndex[iIndex2];
-		vecIndex[iIndex2] = iTemp;
+		
+		if (iIndex1 != iIndex2)
+		{
+			iTemp = vecIndex[iIndex1];
+			vecIndex[iIndex1] = vecIndex[iIndex2];
+			vecIndex[iIndex2] = iTemp;
+		}
 	}
 
 	for (_int i = 0; i < 5; ++i)

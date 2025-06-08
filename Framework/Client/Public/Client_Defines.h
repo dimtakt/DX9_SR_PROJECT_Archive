@@ -22,7 +22,7 @@ namespace Client
 
 	struct UI_DEPTH {
 		//KEY_GUIDE
-		static constexpr float KEY_GUIDE = 0.15f;
+		static constexpr float KEY_GUIDE = 0.f;
 
 		//HUD
 		static constexpr float HUD_DASH = 0.23f;
