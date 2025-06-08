@@ -14,6 +14,9 @@ public:
 	{
 		_uint iLayerIndex;
 	}CAMERAFOLDESC;
+public:
+	enum class CAM_TRANS_STATE { NONE, ZOOM_OUT, ZOOM_IN_AFTER_TELEPORT };
+	
 private:
 	CCamera_Follow(LPDIRECT3DDEVICE9 pGraphic_Device);
 	CCamera_Follow(const CCamera_Follow& Prototype);
@@ -43,7 +46,8 @@ private:
 	_float			m_fCamTransitionTimer = {};
 	_float			m_fCamTransitionDuration = { };
 	_float			m_fCurrentZRatio = {};
-
+	CAM_TRANS_STATE m_eCamTransitionState = CAM_TRANS_STATE::NONE;
+	_bool			m_bFirstFrame = true;
 
 private:
 	CTransform* m_pTargetPlayerTransformCom = { nullptr };

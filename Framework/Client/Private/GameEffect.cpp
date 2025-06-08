@@ -345,33 +345,38 @@ void CGameEffect::OnCollision(CGameObject* pGameObject)
 	{
 		if (pGameObject->Get_ObjType() == GAMEOBJ_TYPE::PLAYER)
 		{
-
+			_int iDamage{};
 			CPlayer* pPlayer = dynamic_cast<CPlayer*>(pGameObject);
 			if (!pPlayer->Get_IsHit())
 			{
 				if (m_strEffectTag == TEXT("Prototype_Component_Texture_LaserGhost_D_Effect_Laser_Progress"))
 				{
 					CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CULHP, -20.f);
+					iDamage = 20;
 				}
 				else if (m_strEffectTag == TEXT("Prototype_Component_Texture_LaserGhost_D_Effect_Laser_End"))
 				{
 					CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CULHP, -1.f);
+					iDamage = 1;
 				}
 				// µÎ´õÁö
 				else if (m_strEffectTag == TEXT("Prototype_Component_Texture_Mole_A_Effect_Swing"))
 				{
 					CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CULHP, -7.f);
+					iDamage = 7;
 				}
 				// µÅÁö
 				else if (m_strEffectTag == TEXT("Prototype_Component_Texture_Oink_A_Effect_Swing"))
 				{
 					CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CULHP, -10.f);
+					iDamage = 10;
 				}
 				else if (m_strEffectTag == TEXT("Prototype_Component_Texture_Oink_A_Effect_SpinSwing"))
 				{
 					CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CULHP, -15.f);
+					iDamage = 15;
 				}
-				pPlayer->Hit();
+				pPlayer->Hit(iDamage);
 			}
 
 		}

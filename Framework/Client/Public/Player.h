@@ -45,7 +45,7 @@ public:
 	virtual void OnEvent(_uint iTypeindex, const EVENTDATA* pData);
 
 public:
-	void Hit();
+	void Hit(_int iDamage);
 	_bool Get_IsHit() { return m_bIsHit; }
 
 private:
@@ -93,9 +93,12 @@ private:
 private:
 	HRESULT Ready_Components(void* pArg);
 	HRESULT Ready_Object();					//필드 HP바 테스트용
-	HRESULT Render_Font();					//필드 폰트 테스트용
 	void SetUp_RenderState();
 	void Reset_RenderState();
+	HRESULT Render_Font(_int iDamage);					//필드 폰트 테스트용
+
+public:
+	
 
 public:
 	static CPlayer* Create(LPDIRECT3DDEVICE9 pGraphic_Device);

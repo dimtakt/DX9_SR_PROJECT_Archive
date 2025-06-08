@@ -95,7 +95,7 @@ void CStatus_Value::Update_Value()
 		break;
 	case 1:
 		m_iMaxValue = (_int)CStat_Manager::GetInstance()->Get_CurStats()[ENUM_CLASS(STAT_INFO::MAXMP)];
-		m_iCulValue = (_int)CStat_Manager::GetInstance()->Get_CurStats()[ENUM_CLASS(STAT_INFO::CULHP)];
+		m_iCulValue = (_int)CStat_Manager::GetInstance()->Get_CurStats()[ENUM_CLASS(STAT_INFO::CULMP)];
 		break;
 	case 2:
 		m_iCulValue = (_int)CStat_Manager::GetInstance()->Get_CurStats()[ENUM_CLASS(STAT_INFO::CULDEF)];

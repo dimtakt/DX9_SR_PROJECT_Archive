@@ -48,8 +48,8 @@ public:
 	class CTransform* Get_Transform() { return m_pTransformCom; }
 
 public:
-	void Set_Damage(_float fDamage) { m_iCulHp += fDamage; }
-
+	void Set_Damage(_float fDamage);
+	HRESULT Render_Font(_int iDamage);
 public:
 	_bool Get_IsHit() { return m_bIsHit; }
 	void Set_IsHit(_bool bHit) { m_bIsHit = bHit; }

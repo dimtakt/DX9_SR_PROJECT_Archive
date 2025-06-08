@@ -80,7 +80,6 @@ HRESULT CLevel_Stage1::Ready_Light(const _wstring& strLayerTag)
 	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_STAGE1), strLayerTag,
 		ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_Point"), &desc)))
 		return E_FAIL;
-
 	return S_OK;
 }
 
