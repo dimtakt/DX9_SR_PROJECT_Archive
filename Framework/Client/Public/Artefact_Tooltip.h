@@ -35,6 +35,7 @@ private:
 	HRESULT							Ready_Children();
 
 	void							Render_Font();
+	void							Render_Pos();
 public:
 	static CArtefact_Tooltip*		Create(LPDIRECT3DDEVICE9 pGraphic_Device, LEVEL eLevel);
 	virtual CGameObject*			Clone(void* pArg) override;

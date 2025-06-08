@@ -63,7 +63,7 @@ void CItem_Base::Late_Update(_float fTimeDelta, _float3 fPos)
 		m_bisSelete = false;
 
 	m_pTransformCom->Rotation(_float3{ 0.f,0.f,-1.f }, D3DXToRadian(m_fAngle));
-
+	m_pTransformCom->Scaling(m_fSizeX, m_fSizeY, 1.f);
 	m_pTransformCom->Set_State(STATE::POSITION, fPos);
 	m_pGameInstance->Add_RenderGroup(RENDERGROUP::RG_UI, this);
 }
@@ -83,21 +83,37 @@ HRESULT CItem_Base::Render()
 		if (m_bisSelete)
 			if (FAILED(Selete_Render()))
 				return E_FAIL;
+
 		if (m_bIsTooltip)
 			m_bIsTooltip_Render = true;
 		else
 			m_bIsTooltip_Render = false;
 
 	}
-	else
+	else if (m_bIsTooltip && !m_bIsTooltip_Slate_Render)
 	{
-		if (m_bIsTooltip)
+		if (FAILED(Tooltip_Render()))
+			return E_FAIL;
+
+		if(m_iItemType == 1)
+			m_bIsTooltip_Slate_Render = true;
+		else
 		{
-			if (FAILED(Tooltip_Render()))
+			m_bIsTooltip = false;
+			m_bIsTooltip_Render = false;
+		}
+	}
+	else if(m_bIsTooltip_Slate_Render)
+	{
+		if (m_iItemType == 1)
+		{
+			if (FAILED(Tooltip_Slate_Render()))
 				return E_FAIL;
 		}
+
 		m_bIsTooltip = false;
 		m_bIsTooltip_Render = false;
+		m_bIsTooltip_Slate_Render = false;
 	}
 	return S_OK;
 }
@@ -122,6 +138,12 @@ void CItem_Base::IsTooltip(_float3 TooltipPos)
 {
 	m_vTooltipPos = TooltipPos;
 	m_bIsTooltip = true;
+	m_pGameInstance->Add_RenderGroup(RENDERGROUP::RG_UI_BLEND, this);
+}
+
+void CItem_Base::IsTooltip_Slate(_float3 TooltipSlotPos)
+{
+	m_vTooltipSlatePos = TooltipSlotPos;
 	m_pGameInstance->Add_RenderGroup(RENDERGROUP::RG_UI_BLEND, this);
 }
 
@@ -155,6 +177,18 @@ HRESULT CItem_Base::Tooltip_Render()
 {
 	m_pTransformCom->Rotation(_float3{ 0.f,0.f,-1.f }, D3DXToRadian(0));
 	m_pTransformCom->Set_State(STATE::POSITION, m_vTooltipPos);
+	__super::Begin();
+	m_pVIBufferCom->Render();
+	__super::End();
+
+	return S_OK;
+}
+
+HRESULT CItem_Base::Tooltip_Slate_Render()
+{
+	m_pTransformCom->Scaling(m_fSizeX * 0.5f, m_fSizeY * 0.5f, 1.f);
+	m_pTransformCom->Rotation(_float3{ 0.f,0.f,-1.f }, D3DXToRadian(m_fAngle));
+	m_pTransformCom->Set_State(STATE::POSITION, m_vTooltipSlatePos);
 	__super::Begin();
 	m_pVIBufferCom->Render();
 	__super::End();

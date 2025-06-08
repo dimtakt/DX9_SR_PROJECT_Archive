@@ -3,6 +3,7 @@
 #include "Gacha_Slot_Selete.h"
 #include "Client_Defines_Item.h"
 #include "Gacha.h"
+#include "Tooltip.h"
 CGacha_Slot::CGacha_Slot(LPDIRECT3DDEVICE9 pGraphic_Device) : CButton{ pGraphic_Device }
 {
 }
@@ -61,6 +62,16 @@ void CGacha_Slot::Priority_Update(_float fTimeDelta)
 void CGacha_Slot::Update(_float fTimeDelta)
 {
 	Item_Selete();
+
+	if (m_pOldSlotItem != m_pSlotItem)
+	{
+		for (_int i = 0; i < 3; ++i)
+		{
+			static_cast<CTooltip*>(m_vecChildren[i])->Change_Item(m_pSlotItem);
+		}
+		m_pOldSlotItem = m_pSlotItem;
+
+	}
 	__super::Update(fTimeDelta);
 }
 
@@ -68,8 +79,33 @@ void CGacha_Slot::Late_Update(_float fTimeDelta)
 {
 	m_pGameInstance->Add_RenderGroup(RENDERGROUP::RG_UI, this);
 	
-	if(CUIObject::isPick(g_hWnd))
-		__super::Late_Update(fTimeDelta);
+	if (CUIObject::isPick(g_hWnd))
+	{
+		if (m_pSlotItem != nullptr)
+		{
+
+			m_vecChildren[3]->Late_Update(fTimeDelta);
+			//ARTEFACT, STONE, POTION, SKILLBOOK
+			switch (m_pSlotItem->Item_Info()->iItemType)
+			{
+			case 0:
+				m_vecChildren[0]->Late_Update(fTimeDelta);
+				break;
+			case 1:
+				m_vecChildren[1]->Late_Update(fTimeDelta);
+				break;
+			case 2:
+				m_vecChildren[2]->Late_Update(fTimeDelta);
+				break;
+			case 3:
+				m_vecChildren[0]->Late_Update(fTimeDelta);
+				break;
+			}
+		}
+		else
+			m_vecChildren[3]->Late_Update(fTimeDelta);
+	}
+
 
 	if (m_pSlotItem != nullptr)
 		m_pSlotItem->Late_Update(fTimeDelta, _float3{ m_pTransformCom->Get_State(STATE::POSITION).x, m_pTransformCom->Get_State(STATE::POSITION).y - 4, m_pTransformCom->Get_State(STATE::POSITION).z });
@@ -151,7 +187,20 @@ HRESULT CGacha_Slot::Ready_ChildPrototype(LEVEL eLevel)
 HRESULT CGacha_Slot::Ready_Children()
 {
 	CUIObject* pGameObject = nullptr;
+	pGameObject = dynamic_cast<CUIObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(m_eLevel), TEXT("Prototype_GameObject_Artefact_Tooltip")));
+	if (nullptr == pGameObject)
+		return E_FAIL;
+	Add_Child(pGameObject);
 
+	pGameObject = dynamic_cast<CUIObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(m_eLevel), TEXT("Prototype_GameObject_Slate_Tooltip")));
+	if (nullptr == pGameObject)
+		return E_FAIL;
+	Add_Child(pGameObject);
+
+	pGameObject = dynamic_cast<CUIObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(m_eLevel), TEXT("Prototype_GameObject_Potion_Tooltip")));
+	if (nullptr == pGameObject)
+		return E_FAIL;
+	Add_Child(pGameObject);
 	pGameObject = dynamic_cast<CUIObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(m_eLevel), TEXT("Prototype_GameObject_UI_Gacha_Slot_Selete")));
 	if (nullptr == pGameObject)
 		return E_FAIL;
@@ -188,5 +237,5 @@ void CGacha_Slot::Free()
 {
 	__super::Free();
 	Safe_Release(m_pSlotItem);
-
+	Safe_Release(m_pOldSlotItem);
 }

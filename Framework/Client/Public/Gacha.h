@@ -24,6 +24,7 @@ public:
 
 public:
 	void							UI_Open(GACHA_TYPE eType);
+	const _bool						Get_Item_Check() {	return m_bIsRandom;}
 
 	void							UI_Switch();
 	void							Rand_Item_Set();
@@ -36,7 +37,8 @@ private:
 	_bool							m_bIsOpen = { false };
 	_bool							m_bIsRandom = { false };
 
-	GACHA_TYPE						eGacha_Type = {};
+	GACHA_TYPE						m_eOldGacha_Type = {};
+	GACHA_TYPE						m_eGacha_Type = {};
 private:
 	HRESULT							Ready_Components();
 

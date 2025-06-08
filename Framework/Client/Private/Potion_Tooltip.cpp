@@ -54,6 +54,9 @@ void CPotion_Tooltip::Priority_Update(_float fTimeDelta)
 
 void CPotion_Tooltip::Update(_float fTimeDelta)
 {
+	if (m_pItemObject == nullptr)
+		return;
+
 	__super::Update(fTimeDelta);
 }
 
@@ -79,6 +82,7 @@ void CPotion_Tooltip::Late_Update(_float fTimeDelta)
 
 HRESULT CPotion_Tooltip::Render()
 {
+	Render_Pos();
 	if (FAILED(m_pTextureCom->Bind_Texture(0)))
 		return E_FAIL;
 	m_pVIBufferCom->Bind_Buffers();
@@ -153,11 +157,11 @@ void CPotion_Tooltip::Render_Font()
 		break;
 	case ITEM_RARITY::RARE:
 		_stprintf_s(szText, TEXT("[°í±Þ]"));
-		TexColor = D3DXCOLOR(0.f, 1.f, 0.f, 1.f);
+		TexColor = D3DXCOLOR(0.3f, 1.f, 0.f, 1.f);
 		break;
 	case ITEM_RARITY::EPIC:
 		_stprintf_s(szText, TEXT("[Èñ±Í]"));
-		TexColor = D3DXCOLOR(0.f, 0.f, 1.f, 1.f);
+		TexColor = D3DXCOLOR(0.f, 0.75f, 1.f, 1.f);
 		break;
 	case ITEM_RARITY::LEGENDARY:
 		_stprintf_s(szText, TEXT("[Àü¼³]"));
@@ -181,6 +185,20 @@ void CPotion_Tooltip::Render_Font()
 	m_vTexRect.top += 20;
 	m_pGameInstance->Render_Font(TEXT("UI_Font_16_Tooltip"), g_ItemDataBase[iItemID].m_szDescription, m_vTexRect, D3DXCOLOR(1.f, 1.f, 1.f, 1.f), DT_LEFT | DT_TOP);
 	return;
+}
+
+void CPotion_Tooltip::Render_Pos()
+{
+	POINT mousePos;
+	GetCursorPos(&mousePos);
+	ScreenToClient(g_hWnd, &mousePos);
+
+	if (mousePos.x < 970)
+		m_fX = 195;
+	else
+		m_fX = -195;
+
+	__super::Update_Position();
 }
 
 CPotion_Tooltip* CPotion_Tooltip::Create(LPDIRECT3DDEVICE9 pGraphic_Device, LEVEL eLevel)

@@ -23,7 +23,7 @@ HRESULT CHud_Exp::Initialize(void* pArg)
     m_fSizeY = 9;
     m_fX = 0;
     m_fY = 0;
-    m_fZ = UI_DEPTH::HUD_EXP;
+    m_fZ = 0;
     m_iWinSizeX = g_iWinSizeX;
     m_iWinSizeY = g_iWinSizeY;
 
@@ -53,6 +53,8 @@ void CHud_Exp::Update(_float fTimeDelta)
 
 void CHud_Exp::Late_Update(_float fTimeDelta)
 {
+    if (m_pGameInstance->IsKeyHold(VK_RIGHT))
+        m_iCulValue += 1;
     m_iCulValue = CStat_Manager::GetInstance()->Get_CurStats()[ENUM_CLASS(STAT_INFO::EXP)];
     Progress_UpdateX();
     m_pGameInstance->Add_RenderGroup(RENDERGROUP::RG_UI, this);
@@ -60,6 +62,7 @@ void CHud_Exp::Late_Update(_float fTimeDelta)
 
 HRESULT CHud_Exp::Render()
 {
+    m_pGraphic_Device->SetTexture(0, NULL);
     m_pVIBufferCom->Bind_Buffers();
 
     SetUp_RenderState();
@@ -67,7 +70,7 @@ HRESULT CHud_Exp::Render()
     m_pVIBufferCom->Render();
     __super::End();
     Reset_RenderState();
- 
+
     return S_OK;
 }
 
@@ -86,6 +89,7 @@ HRESULT CHud_Exp::Ready_Components()
 
 void CHud_Exp::SetUp_RenderState()
 {
+    m_pGraphic_Device->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
     m_pGraphic_Device->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
     m_pGraphic_Device->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
     m_pGraphic_Device->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
@@ -95,6 +99,7 @@ void CHud_Exp::SetUp_RenderState()
 void CHud_Exp::Reset_RenderState()
 {
     m_pGraphic_Device->SetRenderState(D3DRS_ALPHABLENDENABLE, FALSE);
+    m_pGraphic_Device->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
 }
 
 CHud_Exp* CHud_Exp::Create(LPDIRECT3DDEVICE9 pGraphic_Device)
