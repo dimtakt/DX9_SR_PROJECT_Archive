@@ -11,9 +11,11 @@ BEGIN(Client)
 class CSun : public CGameObject
 {
 public:
-	typedef struct tagSunDesc
+	typedef struct tagSunDesc : public LIGHTDATA
 	{
-		CTransform* pTargetTransform;
+		_wstring	strLightID;
+		_float3 vLightPos;
+		_float3 vLightDir;
 	}SUNDESC;
 private:
 	CSun(LPDIRECT3DDEVICE9 pGraphic_Device);
@@ -34,7 +36,7 @@ private:
 
 private:
 	_wstring m_strLightID = {};
-	CTransform* m_pTargetTransformCom = { nullptr };
+	//CTransform* m_pTargetTransformCom = { nullptr };
 	_float3 m_vOffsetPos = {};
 	_float3 m_vOffsetDir = {};
 

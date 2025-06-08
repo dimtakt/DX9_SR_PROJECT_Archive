@@ -6,6 +6,7 @@
 #include "Camera_Follow.h"
 #include "Dagger.h"
 #include "Player.h"
+#include "Sun.h"
 
 CLevel_Town::CLevel_Town(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CLevel{ pGraphic_Device }
@@ -63,10 +64,25 @@ HRESULT CLevel_Town::Ready_Light(const _wstring& strLayerTag)
 	desc.desc.vSpecular = _float4(1.f, 1.f, 1.f, 1.f);
 	desc.desc.vAmbient = _float4(0.01f, 0.01f, 0.01f, 1.f); // 기본 어두움 유지
 	desc.desc.fSpecPower = 64.f;
-	desc.desc.fRange = 15.f;
+	desc.desc.fRange = 200.f;
 
 	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_TOWN), strLayerTag,
 		ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_Point"), &desc)))
+		return E_FAIL;
+
+	CSun::SUNDESC SunDesc{};
+	SunDesc.strLightID = TEXT("Sun");
+	SunDesc.desc.eType = LIGHT_TYPE::POINT;
+	SunDesc.desc.vDiffuse = _float4(1.f, 1.f, 1.f, 1.f);
+	SunDesc.desc.vSpecular = _float4(1.f, 1.f, 1.f, 1.f);
+	SunDesc.desc.vAmbient = _float4(0.01f, 0.01f, 0.01f, 1.f); // 기본 어두움 유지
+	SunDesc.desc.fSpecPower = 64.f;
+	SunDesc.desc.fRange = 200.f;
+	SunDesc.vLightPos = _float3(0.f, -10.f, 0.f);
+	SunDesc.vLightDir = _float3(0.f, -0.5f, 0.f);
+
+	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_TOWN), strLayerTag,
+		ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_Sun"), &desc)))
 		return E_FAIL;
 
 	return S_OK;
