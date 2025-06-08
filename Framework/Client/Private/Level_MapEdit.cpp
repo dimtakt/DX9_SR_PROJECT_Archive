@@ -127,7 +127,7 @@ HRESULT CLevel_MapEdit::Ready_Interaction_Texture_Info()
 		TEXT("Prototype_GameObject_Interaction_Normal")));
 
 	OBJECT_TEXTURE_INFO Interraction;
-	Interraction.iTextureCount = 6;
+	Interraction.iTextureCount = 9;
 	Interraction.pTextureCom = static_cast<CTexture*>(m_pPreview->Find_Component(TEXT("Com_Texture")));
 	if (Interraction.pTextureCom)
 		Interraction.pTextureCom->AddRef();
@@ -753,7 +753,7 @@ void CLevel_MapEdit::ImGui_Interaction_Object_MenBar()
 
 		ImGui::Text("Interaction Texture Index:");
 		ImGui::SetNextItemWidth(250);
-		ImGui::SliderInt("Texture", &iInteractionTexIndex, 0, 5); //  ¿Œµ¶Ω∫
+		ImGui::SliderInt("Texture", &iInteractionTexIndex, 0, 8); //  ¿Œµ¶Ω∫
 		ImGui::SameLine();
 		if (ImGui::Button("-"))
 			iInteractionTexIndex -= 1;
@@ -778,8 +778,16 @@ void CLevel_MapEdit::ImGui_Interaction_Object_MenBar()
 				tSrc.eType = GAMEOBJ_TYPE::ATIFACT;
 			else if (iInteractionTexIndex == 4)
 				tSrc.eType = GAMEOBJ_TYPE::STONE_TABLET;
-			else
+			else if (iInteractionTexIndex == 5)
 				tSrc.eType = GAMEOBJ_TYPE::MERCAHNT;
+			else if (iInteractionTexIndex == 6)
+				tSrc.eType = GAMEOBJ_TYPE::MONSTER_OINK;
+			else if (iInteractionTexIndex == 7)
+				tSrc.eType = GAMEOBJ_TYPE::MONSTER_MOLE;
+			else if (iInteractionTexIndex == 8)
+				tSrc.eType = GAMEOBJ_TYPE::MONSTER_LASERGHOST;
+
+
 			tSrc.iTextureIndex = iInteractionTexIndex;
 			tSrc.vPos = m_Translates;
 			tSrc.vScale = m_Scales;

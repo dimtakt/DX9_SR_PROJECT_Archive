@@ -1,9 +1,9 @@
 #pragma once
 #include "GameObject.h"
 #include "GameInstance.h"
-#include "Client_Defines.h"
 #include "TerrainBox.h"
 #include "Field_Hp.h"
+#include "Client_Defines.h"
 
 BEGIN(Engine)
 class CCollider_OBB;
@@ -21,6 +21,7 @@ public:
 		_wstring strPrototypeTag;
 		_float3 vPosition;
 		CTerrainBox* pTerrainBox;
+		MONSTER_TYPE_A eType;
 	}MONSTERDESC;
 protected:
 	CMonster(LPDIRECT3DDEVICE9 pGraphic_Device);

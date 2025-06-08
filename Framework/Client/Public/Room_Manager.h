@@ -22,7 +22,7 @@ public:
 	HRESULT Check_Room(_uint iLayerLevelIndex, const _wstring& strLayerTag, _int iRoomID);
 	HRESULT Check_SpecialRoom(LEVEL eLevel, const _wstring& strLayerTag, _int iRoomID);
 	HRESULT Check_Potal_Coll(POTAL_TYPE ePotalType, _float3 &vNextPos);
-	HRESULT Check_END_Potal(_uint iLayerLevelIndex, const _wstring& strLayerTag, _int iRoomID);
+	HRESULT Check_END_Potal(_uint iLayerLevelIndex, const _wstring& strLayerTag, _int iIndex);
 	CRoom* Get_CurrentRoom();
 	CRoom* Get_RoomByID(_int iRoomID);
 	CRoom* Find_Room(_int iRoomIndexX, _int iRoomIndexZ);
