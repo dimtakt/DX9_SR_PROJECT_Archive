@@ -486,9 +486,9 @@ HRESULT CErma_Hand_R::Ready_Components(void* pArg)
         TEXT("Com_AnimatorPattern"), reinterpret_cast<CComponent**>(&m_pAnimatorPatternCom), &StartAnimStateDesc)))
         return E_FAIL;
 
-    m_pAnimatorPatternCom->Add_State(L"Idle", { nullptr, 4, true });
-    m_pAnimatorPatternCom->Add_State(L"Strike", { nullptr, 480, true });    // 8s
-    m_pAnimatorPatternCom->Add_State(L"Laser", { nullptr, 600, true });    // 10s
+    m_pAnimatorPatternCom->Add_State(L"Idle",       { nullptr, 4, true });
+    m_pAnimatorPatternCom->Add_State(L"Strike",     { nullptr, 480, true });    // 8s
+    m_pAnimatorPatternCom->Add_State(L"Laser",      { nullptr, 600, true });    // 10s
 
     // ..
 

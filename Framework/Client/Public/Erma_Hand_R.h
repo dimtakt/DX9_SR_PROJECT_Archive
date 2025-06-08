@@ -13,6 +13,7 @@ public:
 		PT_IDLE,
 		PT_STRIKE,	// 주먹으로 내려찍는 패턴
 		PT_LASER,	// 주먹을 펴고 레이저를 쏘는 패턴
+
 		PT_END
 	};
 
