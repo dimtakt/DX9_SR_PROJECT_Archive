@@ -4,6 +4,7 @@
 #include "Minimap_Button.h"
 #include "Minimap_Node.h"
 #include "Room_Manager.h"
+#include "Stat_Manager.h"
 CMinimap::CMinimap(LPDIRECT3DDEVICE9 pGraphic_Device) : CUIObject(pGraphic_Device)
 {
 }
@@ -71,6 +72,12 @@ void CMinimap::Update(_float fTimeDelta)
 
 	if (!m_bIsUpdate)
 		return;
+
+	if (CStat_Manager::GetInstance()->Get_Battle())
+	{
+		m_bisOpen = false;
+		return;
+	}
 
 	if (m_pGameInstance->IsKeyDown(VK_TAB))
 		UI_Switch();

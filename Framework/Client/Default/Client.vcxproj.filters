@@ -882,6 +882,9 @@
     <ClInclude Include="..\public\Erma_Head.h">
       <Filter>02.GameObject\Monster\Boss\Erma</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\Slate_Tooltip_Slot.h">
+      <Filter>02.GameObject\UI\Tooltip\Tooltip_Etc</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -1319,6 +1322,9 @@
     </ClCompile>
     <ClCompile Include="..\private\Erma_Head.cpp">
       <Filter>02.GameObject\Monster\Boss\Erma</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Slate_Tooltip_Slot.cpp">
+      <Filter>02.GameObject\UI\Tooltip\Tooltip_Etc</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

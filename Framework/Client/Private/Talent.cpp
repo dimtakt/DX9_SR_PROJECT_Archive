@@ -3,6 +3,7 @@
 #include "Talent_Reset.h"
 #include "Talent_Point.h"
 #include "Talent_Slot.h"
+#include "Stat_Manager.h"
 CTalent::CTalent(LPDIRECT3DDEVICE9 pGraphic_Device) : CUIObject(pGraphic_Device)
 {
 }
@@ -68,7 +69,11 @@ void CTalent::Update(_float fTimeDelta)
 
 	if (!m_bIsUpdate)
 		return;
-
+	if (CStat_Manager::GetInstance()->Get_Battle())
+	{
+		m_bisOpen = false;
+		return;
+	}
 	if (m_pGameInstance->IsKeyDown('P'))
 		UI_Switch();
 

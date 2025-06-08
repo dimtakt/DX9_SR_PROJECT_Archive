@@ -66,7 +66,15 @@ void CInven_Slot::Update(_float fTimeDelta)
 {
 	if (CUIObject::isPick(g_hWnd) && m_pGameInstance->IsKeyDown('R') && m_pSlotItem != nullptr)
 		m_pSlotItem->IsRotation_Slate();
-
+	
+	if (m_pOldSlotItem != m_pSlotItem)
+	{
+		for (_int i = 0; i < 3; ++i)
+		{
+			static_cast<CTooltip*>(m_vecChildren[i])->Change_Item(m_pSlotItem);
+		}
+		m_pOldSlotItem = m_pSlotItem;
+	}
 	Item_Selete();
 	Setting_Item();
 	if (m_bIsOver)
@@ -131,10 +139,6 @@ void CInven_Slot::Add_Item(CItem_Base* pItem)
 {
 	m_pSlotItem = pItem;
 	m_iItemCount += 1;
-	for (_int i = 0; i < 3; ++i)
-	{
-		static_cast<CTooltip*>(m_vecChildren[i])->Change_Item(pItem);
-	}
 }
 
 void CInven_Slot::Push_Item(CItemObject* pItem)
@@ -438,5 +442,6 @@ CGameObject* CInven_Slot::Clone(void* pArg)
 void CInven_Slot::Free()
 {
 	Safe_Release(m_pSlotItem);
+	Safe_Release(m_pOldSlotItem);
 	__super::Free();
 }

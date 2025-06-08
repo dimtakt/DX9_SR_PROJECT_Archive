@@ -166,6 +166,10 @@ HRESULT CLevel_Stage2::Ready_Layer_UI(const _wstring& strLayerTag)
 		ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_Hud_Buff"), &Desc)))
 		return E_FAIL;
 
+	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_STAGE2), strLayerTag,
+		ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_Minimap"), &Desc)))
+		return E_FAIL;
+
 	return S_OK;
 }
 
@@ -225,52 +229,6 @@ HRESULT CLevel_Stage2::Ready_Layer_Room(const _wstring& strLayerTag)
 				m_pGameInstance->Broadcast(ENUM_CLASS(EVENT_TYPE::ROOMCHANGE), &EventDesc);
 			}
 
-
-			//list<CMonster::MONSTERDESC> DescList;
-			//for (size_t i = 0; i < 5; i++)
-			//{
-			//	CMonster::MONSTERDESC tDesc = {};
-			//	tDesc.iLayerLevelIndex = ENUM_CLASS(LEVEL::LEVEL_STAGE2);
-			//	tDesc.iPrototypeLevelIndex = ENUM_CLASS(LEVEL::LEVEL_STAGE2);
-			//	tDesc.strLayerTag = strLayerTag;
-			//	//tDesc.strPrototypeTag = TEXT("Prototype_GameObject_ShortMonster");
-			//	//tDesc.strPrototypeTag = TEXT("Prototype_GameObject_Monster_Mole_A");
-			//	tDesc.strPrototypeTag = TEXT("Prototype_GameObject_Monster_Oink_A");
-			//	//tDesc.strPrototypeTag = TEXT("Prototype_GameObject_Monster_LaserGhost_D");
-			//	tDesc.pTerrainBox = pRoom->Get_TerrainBox();
-			//	DescList.push_back(tDesc);
-			//}
-			//CMonster_Factory::GetInstance()->Add_Monsters(pRoom, DescList, CMonster_Factory::MONSTER_TYPE::MONSTER_OINK_A);
-			//DescList.clear();
-			//for (size_t i = 0; i < 2; i++)	// ksta : 패턴 파악 위해 임시로 1만 바꿈, 원래값 5
-			//{
-			//	CMonster::MONSTERDESC tDesc = {};
-			//	tDesc.iLayerLevelIndex = ENUM_CLASS(LEVEL::LEVEL_STAGE2);
-			//	tDesc.iPrototypeLevelIndex = ENUM_CLASS(LEVEL::LEVEL_STAGE2);
-			//	tDesc.strLayerTag = strLayerTag;
-			//	//tDesc.strPrototypeTag = TEXT("Prototype_GameObject_ShortMonster");
-			//	tDesc.strPrototypeTag = TEXT("Prototype_GameObject_Monster_Mole_A");
-			//	//tDesc.strPrototypeTag = TEXT("Prototype_GameObject_Monster_Oink_A");
-			//	//tDesc.strPrototypeTag = TEXT("Prototype_GameObject_Monster_LaserGhost_D");
-			//	tDesc.pTerrainBox = pRoom->Get_TerrainBox();
-			//	DescList.push_back(tDesc);
-			//}
-			//CMonster_Factory::GetInstance()->Add_Monsters(pRoom, DescList, CMonster_Factory::MONSTER_TYPE::MONSTER_MOLE_A);
-			//DescList.clear();
-			//for (size_t i = 0; i < 2; i++)	// ksta : 패턴 파악 위해 임시로 1만 바꿈, 원래값 5
-			//{
-			//	CMonster::MONSTERDESC tDesc = {};
-			//	tDesc.iLayerLevelIndex = ENUM_CLASS(LEVEL::LEVEL_STAGE2);
-			//	tDesc.iPrototypeLevelIndex = ENUM_CLASS(LEVEL::LEVEL_STAGE2);
-			//	tDesc.strLayerTag = strLayerTag;
-			//	//tDesc.strPrototypeTag = TEXT("Prototype_GameObject_ShortMonster");
-			//	//tDesc.strPrototypeTag = TEXT("Prototype_GameObject_Monster_Mole_A");
-			//	//tDesc.strPrototypeTag = TEXT("Prototype_GameObject_Monster_Oink_A");
-			//	tDesc.strPrototypeTag = TEXT("Prototype_GameObject_Monster_LaserGhost_D");
-			//	tDesc.pTerrainBox = pRoom->Get_TerrainBox();
-			//	DescList.push_back(tDesc);
-			//}
-			//CMonster_Factory::GetInstance()->Add_Monsters(pRoom, DescList, CMonster_Factory::MONSTER_TYPE::MONSTER_LASERGHOST_D);
 		}
 		else if (iEventCheck < iEventRoomCreate)
 		{
@@ -304,6 +262,8 @@ HRESULT CLevel_Stage2::Ready_Layer_Room(const _wstring& strLayerTag)
 		CRoom_Manager::GetInstance()->Check_Room(ENUM_CLASS(LEVEL::LEVEL_STAGE2), strLayerTag, num);
 	}
 
+	//앤드포탈 생성 1회
+	CRoom_Manager::GetInstance()->Check_END_Potal(ENUM_CLASS(LEVEL::LEVEL_STAGE2), strLayerTag, iIndex);
 
 	return S_OK;
 }

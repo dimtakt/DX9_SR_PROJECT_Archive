@@ -48,7 +48,7 @@ void CLaserGhost_D::Priority_Update(_float fTimeDelta)
 
 void CLaserGhost_D::Update(_float fTimeDelta)
 {
-    if (!m_pTerrainBox || !m_pTransformCom || !m_pTextureCom)
+    if (!m_pTerrainBox || !m_pTransformCom)
         return;
 
 

@@ -43,30 +43,30 @@ HRESULT CInventory::Initialize(void* pArg)
 		return E_FAIL;
 
 	m_pGameInstance->Add_UIObject(ENUM_CLASS(m_eLevel), TEXT("UI_Inven"), this);
-
-	CItemObject* pItem = m_pGameInstance->Get_ItemObject(0, true);
+	CItemObject* pItem = nullptr;
+	pItem = m_pGameInstance->Get_ItemObject(0, true);
 	m_vecInventory[0]->Add_Item(static_cast<CItem_Base*>(pItem));
-
-	pItem = m_pGameInstance->Get_ItemObject(1,true);
-	m_vecInventory[1]->Add_Item(static_cast<CItem_Base*>(pItem));
-
-	pItem = m_pGameInstance->Get_ItemObject(2, true);
-	m_vecInventory[2]->Add_Item(static_cast<CItem_Base*>(pItem));
-
-	pItem = m_pGameInstance->Get_ItemObject(3, true);
-	m_vecInventory[3]->Add_Item(static_cast<CItem_Base*>(pItem));
-
-	pItem = m_pGameInstance->Get_ItemObject(4, true);
-	m_vecInventory[4]->Add_Item(static_cast<CItem_Base*>(pItem));
-
-	pItem = m_pGameInstance->Get_ItemObject(5, true);
-	m_vecInventory[5]->Add_Item(static_cast<CItem_Base*>(pItem));
-
-	pItem = m_pGameInstance->Get_ItemObject(6, true);
-	m_vecInventory[6]->Add_Item(static_cast<CItem_Base*>(pItem));
-
-	pItem = m_pGameInstance->Get_ItemObject(7, true);
-	m_vecInventory[7]->Add_Item(static_cast<CItem_Base*>(pItem));
+//
+//	pItem = m_pGameInstance->Get_ItemObject(1,true);
+//	m_vecInventory[1]->Add_Item(static_cast<CItem_Base*>(pItem));
+//
+//	pItem = m_pGameInstance->Get_ItemObject(2, true);
+//	m_vecInventory[2]->Add_Item(static_cast<CItem_Base*>(pItem));
+//
+//	pItem = m_pGameInstance->Get_ItemObject(3, true);
+//	m_vecInventory[3]->Add_Item(static_cast<CItem_Base*>(pItem));
+//
+//	pItem = m_pGameInstance->Get_ItemObject(4, true);
+//	m_vecInventory[4]->Add_Item(static_cast<CItem_Base*>(pItem));
+//
+//	pItem = m_pGameInstance->Get_ItemObject(5, true);
+//	m_vecInventory[5]->Add_Item(static_cast<CItem_Base*>(pItem));
+//
+//	pItem = m_pGameInstance->Get_ItemObject(6, true);
+//	m_vecInventory[6]->Add_Item(static_cast<CItem_Base*>(pItem));
+//
+//	pItem = m_pGameInstance->Get_ItemObject(7, true);
+//	m_vecInventory[7]->Add_Item(static_cast<CItem_Base*>(pItem));
 
 	pItem = m_pGameInstance->Get_ItemObject(8, true);
 	m_vecInventory[8]->Add_Item(static_cast<CItem_Base*>(pItem));
