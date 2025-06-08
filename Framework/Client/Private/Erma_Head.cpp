@@ -35,10 +35,10 @@ HRESULT CErma_Head::Initialize(void* pArg)
     m_pTransformCom->Set_State(STATE::POSITION, _float3(
         fTerrainPos.x,
         0.f,
-        fTerrainPos.z + fTerrainScale.z / 2 - 1.3f));
+        fTerrainPos.z + fTerrainScale.z / 2 - 2.f));
 
     // 크기 조정
-    m_pTransformCom->Scaling(5.f, 5.f, 5.f);
+    m_pTransformCom->Scaling(7.5f, 7.5f, 7.5f);
 
 
 
@@ -144,7 +144,7 @@ void CErma_Head::Update(_float fTimeDelta)
 
 
     if (m_pTerrainBox != nullptr) {
-        m_pTerrainBox->SetUp_OnTerrainBox(m_pTransformCom, _float3(0.05f, 1.f, 0.05f));
+        m_pTerrainBox->SetUp_OnTerrainBox(m_pTransformCom, _float3(0.0f, 2.f, 0.0f));
     }
 }
 
@@ -158,6 +158,7 @@ HRESULT CErma_Head::Render()
     if (!m_pTransformCom)
         return S_OK;
 
+    SetUp_RenderState();
 
     m_pTransformCom->Bind_Matrix();
 
@@ -165,7 +166,6 @@ HRESULT CErma_Head::Render()
 
     m_pVIBufferCom->Bind_Buffers();
 
-    SetUp_RenderState();
 
     m_pVIBufferCom->Render();
 

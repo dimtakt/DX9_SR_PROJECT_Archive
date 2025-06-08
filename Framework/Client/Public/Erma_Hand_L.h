@@ -63,8 +63,6 @@ private:
 
 
 
-
-
 public:
 	static CErma_Hand_L* Create(LPDIRECT3DDEVICE9 pGraphic_Device);
 	virtual CGameObject* Clone(void* pArg) override;

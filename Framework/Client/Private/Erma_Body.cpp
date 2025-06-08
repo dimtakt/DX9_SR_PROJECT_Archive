@@ -35,10 +35,10 @@ HRESULT CErma_Body::Initialize(void* pArg)
     m_pTransformCom->Set_State(STATE::POSITION, _float3(
         fTerrainPos.x,
         0.f,
-        fTerrainPos.z + fTerrainScale.z / 2 - 1.2f));
+        fTerrainPos.z + fTerrainScale.z / 2 - 1.8f));
 
     // 크기 조정
-    m_pTransformCom->Scaling(6.f, 3.f, 3.f);
+    m_pTransformCom->Scaling(9.f, 4.5f, 4.5f);
 
 
 
@@ -90,6 +90,7 @@ HRESULT CErma_Body::Render()
     if (!m_pTransformCom)
         return S_OK;
 
+    SetUp_RenderState();
 
     m_pTransformCom->Bind_Matrix();
 
@@ -97,7 +98,6 @@ HRESULT CErma_Body::Render()
 
     m_pVIBufferCom->Bind_Buffers();
 
-    SetUp_RenderState();
 
     m_pVIBufferCom->Render();
 
