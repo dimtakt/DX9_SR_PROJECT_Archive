@@ -20,7 +20,8 @@ public:
 	void Set_Stats(STAT_INFO eStat, float fValue);
 	void Interaction_Obj_Stat(GAMEOBJ_TYPE eType);
 	void Reset_CurStats(); // 원본값으로 복원시켜주는 함수
-	_float Get_Damage(DAMAGE eDamage);
+	_float Get_Player_Damage(DAMAGE eDamage);
+	_float Get_Monster_Damage(_float fDamage);
 	const _bool Get_HasItem(_wstring szEffectTag);
 	void HasItem(_wstring szEffectTag, _bool bHasItme);
 

@@ -406,6 +406,8 @@ HRESULT CInteraction_Normal::Stone_Tablet_Initialize()
 
 HRESULT CInteraction_Normal::Stone_Tablet_Priority_Update(_float fTimeDelta)
 {
+    
+
     return S_OK;
 }
 
@@ -416,6 +418,15 @@ HRESULT CInteraction_Normal::Stone_Tablet_Update(_float fTimeDelta)
 
 HRESULT CInteraction_Normal::Stone_Tablet_Late_Update(_float fTimeDelta)
 {
+    if (m_bUsing)
+    {
+        if (dynamic_cast<CGacha*>(m_pGameInstance->Find_UIObj(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("UI_Gacha")))->Get_Item_Check())
+        {
+            m_bDead = true;
+            dynamic_cast<CGacha*>(m_pGameInstance->Find_UIObj(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("UI_Gacha")))->Get_off();
+        }
+            
+    }
     return S_OK;
 }
 
@@ -465,6 +476,7 @@ HRESULT CInteraction_Normal::Atifact_Initialize()
 
 HRESULT CInteraction_Normal::Atifact_Priority_Update(_float fTimeDelta)
 {
+    
     return S_OK;
 }
 
@@ -475,6 +487,14 @@ HRESULT CInteraction_Normal::Atifact_Update(_float fTimeDelta)
 
 HRESULT CInteraction_Normal::Atifact_Late_Update(_float fTimeDelta)
 {
+    if (m_bUsing)
+    {
+        if (dynamic_cast<CGacha*>(m_pGameInstance->Find_UIObj(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("UI_Gacha")))->Get_Item_Check()) {
+            m_bDead = true;
+            dynamic_cast<CGacha*>(m_pGameInstance->Find_UIObj(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("UI_Gacha")))->Get_off();
+        }
+            
+    }
     return S_OK;
 }
 
@@ -658,6 +678,13 @@ void CInteraction_Normal::OnCollision(CGameObject* pGameObject)
                 {   
                     dynamic_cast<CGacha*>(m_pGameInstance->Find_UIObj(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("UI_Gacha")))->UI_Open(CGacha::GACHA_TYPE::STONE);
                     //m_bActive = FALSE;
+                    dynamic_cast<CGacha*>(m_pGameInstance->Find_UIObj(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("UI_Gacha")))->Get_Item_Check();
+                    m_bUsing = true;
+                }
+
+                if (m_pGameInstance->IsKeyDown(VK_ESCAPE))
+                {
+                    m_bUsing = false;
                 }
             }
         }
@@ -669,6 +696,12 @@ void CInteraction_Normal::OnCollision(CGameObject* pGameObject)
                 {
                     dynamic_cast<CGacha*>(m_pGameInstance->Find_UIObj(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("UI_Gacha")))->UI_Open(CGacha::GACHA_TYPE::ARTEFACT);
                     //m_bActive = FALSE;
+                    dynamic_cast<CGacha*>(m_pGameInstance->Find_UIObj(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("UI_Gacha")))->Get_Item_Check();
+                    m_bUsing = true;
+                }
+                if (m_pGameInstance->IsKeyDown(VK_ESCAPE))
+                {
+                    m_bUsing = false;
                 }
             }
         }

@@ -49,7 +49,7 @@ void CHud_Exp::Priority_Update(_float fTimeDelta)
 
 void CHud_Exp::Update(_float fTimeDelta)
 {
-
+    Progress_UpdateX();
 }
 
 void CHud_Exp::Late_Update(_float fTimeDelta)
@@ -106,7 +106,6 @@ void CHud_Exp::OnEvent(_uint iTypeindex, const EVENTDATA* pData)
         if (pDesc->strActionName == TEXT("GET_EXP"))
         {
             m_iCulValue = CStat_Manager::GetInstance()->Get_CurStats()[ENUM_CLASS(STAT_INFO::EXP)];
-            Progress_UpdateX();
         }
         
     }
