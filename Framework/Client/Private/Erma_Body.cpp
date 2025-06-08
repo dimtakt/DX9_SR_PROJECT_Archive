@@ -323,7 +323,7 @@ void CErma_Body::Update(_float fTimeDelta)
 
 #pragma endregion
         }
-        break;
+            break;
         default:
             break;
         }
@@ -502,4 +502,5 @@ void CErma_Body::Free()
 
 
     Safe_Release(m_pAnimatorCom);
+    Safe_Release(m_pAnimatorPatternCom);
 }

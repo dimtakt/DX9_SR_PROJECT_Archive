@@ -586,4 +586,5 @@ void CErma_Hand_R::Free()
 
 
     Safe_Release(m_pAnimatorCom);
+    Safe_Release(m_pAnimatorPatternCom);
 }
