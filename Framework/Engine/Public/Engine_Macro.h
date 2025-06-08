@@ -17,6 +17,7 @@ namespace Engine
 #define			USING(NAMESPACE)		using namespace NAMESPACE;
 
 #define			LAMBDA_FUNC(implement)	[&](){ return implement; }
+#define			IS_BETWEEN(condition, minValue, maxValue)		(((minValue) <= (condition)) && ((condition) < (maxValue)))
 
 #ifdef	ENGINE_EXPORTS
 #define ENGINE_DLL		_declspec(dllexport)

@@ -72,7 +72,7 @@ void CEffect_Factory::Create_Effect(GAMEOBJ_TYPE eType, const _wstring& strEffec
 }
 
 // + 생성 후 해당 객체의 Position 값만을 따라감
-void CEffect_Factory::Create_Effect(GAMEOBJ_TYPE eType, const _wstring& strEffectTag, _float4x4 matEffectWorld, _float4x4 matOffsetWorld, CTransform* pFollowTransformCom, _bool isFlippedX)
+void CEffect_Factory::Create_Effect(GAMEOBJ_TYPE eType, const _wstring& strEffectTag, _float4x4 matEffectWorld, _float4x4 matOffsetWorld, CTransform* pFollowTransformCom, _float fLifeTimeSec, _bool isFlippedX)
 {
 	CEffect::EFFECT_DESC EffectDesc;
 	EffectDesc.strEffectTag = strEffectTag;
@@ -81,6 +81,7 @@ void CEffect_Factory::Create_Effect(GAMEOBJ_TYPE eType, const _wstring& strEffec
 	EffectDesc.matOriginWorld = matEffectWorld;	// offset 적용 전 좌표, 즉 해당 이펙트를 소환하는 객체의 최초좌표
 	EffectDesc.isFlippedX = isFlippedX;
 	EffectDesc.pFollowTransformCom = pFollowTransformCom;
+	EffectDesc.fLifeTimeSec = fLifeTimeSec;
 
 	EffectDesc.eType = eType;
 
