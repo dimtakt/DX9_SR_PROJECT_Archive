@@ -245,7 +245,7 @@ HRESULT CLoader::Loading_For_MapEdit_Level()
 	lstrcpy(m_szLoadingText, TEXT("텍스쳐를 로딩중입니다."));
 
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_MAPEDIT), TEXT("Prototype_Component_Texture_Interaction"),
-		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/InteractionObject/MapEdit/Interaction_%d.png"), 6))))
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/MapEdit/Interaction_%d.png"), 6))))
 		return E_FAIL;
 
 	lstrcpy(m_szLoadingText, TEXT("모델를 로딩중입니다."));
