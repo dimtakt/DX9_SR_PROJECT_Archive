@@ -160,6 +160,8 @@ void CGacha::Release_Slot()
 		static_cast<CGacha_Slot*>(m_vecChildren[i])->Release_Item();
 	}
 
+	m_bIsGet = true;
+
 }
 
 HRESULT CGacha::Ready_Components()

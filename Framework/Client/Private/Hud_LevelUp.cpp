@@ -67,7 +67,11 @@ void CHud_LevelUp::Update(_float fTimeDelta)
 		return;
 	if (CStat_Manager::GetInstance()->Get_CurStats()[ENUM_CLASS(STAT_INFO::LEVELUPPOINT)] <= 0)
 		return;
-	
+	if (static_cast<CGacha*>(m_pGameInstance->Find_UIObj(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("UI_Gacha")))->Get_Item_Check())
+	{
+		CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::LEVELUPPOINT, -1.f);
+		static_cast<CGacha*>(m_pGameInstance->Find_UIObj(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("UI_Gacha")))->Get_off();
+	}
 	if(m_pGameInstance->IsKeyDown('R'))
 		static_cast<CGacha*>(m_pGameInstance->Find_UIObj(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("UI_Gacha")))->UI_Open(CGacha::GACHA_TYPE::ALL);
 

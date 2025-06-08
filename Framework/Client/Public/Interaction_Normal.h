@@ -99,7 +99,8 @@ private:
 	CTexture* m_pTextureCom_1 = { nullptr };
 	CAnimator* m_pAnimatorCom_0 = { nullptr };
 
-	bool m_bActive = { TRUE };
+	_bool m_bActive = { TRUE };
+	_bool m_bUsing = { FALSE };
 
 private:
 	HRESULT Ready_Components();

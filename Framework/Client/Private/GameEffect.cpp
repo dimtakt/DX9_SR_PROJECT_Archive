@@ -319,23 +319,23 @@ void CGameEffect::OnCollision(CGameObject* pGameObject)
 				//플레이어 공격 관련 이펙트
 				if (m_strEffectTag == TEXT("Prototype_Component_Texture_Effect_Blade0_Swing1"))
 				{
-					pMonster->Set_Damage(-(CStat_Manager::GetInstance()->Get_Damage(DAMAGE::NORMAL)));
+					pMonster->Set_Damage(-(CStat_Manager::GetInstance()->Get_Player_Damage(DAMAGE::NORMAL)));
 				}
 				else if (m_strEffectTag == TEXT("Prototype_Component_Texture_Effect_Blade0_Swing0"))
 				{
-					pMonster->Set_Damage(-(CStat_Manager::GetInstance()->Get_Damage(DAMAGE::NORMAL)));
+					pMonster->Set_Damage(-(CStat_Manager::GetInstance()->Get_Player_Damage(DAMAGE::NORMAL)));
 				}
 				else if (m_strEffectTag == TEXT("Prototype_Component_Texture_Effect_Blade0_NFury"))
 				{
-					pMonster->Set_Damage(-(CStat_Manager::GetInstance()->Get_Damage(DAMAGE::SPECIAL)));
+					pMonster->Set_Damage(-(CStat_Manager::GetInstance()->Get_Player_Damage(DAMAGE::SPECIAL)));
 				}
 				else if (m_strEffectTag == TEXT("Prototype_Component_Texture_Effect_Blade0_NFury_Back"))
 				{
-					pMonster->Set_Damage(-(CStat_Manager::GetInstance()->Get_Damage(DAMAGE::SPECIAL)));
+					pMonster->Set_Damage(-(CStat_Manager::GetInstance()->Get_Player_Damage(DAMAGE::SPECIAL)));
 				}
 				else if (m_strEffectTag == TEXT("Prototype_Component_Texture_Effect_Blade0_Parry"))
 				{
-					pMonster->Set_Damage(-(CStat_Manager::GetInstance()->Get_Damage(DAMAGE::SPECIAL)));
+					pMonster->Set_Damage(-(CStat_Manager::GetInstance()->Get_Player_Damage(DAMAGE::SPECIAL)));
 				}
 				pMonster->Set_IsHit(TRUE);
 			}
@@ -351,30 +351,30 @@ void CGameEffect::OnCollision(CGameObject* pGameObject)
 			{
 				if (m_strEffectTag == TEXT("Prototype_Component_Texture_LaserGhost_D_Effect_Laser_Progress"))
 				{
-					CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CULHP, -20.f);
-					iDamage = 20;
+					iDamage = CStat_Manager::GetInstance()->Get_Monster_Damage(20.f);
+					CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CULHP, float(iDamage) * -1 );
 				}
 				else if (m_strEffectTag == TEXT("Prototype_Component_Texture_LaserGhost_D_Effect_Laser_End"))
 				{
-					CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CULHP, -1.f);
-					iDamage = 1;
+					iDamage = CStat_Manager::GetInstance()->Get_Monster_Damage(1.f);
+					CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CULHP, float(iDamage) * -1);
 				}
 				// 두더지
 				else if (m_strEffectTag == TEXT("Prototype_Component_Texture_Mole_A_Effect_Swing"))
 				{
-					CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CULHP, -7.f);
-					iDamage = 7;
+					iDamage = CStat_Manager::GetInstance()->Get_Monster_Damage(7.f);
+					CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CULHP, float(iDamage) * -1);
 				}
 				// 돼지
 				else if (m_strEffectTag == TEXT("Prototype_Component_Texture_Oink_A_Effect_Swing"))
 				{
-					CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CULHP, -10.f);
-					iDamage = 10;
+					iDamage = CStat_Manager::GetInstance()->Get_Monster_Damage(10.f);
+					CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CULHP, float(iDamage) * -1);
 				}
 				else if (m_strEffectTag == TEXT("Prototype_Component_Texture_Oink_A_Effect_SpinSwing"))
 				{
-					CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CULHP, -15.f);
-					iDamage = 15;
+					iDamage = CStat_Manager::GetInstance()->Get_Monster_Damage(15.f);
+					CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CULHP, float(iDamage) * -1);
 				}
 				pPlayer->Hit(iDamage);
 			}
