@@ -1,6 +1,7 @@
 #include "Hud_Exp.h"
 #include "GameInstance.h"
 #include "Stat_Manager.h"
+#include "Client_Defines_Event.h"
 CHud_Exp::CHud_Exp(LPDIRECT3DDEVICE9 pGraphic_Device) : CProgressBar(pGraphic_Device)
 {
 }
@@ -36,9 +37,9 @@ HRESULT CHud_Exp::Initialize(void* pArg)
     m_pTransformCom->Scaling(m_fSizeX, m_fSizeY, 1.f);
     __super::Update_Position();
 
-    return S_OK;
+    m_pGameInstance->Subscribe(ENUM_CLASS(EVENT_TYPE::EXP), this);
 
-	return S_OK;
+    return S_OK;
 }
 
 void CHud_Exp::Priority_Update(_float fTimeDelta)
@@ -53,10 +54,6 @@ void CHud_Exp::Update(_float fTimeDelta)
 
 void CHud_Exp::Late_Update(_float fTimeDelta)
 {
-    if (m_pGameInstance->IsKeyHold(VK_RIGHT))
-        m_iCulValue += 1;
-    m_iCulValue = CStat_Manager::GetInstance()->Get_CurStats()[ENUM_CLASS(STAT_INFO::EXP)];
-    Progress_UpdateX();
     m_pGameInstance->Add_RenderGroup(RENDERGROUP::RG_UI, this);
 }
 
@@ -102,6 +99,20 @@ void CHud_Exp::Reset_RenderState()
     m_pGraphic_Device->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
 }
 
+void CHud_Exp::OnEvent(_uint iTypeindex, const EVENTDATA* pData)
+{
+    if (static_cast<EVENT_TYPE>(iTypeindex) == EVENT_TYPE::EXP) {
+        auto pDesc = static_cast<const ACTIONEVENT*>(pData);
+        if (pDesc->strActionName == TEXT("GET_EXP"))
+        {
+            m_iCulValue = CStat_Manager::GetInstance()->Get_CurStats()[ENUM_CLASS(STAT_INFO::EXP)];
+            Progress_UpdateX();
+        }
+        
+    }
+
+}
+
 CHud_Exp* CHud_Exp::Create(LPDIRECT3DDEVICE9 pGraphic_Device)
 {
     CHud_Exp* pInstance = new CHud_Exp(pGraphic_Device);
@@ -128,6 +139,7 @@ CGameObject* CHud_Exp::Clone(void* pArg)
 
 void CHud_Exp::Free()
 {
+    m_pGameInstance->Unsubscribe(ENUM_CLASS(EVENT_TYPE::EXP), this);
     __super::Free();
     Safe_Release(m_pVIBufferCom);
 }

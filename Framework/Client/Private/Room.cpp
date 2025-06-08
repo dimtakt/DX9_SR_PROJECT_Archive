@@ -1,6 +1,8 @@
 #include "Room.h"
 #include "GameInstance.h"
 #include "Stat_Manager.h"
+#include "Monster_Factory.h"
+
 CRoom::CRoom(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CGameObject { pGraphic_Device }
 {
@@ -329,6 +331,8 @@ HRESULT CRoom::Load_From_File(_uint iLayerLevelIndex, const _wstring& strLayerTa
 
 	_bool bIsTerrain = false;
 
+	list<CMonster::MONSTERDESC> MonsterDescList;
+
 	for (auto& pDesc : m_Object_Desc)
 	{
 		if (pDesc.eType == GAMEOBJ_TYPE::OBJECT || pDesc.eType == GAMEOBJ_TYPE::OBJECT_DECO)
@@ -361,7 +365,32 @@ HRESULT CRoom::Load_From_File(_uint iLayerLevelIndex, const _wstring& strLayerTa
 				bIsTerrain = true;
 			}
 		}
-		else
+		else if (pDesc.eType == GAMEOBJ_TYPE::MONSTER_MOLE || pDesc.eType == GAMEOBJ_TYPE::MONSTER_OINK || pDesc.eType == GAMEOBJ_TYPE::MONSTER_LASERGHOST)
+		{
+			
+			CMonster::MONSTERDESC tDesc = {};
+			tDesc.iLayerLevelIndex = iLayerLevelIndex;
+			tDesc.iPrototypeLevelIndex = iLayerLevelIndex;
+			tDesc.strLayerTag = strLayerTag;
+			tDesc.vPosition = pDesc.vPos + +m_ObjectOffset;
+			if (pDesc.eType == GAMEOBJ_TYPE::MONSTER_MOLE) {
+				tDesc.strPrototypeTag = TEXT("Prototype_GameObject_Monster_Mole_A");
+				tDesc.eType = MONSTER_TYPE_A::MONSTER_MOLE_A;
+			}	
+			else if (pDesc.eType == GAMEOBJ_TYPE::MONSTER_OINK)
+			{
+				tDesc.strPrototypeTag = TEXT("Prototype_GameObject_Monster_Oink_A");
+				tDesc.eType = MONSTER_TYPE_A::MONSTER_OINK_A;
+			}
+			else if (pDesc.eType == GAMEOBJ_TYPE::MONSTER_LASERGHOST)
+			{
+				tDesc.strPrototypeTag = TEXT("Prototype_GameObject_Monster_LaserGhost_D");
+				tDesc.eType = MONSTER_TYPE_A::MONSTER_LASERGHOST_D;
+			}
+				
+			MonsterDescList.push_back(tDesc);
+		}
+		else 
 		{
 			MAP_OBJECT_DESC tSrc{};
 			tSrc.eType = pDesc.eType;
@@ -376,6 +405,13 @@ HRESULT CRoom::Load_From_File(_uint iLayerLevelIndex, const _wstring& strLayerTa
 		}
 	}
 
+	for (auto& desc : MonsterDescList)
+	{
+		desc.pTerrainBox = m_pTerrainBox;
+	}
+
+	CMonster_Factory::GetInstance()->Add_MonstersV2(this, MonsterDescList);
+	MonsterDescList.clear();
 
 	return S_OK;
 }

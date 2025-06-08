@@ -150,9 +150,6 @@ HRESULT CRoom_Manager::Check_Room(_uint iLayerLevelIndex, const _wstring& strLay
 		}
 	}
 
-	if (!m_bCheckEnd )  
-		Check_END_Potal(iLayerLevelIndex, strLayerTag, iRoomID);
-
 	return S_OK;
 }
 
@@ -251,27 +248,46 @@ HRESULT CRoom_Manager::Check_Potal_Coll(POTAL_TYPE ePotalType, _float3& vNextPos
 	return S_OK;
 }
 
-HRESULT CRoom_Manager::Check_END_Potal(_uint iLayerLevelIndex, const _wstring& strLayerTag, _int iRoomID)
+HRESULT CRoom_Manager::Check_END_Potal(_uint iLayerLevelIndex, const _wstring& strLayerTag, _int iIndex)
 {
-	CRoom* pRoom = Get_RoomByID(iRoomID);
-	_int iRandom = static_cast<_int>(m_pGameInstance->Compute_Random(0.f, 3.f));
-	
-	if(!m_bCheckEnd)
+	//CRoom* pRoom = Get_RoomByID(iRoomID);
+	//_int iRandom = static_cast<_int>(m_pGameInstance->Compute_Random(0.f, 3.f));			
+
+	_bool CheckEndPotal = false;
+
+	while (!CheckEndPotal)
 	{
-		if (pRoom->GetID() >= 4 && iRandom == 2)	// 4번방 이후 부터 앤드포탈 생기게 설정
-		{
-			pRoom->Ready_Potal(iLayerLevelIndex, strLayerTag, _float3(0.f, 2.f, 0.f), POTAL_TYPE::END_POTAL);
-			m_bCheckEnd = true;    //스테이지 변경시 그부분에서 false로 초기화 해줘야 함.
-			pRoom->Set_RoomType(ROOM_INFO::EVENT_ENDPOTAL);
-		}
-	}
-	
-	if (!m_bCheckEnd && iRoomIndex == pRoom->GetID() + 1)  // 룸인덱스 8 == 7 , + 1해줘야 됨
+	_int iEndPotalIndexRoom = static_cast<_int>(m_pGameInstance->Compute_Random((_float)iIndex - 4.f, (_float)iIndex - 1.f));
+
+	CRoom * pRoom = Get_RoomByID(iEndPotalIndexRoom);
+
+	if (pRoom->Get_RoomType() == ROOM_INFO::EVENT_NORMAL)
 	{
+		CheckEndPotal = true;
 		pRoom->Ready_Potal(iLayerLevelIndex, strLayerTag, _float3(0.f, 2.f, 0.f), POTAL_TYPE::END_POTAL);
 		m_bCheckEnd = true;
 		pRoom->Set_RoomType(ROOM_INFO::EVENT_ENDPOTAL);
 	}
+
+	}
+
+	//	
+	//if(!m_bCheckEnd)
+	//{
+	//	if (pRoom->GetID() >= 4 && iRandom == 2)	// 4번방 이후 부터 앤드포탈 생기게 설정
+	//	{
+	//		pRoom->Ready_Potal(iLayerLevelIndex, strLayerTag, _float3(0.f, 2.f, 0.f), POTAL_TYPE::END_POTAL);
+	//		m_bCheckEnd = true;    //스테이지 변경시 그부분에서 false로 초기화 해줘야 함.
+	//		pRoom->Set_RoomType(ROOM_INFO::EVENT_ENDPOTAL);
+	//	}
+	//}
+	//
+	//if (!m_bCheckEnd && iRoomIndex == pRoom->GetID() + 1)  // 룸인덱스 8 == 7 , + 1해줘야 됨
+	//{
+	//	pRoom->Ready_Potal(iLayerLevelIndex, strLayerTag, _float3(0.f, 2.f, 0.f), POTAL_TYPE::END_POTAL);
+	//	m_bCheckEnd = true;
+	//	pRoom->Set_RoomType(ROOM_INFO::EVENT_ENDPOTAL);
+	//}
 
 	return S_OK;
 }

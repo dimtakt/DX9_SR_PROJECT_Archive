@@ -10,6 +10,7 @@
 #include "EXP_Ball.h"
 #include "Field_Font.h"
 #include "Level_Loading.h"
+#include "Client_Defines_Event.h"
 
 CPlayer::CPlayer(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CGameObject{ pGraphic_Device }
@@ -573,7 +574,7 @@ void CPlayer::OnCollision(CGameObject* pGameObject)
     {
         if (pGameObject->Get_IsActive()) {
             if (!CStat_Manager::GetInstance()->Get_UIOpen()) {
-                if (m_pGameInstance->IsKeyDown(VK_DOWN))
+                if (m_pGameInstance->IsKeyDown('F'))
                 {
                     dynamic_cast<CChapMap*>(m_pGameInstance->Get_GameObject(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Layer_ChapMap")))->Open_Ui();
                 }
@@ -583,22 +584,28 @@ void CPlayer::OnCollision(CGameObject* pGameObject)
     }
     case GAMEOBJ_TYPE::STAGE_POTAL:
     {
-        if (m_pGameInstance->IsKeyDown(VK_DOWN)) // 특정 키 입력시 다음 스테이지 넘어가게 설정
+
+        if (m_pGameInstance->IsKeyDown('F'))
         {
             _uint CurrentLevel = m_pGameInstance->Get_CurrentLevel();
 
-            if (CurrentLevel == ENUM_CLASS(LEVEL::LEVEL_TOWN))  //타운일 때
+            if (CurrentLevel == ENUM_CLASS(LEVEL::LEVEL_TOWN))  //타운일 때 스테이지1로 이동
                 m_pGameInstance->Open_Level(static_cast<_uint>(LEVEL::LEVEL_LOADING), CLevel_Loading::Create(m_pGraphic_Device, LEVEL::LEVEL_STAGE1));
-            else if (CurrentLevel == ENUM_CLASS(LEVEL::LEVEL_BOSS1))
+            else if (CurrentLevel == ENUM_CLASS(LEVEL::LEVEL_BOSS1)) // 보스1일 때 쉼터로 이동
                 m_pGameInstance->Open_Level(static_cast<_uint>(LEVEL::LEVEL_LOADING), CLevel_Loading::Create(m_pGraphic_Device, LEVEL::LEVEL_SHELTER)); 
-            else if (CurrentLevel == ENUM_CLASS(LEVEL::LEVEL_SHELTER))
+            else if (CurrentLevel == ENUM_CLASS(LEVEL::LEVEL_SHELTER)) // 쉼터일 때 보스2로 이동
                 m_pGameInstance->Open_Level(static_cast<_uint>(LEVEL::LEVEL_LOADING), CLevel_Loading::Create(m_pGraphic_Device, LEVEL::LEVEL_BOSS2));
+            
+                /* }*/
         }
         break;
     }
     case GAMEOBJ_TYPE::EXPBALL:
     {
         CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::EXP, dynamic_cast<CEXP_Ball*>(pGameObject)->Get_EXP());
+        ACTIONEVENT desc{};
+        desc.strActionName = TEXT("GET_EXP");
+        m_pGameInstance->Broadcast(ENUM_CLASS(EVENT_TYPE::EXP), &desc);
         pGameObject->Set_IsDead(TRUE);
         break;
     }
@@ -677,7 +684,7 @@ void CPlayer::OnEvent(_uint iTypeindex, const EVENTDATA* pData)
     //}
 }
 
-void CPlayer::Hit()
+void CPlayer::Hit(_int iDamage)
 {
     m_bIsHit = true;
     m_bIsStun = true;
@@ -692,7 +699,7 @@ void CPlayer::Hit()
 
     //m_pAnimatorCom->Change_State(strStateTag, true, 2);
     m_pAnimatorCom->Change_State(L"Air", false, 0.2, true);
-    Render_Font();
+    Render_Font(iDamage);
 }
 
 
@@ -841,12 +848,12 @@ HRESULT CPlayer::Ready_Object()
     return S_OK;
 }
 
-HRESULT CPlayer::Render_Font()
+HRESULT CPlayer::Render_Font(_int iDamage)
 {
     CField_Font::FIELD_FONT_DESC Desc = {};
 
     Desc.eType = CField_Font::FIELD_FONT_TYPE::PLAYER_DAMAGE;   //데미지 타입
-    Desc.iValue = 65;                                           //넣을 수치 값
+    Desc.iValue = iDamage;                                           //넣을 수치 값
     Desc.pTransform = m_pTransformCom;                          //현재 객체 트랜스폼
 
     if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(m_pGameInstance->Get_CurrentLevel(), TEXT("Layer_Field_Font"),

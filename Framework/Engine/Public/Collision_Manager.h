@@ -32,7 +32,7 @@ public:
 	void	Set_IsRender() { m_bIsRender = !m_bIsRender; }
 private:
 	vector<CCollider_OBB*>	m_vColliders = {};
-	_bool					m_bIsRender = { true };
+	_bool					m_bIsRender = { false };
 public:
 	static CCollision_Manager* Create();
 	virtual void Free() override;

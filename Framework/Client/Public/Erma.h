@@ -60,8 +60,8 @@ private:
 	
 	// 로컬 변수들
 
-	_int		iPhase							= 0;
-	_int		iPattern						= 0;
+	_int		m_iPhase						= 0;
+	_int		m_iPattern						= 0;
 
 
 public:

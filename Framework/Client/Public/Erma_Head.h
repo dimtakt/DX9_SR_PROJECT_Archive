@@ -7,6 +7,15 @@ BEGIN(Client)
 
 class CErma_Head final : public CMonster
 {
+public:
+	enum class PATTERN_HEAD
+	{
+		PT_IDLE,
+		PT_BULLETFIRE,	// 탄막 패턴?
+
+		PT_END
+	};
+
 private:
 	CErma_Head(LPDIRECT3DDEVICE9 pGraphic_Device);
 	CErma_Head(const CErma_Head& Prototype);
@@ -41,12 +50,13 @@ private:
 
 
 	CAnimator* m_pAnimatorCom						= { nullptr };
+	CAnimator* m_pAnimatorPatternCom				= { nullptr };
 
 
 	// 로컬 변수들
 
-	_int		iPhase = 0;
-	_int		iPattern = 0;
+	_int			m_iiPhase		= 0;
+	PATTERN_HEAD	m_ePattern		= PATTERN_HEAD::PT_IDLE;
 
 
 public:

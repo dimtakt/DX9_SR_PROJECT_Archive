@@ -266,6 +266,8 @@ HRESULT CMole_A::Render()
         m_isFlippedX = false;
     }
 
+    Reset_RenderState();
+
     return S_OK;
 }
 

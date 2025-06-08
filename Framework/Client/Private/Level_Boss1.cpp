@@ -237,27 +237,27 @@ HRESULT CLevel_Boss1::Ready_Layer_Room(const _wstring& strLayerTag)
 
 				tDesc.strPrototypeTag = TEXT("Prototype_GameObject_Boss_Erma_Body");
 				DescList.push_back(tDesc);
-				CMonster_Factory::GetInstance()->Add_Monsters(pRoom, DescList, CMonster_Factory::MONSTER_TYPE::MONSTER_BOSS_ERMA_BODY);
+				CMonster_Factory::GetInstance()->Add_Monsters(pRoom, DescList, MONSTER_TYPE_A::MONSTER_BOSS_ERMA_BODY);
 				DescList.clear();
 
 				tDesc.strPrototypeTag = TEXT("Prototype_GameObject_Boss_Erma_Hand_L");
 				DescList.push_back(tDesc);
-				CMonster_Factory::GetInstance()->Add_Monsters(pRoom, DescList, CMonster_Factory::MONSTER_TYPE::MONSTER_BOSS_ERMA_HAND_L);
+				CMonster_Factory::GetInstance()->Add_Monsters(pRoom, DescList, MONSTER_TYPE_A::MONSTER_BOSS_ERMA_HAND_L);
 				DescList.clear();
 
 				tDesc.strPrototypeTag = TEXT("Prototype_GameObject_Boss_Erma_Hand_R");
 				DescList.push_back(tDesc);
-				CMonster_Factory::GetInstance()->Add_Monsters(pRoom, DescList, CMonster_Factory::MONSTER_TYPE::MONSTER_BOSS_ERMA_HAND_R);
+				CMonster_Factory::GetInstance()->Add_Monsters(pRoom, DescList, MONSTER_TYPE_A::MONSTER_BOSS_ERMA_HAND_R);
 				DescList.clear();
 
 				tDesc.strPrototypeTag = TEXT("Prototype_GameObject_Boss_Erma_Head");
 				DescList.push_back(tDesc);
-				CMonster_Factory::GetInstance()->Add_Monsters(pRoom, DescList, CMonster_Factory::MONSTER_TYPE::MONSTER_BOSS_ERMA_HEAD);
+				CMonster_Factory::GetInstance()->Add_Monsters(pRoom, DescList, MONSTER_TYPE_A::MONSTER_BOSS_ERMA_HEAD);
 				DescList.clear();
 
 				tDesc.strPrototypeTag = TEXT("Prototype_GameObject_Boss_Erma");
 				DescList.push_back(tDesc);
-				CMonster_Factory::GetInstance()->Add_Monsters(pRoom, DescList, CMonster_Factory::MONSTER_TYPE::MONSTER_BOSS_ERMA);
+				CMonster_Factory::GetInstance()->Add_Monsters(pRoom, DescList, MONSTER_TYPE_A::MONSTER_BOSS_ERMA);
 				DescList.clear();
 			}
 

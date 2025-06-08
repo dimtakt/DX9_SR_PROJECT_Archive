@@ -1,9 +1,9 @@
 #pragma once
 #include "GameObject.h"
 #include "GameInstance.h"
-#include "Client_Defines.h"
 #include "TerrainBox.h"
 #include "Field_Hp.h"
+#include "Client_Defines.h"
 
 BEGIN(Engine)
 class CCollider_OBB;
@@ -21,6 +21,7 @@ public:
 		_wstring strPrototypeTag;
 		_float3 vPosition;
 		CTerrainBox* pTerrainBox;
+		MONSTER_TYPE_A eType;
 	}MONSTERDESC;
 protected:
 	CMonster(LPDIRECT3DDEVICE9 pGraphic_Device);
@@ -48,8 +49,8 @@ public:
 	class CTransform* Get_Transform() { return m_pTransformCom; }
 
 public:
-	void Set_Damage(_float fDamage) { m_iCulHp += fDamage; }
-
+	void Set_Damage(_float fDamage);
+	HRESULT Render_Font(_int iDamage);
 public:
 	_bool Get_IsHit() { return m_bIsHit; }
 	void Set_IsHit(_bool bHit) { m_bIsHit = bHit; }
