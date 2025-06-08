@@ -5,6 +5,7 @@
 #include "Status_Frame_Down.h"
 #include "Hud_States_Frame.h"
 #include "ChapMap.h"
+#include "Stat_Manager.h"
 CStatus_Window::CStatus_Window(LPDIRECT3DDEVICE9 pGraphic_Device) : CUIObject(pGraphic_Device)
 {
 }
@@ -56,11 +57,13 @@ void CStatus_Window::UI_Switch()
 	{
 		m_bIsOpen = false;
 		static_cast<CHud_States_Frame*>(m_pGameInstance->Get_GameObject(m_pGameInstance->Get_CurrentLevel(), TEXT("Layer_Hud_States")))->FontRender_Switch();
+		CStat_Manager::GetInstance()->Set_UIOpen(false);
 	}
 	else
 	{
 		static_cast<CHud_States_Frame*>(m_pGameInstance->Get_GameObject(m_pGameInstance->Get_CurrentLevel(), TEXT("Layer_Hud_States")))->FontRender_Switch();
 		m_bIsOpen = true;
+		CStat_Manager::GetInstance()->Set_UIOpen(true);
 	}
 }
 

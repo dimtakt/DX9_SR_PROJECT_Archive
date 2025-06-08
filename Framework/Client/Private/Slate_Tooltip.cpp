@@ -306,7 +306,7 @@ void CSlate_Tooltip::Set_UpGrade()
 		_int iYouIndexX = myX + iX;
 		_int iYouIndexY = myY + iY;
 
-		if (iYouIndexX < 0 || iYouIndexX > 6 || iYouIndexY < 0 || iYouIndexY > 4)
+		if (iYouIndexX < 0 || iYouIndexX > 5 || iYouIndexY < 0 || iYouIndexY > 4)
 			continue;
 
 		_int YouIndex = iYouIndexX + iYouIndexY * 6;

@@ -5,7 +5,7 @@ class ENGINE_DLL CItemObject abstract : public CUIObject
 {
 public:
 		typedef struct tagItemObjectDesc
-	{
+		{
 		_uint					iItemID;
 		_uint					iItemType;
 		_uint					iRarity;
@@ -44,7 +44,7 @@ protected:
 	_wstring				m_szDescription = {};
 	_int					m_iArtefact_Value = {};
 	_float					m_fAngle = {};
-
+	tagItemObjectDesc*		m_pDesc = {};
 	class CVIBuffer_Rect* m_pVIBufferCom = { nullptr };
 	class CTexture* m_pTextureCom = { nullptr };
 

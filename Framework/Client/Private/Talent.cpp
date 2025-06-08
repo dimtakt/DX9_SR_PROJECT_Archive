@@ -121,12 +121,14 @@ void CTalent::UI_Switch()
 	{
 		m_pGameInstance->All_Update_On();
 		m_bisOpen = false;
+		CStat_Manager::GetInstance()->Set_UIOpen(false);
 	}
 	else
 	{
 		m_pGameInstance->All_Update_Off();
 		m_bIsUpdate = true;
 		m_bisOpen = true;
+		CStat_Manager::GetInstance()->Set_UIOpen(true);
 	}
 }
 
