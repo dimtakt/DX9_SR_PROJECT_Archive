@@ -42,6 +42,7 @@
 #include "Item_Tooltip_Mid.h"
 #include "FogPlane.h"
 #include "Hud_LevelUp.h"
+#include "Hud_Quick_Slot.h"
 CMainApp::CMainApp()
 	: m_pGameInstance{ CGameInstance::GetInstance() }
 {
@@ -192,6 +193,10 @@ HRESULT CMainApp::Ready_GameObject_Setting()
 
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_Hud_LevelUp"),
 		CHud_LevelUp::Create(m_pGraphic_Device, LEVEL::LEVEL_STATIC))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_Hud_QuickSlot"),
+		CHud_Quick_Slot::Create(m_pGraphic_Device, LEVEL::LEVEL_STATIC))))
 		return E_FAIL;
 #pragma endregion
 
@@ -533,6 +538,11 @@ HRESULT CMainApp::Ready_Texture_Setting()
 		return E_FAIL;
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Rect_UI_Buff_Icon"),
 		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/UI/Buff_Icon/Effect_Icon_0%d.png"), 50))))
+		return E_FAIL;
+#pragma endregion
+#pragma region Prototype_Component_Hud_Buffe_Texture
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Rect_UI_Hud_Quick_Slot"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/UI/HUD/HUD_Slot_%d.png"), 2))))
 		return E_FAIL;
 #pragma endregion
 #pragma region Prototype_Component_Window_Inventory_Texture
@@ -1067,7 +1077,10 @@ HRESULT CMainApp::Ready_UI_Stting()
 	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Layer_LevelUp"),
 		ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_Hud_LevelUp"))))
 		return E_FAIL;
-
+	
+	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Layer_LevelUp"),
+		ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_Hud_QuickSlot"))))
+		return E_FAIL;
 	return S_OK;
 }
 

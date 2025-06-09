@@ -301,7 +301,7 @@ void CInventory::StatToPlayer()
 				_float fValue2 = g_ItemEffect[iItem_Effect].m_vecValue[j].m_fStat_Value2;
 				_float fGarde = static_cast<CInven_Slot*>(m_vecInventory[i])->Get_SlotGrade();
 
-				m_fInvenStats[ENUM_CLASS(eStat)] = fValue1 + fGarde * fValue2;
+				m_fInvenStats[ENUM_CLASS(eStat)] += fValue1 + fGarde * fValue2;
 			}
 		}
 		else if (g_ItemEffect[iItem_Effect].m_eType == ITEM_EFFECT::SKILLBOOK_TYPE)
