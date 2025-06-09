@@ -163,10 +163,12 @@ HRESULT CSlate_Tooltip::Ready_Children()
 		return E_FAIL;
 	Add_Child(pGameObject);
 
-	Desc.fX = 55;
-	Desc.fY = 217;
-	Desc.fZ = 4;
-	pGameObject = dynamic_cast<CUIObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(m_eLevel), TEXT("Prototype_GameObject_UI_Slate_Guide"), &Desc));
+	CUI_KeyGuide::KEYGUIDE_DESC KeyDesc{};
+	KeyDesc.fX = 55;
+	KeyDesc.fY = 217;
+	KeyDesc.fZ = 4;
+	KeyDesc.bTarget = false;
+	pGameObject = dynamic_cast<CUIObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(m_eLevel), TEXT("Prototype_GameObject_UI_Slate_Guide"), &KeyDesc));
 	if (nullptr == pGameObject)
 		return E_FAIL;
 	Add_Child(pGameObject);

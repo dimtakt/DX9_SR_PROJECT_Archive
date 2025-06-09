@@ -42,7 +42,8 @@ HRESULT CPlayer::Initialize(void* pArg)
     m_pGameInstance->Subscribe(ENUM_CLASS(EVENT_TYPE::UICHANGE), this);
     Ready_Object();
     m_dwHitTime = 0.f;
-	return S_OK;
+    
+    return S_OK;
 }
 
 void CPlayer::Priority_Update(_float fTimeDelta)
@@ -53,7 +54,6 @@ void CPlayer::Priority_Update(_float fTimeDelta)
 
     /*if (m_pHpBar != nullptr)
         m_pHpBar->Render_HP_Progress(m_pTransformCom, m_iCulHp, m_iMaxHp);*/
-
 
     // isHit  Àº ¹«Àû °ü¸®,
     // IsStun Àº °æÁ÷ °ü¸®
@@ -80,6 +80,18 @@ void CPlayer::Priority_Update(_float fTimeDelta)
 
 void CPlayer::Update(_float fTimeDelta)
 {    
+    if (m_pGameInstance->IsKeyDown(VK_DOWN))
+    {
+        m_pChat->On_Chat(0, true);
+    }
+    if (m_pGameInstance->IsKeyDown(VK_LEFT))
+    {
+        m_pChat->Cinematic_Chat(0, true);
+    }
+    if (m_pGameInstance->IsKeyDown(VK_RIGHT))
+    {
+        m_pChat->Off_Chat();
+    }
     //m_pCollider->Update_Collider();
     if (m_pTerrainBox != nullptr) {
         m_pTerrainBox->SetUp_OnTerrainBox(m_pTransformCom, _float3(0.f, 0.3f, 0.f));
@@ -844,7 +856,25 @@ HRESULT CPlayer::Ready_Components(void* pArg)
 HRESULT CPlayer::Ready_Object()
 {
     //m_pHpBar = dynamic_cast<CField_Hp*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_Field_Hp")));
+   
+    CField_Npc_Chat::FIELD_CHAT_DESC ChatDesc{};
 
+    _wstring szTag = TEXT("Test_Chat");
+
+    ChatDesc.pTransform = m_pTransformCom;
+    ChatDesc.szChatTag = szTag;
+    ChatDesc.m_iLevel = ENUM_CLASS(LEVEL::LEVEL_TOWN);
+    ChatDesc.fY = -100;
+    if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_TOWN), TEXT("Layer_UI_Chat"),
+        ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_Field_Npc_Chat"), &ChatDesc)))
+        return E_FAIL;
+
+    m_pChat = static_cast<CField_Npc_Chat*>(m_pGameInstance->Find_UIObj(ENUM_CLASS(LEVEL::LEVEL_TOWN), TEXT("Test_Chat")));
+
+    m_pChat->Add_Chat(TEXT("ÀÏÀÌ»ï»ç¿ÀÀ°Ä¥ÆÈ±¸½ÊÀÏÀÌ"));
+    m_pChat->Add_Chat(TEXT("¾È³çÇÏ¼¼¿ä2"));
+    m_pChat->Add_Chat(TEXT("¾È³çÇÏ¼¼¿ä3"));
+    m_pChat->Add_Chat(TEXT("¾È³çÇÏ¼¼¿ä4"));
     return S_OK;
 }
 
@@ -940,8 +970,6 @@ void CPlayer::Free()
     Safe_Release(m_pAnimatorCom);
     Safe_Release(m_pAnimatorTransCom);
     Safe_Release(m_pTerrainBox);
-    
-    //Safe_Release(m_pHpBar);
     
     CEffect_Factory::GetInstance()->Free();
 

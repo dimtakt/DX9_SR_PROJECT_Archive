@@ -44,6 +44,8 @@
 #include "Hud_LevelUp.h"
 #include "Hud_Quick_Slot.h"
 #include "Field_Item.h"
+#include "Field_Npc_Chat.h"
+#include "Field_Npc_Face.h"
 CMainApp::CMainApp()
 	: m_pGameInstance{ CGameInstance::GetInstance() }
 {
@@ -211,6 +213,13 @@ HRESULT CMainApp::Ready_GameObject_Setting()
 		return E_FAIL;
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_Field_Item"),
 		CField_Item::Create(m_pGraphic_Device, LEVEL::LEVEL_STATIC))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_Field_Npc_Chat"),
+		CField_Npc_Chat::Create(m_pGraphic_Device, LEVEL::LEVEL_STATIC))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_Field_Npc_Face"),
+		CField_Npc_Face::Create(m_pGraphic_Device, LEVEL::LEVEL_STATIC))))
 		return E_FAIL;
 #pragma endregion
 
@@ -486,6 +495,14 @@ HRESULT CMainApp::Ready_Texture_Setting()
 
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Rect_LevelUp"),
 		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/UI/Default/LVUP%d.png"), 13))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Rect_Chat"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/UI/Default/Chatting.png"), 1))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Rect_NpcFace"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/UI/Npc/FaceIcon_%d.png"), 2))))
 		return E_FAIL;
 #pragma endregion
 #pragma region Prototype_Component_Hud_States_Texture
@@ -1082,8 +1099,10 @@ HRESULT CMainApp::Ready_UI_Stting()
 	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Layer_LevelUp"),
 		ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_Hud_LevelUp"))))
 		return E_FAIL;
-	
 
+	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Layer_Field_Npc"),
+		ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_Field_Npc_Face"))))
+		return E_FAIL;
 	//if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Layer_LevelUp"),
 	//	ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_Hud_QuickSlot"))))
 	//	return E_FAIL;

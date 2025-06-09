@@ -154,11 +154,29 @@ void CInventory::UI_Switch()
 void CInventory::Add_Item_Inven(_uint ItemIndex)
 {
 	CItemObject* pItem = m_pGameInstance->Get_ItemObject(ItemIndex, true);
+	_bool bNotPotion = false;
 
 	for (size_t i = 0; i < m_vecInventory.size(); ++i)
 	{
-		if (m_vecInventory[i]->Pop_Item() == nullptr)
+		if (!bNotPotion || pItem->Item_Info()->iItemType == ENUM_CLASS(ITEM_TYPE::POTION))
+		{
+			if (pItem->Item_Info()->iItemID == m_vecInventory[i]->Pop_Item()->Item_Info()->iItemID)
+			{
+				m_vecInventory[i]->Add_Item_Count();
+				Safe_Release(pItem);
+				break;
+			}
+			else if (i == m_vecInventory.size() - 1)
+			{
+				bNotPotion = true;
+				i = 0;
+			}
+		}
+		else if (m_vecInventory[i]->Pop_Item() == nullptr)
+		{
 			m_vecInventory[i]->Add_Item(static_cast<CItem_Base*>(pItem));
+			break;
+		}
 	}
 }
 

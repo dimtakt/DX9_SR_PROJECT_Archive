@@ -40,6 +40,7 @@ namespace Client
 		static constexpr float FILED_HP_FRAME = 0.4f;
 		static constexpr float FILED_FONT = 0.29;
 		static constexpr float FILED_ITEM = 0.31;
+		static constexpr float FILED_CHAT = 0.31;
 
 
 		//INVEN

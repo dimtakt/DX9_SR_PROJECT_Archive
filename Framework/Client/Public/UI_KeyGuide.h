@@ -10,6 +10,12 @@ END
 BEGIN(Client)
 class CUI_KeyGuide final : public CUIObject
 {
+public:
+	typedef struct tagKey_Guide : public UIOBJECT_DESC
+	{
+		CTransform* pTransform = nullptr;
+		_bool		bTarget = false;
+	}KEYGUIDE_DESC;
 private:
 								CUI_KeyGuide(LPDIRECT3DDEVICE9 pGraphic_Device);
 								CUI_KeyGuide(const CUI_KeyGuide& Prototype);
@@ -21,15 +27,20 @@ public:
 	virtual void				Update(_float fTimeDelta) override;
 	virtual void				Late_Update(_float fTimeDelta) override;
 	virtual HRESULT				Render() override;
-
 private:
 	CVIBuffer_Rect*				m_pVIBufferCom = { nullptr };
 	CTexture*					m_pTextureCom = { nullptr };
 	_wstring					m_strKey = {};
 	RENDERGROUP					m_eRenderGroup = {};
+	CTransform*					m_pTarget_Transform = { nullptr };
+	_bool						m_bTarget = { false };
+
+	_float						m_iWinPosX = {};
+	_float						m_iWinPosY = {};
+
 private:
 	HRESULT						Ready_Components();
-
+	void						Target_Pos();
 public:
 	static						CUI_KeyGuide* Create(LPDIRECT3DDEVICE9 pGraphic_Device, const _wstring& strPrototypeTag);
 	virtual	CGameObject*		Clone(void* pArg) override;

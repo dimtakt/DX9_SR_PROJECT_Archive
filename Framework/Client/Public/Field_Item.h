@@ -24,7 +24,9 @@ private:
 	virtual					~CField_Item() = default;
 
 public:
-	void					Render_Field_Item();
+	void					Render_Field_Item(_float fTimeDelta, _bool bFontRender);
+	void					Buy_Item();
+
 public:
 	virtual HRESULT			Initialize_Prototype(LEVEL eLevel);
 	virtual HRESULT			Initialize(void* pArg) override;
@@ -42,13 +44,16 @@ private:
 
 	_uint					m_iItemID = {};
 	_uint					m_iItemTex = {};
+
+	_float					m_fAccTime = {};
+	_float					m_fSpeed = {};
+	_float					m_fRange = {};
+
 private:
 	HRESULT					Ready_Components();
 
 	HRESULT					Ready_ChildPrototype(LEVEL eLevel);
 	HRESULT					Ready_Children();
-
-	void					Target_Pos();
 
 public:
 	static CField_Item*		Create(LPDIRECT3DDEVICE9 pGraphic_Device, LEVEL eLevel);
