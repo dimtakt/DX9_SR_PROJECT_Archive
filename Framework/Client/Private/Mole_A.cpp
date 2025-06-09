@@ -31,6 +31,7 @@ HRESULT CMole_A::Initialize(void* pArg)
     m_iMaxHp = 30;
     m_iCulHp = 30;
     m_eMonsterType = MONSTER_TYPE::MOLE;
+    m_pTransformCom->Scaling(1.5f, 1.5f, 1.5f);
 	return S_OK;
 }
 
@@ -212,7 +213,7 @@ void CMole_A::Update(_float fTimeDelta)
     if (m_pTerrainBox != nullptr &&
         !(m_pAnimatorCom->Get_CurStateTag() == L"Summon_Standby" ||
         m_pAnimatorCom->Get_CurStateTag() == L"Summon")) {
-        m_pTerrainBox->SetUp_OnTerrainBox(m_pTransformCom, _float3(0.05f, 0.2f, 0.05f));
+        m_pTerrainBox->SetUp_OnTerrainBox(m_pTransformCom, _float3(0.05f, 0.4f, 0.05f));
     }
 }
 

@@ -28,18 +28,19 @@ HRESULT CPoint::Initialize(void* pArg)
 		return E_FAIL;
 	// 기본 광원 정보 등록
 	//LIGHTDATA light;
-	desc->desc.eType = LIGHT_TYPE::POINT;
-	desc->desc.vDiffuse = _float4(1.f, 1.f, 1.f, 1.f);
-	desc->desc.vSpecular = _float4(1.f, 1.f, 1.f, 1.f);
-	desc->desc.vAmbient = _float4(0.01f, 0.01f, 0.01f, 1.f); // 기본 어두움 유지
-	desc->desc.fSpecPower = 64.f;
-	desc->desc.fRange = 8.f;
+
+	LIGHTDATA light;
+
+	light.desc.eType = desc->desc.eType;
+	light.desc.vDiffuse = desc->desc.vDiffuse;
+	light.desc.vSpecular = desc->desc.vSpecular;
+	light.desc.vAmbient = desc->desc.vAmbient;
+	light.desc.fSpecPower = desc->desc.fSpecPower;
+	light.desc.fRange = desc->desc.fRange;
 
 	m_strLightID = desc->strLightID;
 
-	LIGHTDATA* light = static_cast<LIGHTDATA*>(desc);
-
-	m_pGameInstance->Add_Light(m_strLightID, *light);
+	m_pGameInstance->Add_Light(m_strLightID, light);
 
 	return S_OK;
 }

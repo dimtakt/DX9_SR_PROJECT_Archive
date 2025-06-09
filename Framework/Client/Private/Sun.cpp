@@ -25,19 +25,21 @@ HRESULT CSun::Initialize(void* pArg)
 	SUNDESC* desc = static_cast<SUNDESC*>(pArg);
 
 	if(FAILED(Ready_Target(desc)))
-		return E_FAIL;
-	// 기본 광원 정보 등록
+		return E_FAIL; 
 	LIGHTDATA light;
 
-	light.desc.eType = LIGHT_TYPE::DIRECTIONAL;
-	light.desc.vDiffuse = _float4(2.f, 2.f, 1.8f, 1.f);
-	light.desc.vSpecular = _float4(5.0f, 5.0f, 5.0f, 1.f);
-	light.desc.vAmbient = D3DXVECTOR4(0.1f, 0.1f, 0.1f, 1.f);
-	light.desc.fSpecPower = 128.f;
+	light.desc.eType = desc->desc.eType;
+	light.desc.vDiffuse = desc->desc.vDiffuse;
+	light.desc.vSpecular = desc->desc.vSpecular;
+	light.desc.vAmbient = desc->desc.vAmbient;
+	light.desc.fSpecPower = desc->desc.fSpecPower;
 
-	m_strLightID = TEXT("Player_Sun");
+	m_strLightID = TEXT("Sun");
 
 	m_pGameInstance->Add_Light(m_strLightID, light);
+
+	m_pGameInstance->Update_LightPosition(m_strLightID, desc->vLightPos);
+	m_pGameInstance->Update_LightDirection(m_strLightID, desc->vLightDir);
 
 	return S_OK;
 	return S_OK;
@@ -50,18 +52,18 @@ void CSun::Priority_Update(_float fTimeDelta)
 
 void CSun::Update(_float fTimeDelta)
 {
-	if (m_pTargetTransformCom)
-	{
-		const _float3 vTargetPos = m_pTargetTransformCom->Get_State(STATE::POSITION);
+	//if (m_pTargetTransformCom)
+	//{
+	//	const _float3 vTargetPos = m_pTargetTransformCom->Get_State(STATE::POSITION);
 
-		_float3 vLightPos = vTargetPos + _float3(+3.f, +3.f, 0.f);
+	//	_float3 vLightPos = vTargetPos + _float3(+3.f, +3.f, 0.f);
 
-		_float3 vLightDir = _float3(-1.f, -1.f, 0.f); // 정면에서 보이는 사선
-		D3DXVec3Normalize(&vLightDir, &vLightDir);
+	//	_float3 vLightDir = _float3(-1.f, -1.f, 0.f); // 정면에서 보이는 사선
+	//	D3DXVec3Normalize(&vLightDir, &vLightDir);
 
-		m_pGameInstance->Update_LightPosition(m_strLightID, vLightPos);
-		m_pGameInstance->Update_LightDirection(m_strLightID, vLightDir);
-	}
+	//	m_pGameInstance->Update_LightPosition(m_strLightID, vLightPos);
+	//	m_pGameInstance->Update_LightDirection(m_strLightID, vLightDir);
+	//}
 }
 
 void CSun::Late_Update(_float fTimeDelta)
@@ -87,8 +89,8 @@ HRESULT CSun::Ready_Components()
 
 HRESULT CSun::Ready_Target(SUNDESC* pDesc)
 {
-	m_pTargetTransformCom = pDesc->pTargetTransform;
-	Safe_AddRef(m_pTargetTransformCom);
+	/*m_pTargetTransformCom = pDesc->pTargetTransform;
+	Safe_AddRef(m_pTargetTransformCom);*/
 	return S_OK;
 }
 
@@ -121,5 +123,5 @@ CGameObject* CSun::Clone(void* pArg)
 void CSun::Free()
 {
 	__super::Free();
-	Safe_Release(m_pTargetTransformCom);
+	//Safe_Release(m_pTargetTransformCom);
 }

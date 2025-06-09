@@ -4,7 +4,6 @@ float4x4 gViewMatrix;
 float4x4 gProjMatrix;
 
 float gTime; // 시간 값 (외부에서 전달)
-float3 gPlayerPos; // 카메라 위치
 
 // ===== 다중 광원 구조 =====
 #define MAX_LIGHT_COUNT 8
@@ -79,16 +78,9 @@ float4 PS_Main(VS_OUT input) : COLOR0
         discard;
 
     float3 normal = normalize(input.vNormal);
-    float3 viewDir = float3(0, 0, 1);
 
-    for (int i = 0; i < gLightCount; ++i)
-    {
-        if (gLights[i].eType == 0) // DIRECTIONAL
-        {
-            viewDir = normalize(gLights[i].vPosition.xyz - input.vWorldPos);
-            break;
-        }
-    }
+    // 카메라 방향 기준 시선 벡터 (Z축 기준으로 고정하거나 카메라 위치가 필요)
+    float3 viewDir = normalize(-input.vWorldPos); // 카메라가 원점에 있다고 가정
 
     float3 resultColor = float3(0, 0, 0);
 
@@ -100,22 +92,26 @@ float4 PS_Main(VS_OUT input) : COLOR0
         if (gLights[i].eType == 0) // DIRECTIONAL
         {
             lightDir = normalize(-gLights[i].vDirection.xyz);
-            attenuation = 1.0f;
+            attenuation = 1.0f; // 감쇠 없음
         }
         else if (gLights[i].eType == 1) // POINT
         {
-            lightDir = normalize(gLights[i].vPosition.xyz - input.vWorldPos);
-            float dist = length(gLights[i].vPosition.xyz - input.vWorldPos);
+            float3 lightVec = gLights[i].vPosition.xyz - input.vWorldPos;
+            float dist = length(lightVec);
+            lightDir = normalize(lightVec);
+
             float t = dist / gLights[i].fRange;
             attenuation = saturate(1.0f / (1.0f + t * t));
         }
-        else if (gLights[i].eType == 2) // Spot
+        else if (gLights[i].eType == 2) // SPOT (추후 필요시 구현)
         {
-            // Spot 처리 생략 가능 (원하면 추가 가능)
+            continue;
         }
 
+        // 양면 처리 (뒷면도 조명 받게 함)
         float diff = max(dot(normal, lightDir), 0.0f);
-        diff = max(diff, max(dot(-normal, lightDir), 0.0f)); // 양면 처리
+        diff = max(diff, max(dot(-normal, lightDir), 0.0f));
+
         float3 reflectDir = reflect(-lightDir, normal);
         float spec = pow(max(dot(viewDir, reflectDir), 0.0f), gLights[i].fSpecPower);
 

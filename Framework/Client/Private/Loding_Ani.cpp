@@ -19,19 +19,36 @@ HRESULT CLoding_Ani::Initialize_Prototype(LEVEL eLevel)
 
 HRESULT CLoding_Ani::Initialize(void* pArg)
 {
-	//m_fSpeed = 0;
-	//m_iTexIndex = 0;
-	m_fSizeX = 260 + g_iWinSizeX;
-	m_fSizeY = 260 + g_iWinSizeX;
-	m_fX = 0;
-	m_fY = -120;
-	m_fZ = UI_DEPTH::LODING;
-	m_iWinSizeX = g_iWinSizeX;
-	m_iWinSizeY = g_iWinSizeY;
 
 	CLoding_UI::LOADINGDESC* desc = static_cast<CLoding_UI::LOADINGDESC*>(pArg);
+	//m_fSpeed = 0;
+	//m_iTexIndex = 0;
 
 	m_eLevel = desc->pNewLevel;
+
+	if (m_eLevel == LEVEL::LEVEL_TOWN) {
+		m_fSizeX = g_iWinSizeX;
+		m_fSizeY = g_iWinSizeX;
+		m_fX = 0;
+		m_fY = 0;
+		m_fZ = UI_DEPTH::LODING;
+		m_iWinSizeX = g_iWinSizeX;
+		m_iWinSizeY = g_iWinSizeY;
+	}
+	else {
+		m_fSizeX = 260 + g_iWinSizeX;
+		m_fSizeY = 260 + g_iWinSizeX;
+		m_fX = 0;
+		m_fY = -120;
+		m_fZ = UI_DEPTH::LODING;
+		m_iWinSizeX = g_iWinSizeX;
+		m_iWinSizeY = g_iWinSizeY;
+	}
+	
+
+	
+
+	
 
 	if (FAILED(__super::Initialize()))
 		return E_FAIL;
@@ -102,8 +119,13 @@ HRESULT CLoding_Ani::Ready_Components()
 		TEXT("Com_Animator"), reinterpret_cast<CComponent**>(&m_pAnimatorCom), &StartAnimStateDesc)))
 		return E_FAIL;
 
-	
-	if (m_eLevel == LEVEL::LEVEL_STAGE1)
+	if (m_eLevel == LEVEL::LEVEL_TOWN)
+	{
+		if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Rect_Prologue"),
+			TEXT("Com_Texture"), reinterpret_cast<CComponent**>(&m_pTextureCom))))
+			return E_FAIL;
+	}
+	else if (m_eLevel == LEVEL::LEVEL_STAGE1)
 	{
 		if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Rect_Loding_1"),
 			TEXT("Com_Texture"), reinterpret_cast<CComponent**>(&m_pTextureCom))))
