@@ -108,7 +108,18 @@ namespace Client
 		ItemData(17, 50,ITEM_TYPE::STONE, ITEM_RARITY::LEGENDARY,TEXT("압축"), TEXT(""), 42),
 		ItemData(18, 51,ITEM_TYPE::STONE, ITEM_RARITY::LEGENDARY,TEXT("과거"), TEXT(""), 43),
 		ItemData(19, 52,ITEM_TYPE::STONE, ITEM_RARITY::LEGENDARY,TEXT("단절"), TEXT(""), 44),
-
+		ItemData(20, 54,ITEM_TYPE::ARTEFACT, ITEM_RARITY::NORMAL,TEXT("부정한 붕대"), TEXT("춤추는 그을은 연기처럼."), 3, 5),
+		ItemData(21, 55,ITEM_TYPE::ARTEFACT, ITEM_RARITY::NORMAL,TEXT("압박 밴드"), TEXT("더 빠르게 움직일 수 있는 것 같다."), 2, 6),
+		ItemData(22, 56,ITEM_TYPE::ARTEFACT, ITEM_RARITY::RARE,TEXT("열망의 부적"), TEXT("바라건대 이 몸에 강인한 영혼을."), 3, 7),
+		ItemData(23, 56,ITEM_TYPE::ARTEFACT, ITEM_RARITY::RARE,TEXT("힘의 부적"), TEXT("믿음직스럽지 않게 '힘'이라 적혀 있다."), 3, 8),
+		ItemData(24, 57,ITEM_TYPE::ARTEFACT, ITEM_RARITY::RARE,TEXT("은접시"), TEXT("피가 그 열쇠다."), 2, 9),
+		ItemData(25, 58,ITEM_TYPE::ARTEFACT, ITEM_RARITY::RARE,TEXT("경고 문서"), TEXT("상인연합 긴급 공문"), 1, 10),
+		ItemData(26, 59,ITEM_TYPE::ARTEFACT, ITEM_RARITY::LEGENDARY,TEXT("눈보라 망치"), TEXT("푸른 불 용광로 옆에 놓여있었다."), 6, 11),
+		ItemData(27, 60,ITEM_TYPE::ARTEFACT, ITEM_RARITY::RARE,TEXT("노란 행성"), TEXT("도서관에 전시되어 있던 노란 행성"), 6, 12),
+		ItemData(28, 61,ITEM_TYPE::ARTEFACT, ITEM_RARITY::RARE,TEXT("붉은 행성"), TEXT("도서관에 전시되어 있던 붉은 행성"), 6, 13),
+		ItemData(29, 62,ITEM_TYPE::ARTEFACT, ITEM_RARITY::RARE,TEXT("푸른 행성"), TEXT("도서관에 전시되어 있던 푸른 행성"), 6, 14),
+		ItemData(30, 63,ITEM_TYPE::SKILLBOOK, ITEM_RARITY::RARE,TEXT("아이스 볼트"), TEXT("아이스 볼트 마법이 적혀있는 책"), 1, 15),
+		ItemData(31, 64,ITEM_TYPE::SKILLBOOK, ITEM_RARITY::NORMAL,TEXT("라이트닝 볼트"), TEXT("라이트닝 볼트 마법이 적혀있는 책"), 1, 16),
 
 		//ItemData(12, 12,ITEM_TYPE::STONE, ITEM_RARITY::NORMAL,TEXT("시선"), TEXT(""), 4),
 		//ItemData(13, 13,ITEM_TYPE::STONE, ITEM_RARITY::NORMAL,TEXT("악수"), TEXT(""), 5),
@@ -151,20 +162,6 @@ namespace Client
 		//ItemData(50, 50,ITEM_TYPE::STONE, ITEM_RARITY::LEGENDARY,TEXT("압축"), TEXT(""), 42),
 		//ItemData(51, 51,ITEM_TYPE::STONE, ITEM_RARITY::LEGENDARY,TEXT("과거"), TEXT(""), 43),
 		//ItemData(52, 52,ITEM_TYPE::STONE, ITEM_RARITY::LEGENDARY,TEXT("단절"), TEXT(""), 44),
-
-
-		ItemData(53, 54,ITEM_TYPE::ARTEFACT, ITEM_RARITY::NORMAL,TEXT("부정한 붕대"), TEXT("춤추는 그을은 연기처럼."), 3, 5),
-		ItemData(54, 55,ITEM_TYPE::ARTEFACT, ITEM_RARITY::NORMAL,TEXT("압박 밴드"), TEXT("더 빠르게 움직일 수 있는 것 같다."), 2, 6),
-		ItemData(55, 56,ITEM_TYPE::ARTEFACT, ITEM_RARITY::RARE,TEXT("열망의 부적"), TEXT("바라건대 이 몸에 강인한 영혼을."), 3, 7),
-		ItemData(56, 56,ITEM_TYPE::ARTEFACT, ITEM_RARITY::RARE,TEXT("힘의 부적"), TEXT("믿음직스럽지 않게 '힘'이라 적혀 있다."), 3, 8),
-		ItemData(57, 57,ITEM_TYPE::ARTEFACT, ITEM_RARITY::RARE,TEXT("은접시"), TEXT("피가 그 열쇠다."), 2, 9),
-		ItemData(58, 58,ITEM_TYPE::ARTEFACT, ITEM_RARITY::RARE,TEXT("경고 문서"), TEXT("상인연합 긴급 공문"), 1, 10),
-		ItemData(59, 59,ITEM_TYPE::ARTEFACT, ITEM_RARITY::LEGENDARY,TEXT("눈보라 망치"), TEXT("푸른 불 용광로 옆에 놓여있었다."), 6, 11),
-		ItemData(60, 60,ITEM_TYPE::ARTEFACT, ITEM_RARITY::RARE,TEXT("노란 행성"), TEXT("도서관에 전시되어 있던 노란 행성"), 6, 12),
-		ItemData(61, 61,ITEM_TYPE::ARTEFACT, ITEM_RARITY::RARE,TEXT("붉은 행성"), TEXT("도서관에 전시되어 있던 붉은 행성"), 6, 13),
-		ItemData(62, 62,ITEM_TYPE::ARTEFACT, ITEM_RARITY::RARE,TEXT("푸른 행성"), TEXT("도서관에 전시되어 있던 푸른 행성"), 6, 14),
-		ItemData(63, 63,ITEM_TYPE::SKILLBOOK, ITEM_RARITY::RARE,TEXT("아이스 볼트"), TEXT("아이스 볼트 마법이 적혀있는 책"), 1, 15),
-		ItemData(64, 64,ITEM_TYPE::SKILLBOOK, ITEM_RARITY::NORMAL,TEXT("라이트닝 볼트"), TEXT("라이트닝 볼트 마법이 적혀있는 책"), 1, 16),
 	};
 	
 	const vector<Item_Effect> g_ItemEffect
