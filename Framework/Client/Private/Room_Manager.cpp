@@ -159,7 +159,7 @@ HRESULT CRoom_Manager::Check_SpecialRoom(LEVEL eLevel, const _wstring& strLayerT
 	{
 		CRoom* pRoom = Get_RoomByID(iRoomID);
 
-		pRoom->Ready_Stage_Potal(ENUM_CLASS(eLevel), strLayerTag, _float3(0.f, 2.f, 9.f), POTAL_TYPE::STAGE_POTAL);
+		pRoom->Ready_Stage_Potal(ENUM_CLASS(eLevel), strLayerTag, _float3(0.f, 2.f, 8.f), POTAL_TYPE::STAGE_POTAL);
 	}
 	else if (eLevel == LEVEL::LEVEL_BOSS1 || eLevel == LEVEL::LEVEL_BOSS2)
 	{
