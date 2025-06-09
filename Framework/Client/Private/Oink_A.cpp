@@ -33,6 +33,7 @@ HRESULT COink_A::Initialize(void* pArg)
     m_iMaxHp = 50;
     m_iCulHp = 50;
     m_eMonsterType = MONSTER_TYPE::OINK;
+    m_pTransformCom->Scaling(1.5f, 1.5f, 1.5f);
     return S_OK;
 }
 
@@ -246,7 +247,7 @@ void COink_A::Update(_float fTimeDelta)
     if (m_pTerrainBox != nullptr &&
         !(m_pAnimatorCom->Get_CurStateTag() == L"Summon_Standby" ||
             m_pAnimatorCom->Get_CurStateTag() == L"Summon")) {
-        m_pTerrainBox->SetUp_OnTerrainBox(m_pTransformCom, _float3(0.05f, 0.2f, 0.05f));
+        m_pTerrainBox->SetUp_OnTerrainBox(m_pTransformCom, _float3(0.05f, 0.4f, 0.05f));
     }
 }
 

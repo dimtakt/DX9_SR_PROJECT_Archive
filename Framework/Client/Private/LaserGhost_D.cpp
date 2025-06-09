@@ -35,6 +35,7 @@ HRESULT CLaserGhost_D::Initialize(void* pArg)
     m_iMaxHp = 70;
     m_iCulHp = 70;
     m_eMonsterType = MONSTER_TYPE::LASERGHOST;
+    m_pTransformCom->Scaling(1.5f, 1.5f, 1.5f);
     return S_OK;
 }
 
@@ -284,7 +285,7 @@ void CLaserGhost_D::Update(_float fTimeDelta)
             //_float3 vDiff = -vPlayerPos + vMonsterPos;       // 플레이어 위치에서 마우스 교차좌표로 가는 벡터 
             vDiff = -vMonsterPos + m_vLockedOnPos;
             D3DXVec3Normalize(&vDiff, &vDiff);              // 를 단위벡터화, 안되면 vDiff 순서 바꿔보기
-            _float fDistanceOffset = 5.0f;                   // ** ksta : 중점으로부터 떨어져 있을 거리 **
+            _float fDistanceOffset = 7.5f;                   // ** ksta : 중점으로부터 떨어져 있을 거리 **
             vDiff *= fDistanceOffset;
             D3DXMatrixTranslation(&matTransAddition, vDiff.x, 0, vDiff.z);
 
@@ -353,7 +354,7 @@ void CLaserGhost_D::Update(_float fTimeDelta)
             //_float3 vDiff = -vPlayerPos + vMonsterPos;       // 플레이어 위치에서 마우스 교차좌표로 가는 벡터 
             vDiff = -vMonsterPos + m_vLockedOnPos;
             D3DXVec3Normalize(&vDiff, &vDiff);              // 를 단위벡터화, 안되면 vDiff 순서 바꿔보기
-            _float fDistanceOffset = 5.0f;                   // ** ksta : 중점으로부터 떨어져 있을 거리 **
+            _float fDistanceOffset = 7.5f;                   // ** ksta : 중점으로부터 떨어져 있을 거리 **
             vDiff *= fDistanceOffset;
             D3DXMatrixTranslation(&matTransAddition, vDiff.x, 0, vDiff.z);
 
@@ -425,7 +426,7 @@ void CLaserGhost_D::Update(_float fTimeDelta)
 
 
     if (m_pTerrainBox != nullptr) {
-        m_pTerrainBox->SetUp_OnTerrainBox(m_pTransformCom, _float3(0.05f, 0.2f, 0.05f));
+        m_pTerrainBox->SetUp_OnTerrainBox(m_pTransformCom, _float3(0.05f, 0.4f, 0.05f));
     }
 }
 

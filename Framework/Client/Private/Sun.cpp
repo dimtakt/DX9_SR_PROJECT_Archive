@@ -28,11 +28,11 @@ HRESULT CSun::Initialize(void* pArg)
 		return E_FAIL; 
 	LIGHTDATA light;
 
-	light.desc.eType = LIGHT_TYPE::DIRECTIONAL;
-	light.desc.vDiffuse = _float4(0.5f, 0.5f, 0.5f, 1.f);
-	light.desc.vSpecular = _float4(0.5f, 0.5f, 0.5f, 1.f);
-	light.desc.vAmbient = D3DXVECTOR4(0.1f, 0.1f, 0.1f, 1.f);
-	light.desc.fSpecPower = 64.f;
+	light.desc.eType = desc->desc.eType;
+	light.desc.vDiffuse = desc->desc.vDiffuse;
+	light.desc.vSpecular = desc->desc.vSpecular;
+	light.desc.vAmbient = desc->desc.vAmbient;
+	light.desc.fSpecPower = desc->desc.fSpecPower;
 
 	m_strLightID = TEXT("Sun");
 

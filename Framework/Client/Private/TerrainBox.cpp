@@ -1,7 +1,7 @@
 #include "TerrainBox.h"
 #include "Client_Struct.h"
 #include "GameInstance.h"
-
+#include "Shader.h"
 
 CTerrainBox::CTerrainBox(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CGameObject{ pGraphic_Device }
@@ -40,6 +40,9 @@ HRESULT CTerrainBox::Initialize(void* pArg)
 		m_eObjType = GAMEOBJ_TYPE::TERRAIN;
 	}
 
+	_float4 vMaterialSpecular = _float4(0.2f, 0.2f, 0.2f, 1.f);
+	m_pShaderCom->Set_Vector("gMaterialSpecular", &vMaterialSpecular);
+
 	return S_OK;
 }
 
@@ -68,6 +71,39 @@ HRESULT CTerrainBox::Render()
 
 	m_pVIBufferCom->Bind_Buffers();
 
+	//_float4x4 ViewMatrix, ProjMatrix;
+	//m_pGraphic_Device->GetTransform(D3DTS_VIEW, &ViewMatrix);
+	//m_pGraphic_Device->GetTransform(D3DTS_PROJECTION, &ProjMatrix);
+
+	//if (FAILED(m_pShaderCom->Bind_Matrix("gWorldMatrix", m_pTransformCom->Get_WorldMatrix())))
+	//	return E_FAIL;
+	//if (FAILED(m_pShaderCom->Bind_Matrix("gViewMatrix", &ViewMatrix)))
+	//	return E_FAIL;
+	//if (FAILED(m_pShaderCom->Bind_Matrix("gProjMatrix", &ProjMatrix)))
+	//	return E_FAIL;
+
+	//vector<_wstring> vecLightKeys = { L"Sun" };
+	//m_pGameInstance->Apply_ToShader(m_pShaderCom, vecLightKeys);
+
+	//m_pTextureTop->Bind_Texture(m_pShaderCom, "gTexture", m_iTopTextureIndex);
+
+	//m_pShaderCom->Begin(0);
+
+	//m_pVIBufferCom->Render_Subset(0);
+
+	//m_pShaderCom->End();
+
+	//m_pTextureSide->Bind_Texture(m_pShaderCom, "gTexture", m_iTopTextureIndex);
+
+	//m_pShaderCom->Begin(0);
+
+
+	//m_pVIBufferCom->Render_Subset(2); // ¿Þ
+	//m_pVIBufferCom->Render_Subset(3); // ¿À
+	//m_pVIBufferCom->Render_Subset(4); // ¾Õ
+	//m_pVIBufferCom->Render_Subset(5); // µÚ
+
+	//m_pShaderCom->End();
  	m_pTextureTop->Bind_Texture(m_iTopTextureIndex); // À§
 	m_pVIBufferCom->Render_Subset(0);
 
@@ -106,6 +142,11 @@ HRESULT CTerrainBox::Ready_Components()
 
 	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Transform"),
 		TEXT("Com_Transform_TerrainBox"), reinterpret_cast<CComponent**>(&m_pTransformCom), &TransformDesc)))
+		return E_FAIL;
+
+	///* For.Com_Shader */
+	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Shader_Light"),
+		TEXT("Com_Shader"), reinterpret_cast<CComponent**>(&m_pShaderCom))))
 		return E_FAIL;
 
 	return S_OK;

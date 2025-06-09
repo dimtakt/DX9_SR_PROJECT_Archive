@@ -104,7 +104,7 @@ HRESULT CTree::Render()
             return E_FAIL;
     }
     
-    std::vector<std::wstring> vecLightKeys = { L"Player_Light", L"Sun"};
+    vector<_wstring> vecLightKeys = { L"Player_Light", L"Sun"};
     m_pGameInstance->Apply_ToShader(m_pShaderCom, vecLightKeys);
 
     m_pTextureCom->Bind_Texture(m_pShaderCom, "gTexture", m_iTextureIndex);
