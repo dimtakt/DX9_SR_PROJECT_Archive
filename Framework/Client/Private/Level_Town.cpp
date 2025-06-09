@@ -148,14 +148,23 @@ HRESULT CLevel_Town::Ready_Layer_UI(const _wstring& strLayerTag)
 		ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_Hud_Dash"), &Desc)))
 		return E_FAIL;
 
-	CField_Item::FIELD_ITEM_DESC ItemDesc{};
+	////NPC 내에 생성
+	////상점 아이템 생성 Desc
+	//CField_Item::FIELD_ITEM_DESC ItemDesc{};
 
-	ItemDesc.m_vTargetPos = static_cast<CTransform*>(m_pGameInstance->Get_Component(ENUM_CLASS(LEVEL::LEVEL_TOWN), TEXT("Layer_Player"), TEXT("Com_Transform")))->Get_State(STATE::POSITION);
-	ItemDesc.m_iItemID = 3;
-	ItemDesc.m_iLevel = ENUM_CLASS(LEVEL::LEVEL_TOWN);
-	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_TOWN), strLayerTag,
-		ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_Field_Item"), &ItemDesc)))
-		return E_FAIL;
+	////생성활 위치 좌표 float3형 (현재 임시로 플레이어 좌표로 넣어둠)
+	//ItemDesc.m_vTargetPos = static_cast<CTransform*>(m_pGameInstance->Get_Component(ENUM_CLASS(LEVEL::LEVEL_TOWN), TEXT("Layer_Player"), TEXT("Com_Transform")))->Get_State(STATE::POSITION);
+	//
+	////생성할 아이템 번호 (ITEM DB 참고)
+	//ItemDesc.m_iItemID = 3;
+	////현재 NPC가 있는 레벨 넣어주면 됩니다.
+	//ItemDesc.m_iLevel = ENUM_CLASS(LEVEL::LEVEL_TOWN);
+
+	////가격
+	//ItemDesc.m_iGold = 10;
+	////이후 클론 생성
+	//m_pFieldItem1 = dynamic_cast<CField_Item*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, 
+	//	ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_Field_Item"), &ItemDesc));
 
 	return S_OK;
 }

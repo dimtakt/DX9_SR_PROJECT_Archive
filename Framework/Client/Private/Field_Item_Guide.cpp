@@ -1,6 +1,7 @@
 #include "Field_Item_Guide.h"
 #include "GameInstance.h"
 #include "Stat_Manager.h"
+#include "Field_Item.h"
 CField_Item_Guide::CField_Item_Guide(LPDIRECT3DDEVICE9 pGraphic_Device) : CUIObject(pGraphic_Device)
 {
 }
@@ -137,9 +138,10 @@ void CField_Item_Guide::Render_Font()
 	_stprintf_s(szText, TEXT("F"));
 	m_pGameInstance->Render_Font(TEXT("UI_Font_18"), szText, m_vTexRect, D3DXCOLOR(1.f, 1.f, 1.f, 1.f), DT_CENTER | DT_VCENTER | DT_SINGLELINE);
 
+	_int iGold = static_cast<CField_Item*>(m_pParent)->Get_Value();
 	m_vTexRect.left += 35;
-	m_vTexRect.right += 70;
-	_stprintf_s(szText, TEXT("구매하기"));
+	m_vTexRect.right += 200;
+	_stprintf_s(szText, TEXT("구매하기 %d$"), iGold);
 	m_pGameInstance->Render_Font(TEXT("UI_Font_18"), szText, m_vTexRect, D3DXCOLOR(1.f, 1.f, 1.f, 1.f), DT_LEFT | DT_VCENTER | DT_SINGLELINE);
 
 

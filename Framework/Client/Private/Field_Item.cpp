@@ -2,6 +2,7 @@
 #include "GameInstance.h"
 #include "Field_Item_Guide.h"
 #include "Inventory.h"
+#include "Stat_Manager.h"
 CField_Item::CField_Item(LPDIRECT3DDEVICE9 pGraphic_Device) : CUIObject(pGraphic_Device)
 {
 }
@@ -24,8 +25,12 @@ void CField_Item::Render_Field_Item(_float fTimeDelta, _bool bFontRender)
 
 void CField_Item::Buy_Item()
 {
-	static_cast<CInventory*>(m_pGameInstance->Find_UIObj(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("UI_Inven")))->Add_Item_Inven(m_iItemID);
-	m_bDead = true;
+	if (CStat_Manager::GetInstance()->Get_CurStats()[ENUM_CLASS(STAT_INFO::GOLD)] >= m_iGold)
+	{
+		CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::GOLD, -m_iGold);
+		static_cast<CInventory*>(m_pGameInstance->Find_UIObj(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("UI_Inven")))->Add_Item_Inven(m_iItemID);
+		m_bDead = true;
+	}
 }
 
 HRESULT CField_Item::Initialize_Prototype(LEVEL eLevel)
@@ -42,6 +47,7 @@ HRESULT CField_Item::Initialize(void* pArg)
 {
 	FIELD_ITEM_DESC* Desc = static_cast<FIELD_ITEM_DESC*>(pArg);
 
+	m_iGold = Desc->m_iGold;
 	m_fSizeX = 1.f;
 	m_fSizeY = 1.f;
 	m_fX = 0;
@@ -55,8 +61,7 @@ HRESULT CField_Item::Initialize(void* pArg)
 
 	m_iItemID = Desc->m_iItemID;
 	m_iItemTex = g_ItemDataBase[m_iItemID].m_iItemTextureID;
-	//m_vTargetPos = Desc->m_vTargetPos;
-	m_vTargetPos = _float3{ 0.f, 0.f, 0.f };
+	m_vTargetPos = Desc->m_vTargetPos;
 	m_vTargetPos.y += m_fY; 
 
 	m_vWorldPos = m_vTargetPos;
@@ -86,9 +91,6 @@ void CField_Item::Update(_float fTimeDelta)
 
 void CField_Item::Late_Update(_float fTimeDelta)
 {
-	Render_Field_Item(fTimeDelta, true);
-	if (m_pGameInstance->IsKeyDown(VK_UP))
-		Buy_Item();
 }
 
 HRESULT CField_Item::Render()

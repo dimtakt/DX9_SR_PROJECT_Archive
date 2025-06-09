@@ -24,19 +24,23 @@ private:
 	virtual						~CField_Npc_Chat() = default;
 
 public:
+	//0. NPC 대화 추가 함수 (대화 추가 안해두면 텍스트 출력 안됨)
 	void						Add_Chat(_wstring szChatting);
 	
+	//1. 작은 캐릭터 이미지 랜더 함수 (페이스 인덱스, 페이스 랜더할지 불값 )0, 갑옷 강아지 / 1. 바바
 	void						On_Chat(_int iFaceNum, _bool bIsFace);
 	void						Off_Chat();
 
-	//일반 대화
+	//2. 일반 대화 함수 (채팅만 표시)
 	void						StartToEnd_Chat();
 	//일반 대화 분리
 	void						Start_Chat();
 	void						Next_Chat();
 	void						End_Chat();
-	//시네마틱 대화
-	void						Cinematic_Chat(_int iFaceNum, _bool bIsFace);	//0번 갑옷 강아지 1번 바바(소)
+
+	//3. 시네마틱 대화(화면 상하단 검은색으로 표시됨(페이스 인덱스, 페이스 랜더할지 불값 )
+	void						Cinematic_Chat(_int iFaceNum, _bool bIsFace);
+
 public:
 	virtual HRESULT				Initialize_Prototype(LEVEL eLevel);
 	virtual HRESULT				Initialize(void* pArg) override;

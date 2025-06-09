@@ -861,14 +861,20 @@ HRESULT CPlayer::Ready_Object()
 
     _wstring szTag = TEXT("Test_Chat");
 
+    //NPC 트랜스폼
     ChatDesc.pTransform = m_pTransformCom;
+    //채팅 UI 태그
     ChatDesc.szChatTag = szTag;
+    //NPC 현재 레벨 넣어주면 됩니다.
     ChatDesc.m_iLevel = ENUM_CLASS(LEVEL::LEVEL_TOWN);
+    //NPC 머리 위로 얼만큼 띄울거지 음수 값 넣어주면 됩니다.
     ChatDesc.fY = -100;
+    //생성
     if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_TOWN), TEXT("Layer_UI_Chat"),
         ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_Field_Npc_Chat"), &ChatDesc)))
         return E_FAIL;
 
+    //멤버 변수의 채팅 클래스 주소 연결(만든 레벨, UI 태그)
     m_pChat = static_cast<CField_Npc_Chat*>(m_pGameInstance->Find_UIObj(ENUM_CLASS(LEVEL::LEVEL_TOWN), TEXT("Test_Chat")));
 
     m_pChat->Add_Chat(TEXT("일이삼사오육칠팔구십일이"));
