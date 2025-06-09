@@ -220,4 +220,5 @@ void CTerrainBox::Free()
 	Safe_Release(m_pVIBufferCom);
 	Safe_Release(m_pTextureTop);
 	Safe_Release(m_pTextureSide);
+	Safe_Release(m_pShaderCom);
 }

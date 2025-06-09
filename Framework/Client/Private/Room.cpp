@@ -257,7 +257,7 @@ HRESULT CRoom::Ready_Stage_Potal(_uint iLayerLevelIndex, const _wstring& strLaye
 	OBJECT_INTERACTION_DESC pDesc{};
 	pDesc.ePotalType = eType;
 	pDesc.iTextureIndex = 0;
-	pDesc.vScale = { 1.f, 1.f, 1.f };
+	pDesc.vScale = { 5.f, 1.f, 5.f };
 	pDesc.vRotate = { 0.f, 0.f, 0.f };
 	CTransform* pTransform = static_cast<CTransform*>(m_pTerrainBox->Find_Component(TEXT("Com_Transform_TerrainBox")));
 	pDesc.vPos = pTransform->Get_State(STATE::POSITION) + vOffset;
@@ -381,7 +381,7 @@ HRESULT CRoom::Load_From_File(_uint iLayerLevelIndex, const _wstring& strLayerTa
 			{
 				tDesc.strPrototypeTag = TEXT("Prototype_GameObject_Monster_Oink_A");
 				tDesc.eType = MONSTER_TYPE_A::MONSTER_OINK_A;
-			}
+			}                                                                                                                                                              
 			else if (pDesc.eType == GAMEOBJ_TYPE::MONSTER_LASERGHOST)
 			{
 				tDesc.strPrototypeTag = TEXT("Prototype_GameObject_Monster_LaserGhost_D");

@@ -82,7 +82,7 @@ void CPlayer::Update(_float fTimeDelta)
 {    
     //m_pCollider->Update_Collider();
     if (m_pTerrainBox != nullptr) {
-        m_pTerrainBox->SetUp_OnTerrainBox(m_pTransformCom, _float3(0.f, 0.2f, 0.f));
+        m_pTerrainBox->SetUp_OnTerrainBox(m_pTransformCom, _float3(0.f, 0.3f, 0.f));
     }
 
     // 경직 중이라면 Update 실행 X (키 조작 불가)
