@@ -170,21 +170,6 @@ void CErma::Update(_float fTimeDelta)
     // ***********************
 
 
-    //  키입력 패턴 설정
-    _int iKeyNumMin = 4;    // 키입력 최소 갯수 (랜덤)
-    _int ikeyNumMax = 8;    // 키입력 최대 갯수 (랜덤)
-    _int iPauseSec = 5;     // 키입력을 위해 주어진 시간
-    vector<int> vecKeysTable = { 'A', 'W', 'S', 'D' };  // 나올 수 있는 키의 목록
-
-    _int iPauseFrame = iPauseSec * 60;  // 프레임으로 변환
-    
-    // 발동 조건
-    if (m_pGameInstance->IsKeyDown('M') && m_iPauseLeftFrame == 0)
-    {
-        m_iPauseLeftFrame = iPauseFrame;
-        Set_AllPartsStop(true);
-    }
-
 
 
 
@@ -297,9 +282,10 @@ void CErma::Update(_float fTimeDelta)
         // 이후 반복?
 
 #pragma endregion
-        m_iStackedFrame++;
+        if (!m_isAllStop)
+            m_iStackedFrame++;
         // ===============
-        _int iStandardPatternFrame = m_iStackedFrame % 2450;
+        _int iStandardPatternFrame = m_iStackedFrame % 2800;
 
         // 정규 패턴
         switch (iStandardPatternFrame)
@@ -323,7 +309,10 @@ void CErma::Update(_float fTimeDelta)
             m_pObj_Hand_R->PlayPattern(CErma_Hand_R::PATTERN_HAND_R::PT_LASER);
             break;
         case 2440:
-            //m_iStackedFrame = 20;
+            m_pObj_Hand_L->PlayPattern(CErma_Hand_L::PATTERN_HAND_L::PT_KEYPATTERN);
+            break;
+        case 2620:
+            m_pObj_Hand_R->PlayPattern(CErma_Hand_R::PATTERN_HAND_R::PT_KEYPATTERN);
             break;
         }
 
@@ -346,63 +335,8 @@ void CErma::Update(_float fTimeDelta)
     }
 #pragma endregion
 
-    // 이상한거..
-#pragma region AZ Pattern
-
-    // 시간이 남아있을 때만 실행
-    else if (m_isInCombat &&
-        m_iPauseLeftFrame > 0)
-    {
-        // 최초 프레임에 한해 입력해야 할 키 생성
-        if (iPauseFrame == m_iPauseLeftFrame)
-        {
-            // 입력해야 하는 키 갯수
-            _int iKeyNum = static_cast<_int>(m_pGameInstance->Compute_Random(iKeyNumMin, ikeyNumMax));
-        
-            // 키 갯수만큼 생성하여 벡터에 삽입
-            for (int i = 0; i < iKeyNum; i++)
-            {
-                _int iKey = static_cast<_int>(m_pGameInstance->Compute_Random(0, vecKeysTable.size()));
-                m_listKeys.push_back(vecKeysTable[iKey]);
-            }
-
-            std::cout << "Input Keys... : ";
-            for (auto it = m_listKeys.begin(); it != m_listKeys.end(); ++it) {
-                std::cout << "[" << static_cast<char>(*it) << "] ";
-            }
-            std::wcout << std::endl;
-        }
-        
-        m_iPauseLeftFrame--;
-        
-        // 키 입력 시 맨 앞의 원소와 일치하는지 확인, 일치 시 pop front로 제거
-        if (m_pGameInstance->IsKeyDown(m_listKeys.front()))
-            m_listKeys.pop_front();
-
-        // 입력을 다 마치면 성공, 아니면 실패
-        if (m_listKeys.empty())
-        {
-            m_iPauseLeftFrame = 0;
-            // kstaA : 패턴 파훼 성공으로, 보상을 주거나 보스의 체력을 깎는 기능을 삽입.
-
-
-            std::cout << "Success" << std::endl;
-            m_listKeys.clear();
-            Set_AllPartsStop(false);
-        }
-        else if (m_iPauseLeftFrame == 0)
-        {
-            // kstaA : 패턴 파훼 실패로, 플레이어의 체력을 깎는 기능을 삽입.
-
-
-
-            std::cout << "Fail" << std::endl;
-            m_listKeys.clear();
-            Set_AllPartsStop(false);
-        }
-    }
-
-#pragma endregion
+    // 키입력 패턴용
+    PlayKeyInputPattern();
  
 
 
@@ -532,6 +466,85 @@ void CErma::Set_AllPartsStop(_bool isStop)
     m_pObj_Hand_L->Set_Stop(isStop);
     m_pObj_Hand_R->Set_Stop(isStop);
     m_pObj_Head->Set_Stop(isStop);
+}
+
+void CErma::PlayKeyInputPattern()
+{
+    // 이상한거..
+#pragma region AZ Pattern
+
+    //  키입력 패턴 설정
+    _int iKeyNumMin = 4;    // 키입력 최소 갯수 (랜덤)
+    _int ikeyNumMax = 8;    // 키입력 최대 갯수 (랜덤)
+    _int iPauseSec = 5;     // 키입력을 위해 주어진 시간
+    vector<int> vecKeysTable = { 'A', 'W', 'S', 'D' };  // 나올 수 있는 키의 목록
+
+    _int iPauseFrame = iPauseSec * 60;  // 프레임으로 변환
+
+
+
+    if (m_iPauseLeftFrame == 0 && m_isTriggerKeyPattern)
+    {
+        m_iPauseLeftFrame = iPauseFrame;
+        Set_AllPartsStop(true);
+        m_isTriggerKeyPattern = false;
+    }
+
+    if (!(m_isInCombat &&
+        m_iPauseLeftFrame > 0))
+        return;
+\
+
+    // 최초 프레임에 한해 입력해야 할 키 생성
+    if (iPauseFrame == m_iPauseLeftFrame)
+    {
+        // 입력해야 하는 키 갯수
+        _int iKeyNum = static_cast<_int>(m_pGameInstance->Compute_Random(iKeyNumMin, ikeyNumMax));
+
+        // 키 갯수만큼 생성하여 벡터에 삽입
+        for (int i = 0; i < iKeyNum; i++)
+        {
+            _int iKey = static_cast<_int>(m_pGameInstance->Compute_Random(0, vecKeysTable.size()));
+            m_listKeys.push_back(vecKeysTable[iKey]);
+        }
+
+        std::cout << "Input Keys... : ";
+        for (auto it = m_listKeys.begin(); it != m_listKeys.end(); ++it) {
+            std::cout << "[" << static_cast<char>(*it) << "] ";
+        }
+        std::wcout << std::endl;
+    }
+
+    m_iPauseLeftFrame--;
+
+    // 키 입력 시 맨 앞의 원소와 일치하는지 확인, 일치 시 pop front로 제거
+    if (m_pGameInstance->IsKeyDown(m_listKeys.front()))
+        m_listKeys.pop_front();
+
+    // 입력을 다 마치면 성공, 아니면 실패
+    if (m_listKeys.empty())
+    {
+        m_iPauseLeftFrame = 0;
+        // kstaA : 패턴 파훼 성공으로, 보상을 주거나 보스의 체력을 깎는 기능을 삽입.
+
+
+        std::cout << "Success" << std::endl;
+        m_listKeys.clear();
+        Set_AllPartsStop(false);
+    }
+    else if (m_iPauseLeftFrame == 0)
+    {
+        // kstaA : 패턴 파훼 실패로, 플레이어의 체력을 깎는 기능을 삽입.
+
+
+
+        std::cout << "Fail" << std::endl;
+        m_listKeys.clear();
+        Set_AllPartsStop(false);
+    }
+
+
+#pragma endregion
 }
 
 void CErma::OnCollision(CGameObject* pGameObject)

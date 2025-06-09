@@ -1,6 +1,9 @@
 #include "Erma_Hand_R.h"
 #include "Effect_Factory.h"
 
+#include "Erma.h"
+#include "Room_Manager.h"
+
 CErma_Hand_R::CErma_Hand_R(LPDIRECT3DDEVICE9 pGraphic_Device)
     : CMonster{ pGraphic_Device }
 {
@@ -425,6 +428,85 @@ void CErma_Hand_R::Update(_float fTimeDelta)
 #pragma endregion
         }
             break;
+        case Client::CErma_Hand_R::PATTERN_HAND_R::PT_KEYPATTERN:
+        {
+#pragma region PT_KEYPATTERN
+
+            _float3 vMovePos = {
+                vTerrainPos.x + 7.f,
+                0,
+                vTerrainPos.z
+            };
+
+            if (m_isTracking)
+                m_pTransformCom->Move_To(vMovePos, fTimeDelta * 4.f, 0.01f);
+
+            if (IS_BETWEEN(iCurPatternFrame, 0, 40))
+            {
+                _int iFrame = iCurPatternFrame - (0);
+                m_isTracking = true;
+                _float fY = -0.00125 * pow((iFrame - 40), 2) + 2;
+                m_pTerrainBox->SetUp_OnTerrainBox(m_pTransformCom, _float3(0.0f, fY, 0.0f) + vTerrainOffset);
+            }
+            else if (IS_BETWEEN(iCurPatternFrame, 40, 100))
+            {
+                _int iFrame = iCurPatternFrame - (40);
+                // tracking..
+                m_pTerrainBox->SetUp_OnTerrainBox(m_pTransformCom, _float3(0.0f, 2.f, 0.0f) + vTerrainOffset);
+            }
+            else if (IS_BETWEEN(iCurPatternFrame, 100, 110))
+            {
+                _int iFrame = iCurPatternFrame - (100);
+                m_isTracking = false;
+                _float fY = -0.02 * pow((iFrame), 2) + 2;
+                m_pTerrainBox->SetUp_OnTerrainBox(m_pTransformCom, _float3(0.0f, fY, 0.0f) + vTerrainOffset);
+            }
+            else if (IS_BETWEEN(iCurPatternFrame, 110, 160))
+            {
+                _int iFrame = iCurPatternFrame - (110);
+                m_pTerrainBox->SetUp_OnTerrainBox(m_pTransformCom, vTerrainOffset);
+
+                if (iCurPatternFrame == 110)
+                {
+#pragma region Effect Setting
+
+                    D3DXMatrixIdentity(&matScale);
+                    D3DXMatrixScaling(&matScale, -1.5f, 1.f, 1.f);
+
+                    D3DXMatrixIdentity(&matRotateChild);
+                    D3DXMatrixRotationX(&matRotateChild, D3DXToRadian(90)); // 안되면 -90도도 해보기
+
+                    D3DXMatrixIdentity(&matTransAddition);
+                    D3DXMatrixTranslation(&matTransAddition, 0, -m_pTransformCom->Get_Scaled().y / 2, 0);
+
+                    matMonsterWorld = matTransToOrigin * matScale * matRotateChild * matRotateChildtoPlayer * matTransReturn * matTransAddition;
+
+#pragma endregion
+                    CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::MONSTER_EFFECT, L"Prototype_Component_Boss_Erma_BigGolem_Stmap_FX",
+                        *m_pTransformCom->Get_WorldMatrix(), matMonsterWorld);
+#pragma region Effect Reset
+
+                    D3DXMatrixIdentity(&matScale);
+                    D3DXMatrixScaling(&matScale, -1.f, 1.f, 1.f);
+
+                    D3DXMatrixIdentity(&matRotateChild);
+                    D3DXMatrixRotationX(&matRotateChild, D3DXToRadian(-90)); // 안되면 -90도도 해보기
+
+                    D3DXMatrixIdentity(&matTransAddition);
+
+                    matMonsterWorld = matTransToOrigin * matScale * matRotateChild * matRotateChildtoPlayer * matTransReturn * matTransAddition;
+
+#pragma endregion
+
+                    dynamic_cast<CErma*>(CRoom_Manager::GetInstance()->Find_CurrentRoom_Monster(MONSTER_TYPE::ERMA))->ChangeKeyInputPattern();
+
+                    m_isPatternPlaying = false;
+                }
+            }
+
+#pragma endregion
+        }
+            break;
         default:
             break;
         }
@@ -568,6 +650,7 @@ HRESULT CErma_Hand_R::Ready_Components(void* pArg)
     m_pAnimatorPatternCom->Add_State(L"Idle",       { nullptr, 4, true });
     m_pAnimatorPatternCom->Add_State(L"Strike",     { nullptr, 480, true });    // 8s
     m_pAnimatorPatternCom->Add_State(L"Laser",      { nullptr, 600, true });    // 10s
+    m_pAnimatorPatternCom->Add_State(L"KeyPattern", { nullptr, 180, true });    // 3s
 
     // ..
 
@@ -616,7 +699,12 @@ void CErma_Hand_R::PlayPattern(PATTERN_HAND_R ePattern, _bool isForced)
         fPatternTime = 10.f;
         strPatternTag = L"Laser";
         break;
+    case Client::CErma_Hand_R::PATTERN_HAND_R::PT_KEYPATTERN:
+        fPatternTime = 3.f;
+        strPatternTag = L"KeyPattern";
+        break;
     default:
+        m_isPatternPlaying = false;
         break;
     }
 
