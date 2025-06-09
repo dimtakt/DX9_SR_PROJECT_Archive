@@ -175,6 +175,7 @@
     <ClInclude Include="..\public\Erma_Head.h" />
     <ClInclude Include="..\Public\EXP_Ball.h" />
     <ClInclude Include="..\public\Field_Font.h" />
+    <ClInclude Include="..\public\Field_Item.h" />
     <ClInclude Include="..\Public\FogPlane.h" />
     <ClInclude Include="..\public\Gacha.h" />
     <ClInclude Include="..\public\Gacha_Button_Icon.h" />
@@ -334,6 +335,7 @@
     <ClCompile Include="..\private\Erma_Head.cpp" />
     <ClCompile Include="..\Private\EXP_Ball.cpp" />
     <ClCompile Include="..\private\Field_Font.cpp" />
+    <ClCompile Include="..\private\Field_Item.cpp" />
     <ClCompile Include="..\Private\FogPlane.cpp" />
     <ClCompile Include="..\private\Gacha.cpp" />
     <ClCompile Include="..\private\Gacha_Button_Icon.cpp" />

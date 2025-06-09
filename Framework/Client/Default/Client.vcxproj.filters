@@ -412,6 +412,9 @@
     <Filter Include="02.GameObject\UI\HUD\HUD_Quick_Slot">
       <UniqueIdentifier>{f4e2f595-60e0-46f3-85f1-e781f081c5de}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\UI\Field\Field_Item">
+      <UniqueIdentifier>{8cf15ecb-f64f-443f-9aae-a5c248977581}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -900,6 +903,9 @@
     <ClInclude Include="..\public\Hud_Quick_Slot.h">
       <Filter>02.GameObject\UI\HUD\HUD_Quick_Slot</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\Field_Item.h">
+      <Filter>02.GameObject\UI\Field\Field_Item</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -1349,6 +1355,9 @@
     </ClCompile>
     <ClCompile Include="..\private\Hud_Quick_Slot.cpp">
       <Filter>02.GameObject\UI\HUD\HUD_Quick_Slot</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Field_Item.cpp">
+      <Filter>02.GameObject\UI\Field\Field_Item</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

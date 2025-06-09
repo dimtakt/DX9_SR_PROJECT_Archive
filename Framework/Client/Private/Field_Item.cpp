@@ -8,6 +8,12 @@ CField_Item::CField_Item(const CField_Item& Prototype) : CUIObject(Prototype), m
 {
 }
 
+void CField_Item::Render_Field_Item()
+{
+	Target_Pos();
+	m_pGameInstance->Add_RenderGroup(RENDERGROUP::RG_UI, this);
+}
+
 HRESULT CField_Item::Initialize_Prototype(LEVEL eLevel)
 {
 	m_eLevel = eLevel;
@@ -18,13 +24,19 @@ HRESULT CField_Item::Initialize_Prototype(LEVEL eLevel)
 
 HRESULT CField_Item::Initialize(void* pArg)
 {
-	m_fSizeX = 70.f;
-	m_fSizeY = 10.f;
+	FIELD_ITEM_DESC* Desc = static_cast<FIELD_ITEM_DESC*>(pArg);
+
+	m_fSizeX = 64.f;
+	m_fSizeY = 64.f;
 	m_fX = 0;
-	m_fY = 40;
-	m_fZ = UI_DEPTH::FILED_HP;
+	m_fY = 0;
+	m_fZ = UI_DEPTH::FILED_ITEM;
 	m_iWinSizeX = g_iWinSizeX;
 	m_iWinSizeY = g_iWinSizeY;
+
+	m_iItemID = Desc->m_iItemID;
+	m_iItemTex = g_ItemDataBase[m_iItemID].m_iItemTextureID;
+
 
 	if (FAILED(__super::Initialize()))
 		return E_FAIL;
@@ -58,10 +70,14 @@ void CField_Item::Late_Update(_float fTimeDelta)
 
 HRESULT CField_Item::Render()
 {
-	m_pGraphic_Device->SetTexture(0, NULL);
+	if (FAILED(m_pTextureCom->Bind_Texture(m_iItemTex)))
+		return E_FAIL;
 	m_pVIBufferCom->Bind_Buffers();
+
 	__super::Begin();
 	m_pVIBufferCom->Render();
+
+//	Render_Font();
 	__super::End();
 
 	return S_OK;
@@ -69,12 +85,16 @@ HRESULT CField_Item::Render()
 
 HRESULT CField_Item::Ready_Components()
 {
-	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Rect_UI_Hud_States_Hp"),
+	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_VIBuffer_Rect"),
 		TEXT("Com_VIBuffer"), reinterpret_cast<CComponent**>(&m_pVIBufferCom))))
 		return E_FAIL;
 
 	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Transform"),
 		TEXT("Com_Transform"), reinterpret_cast<CComponent**>(&m_pTransformCom))))
+		return E_FAIL;
+
+	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Rect_UI_Hud_Dice_Symbol"),
+		TEXT("Com_Texture"), reinterpret_cast<CComponent**>(&m_pTextureCom))))
 		return E_FAIL;
 
 	return S_OK;
@@ -92,9 +112,9 @@ HRESULT CField_Item::Ready_Children()
 	return S_OK;
 }
 
-void CField_Item::Target_Pos(CTransform* pTransform)
+void CField_Item::Target_Pos()
 {
-	_float3 Target_Pos = pTransform->Get_State(STATE::POSITION);
+	_float3 Target_Pos = m_vTargetPos;
 
 	m_pGraphic_Device->GetTransform(D3DTS_VIEW, &m_OldViewMatrix);
 	m_pGraphic_Device->GetTransform(D3DTS_PROJECTION, &m_OldProjMatrix);

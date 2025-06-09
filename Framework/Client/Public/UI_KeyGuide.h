@@ -26,7 +26,7 @@ private:
 	CVIBuffer_Rect*				m_pVIBufferCom = { nullptr };
 	CTexture*					m_pTextureCom = { nullptr };
 	_wstring					m_strKey = {};
-
+	RENDERGROUP					m_eRenderGroup = {};
 private:
 	HRESULT						Ready_Components();
 

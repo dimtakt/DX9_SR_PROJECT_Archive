@@ -7,7 +7,7 @@
 #include "Dagger.h"
 #include "Player.h"
 #include "Sun.h"
-
+#include "Field_Item.h"
 CLevel_Town::CLevel_Town(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CLevel{ pGraphic_Device }
 {
@@ -146,6 +146,15 @@ HRESULT CLevel_Town::Ready_Layer_UI(const _wstring& strLayerTag)
 	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_TOWN), strLayerTag,
 		ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_Hud_Dash"), &Desc)))
 		return E_FAIL;
+
+	CField_Item::FIELD_ITEM_DESC ItemDesc{};
+
+	ItemDesc.m_vTargetPos = static_cast<CTransform*>(m_pGameInstance->Get_Component(ENUM_CLASS(LEVEL::LEVEL_TOWN), TEXT("Layer_Player"), TEXT("Com_Transform")))->Get_State(STATE::POSITION);
+	ItemDesc.m_iItemID = 3;
+	
+	//if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_TOWN), strLayerTag,
+	//	ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_Field_Item"), &Desc)))
+	//	return E_FAIL;
 
 	return S_OK;
 }

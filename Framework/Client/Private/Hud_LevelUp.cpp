@@ -74,10 +74,15 @@ void CHud_LevelUp::Update(_float fTimeDelta)
 		CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::LEVELUPPOINT, -1.f);
 		static_cast<CGacha*>(m_pGameInstance->Find_UIObj(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("UI_Gacha")))->Get_off();
 	}
-	if(m_pGameInstance->IsKeyDown('R'))
-		static_cast<CGacha*>(m_pGameInstance->Find_UIObj(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("UI_Gacha")))->UI_Open(CGacha::GACHA_TYPE::ALL);
 
-
+	if (m_pGameInstance->IsKeyDown('R'))
+	{
+		_int iNumber = m_pGameInstance->Rand(0, 10);
+		if(iNumber > 9)
+			static_cast<CGacha*>(m_pGameInstance->Find_UIObj(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("UI_Gacha")))->UI_Open(CGacha::GACHA_TYPE::STONE);
+		else
+			static_cast<CGacha*>(m_pGameInstance->Find_UIObj(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("UI_Gacha")))->UI_Open(CGacha::GACHA_TYPE::ARTEFACT);
+	}
 	m_fFrame += fTimeDelta * m_fSpeed;
 
 	if (m_fFrame > 1)
@@ -151,7 +156,7 @@ HRESULT CHud_LevelUp::Ready_Children()
 
 	Desc.fX = -35;
 	Desc.fY = 60;
-
+	Desc.fZ = 3;
 	pGameObject = dynamic_cast<CUIObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(m_eLevel), TEXT("Prototype_GameObject_UI_LevelUp_Guide"), &Desc));
 	if (nullptr == pGameObject)
 		return E_FAIL;

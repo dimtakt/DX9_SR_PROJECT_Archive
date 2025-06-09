@@ -24,11 +24,13 @@ HRESULT CUI_KeyGuide::Initialize(void* pArg)
 	{
 		m_fX = -m_fSizeX * 0.5;
 		m_fY = m_fSizeY * 0.5;
+		m_eRenderGroup = RENDERGROUP::RG_BLEND;
 	}
 	else
 	{
 		m_fX = Desc->fX;
 		m_fY = Desc->fY;
+		m_eRenderGroup = static_cast<RENDERGROUP>(Desc->fZ);
 	}
 	m_fZ = UI_DEPTH::KEY_GUIDE;
 
@@ -57,7 +59,8 @@ void CUI_KeyGuide::Update(_float fTimeDelta)
 
 void CUI_KeyGuide::Late_Update(_float fTimeDelta)
 {
-	m_pGameInstance->Add_RenderGroup(RENDERGROUP::RG_UI_BLEND, this);
+	
+	m_pGameInstance->Add_RenderGroup(m_eRenderGroup, this);
 }
 
 HRESULT CUI_KeyGuide::Render()

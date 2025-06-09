@@ -55,7 +55,7 @@ HRESULT CField_Font::Initialize(void* pArg)
 
 void CField_Font::Priority_Update(_float fTimeDelta)
 {
-	Target_Pos_Update(m_vTarget_Pos);
+
 }
 
 void CField_Font::Update(_float fTimeDelta)
@@ -77,6 +77,7 @@ void CField_Font::Late_Update(_float fTimeDelta)
 
 HRESULT CField_Font::Render()
 {
+	Target_Pos_Update(m_vTarget_Pos);
 	SetUp_RenderState();
 	__super::Begin();
 	Font_Render();

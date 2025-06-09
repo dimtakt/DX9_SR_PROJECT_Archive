@@ -67,11 +67,14 @@ void CSlate_Tooltip::Late_Update(_float fTimeDelta)
 
 	Set_UpGrade();
 
-	for (_int i = 0; i < 3; ++i)
+	for (_int i = 0; i < 2; ++i)
 	{
 		m_vecChildren[i]->Late_Update(fTimeDelta);
 	}
-	
+
+	if(g_SlateDataBase[ static_cast<CItem_Base*>(m_pItemObject)->Item_Info()->iItemValue].m_bRotation)
+		m_vecChildren[2]->Late_Update(fTimeDelta);
+
 	m_pGameInstance->Add_RenderGroup(RENDERGROUP::RG_UI_BLEND, this);
 
 	_float3 vRenderPos;
@@ -162,7 +165,7 @@ HRESULT CSlate_Tooltip::Ready_Children()
 
 	Desc.fX = 55;
 	Desc.fY = 217;
-	Desc.fZ = 1;
+	Desc.fZ = 4;
 	pGameObject = dynamic_cast<CUIObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(m_eLevel), TEXT("Prototype_GameObject_UI_Slate_Guide"), &Desc));
 	if (nullptr == pGameObject)
 		return E_FAIL;
@@ -181,8 +184,6 @@ HRESULT CSlate_Tooltip::Ready_Children()
 		}
 	}
 	
-
-
 	return S_OK;
 }
 
