@@ -43,7 +43,7 @@ HRESULT CErma_Hand_R::Initialize(void* pArg)
 
 
     // ksta : 테스트중.. 패턴 완성 후 삭제
-    PlayPattern(PATTERN_HAND_R::PT_LASER);
+    //PlayPattern(PATTERN_HAND_R::PT_LASER);
 
 
 
@@ -51,8 +51,8 @@ HRESULT CErma_Hand_R::Initialize(void* pArg)
     //Ready_Object();
 
     // 임시
-    m_iMaxHp = 500;
-    m_iCulHp = 500;
+    m_iMaxHp = 999999;
+    m_iCulHp = 999999;
     m_eMonsterType = MONSTER_TYPE::ERMA_HAND_R;
     return S_OK;
 }
@@ -70,6 +70,8 @@ void CErma_Hand_R::Priority_Update(_float fTimeDelta)
 
 void CErma_Hand_R::Update(_float fTimeDelta)
 {
+    if (m_isAllStop)
+        return;
     // Update
     // 
 
@@ -153,7 +155,13 @@ void CErma_Hand_R::Update(_float fTimeDelta)
         {
         case Client::CErma_Hand_R::PATTERN_HAND_R::PT_IDLE:
         {
-
+            _float3 vPos = {
+                    vTerrainPos.x + 10.f,
+                    0.f,
+                    vTerrainPos.z + vTerrainScale.z / 2 - 6.f
+                };
+            m_pTransformCom->Move_To(vPos + vTerrainPos + vTerrainOffset, fTimeDelta * 10.f, 0.01f);
+            m_pTerrainBox->SetUp_OnTerrainBox(m_pTransformCom, vTerrainOffset);
         }
             break;
         case Client::CErma_Hand_R::PATTERN_HAND_R::PT_STRIKE:
@@ -189,6 +197,36 @@ void CErma_Hand_R::Update(_float fTimeDelta)
             {
                 _int iFrame = iCurPatternFrame - (110 + fROffset);
                 m_pTerrainBox->SetUp_OnTerrainBox(m_pTransformCom, vTerrainOffset);
+#pragma region Effect Setting
+
+                D3DXMatrixIdentity(&matScale);
+                D3DXMatrixScaling(&matScale, -1.5f, 1.f, 1.f);
+
+                D3DXMatrixIdentity(&matRotateChild);
+                D3DXMatrixRotationX(&matRotateChild, D3DXToRadian(90)); // 안되면 -90도도 해보기
+
+                D3DXMatrixIdentity(&matTransAddition);
+                D3DXMatrixTranslation(&matTransAddition, 0, -m_pTransformCom->Get_Scaled().y / 2, 0);
+
+                matMonsterWorld = matTransToOrigin * matScale * matRotateChild * matRotateChildtoPlayer * matTransReturn * matTransAddition;
+
+#pragma endregion
+                if (iCurPatternFrame == (110 + fROffset))
+                    CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::MONSTER_EFFECT, L"Prototype_Component_Boss_Erma_BigGolem_Stmap_FX",
+                        *m_pTransformCom->Get_WorldMatrix(), matMonsterWorld);
+#pragma region Effect Reset
+
+                D3DXMatrixIdentity(&matScale);
+                D3DXMatrixScaling(&matScale, -1.f, 1.f, 1.f);
+
+                D3DXMatrixIdentity(&matRotateChild);
+                D3DXMatrixRotationX(&matRotateChild, D3DXToRadian(90)); // 안되면 -90도도 해보기
+
+                D3DXMatrixIdentity(&matTransAddition);
+
+                matMonsterWorld = matTransToOrigin * matScale * matRotateChild * matRotateChildtoPlayer * matTransReturn * matTransAddition;
+
+#pragma endregion
             }
             else if (IS_BETWEEN(iCurPatternFrame, 0 + 160 + fROffset, 40 + 160 + fROffset))
             {
@@ -212,6 +250,36 @@ void CErma_Hand_R::Update(_float fTimeDelta)
             }
             else if (IS_BETWEEN(iCurPatternFrame, 110 + 160 + fROffset, 160 + 160 + fROffset))
             {
+#pragma region Effect Setting
+
+                D3DXMatrixIdentity(&matScale);
+                D3DXMatrixScaling(&matScale, -1.5f, 1.f, 1.f);
+
+                D3DXMatrixIdentity(&matRotateChild);
+                D3DXMatrixRotationX(&matRotateChild, D3DXToRadian(90)); // 안되면 -90도도 해보기
+
+                D3DXMatrixIdentity(&matTransAddition);
+                D3DXMatrixTranslation(&matTransAddition, 0, -m_pTransformCom->Get_Scaled().y / 2, 0);
+
+                matMonsterWorld = matTransToOrigin * matScale * matRotateChild * matRotateChildtoPlayer * matTransReturn * matTransAddition;
+
+#pragma endregion
+                if (iCurPatternFrame == (110 + 160 + fROffset))
+                    CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::MONSTER_EFFECT, L"Prototype_Component_Boss_Erma_BigGolem_Stmap_FX",
+                        *m_pTransformCom->Get_WorldMatrix(), matMonsterWorld);
+#pragma region Effect Reset
+
+                D3DXMatrixIdentity(&matScale);
+                D3DXMatrixScaling(&matScale, -1.f, 1.f, 1.f);
+
+                D3DXMatrixIdentity(&matRotateChild);
+                D3DXMatrixRotationX(&matRotateChild, D3DXToRadian(-90)); // 안되면 -90도도 해보기
+
+                D3DXMatrixIdentity(&matTransAddition);
+
+                matMonsterWorld = matTransToOrigin * matScale * matRotateChild * matRotateChildtoPlayer * matTransReturn * matTransAddition;
+
+#pragma endregion
                 _int iFrame = iCurPatternFrame - (110 + 160 + fROffset);
                 m_pTerrainBox->SetUp_OnTerrainBox(m_pTransformCom, vTerrainOffset);
             }
@@ -242,7 +310,7 @@ void CErma_Hand_R::Update(_float fTimeDelta)
             _bool isLaserEnd = false;
 
             // Pattern
-            if (iCurPatternFrame == 0)
+            if (iCurPatternFrame == 1)
                 m_pAnimatorCom->Change_State(L"LaserStart");
             if (IS_BETWEEN(iCurPatternFrame, 0, 50))
             {
@@ -411,8 +479,19 @@ HRESULT CErma_Hand_R::Render()
 
     m_pTransformCom->Bind_Matrix();
 
-    m_pAnimatorCom->Update_State(); // Bind_Texture
-    m_pAnimatorPatternCom->Update_State(); // Bind_Texture
+    if (!m_isAllStop)
+    {
+        m_pAnimatorCom->Update_State(); // Bind_Texture
+        m_pAnimatorPatternCom->Update_State(); // Bind_Texture
+    }
+    else
+    {
+        _uint iImageMaxIndex = m_pAnimatorCom->Get_CurState()->pTextureCom->Get_NumTextures();
+        _uint iImageCurIndex = m_pAnimatorCom->Get_CurStackedFrame() / m_pAnimatorCom->Get_CurState()->iFramePerImage;
+
+        iImageCurIndex %= iImageMaxIndex;
+        m_pAnimatorCom->Get_CurState()->pTextureCom->Bind_Texture();
+    }
 
     m_pVIBufferCom->Bind_Buffers();
 
@@ -515,15 +594,16 @@ void CErma_Hand_R::OnCollision(CGameObject* pGameObject)
     }
 }
 
-void CErma_Hand_R::PlayPattern(PATTERN_HAND_R ePattern)
+void CErma_Hand_R::PlayPattern(PATTERN_HAND_R ePattern, _bool isForced)
 {
-    if (m_isPatternPlaying == true)
+    if (m_isPatternPlaying == true && !isForced)
         return;
 
 
 
     _float fPatternTime = 0.f;
     _wstring strPatternTag = {};
+    m_isPatternPlaying = true;
 
     switch (ePattern)
     {
@@ -542,9 +622,9 @@ void CErma_Hand_R::PlayPattern(PATTERN_HAND_R ePattern)
 
 
 
-    m_isPatternPlaying = true;
     m_ePattern = ePattern;
-    m_pAnimatorPatternCom->Change_State(strPatternTag, true, fPatternTime, true);
+    if (!strPatternTag.empty())
+        m_pAnimatorPatternCom->Change_State(strPatternTag, true, fPatternTime, true);
 }
 
 CErma_Hand_R* CErma_Hand_R::Create(LPDIRECT3DDEVICE9 pGraphic_Device)

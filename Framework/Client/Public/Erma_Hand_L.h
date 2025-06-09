@@ -37,7 +37,8 @@ public:
 	virtual void OnCollision(CGameObject* pGameObject) override;
 
 public:
-	void PlayPattern(PATTERN_HAND_L ePattern);
+	void PlayPattern(PATTERN_HAND_L ePattern, _bool isForced = false);
+	void Set_Stop(_bool isStop = true) { m_isAllStop = isStop; }
 
 private:
 	// 각종 컴포넌트들
@@ -60,7 +61,7 @@ private:
 	PATTERN_HAND_L	m_ePattern						= PATTERN_HAND_L::PT_IDLE;
 
 	_bool			m_isPatternPlaying				= false;
-
+	_bool			m_isAllStop						= false;
 
 
 public:
