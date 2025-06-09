@@ -17,6 +17,7 @@
 #include "Item_Manager.h"
 #include "Event_Manager.h"
 #include "UIObject_Manager.h"
+#include "Sound_Manager.h"
 IMPLEMENT_SINGLETON(CGameInstance)
 
 CGameInstance::CGameInstance()
@@ -89,6 +90,10 @@ HRESULT CGameInstance::Initialize_Engine(const ENGINE_DESC& EngineDesc, LPDIRECT
 
     m_pUIObject_Manager = CUIObject_Manager::Create(EngineDesc.iNumLevels);
     if (nullptr == m_pUIObject_Manager)
+        return E_FAIL;
+
+    m_pSound_Manager = CSound_Manager::Create();
+    if (nullptr == m_pSound_Manager)
         return E_FAIL;
 
     return S_OK;
@@ -515,6 +520,37 @@ CUIObject* CGameInstance::Find_UIObj(_uint iLevelIndex, const _wstring& strUITag
 }
 #pragma endregion
 
+#pragma region SOUND_MANAGER
+void CGameInstance::PlaySoundW(const TCHAR* pSoundKey, _uint SoundChannel, float fVolume)
+{
+    m_pSound_Manager->PlaySoundW(pSoundKey, SoundChannel, fVolume);
+}
+void CGameInstance::PlayLoopSound(const TCHAR* pSoundKey, _uint SoundChannel, float fVolume)
+{
+    m_pSound_Manager->PlayLoopSound(pSoundKey, SoundChannel, fVolume);
+}
+void CGameInstance::PlayBGM(const TCHAR* pSoundKey, float fVolume)
+{
+    m_pSound_Manager->PlayBGM(pSoundKey, fVolume);
+}
+void CGameInstance::StopSound(_uint SoundChannel)
+{
+    m_pSound_Manager->StopSound(SoundChannel);
+}
+void CGameInstance::StopAll()
+{
+    m_pSound_Manager->StopAll();
+}
+void CGameInstance::SetChannelVolume(_uint SoundChannel, float fVolume)
+{
+    m_pSound_Manager->SetChannelVolume(SoundChannel, fVolume);
+}
+bool CGameInstance::IsPlaying(_uint SoundChannel)
+{
+    return m_pSound_Manager->IsPlaying(SoundChannel);
+}
+#pragma endregion
+
 void CGameInstance::Release_Engine()
 {
     
@@ -535,7 +571,7 @@ void CGameInstance::Release_Engine()
     Safe_Release(m_pLight_Manager);
     Safe_Release(m_pAnimation_Manager);
     Safe_Release(m_pItem_Manager);//
-  
+    Safe_Release(m_pSound_Manager);
 }
 
 void CGameInstance::Free()
