@@ -101,7 +101,7 @@ void CSlate_Tooltip_Slot::Render_Font()
 	if (m_iValue > 0)
 	{
 		_stprintf_s(szText, TEXT("+%d"), m_iValue);
-		TexColor = D3DXCOLOR(1.f, 1.f, 1.f, 1.f);
+		TexColor = D3DXCOLOR(0.2f, 1.f, 0.f, 1.f);
 		m_pGameInstance->Render_Font(TEXT("UI_Font_14"), szText, m_vTexRect, TexColor, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
 	}
 	else

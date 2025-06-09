@@ -77,48 +77,48 @@ void CTree::Late_Update(_float fTimeDelta)
 
 HRESULT CTree::Render()
 {
-    //SetUp_RenderState();
+    SetUp_RenderState();
 
-    //m_pVIBufferCom->Bind_Buffers();
-    ////m_pTransformCom->Bind_Matrix();
+    m_pVIBufferCom->Bind_Buffers();
+    //m_pTransformCom->Bind_Matrix();
 
-    ///*if (FAILED(m_pTextureCom->Bind_Texture(m_iTextureIndex)))
-    //    return E_FAIL;*/
+    /*if (FAILED(m_pTextureCom->Bind_Texture(m_iTextureIndex)))
+        return E_FAIL;*/
 
 
-    //_float4x4 ViewMatrix, ProjMatrix;
-    //m_pGraphic_Device->GetTransform(D3DTS_VIEW, &ViewMatrix);
-    //m_pGraphic_Device->GetTransform(D3DTS_PROJECTION, &ProjMatrix);
+    _float4x4 ViewMatrix, ProjMatrix;
+    m_pGraphic_Device->GetTransform(D3DTS_VIEW, &ViewMatrix);
+    m_pGraphic_Device->GetTransform(D3DTS_PROJECTION, &ProjMatrix);
 
-    //if (FAILED(m_pShaderCom->Bind_Matrix("gWorldMatrix", m_pTransformCom->Get_WorldMatrix())))
-    //    return E_FAIL;
-    //if (FAILED(m_pShaderCom->Bind_Matrix("gViewMatrix", &ViewMatrix)))
-    //    return E_FAIL;
-    //if (FAILED(m_pShaderCom->Bind_Matrix("gProjMatrix", &ProjMatrix)))
-    //    return E_FAIL;
+    if (FAILED(m_pShaderCom->Bind_Matrix("gWorldMatrix", m_pTransformCom->Get_WorldMatrix())))
+        return E_FAIL;
+    if (FAILED(m_pShaderCom->Bind_Matrix("gViewMatrix", &ViewMatrix)))
+        return E_FAIL;
+    if (FAILED(m_pShaderCom->Bind_Matrix("gProjMatrix", &ProjMatrix)))
+        return E_FAIL;
 
-    //if (m_bIsTree)
-    //{
-    //    _float fTime = static_cast<_float>(GetTickCount()) * 0.001f;
-    //    if (FAILED(m_pShaderCom->Set_Float("gTime", fTime)))
-    //        return E_FAIL;
-    //}
-    //
-    //std::vector<std::wstring> vecLightKeys = { L"Player_Light" };
-    //m_pGameInstance->Apply_ToShader(m_pShaderCom, vecLightKeys);
+    if (m_bIsTree)
+    {
+        _float fTime = static_cast<_float>(GetTickCount()) * 0.001f;
+        if (FAILED(m_pShaderCom->Set_Float("gTime", fTime)))
+            return E_FAIL;
+    }
+    
+    vector<_wstring> vecLightKeys = { L"Player_Light", L"Sun"};
+    m_pGameInstance->Apply_ToShader(m_pShaderCom, vecLightKeys);
 
-    //m_pTextureCom->Bind_Texture(m_pShaderCom, "gTexture", m_iTextureIndex);
+    m_pTextureCom->Bind_Texture(m_pShaderCom, "gTexture", m_iTextureIndex);
 
-    //m_pShaderCom->Begin(0);
+    m_pShaderCom->Begin(0);
 
-    //m_pVIBufferCom->Render();
+    m_pVIBufferCom->Render();
 
-    //m_pShaderCom->End();
+    m_pShaderCom->End();
 
-    //Reset_RenderState();
+    Reset_RenderState();
 
     //// 맵 에디터 전용 랜더 값
-    SetUp_RenderState();
+    /*SetUp_RenderState();
 
     m_pTransformCom->Bind_Matrix();
     if (FAILED(m_pTextureCom->Bind_Texture(m_iTextureIndex)))
@@ -127,7 +127,7 @@ HRESULT CTree::Render()
 
     m_pVIBufferCom->Render();
 
-    Reset_RenderState();
+    Reset_RenderState();*/
 
     return S_OK;
 }
@@ -194,19 +194,19 @@ HRESULT CTree::Ready_Components()
         TEXT("Com_Transform"), reinterpret_cast<CComponent**>(&m_pTransformCom), &TransformDesc)))
         return E_FAIL;
 
-    //if (m_bIsTree) {
-    //    ///* For.Com_Shader */
-    //    if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Shader_Tree"),
-    //        TEXT("Com_Shader"), reinterpret_cast<CComponent**>(&m_pShaderCom))))
-    //        return E_FAIL;
-    //}        
-    //else
-    //{
-    //    ///* For.Com_Shader */
-    //    if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Shader_Light"),
-    //        TEXT("Com_Shader"), reinterpret_cast<CComponent**>(&m_pShaderCom))))
-    //        return E_FAIL;
-    //}
+    if (m_bIsTree) {
+        ///* For.Com_Shader */
+        if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Shader_Tree"),
+            TEXT("Com_Shader"), reinterpret_cast<CComponent**>(&m_pShaderCom))))
+            return E_FAIL;
+    }        
+    else
+    {
+        ///* For.Com_Shader */
+        if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Shader_Light"),
+            TEXT("Com_Shader"), reinterpret_cast<CComponent**>(&m_pShaderCom))))
+            return E_FAIL;
+    }
 
     /*m_pVIBufferCom = dynamic_cast<CVIBuffer_Rect*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::COMPONENT, ));
 

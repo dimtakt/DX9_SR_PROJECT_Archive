@@ -6,6 +6,7 @@
 #include "Camera_Follow.h"
 #include "Dagger.h"
 #include "Player.h"
+#include "Sun.h"
 
 CLevel_Town::CLevel_Town(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CLevel{ pGraphic_Device }
@@ -63,10 +64,24 @@ HRESULT CLevel_Town::Ready_Light(const _wstring& strLayerTag)
 	desc.desc.vSpecular = _float4(1.f, 1.f, 1.f, 1.f);
 	desc.desc.vAmbient = _float4(0.01f, 0.01f, 0.01f, 1.f); // 기본 어두움 유지
 	desc.desc.fSpecPower = 64.f;
-	desc.desc.fRange = 15.f;
+	desc.desc.fRange = 10.f;
 
 	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_TOWN), strLayerTag,
 		ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_Point"), &desc)))
+		return E_FAIL;
+
+	CSun::SUNDESC SunDesc{};
+	SunDesc.strLightID = TEXT("Sun");
+	SunDesc.desc.eType = LIGHT_TYPE::DIRECTIONAL;
+	SunDesc.desc.vDiffuse = _float4(1.f, 1.f, 1.f, 1.f);
+	SunDesc.desc.vSpecular = _float4(0.2f, 0.2f, 0.2f, 0.2f);
+	SunDesc.desc.vAmbient = _float4(1.f, 1.f, 1.f, 1.f); // 기본 어두움 유지
+	SunDesc.desc.fSpecPower = 128.f;
+	SunDesc.vLightPos = _float3(0.f, 1000.f, 0.f);
+	SunDesc.vLightDir = _float3(0.f, -1.f, 0.f);
+
+	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_TOWN), strLayerTag,
+		ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_Sun"), &desc)))
 		return E_FAIL;
 
 	return S_OK;
@@ -130,26 +145,6 @@ HRESULT CLevel_Town::Ready_Layer_UI(const _wstring& strLayerTag)
 
 	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_TOWN), strLayerTag,
 		ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_Hud_Dash"), &Desc)))
-		return E_FAIL;
-	Desc.fX = 190.f;
-	Desc.fY = 100.f;
-	Desc.fZ = 0;
-	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_TOWN), strLayerTag,
-		ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_Hud_Buff"), &Desc)))
-		return E_FAIL;
-
-	Desc.fX = 227.f;
-	Desc.fY = 100.f;
-	Desc.fZ = 1;
-	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_TOWN), strLayerTag,
-		ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_Hud_Buff"), &Desc)))
-		return E_FAIL;
-
-	Desc.fX = 264.f;
-	Desc.fY = 100.f;
-	Desc.fZ = 2;
-	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_TOWN), strLayerTag,
-		ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_Hud_Buff"), &Desc)))
 		return E_FAIL;
 
 	return S_OK;

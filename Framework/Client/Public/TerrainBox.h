@@ -6,6 +6,7 @@ BEGIN(Engine)
 class CTexture;
 class CTransform;
 class CVIBuffer_TerrainBox;
+class CShader;
 END
 
 class CTerrainBox final : public CGameObject
@@ -34,6 +35,7 @@ private:
 	CTexture* m_pTextureTop = { nullptr };			//윗면 전용 텍스처
 	CTexture* m_pTextureSide = { nullptr };			//사이드 전용 텍스처
 	CTransform* m_pTransformCom = { nullptr };
+	CShader* m_pShaderCom = { nullptr };
 
 	_int m_iTopTextureIndex = 0;
 	_int m_iSideTextureIndex = 0;

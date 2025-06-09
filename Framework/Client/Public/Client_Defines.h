@@ -33,6 +33,7 @@ namespace Client
 		static constexpr float HUD_EXP = 0.23f;
 		static constexpr float HUD_STATUS = 0.23f;
 		static constexpr float HUD_WALLET = 0.23f;
+		static constexpr float HUD_Qyick_Slot = 0.23f;
 
 		//FILED
 		static constexpr float FILED_HP = 0.3f;

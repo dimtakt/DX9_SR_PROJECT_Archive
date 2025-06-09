@@ -75,7 +75,8 @@ HRESULT CLevel_Stage1::Ready_Light(const _wstring& strLayerTag)
 	desc.desc.vSpecular = _float4(1.f, 1.f, 1.f, 1.f);
 	desc.desc.vAmbient = _float4(0.01f, 0.01f, 0.01f, 1.f); // 기본 어두움 유지
 	desc.desc.fSpecPower = 64.f;
-	desc.desc.fRange = 15.f;
+	desc.desc.fRange = 8.f;
+
 
 	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_STAGE1), strLayerTag,
 		ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_Point"), &desc)))
@@ -247,32 +248,10 @@ HRESULT CLevel_Stage1::Ready_Layer_UI(const _wstring& strLayerTag)
   	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_STAGE1), strLayerTag,
 		ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_Hud_Dash"), &Desc)))
 		return E_FAIL;
-	
-	Desc.fX = 190.f;
-	Desc.fY = 100.f;
-	Desc.fZ = 0;
-	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_STAGE1), strLayerTag,
-		ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_Hud_Buff"), &Desc)))
-		return E_FAIL;
-
-	Desc.fX = 227.f;
-	Desc.fY = 100.f;
-	Desc.fZ = 1;
-	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_STAGE1), strLayerTag,
-		ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_Hud_Buff"), &Desc)))
-		return E_FAIL;
-
-	Desc.fX = 264.f;
-	Desc.fY = 100.f;
-	Desc.fZ = 2;
-	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_STAGE1), strLayerTag,
-		ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_Hud_Buff"), &Desc)))
-		return E_FAIL;
 
 	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_STAGE1), strLayerTag,
 		ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_Minimap"), &Desc)))
 		return E_FAIL;
-
 	return S_OK;
 }
 
