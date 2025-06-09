@@ -553,7 +553,7 @@ bool CGameInstance::IsPlaying(_uint SoundChannel)
 
 void CGameInstance::Release_Engine()
 {
-    
+    Safe_Release(m_pSound_Manager);
     Release();
     Safe_Release(m_pCollision_Manager);
     Safe_Release(m_pUIObject_Manager);
@@ -570,8 +570,8 @@ void CGameInstance::Release_Engine()
     Safe_Release(m_pFont_Manager);
     Safe_Release(m_pLight_Manager);
     Safe_Release(m_pAnimation_Manager);
-    Safe_Release(m_pItem_Manager);//
-    Safe_Release(m_pSound_Manager);
+    Safe_Release(m_pItem_Manager);
+    
 }
 
 void CGameInstance::Free()

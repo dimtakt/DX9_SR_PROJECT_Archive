@@ -340,6 +340,14 @@ void CGameEffect::OnCollision(CGameObject* pGameObject)
 				pMonster->Set_IsHit(TRUE);
 			}
 		}
+		else if (pGameObject->Get_ObjType() == GAMEOBJ_TYPE::MONSTER_EFFECT)
+		{
+			if (m_strEffectTag == TEXT("Prototype_Component_Texture_Effect_Blade0_Parry"))
+			{
+				CPlayer* pPlayer = dynamic_cast<CPlayer*>(m_pGameInstance->Get_GameObject(m_pGameInstance->Get_CurrentLevel(), TEXT("Layer_Player")));
+				pPlayer->Ready_Parry();
+			}
+		}
 	}
 	else if (m_eObjType == GAMEOBJ_TYPE::MONSTER_EFFECT)
 	{
@@ -347,7 +355,8 @@ void CGameEffect::OnCollision(CGameObject* pGameObject)
 		{
 			_int iDamage{};
 			CPlayer* pPlayer = dynamic_cast<CPlayer*>(pGameObject);
-			if (!pPlayer->Get_IsHit())
+
+			if (!pPlayer->Get_IsHit()&& !pPlayer->Get_IsGodMode())
 			{
 				if (m_strEffectTag == TEXT("Prototype_Component_Texture_LaserGhost_D_Effect_Laser_Progress"))
 				{

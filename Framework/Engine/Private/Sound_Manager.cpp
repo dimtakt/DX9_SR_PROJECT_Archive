@@ -16,18 +16,6 @@ HRESULT CSound_Manager::Initialize()
 
 	return S_OK;
 }
-void CSound_Manager::Release()
-{
-	for (auto& Mypair : m_mapSound)
-	{
-		delete[] Mypair.first;
-		FMOD_Sound_Release(Mypair.second);
-	}
-	m_mapSound.clear();
-
-	FMOD_System_Release(m_pSystem);
-	FMOD_System_Close(m_pSystem);
-}
 
 void CSound_Manager::PlaySoundW(const TCHAR* pSoundKey, _uint SoundChannel, float fVolume)
 {
@@ -182,11 +170,12 @@ CSound_Manager* CSound_Manager::Create()
 {
 	CSound_Manager* pInstance = new CSound_Manager();
 
-	if (FAILED(pInstance->Initialize()))
+	pInstance->Initialize();
+	/*if (FAILED(pInstance->Initialize()))
 	{
 		MSG_BOX(TEXT("Failed to Created : CSound_Manager"));
 		pInstance->Free();
-	}
+	}*/
 
 	return pInstance;
 }

@@ -12,7 +12,6 @@ private:
 
 public:
 	HRESULT Initialize();
-	void Release();
 
 public:
 	void PlaySoundW(const TCHAR* pSoundKey, _uint SoundChannel, float fVolume);
