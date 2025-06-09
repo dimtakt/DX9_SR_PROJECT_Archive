@@ -45,7 +45,7 @@ void CUIObject_Manager::Update_Off(_uint iLevelIndex, const _wstring& strUITag)
 
     if (iter == m_pUIObjects[iLevelIndex].end())
         return;
-
+  
     iter->second->Update_Off();
 }
 

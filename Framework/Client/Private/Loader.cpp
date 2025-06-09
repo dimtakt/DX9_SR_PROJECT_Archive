@@ -228,11 +228,10 @@ HRESULT CLoader::Loading_For_Town_Level()
 		return E_FAIL;
 
 
-	//for (size_t i = 0; i < 10000000000; i++)
-	//{
-	//	int a = 1;
-	//}
-
+	/*for (size_t i = 0; i < 19000000000; i++)
+	{
+		int a = 1;
+	}*/
 	lstrcpy(m_szLoadingText, TEXT("로딩이 완료되었습니다."));
 
 	m_isFinished = true;
@@ -650,10 +649,10 @@ HRESULT CLoader::Loading_For_Stage2_Level()
 		return E_FAIL;
 
 	
-	//for (size_t i = 0; i < 10000000000; i++)
-	//{
-	//	int a = 1;
-	//}
+	/*for (size_t i = 0; i < 10000000000; i++)
+	{
+		int a = 1;
+	}*/
 
 	lstrcpy(m_szLoadingText, TEXT("로딩이 완료되었습니다."));
 
@@ -812,10 +811,10 @@ HRESULT CLoader::Loading_For_Stage3_Level()
 		return E_FAIL;
 
 
-	//for (size_t i = 0; i < 10000000000; i++)
-	//{
-	//	int a = 1;
-	//}
+	/*for (size_t i = 0; i < 10000000000; i++)
+	{
+		int a = 1;
+	}*/
 
 	lstrcpy(m_szLoadingText, TEXT("로딩이 완료되었습니다."));
 
@@ -829,23 +828,23 @@ HRESULT CLoader::Loading_For_Stage4_Level()
 	lstrcpy(m_szLoadingText, TEXT("텍스쳐를 로딩중입니다."));
 	// Prototype_Component_Texture_Monster (Mole_A)
 		// Idle
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STAGE3), TEXT("Prototype_Component_Texture_Mole_A_Idle"),
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STAGE4), TEXT("Prototype_Component_Texture_Mole_A_Idle"),
 		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Monster/Mole_A/Duelist_Mole_Idle0%d.png"), 6))))
 		return E_FAIL;
 	// Move
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STAGE3), TEXT("Prototype_Component_Texture_Mole_A_Move"),
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STAGE4), TEXT("Prototype_Component_Texture_Mole_A_Move"),
 		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Monster/Mole_A/Duelist_Mole_Move0%d.png"), 10))))
 		return E_FAIL;
 	// Down
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STAGE3), TEXT("Prototype_Component_Texture_Mole_A_Down"),
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STAGE4), TEXT("Prototype_Component_Texture_Mole_A_Down"),
 		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Monster/Mole_A/Duelist_Mole_Down00.png"), 1))))
 		return E_FAIL;
 	// Attack
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STAGE3), TEXT("Prototype_Component_Texture_Mole_A_Attack"),
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STAGE4), TEXT("Prototype_Component_Texture_Mole_A_Attack"),
 		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Monster/Mole_A/Duelist_Mole_Attack0%d.png"), 6))))
 		return E_FAIL;
 	// Airborne
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STAGE3), TEXT("Prototype_Component_Texture_Mole_A_Airborne"),
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STAGE4), TEXT("Prototype_Component_Texture_Mole_A_Airborne"),
 		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Monster/Mole_A/Duelist_Mole_Airborne00.png"), 1))))
 		return E_FAIL;
 
@@ -972,10 +971,10 @@ HRESULT CLoader::Loading_For_Stage4_Level()
 		return E_FAIL;
 
 
-	for (size_t i = 0; i < 10000000000; i++)
+	/*for (size_t i = 0; i < 10000000000; i++)
 	{
 		int a = 1;
-	}
+	}*/
 
 	lstrcpy(m_szLoadingText, TEXT("로딩이 완료되었습니다."));
 
@@ -1195,10 +1194,10 @@ HRESULT CLoader::Loading_For_Boss1_Level()
 
 
 
-	//for (size_t i = 0; i < 10000000000; i++)
-	//{
-	//	int a = 1;
-	//}
+	/*for (size_t i = 0; i < 10000000000; i++)
+	{
+		int a = 1;
+	}*/
 
 	lstrcpy(m_szLoadingText, TEXT("로딩이 완료되었습니다."));
 

@@ -172,6 +172,14 @@ void CStat_Manager::HasItem(_wstring szEffectTag, _bool bHasItme)
     m_mapHasItem.find(szEffectTag)->second = bHasItme;
 }
 
+void CStat_Manager::HasItem_Reset()
+{
+    for (auto& iter : m_mapHasItem)
+    {
+        iter.second = false;
+    }
+}
+
 void CStat_Manager::Free()
 {
     Safe_Release(m_pGameInstance);

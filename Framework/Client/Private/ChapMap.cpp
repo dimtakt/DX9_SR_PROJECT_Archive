@@ -5,6 +5,7 @@
 #include "ChapMap_PlayerSymbol.h"
 #include "ChapMap_Line.h"
 #include "Level_Loading.h"
+#include "Stat_Manager.h"
 CChapMap::CChapMap(LPDIRECT3DDEVICE9 pGraphic_Device) : CButton(pGraphic_Device)
 {
 }
@@ -72,14 +73,11 @@ void CChapMap::Update(_float fTimeDelta)
 	if (!m_bIsUpdate)
 		return;
 
-	/*if (m_pGameInstance->IsKeyDown('F'))
-		UI_Switch();*/
-
 	if (!m_bisOpen)
 		return;
 
 	Scroll_Map();
-
+	
 	__super::Update(fTimeDelta);
 }
 
@@ -112,6 +110,8 @@ void CChapMap::Open_Ui()
 	UI_Switch();
 
 	__super::Update_Position();
+
+	CStat_Manager::GetInstance()->Set_UIOpen(true);
 }
 
 void CChapMap::UI_Switch()
@@ -150,7 +150,7 @@ void CChapMap::Scroll_Map()
 	{
 		m_iMouseY = 0;
 	}
-
+	
 	if (m_pGameInstance->IsKeyHold(VK_LBUTTON))
 	{
 		if (m_fY >= _float(g_iWinSizeX) * -3 * 0.25 && m_fY <= 160 + g_iWinSizeX * 0.28)

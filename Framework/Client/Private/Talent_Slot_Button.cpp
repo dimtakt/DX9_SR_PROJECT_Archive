@@ -187,20 +187,26 @@ void CTalent_Slot_Button::On_Button()
 		switch (m_iTexIdex)
 		{
 		case 0:
-			if (iMaxPoint - iPoint < -m_iAddValue)
+			if (static_cast<CTalent_Slot*>(m_pParent)->Get_Value() > 0)
 			{
-				static_cast<CTalent_Slot*>(m_pParent)->Add_Value(iPoint - iMaxPoint);
-				CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CULSTATPOINT, -(iPoint - iMaxPoint));
+				if (iMaxPoint - iPoint < -m_iAddValue)
+				{
+					static_cast<CTalent_Slot*>(m_pParent)->Add_Value(iPoint - iMaxPoint);
+					CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CULSTATPOINT, -(iPoint - iMaxPoint));
+				}
+				else
+				{
+					static_cast<CTalent_Slot*>(m_pParent)->Add_Value(m_iAddValue);
+					CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CULSTATPOINT, -m_iAddValue);
+				}
 			}
-			else
+			break;
+		case 1:
+			if (static_cast<CTalent_Slot*>(m_pParent)->Get_Value() > 0)
 			{
 				static_cast<CTalent_Slot*>(m_pParent)->Add_Value(m_iAddValue);
 				CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CULSTATPOINT, -m_iAddValue);
 			}
-			break;
-		case 1:
-			static_cast<CTalent_Slot*>(m_pParent)->Add_Value(m_iAddValue);
-			CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CULSTATPOINT, -m_iAddValue);
 			break;
 		case 2:
 			static_cast<CTalent_Slot*>(m_pParent)->Add_Value(m_iAddValue);

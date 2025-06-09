@@ -34,7 +34,7 @@ HRESULT CPlayer::Initialize(void* pArg)
 		return E_FAIL;
 
     m_eObjType = GAMEOBJ_TYPE::PLAYER;
-    //m_pTransformCom->Scaling(1.5f, 1.5f, 1.5f);
+    m_pTransformCom->Scaling(1.5f, 1.5f, 1.5f);
     m_strTimerTag = L"GameObject_Player_StateDeltaTime";
     
     m_pGameInstance->Add_Timer(m_strTimerTag);      // 마지막으로 상태가 바뀐지 지난 시간을 측정할 타이머
@@ -82,7 +82,7 @@ void CPlayer::Update(_float fTimeDelta)
 {    
     //m_pCollider->Update_Collider();
     if (m_pTerrainBox != nullptr) {
-        m_pTerrainBox->SetUp_OnTerrainBox(m_pTransformCom, _float3(0.f, 0.2f, 0.f));
+        m_pTerrainBox->SetUp_OnTerrainBox(m_pTransformCom, _float3(0.f, 0.3f, 0.f));
     }
 
     // 경직 중이라면 Update 실행 X (키 조작 불가)
@@ -863,26 +863,28 @@ HRESULT CPlayer::Render_Font(_int iDamage)
 
 void CPlayer::SetUp_RenderState()
 {
-    /*m_pGraphic_Device->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
-    m_pGraphic_Device->SetRenderState(D3DRS_ALPHAREF, 200);
-    m_pGraphic_Device->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER);*/
     m_pGraphic_Device->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
 
-    /*m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_POINT);
+    m_pGraphic_Device->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
+    m_pGraphic_Device->SetRenderState(D3DRS_ALPHAREF, 200);
+    m_pGraphic_Device->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER);
+
+    m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_POINT);
     m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_POINT);
-    m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MIPFILTER, D3DTEXF_NONE);*/
+    m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MIPFILTER, D3DTEXF_NONE);
 }
 
 void CPlayer::Reset_RenderState()
 {
-    //m_pGraphic_Device->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
     m_pGraphic_Device->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);
 
-    /*m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_LINEAR);
+    m_pGraphic_Device->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
+
+    m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_LINEAR);
     m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);
     m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MIPFILTER, D3DTEXF_LINEAR);
 
-    m_pGraphic_Device->SetTexture(0, NULL);*/
+    m_pGraphic_Device->SetTexture(0, NULL);
 }
 
 

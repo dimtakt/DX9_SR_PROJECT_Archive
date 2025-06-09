@@ -148,6 +148,7 @@
     <ClInclude Include="..\public\Animations\Anim_Player_Fury.h" />
     <ClInclude Include="..\public\Animations\Anim_Player_Idle.h" />
     <ClInclude Include="..\Public\Animations\Anim_Player_Parry.h" />
+    <ClInclude Include="..\public\Artefact_Tier_Icon.h" />
     <ClInclude Include="..\public\Artefact_Tooltip.h" />
     <ClInclude Include="..\Public\BackGround.h" />
     <ClInclude Include="..\Public\Buff_Frame.h" />
@@ -183,6 +184,7 @@
     <ClInclude Include="..\public\Gacha_Slot.h" />
     <ClInclude Include="..\public\Gacha_Slot_Selete.h" />
     <ClInclude Include="..\public\Hud_LevelUp.h" />
+    <ClInclude Include="..\public\Hud_Quick_Slot.h" />
     <ClInclude Include="..\public\Item_Tooltip_Bottom.h" />
     <ClInclude Include="..\public\Item_Tooltip_Mid.h" />
     <ClInclude Include="..\public\LaserGhost_D.h" />
@@ -309,6 +311,7 @@
     <ClCompile Include="..\Private\Animations\Anim_Player_Attack2.cpp" />
     <ClCompile Include="..\private\Animations\Anim_Player_Idle.cpp" />
     <ClCompile Include="..\Private\Animations\Anim_Player_Parry.cpp" />
+    <ClCompile Include="..\private\Artefact_Tier_Icon.cpp" />
     <ClCompile Include="..\private\Artefact_Tooltip.cpp" />
     <ClCompile Include="..\Private\BackGround.cpp" />
     <ClCompile Include="..\Private\Buff_Frame.cpp" />
@@ -340,6 +343,7 @@
     <ClCompile Include="..\private\Gacha_Slot.cpp" />
     <ClCompile Include="..\private\Gacha_Slot_Selete.cpp" />
     <ClCompile Include="..\private\Hud_LevelUp.cpp" />
+    <ClCompile Include="..\private\Hud_Quick_Slot.cpp" />
     <ClCompile Include="..\private\Item_Tooltip_Bottom.cpp" />
     <ClCompile Include="..\private\Item_Tooltip_Mid.cpp" />
     <ClCompile Include="..\Private\LaserGhost_D.cpp" />

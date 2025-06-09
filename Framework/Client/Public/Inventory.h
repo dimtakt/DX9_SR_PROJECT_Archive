@@ -39,8 +39,11 @@ private:
 	_bool						m_bIsOpen = {};
 	vector<CInven_Slot*>		m_vecInventory = {};
 
+	_float						m_fInvenStats[static_cast<int>(STAT_INFO::STAT_END)];
+	
 private:
 	void						Set_Grade();
+	void						StatToPlayer();
 
 private:
 	HRESULT						Ready_Components();
