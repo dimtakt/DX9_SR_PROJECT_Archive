@@ -84,6 +84,7 @@ void CArtefact_Tooltip::Update(_float fTimeDelta)
 		}
 		m_bTier = true;
 	}
+	m_iUpgradeValue = static_cast<CButton*>(m_pParent)->Get_Value();
 	if (m_bTier)
 	{
 		for (_int i = 2; i < m_vecChildren.size(); ++i)

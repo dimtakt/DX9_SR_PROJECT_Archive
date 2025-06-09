@@ -409,6 +409,9 @@
     <Filter Include="02.GameObject\UI\HUD\HUD_LevelUp">
       <UniqueIdentifier>{de80ac6d-f6bb-4678-ac16-b6100d7e6301}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\UI\HUD\HUD_Quick_Slot">
+      <UniqueIdentifier>{f4e2f595-60e0-46f3-85f1-e781f081c5de}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -894,6 +897,9 @@
     <ClInclude Include="..\public\Artefact_Tier_Icon.h">
       <Filter>02.GameObject\UI\Tooltip\Tooltip_Etc</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\Hud_Quick_Slot.h">
+      <Filter>02.GameObject\UI\HUD\HUD_Quick_Slot</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -1340,6 +1346,9 @@
     </ClCompile>
     <ClCompile Include="..\private\Artefact_Tier_Icon.cpp">
       <Filter>02.GameObject\UI\Tooltip\Tooltip_Etc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Hud_Quick_Slot.cpp">
+      <Filter>02.GameObject\UI\HUD\HUD_Quick_Slot</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
