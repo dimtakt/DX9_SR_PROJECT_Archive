@@ -37,6 +37,8 @@ HRESULT CLevel_Boss1::Initialize()
 	if (FAILED(Ready_Layer_UI(TEXT("Layer_UI"))))
 		return E_FAIL;
 
+	m_pGameInstance->StopAll();
+	m_pGameInstance->PlayBGM(L"placeDungeonLibrary_Boss(Loop).wav", g_fBGMVolume - 0.9f);
 
 	return S_OK;
 }

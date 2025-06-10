@@ -445,6 +445,9 @@
     <Filter Include="02.GameObject\Monster\Boss\Askard">
       <UniqueIdentifier>{a8576f02-061f-4f78-a401-76908117e7aa}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\Object\GoldLeaf">
+      <UniqueIdentifier>{77647d0a-dca7-4945-86f3-9f1009808dfe}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -975,6 +978,9 @@
     <ClInclude Include="..\Public\Field_Item_Guide.h">
       <Filter>02.GameObject\UI\Field\Field_Item\KeyGuide</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\GoldLeaf.h">
+      <Filter>02.GameObject\Object\GoldLeaf</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -1466,6 +1472,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\Field_Item_Guide.cpp">
       <Filter>02.GameObject\UI\Field\Field_Item\KeyGuide</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\GoldLeaf.cpp">
+      <Filter>02.GameObject\Object\GoldLeaf</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

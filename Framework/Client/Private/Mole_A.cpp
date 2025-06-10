@@ -28,8 +28,8 @@ HRESULT CMole_A::Initialize(void* pArg)
 
     Ready_Object();
 
-    m_iMaxHp = 30;
-    m_iCulHp = 30;
+    m_iMaxHp = 60;
+    m_iCulHp = 60;
     m_eMonsterType = MONSTER_TYPE::MOLE;
     m_pTransformCom->Scaling(1.5f, 1.5f, 1.5f);
 	return S_OK;
@@ -188,6 +188,8 @@ void CMole_A::Update(_float fTimeDelta)
     if (m_pAnimatorCom->Get_CurStateTag() == L"Attack" &&
         m_pAnimatorCom->Get_CurStackedFrame() == 20)
     {
+        m_pGameInstance->StopSound(ENUM_CLASS(CHANNELID::SOUND_MONSTER_EFFECT));
+        m_pGameInstance->PlaySoundW(L"attackSwish07.wav", ENUM_CLASS(CHANNELID::SOUND_MONSTER_EFFECT), g_fEFFECTVolume - 0.6f);
         CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::MONSTER_EFFECT, L"Prototype_Component_Texture_Mole_A_Effect_Swing",
             *m_pTransformCom->Get_WorldMatrix(), matMonsterWorld, true);
     }

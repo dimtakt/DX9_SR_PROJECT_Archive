@@ -2,6 +2,7 @@
 #include "GameInstance.h"
 #include "Stat_Manager.h"
 #include "EXP_Ball.h"
+#include "GoldLeaf.h"
 #include "Field_Font.h"
 CMonster::CMonster(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CGameObject{ pGraphic_Device }
@@ -54,7 +55,14 @@ void CMonster::Priority_Update(_float fTimeDelta)
 
 	if (m_iCulHp <= 0) {
 		m_bDead = true;
+
+		if (m_eMonsterType == MONSTER_TYPE::LASERGHOST)
+		{
+			m_pGameInstance->StopSound(ENUM_CLASS(CHANNELID::SOUND_MONSTER_LONG_EFFECT));
+		}
+		
 		Ready_ExpBall();
+		Ready_Gold();
 	}
 		
 }
@@ -150,10 +158,23 @@ void CMonster::Ready_ExpBall()
 	if(m_pTransformCom != nullptr && m_bDead)
 	{
 		CEXP_Ball::EXPBALLDESC desc{};
-		desc.fValue = m_pGameInstance->Compute_Random(8.f, 20.f);
+		desc.fValue = m_pGameInstance->Compute_Random(3.f, 7.f);
 		desc.vPosition = m_pTransformCom->Get_State(STATE::POSITION);
 		CEXP_Ball* pEXP_Ball = dynamic_cast<CEXP_Ball*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_EXP_Ball"), &desc));
 		m_pGameInstance->Add_Direct_GameObject_ToLayer(m_pGameInstance->Get_CurrentLevel(), TEXT("Layer_Exp"), pEXP_Ball);
+	}
+
+}
+
+void CMonster::Ready_Gold()
+{
+	if (m_pTransformCom != nullptr && m_bDead)
+	{
+		CGoldLeaf::GOLDLEAFDESC desc{};
+		desc.fValue = m_pGameInstance->Compute_Random(4.f, 10.f);
+		desc.vPosition = m_pTransformCom->Get_State(STATE::POSITION);
+		CGoldLeaf* pGold = dynamic_cast<CGoldLeaf*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_GoldLeaf"), &desc));
+		m_pGameInstance->Add_Direct_GameObject_ToLayer(m_pGameInstance->Get_CurrentLevel(), TEXT("Layer_Gold"), pGold);
 	}
 
 }

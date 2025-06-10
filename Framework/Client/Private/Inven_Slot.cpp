@@ -241,6 +241,8 @@ void CInven_Slot::Item_Selete()
 	{
 		m_pGameInstance->Pick_ItemSlot(m_pSlotItem, this, m_iItemCount, 1);
 		m_bIsPick = true;
+		m_pGameInstance->StopSound(ENUM_CLASS(CHANNELID::SOUND_UI));
+		m_pGameInstance->PlaySoundW(L"InventorySelect001.wav", ENUM_CLASS(CHANNELID::SOUND_UI), g_fUIVolume - 0.8f);
 	}
 
 
@@ -285,6 +287,8 @@ void CInven_Slot::Item_Selete()
 			static_cast<CGacha*>(m_pGameInstance->Get_GameObject(ENUM_CLASS(LEVEL::LEVEL_STATIC),
 				TEXT("Layer_Gacha")))->UI_Switch();
 		}
+		m_pGameInstance->StopSound(ENUM_CLASS(CHANNELID::SOUND_UI));
+		m_pGameInstance->PlaySoundW(L"InventorySelect002.wav", ENUM_CLASS(CHANNELID::SOUND_UI), g_fUIVolume - 0.8f);
 		m_pGameInstance->Pop_Slot()->IsPick_off();
 		
 	}

@@ -143,11 +143,15 @@ void CInventory::UI_Switch()
 	{
 		Close_UI();
 		CStat_Manager::GetInstance()->Set_UIOpen(false);
+		m_pGameInstance->StopSound(ENUM_CLASS(CHANNELID::SOUND_UI));
+		m_pGameInstance->PlaySoundW(L"inventory_close.wav", ENUM_CLASS(CHANNELID::SOUND_UI), g_fUIVolume - 0.7f);
 	}
 	else
 	{
 		m_bIsOpen = true;
 		CStat_Manager::GetInstance()->Set_UIOpen(true);
+		m_pGameInstance->StopSound(ENUM_CLASS(CHANNELID::SOUND_UI));
+		m_pGameInstance->PlaySoundW(L"inventory_open.wav", ENUM_CLASS(CHANNELID::SOUND_UI), g_fUIVolume - 0.7f);
 	}
 }
 
