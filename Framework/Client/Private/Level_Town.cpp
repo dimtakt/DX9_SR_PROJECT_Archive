@@ -151,6 +151,11 @@ HRESULT CLevel_Town::Ready_Layer_UI(const _wstring& strLayerTag)
 		ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_Hud_Dash"), &Desc)))
 		return E_FAIL;
 
+	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_TOWN), strLayerTag,
+		ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_BossHp_Askard"), &Desc)))
+		return E_FAIL;
+
+
 	////NPC 내에 생성
 	////상점 아이템 생성 Desc
 	//CField_Item::FIELD_ITEM_DESC ItemDesc{};

@@ -1,16 +1,14 @@
 #pragma once
+#include "UIObject.h"
 #include "Client_Defines.h"
-#include "Client_Defines_Item.h"
-#include "Button.h"
-#include "ItemObject.h"
-#include "Item_Base.h"
+
 BEGIN(Client)
-class CHud_Quick_Slot final : public CButton
+class CHud_Slot final : public CUIObject
 {
 private:
-									CHud_Quick_Slot(LPDIRECT3DDEVICE9 pGraphic_Device);
-									CHud_Quick_Slot(const CHud_Quick_Slot& Prototype);
-	virtual							~CHud_Quick_Slot() = default;
+									CHud_Slot(LPDIRECT3DDEVICE9 pGraphic_Device);
+									CHud_Slot(const CHud_Slot& Prototype);
+	virtual							~CHud_Slot() = default;
 
 public:
 	virtual HRESULT					Initialize_Prototype(LEVEL eLevel);
@@ -22,22 +20,16 @@ public:
 
 private:
 	LEVEL							m_eLevel = {};
-	_bool							m_bIsPick = {};
-	_uint							m_iSlotIndex = {};
-	_int							m_iSlotItem_Tex = {};
 
-	CItem_Base*						m_pSlotItem = { nullptr };
-	CItem_Base*						m_pOldSlotItem = { nullptr };
-	
 private:
 	HRESULT							Ready_Components();
 
 	HRESULT							Ready_ChildPrototype(LEVEL eLevel);
 	HRESULT							Ready_Children();
+
 public:
-	static CHud_Quick_Slot*			Create(LPDIRECT3DDEVICE9 pGraphic_Device, LEVEL eLevel);
+	static CHud_Slot*				Create(LPDIRECT3DDEVICE9 pGraphic_Device, LEVEL eLevel);
 	virtual CGameObject*			Clone(void* pArg) override;
 	virtual void					Free() override;
 };
-
 END

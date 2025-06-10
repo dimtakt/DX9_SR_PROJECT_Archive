@@ -271,9 +271,6 @@
     <Filter Include="02.GameObject\Object\Interaction\Normal">
       <UniqueIdentifier>{73544435-24d8-4011-835b-c5d3ac8481b5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="99.Defines">
-      <UniqueIdentifier>{0b9f6ede-74ab-4dc8-813b-32276d487d12}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObject\UI\Window\Status_Window\Stauts_Frame\Status_Stat_Frame">
       <UniqueIdentifier>{c72af6f8-ab18-4e63-a8cd-eaa59e2185f1}</UniqueIdentifier>
     </Filter>
@@ -426,6 +423,24 @@
     </Filter>
     <Filter Include="02.GameObject\Object\Fire">
       <UniqueIdentifier>{b5b251be-c460-488e-8190-35995c8cb7c8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\UI\HUD\HUD_BossHp">
+      <UniqueIdentifier>{a6803921-f49f-4ad6-a36b-de39dba8e189}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="99.Defines">
+      <UniqueIdentifier>{0b9f6ede-74ab-4dc8-813b-32276d487d12}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\UI\HUD\HUD_BossHp\BossHp_Askard">
+      <UniqueIdentifier>{10e5cfe3-d673-416e-b759-7eb0946d3c6a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\UI\HUD\HUD_BossHp\BossHp_Ema">
+      <UniqueIdentifier>{27dd1308-8e6f-4af5-95d4-c4777fead82f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\UI\HUD\HUD_BossHp\BossHp_Askard\ETC">
+      <UniqueIdentifier>{5b2bdcf3-dcf4-4261-b7bf-146be011c4e6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\UI\HUD\HUD_BossHp\BossHp_Ema\ETC">
+      <UniqueIdentifier>{24c2ce66-cdde-4c5e-a62f-9f106c9d3cff}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -936,6 +951,21 @@
     <ClInclude Include="..\Public\Fire.h">
       <Filter>02.GameObject\Object\Fire</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\Hud_Slot.h">
+      <Filter>02.GameObject\UI\HUD\HUD_Quick_Slot</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\BossHp_Askard.h">
+      <Filter>02.GameObject\UI\HUD\HUD_BossHp\BossHp_Askard</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\BossHp_Ema.h">
+      <Filter>02.GameObject\UI\HUD\HUD_BossHp\BossHp_Ema</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Askard_Frame.h">
+      <Filter>02.GameObject\UI\HUD\HUD_BossHp\BossHp_Askard\ETC</Filter>
+    </ClInclude>
+    <ClInclude Include="Ema_Frame.h">
+      <Filter>02.GameObject\UI\HUD\HUD_BossHp\BossHp_Ema\ETC</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -1406,6 +1436,21 @@
     </ClCompile>
     <ClCompile Include="..\Private\Fire.cpp">
       <Filter>02.GameObject\Object\Fire</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Hud_Slot.cpp">
+      <Filter>02.GameObject\UI\HUD\HUD_Quick_Slot</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\BossHp_Askard.cpp">
+      <Filter>02.GameObject\UI\HUD\HUD_BossHp\BossHp_Askard</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\BossHp_Ema.cpp">
+      <Filter>02.GameObject\UI\HUD\HUD_BossHp\BossHp_Ema</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Askard_Frame.cpp">
+      <Filter>02.GameObject\UI\HUD\HUD_BossHp\BossHp_Askard\ETC</Filter>
+    </ClCompile>
+    <ClCompile Include="Ema_Frame.cpp">
+      <Filter>02.GameObject\UI\HUD\HUD_BossHp\BossHp_Ema\ETC</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
