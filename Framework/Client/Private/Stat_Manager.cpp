@@ -43,7 +43,7 @@ HRESULT CStat_Manager::Initialize()
     m_fCurStats[static_cast<int>(STAT_INFO::MAXSTATPOINT)] = 20.f; // 획득한 재능 포인트
     m_fCurStats[static_cast<int>(STAT_INFO::CULSTATPOINT)] = 20.f; // 현재 재능 포인트
     m_fCurStats[static_cast<int>(STAT_INFO::LEVEL)] = 1.f; // 레벨
-    m_fCurStats[static_cast<int>(STAT_INFO::GOLD)] = 0.f; // 보유 골드
+    m_fCurStats[static_cast<int>(STAT_INFO::GOLD)] = 100.f; // 보유 골드
     m_fCurStats[static_cast<int>(STAT_INFO::DICE)] = 3.f; // 주사위
     m_fCurStats[static_cast<int>(STAT_INFO::LEVELUPPOINT)] = 0.f; // 주사위
 

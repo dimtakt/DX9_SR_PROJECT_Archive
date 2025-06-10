@@ -2,6 +2,7 @@
 #include "GameInstance.h"
 #include "Stat_Manager.h"
 #include "Monster_Factory.h"
+#include "Interaction_Normal.h"
 
 CRoom::CRoom(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CGameObject { pGraphic_Device }
@@ -594,6 +595,11 @@ void CRoom::Enter()
 			tColliderDesc.eType = pObject->Get_ObjType();;
 			CCollider_OBB* pCol = dynamic_cast<CCollider_OBB*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::COMPONENT, ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Collider_OBB"), &tColliderDesc));
 			m_pGameInstance->Add_Collider(pCol);
+
+			if (pObject->Get_ObjType() == GAMEOBJ_TYPE::MERCAHNT)
+			{
+				dynamic_cast<CInteraction_Normal*>(pObject)->ReadyShopItemCollision();
+			}
 		}
 		
 	}

@@ -11,6 +11,7 @@
 #include "Field_Font.h"
 #include "Level_Loading.h"
 #include "Client_Defines_Event.h"
+#include "Field_Item.h"
 
 CPlayer::CPlayer(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CGameObject{ pGraphic_Device }
@@ -432,6 +433,10 @@ void CPlayer::Update(_float fTimeDelta)
                         vDiffResult = vDiff * fDistanceOffset;
                         D3DXMatrixTranslation(&matTransAddition, vDiffResult.x, 0, vDiffResult.z);
                         matPlayerWorld = matTransToOrigin * matScale * matRotateChild * matRotateChildtoCursor * matTransReturn * matTransAddition;
+
+                        _float3 playerPos = vPlayerPos;
+                        playerPos += m_vCursorDir * fTimeDelta * 120.f;        // 커서 방향으로 이동
+                        m_pTransformCom->Set_State(STATE::POSITION, playerPos);
                     }
                     if (m_pAnimatorCom->Change_State(L"Parry"))
                         pStats->Cal_Stats(STAT_INFO::CULMP, -10);
@@ -622,8 +627,8 @@ void CPlayer::OnCollision(CGameObject* pGameObject)
     {
 
         _uint CurrentLevel = m_pGameInstance->Get_CurrentLevel();
-        m_pGameInstance->StopSound(ENUM_CLASS(CHANNELID::SOUND_EFFECT));
-        m_pGameInstance->PlaySoundW(L"breakBulletIce.wav", ENUM_CLASS(CHANNELID::SOUND_EFFECT), g_fEFFECTVolume - 0.6f);
+        /*m_pGameInstance->StopSound(ENUM_CLASS(CHANNELID::SOUND_EFFECT));
+        m_pGameInstance->PlaySoundW(L"breakBulletIce.wav", ENUM_CLASS(CHANNELID::SOUND_EFFECT), g_fEFFECTVolume - 0.6f);*/
         if (CurrentLevel == ENUM_CLASS(LEVEL::LEVEL_TOWN))  //타운일 때 스테이지1로 이동
             m_pGameInstance->Open_Level(static_cast<_uint>(LEVEL::LEVEL_LOADING), CLevel_Loading::Create(m_pGraphic_Device, LEVEL::LEVEL_STAGE1));
         else if (CurrentLevel == ENUM_CLASS(LEVEL::LEVEL_BOSS1)) // 보스1일 때 쉼터로 이동
@@ -690,6 +695,16 @@ void CPlayer::OnCollision(CGameObject* pGameObject)
 
             _float3 vResult = vPlayerPos + vStunDir * 0.2f;    // 밀려날 정도 테스트
             m_pTransformCom->Set_State(STATE::POSITION, vResult);
+        }
+        break;
+    }
+
+    case GAMEOBJ_TYPE::SHOP_ITEM:
+    {
+        if (pGameObject != nullptr)
+        {
+            if(m_pGameInstance->IsKeyDown('F'))
+                dynamic_cast<CField_Item*>(pGameObject)->Buy_Item();
         }
         break;
     }
