@@ -28,8 +28,8 @@ HRESULT CMole_A::Initialize(void* pArg)
 
     Ready_Object();
 
-    m_iMaxHp = 30;
-    m_iCulHp = 30;
+    m_iMaxHp = 60;
+    m_iCulHp = 60;
     m_eMonsterType = MONSTER_TYPE::MOLE;
     m_pTransformCom->Scaling(1.5f, 1.5f, 1.5f);
 	return S_OK;

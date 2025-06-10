@@ -30,8 +30,8 @@ HRESULT COink_A::Initialize(void* pArg)
     
     m_iAtkCooldownFrames = static_cast<_int>(m_pGameInstance->Compute_Random(0, 300));
 
-    m_iMaxHp = 50;
-    m_iCulHp = 50;
+    m_iMaxHp = 80;
+    m_iCulHp = 80;
     m_eMonsterType = MONSTER_TYPE::OINK;
     m_pTransformCom->Scaling(1.5f, 1.5f, 1.5f);
     return S_OK;

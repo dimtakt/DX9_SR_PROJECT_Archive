@@ -32,8 +32,8 @@ HRESULT CLaserGhost_D::Initialize(void* pArg)
     //m_iAtkCooldownFrames = static_cast<_int>(m_pGameInstance->Compute_Random(0, 300));
 
 
-    m_iMaxHp = 70;
-    m_iCulHp = 70;
+    m_iMaxHp = 120;
+    m_iCulHp = 120;
     m_eMonsterType = MONSTER_TYPE::LASERGHOST;
     m_pTransformCom->Scaling(1.5f, 1.5f, 1.5f);
     return S_OK;
