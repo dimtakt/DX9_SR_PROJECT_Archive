@@ -10,8 +10,10 @@ class CErma_Head final : public CMonster
 public:
 	enum class PATTERN_HEAD
 	{
-		PT_IDLE,
+		PT_IDLE,		// 평시
+		PT_AWAKEN,		// 에르마 들어가서 켜지는거
 		PT_BULLETFIRE,	// 탄막 패턴?
+		PT_BROKEN,		// 망가짐
 
 		PT_END
 	};
@@ -36,6 +38,10 @@ private:
 public:
 	virtual void OnCollision(CGameObject* pGameObject) override;
 
+public:
+	void PlayPattern(PATTERN_HEAD ePattern, _bool isForced = false);
+	void Set_Stop(_bool isStop = true) { m_isAllStop = isStop; }
+
 private:
 	// 각종 컴포넌트들
 	CTexture* m_pTextureCom_Standby					= { nullptr };
@@ -46,6 +52,7 @@ private:
 	CTexture* m_pTextureCom_DramaticDying			= { nullptr };
 	CTexture* m_pTextureCom_Broken					= { nullptr };
 
+	CTransform* m_pTerrainTransformCom = { nullptr };
 
 
 
@@ -55,9 +62,13 @@ private:
 
 	// 로컬 변수들
 
-	_int			m_iiPhase		= 0;
+	_int			m_iPhase		= 0;
 	PATTERN_HEAD	m_ePattern		= PATTERN_HEAD::PT_IDLE;
 
+	_bool			m_isPatternPlaying = false;
+	_bool			m_isAllStop = false;
+
+	//std::list<_float3> m_effectVecList = {};
 
 public:
 	static CErma_Head* Create(LPDIRECT3DDEVICE9 pGraphic_Device);

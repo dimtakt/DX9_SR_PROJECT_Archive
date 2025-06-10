@@ -85,7 +85,7 @@ HRESULT CLevel_MapEdit::Ready_Texture_Info()
 		TEXT("Prototype_GameObject_Tree")));
 
 	OBJECT_TEXTURE_INFO ObjectInfo;
-	ObjectInfo.iTextureCount = 85;
+	ObjectInfo.iTextureCount = 90;
 	ObjectInfo.pTextureCom = static_cast<CTexture*>(m_pPreview->Find_Component(TEXT("Com_Texture")));
 	if (ObjectInfo.pTextureCom)
 		ObjectInfo.pTextureCom->AddRef();
@@ -127,7 +127,7 @@ HRESULT CLevel_MapEdit::Ready_Interaction_Texture_Info()
 		TEXT("Prototype_GameObject_Interaction_Normal")));
 
 	OBJECT_TEXTURE_INFO Interraction;
-	Interraction.iTextureCount = 9;
+	Interraction.iTextureCount = 10;
 	Interraction.pTextureCom = static_cast<CTexture*>(m_pPreview->Find_Component(TEXT("Com_Texture")));
 	if (Interraction.pTextureCom)
 		Interraction.pTextureCom->AddRef();
@@ -220,6 +220,7 @@ void CLevel_MapEdit::ImGui_MenuBar_Render()
 					m_bPicking = false;
 					m_pObject.clear();
 					m_pObject_Desc.clear();
+					m_iLightIndex = 0;
 				}
 
 				while (!ifs.eof())
@@ -339,6 +340,8 @@ void CLevel_MapEdit::ImGui_MenuBar_Render()
 						Desc.eType = pObj->Get_ObjType();
 						CTexture* pTexture = static_cast<CTexture*>(pObj->Find_Component(TEXT("Com_Texture")));
 						Desc.iTextureIndex = pTexture->Get_NumBindTexture(); //TEXTURE 
+						if (Desc.eType == GAMEOBJ_TYPE::FIRE)
+							Desc.iTextureIndex = dynamic_cast<CMapEditObject*>(pObj)->Get_LightIndex();
 					}
 
 					m_pObject_Desc.push_back(Desc);
@@ -399,7 +402,7 @@ void CLevel_MapEdit::ImGui_Object_MenBar()
 
 		ImGui::Text("Object Texture Index:");
 		ImGui::SetNextItemWidth(250);
-		ImGui::SliderInt("Texture", &iObjectTexIndex, 0, 85); // 0~15 ¿Œµ¶Ω∫
+		ImGui::SliderInt("Texture", &iObjectTexIndex, 0, 90); // 0~15 ¿Œµ¶Ω∫
 		ImGui::SameLine();
 		if (ImGui::Button("-"))
 			iObjectTexIndex -= 1;
@@ -419,7 +422,7 @@ void CLevel_MapEdit::ImGui_Object_MenBar()
 			tSrc.vScale = m_Scales;
 			tSrc.vRotate = m_Rotates;
 			tSrc.eType = GAMEOBJ_TYPE::OBJECT;
-			if (iObjectTexIndex == 59 || (28 <= iObjectTexIndex && iObjectTexIndex <= 38))
+			if (iObjectTexIndex == 83 || iObjectTexIndex == 59 || (28 <= iObjectTexIndex && iObjectTexIndex <= 38))
 				tSrc.eType = GAMEOBJ_TYPE::OBJECT_DECO;
 		
 
@@ -490,6 +493,7 @@ void CLevel_MapEdit::ImGui_Option_Button_Reset()
 				m_bPicking = false;
 				m_pObject.clear();
 				m_pObject_Desc.clear();
+				m_iLightIndex = 0;
 			}
 		}
 	}
@@ -754,7 +758,7 @@ void CLevel_MapEdit::ImGui_Interaction_Object_MenBar()
 
 		ImGui::Text("Interaction Texture Index:");
 		ImGui::SetNextItemWidth(250);
-		ImGui::SliderInt("Texture", &iInteractionTexIndex, 0, 8); //  ¿Œµ¶Ω∫
+		ImGui::SliderInt("Texture", &iInteractionTexIndex, 0, 9); //  ¿Œµ¶Ω∫
 		ImGui::SameLine();
 		if (ImGui::Button("-"))
 			iInteractionTexIndex -= 1;
@@ -787,9 +791,16 @@ void CLevel_MapEdit::ImGui_Interaction_Object_MenBar()
 				tSrc.eType = GAMEOBJ_TYPE::MONSTER_MOLE;
 			else if (iInteractionTexIndex == 8)
 				tSrc.eType = GAMEOBJ_TYPE::MONSTER_LASERGHOST;
+			else if (iInteractionTexIndex == 9)
+				tSrc.eType = GAMEOBJ_TYPE::FIRE;
 
 
 			tSrc.iTextureIndex = iInteractionTexIndex;
+			if (tSrc.eType == GAMEOBJ_TYPE::FIRE)
+			{
+				tSrc.iTextureIndex = m_iLightIndex;
+				m_iLightIndex++;
+			}
 			tSrc.vPos = m_Translates;
 			tSrc.vScale = m_Scales;
 			tSrc.vRotate = m_Rotates;

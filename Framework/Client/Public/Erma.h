@@ -31,8 +31,13 @@ private:
 	HRESULT Ready_Components(void* pArg);
 	HRESULT Ready_Object();
 
+	void PlayKeyInputPattern();
+	void Set_AllPartsStop(_bool isStop = true);
+
 public:
 	virtual void OnCollision(CGameObject* pGameObject) override;
+
+	void ChangeKeyInputPattern() { m_isTriggerKeyPattern = true; }
 
 private:
 	// 각종 컴포넌트들
@@ -45,7 +50,7 @@ private:
 	CTexture*	m_pTextureCom_Enter_Progress	= { nullptr };
 	CTexture*	m_pTextureCom_Enter_End			= { nullptr };
 	
-	
+	CTransform* m_pTerrainTransformCom			= { nullptr };
 	
 	CAnimator*	m_pAnimatorCom					= { nullptr };
 	
@@ -63,6 +68,17 @@ private:
 	_int		m_iPhase						= 0;
 	_int		m_iPattern						= 0;
 
+	_bool		m_isEntering					= false;
+	_bool		m_isInCombat					= false;
+
+	_int		m_iStackedFrame					= 0;
+	_int		m_iPauseLeftFrame				= 0;
+	list<int>	m_listKeys						= {};
+
+	_int		m_iPatternRandOffset			= 0;
+
+	_bool		m_isAllStop						= false;
+	_bool		m_isTriggerKeyPattern = false;
 
 public:
 	static CErma* Create(LPDIRECT3DDEVICE9 pGraphic_Device);

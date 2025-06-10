@@ -50,9 +50,11 @@ HRESULT CRoom_Manager::Enter_Room(_int iRoomID)
 			{
 				pRoom->Enter();
 				m_iCurrentRoomID = iRoomID;
+				pRoom->On_Fire();
 			}
 			else {
 				pRoom->Exit();
+				pRoom->Off_Fire();
 			}
 		}
 	}
@@ -90,6 +92,8 @@ vector<pair<_int, _int>> CRoom_Manager::Create_RandomRooms(_int iRoomMax)
 		pair<_int, _int> CheckIndex = { nX, nZ };
 
 		if (0 != count(m_RoomIndex.begin(), m_RoomIndex.end(), CheckIndex))
+			continue;
+		if (nZ > 3 || nZ < -3)
 			continue;
 
 		m_RoomIndex.push_back({ nX, nZ });
