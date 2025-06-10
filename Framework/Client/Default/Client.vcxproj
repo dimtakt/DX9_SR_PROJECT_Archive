@@ -150,7 +150,10 @@
     <ClInclude Include="..\Public\Animations\Anim_Player_Parry.h" />
     <ClInclude Include="..\public\Artefact_Tier_Icon.h" />
     <ClInclude Include="..\public\Artefact_Tooltip.h" />
+    <ClInclude Include="..\public\Askard_Frame.h" />
     <ClInclude Include="..\Public\BackGround.h" />
+    <ClInclude Include="..\public\BossHp_Askard.h" />
+    <ClInclude Include="..\public\BossHp_Ema.h" />
     <ClInclude Include="..\Public\Buff_Frame.h" />
     <ClInclude Include="..\Public\Buff_Icon.h" />
     <ClInclude Include="..\Public\Buff_Type_Base.h" />
@@ -191,6 +194,7 @@
     <ClInclude Include="..\public\Gacha_Slot_Selete.h" />
     <ClInclude Include="..\public\Hud_LevelUp.h" />
     <ClInclude Include="..\public\Hud_Quick_Slot.h" />
+    <ClInclude Include="..\public\Hud_Slot.h" />
     <ClInclude Include="..\public\Item_Tooltip_Bottom.h" />
     <ClInclude Include="..\public\Item_Tooltip_Mid.h" />
     <ClInclude Include="..\public\LaserGhost_D.h" />
@@ -309,6 +313,7 @@
     <ClInclude Include="..\public\UI_KeyGuide.h" />
     <ClInclude Include="..\Public\Tree.h" />
     <ClInclude Include="Client.h" />
+    <ClInclude Include="Ema_Frame.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="targetver.h" />
@@ -320,7 +325,10 @@
     <ClCompile Include="..\Private\Animations\Anim_Player_Parry.cpp" />
     <ClCompile Include="..\private\Artefact_Tier_Icon.cpp" />
     <ClCompile Include="..\private\Artefact_Tooltip.cpp" />
+    <ClCompile Include="..\private\Askard_Frame.cpp" />
     <ClCompile Include="..\Private\BackGround.cpp" />
+    <ClCompile Include="..\private\BossHp_Askard.cpp" />
+    <ClCompile Include="..\private\BossHp_Ema.cpp" />
     <ClCompile Include="..\Private\Buff_Frame.cpp" />
     <ClCompile Include="..\Private\Buff_Icon.cpp" />
     <ClCompile Include="..\Private\Buff_Type_Base.cpp" />
@@ -357,6 +365,7 @@
     <ClCompile Include="..\private\Gacha_Slot_Selete.cpp" />
     <ClCompile Include="..\private\Hud_LevelUp.cpp" />
     <ClCompile Include="..\private\Hud_Quick_Slot.cpp" />
+    <ClCompile Include="..\private\Hud_Slot.cpp" />
     <ClCompile Include="..\private\Item_Tooltip_Bottom.cpp" />
     <ClCompile Include="..\private\Item_Tooltip_Mid.cpp" />
     <ClCompile Include="..\Private\LaserGhost_D.cpp" />
@@ -466,6 +475,7 @@
     <ClCompile Include="..\private\UI_KeyGuide.cpp" />
     <ClCompile Include="..\public\Animations\Anim_Player_Fury.cpp" />
     <ClCompile Include="Client.cpp" />
+    <ClCompile Include="Ema_Frame.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Client.rc" />
