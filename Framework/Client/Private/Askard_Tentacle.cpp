@@ -1,0 +1,64 @@
+#include "Askard_Tentacle.h"
+#include "Effect_Factory.h"
+
+CAskard_Tentacle::CAskard_Tentacle(LPDIRECT3DDEVICE9 pGraphic_Device)
+	: CMonster{ pGraphic_Device }
+{
+}
+
+CAskard_Tentacle::CAskard_Tentacle(const CAskard_Tentacle& Prototype)
+	: CMonster{ Prototype }
+{
+}
+
+HRESULT CAskard_Tentacle::Initialize_Prototype()
+{
+	return S_OK;
+}
+
+
+HRESULT CAskard_Tentacle::Initialize(void* pArg)
+{
+	return S_OK;
+}
+
+void CAskard_Tentacle::Priority_Update(_float fTimeDelta)
+{
+}
+
+void CAskard_Tentacle::Update(_float fTimeDelta)
+{
+}
+
+void CAskard_Tentacle::Late_Update(_float fTimeDelta)
+{
+}
+
+HRESULT CAskard_Tentacle::Render()
+{
+	return E_NOTIMPL;
+}
+
+HRESULT CAskard_Tentacle::Ready_Components(void* pArg)
+{
+	return E_NOTIMPL;
+}
+
+void CAskard_Tentacle::OnCollision(CGameObject* pGameObject)
+{
+}
+
+CAskard_Tentacle* CAskard_Tentacle::Create(LPDIRECT3DDEVICE9 pGraphic_Device)
+{
+	return nullptr;
+}
+
+CGameObject* CAskard_Tentacle::Clone(void* pArg)
+{
+	return nullptr;
+}
+
+void CAskard_Tentacle::Free()
+{
+}
+
