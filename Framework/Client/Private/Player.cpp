@@ -894,7 +894,7 @@ HRESULT CPlayer::Ready_Components(void* pArg)
 
     // collider
     CCollider_OBB::OBB_DESC tColliderDesc;
-    tColliderDesc.vScale = _float3(0.7f, 0.5f, 0.7f);
+    tColliderDesc.vScale = _float3(0.7f, 4.f, 0.7f);
     tColliderDesc.pOwner = this;
     tColliderDesc.pTransform = m_pTransformCom;
     tColliderDesc.eType = m_eObjType;

@@ -292,15 +292,15 @@ void CGameEffect::Ready_Collision()
 			// 추후 처리필요 탄막 충돌체 가 안됨..
 			else if (m_strEffectTag == TEXT("Prototype_Component_Boss_Erma_Bullet"))
 			{
-				tColliderDesc.vScale = _float3(5.f, 10.f, 5.f);
+				tColliderDesc.vScale = _float3(0.2f, 0.2f, 0.2f);
 			}
 			else if (m_strEffectTag == TEXT("Prototype_Component_Boss_Erma_Missile_Lower"))
 			{
-				tColliderDesc.vScale = _float3(1.f, 1.f, 1.f);
+				tColliderDesc.vScale = _float3(0.7f, 1.f, 0.7f);
 			}
 			else if (m_strEffectTag == TEXT("Prototype_Component_Boss_Erma_Missile_Lower_Light"))
 			{
-				tColliderDesc.vScale = _float3(1.f, 1.f, 1.f);
+				tColliderDesc.vScale = _float3(0.7f, 1.f, 0.7f);
 			}
 		}
 
