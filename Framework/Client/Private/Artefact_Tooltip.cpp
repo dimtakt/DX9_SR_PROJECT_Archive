@@ -241,9 +241,13 @@ void CArtefact_Tooltip::Render_Font()
 			
 			_float iStat_Value = g_ItemEffect[g_ItemDataBase[iItemID].m_iARTEFACT_Value].m_vecValue[i].m_fStat_Value1;
 			_float iUP_Value = g_ItemEffect[g_ItemDataBase[iItemID].m_iARTEFACT_Value].m_vecValue[i].m_fStat_Value2;
-
-			iStat_Value = iStat_Value + iUP_Value * static_cast<CButton*>(m_pParent)->Get_Value();
-			
+			_float fGrade = static_cast<CButton*>(m_pParent)->Get_Value();
+			_float fMaxGrade = g_ItemDataBase[iItemID].m_iItemValue;
+			if (fMaxGrade < fGrade)
+				iStat_Value = iStat_Value + iUP_Value * fMaxGrade;
+			else
+				iStat_Value = iStat_Value + iUP_Value * fGrade;
+				
 			_stprintf_s(szText, szText, int(iStat_Value));
 
 			m_pGameInstance->Render_Font(TEXT("UI_Font_16_Tooltip"), szText, m_vTexRect, D3DXCOLOR(1.f, 1.f, 1.f, 1.f), DT_LEFT | DT_TOP);

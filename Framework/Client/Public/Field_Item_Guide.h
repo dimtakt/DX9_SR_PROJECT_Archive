@@ -1,49 +1,40 @@
 #pragma once
 #include "Client_Defines.h"
 #include "UIObject.h"
-#include "Inven_Slot.h"
+#include "Engine_Defines.h"
+#include "Client_Defines_Item.h"
 
 BEGIN(Engine)
 class CVIBuffer_Rect;
 class CTexture;
-class CItemObject;
 END
 
 BEGIN(Client)
-class CInventory final : public CUIObject
+class CField_Item_Guide final : public CUIObject
 {
 private:
-								CInventory(LPDIRECT3DDEVICE9 pGraphic_Device);
-								CInventory(const CInventory& Prototype);
-	virtual						~CInventory() = default;
+								CField_Item_Guide(LPDIRECT3DDEVICE9 pGraphic_Device);
+								CField_Item_Guide(const CField_Item_Guide& Prototype);
+	virtual						~CField_Item_Guide() = default;
+
 public:
 	virtual HRESULT				Initialize_Prototype(LEVEL eLevel);
 	virtual HRESULT				Initialize(void* pArg) override;
 	virtual void				Priority_Update(_float fTimeDelta) override;
 	virtual void				Update(_float fTimeDelta) override;
-	virtual void				Late_Update(_float fTimeDelta) override;
+	virtual void				Late_Update(_float fTimeDelta);
 	virtual HRESULT				Render() override;
-
-public:
-	void						UI_Switch();
-	void						Add_Item_Inven(_uint ItemIndex);
-
-	void						Open_UI(_float fX, _float fY);
-	void						Close_UI();
-	void						Push_Item_Slot(CItem_Base* pItem, _uint iCount);
 
 private:
 	CVIBuffer_Rect*				m_pVIBufferCom = { nullptr };
 	CTexture*					m_pTextureCom = { nullptr };
-	LEVEL						m_eLevel = {};
-	_bool						m_bIsOpen = {};
-	vector<CInven_Slot*>		m_vecInventory = {};
 
-	_float						m_fInvenStats[static_cast<int>(STAT_INFO::STAT_END)];
-	
-private:
-	void						Set_Grade();
-	void						StatToPlayer();
+	LEVEL						m_eLevel = {};
+
+	_uint						m_iItemID = {};
+
+	_int						m_iWinPosX = {};
+	_int						m_iWinPosY = {};
 
 private:
 	HRESULT						Ready_Components();
@@ -51,10 +42,13 @@ private:
 	HRESULT						Ready_ChildPrototype(LEVEL eLevel);
 	HRESULT						Ready_Children();
 
+	void						Target_Pos();
+	void						Render_Font();
+
 public:
-	static CInventory*			Create(LPDIRECT3DDEVICE9 pGraphic_Device, LEVEL eLevel);
+	static CField_Item_Guide*	Create(LPDIRECT3DDEVICE9 pGraphic_Device, LEVEL eLevel);
 	virtual CGameObject*		Clone(void* pArg) override;
 	virtual void				Free() override;
-
 };
 END
+

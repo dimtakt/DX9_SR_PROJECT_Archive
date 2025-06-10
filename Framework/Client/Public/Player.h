@@ -4,6 +4,7 @@
 #include "TerrainBox.h"
 #include "EventListener.h"
 #include "Field_Hp.h"
+#include "Field_Npc_Chat.h"
 BEGIN(Engine)
 class CTexture;
 class CTransform;
@@ -85,7 +86,7 @@ private:
 	_bool					m_isReadyFury					= false;
 
 	//CField_Hp*				m_pHpBar						= { nullptr };
-
+	CField_Npc_Chat*		m_pChat							= { nullptr };
 	_bool					m_bIsHit						= { false };
 	_bool					m_bIsStun						= false;
 	DWORD					m_dwHitTime						= {};

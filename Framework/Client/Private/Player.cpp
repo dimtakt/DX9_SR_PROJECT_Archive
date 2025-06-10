@@ -42,7 +42,8 @@ HRESULT CPlayer::Initialize(void* pArg)
     m_pGameInstance->Subscribe(ENUM_CLASS(EVENT_TYPE::UICHANGE), this);
     Ready_Object();
     m_dwHitTime = 0.f;
-	return S_OK;
+    
+    return S_OK;
 }
 
 void CPlayer::Priority_Update(_float fTimeDelta)
@@ -53,7 +54,6 @@ void CPlayer::Priority_Update(_float fTimeDelta)
 
     /*if (m_pHpBar != nullptr)
         m_pHpBar->Render_HP_Progress(m_pTransformCom, m_iCulHp, m_iMaxHp);*/
-
 
     // isHit  은 무적 관리,
     // IsStun 은 경직 관리
@@ -80,6 +80,18 @@ void CPlayer::Priority_Update(_float fTimeDelta)
 
 void CPlayer::Update(_float fTimeDelta)
 {    
+    if (m_pGameInstance->IsKeyDown(VK_DOWN))
+    {
+        m_pChat->On_Chat(0, true);
+    }
+    if (m_pGameInstance->IsKeyDown(VK_LEFT))
+    {
+        m_pChat->Cinematic_Chat(0, true);
+    }
+    if (m_pGameInstance->IsKeyDown(VK_RIGHT))
+    {
+        m_pChat->Off_Chat();
+    }
     //m_pCollider->Update_Collider();
     if (m_pTerrainBox != nullptr) {
         m_pTerrainBox->SetUp_OnTerrainBox(m_pTransformCom, _float3(0.f, 0.3f, 0.f));
@@ -844,7 +856,31 @@ HRESULT CPlayer::Ready_Components(void* pArg)
 HRESULT CPlayer::Ready_Object()
 {
     //m_pHpBar = dynamic_cast<CField_Hp*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_Field_Hp")));
+   
+    CField_Npc_Chat::FIELD_CHAT_DESC ChatDesc{};
 
+    _wstring szTag = TEXT("Test_Chat");
+
+    //NPC 트랜스폼
+    ChatDesc.pTransform = m_pTransformCom;
+    //채팅 UI 태그
+    ChatDesc.szChatTag = szTag;
+    //NPC 현재 레벨 넣어주면 됩니다.
+    ChatDesc.m_iLevel = ENUM_CLASS(LEVEL::LEVEL_TOWN);
+    //NPC 머리 위로 얼만큼 띄울거지 음수 값 넣어주면 됩니다.
+    ChatDesc.fY = -100;
+    //생성
+    if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_TOWN), TEXT("Layer_UI_Chat"),
+        ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_Field_Npc_Chat"), &ChatDesc)))
+        return E_FAIL;
+
+    //멤버 변수의 채팅 클래스 주소 연결(만든 레벨, UI 태그)
+    m_pChat = static_cast<CField_Npc_Chat*>(m_pGameInstance->Find_UIObj(ENUM_CLASS(LEVEL::LEVEL_TOWN), TEXT("Test_Chat")));
+
+    m_pChat->Add_Chat(TEXT("일이삼사오육칠팔구십일이"));
+    m_pChat->Add_Chat(TEXT("안녕하세요2"));
+    m_pChat->Add_Chat(TEXT("안녕하세요3"));
+    m_pChat->Add_Chat(TEXT("안녕하세요4"));
     return S_OK;
 }
 
@@ -940,8 +976,6 @@ void CPlayer::Free()
     Safe_Release(m_pAnimatorCom);
     Safe_Release(m_pAnimatorTransCom);
     Safe_Release(m_pTerrainBox);
-    
-    //Safe_Release(m_pHpBar);
     
     CEffect_Factory::GetInstance()->Free();
 
