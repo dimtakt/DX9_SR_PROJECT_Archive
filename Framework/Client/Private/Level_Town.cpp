@@ -36,7 +36,7 @@ HRESULT CLevel_Town::Initialize()
 		return E_FAIL;
 
 	// Å×½ºÆ®
-	m_pGameInstance->PlaySoundW(L"01_Title_Screen.wav", ENUM_CLASS(CHANNELID::SOUND_PLAYER), 0.8f);
+	//m_pGameInstance->PlaySoundW(L"01_Title_Screen.wav", ENUM_CLASS(CHANNELID::SOUND_PLAYER), 0.8f);
 	//m_pGameInstance->StopSound(ENUM_CLASS(CHANNELID::SOUND_BGM));
 
 	return S_OK;
