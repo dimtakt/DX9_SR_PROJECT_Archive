@@ -27,7 +27,7 @@ void CEffect_Factory::Create_Effect(GAMEOBJ_TYPE eType, const _wstring& strEffec
 	CEffect::EFFECT_DESC EffectDesc;
 	EffectDesc.strEffectTag = strEffectTag;
 	EffectDesc.vPos = vPos;
-	
+	EffectDesc.eType = eType;
 	EffectDesc.qRot = qRot;
 	EffectDesc.vScale = vScale;
 

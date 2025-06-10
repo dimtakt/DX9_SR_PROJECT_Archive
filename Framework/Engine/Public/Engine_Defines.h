@@ -9,12 +9,17 @@
 #include <d3d9.h>
 #include <d3dx9.h>
 
+#include "fmod.h"
+#include "fmod.hpp"
+#pragma comment(lib, "fmod_vc.lib")
+
 //#include "nlohmann/json.hpp"
 //using json = nlohmann::json;
 
 #include <vector>
 #include <list>
 #include <map>
+#include <queue>
 #include <algorithm>
 #include <functional>
 #include <string>
@@ -22,6 +27,7 @@
 #include <ctime>
 #include <functional>
 #include <iostream>
+#include <io.h> 
 using namespace std;
 
 #include "Engine_Enum.h"
@@ -29,6 +35,8 @@ using namespace std;
 #include "Engine_Struct.h"
 #include "Engine_Typedef.h"
 #include "Engine_Function.h"
+
+#define MAXCHANNEL 32
 
 #ifdef _DEBUG
 

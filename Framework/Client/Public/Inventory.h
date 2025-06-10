@@ -13,8 +13,8 @@ BEGIN(Client)
 class CInventory final : public CUIObject
 {
 private:
-	CInventory(LPDIRECT3DDEVICE9 pGraphic_Device);
-	CInventory(const CInventory& Prototype);
+								CInventory(LPDIRECT3DDEVICE9 pGraphic_Device);
+								CInventory(const CInventory& Prototype);
 	virtual						~CInventory() = default;
 public:
 	virtual HRESULT				Initialize_Prototype(LEVEL eLevel);

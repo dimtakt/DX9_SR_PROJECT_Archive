@@ -177,7 +177,7 @@ namespace Client
 		Item_Effect(8, ITEM_EFFECT::VALUE_TYPE, {{STAT_INFO::CULDAMAGE,TEXT("공격력 증가 +%d"), 2, 2}}),
 		Item_Effect(9, ITEM_EFFECT::VALUE_TYPE, {{STAT_INFO::CULDAMAGE,TEXT("공격력 증가 +%d"), 2, 5}, {STAT_INFO::CRITICALDAMAGE,TEXT("크리티컬 데미지 증가 +%d%%"), 2, 5}}),
 		Item_Effect(10, ITEM_EFFECT::VALUE_TYPE, {{STAT_INFO::REGENDASH, TEXT("대쉬 회복 속도 증가 +%d%%"),2.f, 2.f}}),
-		Item_Effect(11, ITEM_EFFECT::SPAWN_TYPE, {{STAT_INFO::STAT_END,TEXT("7초 마다 대시 쉬 주변 적에게 망치를 날림"), 0, 0}}, TEXT("Snow Hamer")),
+		Item_Effect(11, ITEM_EFFECT::SPAWN_TYPE, {{STAT_INFO::STAT_END,TEXT("대시를 하면 얼음 망치를 날림(7초)"), 0, 0}}, TEXT("Snow Hamer")),
 		Item_Effect(12, ITEM_EFFECT::SPAWN_TYPE, {{STAT_INFO::STAT_END,TEXT("노란 행성 소환"), 0, 0}}, TEXT("Yellow Planet")),
 		Item_Effect(13, ITEM_EFFECT::SPAWN_TYPE, {{STAT_INFO::STAT_END,TEXT("붉은 행성 소환"), 0, 0}}, TEXT("Red Planet")),
 		Item_Effect(14, ITEM_EFFECT::SPAWN_TYPE, {{STAT_INFO::STAT_END,TEXT("푸른 행성 소환"), 0, 0}}, TEXT("Bule Planet")),
@@ -195,9 +195,9 @@ namespace Client
 
 		//인덱스, 상대 or 고정, 회전 가능 여부, (X, Y, 값)
 		Slate(0, true, true,	{{0,-1,1,0},{0, 1,1,0}}),
-		Slate(1, true, true,	{{0,1,1,0},{1,0,1,0} }),
+		Slate(1, true, true,	{{0,1,1,0},{-1,0,1,0} }),
 		Slate(2, true, true,	{{-1, -2,1,0}}),
-		Slate(3, true, true,	{{-2,0,-2,0},{-1, 0,-1,0}, {1, 0,1,0}, {2, 0,1,0}}),
+		Slate(3, true, true,	{{0,2,-1,0},{0, 1,-1,0}, {0, 1,1,0}, {0, 2,1,0}}),
 		Slate(4, true, true,	{{-1,-1,1,0},{1,1,-1,0} }),
 		Slate(5, true, true,	{{0, -1,1,0},{0, 1,1,0}}),
 		Slate(6, true, true,	{{0,-2,2,0},{0, 2,2,0}}),

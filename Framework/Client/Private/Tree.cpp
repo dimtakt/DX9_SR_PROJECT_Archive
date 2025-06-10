@@ -52,8 +52,8 @@ HRESULT CTree::Initialize(void* pArg)
                 m_eObjType = GAMEOBJ_TYPE::OBJECT_DECO;
             //후에 추가한건데 이전맵 데이터들 꼬일까봐 이렇게 처리해둠.
 
-            //if (FAILED(Ready_Shader()))
-            //    return E_FAIL;
+            if (FAILED(Ready_Shader()))
+                return E_FAIL;
 
         }
     return S_OK;

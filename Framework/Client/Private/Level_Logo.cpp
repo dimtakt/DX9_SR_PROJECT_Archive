@@ -14,6 +14,8 @@ HRESULT CLevel_Logo::Initialize()
 	if (FAILED(Ready_Layer_BackGround(TEXT("Layer_Title_BackGround"))))
 		return E_FAIL;
 
+	m_pGameInstance->PlayBGM(L"mainTeme01.wav", 0.5f);
+
 	return S_OK;
 }
 

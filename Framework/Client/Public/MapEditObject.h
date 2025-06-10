@@ -26,6 +26,8 @@ public:
 	virtual void Late_Update(_float fTimeDelta) override;
 	virtual HRESULT Render() override;
 
+	_uint Get_LightIndex() { return m_iLightIndex; }
+
 	void SetUp_RenderState();
 	void Reset_RenderState();
 private:
@@ -34,6 +36,7 @@ private:
 	CTexture* m_pTextureCom = { nullptr };
 
 	_uint m_iTextureIndex = 0;
+	_uint m_iLightIndex = 0;
 
 private:
 	HRESULT Ready_Components();

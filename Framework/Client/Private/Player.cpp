@@ -42,7 +42,8 @@ HRESULT CPlayer::Initialize(void* pArg)
     m_pGameInstance->Subscribe(ENUM_CLASS(EVENT_TYPE::UICHANGE), this);
     Ready_Object();
     m_dwHitTime = 0.f;
-	return S_OK;
+    
+    return S_OK;
 }
 
 void CPlayer::Priority_Update(_float fTimeDelta)
@@ -53,7 +54,6 @@ void CPlayer::Priority_Update(_float fTimeDelta)
 
     /*if (m_pHpBar != nullptr)
         m_pHpBar->Render_HP_Progress(m_pTransformCom, m_iCulHp, m_iMaxHp);*/
-
 
     // isHit  은 무적 관리,
     // IsStun 은 경직 관리
@@ -70,6 +70,8 @@ void CPlayer::Priority_Update(_float fTimeDelta)
         m_bIsHit = false;
     }
 
+    m_fGodModeTime += 1.f;
+
 
     //if (m_bIsHit)       std::wcout << "TRUE" << std::endl;
     //else                std::wcout << "FALSE" << std::endl; // 왜 TRUE인데도 공격이 잘 되지??
@@ -80,6 +82,18 @@ void CPlayer::Priority_Update(_float fTimeDelta)
 
 void CPlayer::Update(_float fTimeDelta)
 {    
+    if (m_pGameInstance->IsKeyDown(VK_DOWN))
+    {
+        m_pChat->On_Chat(0, true);
+    }
+    if (m_pGameInstance->IsKeyDown(VK_LEFT))
+    {
+        m_pChat->Cinematic_Chat(0, true);
+    }
+    if (m_pGameInstance->IsKeyDown(VK_RIGHT))
+    {
+        m_pChat->Off_Chat();
+    }
     //m_pCollider->Update_Collider();
     if (m_pTerrainBox != nullptr) {
         m_pTerrainBox->SetUp_OnTerrainBox(m_pTransformCom, _float3(0.f, 0.3f, 0.f));
@@ -92,7 +106,7 @@ void CPlayer::Update(_float fTimeDelta)
     // 아래에서 사용할 변수들
 #pragma region Variables Setting
 
-    _float fPointY = m_pTransformCom->Get_State(STATE::POSITION).y - m_pTransformCom->Get_Scaled().y/2.0f;       // 교차 평면의 기준이 될 Y값
+    _float fPointY = m_pTransformCom->Get_State(STATE::POSITION).y - m_pTransformCom->Get_Scaled().y / 2.0f;       // 교차 평면의 기준이 될 Y값
     _float3 vRayPoint = {};     // fPointY 값 기준 마우스 Ray와 교차하는 좌표
     m_pGameInstance->Get_IntersectAtY(fPointY, vRayPoint);
 
@@ -105,7 +119,7 @@ void CPlayer::Update(_float fTimeDelta)
     CStat_Manager* pPlayerStat = CStat_Manager::GetInstance();
 
     _float4x4 matPlayerWorld = *m_pTransformCom->Get_WorldMatrix();
-    CStat_Manager* pStats =  CStat_Manager::GetInstance();
+    CStat_Manager* pStats = CStat_Manager::GetInstance();
 
 #pragma endregion
 
@@ -148,7 +162,7 @@ void CPlayer::Update(_float fTimeDelta)
     D3DXMatrixTranslation(&matTransAddition, vDiffResult.x, 0, vDiffResult.z);
 
     matPlayerWorld = matTransToOrigin * matScale * matRotateChild * matRotateChildtoCursor * matTransReturn * matTransAddition;
-   
+
 #pragma endregion
     // ***********************
 
@@ -189,7 +203,7 @@ void CPlayer::Update(_float fTimeDelta)
 
             //std::cout << "[Player::Update] PlayerPos : " << vPlayerPos.x << ", " << vPlayerPos.y << ", " << vPlayerPos.z << std::endl;
         }
-        
+
     }
 
 #pragma endregion
@@ -269,7 +283,7 @@ void CPlayer::Update(_float fTimeDelta)
     if (!(m_pAnimatorTransCom->Get_CurStateTag() == L"Dash" ||
         m_pAnimatorTransCom->Get_CurStateTag() == L"Parry" ||
         m_pAnimatorTransCom->Get_CurStateTag() == L"Fury" ||
-        m_pAnimatorTransCom->Get_CurStateTag() == L"Attack" ))
+        m_pAnimatorTransCom->Get_CurStateTag() == L"Attack"))
     {
         if (!CStat_Manager::GetInstance()->Get_UIOpen()) {
             if (m_pGameInstance->IsKeyHold('W'))
@@ -308,7 +322,7 @@ void CPlayer::Update(_float fTimeDelta)
 
 #pragma endregion
 
-    
+
     // ***************************************
     // * [Space] 대쉬
     // ***************************************
@@ -347,7 +361,7 @@ void CPlayer::Update(_float fTimeDelta)
         playerPos += m_vDashDir * 30.f * (-0.04f * pow((fTimeDelta - 5.f), 2.f) + 1.f);        // 마지막으로 누른 방향으로 이동
         m_pTransformCom->Set_State(STATE::POSITION, playerPos);
     }
-        
+
 #pragma endregion
 
 
@@ -413,34 +427,34 @@ void CPlayer::Update(_float fTimeDelta)
     }
 
 #pragma endregion
-    
+
 #pragma region Transform Change (Parry)
 
-    // [Parry 이동]
-    if (m_pAnimatorTransCom->Get_CurStateTag() == L"Parry")
-    {
-        if (m_pAnimatorCom->Get_CurStackedFrame() >= 8)
-        {
-            _float3 playerPos = vPlayerPos;
-            playerPos += m_vCursorDir * fTimeDelta * 15.f * (-1 * cosf(0.4f * m_pAnimatorCom->Get_CurStackedFrame() - 0.7) + 1);        // 커서 방향으로 이동
-            m_pTransformCom->Set_State(STATE::POSITION, playerPos);
-            // 무적 설정...
-            m_bIsHit = true;
-            // 공격 막는 데에 성공 시 Fury_Ready로 넘어갈 준비
-            if (m_pGameInstance->IsKeyDown('M'))    // ksta : 조건은 나중에 수정
-            {
-                if (!CStat_Manager::GetInstance()->Get_UIOpen()) {
-                    m_isReadyFury = true;
-                    pStats->Set_Stats(STAT_INFO::FURYREADY, true);
-                }
-            }
-        }
-    }
-    else
-    {
-        // 무적 해제...
-    }
-    
+    //// [Parry 이동]
+    //if (m_pAnimatorTransCom->Get_CurStateTag() == L"Parry")
+    //{
+    //    if (m_pAnimatorCom->Get_CurStackedFrame() >= 8)
+    //    {
+    //        _float3 playerPos = vPlayerPos;
+    //        playerPos += m_vCursorDir * fTimeDelta * 15.f * (-1 * cosf(0.4f * m_pAnimatorCom->Get_CurStackedFrame() - 0.7) + 1);        // 커서 방향으로 이동
+    //        m_pTransformCom->Set_State(STATE::POSITION, playerPos);
+    //        // 무적 설정...
+    //        m_bIsHit = true;
+    //        // 공격 막는 데에 성공 시 Fury_Ready로 넘어갈 준비
+    //        if (m_pGameInstance->IsKeyDown('M'))    // ksta : 조건은 나중에 수정
+    //        {
+    //            if (!CStat_Manager::GetInstance()->Get_UIOpen()) {
+    //                m_isReadyFury = true;
+    //                pStats->Set_Stats(STAT_INFO::FURYREADY, true);
+    //            }
+    //        }
+    //    }
+    //}
+    //else
+    //{
+    //    // 무적 해제...
+    //}
+    //
 #pragma endregion   
 
 #pragma region Transform Change (Fury)
@@ -453,7 +467,7 @@ void CPlayer::Update(_float fTimeDelta)
             _float3 playerPos = vPlayerPos;
             playerPos += m_vCursorDir * fTimeDelta * 14.f * (-1 * cosf(0.4f * m_pAnimatorCom->Get_CurStackedFrame() - 0.7f) + 1.f);        // 커서 방향으로 이동
             m_pTransformCom->Set_State(STATE::POSITION, playerPos);
-            
+
             // 무적 설정...
             m_bIsHit = true;
         }
@@ -475,7 +489,7 @@ void CPlayer::Update(_float fTimeDelta)
 
     // 상태가 바뀌었다면, 공격 타이머 초기화
     if (strCurStateTag == L"Attack_Upper" ||
-        strCurStateTag == L"Attack_Lower" )
+        strCurStateTag == L"Attack_Lower")
         m_fStackedTime = 0.f;
 
     // 이동 관련 상태가 Idle 일 때만 커서 위치 갱신
@@ -485,7 +499,7 @@ void CPlayer::Update(_float fTimeDelta)
         m_vCursorDir = _float3{ vRayPoint.x, playerPos.y, vRayPoint.z } - playerPos;
         D3DXVec3Normalize(&m_vCursorDir, &m_vCursorDir);
     }
-        
+
 
 
     m_pGameInstance->Compute_TimeDelta(m_strTimerTag);
@@ -501,7 +515,7 @@ void CPlayer::Update(_float fTimeDelta)
 void CPlayer::Late_Update(_float fTimeDelta)
 {
     m_pGameInstance->Add_RenderGroup(RENDERGROUP::RG_BLEND, this);
-    
+
 }
 
 HRESULT CPlayer::Render()
@@ -536,16 +550,16 @@ HRESULT CPlayer::Render()
     m_pAnimatorTransCom->Update_State(); // 단순 이동관련 상태만 체크할 애니메이터
 
     m_pVIBufferCom->Bind_Buffers();
-    
+
     m_pVIBufferCom->Render();
-    if(m_isFlippedX)
+    if (m_isFlippedX)
     {
         m_pVIBufferCom->ResetUV_FlipX();
         m_isFlippedX = false;
     }
 
     Reset_RenderState();
-	return S_OK;
+    return S_OK;
 }
 
 void CPlayer::Change_TerrainBox(CTerrainBox* pTerrainBox, _int iIndex)
@@ -567,7 +581,7 @@ void CPlayer::OnCollision(CGameObject* pGameObject)
 
             m_pTransformCom->Set_State(STATE::POSITION, vPos);
         }
-        
+
         break;
     }
     case GAMEOBJ_TYPE::END_POTAL:
@@ -592,11 +606,11 @@ void CPlayer::OnCollision(CGameObject* pGameObject)
             if (CurrentLevel == ENUM_CLASS(LEVEL::LEVEL_TOWN))  //타운일 때 스테이지1로 이동
                 m_pGameInstance->Open_Level(static_cast<_uint>(LEVEL::LEVEL_LOADING), CLevel_Loading::Create(m_pGraphic_Device, LEVEL::LEVEL_STAGE1));
             else if (CurrentLevel == ENUM_CLASS(LEVEL::LEVEL_BOSS1)) // 보스1일 때 쉼터로 이동
-                m_pGameInstance->Open_Level(static_cast<_uint>(LEVEL::LEVEL_LOADING), CLevel_Loading::Create(m_pGraphic_Device, LEVEL::LEVEL_SHELTER)); 
+                m_pGameInstance->Open_Level(static_cast<_uint>(LEVEL::LEVEL_LOADING), CLevel_Loading::Create(m_pGraphic_Device, LEVEL::LEVEL_SHELTER));
             else if (CurrentLevel == ENUM_CLASS(LEVEL::LEVEL_SHELTER)) // 쉼터일 때 보스2로 이동
                 m_pGameInstance->Open_Level(static_cast<_uint>(LEVEL::LEVEL_LOADING), CLevel_Loading::Create(m_pGraphic_Device, LEVEL::LEVEL_BOSS2));
-            
-                /* }*/
+
+            /* }*/
         }
         break;
     }
@@ -625,7 +639,7 @@ void CPlayer::OnCollision(CGameObject* pGameObject)
 
         D3DXVec3Normalize(&vPushDir, &vPushDir);
 
-        const _float fMinDistance = 2.0f; 
+        const _float fMinDistance = 2.0f;
         _float fOverlap = fMinDistance - fDist;
 
         if (fOverlap > 0.f)
@@ -658,8 +672,8 @@ void CPlayer::OnCollision(CGameObject* pGameObject)
             m_pTransformCom->Set_State(STATE::POSITION, vResult);
         }
         break;
-    }  
-        
+    }
+
     }
 }
 
@@ -775,7 +789,7 @@ HRESULT CPlayer::Ready_Components(void* pArg)
         return E_FAIL;
 
     _float3 vPlayerPos = m_pTransformCom->Get_State(STATE::POSITION);
-    m_pTransformCom->Set_State(STATE::POSITION, vPlayerPos + _float3{0, 0.5, 0});
+    m_pTransformCom->Set_State(STATE::POSITION, vPlayerPos + _float3{ 0, 0.5, 0 });
     m_pTransformCom->Scaling(float(18) / 19, 1, 1);
 
 
@@ -792,27 +806,27 @@ HRESULT CPlayer::Ready_Components(void* pArg)
     // 요소 삽입 : m_pAnimatorCom->Add_State(L"태그명", { m_pTextureCom_상태명, 프레임단위 이미지전환간격, 도중 나갈수있는지});
     // 애니메이션 찾기 :  m_pGameInstance->Find_Animation(L"태그명");
     // 애니메이션은 Level_GamePlay.cpp 에서 Create 함.
-    
-    m_pAnimatorCom->Add_State(L"Roll",              { m_pTextureCom_Roll, 3, true });
-    m_pAnimatorCom->Add_State(L"Air",               { m_pTextureCom_Air, 4, true });
-    m_pAnimatorCom->Add_State(L"Down",              { m_pTextureCom_Down, 4, true });
-    m_pAnimatorCom->Add_State(L"Idle_Lower",        { m_pTextureCom_Idle_Lower, 4, true, m_pGameInstance->Find_Animation(L"Player_Idle") });
-    m_pAnimatorCom->Add_State(L"Idle_Upper",        { m_pTextureCom_Idle_Upper, 4, true, m_pGameInstance->Find_Animation(L"Player_Idle") });
+
+    m_pAnimatorCom->Add_State(L"Roll", { m_pTextureCom_Roll, 3, true });
+    m_pAnimatorCom->Add_State(L"Air", { m_pTextureCom_Air, 4, true });
+    m_pAnimatorCom->Add_State(L"Down", { m_pTextureCom_Down, 4, true });
+    m_pAnimatorCom->Add_State(L"Idle_Lower", { m_pTextureCom_Idle_Lower, 4, true, m_pGameInstance->Find_Animation(L"Player_Idle") });
+    m_pAnimatorCom->Add_State(L"Idle_Upper", { m_pTextureCom_Idle_Upper, 4, true, m_pGameInstance->Find_Animation(L"Player_Idle") });
     //m_pAnimatorCom->Add_State(L"Idle_Lower_Damaged",{ m_pTextureCom_Idle_Lower, 4, false });
     //m_pAnimatorCom->Add_State(L"Idle_Upper_Damaged",{ m_pTextureCom_Idle_Upper, 4, false });
-    m_pAnimatorCom->Add_State(L"Move_Lower",        { m_pTextureCom_Move_Lower, 4, true });
-    m_pAnimatorCom->Add_State(L"Move_Upper",        { m_pTextureCom_Move_Upper, 4, true });
-    m_pAnimatorCom->Add_State(L"Attack_Lower",      { m_pTextureCom_Attack_Lower, 3, false, m_pGameInstance->Find_Animation(L"Player_Attack") });
-    m_pAnimatorCom->Add_State(L"Attack_Upper",      { m_pTextureCom_Attack_Upper, 3, false, m_pGameInstance->Find_Animation(L"Player_Attack") });
-    m_pAnimatorCom->Add_State(L"Attack_Lower2",     { m_pTextureCom_Attack_Lower, 3, false, m_pGameInstance->Find_Animation(L"Player_Attack2") });
-    m_pAnimatorCom->Add_State(L"Attack_Upper2",     { m_pTextureCom_Attack_Upper, 3, false, m_pGameInstance->Find_Animation(L"Player_Attack2") });
-    m_pAnimatorCom->Add_State(L"GreatSwordHeavyAttack_Lower", { m_pTextureCom_GreatSwordHeavyAttack_Lower, 4, false});
-    m_pAnimatorCom->Add_State(L"GreatSwordHeavyAttack_Upper", { m_pTextureCom_GreatSwordHeavyAttack_Upper, 4, false});
-    m_pAnimatorCom->Add_State(L"WhirlWind_Ready",   { m_pTextureCom_WhirlWind_Ready, 4, false });
-    m_pAnimatorCom->Add_State(L"WhirlWind_Cycle",   { m_pTextureCom_WhirlWind_Cycle, 4, false });
-    m_pAnimatorCom->Add_State(L"Parry",             { m_pTextureCom_Roll, 3, false, m_pGameInstance->Find_Animation(L"Player_Parry") });
-    m_pAnimatorCom->Add_State(L"Fury_Lower",        { m_pTextureCom_Attack_Lower, 6, false, m_pGameInstance->Find_Animation(L"Player_Fury") });
-    m_pAnimatorCom->Add_State(L"Fury_Upper",        { m_pTextureCom_Attack_Upper, 6, false, m_pGameInstance->Find_Animation(L"Player_Fury") });
+    m_pAnimatorCom->Add_State(L"Move_Lower", { m_pTextureCom_Move_Lower, 4, true });
+    m_pAnimatorCom->Add_State(L"Move_Upper", { m_pTextureCom_Move_Upper, 4, true });
+    m_pAnimatorCom->Add_State(L"Attack_Lower", { m_pTextureCom_Attack_Lower, 3, false, m_pGameInstance->Find_Animation(L"Player_Attack") });
+    m_pAnimatorCom->Add_State(L"Attack_Upper", { m_pTextureCom_Attack_Upper, 3, false, m_pGameInstance->Find_Animation(L"Player_Attack") });
+    m_pAnimatorCom->Add_State(L"Attack_Lower2", { m_pTextureCom_Attack_Lower, 3, false, m_pGameInstance->Find_Animation(L"Player_Attack2") });
+    m_pAnimatorCom->Add_State(L"Attack_Upper2", { m_pTextureCom_Attack_Upper, 3, false, m_pGameInstance->Find_Animation(L"Player_Attack2") });
+    m_pAnimatorCom->Add_State(L"GreatSwordHeavyAttack_Lower", { m_pTextureCom_GreatSwordHeavyAttack_Lower, 4, false });
+    m_pAnimatorCom->Add_State(L"GreatSwordHeavyAttack_Upper", { m_pTextureCom_GreatSwordHeavyAttack_Upper, 4, false });
+    m_pAnimatorCom->Add_State(L"WhirlWind_Ready", { m_pTextureCom_WhirlWind_Ready, 4, false });
+    m_pAnimatorCom->Add_State(L"WhirlWind_Cycle", { m_pTextureCom_WhirlWind_Cycle, 4, false });
+    m_pAnimatorCom->Add_State(L"Parry", { m_pTextureCom_Roll, 3, false, m_pGameInstance->Find_Animation(L"Player_Parry") });
+    m_pAnimatorCom->Add_State(L"Fury_Lower", { m_pTextureCom_Attack_Lower, 6, false, m_pGameInstance->Find_Animation(L"Player_Fury") });
+    m_pAnimatorCom->Add_State(L"Fury_Upper", { m_pTextureCom_Attack_Upper, 6, false, m_pGameInstance->Find_Animation(L"Player_Fury") });
 
     /* For Com_Animator (이동 관련) */
     CAnimator::ANIMSTATE_DESC StartAnimStateDesc2{};
@@ -823,13 +837,13 @@ HRESULT CPlayer::Ready_Components(void* pArg)
     if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Animator"),
         TEXT("Com_Animator_Dash"), reinterpret_cast<CComponent**>(&m_pAnimatorTransCom), &StartAnimStateDesc2)))
         return E_FAIL;
-    
-    m_pAnimatorTransCom->Add_State(L"Idle",         { nullptr, 1, true });
-    m_pAnimatorTransCom->Add_State(L"Dash",         { nullptr, 10, false });
-    m_pAnimatorTransCom->Add_State(L"Attack",       { nullptr, 4, false });
-    m_pAnimatorTransCom->Add_State(L"Parry",        { nullptr, 18, false });
-    m_pAnimatorTransCom->Add_State(L"Fury",         { nullptr, 18, false });
-    
+
+    m_pAnimatorTransCom->Add_State(L"Idle", { nullptr, 1, true });
+    m_pAnimatorTransCom->Add_State(L"Dash", { nullptr, 10, false });
+    m_pAnimatorTransCom->Add_State(L"Attack", { nullptr, 4, false });
+    m_pAnimatorTransCom->Add_State(L"Parry", { nullptr, 18, false });
+    m_pAnimatorTransCom->Add_State(L"Fury", { nullptr, 18, false });
+
     // collider
     CCollider_OBB::OBB_DESC tColliderDesc;
     tColliderDesc.vScale = _float3(0.7f, 0.5f, 0.7f);
@@ -844,7 +858,31 @@ HRESULT CPlayer::Ready_Components(void* pArg)
 HRESULT CPlayer::Ready_Object()
 {
     //m_pHpBar = dynamic_cast<CField_Hp*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_Field_Hp")));
+   
+    CField_Npc_Chat::FIELD_CHAT_DESC ChatDesc{};
 
+    _wstring szTag = TEXT("Test_Chat");
+
+    //NPC 트랜스폼
+    ChatDesc.pTransform = m_pTransformCom;
+    //채팅 UI 태그
+    ChatDesc.szChatTag = szTag;
+    //NPC 현재 레벨 넣어주면 됩니다.
+    ChatDesc.m_iLevel = ENUM_CLASS(LEVEL::LEVEL_TOWN);
+    //NPC 머리 위로 얼만큼 띄울거지 음수 값 넣어주면 됩니다.
+    ChatDesc.fY = -100;
+    //생성
+    if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_TOWN), TEXT("Layer_UI_Chat"),
+        ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_Field_Npc_Chat"), &ChatDesc)))
+        return E_FAIL;
+
+    //멤버 변수의 채팅 클래스 주소 연결(만든 레벨, UI 태그)
+    m_pChat = static_cast<CField_Npc_Chat*>(m_pGameInstance->Find_UIObj(ENUM_CLASS(LEVEL::LEVEL_TOWN), TEXT("Test_Chat")));
+
+    m_pChat->Add_Chat(TEXT("일이삼사오육칠팔구십일이"));
+    m_pChat->Add_Chat(TEXT("안녕하세요2"));
+    m_pChat->Add_Chat(TEXT("안녕하세요3"));
+    m_pChat->Add_Chat(TEXT("안녕하세요4"));
     return S_OK;
 }
 
@@ -859,6 +897,56 @@ HRESULT CPlayer::Render_Font(_int iDamage)
     if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(m_pGameInstance->Get_CurrentLevel(), TEXT("Layer_Field_Font"),
         ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_Field_Font"), &Desc)))
         return E_FAIL;
+}
+
+HRESULT CPlayer::Render_Font_Parry()
+{
+    CField_Font::FIELD_FONT_DESC Desc = {};
+
+    Desc.eType = CField_Font::FIELD_FONT_TYPE::PARING;
+    //Desc.iValue = iDamage;                                           //넣을 수치 값
+    Desc.pTransform = m_pTransformCom;                          //현재 객체 트랜스폼
+
+    if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(m_pGameInstance->Get_CurrentLevel(), TEXT("Layer_Field_Font"),
+        ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_Field_Font"), &Desc)))
+        return E_FAIL;
+}
+
+void CPlayer::Ready_Parry()
+{
+    // [Parry 이동]
+    if (!m_isReadyFury) {
+        if (m_pAnimatorTransCom->Get_CurStateTag() == L"Parry")
+        {
+            if (m_pAnimatorCom->Get_CurStackedFrame() >= 8)
+            {
+                m_fGodModeTime = 0.f;
+                Render_Font_Parry();
+                _float3 playerPos = m_pTransformCom->Get_State(STATE::POSITION);
+                playerPos += m_vCursorDir * 0.01f * 15.f * (-1 * cosf(0.4f * m_pAnimatorCom->Get_CurStackedFrame() - 0.7) + 1);        // 커서 방향으로 이동
+                m_pTransformCom->Set_State(STATE::POSITION, playerPos);
+                // 무적 설정...
+                // 무적 바꿔야함 패리 순간만 무적임
+                m_bIsHit = true;
+                // 공격 막는 데에 성공 시 Fury_Ready로 넘어갈 준비
+                if (!CStat_Manager::GetInstance()->Get_UIOpen()) {
+                    m_isReadyFury = true;
+                    CStat_Manager::GetInstance()->Set_Stats(STAT_INFO::FURYREADY, true);
+                }
+
+            }
+        }
+    }
+    
+
+}
+
+_bool CPlayer::Get_IsGodMode()
+{
+    if (m_fGodModeTime <= 31)
+        return true;
+
+    return false;
 }
 
 void CPlayer::SetUp_RenderState()
@@ -940,8 +1028,6 @@ void CPlayer::Free()
     Safe_Release(m_pAnimatorCom);
     Safe_Release(m_pAnimatorTransCom);
     Safe_Release(m_pTerrainBox);
-    
-    //Safe_Release(m_pHpBar);
     
     CEffect_Factory::GetInstance()->Free();
 

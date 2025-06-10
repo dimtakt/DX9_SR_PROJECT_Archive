@@ -4,6 +4,7 @@
 #include "TerrainBox.h"
 #include "EventListener.h"
 #include "Field_Hp.h"
+#include "Field_Npc_Chat.h"
 BEGIN(Engine)
 class CTexture;
 class CTransform;
@@ -83,9 +84,10 @@ private:
 	_float3					m_vCursorDir					= {};
 
 	_bool					m_isReadyFury					= false;
+	_float					m_fGodModeTime					= {};
 
 	//CField_Hp*				m_pHpBar						= { nullptr };
-
+	CField_Npc_Chat*		m_pChat							= { nullptr };
 	_bool					m_bIsHit						= { false };
 	_bool					m_bIsStun						= false;
 	DWORD					m_dwHitTime						= {};
@@ -96,9 +98,11 @@ private:
 	void SetUp_RenderState();
 	void Reset_RenderState();
 	HRESULT Render_Font(_int iDamage);					//필드 폰트 테스트용
+	HRESULT Render_Font_Parry();
 
 public:
-	
+	void Ready_Parry();
+	_bool Get_IsGodMode();
 
 public:
 	static CPlayer* Create(LPDIRECT3DDEVICE9 pGraphic_Device);

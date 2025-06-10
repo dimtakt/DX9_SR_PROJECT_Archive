@@ -50,6 +50,7 @@ void CTitle_Tree::Update(_float fTimeDelta)
     if (m_pAnimatorCom->Get_IsLastFrame() && m_pAnimatorCom->Get_CurStateTag() == TEXT("Title_TreeBegin"))
     {
         m_pAnimatorCom->Change_State(TEXT("Title_Tree"));
+        //m_pGameInstance->PlaySoundW(L"title.wav", ENUM_CLASS(CHANNELID::SOUND_OBJECT), 0.5f);
         //m_pParent->
     }
         
