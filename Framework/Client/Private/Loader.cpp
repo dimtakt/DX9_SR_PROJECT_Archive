@@ -1352,6 +1352,10 @@ HRESULT CLoader::Loading_For_Boss1_Level()
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_BOSS1), TEXT("Prototype_Component_Boss_Askard_BigRoot_Root_EyeOpen0"),
 		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Boss/Askard/Effect/BigRoot/BigRoot_Root_EyeOpen%02d_0.png"), 3))))
 		return E_FAIL;
+	// Root_EyeOpened (1) - Custom
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_BOSS1), TEXT("Prototype_Component_Boss_Askard_BigRoot_Root_EyeOpened"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Boss/Askard/Effect/BigRoot/BigRoot_Root_EyeOpen02.png"), 1))))
+		return E_FAIL;
 	// Root_FX_Explosion (8)
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_BOSS1), TEXT("Prototype_Component_Boss_Askard_BigRoot_Root_FX_Explosion"),
 		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Boss/Askard/Effect/BigRoot/BigRoot_Root_FX_Explosion%02d.png"), 8))))
