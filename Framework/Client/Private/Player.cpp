@@ -12,6 +12,7 @@
 #include "Level_Loading.h"
 #include "Client_Defines_Event.h"
 #include "Field_Item.h"
+#include "GoldLeaf.h"
 
 CPlayer::CPlayer(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CGameObject{ pGraphic_Device }
@@ -706,6 +707,18 @@ void CPlayer::OnCollision(CGameObject* pGameObject)
             if(m_pGameInstance->IsKeyDown('F'))
                 dynamic_cast<CField_Item*>(pGameObject)->Buy_Item();
         }
+        break;
+    }
+
+    case GAMEOBJ_TYPE::GOLDLEAF:
+    {
+        CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::GOLD, dynamic_cast<CGoldLeaf*>(pGameObject)->Get_Gold());
+        /*ACTIONEVENT desc{};
+        desc.strActionName = TEXT("GET_GOLD");
+        m_pGameInstance->Broadcast(ENUM_CLASS(EVENT_TYPE::GOLD), &desc);*/
+        pGameObject->Set_IsDead(TRUE);
+        m_pGameInstance->StopSound(ENUM_CLASS(CHANNELID::SOUND_EFFECT));
+        m_pGameInstance->PlaySoundW(L"goldCollect.wav", ENUM_CLASS(CHANNELID::SOUND_EFFECT), g_fEFFECTVolume - 0.6f);
         break;
     }
 

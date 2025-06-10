@@ -807,4 +807,10 @@ void CInteraction_Normal::Free()
     Safe_Release(m_pTextureCom_0);
     Safe_Release(m_pTextureCom_1);
     Safe_Release(m_pAnimatorCom_0);   
+
+    for (auto& Item : m_vShopItem)
+    {
+        Safe_Release(Item);
+    }
+    m_vShopItem.clear();
 }

@@ -427,6 +427,9 @@
     <Filter Include="02.GameObject\Object\Fire">
       <UniqueIdentifier>{b5b251be-c460-488e-8190-35995c8cb7c8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\Object\GoldLeaf">
+      <UniqueIdentifier>{77647d0a-dca7-4945-86f3-9f1009808dfe}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -936,6 +939,9 @@
     <ClInclude Include="..\Public\Fire.h">
       <Filter>02.GameObject\Object\Fire</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\GoldLeaf.h">
+      <Filter>02.GameObject\Object\GoldLeaf</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -1406,6 +1412,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\Fire.cpp">
       <Filter>02.GameObject\Object\Fire</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\GoldLeaf.cpp">
+      <Filter>02.GameObject\Object\GoldLeaf</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

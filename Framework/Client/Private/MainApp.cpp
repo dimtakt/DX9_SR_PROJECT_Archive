@@ -46,6 +46,7 @@
 #include "Field_Item.h"
 #include "Field_Npc_Chat.h"
 #include "Field_Npc_Face.h"
+#include "GoldLeaf.h"
 CMainApp::CMainApp()
 	: m_pGameInstance{ CGameInstance::GetInstance() }
 {
@@ -253,7 +254,7 @@ HRESULT CMainApp::Ready_GameObject_Setting()
 		return E_FAIL;
 #pragma endregion
 	
-#pragma region Prototype_GameObject_Loding_EXP_Ball
+#pragma region Prototype_GameObject_EXP_Ball
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_EXP_Ball"),
 		CEXP_Ball::Create(m_pGraphic_Device))))
 		return E_FAIL;
@@ -294,6 +295,12 @@ HRESULT CMainApp::Ready_GameObject_Setting()
 #pragma region Prototype_GameObject_FogPlane
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_FogPlane"),
 		CFogPlane::Create(m_pGraphic_Device))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region Prototype_GameObject_GoldLeaf
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_GoldLeaf"),
+		CGoldLeaf::Create(m_pGraphic_Device))))
 		return E_FAIL;
 #pragma endregion
 
@@ -763,6 +770,9 @@ HRESULT CMainApp::Ready_Texture_Setting()
 #pragma region Prototype_Component_Gold
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Gold"),
 		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/InteractionObject/Gold/Gold%d.png"), 1))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_GoldLeaf"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/InteractionObject/Gold/GoldLeaf.png"), 1))))
 		return E_FAIL;
 #pragma endregion
 
