@@ -36,7 +36,8 @@ HRESULT CLevel_Shelter::Initialize()
 	if (FAILED(Ready_Layer_UI(TEXT("Layer_UI"))))
 		return E_FAIL;
 
-
+	m_pGameInstance->StopAll();
+	m_pGameInstance->PlayBGM(L"mainTheme02.wav", g_fBGMVolume - 0.9f);
 	return S_OK;
 }
 

@@ -153,6 +153,8 @@ void CGacha_Slot::Item_Selete()
 {
 	if(Check_Key_Down(g_hWnd, VK_LBUTTON) && m_pSlotItem != nullptr)
 	{
+		m_pGameInstance->StopSound(ENUM_CLASS(CHANNELID::SOUND_UI));
+		m_pGameInstance->PlaySoundW(L"sephiriteSelect.wav", ENUM_CLASS(CHANNELID::SOUND_UI), g_fUIVolume - 0.6f);
 		m_pGameInstance->Pick_ItemSlot(m_pSlotItem, this, 1, 2);
 		m_bIsPick = true;
 	}

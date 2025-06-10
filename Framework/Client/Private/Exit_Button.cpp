@@ -53,6 +53,7 @@ void CExit_Button::Update(_float fTimeDelta)
         m_FontColor = { 1.f, 1.f, 0.2f, 1.f };
         if (m_pGameInstance->IsKeyDown(VK_LBUTTON))
         {
+            m_pGameInstance->PlaySoundW(L"sephiriteSelect.wav", ENUM_CLASS(CHANNELID::SOUND_EFFECT), g_fEFFECTVolume - 0.9f);
             PostQuitMessage(0);
         }
     }

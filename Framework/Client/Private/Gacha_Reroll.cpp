@@ -55,6 +55,8 @@ void CGacha_Reroll::Update(_float fTimeDelta)
 {
 	if (Button_Pick() && m_pGameInstance->IsKeyDown(VK_LBUTTON) && CStat_Manager::GetInstance()->Get_CurStats()[ENUM_CLASS(STAT_INFO::DICE)] > 0)
 	{
+		m_pGameInstance->StopSound(ENUM_CLASS(CHANNELID::SOUND_UI));
+		m_pGameInstance->PlaySoundW(L"reroll.wav", ENUM_CLASS(CHANNELID::SOUND_UI), g_fUIVolume - 0.8);
 		static_cast<CGacha*>(m_pParent)->Rand_Item_Set();
 		CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::DICE, -1);
 	}

@@ -14,6 +14,10 @@
 // 전역 변수:
 HWND g_hWnd;
 HCURSOR g_hCursor;
+float g_fBGMVolume = 1.f;
+float g_fEFFECTVolume = 1.f;
+float g_fWALKVolume = 1.f;
+float g_fUIVolume = 1.f;
 HINSTANCE hInst;                                // 현재 인스턴스입니다.
 short g_ScrollValue;
 

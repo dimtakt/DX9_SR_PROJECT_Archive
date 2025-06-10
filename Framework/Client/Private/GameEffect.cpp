@@ -343,6 +343,8 @@ void CGameEffect::OnCollision(CGameObject* pGameObject)
 			CMonster* pMonster = dynamic_cast<CMonster*>(pGameObject);
 			if (!pMonster->Get_IsHit())
 			{
+				m_pGameInstance->StopSound(ENUM_CLASS(CHANNELID::SOUND_PLAYER));
+				m_pGameInstance->PlaySoundW(L"hitSword02.wav", ENUM_CLASS(CHANNELID::SOUND_PLAYER), g_fEFFECTVolume - 0.6f);
 				//플레이어 공격 관련 이펙트
 				if (m_strEffectTag == TEXT("Prototype_Component_Texture_Effect_Blade0_Swing1"))
 				{
@@ -385,6 +387,8 @@ void CGameEffect::OnCollision(CGameObject* pGameObject)
 
 			if (!pPlayer->Get_IsHit()&& !pPlayer->Get_IsGodMode())
 			{
+				m_pGameInstance->StopSound(ENUM_CLASS(CHANNELID::SOUND_MONSTER));
+				m_pGameInstance->PlaySoundW(L"HitPlayer.wav", ENUM_CLASS(CHANNELID::SOUND_MONSTER), g_fEFFECTVolume - 0.8f);
 				if (m_strEffectTag == TEXT("Prototype_Component_Texture_LaserGhost_D_Effect_Laser_Progress"))
 				{
 					iDamage = CStat_Manager::GetInstance()->Get_Monster_Damage(20.f);

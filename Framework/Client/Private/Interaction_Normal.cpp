@@ -647,6 +647,8 @@ void CInteraction_Normal::OnCollision(CGameObject* pGameObject)
 
                 CStat_Manager::GetInstance()->Interaction_Obj_Stat(GAMEOBJ_TYPE::EXP);
                 m_pAnimatorCom_0->Change_State(TEXT("EXP_Fx"));
+                m_pGameInstance->StopSound(ENUM_CLASS(CHANNELID::SOUND_EFFECT));
+                m_pGameInstance->PlaySoundW(L"shineMagical.wav", ENUM_CLASS(CHANNELID::SOUND_EFFECT), g_fEFFECTVolume - 0.6f);
                 m_bActive = FALSE;
             }
         }
@@ -665,6 +667,8 @@ void CInteraction_Normal::OnCollision(CGameObject* pGameObject)
                 {
                     CStat_Manager::GetInstance()->Interaction_Obj_Stat(GAMEOBJ_TYPE::HP);
                     m_pAnimatorCom_0->Change_State(TEXT("Empty_HP"));
+                    m_pGameInstance->StopSound(ENUM_CLASS(CHANNELID::SOUND_EFFECT));
+                    m_pGameInstance->PlaySoundW(L"healPotion02.wav", ENUM_CLASS(CHANNELID::SOUND_EFFECT), g_fEFFECTVolume - 0.6f);
                     m_bActive = FALSE;
                 }
 
@@ -676,6 +680,8 @@ void CInteraction_Normal::OnCollision(CGameObject* pGameObject)
             {
                 if (m_pGameInstance->IsKeyDown('F'))
                 {   
+                    m_pGameInstance->StopSound(ENUM_CLASS(CHANNELID::SOUND_UI));
+                    m_pGameInstance->PlaySoundW(L"sephiriteOpen.wav", ENUM_CLASS(CHANNELID::SOUND_UI), g_fUIVolume - 0.7f);
                     dynamic_cast<CGacha*>(m_pGameInstance->Find_UIObj(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("UI_Gacha")))->UI_Open(CGacha::GACHA_TYPE::STONE);
                     //m_bActive = FALSE;
                     dynamic_cast<CGacha*>(m_pGameInstance->Find_UIObj(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("UI_Gacha")))->Get_Item_Check();
@@ -694,6 +700,8 @@ void CInteraction_Normal::OnCollision(CGameObject* pGameObject)
             {
                 if (m_pGameInstance->IsKeyDown('F'))
                 {
+                    m_pGameInstance->StopSound(ENUM_CLASS(CHANNELID::SOUND_UI));
+                    m_pGameInstance->PlaySoundW(L"sephiriteOpen.wav", ENUM_CLASS(CHANNELID::SOUND_UI), g_fUIVolume - 0.7f);
                     dynamic_cast<CGacha*>(m_pGameInstance->Find_UIObj(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("UI_Gacha")))->UI_Open(CGacha::GACHA_TYPE::ARTEFACT);
                     //m_bActive = FALSE;
                     dynamic_cast<CGacha*>(m_pGameInstance->Find_UIObj(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("UI_Gacha")))->Get_Item_Check();

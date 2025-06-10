@@ -37,6 +37,10 @@ HRESULT CLevel_Stage3::Initialize()
 	if (FAILED(Ready_Layer_UI(TEXT("Layer_UI"))))
 		return E_FAIL;
 
+	m_pGameInstance->StopAll();
+	m_pGameInstance->PlayBGM(L"placeDungeonLibrary_Field(Loop).wav", g_fBGMVolume - 0.9f);
+	//m_pGameInstance->PlayLoopSound(L"ambienceField2.wav", ENUM_CLASS(CHANNELID::SOUND_BACKGROUND), g_fBGMVolume - 0.8f);
+
 
 	return S_OK;
 }

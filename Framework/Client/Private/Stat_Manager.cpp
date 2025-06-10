@@ -94,6 +94,8 @@ void CStat_Manager::Cal_Stats(STAT_INFO eStat, float fValue)
             m_fCurStats[static_cast<int>(eStat)] -= 100.f;
             m_fCurStats[static_cast<int>(STAT_INFO::LEVEL)] += 1.f;
             m_fCurStats[static_cast<int>(STAT_INFO::LEVELUPPOINT)] += 1.f;
+            m_pGameInstance->StopSound(ENUM_CLASS(CHANNELID::SOUND_UI));
+            m_pGameInstance->PlaySoundW(L"spellHeal02.wav", ENUM_CLASS(CHANNELID::SOUND_UI), g_fUIVolume - 0.7f);
         }
     }
 }

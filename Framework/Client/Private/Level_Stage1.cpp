@@ -51,6 +51,10 @@ HRESULT CLevel_Stage1::Initialize()
 	//if (FAILED(Ready_Test(TEXT("Layer_Test"))))
 	//	return E_FAIL;
 
+	m_pGameInstance->StopAll();
+	m_pGameInstance->PlayBGM(L"moleField_Start.wav", g_fBGMVolume - 0.8f);
+	m_pGameInstance->PlayLoopSound(L"ambienceCave.wav", ENUM_CLASS(CHANNELID::SOUND_BACKGROUND), g_fBGMVolume - 0.9f);
+
 	return S_OK;
 }
 
