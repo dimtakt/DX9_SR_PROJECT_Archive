@@ -3,6 +3,7 @@
 #include "Stat_Manager.h"
 #include "Monster.h"
 #include "Player.h"
+#include "Erma.h"
 CGameEffect::CGameEffect(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CEffect(pGraphic_Device)
 {
@@ -341,6 +342,16 @@ void CGameEffect::OnCollision(CGameObject* pGameObject)
 		if (pGameObject->Get_ObjType() == GAMEOBJ_TYPE::MONSTER)
 		{
 			CMonster* pMonster = dynamic_cast<CMonster*>(pGameObject);
+			
+			if (pMonster->Get_MonsterType() == MONSTER_TYPE::ERMA)
+			{
+				CAnimator* pAni = dynamic_cast<CAnimator*>((dynamic_cast<CErma*>(pGameObject)->Find_Component(TEXT("Com_Animator"))));
+
+				if (pAni->Get_CurStateTag() == L"Idle" || pAni->Get_CurStateTag() == L"Move" || pAni->Get_CurStateTag() == L"AirBorne" ||
+					pAni->Get_CurStateTag() == L"Enter_Progress" || pAni->Get_CurStateTag() == L"Enter_End" || pAni->Get_CurStateTag() == L"Entered")
+					return;
+			}
+
 			if (!pMonster->Get_IsHit())
 			{
 				m_pGameInstance->StopSound(ENUM_CLASS(CHANNELID::SOUND_PLAYER));
