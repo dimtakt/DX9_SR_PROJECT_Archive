@@ -173,6 +173,18 @@ public:
 
 #pragma endregion
 
+#pragma region SOUND_MANAGER
+
+	void PlaySoundW(const TCHAR* pSoundKey, _uint SoundChannel, float fVolume);
+	void PlayLoopSound(const TCHAR* pSoundKey, _uint SoundChannel, float fVolume);
+	void PlayBGM(const TCHAR* pSoundKey, float fVolume);
+	void StopSound(_uint SoundChannel);
+	void StopAll();
+	void SetChannelVolume(_uint SoundChannel, float fVolume);
+	bool IsPlaying(_uint SoundChannel);
+
+#pragma endregion
+
 private:
 	class CGraphic_Device*		m_pGraphic_Device = { nullptr };
 	class CLevel_Manager*		m_pLevel_Manager = { nullptr };
@@ -190,6 +202,7 @@ private:
 	class CItem_Manager*		m_pItem_Manager = { nullptr };
 	class CEvent_Manager*		m_pEvent_Manager = { nullptr };
 	class CUIObject_Manager*	m_pUIObject_Manager = { nullptr };
+	class CSound_Manager*		m_pSound_Manager = { nullptr };
 public:
 	void Release_Engine();
 	virtual void Free() override;

@@ -9,10 +9,10 @@ CStat_Manager::CStat_Manager()
 
 HRESULT CStat_Manager::Initialize()
 {
-    m_fOriginStats[static_cast<int>(STAT_INFO::MAXHP)] = 200.f; // 최대 생명력
-    m_fOriginStats[static_cast<int>(STAT_INFO::CULHP)] = 200.f; // 현재 생명력
-    m_fOriginStats[static_cast<int>(STAT_INFO::MAXMP)] = 200.f; // 최대 마나
-    m_fOriginStats[static_cast<int>(STAT_INFO::CULMP)] = 200.f; // 현재 마나
+    m_fOriginStats[static_cast<int>(STAT_INFO::MAXHP)] = 100.f; // 최대 생명력
+    m_fOriginStats[static_cast<int>(STAT_INFO::CULHP)] = 100.f; // 현재 생명력
+    m_fOriginStats[static_cast<int>(STAT_INFO::MAXMP)] = 100.f; // 최대 마나
+    m_fOriginStats[static_cast<int>(STAT_INFO::CULMP)] = 100.f; // 현재 마나
     m_fOriginStats[static_cast<int>(STAT_INFO::CULDEF)] = 10.f; // 현재 방어력
     m_fOriginStats[static_cast<int>(STAT_INFO::CULDAMAGE)] = 20.f; // 현재 물리 피해
     m_fOriginStats[static_cast<int>(STAT_INFO::CULCRITICAL)] = 5.f; // 현재 치명타 확률
@@ -28,10 +28,10 @@ HRESULT CStat_Manager::Initialize()
     m_fOriginStats[static_cast<int>(STAT_INFO::DICE)] = 3.f; // 주사위
     m_fOriginStats[static_cast<int>(STAT_INFO::LEVELUPPOINT)] = 0.f; // 주사위
 
-    m_fCurStats[static_cast<int>(STAT_INFO::MAXHP)] = 200.f; // 최대 생명력
-    m_fCurStats[static_cast<int>(STAT_INFO::CULHP)] = 200.f; // 현재 생명력
-    m_fCurStats[static_cast<int>(STAT_INFO::MAXMP)] = 200.f; // 최대 마나
-    m_fCurStats[static_cast<int>(STAT_INFO::CULMP)] = 200.f; // 현재 마나
+    m_fCurStats[static_cast<int>(STAT_INFO::MAXHP)] = 100.f; // 최대 생명력
+    m_fCurStats[static_cast<int>(STAT_INFO::CULHP)] = 100.f; // 현재 생명력
+    m_fCurStats[static_cast<int>(STAT_INFO::MAXMP)] = 100.f; // 최대 마나
+    m_fCurStats[static_cast<int>(STAT_INFO::CULMP)] = 100.f; // 현재 마나
     m_fCurStats[static_cast<int>(STAT_INFO::CULDEF)] = 10.f; // 현재 방어력
     m_fCurStats[static_cast<int>(STAT_INFO::CULDAMAGE)] = 20.f; // 현재 물리 피해
     m_fCurStats[static_cast<int>(STAT_INFO::CULCRITICAL)] = 5.f; // 현재 치명타 확률
