@@ -274,6 +274,33 @@ void CGameEffect::Ready_Collision()
 			{
 				tColliderDesc.vScale = _float3(1.f, 1.f, 1.f);
 			}
+			// 에르마
+			else if (m_strEffectTag == TEXT("Prototype_Component_Boss_Erma_BigGolem_LaserStart"))
+			{
+				tColliderDesc.vScale = _float3(1.f, 1.f, 1.f);
+			}
+			else if (m_strEffectTag == TEXT("Prototype_Component_Boss_Erma_BigGolem_LaserProgress"))
+			{
+				tColliderDesc.vScale = _float3(1.f, 1.f, 1.f);
+			}
+			else if (m_strEffectTag == TEXT("Prototype_Component_Boss_Erma_BigGolem_Stmap_FX"))
+			{
+				tColliderDesc.vScale = _float3(0.5f, 1.f, 0.5f);
+			}
+
+			// 추후 처리필요 탄막 충돌체 가 안됨..
+			else if (m_strEffectTag == TEXT("Prototype_Component_Boss_Erma_Bullet"))
+			{
+				tColliderDesc.vScale = _float3(5.f, 10.f, 5.f);
+			}
+			else if (m_strEffectTag == TEXT("Prototype_Component_Boss_Erma_Missile_Lower"))
+			{
+				tColliderDesc.vScale = _float3(1.f, 1.f, 1.f);
+			}
+			else if (m_strEffectTag == TEXT("Prototype_Component_Boss_Erma_Missile_Lower_Light"))
+			{
+				tColliderDesc.vScale = _float3(1.f, 1.f, 1.f);
+			}
 		}
 
 		CCollider_OBB* pCol = dynamic_cast<CCollider_OBB*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::COMPONENT, ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Collider_OBB"), &tColliderDesc));
@@ -383,6 +410,36 @@ void CGameEffect::OnCollision(CGameObject* pGameObject)
 				else if (m_strEffectTag == TEXT("Prototype_Component_Texture_Oink_A_Effect_SpinSwing"))
 				{
 					iDamage = CStat_Manager::GetInstance()->Get_Monster_Damage(15.f);
+					CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CULHP, float(iDamage) * -1);
+				}
+				else if (m_strEffectTag == TEXT("Prototype_Component_Boss_Erma_BigGolem_LaserStart"))
+				{
+					iDamage = CStat_Manager::GetInstance()->Get_Monster_Damage(20.f);
+					CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CULHP, float(iDamage) * -1);
+				}
+				else if (m_strEffectTag == TEXT("Prototype_Component_Boss_Erma_BigGolem_LaserProgress"))
+				{
+					iDamage = CStat_Manager::GetInstance()->Get_Monster_Damage(20.f);
+					CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CULHP, float(iDamage) * -1);
+				}
+				else if (m_strEffectTag == TEXT("Prototype_Component_Boss_Erma_BigGolem_Stmap_FX"))
+				{
+					iDamage = CStat_Manager::GetInstance()->Get_Monster_Damage(15.f);
+					CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CULHP, float(iDamage) * -1);
+				}
+				else if (m_strEffectTag == TEXT("Prototype_Component_Boss_Erma_Bullet"))
+				{
+					iDamage = CStat_Manager::GetInstance()->Get_Monster_Damage(14.f);
+					CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CULHP, float(iDamage) * -1);
+				}
+				else if (m_strEffectTag == TEXT("Prototype_Component_Boss_Erma_Missile_Lower"))
+				{
+					iDamage = CStat_Manager::GetInstance()->Get_Monster_Damage(12.f);
+					CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CULHP, float(iDamage) * -1);
+				}
+				else if (m_strEffectTag == TEXT("Prototype_Component_Boss_Erma_Missile_Lower_Light"))
+				{
+					iDamage = CStat_Manager::GetInstance()->Get_Monster_Damage(13.f);
 					CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CULHP, float(iDamage) * -1);
 				}
 				pPlayer->Hit(iDamage);

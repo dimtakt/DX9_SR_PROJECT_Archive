@@ -8,6 +8,7 @@
 #include "Client_Struct.h"
 #include "Potal.h"
 #include "FogPlane.h"
+#include "Fire.h"
 
 BEGIN(Client)
 
@@ -39,6 +40,8 @@ public:
     HRESULT Ready_Potal(_uint iLayerLevelIndex, const _wstring& strLayerTag, _float3 vOffset, POTAL_TYPE eType);
     HRESULT Ready_Stage_Potal(_uint iLayerLevelIndex, const _wstring& strLayerTag, _float3 vOffset, POTAL_TYPE eType);
     CPotal* Find_Potal(POTAL_TYPE ePotal);
+    HRESULT On_Fire();
+    HRESULT Off_Fire();
 
 public:
     _bool GetIsActive() { return m_bIsActive; }
@@ -50,6 +53,8 @@ public:
     _int Get_RoomZ() { return m_iRoomZ; }
     void Set_RoomType(ROOM_INFO eType) { m_eRoomType = eType; }
     ROOM_INFO Get_RoomType() { return m_eRoomType; }
+    vector<CFire*> Get_FireList() { return m_vFire; }
+    
 
 public:
     void Add_TerrainBox(class CTerrainBox* pTerrainBox){m_pTerrainBox = pTerrainBox;}
@@ -68,8 +73,8 @@ protected:
     _bool m_bIsClear = false;
     CTerrainBox* m_pTerrainBox = { nullptr };
     //CFogPlane* m_pFogPlane = { nullptr };
-    // 맵툴 진행중이라 추후에 어떻게 처리할지 고민중
     vector<CGameObject*> m_vObject = {};
+    vector<CFire*> m_vFire = {};
     vector<CMonster*> m_vMonster = {};
     list<MAP_OBJECT_DESC> m_Object_Desc = {};
     vector<CPotal*> m_vPotal = {};

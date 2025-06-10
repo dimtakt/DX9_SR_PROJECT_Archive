@@ -305,6 +305,7 @@
     <ClInclude Include="..\Public\Title_Star.h" />
     <ClInclude Include="..\Public\Title_Logo_Wave.h" />
     <ClInclude Include="..\Public\Title_Tree.h" />
+    <ClInclude Include="..\Public\Fire.h" />
     <ClInclude Include="..\public\UI_KeyGuide.h" />
     <ClInclude Include="..\Public\Tree.h" />
     <ClInclude Include="Client.h" />
@@ -460,6 +461,7 @@
     <ClCompile Include="..\Private\Title_Star.cpp" />
     <ClCompile Include="..\Private\Title_Logo_Wave.cpp" />
     <ClCompile Include="..\Private\Title_Tree.cpp" />
+    <ClCompile Include="..\Private\Fire.cpp" />
     <ClCompile Include="..\Private\Tree.cpp" />
     <ClCompile Include="..\private\UI_KeyGuide.cpp" />
     <ClCompile Include="..\public\Animations\Anim_Player_Fury.cpp" />

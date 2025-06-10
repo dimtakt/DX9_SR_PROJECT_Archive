@@ -87,6 +87,8 @@ private:
 	_float3 m_TrrainTranslate = { 0.f, 0.f, 0.f };	//지형 전용
 	_float3 m_TrrainScales = { 20.f, 2.f, 20.f };
 
+	_int m_iLightIndex = 0;					// 조명 들어가는 객체 생성시 ++ 해줘서 텍스처값으로 넘길예정, 초기화 필수
+
 	map<string, OBJECT_TEXTURE_INFO>			m_ObjectTextureInfo = {};			//이미지뷰 띄우기, string "Object", "TerrainBox"
 	CGameObject*								m_pPreview = nullptr;				//텍스처 가져오고자 만든 임시변수
 	CTransform*									m_pObjectTransform = nullptr;		// 하나의 오브젝트 선택되면 트랜스폼 설정하고자 함
