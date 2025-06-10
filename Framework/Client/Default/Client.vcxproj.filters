@@ -412,6 +412,9 @@
     <Filter Include="02.GameObject\UI\HUD\HUD_Quick_Slot">
       <UniqueIdentifier>{f4e2f595-60e0-46f3-85f1-e781f081c5de}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\Object\Fire">
+      <UniqueIdentifier>{b5b251be-c460-488e-8190-35995c8cb7c8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -900,6 +903,9 @@
     <ClInclude Include="..\public\Hud_Quick_Slot.h">
       <Filter>02.GameObject\UI\HUD\HUD_Quick_Slot</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Fire.h">
+      <Filter>02.GameObject\Object\Fire</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -1349,6 +1355,9 @@
     </ClCompile>
     <ClCompile Include="..\private\Hud_Quick_Slot.cpp">
       <Filter>02.GameObject\UI\HUD\HUD_Quick_Slot</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Fire.cpp">
+      <Filter>02.GameObject\Object\Fire</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

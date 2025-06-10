@@ -41,6 +41,20 @@ void CRoom::Priority_Update(_float fTimeDelta)
 			else if (m_pTerrainBox == nullptr || m_pTerrainBox->Get_IsDead())
 				Safe_Release(m_pTerrainBox);
 
+			for (auto it = m_vFire.begin(); it != m_vFire.end();)
+			{
+				if ((*it) == nullptr || (*it)->Get_IsDead())
+				{
+					Safe_Release(*it);
+					it = m_vFire.erase(it);
+				}
+				else
+				{
+					(*it)->Priority_Update(fTimeDelta);
+					++it;
+				}
+			}
+
 			for (auto it = m_vObject.begin(); it != m_vObject.end(); ) {
 				if ((*it) == nullptr || (*it)->Get_IsDead()) {
 					Safe_Release(*it);
@@ -75,6 +89,20 @@ void CRoom::Update(_float fTimeDelta)
 				m_pTerrainBox->Update(fTimeDelta);
 			else if (m_pTerrainBox == nullptr || m_pTerrainBox->Get_IsDead())
 				Safe_Release(m_pTerrainBox);
+
+			for (auto it = m_vFire.begin(); it != m_vFire.end();)
+			{
+				if ((*it) == nullptr || (*it)->Get_IsDead())
+				{
+					Safe_Release(*it);
+					it = m_vFire.erase(it);
+				}
+				else
+				{
+					(*it)->Update(fTimeDelta);
+					++it;
+				}
+			}
 
 			for (auto it = m_vObject.begin(); it != m_vObject.end(); ) {
 				if ((*it) == nullptr || (*it)->Get_IsDead()) {
@@ -161,6 +189,20 @@ void CRoom::Late_Update(_float fTimeDelta)
 		}
 		if (m_bIsActive)
 		{
+			for (auto it = m_vFire.begin(); it != m_vFire.end();)
+			{
+				if ((*it) == nullptr || (*it)->Get_IsDead())
+				{
+					Safe_Release(*it);
+					it = m_vFire.erase(it);
+				}
+				else
+				{
+					(*it)->Late_Update(fTimeDelta);
+					++it;
+				}
+			}
+
 			for (auto it = m_vMonster.begin(); it != m_vMonster.end(); ) {
 				if ((*it) == nullptr || (*it)->Get_IsDead()) { 
 					Safe_Release(*it);
@@ -179,6 +221,8 @@ void CRoom::Late_Update(_float fTimeDelta)
 
 HRESULT CRoom::Render()
 {
+
+
 	if (m_bIsVisited)
 	{
 		if (m_pTerrainBox != nullptr)
@@ -198,6 +242,9 @@ HRESULT CRoom::Render()
 		}
 	}
 
+	m_pGraphic_Device->SetRenderState(D3DRS_LIGHTING, TRUE);
+
+
 	if (m_bIsActive)
 	{
 		for (auto it = m_vMonster.begin(); it != m_vMonster.end(); ) {
@@ -211,6 +258,26 @@ HRESULT CRoom::Render()
 			}
 		}
 	}
+	
+	m_pGraphic_Device->SetRenderState(D3DRS_LIGHTING, FALSE);
+
+	if (m_bIsActive)
+	{
+		for (auto it = m_vFire.begin(); it != m_vFire.end();)
+		{
+			if ((*it) == nullptr || (*it)->Get_IsDead())
+			{
+				Safe_Release(*it);
+				it = m_vFire.erase(it);
+			}
+			else
+			{
+				m_pGraphic_Device->LightEnable((*it)->Get_LightIndex(), FALSE);
+				++it;
+			}
+		}
+	}
+
 	return S_OK;
 }
 
@@ -277,6 +344,48 @@ CPotal* CRoom::Find_Potal(POTAL_TYPE ePotal)
 			return pPotal;
 	}
 	return nullptr;
+}
+
+HRESULT CRoom::On_Fire()
+{
+	if (m_bIsActive)
+	{
+		for (auto it = m_vFire.begin(); it != m_vFire.end();)
+		{
+			m_pGraphic_Device->SetLight((*it)->Get_LightIndex(), (*it)->Get_Lihgt());
+			m_pGraphic_Device->LightEnable((*it)->Get_LightIndex(), TRUE);
+			(*it)->Render();
+			++it;
+		}
+	}
+
+	m_pGraphic_Device->SetRenderState(D3DRS_LIGHTING, TRUE);
+
+	return S_OK;
+}
+
+HRESULT CRoom::Off_Fire()
+{
+	m_pGraphic_Device->SetRenderState(D3DRS_LIGHTING, FALSE);
+
+	if (m_bIsActive)
+	{
+		for (auto it = m_vFire.begin(); it != m_vFire.end();)
+		{
+			if ((*it) == nullptr || (*it)->Get_IsDead())
+			{
+				Safe_Release(*it);
+				it = m_vFire.erase(it);
+			}
+			else
+			{
+				m_pGraphic_Device->LightEnable((*it)->Get_LightIndex(), FALSE);
+				++it;
+			}
+		}
+	}
+
+	return S_OK;
 }
 
 HRESULT CRoom::Load_From_File(_uint iLayerLevelIndex, const _wstring& strLayerTag, const _tchar* pLoadFileTag, _int iIndex, _int RoomX , _int RoomZ, ROOM_INFO Event)
@@ -389,6 +498,18 @@ HRESULT CRoom::Load_From_File(_uint iLayerLevelIndex, const _wstring& strLayerTa
 			}
 				
 			MonsterDescList.push_back(tDesc);
+		}
+		else if (pDesc.eType == GAMEOBJ_TYPE::FIRE)
+		{
+			MAP_OBJECT_DESC tSrc{};
+			tSrc.eType = pDesc.eType;
+			tSrc.iTextureIndex = pDesc.iTextureIndex;
+			tSrc.vPos = pDesc.vPos;
+			tSrc.vScale = pDesc.vScale;
+			tSrc.vRotate = pDesc.vRotate;
+
+			CFire* pFire = dynamic_cast<CFire*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, iLayerLevelIndex, TEXT("Prototype_GameObject_Fire"), &tSrc));
+			m_vFire.push_back(pFire);
 		}
 		else 
 		{
