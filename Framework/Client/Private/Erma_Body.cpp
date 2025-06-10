@@ -41,7 +41,9 @@ HRESULT CErma_Body::Initialize(void* pArg)
     // 크기 조정
     m_pTransformCom->Scaling(9.f, 4.5f, 4.5f);
 
-    PlayPattern(PATTERN_BODY::PT_MISSILE_R);
+
+    // ksta : 테스트중.. 패턴 완성 후 삭제
+    //PlayPattern(PATTERN_BODY::PT_MISSILE_R);
 
 
 
@@ -52,8 +54,8 @@ HRESULT CErma_Body::Initialize(void* pArg)
     //Ready_Object();
 
     // 임시
-    m_iMaxHp = 500;
-    m_iCulHp = 500;
+    m_iMaxHp = 1000;
+    m_iCulHp = 1000;
 
     m_eMonsterType = MONSTER_TYPE::ERMA_BODY;
 
@@ -62,7 +64,21 @@ HRESULT CErma_Body::Initialize(void* pArg)
 
 void CErma_Body::Priority_Update(_float fTimeDelta)
 {
-    __super::Priority_Update(fTimeDelta);
+    //__super::Priority_Update(fTimeDelta);
+
+    if (m_bIsHit)
+    {
+        m_dwHitTime += 1.f;
+    }
+
+    if (m_dwHitTime >= 10.f)
+    {
+        m_dwHitTime = 0.f;
+        m_bIsHit = false;
+    }
+
+
+
     //if (m_pHpBar != nullptr &&
     //    m_isSummoned)
     //    m_pHpBar->Render_HP_Progress(m_pTransformCom, m_iCulHp, m_iMaxHp);
@@ -73,6 +89,8 @@ void CErma_Body::Priority_Update(_float fTimeDelta)
 
 void CErma_Body::Update(_float fTimeDelta)
 {
+    if (m_isAllStop)
+        return;
     // Update
     // 
 
@@ -216,13 +234,13 @@ void CErma_Body::Update(_float fTimeDelta)
                 {
                     _int iCount = (iCurPatternFrame - 80) / 5;  // 0 ~ 9
 
-                    CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::NORMAL_EFFECT, L"Prototype_Component_Boss_Erma_Missile_Lower",
+                    CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::MONSTER_EFFECT, L"Prototype_Component_Boss_Erma_Missile_Lower",
                         { vTerrainPos.x - 5 + iCount * 1.1f,
                         vTerrainPos.y + 5.f,
                         vTerrainPos.z + vTerrainScale.z / 2 - 2.8f * (1 + iCount) },
                         {0, 0, 0, 1},
                         { 5.f, 10.f, 5.f });
-                    CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::NORMAL_EFFECT, L"Prototype_Component_Boss_Erma_Missile_Lower_Light",
+                    CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::MONSTER_EFFECT, L"Prototype_Component_Boss_Erma_Missile_Lower_Light",
                         { vTerrainPos.x - 5 + iCount * 1.1f,
                         vTerrainPos.y + 5.f,
                         vTerrainPos.z + vTerrainScale.z / 2 - 2.8f * (1 + iCount) },
@@ -299,13 +317,13 @@ void CErma_Body::Update(_float fTimeDelta)
                 {
                     _int iCount = (iCurPatternFrame - 80) / 5;  // 0 ~ 9
 
-                    CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::NORMAL_EFFECT, L"Prototype_Component_Boss_Erma_Missile_Lower",
+                    CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::MONSTER_EFFECT, L"Prototype_Component_Boss_Erma_Missile_Lower",
                         { vTerrainPos.x + 5 - iCount * 1.1f,
                         vTerrainPos.y + 5.f,
                         vTerrainPos.z + vTerrainScale.z / 2 - 2.8f * (1 + iCount) },
                         { 0, 0, 0, 1 },
                         { 5.f, 10.f, 5.f });
-                    CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::NORMAL_EFFECT, L"Prototype_Component_Boss_Erma_Missile_Lower_Light",
+                    CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::MONSTER_EFFECT, L"Prototype_Component_Boss_Erma_Missile_Lower_Light",
                         { vTerrainPos.x + 5 - iCount * 1.1f,
                         vTerrainPos.y + 5.f,
                         vTerrainPos.z + vTerrainScale.z / 2 - 2.8f * (1 + iCount) },
@@ -351,8 +369,19 @@ HRESULT CErma_Body::Render()
 
     m_pTransformCom->Bind_Matrix();
 
-    m_pAnimatorCom->Update_State(); // Bind_Texture
-    m_pAnimatorPatternCom->Update_State(); // Bind_Texture
+    if (!m_isAllStop)
+    {
+        m_pAnimatorCom->Update_State(); // Bind_Texture
+        m_pAnimatorPatternCom->Update_State(); // Bind_Texture
+    }
+    else
+    {
+        _uint iImageMaxIndex = m_pAnimatorCom->Get_CurState()->pTextureCom->Get_NumTextures();
+        _uint iImageCurIndex = m_pAnimatorCom->Get_CurStackedFrame() / m_pAnimatorCom->Get_CurState()->iFramePerImage;
+
+        iImageCurIndex %= iImageMaxIndex;
+        m_pAnimatorCom->Get_CurState()->pTextureCom->Bind_Texture();
+    }
 
     m_pVIBufferCom->Bind_Buffers();
 
@@ -436,14 +465,15 @@ void CErma_Body::OnCollision(CGameObject* pGameObject)
     }
 }
 
-void CErma_Body::PlayPattern(PATTERN_BODY ePattern)
+void CErma_Body::PlayPattern(PATTERN_BODY ePattern, _bool isForced)
 {
-    if (m_isPatternPlaying == true)
+    if (m_isPatternPlaying == true && !isForced)
         return;
 
 
     _float fPatternTime = 0.f;
     _wstring strPatternTag = {};
+    m_isPatternPlaying = true;
 
     switch (ePattern)
     {
@@ -455,15 +485,19 @@ void CErma_Body::PlayPattern(PATTERN_BODY ePattern)
         fPatternTime = 5.f;
         strPatternTag = L"Missile";
         break;
+    case Client::CErma_Body::PATTERN_BODY::PT_BROKEN:
+        m_isPatternPlaying = false;
+        m_pAnimatorCom->Change_State(L"Broken");
+        strPatternTag = L"Idle";
     default:
         break;
     }
 
 
 
-    m_isPatternPlaying = true;
     m_ePattern = ePattern;
-    m_pAnimatorPatternCom->Change_State(strPatternTag, true, fPatternTime, true);
+    if (!strPatternTag.empty())
+        m_pAnimatorPatternCom->Change_State(strPatternTag, true, fPatternTime, true);
 }
 
 CErma_Body* CErma_Body::Create(LPDIRECT3DDEVICE9 pGraphic_Device)

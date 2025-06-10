@@ -1104,6 +1104,11 @@ HRESULT CLoader::Loading_For_Boss1_Level()
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Boss_Erma_BigGolem_LaserEnd"),
 		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Boss/Erma/Effect/laser/Merged/SeparateByState/BigGolem_LaserEnd%02d.png"), 6))))
 		return E_FAIL;
+	// Golem_Stmap_FX (7)
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Boss_Erma_BigGolem_Stmap_FX"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Boss/Erma/Hand/Effect/Golem_Stmap_FX%d.png"), 7))))
+		return E_FAIL;
+
 	
 	// HeadStart_tFX (7)
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Boss_Erma_Effect_HeadStart"),
@@ -1137,6 +1142,16 @@ HRESULT CLoader::Loading_For_Boss1_Level()
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Boss_Erma_Missile_Lower_Light"),
 		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Boss/Erma/Effect/Missile_Lower_Light_%02d.png"), 17))))
 		return E_FAIL;
+
+	// Boom_MoleBullet (6)
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Boss_Erma_Bullet"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Boss/Erma/Effect/bullet/Boom_MoleBullet%d.png"), 6))))
+		return E_FAIL;
+	// Boom_MoleBulletFX (9)
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Boss_Erma_BulletFX"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Boss/Erma/Effect/bullet/Boom_MoleBulletFX%d.png"), 9))))
+		return E_FAIL;
+
 
 
 	lstrcpy(m_szLoadingText, TEXT("모델를 로딩중입니다."));

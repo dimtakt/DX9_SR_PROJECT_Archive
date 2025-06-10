@@ -17,20 +17,28 @@ HRESULT CUI_KeyGuide::Initialize_Prototype(const _wstring& strPrototypeTag)
 
 HRESULT CUI_KeyGuide::Initialize(void* pArg)
 {
-	UIOBJECT_DESC* Desc = static_cast<UIOBJECT_DESC*>(pArg);
+	KEYGUIDE_DESC* Desc = static_cast<KEYGUIDE_DESC*>(pArg);
 	m_fSizeX = 25;
 	m_fSizeY = 25;
 	if (Desc == nullptr)
 	{
 		m_fX = -m_fSizeX * 0.5;
 		m_fY = m_fSizeY * 0.5;
+		m_eRenderGroup = RENDERGROUP::RG_BLEND;
 	}
 	else
 	{
 		m_fX = Desc->fX;
 		m_fY = Desc->fY;
+		m_eRenderGroup = static_cast<RENDERGROUP>(Desc->fZ);
+		if (Desc->bTarget)
+		{
+			m_bTarget = true;
+			m_pTarget_Transform = Desc->pTransform;
+		}
 	}
 	m_fZ = UI_DEPTH::KEY_GUIDE;
+
 
 	m_iWinSizeX = g_iWinSizeX;
 	m_iWinSizeY = g_iWinSizeY;
@@ -57,7 +65,20 @@ void CUI_KeyGuide::Update(_float fTimeDelta)
 
 void CUI_KeyGuide::Late_Update(_float fTimeDelta)
 {
-	m_pGameInstance->Add_RenderGroup(RENDERGROUP::RG_UI_BLEND, this);
+	if (m_bTarget)
+	{
+		m_vWorldPos.x = m_pParent->Get_WorldPos().x + m_fX;
+		m_vWorldPos.y = m_pParent->Get_WorldPos().y + m_fY;
+
+		m_vTexRect.left = m_pParent->Get_WorldPos().x + g_iWinSizeX * 0.5 + m_fX - (m_fSizeX * 0.5);
+		m_vTexRect.right = m_pParent->Get_WorldPos().x + g_iWinSizeX * 0.5 + m_fX + (m_fSizeX * 0.5);
+		m_vTexRect.top = -m_pParent->Get_WorldPos().y + g_iWinSizeY * 0.5 - m_fY - (m_fSizeY * 0.5);
+		m_vTexRect.bottom = -m_pParent->Get_WorldPos().y + g_iWinSizeY * 0.5 - m_fY + (m_fSizeY * 0.5);
+
+		m_pTransformCom->Set_State(STATE::POSITION, m_vWorldPos);
+	}
+
+	m_pGameInstance->Add_RenderGroup(m_eRenderGroup, this);
 }
 
 HRESULT CUI_KeyGuide::Render()
@@ -69,9 +90,16 @@ HRESULT CUI_KeyGuide::Render()
 	__super::Begin();
 	m_pVIBufferCom->Render();
 	__super::End();
-	Font_Rect_Update();
-	m_pGameInstance->Render_Font(TEXT("UI_Font_18"), m_strKey, m_vTexRect, D3DXCOLOR(1.f, 1.f, 1.f, 1.f), DT_CENTER | DT_VCENTER | DT_SINGLELINE);
+	if (m_bTarget)
+	{
 
+		m_pGameInstance->Render_Font(TEXT("UI_Font_18"), m_strKey, m_vTexRect, D3DXCOLOR(1.f, 1.f, 1.f, 1.f), DT_CENTER | DT_VCENTER | DT_SINGLELINE);
+	}
+	else
+	{
+		Font_Rect_Update();
+		m_pGameInstance->Render_Font(TEXT("UI_Font_18"), m_strKey, m_vTexRect, D3DXCOLOR(1.f, 1.f, 1.f, 1.f), DT_CENTER | DT_VCENTER | DT_SINGLELINE);
+	}
 	return S_OK;
 }
 
@@ -90,6 +118,27 @@ HRESULT CUI_KeyGuide::Ready_Components()
 		return E_FAIL;
 
 	return S_OK;
+}
+
+void CUI_KeyGuide::Target_Pos()
+{
+	_float3 Target_Pos = m_pTarget_Transform->Get_State(STATE::POSITION);
+
+	m_pGraphic_Device->GetTransform(D3DTS_VIEW, &m_OldViewMatrix);
+	m_pGraphic_Device->GetTransform(D3DTS_PROJECTION, &m_OldProjMatrix);
+
+	_float3 vWinPos{};
+	_float4x4 vVPMatrix = m_OldViewMatrix * m_OldProjMatrix;
+	D3DXVec3TransformCoord(&vWinPos, &Target_Pos, &vVPMatrix);
+
+	m_iWinPosX = (vWinPos.x + 1.f) * 0.5 * g_iWinSizeX + m_fX;
+	m_iWinPosY = (-vWinPos.y + 1.f) * 0.5 * g_iWinSizeY + m_fY;
+
+	m_vWorldPos.x = m_iWinPosX - m_iWinSizeX * 0.5f;
+	m_vWorldPos.y = -m_iWinPosY + m_iWinSizeY * 0.5f;
+	m_vWorldPos.z = UI_DEPTH::KEY_GUIDE;;
+
+	m_pTransformCom->Set_State(STATE::POSITION, m_vWorldPos);
 }
 
 CUI_KeyGuide* CUI_KeyGuide::Create(LPDIRECT3DDEVICE9 pGraphic_Device, const _wstring& strPrototypeTag)
@@ -118,6 +167,8 @@ CGameObject* CUI_KeyGuide::Clone(void* pArg)
 
 void CUI_KeyGuide::Free()
 {
+	m_pTarget_Transform = nullptr;
+
 	__super::Free();
 	Safe_Release(m_pVIBufferCom);
 	Safe_Release(m_pTextureCom);

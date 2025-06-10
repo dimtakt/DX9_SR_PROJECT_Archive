@@ -567,6 +567,8 @@ void CRoom::Enter()
 	for (auto& pMonster : m_vMonster)
 	{
 		if (pMonster != nullptr) {
+			if (pMonster->Get_MonsterType() == MONSTER_TYPE::ERMA_BODY || pMonster->Get_MonsterType() == MONSTER_TYPE::ERMA_HAND_L || pMonster->Get_MonsterType() == MONSTER_TYPE::ERMA_HAND_R)
+				continue;
 			pMonster->Set_IsActive(true);
 			// collider
 			CCollider_OBB::OBB_DESC tColliderDesc;

@@ -412,6 +412,18 @@
     <Filter Include="02.GameObject\UI\HUD\HUD_Quick_Slot">
       <UniqueIdentifier>{f4e2f595-60e0-46f3-85f1-e781f081c5de}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\UI\Field\Field_Item">
+      <UniqueIdentifier>{8cf15ecb-f64f-443f-9aae-a5c248977581}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\UI\Field\Field_Item\KeyGuide">
+      <UniqueIdentifier>{30bac6e1-b594-45ee-a938-e96d57c2cd83}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\UI\Field\Field_Npc_Chat">
+      <UniqueIdentifier>{bf30ab37-1f89-4c15-b3ba-d83e5e5639ed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\UI\Field\Field_Npc_Chat\Face_Rect">
+      <UniqueIdentifier>{814a583d-da36-4a81-b2c6-7604e0631cd0}</UniqueIdentifier>
+    </Filter>
     <Filter Include="02.GameObject\Object\Fire">
       <UniqueIdentifier>{b5b251be-c460-488e-8190-35995c8cb7c8}</UniqueIdentifier>
     </Filter>
@@ -903,6 +915,24 @@
     <ClInclude Include="..\public\Hud_Quick_Slot.h">
       <Filter>02.GameObject\UI\HUD\HUD_Quick_Slot</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\Field_Item_Guide.h">
+      <Filter>02.GameObject\UI\Field\Field_Item\KeyGuide</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Field_Item.h">
+      <Filter>02.GameObject\UI\Field\Field_Item</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Field_Npc_Chat.h">
+      <Filter>02.GameObject\UI\Field\Field_Npc_Chat</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Field_Npc_Face.h">
+      <Filter>02.GameObject\UI\Field\Field_Npc_Chat</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Face_Rect.h">
+      <Filter>02.GameObject\UI\Field\Field_Npc_Chat\Face_Rect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Face_Rect_Small.h">
+      <Filter>02.GameObject\UI\Field\Field_Npc_Chat\Face_Rect</Filter>
+    </ClInclude>
     <ClInclude Include="..\Public\Fire.h">
       <Filter>02.GameObject\Object\Fire</Filter>
     </ClInclude>
@@ -1355,6 +1385,24 @@
     </ClCompile>
     <ClCompile Include="..\private\Hud_Quick_Slot.cpp">
       <Filter>02.GameObject\UI\HUD\HUD_Quick_Slot</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Field_Item.cpp">
+      <Filter>02.GameObject\UI\Field\Field_Item</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Field_Item_Guide.cpp">
+      <Filter>02.GameObject\UI\Field\Field_Item\KeyGuide</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Field_Npc_Chat.cpp">
+      <Filter>02.GameObject\UI\Field\Field_Npc_Chat</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Field_Npc_Face.cpp">
+      <Filter>02.GameObject\UI\Field\Field_Npc_Chat</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Face_Rect.cpp">
+      <Filter>02.GameObject\UI\Field\Field_Npc_Chat\Face_Rect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Face_Rect_Small.cpp">
+      <Filter>02.GameObject\UI\Field\Field_Npc_Chat\Face_Rect</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Fire.cpp">
       <Filter>02.GameObject\Object\Fire</Filter>

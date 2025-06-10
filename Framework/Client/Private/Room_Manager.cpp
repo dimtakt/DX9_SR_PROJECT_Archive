@@ -93,6 +93,8 @@ vector<pair<_int, _int>> CRoom_Manager::Create_RandomRooms(_int iRoomMax)
 
 		if (0 != count(m_RoomIndex.begin(), m_RoomIndex.end(), CheckIndex))
 			continue;
+		if (nZ > 3 || nZ < -3)
+			continue;
 
 		m_RoomIndex.push_back({ nX, nZ });
 

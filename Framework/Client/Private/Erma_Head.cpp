@@ -28,6 +28,7 @@ HRESULT CErma_Head::Initialize(void* pArg)
     MONSTERDESC* desc = static_cast<MONSTERDESC*>(pArg);
 
     CTransform* pTerrainTransform = dynamic_cast<CTransform*>(desc->pTerrainBox->Find_Component(TEXT("Com_Transform_TerrainBox")));
+    m_pTerrainTransformCom = pTerrainTransform;
     _float3 fTerrainPos = pTerrainTransform->Get_State(STATE::POSITION);
     _float3 fTerrainScale = pTerrainTransform->Get_Scaled();
 
@@ -42,12 +43,16 @@ HRESULT CErma_Head::Initialize(void* pArg)
 
 
 
+    // ksta : 테스트중.. 패턴 완성 후 삭제
+    //PlayPattern(PATTERN_HEAD::PT_BULLETFIRE);
+
+
     m_isSummoned = true;
     //Ready_Object();
 
     // 임시
-    m_iMaxHp = 500;
-    m_iCulHp = 500;
+    m_iMaxHp = 999999;
+    m_iCulHp = 999999;
     m_eMonsterType = MONSTER_TYPE::ERMA_HEAD;
     return S_OK;
 }
@@ -65,6 +70,8 @@ void CErma_Head::Priority_Update(_float fTimeDelta)
 
 void CErma_Head::Update(_float fTimeDelta)
 {
+    if (m_isAllStop)
+        return;
     // Update
     // 
 
@@ -72,9 +79,11 @@ void CErma_Head::Update(_float fTimeDelta)
     // 아래에서 사용할 변수들
 #pragma region Variables Setting
 
-    _uint iCurLevel = CGameInstance::GetInstance()->Get_CurrentLevel();
+    _uint iCurLevel = m_pGameInstance->Get_CurrentLevel();
 
     CTransform* pTargetTransform = dynamic_cast<CTransform*>(m_pGameInstance->GetInstance()->Get_Component(iCurLevel, TEXT("Layer_Player"), TEXT("Com_Transform")));
+    _float3 vTerrainPos = m_pTerrainTransformCom->Get_State(STATE::POSITION);
+    _float3 vTerrainScale = m_pTerrainTransformCom->Get_Scaled();
 
     _float3 vMonsterPos = m_pTransformCom->Get_State(STATE::POSITION);
     _float3 vTargetPos = pTargetTransform->Get_State(STATE::POSITION);
@@ -82,9 +91,12 @@ void CErma_Head::Update(_float fTimeDelta)
     _float3 vDiff = -vMonsterPos + vTargetPos;
     _float fDistance = D3DXVec3Length(&vDiff);
 
+    _int iCurPatternFrame = m_pAnimatorPatternCom->Get_CurStackedFrame();
 
     // ********* matMonster 구하기
     _float4x4 matMonsterWorld = *m_pTransformCom->Get_WorldMatrix();
+
+    _float3 vTerrainOffset = { 0.f, 1.f, 0.f };
 
 #pragma endregion
 
@@ -100,12 +112,12 @@ void CErma_Head::Update(_float fTimeDelta)
     // 2. 크기
     _float4x4 matScale = {};
     D3DXMatrixIdentity(&matScale);
-    D3DXMatrixScaling(&matScale, -1.3f, 1.f, 1.f);
+    D3DXMatrixScaling(&matScale, -0.1f, 0.1f, 0.1f);
 
     // 3. 자전
     _float4x4 matRotateChild = {};
     D3DXMatrixIdentity(&matRotateChild);
-    //D3DXMatrixRotationX(&matRotateChild, D3DXToRadian(-90)); // 안되면 -90도도 해보기
+    D3DXMatrixRotationX(&matRotateChild, D3DXToRadian(-90)); // 안되면 -90도도 해보기
 
     _float4x4 matRotateChildtoPlayer = {};
     D3DXMatrixIdentity(&matRotateChildtoPlayer);
@@ -132,6 +144,92 @@ void CErma_Head::Update(_float fTimeDelta)
 #pragma endregion
     // ***********************
 
+    if (m_isPatternPlaying)
+    {
+        switch (m_ePattern)
+        {
+        case Client::CErma_Head::PATTERN_HEAD::PT_IDLE:
+        {
+
+        }
+            break;
+        case Client::CErma_Head::PATTERN_HEAD::PT_BULLETFIRE:
+        {
+#pragma region PT_BULLETFIRE Pattern
+            _bool isBulletFireEnd = false;
+
+            D3DXMatrixIdentity(&matTransAddition);
+            D3DXMatrixTranslation(&matTransAddition, 0.f, -1.0f, 0.f);
+            matMonsterWorld = matTransToOrigin * matScale * matRotateChild * matRotateChildtoPlayer * matTransReturn * matTransAddition;
+
+            // 360frame (6s)
+            if (iCurPatternFrame == 1)
+                m_pAnimatorCom->Change_State(L"AttackStart");
+
+
+            if (m_pAnimatorCom->Get_CurStateTag() == L"AttackProgress")
+            {   
+                _float fLifeTime = 2.8f;
+
+                // 한번에 발사 시 렉이 크게 걸려서 프레임에 걸쳐 생성하도록
+                if (IS_BETWEEN(iCurPatternFrame % 50, 0, 15))
+                {
+                    for (int i = 0; i < 5; i++)
+                    {
+                        _float fAngle = 150;    // 방사 각도 수정용
+
+                        _float fAngleRand = m_pGameInstance->Compute_Random(-fAngle / 2.f, fAngle / 2.f);
+                        _float fRad = D3DXToRadian(fAngleRand);
+
+                        _float3 vThrownDir = {
+                            sinf(fRad),
+                            0.f,
+                            -cosf(fRad)
+                        };
+
+                        _float fThrownPower = m_pGameInstance->Compute_Random(7.f, 12.f);
+                        _float fThrownAtkLifeTime = fLifeTime;
+
+                        CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::MONSTER_EFFECT, L"Prototype_Component_Boss_Erma_Bullet",
+                            *m_pTransformCom->Get_WorldMatrix(), matMonsterWorld, vThrownDir, fThrownPower, fThrownAtkLifeTime, 0.f, true);
+                    
+                        //_float3 vStartPos = m_pTransformCom->Get_State(STATE::POSITION);
+                        //_float3 vFinalPos = vStartPos + vThrownDir * fThrownPower * fThrownAtkLifeTime;
+
+                        //m_effectVecList.push_back(vFinalPos);
+                    }
+                }
+
+                if (iCurPatternFrame == 330)
+                    isBulletFireEnd = true;
+            }
+
+            if (iCurPatternFrame == 359)
+            {
+                m_isPatternPlaying = false;
+                m_ePattern = PATTERN_HEAD::PT_IDLE;
+                m_pAnimatorPatternCom->Change_State(L"Idle");
+            }
+
+
+
+            if (m_pAnimatorCom->Get_CurStateTag() == L"AttackStart")
+                m_pAnimatorCom->Change_State(L"AttackProgress");
+            else if (m_pAnimatorCom->Get_CurStateTag() == L"AttackProgress" &&
+                isBulletFireEnd)
+                m_pAnimatorCom->Change_State(L"AttackEnd");
+            else if (m_pAnimatorCom->Get_CurStateTag() == L"AttackEnd")
+                m_pAnimatorCom->Change_State(L"Idle");
+    
+            D3DXMatrixIdentity(&matTransAddition);
+            matMonsterWorld = matTransToOrigin * matScale * matRotateChild * matRotateChildtoPlayer * matTransReturn * matTransAddition;
+#pragma endregion
+        }
+            break;
+        default:
+            break;
+        }
+    }
 
 
 
@@ -162,7 +260,19 @@ HRESULT CErma_Head::Render()
 
     m_pTransformCom->Bind_Matrix();
 
-    m_pAnimatorCom->Update_State(); // Bind_Texture
+    if (!m_isAllStop)
+    {
+        m_pAnimatorCom->Update_State(); // Bind_Texture
+        m_pAnimatorPatternCom->Update_State(); // Bind_Texture
+    }
+    else
+    {
+        _uint iImageMaxIndex = m_pAnimatorCom->Get_CurState()->pTextureCom->Get_NumTextures();
+        _uint iImageCurIndex = m_pAnimatorCom->Get_CurStackedFrame() / m_pAnimatorCom->Get_CurState()->iFramePerImage;
+
+        iImageCurIndex %= iImageMaxIndex;
+        m_pAnimatorCom->Get_CurState()->pTextureCom->Bind_Texture();
+    }
 
     m_pVIBufferCom->Bind_Buffers();
 
@@ -231,6 +341,18 @@ HRESULT CErma_Head::Ready_Components(void* pArg)
     m_pAnimatorCom->Add_State(L"DramaticDying",     { m_pTextureCom_DramaticDying, 4, true });
     m_pAnimatorCom->Add_State(L"Broken",            { m_pTextureCom_Broken, 4, true });
 
+    CAnimator::ANIMSTATE_DESC StartAnimStateDesc2{};
+    StartAnimStateDesc2.strTimerTag = L"Animator_Boss_Arma_Head_Pattern";   // 해당 애니메이터가 타이머에서 사용할 태그 key값
+    StartAnimStateDesc2.pParentTransform = nullptr;
+    StartAnimStateDesc2.pChildTransform = nullptr;
+
+    if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Animator"),
+        TEXT("Com_AnimatorPattern"), reinterpret_cast<CComponent**>(&m_pAnimatorPatternCom), &StartAnimStateDesc)))
+        return E_FAIL;
+
+    m_pAnimatorPatternCom->Add_State(L"Idle",           { nullptr, 4, true });
+    m_pAnimatorPatternCom->Add_State(L"BulletFire",     { nullptr, 360, true });    // 6s
+
     // ..
 
 
@@ -255,6 +377,41 @@ void CErma_Head::OnCollision(CGameObject* pGameObject)
     case GAMEOBJ_TYPE::PLAYER_EFFECT:
         break;
     }
+}
+
+void CErma_Head::PlayPattern(PATTERN_HEAD ePattern, _bool isForced)
+{
+    if (m_isPatternPlaying == true && !isForced)
+        return;
+
+
+    _float fPatternTime = 0.f;
+    _wstring strPatternTag = {};
+    m_isPatternPlaying = true;
+
+    switch (ePattern)
+    {
+    case Client::CErma_Head::PATTERN_HEAD::PT_AWAKEN:
+        if (m_pAnimatorCom->Get_CurStateTag() == L"Standby")
+            m_pAnimatorCom->Change_State(L"Idle");
+        m_isPatternPlaying = false;
+        break;
+    case Client::CErma_Head::PATTERN_HEAD::PT_BULLETFIRE:
+        fPatternTime = 6.f;
+        strPatternTag = L"BulletFire";
+        break;
+    case Client::CErma_Head::PATTERN_HEAD::PT_BROKEN:
+        m_isPatternPlaying = false;
+        m_pAnimatorCom->Change_State(L"Broken");
+    default:
+        break;
+    }
+
+
+
+    m_ePattern = ePattern;
+    if (!strPatternTag.empty())
+        m_pAnimatorPatternCom->Change_State(strPatternTag, true, fPatternTime, true);
 }
 
 CErma_Head* CErma_Head::Create(LPDIRECT3DDEVICE9 pGraphic_Device)
@@ -298,4 +455,5 @@ void CErma_Head::Free()
 
 
     Safe_Release(m_pAnimatorCom);
+    Safe_Release(m_pAnimatorPatternCom);
 }

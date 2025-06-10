@@ -22,6 +22,9 @@ namespace Client
 
 	enum class MONSTER_TYPE_A { MONSTER_DEFAULT, MONSTER_MOLE_A, MONSTER_OINK_A, MONSTER_LASERGHOST_D, MONSTER_BOSS_ERMA, MONSTER_BOSS_ERMA_BODY, MONSTER_BOSS_ERMA_HAND_L, MONSTER_BOSS_ERMA_HAND_R, MONSTER_BOSS_ERMA_HEAD, ERMA_HEAD }; 
 
+	// SOUND_BGM은 0으로 고정
+	enum class CHANNELID { SOUND_BGM, SOUND_PLAYER, SOUND_MONSTER, SOUND_EFFECT, SOUND_PLAYER_EFFECT, SOUND_MONSTER_EFFECT, SOUND_OBJECT, SOUND_END };
+
 	struct UI_DEPTH {
 		//KEY_GUIDE
 		static constexpr float KEY_GUIDE = 0.f;
@@ -39,6 +42,9 @@ namespace Client
 		static constexpr float FILED_HP = 0.3f;
 		static constexpr float FILED_HP_FRAME = 0.4f;
 		static constexpr float FILED_FONT = 0.29;
+		static constexpr float FILED_ITEM = 0.31;
+		static constexpr float FILED_CHAT = 0.31;
+
 
 		//INVEN
 		static constexpr float INVEN_SLOT_SELETE = 0.1f;

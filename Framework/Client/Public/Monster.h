@@ -55,6 +55,11 @@ public:
 	_bool Get_IsHit() { return m_bIsHit; }
 	void Set_IsHit(_bool bHit) { m_bIsHit = bHit; }
 	const MONSTER_TYPE Get_MonsterType() { return m_eMonsterType; }
+
+	_int Get_HP() { return m_iCulHp; }
+	void Set_HP(_int iHp) { m_iCulHp = iHp; }
+	void Fill_HP() { m_iCulHp = m_iMaxHp; }
+
 protected:
 	class CTransform*		m_pTransformCom = { nullptr };
 	class CTexture*			m_pTextureCom = { nullptr };
