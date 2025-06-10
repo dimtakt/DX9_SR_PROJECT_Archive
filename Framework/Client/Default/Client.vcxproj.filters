@@ -427,6 +427,9 @@
     <Filter Include="02.GameObject\Object\Fire">
       <UniqueIdentifier>{b5b251be-c460-488e-8190-35995c8cb7c8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\Monster\Boss\Askard">
+      <UniqueIdentifier>{a8576f02-061f-4f78-a401-76908117e7aa}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -915,26 +918,32 @@
     <ClInclude Include="..\public\Hud_Quick_Slot.h">
       <Filter>02.GameObject\UI\HUD\HUD_Quick_Slot</Filter>
     </ClInclude>
-    <ClInclude Include="..\public\Field_Item_Guide.h">
-      <Filter>02.GameObject\UI\Field\Field_Item\KeyGuide</Filter>
+    <ClInclude Include="..\public\Askard.h">
+      <Filter>02.GameObject\Monster\Boss\Askard</Filter>
     </ClInclude>
-    <ClInclude Include="..\public\Field_Item.h">
-      <Filter>02.GameObject\UI\Field\Field_Item</Filter>
-    </ClInclude>
-    <ClInclude Include="..\public\Field_Npc_Chat.h">
-      <Filter>02.GameObject\UI\Field\Field_Npc_Chat</Filter>
-    </ClInclude>
-    <ClInclude Include="..\public\Field_Npc_Face.h">
-      <Filter>02.GameObject\UI\Field\Field_Npc_Chat</Filter>
-    </ClInclude>
-    <ClInclude Include="..\public\Face_Rect.h">
-      <Filter>02.GameObject\UI\Field\Field_Npc_Chat\Face_Rect</Filter>
-    </ClInclude>
-    <ClInclude Include="..\public\Face_Rect_Small.h">
-      <Filter>02.GameObject\UI\Field\Field_Npc_Chat\Face_Rect</Filter>
+    <ClInclude Include="..\public\Askard_Tentacle.h">
+      <Filter>02.GameObject\Monster\Boss\Askard</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Fire.h">
       <Filter>02.GameObject\Object\Fire</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Field_Npc_Chat.h">
+      <Filter>02.GameObject\UI\Field\Field_Npc_Chat</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Field_Npc_Face.h">
+      <Filter>02.GameObject\UI\Field\Field_Npc_Chat</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Face_Rect.h">
+      <Filter>02.GameObject\UI\Field\Field_Npc_Chat\Face_Rect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Face_Rect_Small.h">
+      <Filter>02.GameObject\UI\Field\Field_Npc_Chat\Face_Rect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Field_Item.h">
+      <Filter>02.GameObject\UI\Field\Field_Item</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Field_Item_Guide.h">
+      <Filter>02.GameObject\UI\Field\Field_Item\KeyGuide</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1386,26 +1395,32 @@
     <ClCompile Include="..\private\Hud_Quick_Slot.cpp">
       <Filter>02.GameObject\UI\HUD\HUD_Quick_Slot</Filter>
     </ClCompile>
-    <ClCompile Include="..\private\Field_Item.cpp">
-      <Filter>02.GameObject\UI\Field\Field_Item</Filter>
+    <ClCompile Include="..\private\Askard.cpp">
+      <Filter>02.GameObject\Monster\Boss\Askard</Filter>
     </ClCompile>
-    <ClCompile Include="..\private\Field_Item_Guide.cpp">
-      <Filter>02.GameObject\UI\Field\Field_Item\KeyGuide</Filter>
-    </ClCompile>
-    <ClCompile Include="..\private\Field_Npc_Chat.cpp">
-      <Filter>02.GameObject\UI\Field\Field_Npc_Chat</Filter>
-    </ClCompile>
-    <ClCompile Include="..\private\Field_Npc_Face.cpp">
-      <Filter>02.GameObject\UI\Field\Field_Npc_Chat</Filter>
-    </ClCompile>
-    <ClCompile Include="..\private\Face_Rect.cpp">
-      <Filter>02.GameObject\UI\Field\Field_Npc_Chat\Face_Rect</Filter>
-    </ClCompile>
-    <ClCompile Include="..\private\Face_Rect_Small.cpp">
-      <Filter>02.GameObject\UI\Field\Field_Npc_Chat\Face_Rect</Filter>
+    <ClCompile Include="..\private\Askard_Tentacle.cpp">
+      <Filter>02.GameObject\Monster\Boss\Askard</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Fire.cpp">
       <Filter>02.GameObject\Object\Fire</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Field_Npc_Chat.cpp">
+      <Filter>02.GameObject\UI\Field\Field_Npc_Chat</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Field_Npc_Face.cpp">
+      <Filter>02.GameObject\UI\Field\Field_Npc_Chat</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Face_Rect.cpp">
+      <Filter>02.GameObject\UI\Field\Field_Npc_Chat\Face_Rect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Face_Rect_Small.cpp">
+      <Filter>02.GameObject\UI\Field\Field_Npc_Chat\Face_Rect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Field_Item.cpp">
+      <Filter>02.GameObject\UI\Field\Field_Item</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Field_Item_Guide.cpp">
+      <Filter>02.GameObject\UI\Field\Field_Item\KeyGuide</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
