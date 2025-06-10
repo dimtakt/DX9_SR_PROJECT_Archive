@@ -13,7 +13,7 @@ CAnimator::CAnimator(const CAnimator& Prototype)
 
 HRESULT CAnimator::Initialize_Prototype()
 {
-	std::cout << "[CAnimator::Initialize_Prototype] Prototype Initialized!" << std::endl;
+	//std::cout << "[CAnimator::Initialize_Prototype] Prototype Initialized!" << std::endl;
 
 	return S_OK;
 }
@@ -40,7 +40,7 @@ HRESULT CAnimator::Initialize(void* pArg)
 	m_pChildTransform	= nullptr != pDesc->pChildTransform? pDesc->pChildTransform : nullptr;
 	
 
-	std::cout << "[CAnimator::Initialize] Initialized!" << std::endl;
+	//std::cout << "[CAnimator::Initialize] Initialized!" << std::endl;
 
 	return S_OK;
 }
@@ -78,14 +78,14 @@ HRESULT CAnimator::Add_State(const _wstring strStateTag, ANIMSTATE _state)
 		std::wcout << "[CAnimator::Add_State]  \"" << strStateTag << "\" State Added. but Texture Component was nullptr." << std::endl;
 
 	m_pStates.emplace(strStateTag, _state);
-	std::wcout << "[CAnimator::Add_State] \"" << strStateTag << "\" State Added." << std::endl;
+	//std::wcout << "[CAnimator::Add_State] \"" << strStateTag << "\" State Added." << std::endl;
 
 	// 최초 삽입이면 해당 State 를 현재 State로 
 	if (m_pCurState == nullptr)
 	{
 		m_pCurState = Find_State(strStateTag);
 		m_strCurStateTag = strStateTag;
-		std::wcout << "[CAnimator::Add_State] Start state set to \"" << strStateTag << "\"." << std::endl;
+		//std::wcout << "[CAnimator::Add_State] Start state set to \"" << strStateTag << "\"." << std::endl;
 	}
 
 	return S_OK;

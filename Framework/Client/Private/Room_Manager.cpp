@@ -50,9 +50,11 @@ HRESULT CRoom_Manager::Enter_Room(_int iRoomID)
 			{
 				pRoom->Enter();
 				m_iCurrentRoomID = iRoomID;
+				pRoom->On_Fire();
 			}
 			else {
 				pRoom->Exit();
+				pRoom->Off_Fire();
 			}
 		}
 	}

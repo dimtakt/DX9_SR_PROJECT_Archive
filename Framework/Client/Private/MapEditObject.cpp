@@ -42,6 +42,11 @@ HRESULT CMapEditObject::Initialize(void* pArg)
     m_pTransformCom->Scaling(pObject_Desc->vScale.x, pObject_Desc->vScale.y, pObject_Desc->vScale.z);
 
     m_iTextureIndex = pObject_Desc->iTextureIndex;
+    if (pObject_Desc->eType == GAMEOBJ_TYPE::FIRE)
+    {
+        m_iTextureIndex = 9;
+        m_iLightIndex = pObject_Desc->iTextureIndex;
+    }
     m_pTextureCom->Bind_Texture(m_iTextureIndex);
     m_eObjType = pObject_Desc->eType;
 
@@ -73,7 +78,7 @@ HRESULT CMapEditObject::Render()
 
     m_pVIBufferCom->Render();
 
-    Reset_RenderState();
+   Reset_RenderState();
 
     return S_OK;
 }
@@ -81,7 +86,7 @@ HRESULT CMapEditObject::Render()
 void CMapEditObject::SetUp_RenderState()
 {
     m_pGraphic_Device->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
-    m_pGraphic_Device->SetRenderState(D3DRS_ALPHAREF, 200);
+    m_pGraphic_Device->SetRenderState(D3DRS_ALPHAREF, 50);
     m_pGraphic_Device->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER);
 
     m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_POINT);

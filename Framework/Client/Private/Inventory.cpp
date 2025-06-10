@@ -154,11 +154,29 @@ void CInventory::UI_Switch()
 void CInventory::Add_Item_Inven(_uint ItemIndex)
 {
 	CItemObject* pItem = m_pGameInstance->Get_ItemObject(ItemIndex, true);
+	_bool bNotPotion = false;
 
 	for (size_t i = 0; i < m_vecInventory.size(); ++i)
 	{
-		if (m_vecInventory[i]->Pop_Item() == nullptr)
+		if (!bNotPotion || pItem->Item_Info()->iItemType == ENUM_CLASS(ITEM_TYPE::POTION))
+		{
+			if (pItem->Item_Info()->iItemID == m_vecInventory[i]->Pop_Item()->Item_Info()->iItemID)
+			{
+				m_vecInventory[i]->Add_Item_Count();
+				Safe_Release(pItem);
+				break;
+			}
+			else if (i == m_vecInventory.size() - 1)
+			{
+				bNotPotion = true;
+				i = 0;
+			}
+		}
+		else if (m_vecInventory[i]->Pop_Item() == nullptr)
+		{
 			m_vecInventory[i]->Add_Item(static_cast<CItem_Base*>(pItem));
+			break;
+		}
 	}
 }
 
@@ -292,6 +310,7 @@ void CInventory::StatToPlayer()
 			continue;
 
 		_uint iItem_Effect = m_vecInventory[i]->Pop_Item()->Item_Info()->iArtefact_Value;
+	
 		if(g_ItemEffect[iItem_Effect].m_eType == ITEM_EFFECT::VALUE_TYPE)
 		{
 			for (_int j = 0; j < g_ItemEffect[iItem_Effect].m_vecValue.size(); ++j)
@@ -300,8 +319,11 @@ void CInventory::StatToPlayer()
 				_float fValue1 = g_ItemEffect[iItem_Effect].m_vecValue[j].m_fStat_Value1;
 				_float fValue2 = g_ItemEffect[iItem_Effect].m_vecValue[j].m_fStat_Value2;
 				_float fGarde = static_cast<CInven_Slot*>(m_vecInventory[i])->Get_SlotGrade();
-
-				m_fInvenStats[ENUM_CLASS(eStat)] += fValue1 + fGarde * fValue2;
+				_float iItem_MaxGarde = m_vecInventory[i]->Pop_Item()->Item_Info()->iItemValue;
+				if(iItem_MaxGarde < fGarde)
+					m_fInvenStats[ENUM_CLASS(eStat)] += fValue1 + iItem_MaxGarde * fValue2;
+				else
+					m_fInvenStats[ENUM_CLASS(eStat)] += fValue1 + fGarde * fValue2;
 			}
 		}
 		else if (g_ItemEffect[iItem_Effect].m_eType == ITEM_EFFECT::SKILLBOOK_TYPE)

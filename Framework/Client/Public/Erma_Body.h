@@ -14,6 +14,7 @@ public:
 		PT_MISSILE_L,	// 미사일 발사
 		PT_MISSILE_R,	// 미사일 발사
 
+		PT_BROKEN,
 		PT_END
 	};
 
@@ -38,7 +39,8 @@ public:
 	virtual void OnCollision(CGameObject* pGameObject) override;
 
 public:
-	void PlayPattern(PATTERN_BODY ePattern);
+	void PlayPattern(PATTERN_BODY ePattern, _bool isForced = false);
+	void Set_Stop(_bool isStop = true) { m_isAllStop = isStop; }
 
 private:
 	// 각종 컴포넌트들
@@ -57,6 +59,7 @@ private:
 	PATTERN_BODY	m_ePattern		= PATTERN_BODY::PT_IDLE;
 
 	_bool			m_isPatternPlaying = false;
+	_bool			m_isAllStop = false;
 
 
 public:
