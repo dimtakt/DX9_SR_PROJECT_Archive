@@ -29,6 +29,8 @@ void CField_Item::Buy_Item()
 	{
 		CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::GOLD, -m_iGold);
 		static_cast<CInventory*>(m_pGameInstance->Find_UIObj(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("UI_Inven")))->Add_Item_Inven(m_iItemID);
+		m_pGameInstance->StopSound(ENUM_CLASS(CHANNELID::SOUND_UI));
+		m_pGameInstance->PlaySoundW(L"shopBuy.wav", ENUM_CLASS(CHANNELID::SOUND_UI), g_fUIVolume - 0.6f);
 		m_bDead = true;
 	}
 }
@@ -63,6 +65,8 @@ HRESULT CField_Item::Initialize(void* pArg)
 	m_iItemTex = g_ItemDataBase[m_iItemID].m_iItemTextureID;
 	m_vTargetPos = Desc->m_vTargetPos;
 	m_vTargetPos.y += m_fY; 
+
+	m_eObjType = GAMEOBJ_TYPE::SHOP_ITEM;
 
 	m_vWorldPos = m_vTargetPos;
 	if (FAILED(__super::Initialize()))

@@ -442,6 +442,18 @@
     <Filter Include="02.GameObject\UI\HUD\HUD_BossHp\BossHp_Ema\ETC">
       <UniqueIdentifier>{24c2ce66-cdde-4c5e-a62f-9f106c9d3cff}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\Monster\Boss\Askard">
+      <UniqueIdentifier>{a8576f02-061f-4f78-a401-76908117e7aa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Object\GoldLeaf">
+      <UniqueIdentifier>{77647d0a-dca7-4945-86f3-9f1009808dfe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Particle">
+      <UniqueIdentifier>{d63b5b87-031a-4979-a01b-257c7b034658}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Particle\RainParicle">
+      <UniqueIdentifier>{8e64aac7-3dec-4bf1-9984-f08eba41c47a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -930,23 +942,11 @@
     <ClInclude Include="..\public\Hud_Quick_Slot.h">
       <Filter>02.GameObject\UI\HUD\HUD_Quick_Slot</Filter>
     </ClInclude>
-    <ClInclude Include="..\public\Field_Item_Guide.h">
-      <Filter>02.GameObject\UI\Field\Field_Item\KeyGuide</Filter>
+    <ClInclude Include="..\public\Askard.h">
+      <Filter>02.GameObject\Monster\Boss\Askard</Filter>
     </ClInclude>
-    <ClInclude Include="..\public\Field_Item.h">
-      <Filter>02.GameObject\UI\Field\Field_Item</Filter>
-    </ClInclude>
-    <ClInclude Include="..\public\Field_Npc_Chat.h">
-      <Filter>02.GameObject\UI\Field\Field_Npc_Chat</Filter>
-    </ClInclude>
-    <ClInclude Include="..\public\Field_Npc_Face.h">
-      <Filter>02.GameObject\UI\Field\Field_Npc_Chat</Filter>
-    </ClInclude>
-    <ClInclude Include="..\public\Face_Rect.h">
-      <Filter>02.GameObject\UI\Field\Field_Npc_Chat\Face_Rect</Filter>
-    </ClInclude>
-    <ClInclude Include="..\public\Face_Rect_Small.h">
-      <Filter>02.GameObject\UI\Field\Field_Npc_Chat\Face_Rect</Filter>
+    <ClInclude Include="..\public\Askard_Tentacle.h">
+      <Filter>02.GameObject\Monster\Boss\Askard</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Fire.h">
       <Filter>02.GameObject\Object\Fire</Filter>
@@ -966,8 +966,32 @@
     <ClInclude Include="Ema_Frame.h">
       <Filter>02.GameObject\UI\HUD\HUD_BossHp\BossHp_Ema\ETC</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Field_Npc_Chat.h">
+      <Filter>02.GameObject\UI\Field\Field_Npc_Chat</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Field_Npc_Face.h">
+      <Filter>02.GameObject\UI\Field\Field_Npc_Chat</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Face_Rect.h">
+      <Filter>02.GameObject\UI\Field\Field_Npc_Chat\Face_Rect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Face_Rect_Small.h">
+      <Filter>02.GameObject\UI\Field\Field_Npc_Chat\Face_Rect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Field_Item.h">
+      <Filter>02.GameObject\UI\Field\Field_Item</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Field_Item_Guide.h">
+      <Filter>02.GameObject\UI\Field\Field_Item\KeyGuide</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\GoldLeaf.h">
+      <Filter>02.GameObject\Object\GoldLeaf</Filter>
+    </ClInclude>
     <ClInclude Include="..\public\Askard_Hpbar.h">
       <Filter>02.GameObject\UI\HUD\HUD_BossHp\BossHp_Askard\ETC</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\RainParticle.h">
+      <Filter>02.GameObject\Particle\RainParicle</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1419,23 +1443,11 @@
     <ClCompile Include="..\private\Hud_Quick_Slot.cpp">
       <Filter>02.GameObject\UI\HUD\HUD_Quick_Slot</Filter>
     </ClCompile>
-    <ClCompile Include="..\private\Field_Item.cpp">
-      <Filter>02.GameObject\UI\Field\Field_Item</Filter>
+    <ClCompile Include="..\private\Askard.cpp">
+      <Filter>02.GameObject\Monster\Boss\Askard</Filter>
     </ClCompile>
-    <ClCompile Include="..\private\Field_Item_Guide.cpp">
-      <Filter>02.GameObject\UI\Field\Field_Item\KeyGuide</Filter>
-    </ClCompile>
-    <ClCompile Include="..\private\Field_Npc_Chat.cpp">
-      <Filter>02.GameObject\UI\Field\Field_Npc_Chat</Filter>
-    </ClCompile>
-    <ClCompile Include="..\private\Field_Npc_Face.cpp">
-      <Filter>02.GameObject\UI\Field\Field_Npc_Chat</Filter>
-    </ClCompile>
-    <ClCompile Include="..\private\Face_Rect.cpp">
-      <Filter>02.GameObject\UI\Field\Field_Npc_Chat\Face_Rect</Filter>
-    </ClCompile>
-    <ClCompile Include="..\private\Face_Rect_Small.cpp">
-      <Filter>02.GameObject\UI\Field\Field_Npc_Chat\Face_Rect</Filter>
+    <ClCompile Include="..\private\Askard_Tentacle.cpp">
+      <Filter>02.GameObject\Monster\Boss\Askard</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Fire.cpp">
       <Filter>02.GameObject\Object\Fire</Filter>
@@ -1455,8 +1467,32 @@
     <ClCompile Include="Ema_Frame.cpp">
       <Filter>02.GameObject\UI\HUD\HUD_BossHp\BossHp_Ema\ETC</Filter>
     </ClCompile>
+    <ClCompile Include="..\Private\Field_Npc_Chat.cpp">
+      <Filter>02.GameObject\UI\Field\Field_Npc_Chat</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Field_Npc_Face.cpp">
+      <Filter>02.GameObject\UI\Field\Field_Npc_Chat</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Face_Rect.cpp">
+      <Filter>02.GameObject\UI\Field\Field_Npc_Chat\Face_Rect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Face_Rect_Small.cpp">
+      <Filter>02.GameObject\UI\Field\Field_Npc_Chat\Face_Rect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Field_Item.cpp">
+      <Filter>02.GameObject\UI\Field\Field_Item</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Field_Item_Guide.cpp">
+      <Filter>02.GameObject\UI\Field\Field_Item\KeyGuide</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\GoldLeaf.cpp">
+      <Filter>02.GameObject\Object\GoldLeaf</Filter>
+    </ClCompile>
     <ClCompile Include="..\private\Askard_Hpbar.cpp">
       <Filter>02.GameObject\UI\HUD\HUD_BossHp\BossHp_Askard\ETC</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\RainParticle.cpp">
+      <Filter>02.GameObject\Particle\RainParicle</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

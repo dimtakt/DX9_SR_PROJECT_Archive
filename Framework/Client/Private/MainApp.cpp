@@ -48,6 +48,7 @@
 #include "Field_Npc_Face.h"
 #include "BossHp_Askard.h"
 #include "BossHp_Ema.h"
+#include "GoldLeaf.h"
 
 CMainApp::CMainApp()
 	: m_pGameInstance{ CGameInstance::GetInstance() }
@@ -259,7 +260,7 @@ HRESULT CMainApp::Ready_GameObject_Setting()
 		return E_FAIL;
 #pragma endregion
 	
-#pragma region Prototype_GameObject_Loding_EXP_Ball
+#pragma region Prototype_GameObject_EXP_Ball
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_EXP_Ball"),
 		CEXP_Ball::Create(m_pGraphic_Device))))
 		return E_FAIL;
@@ -303,6 +304,12 @@ HRESULT CMainApp::Ready_GameObject_Setting()
 		return E_FAIL;
 #pragma endregion
 
+#pragma region Prototype_GameObject_GoldLeaf
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_GoldLeaf"),
+		CGoldLeaf::Create(m_pGraphic_Device))))
+		return E_FAIL;
+#pragma endregion
+
 	return S_OK;
 }
 
@@ -329,6 +336,11 @@ HRESULT CMainApp::Ready_Texture_Setting()
 	//Fire
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Fire"),
 		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/BleakSwordDX/Object/Fire/FX_Fire_00_0.png"), 1))))
+		return E_FAIL;
+
+	/* Rain */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Rain"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/BleakSwordDX/Particle/Window_Rain.png"), 1))))
 		return E_FAIL;
 
 	// Roll
@@ -775,6 +787,9 @@ HRESULT CMainApp::Ready_Texture_Setting()
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Gold"),
 		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/InteractionObject/Gold/Gold%d.png"), 1))))
 		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_GoldLeaf"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/InteractionObject/Gold/GoldLeaf.png"), 1))))
+		return E_FAIL;
 #pragma endregion
 
 #pragma region Prototype_Component_HP
@@ -967,7 +982,11 @@ void CMainApp::Ready_Key_Setting()
 	m_pGameInstance->AddTrackingKey('F');
 	m_pGameInstance->AddTrackingKey('B');
 	m_pGameInstance->AddTrackingKey(VK_F1);
+	m_pGameInstance->AddTrackingKey(VK_F2);
 	m_pGameInstance->AddTrackingKey(VK_F3);
+	m_pGameInstance->AddTrackingKey(VK_F4);
+	m_pGameInstance->AddTrackingKey(VK_F5);
+	m_pGameInstance->AddTrackingKey(VK_F6);
 	// 임시 테스트용
 #if _DEBUG
 	m_pGameInstance->AddTrackingKey('J');
