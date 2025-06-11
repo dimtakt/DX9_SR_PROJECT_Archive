@@ -350,7 +350,7 @@ void CErma::Late_Update(_float fTimeDelta)
 {
     __super::Late_Update(fTimeDelta);
 
-    _float3 vPos = m_pTransformCom->Get_State(STATE::POSITION);
+    //_float3 vPos = m_pTransformCom->Get_State(STATE::POSITION);
     //std::cout << "Erma Pos : " << vPos.x << ", " << vPos.y << ", " << vPos.z << std::endl;
 }
 
@@ -443,8 +443,7 @@ HRESULT CErma::Ready_Components(void* pArg)
     m_pAnimatorCom->Add_State(L"Enter_Progress",    { m_pTextureCom_Enter_Progress, 4, false });
     m_pAnimatorCom->Add_State(L"Enter_End",         { m_pTextureCom_Enter_End, 4, true });
     m_pAnimatorCom->Add_State(L"Entered",           { nullptr, 4, true });    // 기체 탑승 상태, 텍스쳐 사용 X
-
-
+    
     // ..
 
 

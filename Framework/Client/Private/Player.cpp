@@ -11,6 +11,8 @@
 #include "Field_Font.h"
 #include "Level_Loading.h"
 #include "Client_Defines_Event.h"
+#include "Field_Item.h"
+#include "GoldLeaf.h"
 
 CPlayer::CPlayer(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CGameObject{ pGraphic_Device }
@@ -185,6 +187,9 @@ void CPlayer::Update(_float fTimeDelta)
                 strStateTag = (vRayPoint.z > vPlayerPos.z) ? L"Attack_Upper2" :
                     L"Attack_Lower2";
 
+                m_pGameInstance->StopSound(ENUM_CLASS(CHANNELID::SOUND_PLAYER_EFFECT));
+                m_pGameInstance->PlaySoundW(L"DaggerAttack.wav", ENUM_CLASS(CHANNELID::SOUND_PLAYER_EFFECT), g_fEFFECTVolume - 0.6f);
+
                 // 바꾸는 데에 성공시 2타공격 이펙트 출력
                 if (m_pAnimatorCom->Change_State(strStateTag, true))
                     CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::PLAYER_EFFECT, L"Prototype_Component_Texture_Effect_Blade0_Swing1",
@@ -198,8 +203,13 @@ void CPlayer::Update(_float fTimeDelta)
 
             // 바꾸는 데에 성공시 1타공격 이펙트 출력
             if (m_pAnimatorCom->Change_State(strStateTag, true))
+            {
+                m_pGameInstance->StopSound(ENUM_CLASS(CHANNELID::SOUND_PLAYER_EFFECT));
+                m_pGameInstance->PlaySoundW(L"DaggerAttack.wav", ENUM_CLASS(CHANNELID::SOUND_PLAYER_EFFECT), g_fEFFECTVolume - 0.6f);
                 CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::PLAYER_EFFECT, L"Prototype_Component_Texture_Effect_Blade0_Swing0",
                     *m_pTransformCom->Get_WorldMatrix(), matPlayerWorld, m_pTransformCom, 0.f);
+            }
+                
 
             //std::cout << "[Player::Update] PlayerPos : " << vPlayerPos.x << ", " << vPlayerPos.y << ", " << vPlayerPos.z << std::endl;
         }
@@ -234,6 +244,7 @@ void CPlayer::Update(_float fTimeDelta)
         m_pGameInstance->IsKeyHold('D'))
     {
         if (!CStat_Manager::GetInstance()->Get_UIOpen()) {
+            m_pGameInstance->PlaySoundW(L"footstepRoad01.wav", ENUM_CLASS(CHANNELID::SOUND_PLAYER_WALK), g_fWALKVolume);
             // 이전에 Move 이었다면 프레임 초기화X
             if (vRayPoint.z > vPlayerPos.z)                 // 상단
             {
@@ -255,6 +266,7 @@ void CPlayer::Update(_float fTimeDelta)
     }
     else
     {
+        g_fWALKVolume = 0.f;
         // 이전에 Idle 이었다면 프레임 초기화 X
         if (vRayPoint.z > vPlayerPos.z)                 // 상단
         {
@@ -335,10 +347,13 @@ void CPlayer::Update(_float fTimeDelta)
             if (pStats->Get_CurStats()[ENUM_CLASS(STAT_INFO::CULDASH)] >= 1 &&
                 m_pAnimatorTransCom->Change_State(L"Dash"))
             {
+                m_pGameInstance->StopSound(ENUM_CLASS(CHANNELID::SOUND_PLAYER));
+                m_pGameInstance->PlaySoundW(L"dashMove.wav", ENUM_CLASS(CHANNELID::SOUND_PLAYER), g_fEFFECTVolume - 0.6f);
                 D3DXVec3Normalize(&m_vDashDir, &m_vDashDir);
                 pStats->Cal_Stats(STAT_INFO::CULDASH, -1);
                 // 무적 설정..
                 m_bIsHit = true;
+                m_fGodModeTime = 0.f;
             }
         }
     }
@@ -358,7 +373,7 @@ void CPlayer::Update(_float fTimeDelta)
     if (m_pAnimatorTransCom->Get_CurStateTag() == L"Dash")
     {
         _float3 playerPos = vPlayerPos;
-        playerPos += m_vDashDir * 30.f * (-0.04f * pow((fTimeDelta - 5.f), 2.f) + 1.f);        // 마지막으로 누른 방향으로 이동
+        playerPos += m_vDashDir * 60.f * (-0.04f * pow((fTimeDelta - 5.f), 2.f) + 1.f);        // 마지막으로 누른 방향으로 이동
         m_pTransformCom->Set_State(STATE::POSITION, playerPos);
     }
 
@@ -383,6 +398,8 @@ void CPlayer::Update(_float fTimeDelta)
                 {
                     if (m_pAnimatorTransCom->Change_State(L"Fury"))
                     {
+                        m_pGameInstance->StopSound(ENUM_CLASS(CHANNELID::SOUND_PLAYER_EFFECT));
+                        m_pGameInstance->PlaySoundW(L"DaggerAttack_Fury.wav", ENUM_CLASS(CHANNELID::SOUND_PLAYER_EFFECT), g_fEFFECTVolume - 0.6f);
                         CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::PLAYER_EFFECT, L"Prototype_Component_Texture_Effect_Blade0_NFury",
                             *m_pTransformCom->Get_WorldMatrix(), matPlayerWorld, m_pTransformCom, 0.f, true);
                         CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::PLAYER_EFFECT, L"Prototype_Component_Texture_Effect_Blade0_NFury_Back",
@@ -405,6 +422,9 @@ void CPlayer::Update(_float fTimeDelta)
                         D3DXMatrixTranslation(&matTransAddition, vDiffResult.x, 0, vDiffResult.z);
                         matPlayerWorld = matTransToOrigin * matScale * matRotateChild * matRotateChildtoCursor * matTransReturn * matTransAddition;
 
+                        m_pGameInstance->StopSound(ENUM_CLASS(CHANNELID::SOUND_PLAYER_EFFECT));
+                        m_pGameInstance->PlaySoundW(L"DaggerAttack_Parry.wav", ENUM_CLASS(CHANNELID::SOUND_PLAYER_EFFECT), g_fEFFECTVolume - 0.6f);
+
                         // 이펙트 적용
                         CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::PLAYER_EFFECT, L"Prototype_Component_Texture_Effect_Blade0_Parry",
                             *m_pTransformCom->Get_WorldMatrix(), matPlayerWorld, m_pTransformCom, 0.f, true);
@@ -414,6 +434,10 @@ void CPlayer::Update(_float fTimeDelta)
                         vDiffResult = vDiff * fDistanceOffset;
                         D3DXMatrixTranslation(&matTransAddition, vDiffResult.x, 0, vDiffResult.z);
                         matPlayerWorld = matTransToOrigin * matScale * matRotateChild * matRotateChildtoCursor * matTransReturn * matTransAddition;
+
+                        _float3 playerPos = vPlayerPos;
+                        playerPos += m_vCursorDir * fTimeDelta * 120.f;        // 커서 방향으로 이동
+                        m_pTransformCom->Set_State(STATE::POSITION, playerPos);
                     }
                     if (m_pAnimatorCom->Change_State(L"Parry"))
                         pStats->Cal_Stats(STAT_INFO::CULMP, -10);
@@ -580,6 +604,8 @@ void CPlayer::OnCollision(CGameObject* pGameObject)
             CRoom_Manager::GetInstance()->Check_Potal_Coll(dynamic_cast<CPotal*>(pGameObject)->Get_PotalType(), vPos);
 
             m_pTransformCom->Set_State(STATE::POSITION, vPos);
+            m_pGameInstance->StopSound(ENUM_CLASS(CHANNELID::SOUND_EFFECT));
+            m_pGameInstance->PlaySoundW(L"breakBulletIce.wav", ENUM_CLASS(CHANNELID::SOUND_EFFECT), g_fEFFECTVolume - 0.6f);
         }
 
         break;
@@ -591,6 +617,8 @@ void CPlayer::OnCollision(CGameObject* pGameObject)
                 if (m_pGameInstance->IsKeyDown('F'))
                 {
                     dynamic_cast<CChapMap*>(m_pGameInstance->Get_GameObject(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Layer_ChapMap")))->Open_Ui();
+                    m_pGameInstance->StopSound(ENUM_CLASS(CHANNELID::SOUND_EFFECT));
+                    m_pGameInstance->PlaySoundW(L"breakBulletIce.wav", ENUM_CLASS(CHANNELID::SOUND_EFFECT), g_fEFFECTVolume - 0.6f);
                 }
             }
         }
@@ -599,19 +627,15 @@ void CPlayer::OnCollision(CGameObject* pGameObject)
     case GAMEOBJ_TYPE::STAGE_POTAL:
     {
 
-        if (m_pGameInstance->IsKeyDown('F'))
-        {
-            _uint CurrentLevel = m_pGameInstance->Get_CurrentLevel();
-
-            if (CurrentLevel == ENUM_CLASS(LEVEL::LEVEL_TOWN))  //타운일 때 스테이지1로 이동
-                m_pGameInstance->Open_Level(static_cast<_uint>(LEVEL::LEVEL_LOADING), CLevel_Loading::Create(m_pGraphic_Device, LEVEL::LEVEL_STAGE1));
-            else if (CurrentLevel == ENUM_CLASS(LEVEL::LEVEL_BOSS1)) // 보스1일 때 쉼터로 이동
-                m_pGameInstance->Open_Level(static_cast<_uint>(LEVEL::LEVEL_LOADING), CLevel_Loading::Create(m_pGraphic_Device, LEVEL::LEVEL_SHELTER));
-            else if (CurrentLevel == ENUM_CLASS(LEVEL::LEVEL_SHELTER)) // 쉼터일 때 보스2로 이동
-                m_pGameInstance->Open_Level(static_cast<_uint>(LEVEL::LEVEL_LOADING), CLevel_Loading::Create(m_pGraphic_Device, LEVEL::LEVEL_BOSS2));
-
-            /* }*/
-        }
+        _uint CurrentLevel = m_pGameInstance->Get_CurrentLevel();
+        /*m_pGameInstance->StopSound(ENUM_CLASS(CHANNELID::SOUND_EFFECT));
+        m_pGameInstance->PlaySoundW(L"breakBulletIce.wav", ENUM_CLASS(CHANNELID::SOUND_EFFECT), g_fEFFECTVolume - 0.6f);*/
+        if (CurrentLevel == ENUM_CLASS(LEVEL::LEVEL_TOWN))  //타운일 때 스테이지1로 이동
+            m_pGameInstance->Open_Level(static_cast<_uint>(LEVEL::LEVEL_LOADING), CLevel_Loading::Create(m_pGraphic_Device, LEVEL::LEVEL_STAGE1));
+        else if (CurrentLevel == ENUM_CLASS(LEVEL::LEVEL_BOSS1)) // 보스1일 때 쉼터로 이동
+            m_pGameInstance->Open_Level(static_cast<_uint>(LEVEL::LEVEL_LOADING), CLevel_Loading::Create(m_pGraphic_Device, LEVEL::LEVEL_SHELTER));
+        else if (CurrentLevel == ENUM_CLASS(LEVEL::LEVEL_SHELTER)) // 쉼터일 때 보스2로 이동
+            m_pGameInstance->Open_Level(static_cast<_uint>(LEVEL::LEVEL_LOADING), CLevel_Loading::Create(m_pGraphic_Device, LEVEL::LEVEL_BOSS2));
         break;
     }
     case GAMEOBJ_TYPE::EXPBALL:
@@ -621,6 +645,8 @@ void CPlayer::OnCollision(CGameObject* pGameObject)
         desc.strActionName = TEXT("GET_EXP");
         m_pGameInstance->Broadcast(ENUM_CLASS(EVENT_TYPE::EXP), &desc);
         pGameObject->Set_IsDead(TRUE);
+        m_pGameInstance->StopSound(ENUM_CLASS(CHANNELID::SOUND_EFFECT));
+        m_pGameInstance->PlaySoundW(L"changeConfirm.wav", ENUM_CLASS(CHANNELID::SOUND_EFFECT), g_fEFFECTVolume - 0.6f);
         break;
     }
     case GAMEOBJ_TYPE::OBJECT:
@@ -671,6 +697,28 @@ void CPlayer::OnCollision(CGameObject* pGameObject)
             _float3 vResult = vPlayerPos + vStunDir * 0.2f;    // 밀려날 정도 테스트
             m_pTransformCom->Set_State(STATE::POSITION, vResult);
         }
+        break;
+    }
+
+    case GAMEOBJ_TYPE::SHOP_ITEM:
+    {
+        if (pGameObject != nullptr)
+        {
+            if(m_pGameInstance->IsKeyDown('F'))
+                dynamic_cast<CField_Item*>(pGameObject)->Buy_Item();
+        }
+        break;
+    }
+
+    case GAMEOBJ_TYPE::GOLDLEAF:
+    {
+        CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::GOLD, dynamic_cast<CGoldLeaf*>(pGameObject)->Get_Gold());
+        /*ACTIONEVENT desc{};
+        desc.strActionName = TEXT("GET_GOLD");
+        m_pGameInstance->Broadcast(ENUM_CLASS(EVENT_TYPE::GOLD), &desc);*/
+        pGameObject->Set_IsDead(TRUE);
+        m_pGameInstance->StopSound(ENUM_CLASS(CHANNELID::SOUND_EFFECT));
+        m_pGameInstance->PlaySoundW(L"goldCollect.wav", ENUM_CLASS(CHANNELID::SOUND_EFFECT), g_fEFFECTVolume - 0.6f);
         break;
     }
 
@@ -846,7 +894,7 @@ HRESULT CPlayer::Ready_Components(void* pArg)
 
     // collider
     CCollider_OBB::OBB_DESC tColliderDesc;
-    tColliderDesc.vScale = _float3(0.7f, 0.5f, 0.7f);
+    tColliderDesc.vScale = _float3(0.7f, 4.f, 0.7f);
     tColliderDesc.pOwner = this;
     tColliderDesc.pTransform = m_pTransformCom;
     tColliderDesc.eType = m_eObjType;
@@ -918,8 +966,11 @@ void CPlayer::Ready_Parry()
     if (!m_isReadyFury) {
         if (m_pAnimatorTransCom->Get_CurStateTag() == L"Parry")
         {
+            
             if (m_pAnimatorCom->Get_CurStackedFrame() >= 8)
             {
+                m_pGameInstance->StopSound(ENUM_CLASS(CHANNELID::SOUND_PLAYER_EFFECT));
+                m_pGameInstance->PlaySoundW(L"DaggerAttack_ParrySuccess_2.wav", ENUM_CLASS(CHANNELID::SOUND_PLAYER_EFFECT), g_fEFFECTVolume - 0.6f);
                 m_fGodModeTime = 0.f;
                 Render_Font_Parry();
                 _float3 playerPos = m_pTransformCom->Get_State(STATE::POSITION);

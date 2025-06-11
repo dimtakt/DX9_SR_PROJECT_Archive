@@ -36,9 +36,8 @@ HRESULT CLevel_Town::Initialize()
 	if (FAILED(Ready_Layer_UI(TEXT("Layer_UI"))))
 		return E_FAIL;
 
-	// 테스트
-	//m_pGameInstance->PlaySoundW(L"01_Title_Screen.wav", ENUM_CLASS(CHANNELID::SOUND_PLAYER), 0.8f);
-	//m_pGameInstance->StopSound(ENUM_CLASS(CHANNELID::SOUND_BGM));
+	m_pGameInstance->StopAll();
+	m_pGameInstance->PlayBGM(L"bunnyville.wav", g_fBGMVolume - 0.9f);
 
 	return S_OK;
 }
@@ -155,6 +154,11 @@ HRESULT CLevel_Town::Ready_Layer_UI(const _wstring& strLayerTag)
 	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_TOWN), strLayerTag,
 		ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_Hud_Dash"), &Desc)))
 		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_TOWN), strLayerTag,
+		ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_BossHp_Askard"), &Desc)))
+		return E_FAIL;
+
 
 	////NPC 내에 생성
 	////상점 아이템 생성 Desc

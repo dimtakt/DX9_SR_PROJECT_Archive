@@ -54,6 +54,7 @@ void COption_Button::Update(_float fTimeDelta)
         if (m_pGameInstance->IsKeyDown(VK_LBUTTON))
         {
             // 옵션창 호출 필요
+            m_pGameInstance->PlaySoundW(L"sephiriteSelect.wav", ENUM_CLASS(CHANNELID::SOUND_EFFECT), g_fEFFECTVolume - 0.9f);
         }
     }
     else {

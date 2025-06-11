@@ -115,6 +115,8 @@ void CChapMap_Button::Click_Event()
 {
 	if (Check_Key_Down(g_hWnd, VK_LBUTTON))
 	{
+		m_pGameInstance->StopSound(ENUM_CLASS(CHANNELID::SOUND_UI));
+		m_pGameInstance->PlaySoundW(L"mapSelect.wav", ENUM_CLASS(CHANNELID::SOUND_UI), g_fUIVolume - 0.6f);
 		static_cast<CChapMap*>(m_pParent)->Player_Offset(m_fX, m_fY, g_MapDB[m_iMapID].m_iLine, m_iMapID);
 		
 		CRoom_Manager::GetInstance()->Clear(m_pGameInstance->Get_CurrentLevel());

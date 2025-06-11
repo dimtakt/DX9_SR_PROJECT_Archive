@@ -67,8 +67,15 @@ HRESULT CCamera_Follow::Initialize(void* pArg)
 
 void CCamera_Follow::Priority_Update(_float fTimeDelta)
 {
+
+	if (m_pGameInstance->IsKeyDown(VK_F2)) {
+		Start_Shake(1.f, 0.2f);
+	}
+
 	Move_Angle(90.f, fTimeDelta);
-	Follow_Target(fTimeDelta);
+	_float3 vNewCameraPos = Follow_Target(fTimeDelta);
+	_float3 vShakedCamPos = Apply_Shake(vNewCameraPos, fTimeDelta);
+	m_pTransformCom->Set_State(STATE::POSITION, vShakedCamPos);
 	__super::Update_VP_Matrices();
 }
 
@@ -126,32 +133,32 @@ HRESULT CCamera_Follow::Ready_Components(void* pArg)
 
 void CCamera_Follow::Move_Angle(_float fAngle, _float fTimeDelta)
 {
-	if (m_pGameInstance->IsKeyDown('Q'))
-	{
-		m_fCurrentAngle += fAngle;
-		if (m_fCurrentAngle >= 360.f)
-			m_fCurrentAngle -= 360.f;
+	//if (m_pGameInstance->IsKeyDown('Q'))
+	//{
+	//	m_fCurrentAngle += fAngle;
+	//	if (m_fCurrentAngle >= 360.f)
+	//		m_fCurrentAngle -= 360.f;
 
-		m_pTargetPlayerTransformCom->RotationAccumulate(_float3{ 0.f, 1.f, 0.f }, D3DXToRadian(fAngle));
-		//for (auto* component : m_vRotateObjectsTransformCom) {
-		//	component->RotationAccumulate(_float3{ 0.f, 1.f, 0.f }, D3DXToRadian(fAngle));
-		//}
-	}
+	//	m_pTargetPlayerTransformCom->RotationAccumulate(_float3{ 0.f, 1.f, 0.f }, D3DXToRadian(fAngle));
+	//	//for (auto* component : m_vRotateObjectsTransformCom) {
+	//	//	component->RotationAccumulate(_float3{ 0.f, 1.f, 0.f }, D3DXToRadian(fAngle));
+	//	//}
+	//}
 
-	if (m_pGameInstance->IsKeyDown('E'))
-	{
-		m_fCurrentAngle -= fAngle;
-		if (m_fCurrentAngle < 0.f)
-			m_fCurrentAngle += 360.f;
+	//if (m_pGameInstance->IsKeyDown('E'))
+	//{
+	//	m_fCurrentAngle -= fAngle;
+	//	if (m_fCurrentAngle < 0.f)
+	//		m_fCurrentAngle += 360.f;
 
-		m_pTargetPlayerTransformCom->RotationAccumulate(_float3{ 0.f, 1.f, 0.f }, D3DXToRadian(fAngle) * -1.f);
-		//for (auto* component : m_vRotateObjectsTransformCom) {
-		//	component->RotationAccumulate(_float3{ 0.f, 1.f, 0.f }, D3DXToRadian(fAngle) * -1.f);
-		//}
-	}
+	//	m_pTargetPlayerTransformCom->RotationAccumulate(_float3{ 0.f, 1.f, 0.f }, D3DXToRadian(fAngle) * -1.f);
+	//	//for (auto* component : m_vRotateObjectsTransformCom) {
+	//	//	component->RotationAccumulate(_float3{ 0.f, 1.f, 0.f }, D3DXToRadian(fAngle) * -1.f);
+	//	//}
+	//}
 }
 
-void CCamera_Follow::Follow_Target(_float fTimeDelta)
+_float3 CCamera_Follow::Follow_Target(_float fTimeDelta)
 {
 	if (m_bFirstFrame)
 	{
@@ -189,7 +196,7 @@ void CCamera_Follow::Follow_Target(_float fTimeDelta)
 		m_pTransformCom->Set_State(STATE::LOOK, vLook);
 
 		// 바로 return하여 보간 스킵 (첫 프레임만)
-		return;
+		return vStartPos;
 	}
 
 	if (m_bCameraTransition)
@@ -264,7 +271,7 @@ void CCamera_Follow::Follow_Target(_float fTimeDelta)
 		m_pTransformCom->Set_State(STATE::UP, vUp);
 		m_pTransformCom->Set_State(STATE::LOOK, vNewLook);
 		m_pTransformCom->Set_State(STATE::POSITION, vNewCamPos);
-		return;
+		return vNewCamPos;
 	}
 
 	// 일반 추적
@@ -317,7 +324,39 @@ void CCamera_Follow::Follow_Target(_float fTimeDelta)
 	m_pTransformCom->Set_State(STATE::LOOK, vNewLook);
 	m_pTransformCom->Set_State(STATE::POSITION, vNewCameraPos);
 
+	return vNewCameraPos;
+}
 
+void CCamera_Follow::Start_Shake(_float fDuration, _float fIntensity)
+{
+	m_bShake = true;
+	m_fShakeDuration = fDuration;
+	m_fShakeElapsed = 0.f;
+	m_fShakeIntensity = fIntensity;
+}
+
+_float3 CCamera_Follow::Apply_Shake(_float3 vBasePos, _float fTimeDelta)
+{
+	if (!m_bShake)
+		return vBasePos;
+
+	m_fShakeElapsed += fTimeDelta;
+
+	if (m_fShakeElapsed >= m_fShakeDuration)
+	{
+		m_bShake = false;
+		return vBasePos;
+	}
+
+	// 진동 감쇠
+	_float fProgress = m_fShakeElapsed / m_fShakeDuration;
+	_float fDampenedIntensity = m_fShakeIntensity * (1.f - fProgress);
+
+	_float fOffsetX = (rand() % 2000 / 1000.f - 1.f) * fDampenedIntensity;
+	_float fOffsetY = (rand() % 2000 / 1000.f - 1.f) * fDampenedIntensity;
+	_float fOffsetZ = (rand() % 2000 / 1000.f - 1.f) * fDampenedIntensity;
+
+	return vBasePos + _float3(fOffsetX, fOffsetY, fOffsetZ);
 }
 
 CCamera_Follow* CCamera_Follow::Create(LPDIRECT3DDEVICE9 pGraphic_Device)

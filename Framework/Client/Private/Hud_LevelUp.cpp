@@ -77,6 +77,8 @@ void CHud_LevelUp::Update(_float fTimeDelta)
 
 	if (m_pGameInstance->IsKeyDown('R'))
 	{
+		m_pGameInstance->StopSound(ENUM_CLASS(CHANNELID::SOUND_UI));
+		m_pGameInstance->PlaySoundW(L"levelUpUIOpen.wav", ENUM_CLASS(CHANNELID::SOUND_UI), g_fUIVolume - 0.5f);
 		_int iNumber = m_pGameInstance->Rand(0, 10);
 		if(iNumber > 9)
 			static_cast<CGacha*>(m_pGameInstance->Find_UIObj(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("UI_Gacha")))->UI_Open(CGacha::GACHA_TYPE::STONE);

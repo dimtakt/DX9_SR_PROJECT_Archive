@@ -157,6 +157,7 @@ void CTalent_Slot_Button::Ready_ButtonSet()
 		m_iAddValue -= 1;
 		break;
 	case 2:
+
 		m_iAddValue += 1;
 		break;
 	case 3:
@@ -184,6 +185,7 @@ void CTalent_Slot_Button::On_Button()
 
 	if (Is_Button_Pick() && m_pGameInstance->IsKeyDown(VK_LBUTTON))
 	{
+		_float fOldPoint = static_cast<CTalent_Slot*>(m_pParent)->Get_Value();
 		switch (m_iTexIdex)
 		{
 		case 0:
@@ -200,6 +202,8 @@ void CTalent_Slot_Button::On_Button()
 					CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CULSTATPOINT, -m_iAddValue);
 				}
 			}
+			m_pGameInstance->StopSound(ENUM_CLASS(CHANNELID::SOUND_UI));
+			m_pGameInstance->PlaySoundW(L"talentStatMinus.wav", ENUM_CLASS(CHANNELID::SOUND_UI), g_fUIVolume - 0.8f);
 			break;
 		case 1:
 			if (static_cast<CTalent_Slot*>(m_pParent)->Get_Value() > 0)
@@ -207,10 +211,14 @@ void CTalent_Slot_Button::On_Button()
 				static_cast<CTalent_Slot*>(m_pParent)->Add_Value(m_iAddValue);
 				CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CULSTATPOINT, -m_iAddValue);
 			}
+			m_pGameInstance->StopSound(ENUM_CLASS(CHANNELID::SOUND_UI));
+			m_pGameInstance->PlaySoundW(L"talentStatMinus.wav", ENUM_CLASS(CHANNELID::SOUND_UI), g_fUIVolume - 0.8f);
 			break;
 		case 2:
 			static_cast<CTalent_Slot*>(m_pParent)->Add_Value(m_iAddValue);
 			CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CULSTATPOINT, -m_iAddValue);
+			m_pGameInstance->StopSound(ENUM_CLASS(CHANNELID::SOUND_UI));
+			m_pGameInstance->PlaySoundW(L"talentPerk.wav", ENUM_CLASS(CHANNELID::SOUND_UI), g_fUIVolume - 0.8f);
 			break;
 		case 3:
 			if (iPoint < m_iAddValue)
@@ -223,7 +231,15 @@ void CTalent_Slot_Button::On_Button()
 				static_cast<CTalent_Slot*>(m_pParent)->Add_Value(m_iAddValue);
 				CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CULSTATPOINT, -m_iAddValue);
 			}
+			m_pGameInstance->StopSound(ENUM_CLASS(CHANNELID::SOUND_UI));
+			m_pGameInstance->PlaySoundW(L"talentPerk.wav", ENUM_CLASS(CHANNELID::SOUND_UI), g_fUIVolume - 0.8f);
 			break;
+		}
+		if ((fOldPoint < 10 && static_cast<CTalent_Slot*>(m_pParent)->Get_Value() >= 10) || 
+			(static_cast<CTalent_Slot*>(m_pParent)->Get_Value() == 20))
+		{
+			m_pGameInstance->StopSound(ENUM_CLASS(CHANNELID::SOUND_UI));
+			m_pGameInstance->PlaySoundW(L"talentPerk2.wav", ENUM_CLASS(CHANNELID::SOUND_UI), g_fUIVolume - 0.8f);
 		}
 
 	}

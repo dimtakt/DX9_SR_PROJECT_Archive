@@ -5,6 +5,8 @@
 #include "Stat_Manager.h"
 #include "EXP_Ball.h"
 #include "Gacha.h"
+#include "Field_Item.h"
+
 CInteraction_Normal::CInteraction_Normal(LPDIRECT3DDEVICE9 pGraphic_Device)
     : CGameObject{ pGraphic_Device }
 {
@@ -540,6 +542,34 @@ HRESULT CInteraction_Normal::Atifact_Component()
 #pragma region »óÀÎ
 HRESULT CInteraction_Normal::Merchant_Initialize()
 {
+    _float3 vMerchantPos = m_pTransformCom->Get_State(STATE::POSITION);
+
+    vector<size_t> m_iIndex;
+    m_iIndex.push_back(3);
+    m_iIndex.push_back(4);
+    m_iIndex.push_back(m_pGameInstance->Compute_Random(6, 10));
+    m_iIndex.push_back(m_pGameInstance->Compute_Random(11, 20));
+    m_iIndex.push_back(m_pGameInstance->Compute_Random(21, 29));
+    vector<_float3> m_vPos;
+    m_vPos.push_back(_float3(2.3f, 2.5f, 3.f));
+    m_vPos.push_back(_float3(1.3f, 2.5f, 1.f));
+    m_vPos.push_back(_float3(-0.1f, 2.5f, 3.f));
+    m_vPos.push_back(_float3(-1.5f, 2.5f, 1.f));
+    m_vPos.push_back(_float3(-2.6f, 2.5f, 3.f));
+
+    //m_vShopItem.push_back()
+    for (size_t i = 0; i < 5; i++)
+    {
+        CField_Item::FIELD_ITEM_DESC desc{};
+
+        desc.m_vTargetPos = vMerchantPos - m_vPos[i];
+        desc.m_iItemID = m_iIndex[i];
+        desc.m_iLevel = m_pGameInstance->Get_CurrentLevel();
+        desc.m_iGold = 10;
+
+        m_vShopItem.push_back(dynamic_cast<CField_Item*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_Field_Item"), &desc)));
+    }
+
     return S_OK;
 }
 
@@ -555,6 +585,12 @@ HRESULT CInteraction_Normal::Merchant_Update(_float fTimeDelta)
 
 HRESULT CInteraction_Normal::Merchant_Late_Update(_float fTimeDelta)
 {
+
+    for (auto& Item : m_vShopItem)
+    {
+        Item->Render_Field_Item(fTimeDelta, true);
+    }
+
     return S_OK;
 }
 
@@ -594,6 +630,19 @@ HRESULT CInteraction_Normal::Merchant_Component()
     m_pAnimatorCom_0->Add_State(L"Merchant", { m_pTextureCom_0, 5, true });
 
     return S_OK;
+}
+void CInteraction_Normal::ReadyShopItemCollision()
+{
+    for (auto& Item : m_vShopItem)
+    {
+        CCollider_OBB::OBB_DESC tColliderDesc;
+        tColliderDesc.pOwner = Item;
+        tColliderDesc.pTransform = dynamic_cast<CTransform*>(Item->Find_Component(TEXT("Com_Transform")));
+        tColliderDesc.eType = Item->Get_ObjType();
+        tColliderDesc.vScale = _float3(0.8f, 0.7f, 0.9f);
+        CCollider_OBB* pCol = dynamic_cast<CCollider_OBB*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::COMPONENT, ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Collider_OBB"), &tColliderDesc));
+        m_pGameInstance->Add_Collider(pCol);
+    }
 }
 #pragma endregion
 
@@ -647,6 +696,8 @@ void CInteraction_Normal::OnCollision(CGameObject* pGameObject)
 
                 CStat_Manager::GetInstance()->Interaction_Obj_Stat(GAMEOBJ_TYPE::EXP);
                 m_pAnimatorCom_0->Change_State(TEXT("EXP_Fx"));
+                m_pGameInstance->StopSound(ENUM_CLASS(CHANNELID::SOUND_EFFECT));
+                m_pGameInstance->PlaySoundW(L"shineMagical.wav", ENUM_CLASS(CHANNELID::SOUND_EFFECT), g_fEFFECTVolume - 0.6f);
                 m_bActive = FALSE;
             }
         }
@@ -665,6 +716,8 @@ void CInteraction_Normal::OnCollision(CGameObject* pGameObject)
                 {
                     CStat_Manager::GetInstance()->Interaction_Obj_Stat(GAMEOBJ_TYPE::HP);
                     m_pAnimatorCom_0->Change_State(TEXT("Empty_HP"));
+                    m_pGameInstance->StopSound(ENUM_CLASS(CHANNELID::SOUND_EFFECT));
+                    m_pGameInstance->PlaySoundW(L"healPotion02.wav", ENUM_CLASS(CHANNELID::SOUND_EFFECT), g_fEFFECTVolume - 0.6f);
                     m_bActive = FALSE;
                 }
 
@@ -676,6 +729,8 @@ void CInteraction_Normal::OnCollision(CGameObject* pGameObject)
             {
                 if (m_pGameInstance->IsKeyDown('F'))
                 {   
+                    m_pGameInstance->StopSound(ENUM_CLASS(CHANNELID::SOUND_UI));
+                    m_pGameInstance->PlaySoundW(L"sephiriteOpen.wav", ENUM_CLASS(CHANNELID::SOUND_UI), g_fUIVolume - 0.7f);
                     dynamic_cast<CGacha*>(m_pGameInstance->Find_UIObj(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("UI_Gacha")))->UI_Open(CGacha::GACHA_TYPE::STONE);
                     //m_bActive = FALSE;
                     dynamic_cast<CGacha*>(m_pGameInstance->Find_UIObj(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("UI_Gacha")))->Get_Item_Check();
@@ -694,6 +749,8 @@ void CInteraction_Normal::OnCollision(CGameObject* pGameObject)
             {
                 if (m_pGameInstance->IsKeyDown('F'))
                 {
+                    m_pGameInstance->StopSound(ENUM_CLASS(CHANNELID::SOUND_UI));
+                    m_pGameInstance->PlaySoundW(L"sephiriteOpen.wav", ENUM_CLASS(CHANNELID::SOUND_UI), g_fUIVolume - 0.7f);
                     dynamic_cast<CGacha*>(m_pGameInstance->Find_UIObj(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("UI_Gacha")))->UI_Open(CGacha::GACHA_TYPE::ARTEFACT);
                     //m_bActive = FALSE;
                     dynamic_cast<CGacha*>(m_pGameInstance->Find_UIObj(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("UI_Gacha")))->Get_Item_Check();
@@ -750,4 +807,10 @@ void CInteraction_Normal::Free()
     Safe_Release(m_pTextureCom_0);
     Safe_Release(m_pTextureCom_1);
     Safe_Release(m_pAnimatorCom_0);   
+
+    for (auto& Item : m_vShopItem)
+    {
+        Safe_Release(Item);
+    }
+    m_vShopItem.clear();
 }

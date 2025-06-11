@@ -42,10 +42,14 @@
 #include "Item_Tooltip_Mid.h"
 #include "FogPlane.h"
 #include "Hud_LevelUp.h"
-#include "Hud_Quick_Slot.h"
+#include "Hud_Slot.h"
 #include "Field_Item.h"
 #include "Field_Npc_Chat.h"
 #include "Field_Npc_Face.h"
+#include "BossHp_Askard.h"
+#include "BossHp_Ema.h"
+#include "GoldLeaf.h"
+
 CMainApp::CMainApp()
 	: m_pGameInstance{ CGameInstance::GetInstance() }
 {
@@ -198,10 +202,13 @@ HRESULT CMainApp::Ready_GameObject_Setting()
 		CHud_LevelUp::Create(m_pGraphic_Device, LEVEL::LEVEL_STATIC))))
 		return E_FAIL;
 
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_Hud_QuickSlot"),
-		CHud_Quick_Slot::Create(m_pGraphic_Device, LEVEL::LEVEL_STATIC))))
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_Hud_Slot"),
+		CHud_Slot::Create(m_pGraphic_Device, LEVEL::LEVEL_STATIC))))
 		return E_FAIL;
 
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_BossHp_Askard"),
+		CBossHp_Askard::Create(m_pGraphic_Device, LEVEL::LEVEL_STATIC))))
+		return E_FAIL;
 #pragma endregion
 
 #pragma region Prototype_GameObject_Field_UI
@@ -253,7 +260,7 @@ HRESULT CMainApp::Ready_GameObject_Setting()
 		return E_FAIL;
 #pragma endregion
 	
-#pragma region Prototype_GameObject_Loding_EXP_Ball
+#pragma region Prototype_GameObject_EXP_Ball
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_EXP_Ball"),
 		CEXP_Ball::Create(m_pGraphic_Device))))
 		return E_FAIL;
@@ -294,6 +301,12 @@ HRESULT CMainApp::Ready_GameObject_Setting()
 #pragma region Prototype_GameObject_FogPlane
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_FogPlane"),
 		CFogPlane::Create(m_pGraphic_Device))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region Prototype_GameObject_GoldLeaf
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_GoldLeaf"),
+		CGoldLeaf::Create(m_pGraphic_Device))))
 		return E_FAIL;
 #pragma endregion
 
@@ -513,6 +526,11 @@ HRESULT CMainApp::Ready_Texture_Setting()
 
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Rect_NpcFace"),
 		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/UI/Npc/FaceIcon_%d.png"), 2))))
+		return E_FAIL;
+#pragma endregion
+#pragma region Prototype_Component_Hud_Boss
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Rect_BossHp"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/UI/HUD/Hud_BossHp_%d.png"), 2))))
 		return E_FAIL;
 #pragma endregion
 #pragma region Prototype_Component_Hud_States_Texture
@@ -769,6 +787,9 @@ HRESULT CMainApp::Ready_Texture_Setting()
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Gold"),
 		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/InteractionObject/Gold/Gold%d.png"), 1))))
 		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_GoldLeaf"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/InteractionObject/Gold/GoldLeaf.png"), 1))))
+		return E_FAIL;
 #pragma endregion
 
 #pragma region Prototype_Component_HP
@@ -961,6 +982,11 @@ void CMainApp::Ready_Key_Setting()
 	m_pGameInstance->AddTrackingKey('F');
 	m_pGameInstance->AddTrackingKey('B');
 	m_pGameInstance->AddTrackingKey(VK_F1);
+	m_pGameInstance->AddTrackingKey(VK_F2);
+	m_pGameInstance->AddTrackingKey(VK_F3);
+	m_pGameInstance->AddTrackingKey(VK_F4);
+	m_pGameInstance->AddTrackingKey(VK_F5);
+	m_pGameInstance->AddTrackingKey(VK_F6);
 	// 임시 테스트용
 #if _DEBUG
 	m_pGameInstance->AddTrackingKey('J');
@@ -1113,9 +1139,10 @@ HRESULT CMainApp::Ready_UI_Stting()
 	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Layer_Field_Npc"),
 		ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_Field_Npc_Face"))))
 		return E_FAIL;
-	//if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Layer_LevelUp"),
-	//	ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_Hud_QuickSlot"))))
-	//	return E_FAIL;
+	
+	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Layer_Slot"),
+		ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_Hud_Slot"))))
+		return E_FAIL;
 	return S_OK;
 }
 

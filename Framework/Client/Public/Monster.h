@@ -41,6 +41,7 @@ public:
 	void SetUp_RenderState();
 	void Reset_RenderState();
 	void Ready_ExpBall();
+	void Ready_Gold();
 
 public:
 	virtual void OnCollision(CGameObject* pGameObject) override;

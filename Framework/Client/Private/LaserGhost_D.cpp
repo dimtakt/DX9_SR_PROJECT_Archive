@@ -32,8 +32,8 @@ HRESULT CLaserGhost_D::Initialize(void* pArg)
     //m_iAtkCooldownFrames = static_cast<_int>(m_pGameInstance->Compute_Random(0, 300));
 
 
-    m_iMaxHp = 70;
-    m_iCulHp = 70;
+    m_iMaxHp = 120;
+    m_iCulHp = 120;
     m_eMonsterType = MONSTER_TYPE::LASERGHOST;
     m_pTransformCom->Scaling(1.5f, 1.5f, 1.5f);
     return S_OK;
@@ -209,6 +209,8 @@ void CLaserGhost_D::Update(_float fTimeDelta)
         {
             if (m_pAnimatorCom->Change_State(L"AttackReady"))
             {
+                m_pGameInstance->StopSound(ENUM_CLASS(CHANNELID::SOUND_MONSTER_LONG_EFFECT));
+                m_pGameInstance->PlaySoundW(L"GolemLaser.wav", ENUM_CLASS(CHANNELID::SOUND_MONSTER_LONG_EFFECT), g_fEFFECTVolume - 0.9f);
                 CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::NORMAL_EFFECT, L"Prototype_Component_Texture_LaserGhost_D_Effect_AttackReady",
                     *m_pTransformCom->Get_WorldMatrix(), matMonsterWorld);
                 m_vLockedOnPos = vTargetPos;
@@ -543,9 +545,9 @@ HRESULT CLaserGhost_D::Ready_Components(void* pArg)
     m_pAnimatorCom->Add_State(L"Idle",          { m_pTextureCom_Idle, 4, true });           // 14
     m_pAnimatorCom->Add_State(L"Move",          { m_pTextureCom_Move, 4, true });           // 14
     m_pAnimatorCom->Add_State(L"Down",          { m_pTextureCom_Down, 4, true });           // 3
-    m_pAnimatorCom->Add_State(L"AttackReady",   { m_pTextureCom_AttackReady, 4, false });   // 28
+    m_pAnimatorCom->Add_State(L"AttackReady",   { m_pTextureCom_AttackReady, 7, false });   // 28
     m_pAnimatorCom->Add_State(L"Attack_Start",  { m_pTextureCom_Attack_Start, 4, false });  // 1
-    m_pAnimatorCom->Add_State(L"Attack_Cycle",  { m_pTextureCom_Attack_Cycle, 4, false });  // 7
+    m_pAnimatorCom->Add_State(L"Attack_Cycle",  { m_pTextureCom_Attack_Cycle, 5, false });  // 7
     m_pAnimatorCom->Add_State(L"Attack_End",    { m_pTextureCom_Attack_End, 4, false });    // 8
     m_pAnimatorCom->Add_State(L"Airborne",      { m_pTextureCom_Airborne, 4, false });      // 3
     m_pAnimatorCom->Add_State(L"Attack_Standby",{ m_pTextureCom_Idle, 4, false });          // 14

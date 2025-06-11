@@ -138,7 +138,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>Engine.lib;d3dx9.lib;fmod_vc.lib;fmodL_vc.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Engine.lib;d3dx9.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>../../EngineSDK/Lib/;C:/vcpkg/installed/x64-windows/lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
@@ -150,7 +150,13 @@
     <ClInclude Include="..\Public\Animations\Anim_Player_Parry.h" />
     <ClInclude Include="..\public\Artefact_Tier_Icon.h" />
     <ClInclude Include="..\public\Artefact_Tooltip.h" />
+    <ClInclude Include="..\public\Askard_Frame.h" />
+    <ClInclude Include="..\public\Askard.h" />
+    <ClInclude Include="..\public\Askard_Tentacle.h" />
+    <ClInclude Include="..\public\Askard_Hpbar.h" />
     <ClInclude Include="..\Public\BackGround.h" />
+    <ClInclude Include="..\public\BossHp_Askard.h" />
+    <ClInclude Include="..\public\BossHp_Ema.h" />
     <ClInclude Include="..\Public\Buff_Frame.h" />
     <ClInclude Include="..\Public\Buff_Icon.h" />
     <ClInclude Include="..\Public\Buff_Type_Base.h" />
@@ -174,13 +180,14 @@
     <ClInclude Include="..\public\Erma_Hand_R.h" />
     <ClInclude Include="..\public\Erma_Head.h" />
     <ClInclude Include="..\Public\EXP_Ball.h" />
-    <ClInclude Include="..\public\Face_Rect.h" />
-    <ClInclude Include="..\public\Face_Rect_Small.h" />
+    <ClInclude Include="..\Public\Face_Rect.h" />
+    <ClInclude Include="..\Public\Face_Rect_Small.h" />
     <ClInclude Include="..\public\Field_Font.h" />
-    <ClInclude Include="..\public\Field_Item.h" />
-    <ClInclude Include="..\public\Field_Item_Guide.h" />
-    <ClInclude Include="..\public\Field_Npc_Chat.h" />
-    <ClInclude Include="..\public\Field_Npc_Face.h" />
+    <ClInclude Include="..\Public\Field_Item.h" />
+    <ClInclude Include="..\Public\Field_Item_Guide.h" />
+    <ClInclude Include="..\Public\Field_Npc_Chat.h" />
+    <ClInclude Include="..\Public\Field_Npc_Face.h" />
+    <ClInclude Include="..\Public\Fire.h" />
     <ClInclude Include="..\Public\FogPlane.h" />
     <ClInclude Include="..\public\Gacha.h" />
     <ClInclude Include="..\public\Gacha_Button_Icon.h" />
@@ -189,8 +196,10 @@
     <ClInclude Include="..\public\Gacha_Reroll.h" />
     <ClInclude Include="..\public\Gacha_Slot.h" />
     <ClInclude Include="..\public\Gacha_Slot_Selete.h" />
+    <ClInclude Include="..\Public\GoldLeaf.h" />
     <ClInclude Include="..\public\Hud_LevelUp.h" />
     <ClInclude Include="..\public\Hud_Quick_Slot.h" />
+    <ClInclude Include="..\public\Hud_Slot.h" />
     <ClInclude Include="..\public\Item_Tooltip_Bottom.h" />
     <ClInclude Include="..\public\Item_Tooltip_Mid.h" />
     <ClInclude Include="..\public\LaserGhost_D.h" />
@@ -306,10 +315,10 @@
     <ClInclude Include="..\Public\Title_Star.h" />
     <ClInclude Include="..\Public\Title_Logo_Wave.h" />
     <ClInclude Include="..\Public\Title_Tree.h" />
-    <ClInclude Include="..\Public\Fire.h" />
     <ClInclude Include="..\public\UI_KeyGuide.h" />
     <ClInclude Include="..\Public\Tree.h" />
     <ClInclude Include="Client.h" />
+    <ClInclude Include="Ema_Frame.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="targetver.h" />
@@ -321,7 +330,13 @@
     <ClCompile Include="..\Private\Animations\Anim_Player_Parry.cpp" />
     <ClCompile Include="..\private\Artefact_Tier_Icon.cpp" />
     <ClCompile Include="..\private\Artefact_Tooltip.cpp" />
+    <ClCompile Include="..\private\Askard_Frame.cpp" />
+    <ClCompile Include="..\private\Askard.cpp" />
+    <ClCompile Include="..\private\Askard_Tentacle.cpp" />
+    <ClCompile Include="..\private\Askard_Hpbar.cpp" />
     <ClCompile Include="..\Private\BackGround.cpp" />
+    <ClCompile Include="..\private\BossHp_Askard.cpp" />
+    <ClCompile Include="..\private\BossHp_Ema.cpp" />
     <ClCompile Include="..\Private\Buff_Frame.cpp" />
     <ClCompile Include="..\Private\Buff_Icon.cpp" />
     <ClCompile Include="..\Private\Buff_Type_Base.cpp" />
@@ -341,13 +356,14 @@
     <ClCompile Include="..\private\Erma_Hand_R.cpp" />
     <ClCompile Include="..\private\Erma_Head.cpp" />
     <ClCompile Include="..\Private\EXP_Ball.cpp" />
-    <ClCompile Include="..\private\Face_Rect.cpp" />
-    <ClCompile Include="..\private\Face_Rect_Small.cpp" />
+    <ClCompile Include="..\Private\Face_Rect.cpp" />
+    <ClCompile Include="..\Private\Face_Rect_Small.cpp" />
     <ClCompile Include="..\private\Field_Font.cpp" />
-    <ClCompile Include="..\private\Field_Item.cpp" />
-    <ClCompile Include="..\private\Field_Item_Guide.cpp" />
-    <ClCompile Include="..\private\Field_Npc_Chat.cpp" />
-    <ClCompile Include="..\private\Field_Npc_Face.cpp" />
+    <ClCompile Include="..\Private\Field_Item.cpp" />
+    <ClCompile Include="..\Private\Field_Item_Guide.cpp" />
+    <ClCompile Include="..\Private\Field_Npc_Chat.cpp" />
+    <ClCompile Include="..\Private\Field_Npc_Face.cpp" />
+    <ClCompile Include="..\Private\Fire.cpp" />
     <ClCompile Include="..\Private\FogPlane.cpp" />
     <ClCompile Include="..\private\Gacha.cpp" />
     <ClCompile Include="..\private\Gacha_Button_Icon.cpp" />
@@ -356,8 +372,10 @@
     <ClCompile Include="..\private\Gacha_Reroll.cpp" />
     <ClCompile Include="..\private\Gacha_Slot.cpp" />
     <ClCompile Include="..\private\Gacha_Slot_Selete.cpp" />
+    <ClCompile Include="..\Private\GoldLeaf.cpp" />
     <ClCompile Include="..\private\Hud_LevelUp.cpp" />
     <ClCompile Include="..\private\Hud_Quick_Slot.cpp" />
+    <ClCompile Include="..\private\Hud_Slot.cpp" />
     <ClCompile Include="..\private\Item_Tooltip_Bottom.cpp" />
     <ClCompile Include="..\private\Item_Tooltip_Mid.cpp" />
     <ClCompile Include="..\Private\LaserGhost_D.cpp" />
@@ -463,11 +481,11 @@
     <ClCompile Include="..\Private\Title_Star.cpp" />
     <ClCompile Include="..\Private\Title_Logo_Wave.cpp" />
     <ClCompile Include="..\Private\Title_Tree.cpp" />
-    <ClCompile Include="..\Private\Fire.cpp" />
     <ClCompile Include="..\Private\Tree.cpp" />
     <ClCompile Include="..\private\UI_KeyGuide.cpp" />
     <ClCompile Include="..\public\Animations\Anim_Player_Fury.cpp" />
     <ClCompile Include="Client.cpp" />
+    <ClCompile Include="Ema_Frame.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Client.rc" />
