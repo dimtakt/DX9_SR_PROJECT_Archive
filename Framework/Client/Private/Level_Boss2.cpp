@@ -180,7 +180,25 @@ HRESULT CLevel_Boss2::Ready_Layer_Room(const _wstring& strLayerTag)
 			m_pGameInstance->Broadcast(ENUM_CLASS(EVENT_TYPE::ROOMCHANGE), &EventDesc);
 		}
 
+		list<CMonster::MONSTERDESC> DescList;
 
+		if (iCount == 1)
+		{
+			CMonster::MONSTERDESC tDesc = {};
+			tDesc.iLayerLevelIndex = ENUM_CLASS(LEVEL::LEVEL_BOSS1);
+			tDesc.iPrototypeLevelIndex = ENUM_CLASS(LEVEL::LEVEL_BOSS1);
+			tDesc.strLayerTag = strLayerTag;
+			tDesc.pTerrainBox = pRoom->Get_TerrainBox();
+
+#pragma region Askard Spawn test...
+
+			tDesc.strPrototypeTag = TEXT("Prototype_GameObject_Boss_Askard");
+			DescList.push_back(tDesc);
+			CMonster_Factory::GetInstance()->Add_Monsters(pRoom, DescList, MONSTER_TYPE_A::MONSTER_BOSS_ASKARD);
+			DescList.clear();
+
+#pragma endregion
+		}
 
 		// 룸매니저 투입
 		CRoom_Manager::GetInstance()->Add_Room(pRoom, ENUM_CLASS(LEVEL::LEVEL_BOSS2), strLayerTag);

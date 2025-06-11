@@ -2,8 +2,12 @@
 #include "Monster.h"
 #include "Client_Defines.h"
 
+#include "Askard_Tentacle.h"
+
+
 BEGIN(Client)
 
+//class CAskard_Tentacle;
 
 class CAskard :	public CMonster
 {
@@ -51,6 +55,8 @@ public:
 private:
 	HRESULT Ready_Components(void* pArg);
 	HRESULT Ready_Object();
+
+	void Summon_Tentacle(_float3 vPosition, CAskard_Tentacle::TYPE_TENTACLE eType);
 
 public:
 	virtual void OnCollision(CGameObject* pGameObject) override;

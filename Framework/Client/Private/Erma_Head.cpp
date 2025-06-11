@@ -398,6 +398,11 @@ void CErma_Head::PlayPattern(PATTERN_HEAD ePattern, _bool isForced)
 
     switch (ePattern)
     {
+    case Client::CErma_Head::PATTERN_HEAD::PT_IDLE:
+        if (m_pAnimatorCom->Get_CurStateTag() == L"Idle")
+            m_pAnimatorCom->Change_State(L"Standby");
+        m_isPatternPlaying = false;
+        break;
     case Client::CErma_Head::PATTERN_HEAD::PT_AWAKEN:
         if (m_pAnimatorCom->Get_CurStateTag() == L"Standby")
             m_pAnimatorCom->Change_State(L"Idle");
@@ -410,10 +415,6 @@ void CErma_Head::PlayPattern(PATTERN_HEAD ePattern, _bool isForced)
     case Client::CErma_Head::PATTERN_HEAD::PT_BROKEN:
         m_isPatternPlaying = false;
         m_pAnimatorCom->Change_State(L"Broken");
-        break;
-    case Client::CErma_Head::PATTERN_HEAD::PT_IDLE:
-        m_isPatternPlaying = false;
-        m_pAnimatorCom->Change_State(L"Idle");
         break;
     default:
         break;
