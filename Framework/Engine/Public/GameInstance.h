@@ -182,7 +182,14 @@ public:
 	void StopAll();
 	void SetChannelVolume(_uint SoundChannel, float fVolume);
 	bool IsPlaying(_uint SoundChannel);
+#pragma endregion
 
+#pragma region PARTICLE_MANAGER
+	void Priority_Update(_float fTimeDelta);
+	void Update(_float fTimeDelta, _uint iParticleType);
+	void Late_Update(_float fTimeDelta, _uint iParticleType);
+	HRESULT Create_Particle(_uint iParticleType, _uint iLayerLevelIndex, const _wstring& strLayerTag, _float3 vScale, _bool bUseOrtho =false);
+	HRESULT Play(_uint iParticleType, _float3 vPos);
 #pragma endregion
 
 private:
@@ -203,6 +210,8 @@ private:
 	class CEvent_Manager*		m_pEvent_Manager = { nullptr };
 	class CUIObject_Manager*	m_pUIObject_Manager = { nullptr };
 	class CSound_Manager*		m_pSound_Manager = { nullptr };
+	class CParticle_Manager*	m_pParticle_Manager = { nullptr };
+
 public:
 	void Release_Engine();
 	virtual void Free() override;

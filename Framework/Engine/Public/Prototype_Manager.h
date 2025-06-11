@@ -13,6 +13,8 @@
 #include "GameObject.h"
 #include "Collider_OBB.h"
 #include "UIObject.h"
+#include "Particle.h"
+
 BEGIN(Engine)
 
 class CPrototype_Manager final : public CBase
