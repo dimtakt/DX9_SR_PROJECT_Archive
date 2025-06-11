@@ -454,6 +454,9 @@
     <Filter Include="02.GameObject\Particle\RainParicle">
       <UniqueIdentifier>{8e64aac7-3dec-4bf1-9984-f08eba41c47a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\UI\HUD\HUD_BossHp\BossHp_Ema\ETC\SubHp">
+      <UniqueIdentifier>{8169109e-c328-45a9-9998-484c3a8b9c4b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -963,9 +966,6 @@
     <ClInclude Include="..\public\Askard_Frame.h">
       <Filter>02.GameObject\UI\HUD\HUD_BossHp\BossHp_Askard\ETC</Filter>
     </ClInclude>
-    <ClInclude Include="Ema_Frame.h">
-      <Filter>02.GameObject\UI\HUD\HUD_BossHp\BossHp_Ema\ETC</Filter>
-    </ClInclude>
     <ClInclude Include="..\Public\Field_Npc_Chat.h">
       <Filter>02.GameObject\UI\Field\Field_Npc_Chat</Filter>
     </ClInclude>
@@ -992,6 +992,18 @@
     </ClInclude>
     <ClInclude Include="..\Public\RainParticle.h">
       <Filter>02.GameObject\Particle\RainParicle</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Ema_Frame.h">
+      <Filter>02.GameObject\UI\HUD\HUD_BossHp\BossHp_Ema\ETC</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Ema_Hpbar.h">
+      <Filter>02.GameObject\UI\HUD\HUD_BossHp\BossHp_Ema\ETC</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\BossHp_SubHp.h">
+      <Filter>02.GameObject\UI\HUD\HUD_BossHp\BossHp_Ema\ETC\SubHp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Ema_SubHpbar.h">
+      <Filter>02.GameObject\UI\HUD\HUD_BossHp\BossHp_Ema\ETC\SubHp</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1464,9 +1476,6 @@
     <ClCompile Include="..\private\Askard_Frame.cpp">
       <Filter>02.GameObject\UI\HUD\HUD_BossHp\BossHp_Askard\ETC</Filter>
     </ClCompile>
-    <ClCompile Include="Ema_Frame.cpp">
-      <Filter>02.GameObject\UI\HUD\HUD_BossHp\BossHp_Ema\ETC</Filter>
-    </ClCompile>
     <ClCompile Include="..\Private\Field_Npc_Chat.cpp">
       <Filter>02.GameObject\UI\Field\Field_Npc_Chat</Filter>
     </ClCompile>
@@ -1488,11 +1497,23 @@
     <ClCompile Include="..\Private\GoldLeaf.cpp">
       <Filter>02.GameObject\Object\GoldLeaf</Filter>
     </ClCompile>
+    <ClCompile Include="..\Private\RainParticle.cpp">
+      <Filter>02.GameObject\Particle\RainParicle</Filter>
+    </ClCompile>
     <ClCompile Include="..\private\Askard_Hpbar.cpp">
       <Filter>02.GameObject\UI\HUD\HUD_BossHp\BossHp_Askard\ETC</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\RainParticle.cpp">
-      <Filter>02.GameObject\Particle\RainParicle</Filter>
+    <ClCompile Include="..\Private\Ema_Frame.cpp">
+      <Filter>02.GameObject\UI\HUD\HUD_BossHp\BossHp_Ema\ETC</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Ema_Hpbar.cpp">
+      <Filter>02.GameObject\UI\HUD\HUD_BossHp\BossHp_Ema\ETC</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\BossHp_SubHp.cpp">
+      <Filter>02.GameObject\UI\HUD\HUD_BossHp\BossHp_Ema\ETC\SubHp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Ema_SubHpbar.cpp">
+      <Filter>02.GameObject\UI\HUD\HUD_BossHp\BossHp_Ema\ETC\SubHp</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
