@@ -7,12 +7,12 @@ class CVIBuffer_Rect;
 END
 
 BEGIN(Client)
-class CHud_Slot_CoolTime final : public CProgressBar
+class CHud_Slot_EatPotion final : public CProgressBar
 {
 private:
-								CHud_Slot_CoolTime(LPDIRECT3DDEVICE9 pGraphic_Device);
-								CHud_Slot_CoolTime(const CHud_Slot_CoolTime& Prototype);
-	virtual						~CHud_Slot_CoolTime() = default;
+								CHud_Slot_EatPotion(LPDIRECT3DDEVICE9 pGraphic_Device);
+								CHud_Slot_EatPotion(const CHud_Slot_EatPotion& Prototype);
+	virtual						~CHud_Slot_EatPotion() = default;
 public:
 	virtual HRESULT				Initialize_Prototype() override;
 	virtual HRESULT				Initialize(void* pArg) override;
@@ -33,7 +33,7 @@ private:
 	HRESULT						Ready_Components();
 
 public:
-	static CHud_Slot_CoolTime*	Create(LPDIRECT3DDEVICE9 pGraphic_Device);
+	static CHud_Slot_EatPotion*	Create(LPDIRECT3DDEVICE9 pGraphic_Device);
 	virtual CGameObject*		Clone(void* pArg) override;
 	virtual void				Free() override;
 };

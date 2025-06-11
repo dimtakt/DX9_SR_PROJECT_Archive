@@ -206,6 +206,7 @@
     <ClInclude Include="..\public\Hud_Quick_Slot.h" />
     <ClInclude Include="..\public\Hud_Slot.h" />
     <ClInclude Include="..\public\Hud_Slot_CoolTime.h" />
+    <ClInclude Include="..\public\Hud_Slot_EatPotion.h" />
     <ClInclude Include="..\public\Hud_Slot_Guide.h" />
     <ClInclude Include="..\public\Item_Tooltip_Bottom.h" />
     <ClInclude Include="..\public\Item_Tooltip_Mid.h" />
@@ -388,6 +389,7 @@
     <ClCompile Include="..\private\Hud_Quick_Slot.cpp" />
     <ClCompile Include="..\private\Hud_Slot.cpp" />
     <ClCompile Include="..\private\Hud_Slot_CoolTime.cpp" />
+    <ClCompile Include="..\private\Hud_Slot_EatPotion.cpp" />
     <ClCompile Include="..\private\Hud_Slot_Guide.cpp" />
     <ClCompile Include="..\private\Item_Tooltip_Bottom.cpp" />
     <ClCompile Include="..\private\Item_Tooltip_Mid.cpp" />

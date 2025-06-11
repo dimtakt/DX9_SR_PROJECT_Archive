@@ -16,11 +16,11 @@ HRESULT CHud_Slot_CoolTime::Initialize_Prototype()
 
 HRESULT CHud_Slot_CoolTime::Initialize(void* pArg)
 {
-	m_fSizeX = 610;
-	m_fSizeY = 40;
+	m_fSizeX = 50;
+	m_fSizeY = 50;
 	m_fX = 0;
 	m_fY = 0;
-	m_fZ = UI_DEPTH::BOSSHP;
+	m_fZ = UI_DEPTH::KEY_GUIDE;
 	m_iWinSizeX = g_iWinSizeX;
 	m_iWinSizeY = g_iWinSizeY;
 
@@ -46,30 +46,55 @@ void CHud_Slot_CoolTime::Update(_float fTimeDelta)
 
 void CHud_Slot_CoolTime::Late_Update(_float fTimeDelta)
 {
-	Progress_UpdateX();
-	m_pGameInstance->Add_RenderGroup(RENDERGROUP::RG_UI, this);
+	Progress_UpdateY();
+	m_pGameInstance->Add_RenderGroup(RENDERGROUP::RG_UI_BLEND, this);
 }
 
 HRESULT CHud_Slot_CoolTime::Render()
 {
+	Set_RenderState();
+
 	m_pGraphic_Device->SetTexture(0, NULL);
 	m_pVIBufferCom->Bind_Buffers();
 	__super::Begin();
 	m_pVIBufferCom->Render();
 	__super::End();
+
+	Reset_RenderState();
 	return S_OK;
 }
 
-void CHud_Slot_CoolTime::HpBar_Set(_int iCulValue, _int iMaxValue)
+void CHud_Slot_CoolTime::Progerss_Set(_int iCulValue, _int iMaxValue)
 {
 	m_iCulValue = iCulValue;
 	m_iCulMaxValue = iMaxValue;
 }
 
 
+void CHud_Slot_CoolTime::Set_RenderState()
+{
+	m_pGraphic_Device->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
+
+	m_pGraphic_Device->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
+
+	m_pGraphic_Device->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
+
+	m_pGraphic_Device->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
+
+	m_pGraphic_Device->SetRenderState(D3DRS_BLENDOP, D3DBLENDOP_ADD);
+
+}
+
+void CHud_Slot_CoolTime::Reset_RenderState()
+{
+	m_pGraphic_Device->SetRenderState(D3DRS_ALPHABLENDENABLE, FALSE);
+
+	m_pGraphic_Device->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
+}
+
 HRESULT CHud_Slot_CoolTime::Ready_Components()
 {
-	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Rect_UI_Hud_States_Hp"),
+	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Rect_UI_Alpha_Black"),
 		TEXT("Com_VIBuffer"), reinterpret_cast<CComponent**>(&m_pVIBufferCom))))
 		return E_FAIL;
 

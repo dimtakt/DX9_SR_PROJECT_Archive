@@ -1020,6 +1020,9 @@
     <ClInclude Include="..\public\Hud_Slot_CoolTime.h">
       <Filter>02.GameObject\UI\HUD\HUD_Quick_Slot\ETC</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\Hud_Slot_EatPotion.h">
+      <Filter>02.GameObject\UI\HUD\HUD_Quick_Slot\ETC</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -1537,6 +1540,9 @@
       <Filter>02.GameObject\UI\HUD\HUD_Quick_Slot</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Hud_Slot_CoolTime.cpp">
+      <Filter>02.GameObject\UI\HUD\HUD_Quick_Slot\ETC</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Hud_Slot_EatPotion.cpp">
       <Filter>02.GameObject\UI\HUD\HUD_Quick_Slot\ETC</Filter>
     </ClCompile>
   </ItemGroup>

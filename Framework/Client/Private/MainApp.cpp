@@ -506,7 +506,7 @@ HRESULT CMainApp::Ready_Texture_Setting()
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Rect_UI_BalckRect"), CVIBuffer_Rect::Create(m_pGraphic_Device, vRectCol))))
 		return E_FAIL;
 
-	vRectCol = { 1.0f, 0.f, 0.f, 0.8f };
+	vRectCol = { 0.f, 0.f, 0.f, 0.7f };
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Rect_UI_Alpha_Black"), CVIBuffer_Rect::Create(m_pGraphic_Device, vRectCol))))
 		return E_FAIL;
 
