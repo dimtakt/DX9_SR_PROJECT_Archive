@@ -87,6 +87,12 @@ void CStat_Manager::Cal_Stats(STAT_INFO eStat, float fValue)
     if (m_fCurStats[static_cast<int>(eStat)] <= 0)
         m_fCurStats[static_cast<int>(eStat)] = 0;
 
+    if (m_fCurStats[static_cast<int>(STAT_INFO::CULHP)] >= m_fCurStats[static_cast<int>(STAT_INFO::MAXHP)])
+        m_fCurStats[static_cast<int>(STAT_INFO::CULHP)] = m_fCurStats[static_cast<int>(STAT_INFO::MAXHP)];
+
+    if (m_fCurStats[static_cast<int>(STAT_INFO::CULMP)] >= m_fCurStats[static_cast<int>(STAT_INFO::MAXMP)])
+        m_fCurStats[static_cast<int>(STAT_INFO::CULMP)] = m_fCurStats[static_cast<int>(STAT_INFO::MAXMP)];
+
     if (eStat == STAT_INFO::EXP)
     {
         if (m_fCurStats[static_cast<int>(eStat)] >= 100.f)

@@ -1026,6 +1026,9 @@
     <ClInclude Include="..\Public\Planet.h">
       <Filter>02.GameObject\Player\Planet</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\Hud_Slot_EatPotion.h">
+      <Filter>02.GameObject\UI\HUD\HUD_Quick_Slot\ETC</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -1547,6 +1550,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\Planet.cpp">
       <Filter>02.GameObject\Player\Planet</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Hud_Slot_EatPotion.cpp">
+      <Filter>02.GameObject\UI\HUD\HUD_Quick_Slot\ETC</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
