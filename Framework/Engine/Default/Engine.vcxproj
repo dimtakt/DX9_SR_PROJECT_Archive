@@ -191,6 +191,8 @@ call Copy.bat</Command>
     <ClInclude Include="..\Public\Network_Manager.h" />
     <ClInclude Include="..\public\Collider_OBB.h" />
     <ClInclude Include="..\Public\Object_Manager.h" />
+    <ClInclude Include="..\Public\Particle.h" />
+    <ClInclude Include="..\Public\Particle_Manager.h" />
     <ClInclude Include="..\public\Picking.h" />
     <ClInclude Include="..\public\PlayerStats.h" />
     <ClInclude Include="..\public\ProgressBar.h" />
@@ -235,6 +237,8 @@ call Copy.bat</Command>
     <ClCompile Include="..\private\ItemObject.cpp" />
     <ClCompile Include="..\Private\Light.cpp" />
     <ClCompile Include="..\Private\Network_Manager.cpp" />
+    <ClCompile Include="..\Private\Particle.cpp" />
+    <ClCompile Include="..\Private\Particle_Manager.cpp" />
     <ClCompile Include="..\private\Picking.cpp" />
     <ClCompile Include="..\private\PlayerStats.cpp" />
     <ClCompile Include="..\private\ProgressBar.cpp" />

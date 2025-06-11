@@ -90,6 +90,7 @@ public:
 	HRESULT Merchant_Late_Update(_float fTimeDelta);
 	HRESULT Merchant_Render();
 	HRESULT Merchant_Component();
+	void ReadyShopItemCollision();
 #pragma endregion
 
 private:
@@ -101,6 +102,9 @@ private:
 
 	_bool m_bActive = { TRUE };
 	_bool m_bUsing = { FALSE };
+
+	vector<class CField_Item*> m_vShopItem = {};
+	
 
 private:
 	HRESULT Ready_Components();

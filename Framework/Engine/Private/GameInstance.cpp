@@ -18,6 +18,7 @@
 #include "Event_Manager.h"
 #include "UIObject_Manager.h"
 #include "Sound_Manager.h"
+#include "Particle_Manager.h"
 IMPLEMENT_SINGLETON(CGameInstance)
 
 CGameInstance::CGameInstance()
@@ -94,6 +95,10 @@ HRESULT CGameInstance::Initialize_Engine(const ENGINE_DESC& EngineDesc, LPDIRECT
 
     m_pSound_Manager = CSound_Manager::Create();
     if (nullptr == m_pSound_Manager)
+        return E_FAIL;
+
+    m_pParticle_Manager = CParticle_Manager::Create();
+    if (nullptr == m_pUIObject_Manager)
         return E_FAIL;
 
     return S_OK;
@@ -518,6 +523,34 @@ CUIObject* CGameInstance::Find_UIObj(_uint iLevelIndex, const _wstring& strUITag
 {
     return m_pUIObject_Manager->Find_UIObj(iLevelIndex, strUITag);
 }
+
+#pragma endregion
+
+
+#pragma region PARTICLE_MAGAGER
+void CGameInstance::Priority_Update(_float fTimeDelta)
+{
+}
+void CGameInstance::Update(_float fTimeDelta, _uint iParticleType)
+{
+    m_pParticle_Manager->Update(fTimeDelta, iParticleType);
+}
+void CGameInstance::Late_Update(_float fTimeDelta, _uint iParticleType)
+{
+    m_pParticle_Manager->Late_Update(fTimeDelta, iParticleType);
+}
+HRESULT CGameInstance::Create_Particle(_uint iParticleType, _uint iLayerLevelIndex, const _wstring& strLayerTag, _float3 vScale, _bool bUseOrtho)
+{
+    m_pParticle_Manager->Create_Particle(iParticleType, iLayerLevelIndex, strLayerTag, vScale, bUseOrtho);
+
+    return S_OK;
+}
+HRESULT CGameInstance::Play(_uint iParticleType, _float3 vPos)
+{
+    m_pParticle_Manager->Play(iParticleType, vPos);
+
+    return S_OK;
+}
 #pragma endregion
 
 #pragma region SOUND_MANAGER
@@ -571,7 +604,10 @@ void CGameInstance::Release_Engine()
     Safe_Release(m_pLight_Manager);
     Safe_Release(m_pAnimation_Manager);
     Safe_Release(m_pItem_Manager);
-    
+
+    Safe_Release(m_pItem_Manager);//
+   // Safe_Release(m_pParticle_Manager);
+
 }
 
 void CGameInstance::Free()

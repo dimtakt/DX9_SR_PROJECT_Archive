@@ -38,6 +38,8 @@ HRESULT CLevel_Stage4::Initialize()
 		return E_FAIL;
 
 
+	m_pGameInstance->StopAll();
+	m_pGameInstance->PlayBGM(L"placeDungeonBadland_Field_001.wav", g_fBGMVolume - 0.9f);
 	return S_OK;
 }
 

@@ -30,8 +30,8 @@ HRESULT COink_A::Initialize(void* pArg)
     
     m_iAtkCooldownFrames = static_cast<_int>(m_pGameInstance->Compute_Random(0, 300));
 
-    m_iMaxHp = 50;
-    m_iCulHp = 50;
+    m_iMaxHp = 80;
+    m_iCulHp = 80;
     m_eMonsterType = MONSTER_TYPE::OINK;
     m_pTransformCom->Scaling(1.5f, 1.5f, 1.5f);
     return S_OK;
@@ -205,6 +205,8 @@ void COink_A::Update(_float fTimeDelta)
     if (m_pAnimatorCom->Get_CurStateTag() == L"Attack" &&
         m_pAnimatorCom->Get_CurStackedFrame() == 24)
     {
+        m_pGameInstance->StopSound(ENUM_CLASS(CHANNELID::SOUND_MONSTER_EFFECT));
+        m_pGameInstance->PlaySoundW(L"attackSwish03.wav", ENUM_CLASS(CHANNELID::SOUND_MONSTER_EFFECT), g_fEFFECTVolume - 0.6f);
         CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::MONSTER_EFFECT, L"Prototype_Component_Texture_Oink_A_Effect_Swing",
             *m_pTransformCom->Get_WorldMatrix(), matMonsterWorld, true);
     }
@@ -220,6 +222,10 @@ void COink_A::Update(_float fTimeDelta)
         if (m_pAnimatorCom->Change_State(L"Charge_End"))
         {
             _float3 vThrownDir = pTargetTransform->Get_State(STATE::POSITION) - vMonsterPos;
+
+            m_pGameInstance->StopSound(ENUM_CLASS(CHANNELID::SOUND_MONSTER_EFFECT));
+            m_pGameInstance->PlaySoundW(L"attackSpin.wav", ENUM_CLASS(CHANNELID::SOUND_MONSTER_EFFECT), g_fEFFECTVolume - 0.6f);
+
             CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::MONSTER_EFFECT, L"Prototype_Component_Texture_Oink_A_Effect_SpinSwing",
                 *m_pTransformCom->Get_WorldMatrix(), matMonsterWorld, vThrownDir, fThrownPower, fThrownAtkLifeTime, 0.f, true);
         }

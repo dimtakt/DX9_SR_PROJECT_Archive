@@ -3,6 +3,7 @@
 #include "Stat_Manager.h"
 #include "Monster.h"
 #include "Player.h"
+#include "Erma.h"
 CGameEffect::CGameEffect(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CEffect(pGraphic_Device)
 {
@@ -291,15 +292,15 @@ void CGameEffect::Ready_Collision()
 			// 추후 처리필요 탄막 충돌체 가 안됨..
 			else if (m_strEffectTag == TEXT("Prototype_Component_Boss_Erma_Bullet"))
 			{
-				tColliderDesc.vScale = _float3(5.f, 10.f, 5.f);
+				tColliderDesc.vScale = _float3(0.2f, 0.2f, 0.2f);
 			}
 			else if (m_strEffectTag == TEXT("Prototype_Component_Boss_Erma_Missile_Lower"))
 			{
-				tColliderDesc.vScale = _float3(1.f, 1.f, 1.f);
+				tColliderDesc.vScale = _float3(0.7f, 1.f, 0.7f);
 			}
 			else if (m_strEffectTag == TEXT("Prototype_Component_Boss_Erma_Missile_Lower_Light"))
 			{
-				tColliderDesc.vScale = _float3(1.f, 1.f, 1.f);
+				tColliderDesc.vScale = _float3(0.7f, 1.f, 0.7f);
 			}
 		}
 
@@ -341,8 +342,20 @@ void CGameEffect::OnCollision(CGameObject* pGameObject)
 		if (pGameObject->Get_ObjType() == GAMEOBJ_TYPE::MONSTER)
 		{
 			CMonster* pMonster = dynamic_cast<CMonster*>(pGameObject);
+			
+			if (pMonster->Get_MonsterType() == MONSTER_TYPE::ERMA)
+			{
+				CAnimator* pAni = dynamic_cast<CAnimator*>((dynamic_cast<CErma*>(pGameObject)->Find_Component(TEXT("Com_Animator"))));
+
+				if (pAni->Get_CurStateTag() == L"Idle" || pAni->Get_CurStateTag() == L"Move" || pAni->Get_CurStateTag() == L"AirBorne" ||
+					pAni->Get_CurStateTag() == L"Enter_Progress" || pAni->Get_CurStateTag() == L"Enter_End" || pAni->Get_CurStateTag() == L"Entered")
+					return;
+			}
+
 			if (!pMonster->Get_IsHit())
 			{
+				m_pGameInstance->StopSound(ENUM_CLASS(CHANNELID::SOUND_PLAYER));
+				m_pGameInstance->PlaySoundW(L"hitSword02.wav", ENUM_CLASS(CHANNELID::SOUND_PLAYER), g_fEFFECTVolume - 0.6f);
 				//플레이어 공격 관련 이펙트
 				if (m_strEffectTag == TEXT("Prototype_Component_Texture_Effect_Blade0_Swing1"))
 				{
@@ -385,6 +398,8 @@ void CGameEffect::OnCollision(CGameObject* pGameObject)
 
 			if (!pPlayer->Get_IsHit()&& !pPlayer->Get_IsGodMode())
 			{
+				m_pGameInstance->StopSound(ENUM_CLASS(CHANNELID::SOUND_MONSTER));
+				m_pGameInstance->PlaySoundW(L"HitPlayer.wav", ENUM_CLASS(CHANNELID::SOUND_MONSTER), g_fEFFECTVolume - 0.8f);
 				if (m_strEffectTag == TEXT("Prototype_Component_Texture_LaserGhost_D_Effect_Laser_Progress"))
 				{
 					iDamage = CStat_Manager::GetInstance()->Get_Monster_Damage(20.f);

@@ -79,6 +79,8 @@ void CTalent_Reset::Update(_float fTimeDelta)
 	{
 		CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CULSTATPOINT, iMaxPoint - iPoint);
 		static_cast<CTalent*>(m_pParent)->Slot_Reset();
+		m_pGameInstance->StopSound(ENUM_CLASS(CHANNELID::SOUND_UI));
+		m_pGameInstance->PlaySoundW(L"reroll.wav", ENUM_CLASS(CHANNELID::SOUND_UI), g_fUIVolume - 0.8f);
 		m_bHold = false;
 	}
 	static_cast<CTalent_Progress*>(m_vecChildren[0])->Progress_Update(m_iClickValue);
