@@ -177,6 +177,12 @@
     </Filter>
     <Filter Include="00.System\07. Sound\Manager">
       <UniqueIdentifier>{97d7c9d4-b25f-47b8-9946-56be9dc582ea}</UniqueIdentifier>
+	</Filter>
+    <Filter Include="01.Utility\03.GameObject\Particle">
+      <UniqueIdentifier>{148aad6f-d278-4ec1-8f35-f72895327d23}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\03.GameObject\Particle\Manager">
+      <UniqueIdentifier>{234c60bb-f919-4081-a363-aacf9c465e71}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -344,6 +350,12 @@
     </ClInclude>
     <ClInclude Include="..\Public\fmod.h">
       <Filter>00.System\07. Sound</Filter>
+	  </ClInclude>
+    <ClInclude Include="..\Public\Particle.h">
+      <Filter>01.Utility\03.GameObject\Particle</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Particle_Manager.h">
+      <Filter>01.Utility\03.GameObject\Particle\Manager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -487,6 +499,12 @@
     </ClCompile>
     <ClCompile Include="..\Private\Sound_Manager.cpp">
       <Filter>00.System\07. Sound\Manager</Filter>
+	   </ClCompile>
+    <ClCompile Include="..\Private\Particle.cpp">
+      <Filter>01.Utility\03.GameObject\Particle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Particle_Manager.cpp">
+      <Filter>01.Utility\03.GameObject\Particle\Manager</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

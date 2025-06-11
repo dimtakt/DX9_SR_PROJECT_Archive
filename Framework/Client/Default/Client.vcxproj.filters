@@ -448,6 +448,12 @@
     <Filter Include="02.GameObject\Object\GoldLeaf">
       <UniqueIdentifier>{77647d0a-dca7-4945-86f3-9f1009808dfe}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\Particle">
+      <UniqueIdentifier>{d63b5b87-031a-4979-a01b-257c7b034658}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Particle\RainParicle">
+      <UniqueIdentifier>{8e64aac7-3dec-4bf1-9984-f08eba41c47a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -984,6 +990,9 @@
     <ClInclude Include="..\public\Askard_Hpbar.h">
       <Filter>02.GameObject\UI\HUD\HUD_BossHp\BossHp_Askard\ETC</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\RainParticle.h">
+      <Filter>02.GameObject\Particle\RainParicle</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -1481,6 +1490,9 @@
     </ClCompile>
     <ClCompile Include="..\private\Askard_Hpbar.cpp">
       <Filter>02.GameObject\UI\HUD\HUD_BossHp\BossHp_Askard\ETC</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\RainParticle.cpp">
+      <Filter>02.GameObject\Particle\RainParicle</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
