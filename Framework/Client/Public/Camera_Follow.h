@@ -48,6 +48,10 @@ private:
 	_float			m_fCurrentZRatio = {};
 	CAM_TRANS_STATE m_eCamTransitionState = CAM_TRANS_STATE::NONE;
 	_bool			m_bFirstFrame = true;
+	bool m_bShake = false;
+	_float m_fShakeDuration = 0.f;
+	_float m_fShakeElapsed = 0.f;
+	_float m_fShakeIntensity = 0.f;
 
 private:
 	CTransform* m_pTargetPlayerTransformCom = { nullptr };
@@ -59,7 +63,9 @@ private:
 
 private:
 	void	Move_Angle(_float fAngle, _float fTimeDelta);
-	void	Follow_Target(_float fTimeDelta);
+	_float3	Follow_Target(_float fTimeDelta);
+	void	Start_Shake(_float fDuration, _float fIntensity);
+	_float3	Apply_Shake(_float3 vBasePos, _float fTimeDelta);
 
 public:
 	static CCamera_Follow* Create(LPDIRECT3DDEVICE9 pGraphic_Device);
