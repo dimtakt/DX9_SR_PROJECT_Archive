@@ -13,6 +13,9 @@ CField_Item::CField_Item(const CField_Item& Prototype) : CUIObject(Prototype), m
 
 void CField_Item::Render_Field_Item(_float fTimeDelta)
 {
+	if (m_bDead)
+		return;
+
 	m_fAccTime += fTimeDelta;
 	_float Offset = sinf(m_fAccTime * m_fSpeed) * m_fRange;
 	m_vTargetPos.y = m_vWorldPos.y + Offset;
@@ -29,6 +32,7 @@ void CField_Item::Buy_Item()
 		static_cast<CInventory*>(m_pGameInstance->Find_UIObj(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("UI_Inven")))->Add_Item_Inven(m_iItemID);
 		m_pGameInstance->StopSound(ENUM_CLASS(CHANNELID::SOUND_UI));
 		m_pGameInstance->PlaySoundW(L"shopBuy.wav", ENUM_CLASS(CHANNELID::SOUND_UI), g_fUIVolume - 0.6f);
+
 		m_bDead = true;
 	}
 }

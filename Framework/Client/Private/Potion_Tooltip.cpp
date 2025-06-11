@@ -176,12 +176,13 @@ void CPotion_Tooltip::Render_Font()
 	CUIObject::Font_Rect_Update();
 	m_vTexRect.top += 220;
 	m_vTexRect.left += 50;
-
-
-
+	m_vTexRect.right -= 50;
 
 	m_pGameInstance->Render_Font(TEXT("UI_Font_16_Tooltip"), szText, m_vTexRect, TexColor, DT_LEFT | DT_TOP);
 	
+	_stprintf_s(szText, TEXT("[Äü½½·Ô µî·Ï]"));
+	m_pGameInstance->Render_Font(TEXT("UI_Font_16_Tooltip"), szText, m_vTexRect, D3DXCOLOR(1.f, 1.f, 1.f, 1.f), DT_RIGHT | DT_TOP);
+
 	m_vTexRect.top += 20;
 	m_pGameInstance->Render_Font(TEXT("UI_Font_16_Tooltip"), g_ItemDataBase[iItemID].m_szDescription, m_vTexRect, D3DXCOLOR(1.f, 1.f, 1.f, 1.f), DT_LEFT | DT_TOP);
 	return;

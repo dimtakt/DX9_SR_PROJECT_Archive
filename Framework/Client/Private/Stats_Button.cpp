@@ -98,8 +98,9 @@ HRESULT CStats_Button::Ready_Components()
 
 HRESULT CStats_Button::Ready_ChildPrototype(LEVEL eLevel)
 {
+
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(eLevel), TEXT("Prototype_GameObject_UI_StatsButton_Guide"),
-		CUI_KeyGuide::Create(m_pGraphic_Device, TEXT("C")))))
+		CUI_KeyGuide::Create(m_pGraphic_Device))))
 		return E_FAIL;
 
 	return S_OK;
@@ -108,8 +109,11 @@ HRESULT CStats_Button::Ready_ChildPrototype(LEVEL eLevel)
 HRESULT CStats_Button::Ready_Children()
 {
 	CUIObject* pGameObject = nullptr;
+	CUI_KeyGuide::KEYGUIDE_DESC Desc{};
 
-	pGameObject = dynamic_cast<CUIObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(m_eLevel), TEXT("Prototype_GameObject_UI_StatsButton_Guide")));
+	Desc.strKey = TEXT("C");
+	Desc.Default = true;
+	pGameObject = dynamic_cast<CUIObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(m_eLevel), TEXT("Prototype_GameObject_UI_StatsButton_Guide"),&Desc));
 	if (nullptr == pGameObject)
 		return E_FAIL;
 	Add_Child(pGameObject);

@@ -15,13 +15,15 @@ public:
 	{
 		CTransform* pTransform = nullptr;
 		_bool		bTarget = false;
+		_bool		Default = false;
+		_wstring    strKey;
 	}KEYGUIDE_DESC;
 private:
 								CUI_KeyGuide(LPDIRECT3DDEVICE9 pGraphic_Device);
 								CUI_KeyGuide(const CUI_KeyGuide& Prototype);
 	virtual						~CUI_KeyGuide() = default;
 public:
-	virtual HRESULT				Initialize_Prototype(const _wstring& strPrototypeTag);
+	virtual HRESULT				Initialize_Prototype();
 	virtual HRESULT				Initialize(void* pArg) override;
 	virtual void				Priority_Update(_float fTimeDelta) override;
 	virtual void				Update(_float fTimeDelta) override;
@@ -42,7 +44,7 @@ private:
 	HRESULT						Ready_Components();
 	void						Target_Pos();
 public:
-	static						CUI_KeyGuide* Create(LPDIRECT3DDEVICE9 pGraphic_Device, const _wstring& strPrototypeTag);
+	static						CUI_KeyGuide* Create(LPDIRECT3DDEVICE9 pGraphic_Device);
 	virtual	CGameObject*		Clone(void* pArg) override;
 	virtual void				Free() override;
 
