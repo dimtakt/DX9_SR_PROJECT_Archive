@@ -39,7 +39,7 @@ void CDagger::Update(_float fTimeDelta)
 {
 	// ksta : test
 
-	_float fAngle = 90.f;
+	/*_float fAngle = 90.f;
 
 	if (m_pGameInstance->IsKeyDown('Q'))
 	{
@@ -53,7 +53,7 @@ void CDagger::Update(_float fTimeDelta)
 		m_fCurrentAngle -= fAngle;
 		if (m_fCurrentAngle < 0.f)
 			m_fCurrentAngle += 360.f;
-	}
+	}*/
 	
 	// 플레이어에 붙어서 이동 및 커서방향에 맞게 돌도록 처리
 	Follow_Player();

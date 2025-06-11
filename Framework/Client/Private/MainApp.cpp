@@ -977,7 +977,11 @@ void CMainApp::Ready_Key_Setting()
 	m_pGameInstance->AddTrackingKey('F');
 	m_pGameInstance->AddTrackingKey('B');
 	m_pGameInstance->AddTrackingKey(VK_F1);
+	m_pGameInstance->AddTrackingKey(VK_F2);
 	m_pGameInstance->AddTrackingKey(VK_F3);
+	m_pGameInstance->AddTrackingKey(VK_F4);
+	m_pGameInstance->AddTrackingKey(VK_F5);
+	m_pGameInstance->AddTrackingKey(VK_F6);
 	// 임시 테스트용
 #if _DEBUG
 	m_pGameInstance->AddTrackingKey('J');
