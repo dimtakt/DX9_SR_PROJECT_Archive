@@ -33,6 +33,8 @@ public:
 
 public:
 	CMonster* Find_CurrentRoom_Monster(MONSTER_TYPE eType);
+	void CurrentRoom_AddObject(CGameObject* pGameObject);
+	void CurrentRoom_ForcePotalActive();
 
 private:
 	CGameInstance* m_pGameInstance = { nullptr };

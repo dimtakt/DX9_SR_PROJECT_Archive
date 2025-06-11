@@ -163,8 +163,10 @@ void CErma_Head::Update(_float fTimeDelta)
             matMonsterWorld = matTransToOrigin * matScale * matRotateChild * matRotateChildtoPlayer * matTransReturn * matTransAddition;
 
             // 360frame (6s)
-            if (iCurPatternFrame == 1)
+            if (iCurPatternFrame == 1) {
                 m_pAnimatorCom->Change_State(L"AttackStart");
+            }
+                
 
 
             if (m_pAnimatorCom->Get_CurStateTag() == L"AttackProgress")
@@ -174,6 +176,11 @@ void CErma_Head::Update(_float fTimeDelta)
                 // 한번에 발사 시 렉이 크게 걸려서 프레임에 걸쳐 생성하도록
                 if (IS_BETWEEN(iCurPatternFrame % 50, 0, 15))
                 {
+                    if (iCurPatternFrame % 50 == 0)
+                    {
+                        m_pGameInstance->StopSound(ENUM_CLASS(CHANNELID::SOUND_MONSTER_EFFECT));
+                        m_pGameInstance->PlaySoundW(L"GolemSpreadShot.wav", ENUM_CLASS(CHANNELID::SOUND_MONSTER_EFFECT), g_fEFFECTVolume - 0.6f);
+                    }
                     for (int i = 0; i < 5; i++)
                     {
                         _float fAngle = 150;    // 방사 각도 수정용
@@ -403,6 +410,11 @@ void CErma_Head::PlayPattern(PATTERN_HEAD ePattern, _bool isForced)
     case Client::CErma_Head::PATTERN_HEAD::PT_BROKEN:
         m_isPatternPlaying = false;
         m_pAnimatorCom->Change_State(L"Broken");
+        break;
+    case Client::CErma_Head::PATTERN_HEAD::PT_IDLE:
+        m_isPatternPlaying = false;
+        m_pAnimatorCom->Change_State(L"Idle");
+        break;
     default:
         break;
     }

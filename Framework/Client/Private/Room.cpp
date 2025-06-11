@@ -169,7 +169,7 @@ void CRoom::Late_Update(_float fTimeDelta)
 				}
 				else {
 					if (nullptr != *it) {
-						if (m_vMonster.size() == 0)
+						if (m_vMonster.size() == 0 || m_bForcePotal_Active)
 						{
 							if (!m_bIsClear && it != m_vPotal.end())
 							{
