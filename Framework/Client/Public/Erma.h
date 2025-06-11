@@ -1,8 +1,8 @@
 #pragma once
 #include "Monster.h"
 #include "Client_Defines.h"
-
-
+#include "BossHp_Ema.h"
+#include "Field_Npc_Chat.h"
 BEGIN(Client)
 
 
@@ -30,6 +30,7 @@ public:
 private:
 	HRESULT Ready_Components(void* pArg);
 	HRESULT Ready_Object();
+	HRESULT Ready_Chat();
 
 	void PlayKeyInputPattern();
 	void Set_AllPartsStop(_bool isStop = true);
@@ -61,7 +62,9 @@ private:
 	CErma_Hand_R* m_pObj_Hand_R				= { nullptr };
 	CErma_Head* m_pObj_Head					= { nullptr };
 
-
+	CBossHp_Ema* m_pBossHp					= { nullptr };
+	CField_Npc_Chat* m_pChat				= { nullptr };
+	
 	
 	// 로컬 변수들
 
@@ -79,7 +82,9 @@ private:
 
 	_bool		m_isAllStop						= false;
 	_bool		m_isTriggerKeyPattern			= false;
-
+	_bool		m_bStart						= false;
+	_int		m_iChatCount					= 0;
+	_int		m_iCulChatCount					= 0;
 public:
 	static CErma* Create(LPDIRECT3DDEVICE9 pGraphic_Device);
 	virtual CGameObject* Clone(void* pArg) override;

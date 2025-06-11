@@ -1,6 +1,10 @@
 #include "Askard.h"
 #include "Effect_Factory.h"
 
+//#include "Askard_Tentacle.h"
+#include "Room_Manager.h"
+
+
 CAskard::CAskard(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CMonster{ pGraphic_Device }
 {
@@ -45,7 +49,7 @@ HRESULT CAskard::Initialize(void* pArg)
     m_iMaxHp = 2000;
     m_iCulHp = 2000;
 
-    m_eMonsterType = MONSTER_TYPE::ASKARD;
+    m_eMonsterType = MONSTER_TYPE::ASKARD; // ksta
 
     return S_OK;
 }
@@ -79,6 +83,7 @@ void CAskard::Update(_float fTimeDelta)
 {
     // Update
     // 
+
 
 
     // 아래에서 사용할 변수들
@@ -148,7 +153,23 @@ void CAskard::Update(_float fTimeDelta)
 
 
     // ksta3 : 패턴 구현..w
-    // switchh
+    // switch
+
+
+    if (m_pAnimatorCom->Get_CurStackedFrame() == 10)
+    {
+        Summon_Tentacle({ vMonsterPos.x - 5, vMonsterPos.y, vMonsterPos.z - 5 }, CAskard_Tentacle::TYPE_TENTACLE::TYPE_NORMAL_1);
+        Summon_Tentacle({ vMonsterPos.x, vMonsterPos.y, vMonsterPos.z - 5 }, CAskard_Tentacle::TYPE_TENTACLE::TYPE_NORMAL_2);
+        Summon_Tentacle({ vMonsterPos.x + 5, vMonsterPos.y, vMonsterPos.z - 5 }, CAskard_Tentacle::TYPE_TENTACLE::TYPE_NORMAL_3);
+        Summon_Tentacle({ vMonsterPos.x, vMonsterPos.y, vMonsterPos.z - 10 }, CAskard_Tentacle::TYPE_TENTACLE::TYPE_ODD_1);
+    }
+
+
+
+
+
+
+
 
 
     if (m_pTerrainBox != nullptr) {
@@ -160,7 +181,7 @@ void CAskard::Late_Update(_float fTimeDelta)
 {
     __super::Late_Update(fTimeDelta);
 
-    _float3 vPos = m_pTransformCom->Get_State(STATE::POSITION);
+    //_float3 vPos = m_pTransformCom->Get_State(STATE::POSITION);
     //std::cout << "Askard Pos : " << vPos.x << ", " << vPos.y << ", " << vPos.z << std::endl;
 }
 
@@ -351,6 +372,19 @@ HRESULT CAskard::Ready_Object()
     m_pHpBar = dynamic_cast<CField_Hp*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_Field_Hp")));
 
     return S_OK;
+}
+
+void CAskard::Summon_Tentacle(_float3 vPosition, CAskard_Tentacle::TYPE_TENTACLE eType)
+{
+    CAskard_Tentacle::TENTACLE_DESC pDesc = {};
+    pDesc.vPosition = vPosition;
+    pDesc.eType = eType;
+
+    pDesc.pTerrainBox = CRoom_Manager::GetInstance()->Get_CurrentRoom()->Get_TerrainBox();
+
+
+    m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_STATIC), L"Layer_Effect",
+        ENUM_CLASS(LEVEL::LEVEL_BOSS1), L"Prototype_GameObject_Boss_Askard_Tentacle", &pDesc);
 }
 
 

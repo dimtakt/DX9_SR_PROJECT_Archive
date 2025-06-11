@@ -8,12 +8,14 @@ class ENGINE_DLL CParticle abstract : public CGameObject
 public:
 	typedef struct tagParticleDesc
 	{
+		_uint iType = {};
 		_float3 vPos = {};
 		_float3 vScale = {};
 		_bool bUseOrtho = false;
 		_float fSpwanTimer = {};
 		_float fSpeed = {};
 		_float fLifeTime = {};
+		_int iTexture = {};
 	}PARTICLE_DESC;
 
 protected:
@@ -43,6 +45,8 @@ protected:
 	_float					m_fSpeed = 0.f;			// 떨어지는 속도
 	_float					m_fLifeTime = 0.f;		// 수명시간
 	_float					m_fElapsedTime = 0.f;	// 누적시간
+		
+	_uint					m_iTextureType = {};
 
 
 public:

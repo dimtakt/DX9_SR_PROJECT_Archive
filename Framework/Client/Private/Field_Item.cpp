@@ -11,7 +11,7 @@ CField_Item::CField_Item(const CField_Item& Prototype) : CUIObject(Prototype), m
 {
 }
 
-void CField_Item::Render_Field_Item(_float fTimeDelta, _bool bFontRender)
+void CField_Item::Render_Field_Item(_float fTimeDelta)
 {
 	if (m_bDead)
 		return;
@@ -22,8 +22,6 @@ void CField_Item::Render_Field_Item(_float fTimeDelta, _bool bFontRender)
 	m_pTransformCom->Set_State(STATE::POSITION, m_vTargetPos);
 	m_pGameInstance->Add_RenderGroup(RENDERGROUP::RG_UI, this);
 
-	if(bFontRender)
-		__super::Late_Update(fTimeDelta);
 }
 
 void CField_Item::Buy_Item()
@@ -151,6 +149,15 @@ HRESULT CField_Item::Ready_Children()
 	Add_Child(pGameObject);
 
 	return S_OK;
+}
+
+void CField_Item::OnCollision(CGameObject* pGameObject)
+{
+}
+
+void CField_Item::RenderFont()
+{
+	__super::Late_Update(0.15f);
 }
 
 CField_Item* CField_Item::Create(LPDIRECT3DDEVICE9 pGraphic_Device, LEVEL eLevel)

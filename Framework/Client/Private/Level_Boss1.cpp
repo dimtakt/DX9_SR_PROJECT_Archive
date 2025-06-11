@@ -16,8 +16,9 @@ CLevel_Boss1::CLevel_Boss1(LPDIRECT3DDEVICE9 pGraphic_Device)
 HRESULT CLevel_Boss1::Initialize()
 {
 	CRoom_Manager::GetInstance()->Clear(ENUM_CLASS(LEVEL::LEVEL_STAGE4));
-	g_hCursor = LoadCursorFromFile(L"Resources/Sephiria/UI/Cursor/Cursor_Combat.cur");
+	m_pGameInstance->Clear(); //파티클 초기화
 
+	g_hCursor = LoadCursorFromFile(L"Resources/Sephiria/UI/Cursor/Cursor_Combat.cur");
 
 	if (FAILED(Ready_Layer_BackGround(TEXT("Layer_BackGround"))))
 		return E_FAIL;
@@ -179,8 +180,15 @@ HRESULT CLevel_Boss1::Ready_Layer_Room(const _wstring& strLayerTag)
 				ROOMCHANGE EventDesc;
 				EventDesc.vPosition = dynamic_cast<CTransform*>(pRoom->Get_TerrainBox()->Find_Component(TEXT("Com_Transform_TerrainBox")))->Get_State(STATE::POSITION);
 				m_pGameInstance->Broadcast(ENUM_CLASS(EVENT_TYPE::ROOMCHANGE), &EventDesc);
+
 			}
 
+			//if (iNumber == 1)
+			//{
+			//	pRoom->Load_Particle(PARTICLE_TYPE::DUST, TEXT("Prototype_GameObject_FireParticle"), ENUM_CLASS(LEVEL::LEVEL_BOSS1), _float3(0.5f, 0.5f, 1.f), 2);
+			//	pRoom->Set_ParticleType(PARTICLE_TYPE::DUST);
+			//	pRoom->Set_ParticleOn();
+			//}
 			//여기에 몬스터 배치, 아래는 이전 스테이지에서 몬스터 배치 하는 방식, 참고할려면 참고해서 배치하기!
 
 			//list<CMonster::MONSTERDESC> DescList;
@@ -210,13 +218,10 @@ HRESULT CLevel_Boss1::Ready_Layer_Room(const _wstring& strLayerTag)
 				tDesc.iLayerLevelIndex = ENUM_CLASS(LEVEL::LEVEL_BOSS1);
 				tDesc.iPrototypeLevelIndex = ENUM_CLASS(LEVEL::LEVEL_BOSS1);
 				tDesc.strLayerTag = strLayerTag;
-				//tDesc.strPrototypeTag = TEXT("Prototype_GameObject_ShortMonster");
-				//tDesc.strPrototypeTag = TEXT("Prototype_GameObject_Monster_Mole_A");
-				//tDesc.strPrototypeTag = TEXT("Prototype_GameObject_Monster_Oink_A");
-				//tDesc.strPrototypeTag = TEXT("Prototype_GameObject_Monster_LaserGhost_D");
 				tDesc.pTerrainBox = pRoom->Get_TerrainBox();
 
-
+#pragma region Erma Spawn...
+				
 				tDesc.strPrototypeTag = TEXT("Prototype_GameObject_Boss_Erma_Body");
 				DescList.push_back(tDesc);
 				CMonster_Factory::GetInstance()->Add_Monsters(pRoom, DescList, MONSTER_TYPE_A::MONSTER_BOSS_ERMA_BODY);
@@ -241,6 +246,23 @@ HRESULT CLevel_Boss1::Ready_Layer_Room(const _wstring& strLayerTag)
 				DescList.push_back(tDesc);
 				CMonster_Factory::GetInstance()->Add_Monsters(pRoom, DescList, MONSTER_TYPE_A::MONSTER_BOSS_ERMA);
 				DescList.clear();
+				
+#pragma endregion
+
+
+#pragma region Askard Spawn test...
+
+				//tDesc.strPrototypeTag = TEXT("Prototype_GameObject_Boss_Askard");
+				//DescList.push_back(tDesc);
+				//CMonster_Factory::GetInstance()->Add_Monsters(pRoom, DescList, MONSTER_TYPE_A::MONSTER_BOSS_ASKARD);
+				//DescList.clear();
+
+#pragma endregion
+
+
+
+
+
 			}
 
 			//CMonster_Factory::GetInstance()->Add_Monsters(pRoom, DescList, CMonster_Factory::MONSTER_TYPE::MONSTER_MOLE_A);

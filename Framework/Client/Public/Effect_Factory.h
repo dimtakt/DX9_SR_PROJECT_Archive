@@ -17,7 +17,7 @@ public:
 	HRESULT Initialize();
 
 public:
-	void Create_Effect(GAMEOBJ_TYPE eType, const _wstring& strEffectTag, _float3 vPos, D3DXQUATERNION qRot, _float3 vScale, _bool isFlippedX = false);
+	void Create_Effect(GAMEOBJ_TYPE eType, const _wstring& strEffectTag, _float3 vPos, D3DXQUATERNION qRot, _float3 vScale, _float fLifeTimeSec = 0.f, _bool isFlippedX = false);
 	void Create_Effect(GAMEOBJ_TYPE eType, const _wstring& strEffectTag, _float4x4 matEffectWorld, _bool isFlippedX = false);
 	void Create_Effect(GAMEOBJ_TYPE eType, const _wstring& strEffectTag, _float4x4 matEffectWorld, _float4x4 matOffsetWorld, _bool isFlippedX = false);
 	void Create_Effect(GAMEOBJ_TYPE eType, const _wstring& strEffectTag, _float4x4 matEffectWorld, _float4x4 matOffsetWorld, CTransform* pFollowTransformCom, _float fLifeTimeSec = 0.f, _bool isFlippedX = false);

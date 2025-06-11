@@ -54,8 +54,8 @@ HRESULT CErma_Body::Initialize(void* pArg)
     //Ready_Object();
 
     // 임시
-    m_iMaxHp = 1000;
-    m_iCulHp = 1000;
+    m_iMaxHp = 3000;
+    m_iCulHp = 3000;
 
     m_eMonsterType = MONSTER_TYPE::ERMA_BODY;
 
@@ -186,6 +186,12 @@ void CErma_Body::Update(_float fTimeDelta)
             // 하나는 맵 구석에서 발사하는 미사일 이펙트
             // 하나는 조준점 이펙트
             
+            if (iCurPatternFrame == 9)
+            {
+                m_pGameInstance->StopSound(ENUM_CLASS(CHANNELID::SOUND_MONSTER_LONG_EFFECT3));
+                m_pGameInstance->PlaySoundW(L"GolemMissileStart.wav", ENUM_CLASS(CHANNELID::SOUND_MONSTER_LONG_EFFECT3), g_fEFFECTVolume - 0.6f);
+            }
+
             if (IS_BETWEEN(iCurPatternFrame, 10, 60))
             {
                 if (iCurPatternFrame % 5 == 0)
@@ -232,6 +238,8 @@ void CErma_Body::Update(_float fTimeDelta)
             {
                 if (iCurPatternFrame % 5 == 0)
                 {
+                    m_pGameInstance->StopSound(ENUM_CLASS(CHANNELID::SOUND_MONSTER_LONG_EFFECT3));
+                    m_pGameInstance->PlaySoundW(L"GolemMissile.wav", ENUM_CLASS(CHANNELID::SOUND_MONSTER_LONG_EFFECT3), g_fEFFECTVolume - 0.6f);
                     _int iCount = (iCurPatternFrame - 80) / 5;  // 0 ~ 9
 
                     CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::MONSTER_EFFECT, L"Prototype_Component_Boss_Erma_Missile_Lower",
@@ -489,6 +497,11 @@ void CErma_Body::PlayPattern(PATTERN_BODY ePattern, _bool isForced)
         m_isPatternPlaying = false;
         m_pAnimatorCom->Change_State(L"Broken");
         strPatternTag = L"Idle";
+        break;
+    case Client::CErma_Body::PATTERN_BODY::PT_IDLE:
+        m_isPatternPlaying = false;
+        m_pAnimatorCom->Change_State(L"Idle");
+        break;
     default:
         break;
     }

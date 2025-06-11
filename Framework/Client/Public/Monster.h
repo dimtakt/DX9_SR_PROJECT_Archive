@@ -56,8 +56,10 @@ public:
 	_bool Get_IsHit() { return m_bIsHit; }
 	void Set_IsHit(_bool bHit) { m_bIsHit = bHit; }
 	const MONSTER_TYPE Get_MonsterType() { return m_eMonsterType; }
+	void Set_GodMode(_bool bGodMode) { m_bIsGodMode = bGodMode; }
 
 	_int Get_HP() { return m_iCulHp; }
+	_int Get_MaxHP() { return m_iMaxHp; }
 	void Set_HP(_int iHp) { m_iCulHp = iHp; }
 	void Fill_HP() { m_iCulHp = m_iMaxHp; }
 
@@ -71,6 +73,8 @@ protected:
 	_bool					m_isSummoned = false;
 	MONSTER_TYPE			m_eMonsterType = {};
 	DWORD					m_dwHitTime = {};
+
+	_bool					m_bIsGodMode = false;
 
 	CField_Hp* m_pHpBar		= { nullptr };
 

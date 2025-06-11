@@ -64,6 +64,8 @@ private:
 private:
 	void	Move_Angle(_float fAngle, _float fTimeDelta);
 	_float3	Follow_Target(_float fTimeDelta);
+
+public:
 	void	Start_Shake(_float fDuration, _float fIntensity);
 	_float3	Apply_Shake(_float3 vBasePos, _float fTimeDelta);
 

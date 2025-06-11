@@ -26,7 +26,7 @@ private:
 
 public:
 	//랜더 아이템 업데이트에서 호출 하면됩니다. 폰트 랜더 끄면 텍스트 출력 안되고 아이템만 보여줌
-	void					Render_Field_Item(_float fTimeDelta, _bool bFontRender);
+	void					Render_Field_Item(_float fTimeDelta);
 	
 	//구매 함수 돈 부족하면 구매 안됨 (충돌 지역에서 F키 눌렀을 때 함수 사용하시면 됩니다.)
 	void					Buy_Item();
@@ -61,6 +61,10 @@ private:
 
 	HRESULT					Ready_ChildPrototype(LEVEL eLevel);
 	HRESULT					Ready_Children();
+
+public:
+	virtual void OnCollision(CGameObject* pGameObject) override;
+	void RenderFont();
 
 public:
 	static CField_Item*		Create(LPDIRECT3DDEVICE9 pGraphic_Device, LEVEL eLevel);
