@@ -2,6 +2,7 @@
 #include "GameInstance.h"
 #include "Item_Base.h"
 #include "Stat_Manager.h"
+#include "Hud_Slot.h"
 CInventory::CInventory(LPDIRECT3DDEVICE9 pGraphic_Device) : CUIObject(pGraphic_Device)
 {
 }
@@ -49,32 +50,15 @@ HRESULT CInventory::Initialize(void* pArg)
 
 	m_pGameInstance->Add_UIObject(ENUM_CLASS(m_eLevel), TEXT("UI_Inven"), this);
 	CItemObject* pItem = nullptr;
-	pItem = m_pGameInstance->Get_ItemObject(0, true);
-	m_vecInventory[0]->Add_Item(static_cast<CItem_Base*>(pItem));
-	
-	pItem = m_pGameInstance->Get_ItemObject(1,true);
-	m_vecInventory[1]->Add_Item(static_cast<CItem_Base*>(pItem));
-	
-	pItem = m_pGameInstance->Get_ItemObject(2, true);
-	m_vecInventory[2]->Add_Item(static_cast<CItem_Base*>(pItem));
-	
-	pItem = m_pGameInstance->Get_ItemObject(3, true);
-	m_vecInventory[3]->Add_Item(static_cast<CItem_Base*>(pItem));
-	
-	pItem = m_pGameInstance->Get_ItemObject(4, true);
-	m_vecInventory[4]->Add_Item(static_cast<CItem_Base*>(pItem));
-	
-	pItem = m_pGameInstance->Get_ItemObject(5, true);
-	m_vecInventory[5]->Add_Item(static_cast<CItem_Base*>(pItem));
-	
-	pItem = m_pGameInstance->Get_ItemObject(6, true);
-	m_vecInventory[6]->Add_Item(static_cast<CItem_Base*>(pItem));
-	
-	pItem = m_pGameInstance->Get_ItemObject(7, true);
-	m_vecInventory[7]->Add_Item(static_cast<CItem_Base*>(pItem));
 
-	pItem = m_pGameInstance->Get_ItemObject(8, true);
-	m_vecInventory[8]->Add_Item(static_cast<CItem_Base*>(pItem));
+	Add_Item_Inven(26);
+	Add_Item_Inven(25);
+	Add_Item_Inven(2);
+	Add_Item_Inven(15);
+	Add_Item_Inven(4);
+	Add_Item_Inven(5);
+	Add_Item_Inven(14);
+
 	return S_OK;
 }
 
@@ -95,8 +79,16 @@ void CInventory::Priority_Update(_float fTimeDelta)
 
 void CInventory::Update(_float fTimeDelta)
 {
+	if (m_pGameInstance->IsKeyDown(VK_F3))
+		CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::GOLD, -200);
+
 	if (m_pGameInstance->Get_CurrentLevel() == ENUM_CLASS(LEVEL::LEVEL_LOADING) || m_pGameInstance->Get_CurrentLevel() == ENUM_CLASS(LEVEL::LEVEL_LOGO) || m_pGameInstance->Get_CurrentLevel() == ENUM_CLASS(LEVEL::LEVEL_MAPEDIT))
 		return;
+
+	if (m_pGameInstance->IsKeyDown(VK_F3))
+	{
+		Add_Item_Inven(3);
+	}
 	Set_Grade();
 	StatToPlayer();
 	__super::Update(fTimeDelta);
@@ -162,7 +154,7 @@ void CInventory::Add_Item_Inven(_uint ItemIndex)
 
 	for (size_t i = 0; i < m_vecInventory.size(); ++i)
 	{
-		if (!bNotPotion || pItem->Item_Info()->iItemType == ENUM_CLASS(ITEM_TYPE::POTION))
+		if (m_vecInventory[i]->Pop_Item() != nullptr && !bNotPotion && pItem->Item_Info()->iItemType == ENUM_CLASS(ITEM_TYPE::POTION))
 		{
 			if (pItem->Item_Info()->iItemID == m_vecInventory[i]->Pop_Item()->Item_Info()->iItemID)
 			{
@@ -170,15 +162,20 @@ void CInventory::Add_Item_Inven(_uint ItemIndex)
 				Safe_Release(pItem);
 				break;
 			}
-			else if (i == m_vecInventory.size() - 1)
-			{
-				bNotPotion = true;
-				i = 0;
-			}
+			
 		}
-		else if (m_vecInventory[i]->Pop_Item() == nullptr)
+
+		if (i == m_vecInventory.size() - 1)
+		{
+			bNotPotion = true;
+			i = -1;
+			continue;
+		}
+
+		if (bNotPotion && m_vecInventory[i]->Pop_Item() == nullptr)
 		{
 			m_vecInventory[i]->Add_Item(static_cast<CItem_Base*>(pItem));
+			static_cast<CHud_Slot*>(m_pGameInstance->Find_UIObj(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Hud_Slot")))->SlotToItem(static_cast<CItem_Base*>(pItem));
 			break;
 		}
 	}
@@ -216,6 +213,21 @@ void CInventory::Push_Item_Slot(CItem_Base* pItem, _uint iCount)
 			return;
 		}
 	}
+}
+
+_bool CInventory::Use_Item(CItem_Base* pItem)
+{
+	for (_int i = 0; i < m_vecInventory.size(); ++i)
+	{
+		if (m_vecInventory[i]->Pop_Item() == pItem)
+		{
+			if (m_vecInventory[i]->Down_Item_Count())
+			{
+				return true;
+			}
+		}
+	}
+	return false;
 }
 
 void CInventory::Set_Grade()

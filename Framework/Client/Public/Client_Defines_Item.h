@@ -114,7 +114,7 @@ namespace Client
 		ItemData(23, 56,ITEM_TYPE::ARTEFACT, ITEM_RARITY::RARE,TEXT("힘의 부적"), TEXT("믿음직스럽지 않게 '힘'이라 적혀 있다."), 3, 8),
 		ItemData(24, 57,ITEM_TYPE::ARTEFACT, ITEM_RARITY::RARE,TEXT("은접시"), TEXT("피가 그 열쇠다."), 2, 9),
 		ItemData(25, 58,ITEM_TYPE::ARTEFACT, ITEM_RARITY::RARE,TEXT("경고 문서"), TEXT("상인연합 긴급 공문"), 1, 10),
-		ItemData(26, 59,ITEM_TYPE::ARTEFACT, ITEM_RARITY::LEGENDARY,TEXT("눈보라 망치"), TEXT("푸른 불 용광로 옆에 놓여있었다."), 6, 11),
+		ItemData(26, 59,ITEM_TYPE::SKILLBOOK, ITEM_RARITY::LEGENDARY,TEXT("눈보라 망치"), TEXT("푸른 불 용광로 옆에 놓여있었다."), 6, 11),
 		ItemData(27, 60,ITEM_TYPE::ARTEFACT, ITEM_RARITY::RARE,TEXT("노란 행성"), TEXT("도서관에 전시되어 있던 노란 행성"), 6, 12),
 		ItemData(28, 61,ITEM_TYPE::ARTEFACT, ITEM_RARITY::RARE,TEXT("붉은 행성"), TEXT("도서관에 전시되어 있던 붉은 행성"), 6, 13),
 		ItemData(29, 62,ITEM_TYPE::ARTEFACT, ITEM_RARITY::RARE,TEXT("푸른 행성"), TEXT("도서관에 전시되어 있던 푸른 행성"), 6, 14),

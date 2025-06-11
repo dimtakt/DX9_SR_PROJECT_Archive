@@ -11,16 +11,17 @@ CField_Item::CField_Item(const CField_Item& Prototype) : CUIObject(Prototype), m
 {
 }
 
-void CField_Item::Render_Field_Item(_float fTimeDelta, _bool bFontRender)
+void CField_Item::Render_Field_Item(_float fTimeDelta)
 {
+	if (m_bDead)
+		return;
+
 	m_fAccTime += fTimeDelta;
 	_float Offset = sinf(m_fAccTime * m_fSpeed) * m_fRange;
 	m_vTargetPos.y = m_vWorldPos.y + Offset;
 	m_pTransformCom->Set_State(STATE::POSITION, m_vTargetPos);
 	m_pGameInstance->Add_RenderGroup(RENDERGROUP::RG_UI, this);
 
-	if(bFontRender)
-		__super::Late_Update(fTimeDelta);
 }
 
 void CField_Item::Buy_Item()
@@ -31,6 +32,7 @@ void CField_Item::Buy_Item()
 		static_cast<CInventory*>(m_pGameInstance->Find_UIObj(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("UI_Inven")))->Add_Item_Inven(m_iItemID);
 		m_pGameInstance->StopSound(ENUM_CLASS(CHANNELID::SOUND_UI));
 		m_pGameInstance->PlaySoundW(L"shopBuy.wav", ENUM_CLASS(CHANNELID::SOUND_UI), g_fUIVolume - 0.6f);
+
 		m_bDead = true;
 	}
 }
@@ -147,6 +149,15 @@ HRESULT CField_Item::Ready_Children()
 	Add_Child(pGameObject);
 
 	return S_OK;
+}
+
+void CField_Item::OnCollision(CGameObject* pGameObject)
+{
+}
+
+void CField_Item::RenderFont()
+{
+	__super::Late_Update(0.15f);
 }
 
 CField_Item* CField_Item::Create(LPDIRECT3DDEVICE9 pGraphic_Device, LEVEL eLevel)

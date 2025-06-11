@@ -5,7 +5,7 @@
 #include "Erma_Hand_L.h"
 #include "Erma_Hand_R.h"
 #include "Erma_Head.h"
-
+#include "Interaction_Normal.h"
 #include "Room_Manager.h"
 
 CErma::CErma(LPDIRECT3DDEVICE9 pGraphic_Device)
@@ -49,10 +49,13 @@ HRESULT CErma::Initialize(void* pArg)
     m_isSummoned = true;
     Ready_Object();
 
-    m_iMaxHp = 500;
-    m_iCulHp = 500;
+    m_iMaxHp = 2000;
+    m_iCulHp = 2000;
 
     m_eMonsterType = MONSTER_TYPE::ERMA;
+
+    if(FAILED(Ready_Chat()))
+        return E_FAIL;
 
     return S_OK;
 }
@@ -60,10 +63,13 @@ HRESULT CErma::Initialize(void* pArg)
 void CErma::Priority_Update(_float fTimeDelta)
 {
     __super::Priority_Update(fTimeDelta);
+
+    if (m_iChatCount < m_iCulChatCount)
+        m_bStart = true;
     
-    if (m_pHpBar != nullptr &&
+    /*if (m_pHpBar != nullptr &&
         m_isSummoned)
-        m_pHpBar->Render_HP_Progress(m_pTransformCom, m_iCulHp, m_iMaxHp);
+        m_pHpBar->Render_HP_Progress(m_pTransformCom, m_iCulHp, m_iMaxHp);*/
 
     // Erma가 각 부속 객체들을 제어하도록 연결
     if (m_pObj_Body == nullptr)     m_pObj_Body     = dynamic_cast<CErma_Body*>     (CRoom_Manager::GetInstance()->Find_CurrentRoom_Monster(MONSTER_TYPE::ERMA_BODY));
@@ -76,27 +82,56 @@ void CErma::Priority_Update(_float fTimeDelta)
     {
         m_iPhase++;
         m_pObj_Body->Fill_HP();
-
         // 체력 0 되면 강제 무장해제
         m_pAnimatorCom->Change_State(L"Airborne", true, 0.3f, true);
         m_isInCombat = false;
         m_iStackedFrame = 0;
         m_iPatternRandOffset = 0;
 
+        m_pObj_Body->Set_GodMode(true);
+
         m_pObj_Head->PlayPattern(CErma_Head::PATTERN_HEAD::PT_IDLE, true);
+        m_pObj_Body->PlayPattern(CErma_Body::PATTERN_BODY::PT_IDLE, true);
         m_pObj_Hand_L->PlayPattern(CErma_Hand_L::PATTERN_HAND_L::PT_IDLE, true);
         m_pObj_Hand_R->PlayPattern(CErma_Hand_R::PATTERN_HAND_R::PT_IDLE, true);
+        m_pGameInstance->StopSound(ENUM_CLASS(CHANNELID::SOUND_MONSTER));
+        m_pGameInstance->PlaySoundW(L"golemDie01.wav", ENUM_CLASS(CHANNELID::SOUND_MONSTER), g_fEFFECTVolume - 0.6f);
     }
     if (m_iCulHp <= 0)
     {
-        m_pObj_Body->PlayPattern(CErma_Body::PATTERN_BODY::PT_BROKEN);
+        m_pObj_Body->PlayPattern(CErma_Body::PATTERN_BODY::PT_BROKEN, true);
         m_pObj_Hand_L->PlayPattern(CErma_Hand_L::PATTERN_HAND_L::PT_IDLE, true);
         m_pObj_Hand_R->PlayPattern(CErma_Hand_R::PATTERN_HAND_R::PT_IDLE, true);
-        m_pObj_Head->PlayPattern(CErma_Head::PATTERN_HEAD::PT_BROKEN);
+        m_pObj_Head->PlayPattern(CErma_Head::PATTERN_HEAD::PT_BROKEN, true);
+        m_pGameInstance->StopSound(ENUM_CLASS(CHANNELID::SOUND_MONSTER));
+        m_pGameInstance->PlaySoundW(L"golemDie02.wav", ENUM_CLASS(CHANNELID::SOUND_MONSTER), g_fEFFECTVolume - 0.6f);
+        _float3 vPos = m_pTransformCom->Get_State(STATE::POSITION);
+
+        CGameObject* pGameObject = nullptr;
+        MAP_OBJECT_DESC tSrc{};
+        tSrc.eType = GAMEOBJ_TYPE::ATIFACT;
+        tSrc.vPos = _float3(vPos.x - 0.9f, 3.f, vPos.z - 2.f);
+        tSrc.vScale = _float3(1.f, 1.f, 1.f);
+        tSrc.vRotate = _float3(0.f, 0.f, 0.f);
+
+        pGameObject = dynamic_cast<CGameObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_Interaction_Normal"), &tSrc));
+        CRoom_Manager::GetInstance()->CurrentRoom_AddObject(pGameObject);
+
+        MAP_OBJECT_DESC tSrc2{};
+        tSrc2.eType = GAMEOBJ_TYPE::STONE_TABLET;
+        tSrc2.vPos = _float3(vPos.x + 0.4f, 3.f, vPos.z - 2.f);
+        tSrc2.vScale = _float3(1.5f, 1.5f, 1.5f);
+        tSrc2.vRotate = _float3(0.f, 0.f, 0.f);
+
+        pGameObject = dynamic_cast<CGameObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_Interaction_Normal"), &tSrc2));
+        CRoom_Manager::GetInstance()->CurrentRoom_AddObject(pGameObject);
+
+        CRoom_Manager::GetInstance()->CurrentRoom_ForcePotalActive();
 
         m_iCulHp = 0;
         m_bDead = true;
     }
+
 }
 
 void CErma::Update(_float fTimeDelta)
@@ -200,7 +235,9 @@ void CErma::Update(_float fTimeDelta)
             }
         }
         else if (strCurStateTag == L"Stun")
+        {
             m_pAnimatorCom->Change_State(L"Down_End");
+        }
         else if (strCurStateTag == L"Down_End")
             m_pAnimatorCom->Change_State(L"Idle");
 
@@ -208,7 +245,12 @@ void CErma::Update(_float fTimeDelta)
         {
             m_iStackedFrame = 0;
             //if (보스와의 대화 완료 트리거 발동 시)
-            m_pAnimatorCom->Change_State(L"Enter_Progress");
+            if (m_bStart)
+            {
+                m_pAnimatorCom->Change_State(L"Enter_Progress");
+                m_pGameInstance->StopSound(ENUM_CLASS(CHANNELID::SOUND_MONSTER));
+                m_pGameInstance->PlaySoundW(L"spellArcaneStart.wav", ENUM_CLASS(CHANNELID::SOUND_MONSTER), g_fEFFECTVolume - 0.6f);
+            }
         }
         else if (strCurStateTag == L"Enter_Progress")
         {
@@ -220,12 +262,15 @@ void CErma::Update(_float fTimeDelta)
             // ksta : 위치에 도달 할 때 발동 조건도 넣어야 함
             if (m_pAnimatorCom->Change_State(L"Entered"))
             {
+                m_pObj_Body->Set_GodMode(false);
+
                 // effect setting
                 D3DXMatrixIdentity(&matTransAddition);
                 D3DXMatrixTranslation(&matTransAddition, 0.05f, -0.3f, -0.2f);
 
                 matMonsterWorld = matTransToOrigin * matScale * matRotateChild * matRotateChildtoPlayer * matTransReturn * matTransAddition;
-
+                m_pGameInstance->StopSound(ENUM_CLASS(CHANNELID::SOUND_MONSTER));
+                m_pGameInstance->PlaySoundW(L"GolemEnter.wav", ENUM_CLASS(CHANNELID::SOUND_MONSTER), g_fEFFECTVolume - 0.6f);
                 CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::NORMAL_EFFECT, L"Prototype_Component_Boss_Erma_Effect_HeadStart",
                     *m_pTransformCom->Get_WorldMatrix(), matMonsterWorld);
 
@@ -343,7 +388,7 @@ void CErma::Update(_float fTimeDelta)
 
     if (m_pTerrainBox != nullptr &&
         strCurStateTag == L"Idle") {
-        m_pTerrainBox->SetUp_OnTerrainBox(m_pTransformCom, _float3(0.05f, 0.5f, 0.05f));
+        m_pTerrainBox->SetUp_OnTerrainBox(m_pTransformCom, _float3(0.05f, 0.7f, 0.05f));
     }
 }
 
@@ -353,6 +398,8 @@ void CErma::Late_Update(_float fTimeDelta)
 
     //_float3 vPos = m_pTransformCom->Get_State(STATE::POSITION);
     //std::cout << "Erma Pos : " << vPos.x << ", " << vPos.y << ", " << vPos.z << std::endl;
+    if (m_bStart)
+        m_pBossHp->Render_Hpbar(m_iCulHp, m_iMaxHp, m_pObj_Body->Get_HP(), m_pObj_Body->Get_MaxHP(), fTimeDelta);
 }
 
 HRESULT CErma::Render()
@@ -457,6 +504,33 @@ HRESULT CErma::Ready_Object()
 {
     m_pHpBar = dynamic_cast<CField_Hp*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_Field_Hp")));
 
+    if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_BOSS1), TEXT("Layer_HPBar"), ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_BossHp_Ema"))))
+        return E_FAIL;
+
+    m_pBossHp = static_cast<CBossHp_Ema*>(m_pGameInstance->Find_UIObj(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("BossHp_Ema")));
+
+    return S_OK;
+}
+
+HRESULT CErma::Ready_Chat()
+{
+    CField_Npc_Chat::FIELD_CHAT_DESC desc{};
+
+    desc.pTransform = m_pTransformCom;
+    desc.szChatTag = TEXT("ERMA_CHAT");
+    desc.m_iLevel = ENUM_CLASS(LEVEL::LEVEL_BOSS1);
+    desc.fY = -100;
+
+    if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_BOSS1), TEXT("Layer_UI_Chat"), ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_Field_Npc_Chat"), &desc)))
+        return E_FAIL;
+
+    m_pChat = static_cast<CField_Npc_Chat*>(m_pGameInstance->Find_UIObj(ENUM_CLASS(LEVEL::LEVEL_BOSS1), TEXT("ERMA_CHAT")));
+
+    m_pChat->Add_Chat(TEXT("집에가고 싶어요...."));
+    m_pChat->Add_Chat(TEXT("보내주세요..."));
+
+    m_iChatCount = 2;
+
     return S_OK;
 }
 
@@ -553,7 +627,12 @@ void CErma::OnCollision(CGameObject* pGameObject)
 
     switch (pGameObject->Get_ObjType())
     {
-    case GAMEOBJ_TYPE::PLAYER_EFFECT:
+    case GAMEOBJ_TYPE::PLAYER:
+        if (m_pGameInstance->IsKeyDown('F'))
+        {
+            m_pChat->Cinematic_Chat(0, false);
+            m_iCulChatCount++;
+        }
         break;
     }
 }
@@ -599,6 +678,7 @@ void CErma::Free()
     Safe_Release(m_pTextureCom_Enter_End);
 
     Safe_Release(m_pAnimatorCom);
-
+    Safe_Release(m_pBossHp);
+    Safe_Release(m_pChat);
     //Safe_Release(m_pAnimatorCom);
 }

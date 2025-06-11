@@ -188,8 +188,10 @@ public:
 	void Priority_Update(_float fTimeDelta);
 	void Update(_float fTimeDelta, _uint iParticleType);
 	void Late_Update(_float fTimeDelta, _uint iParticleType);
-	HRESULT Create_Particle(_uint iParticleType, _uint iLayerLevelIndex, const _wstring& strLayerTag, _float3 vScale, _bool bUseOrtho =false);
+	HRESULT Create_Particle_Fast(_uint iParticleType, _uint iLayerLevelIndex, const _wstring& strLayerTag, _int iOffSetType, _float3 vScale, _bool bUseOrtho = false);
+	HRESULT Create_Particle_Low(_uint iParticleType, _uint iLayerLevelIndex, const _wstring& strLayerTag, _int iOffSetType, _bool bUseOrtho = false);
 	HRESULT Play(_uint iParticleType, _float3 vPos);
+	void Clear();
 #pragma endregion
 
 private:

@@ -588,7 +588,7 @@ HRESULT CInteraction_Normal::Merchant_Late_Update(_float fTimeDelta)
 
     for (auto& Item : m_vShopItem)
     {
-        Item->Render_Field_Item(fTimeDelta, true);
+        Item->Render_Field_Item(fTimeDelta);
     }
 
     return S_OK;

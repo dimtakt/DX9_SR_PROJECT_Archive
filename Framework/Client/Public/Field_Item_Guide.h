@@ -25,6 +25,9 @@ public:
 	virtual void				Late_Update(_float fTimeDelta);
 	virtual HRESULT				Render() override;
 
+public:
+	void						FontRenderSwitch(_bool bRender) { m_bFontRender = bRender; }
+
 private:
 	CVIBuffer_Rect*				m_pVIBufferCom = { nullptr };
 	CTexture*					m_pTextureCom = { nullptr };
@@ -32,9 +35,10 @@ private:
 	LEVEL						m_eLevel = {};
 
 	_uint						m_iItemID = {};
-
 	_int						m_iWinPosX = {};
 	_int						m_iWinPosY = {};
+
+	_bool						m_bFontRender = { false };
 
 private:
 	HRESULT						Ready_Components();
@@ -44,7 +48,7 @@ private:
 
 	void						Target_Pos();
 	void						Render_Font();
-
+	void						Rneder_Font_NotBuy();
 public:
 	static CField_Item_Guide*	Create(LPDIRECT3DDEVICE9 pGraphic_Device, LEVEL eLevel);
 	virtual CGameObject*		Clone(void* pArg) override;

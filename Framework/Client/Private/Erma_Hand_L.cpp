@@ -3,6 +3,7 @@
 
 #include "Erma.h"
 #include "Room_Manager.h"
+#include "Camera_Follow.h"
 
 CErma_Hand_L::CErma_Hand_L(LPDIRECT3DDEVICE9 pGraphic_Device)
     : CMonster{ pGraphic_Device }
@@ -215,9 +216,14 @@ void CErma_Hand_L::Update(_float fTimeDelta)
                 matMonsterWorld = matTransToOrigin * matScale * matRotateChild * matRotateChildtoPlayer * matTransReturn * matTransAddition;
 
 #pragma endregion
-                if (iCurPatternFrame == 110)
+                if (iCurPatternFrame == 110) {
+                    m_pGameInstance->StopSound(ENUM_CLASS(CHANNELID::SOUND_MONSTER_EFFECT));
+                    m_pGameInstance->PlaySoundW(L"GolemHandStomp.wav", ENUM_CLASS(CHANNELID::SOUND_MONSTER_EFFECT), g_fEFFECTVolume - 0.8f);
+                    dynamic_cast<CCamera_Follow*>(m_pGameInstance->Get_GameObject(m_pGameInstance->Get_CurrentLevel(), TEXT("Layer_Camera")))->Start_Shake(0.4f, 0.3);
                     CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::MONSTER_EFFECT, L"Prototype_Component_Boss_Erma_BigGolem_Stmap_FX",
                         *m_pTransformCom->Get_WorldMatrix(), matMonsterWorld);
+                }
+                    
 #pragma region Effect Reset
 
                 D3DXMatrixIdentity(&matScale);
@@ -271,8 +277,14 @@ void CErma_Hand_L::Update(_float fTimeDelta)
 
 #pragma endregion
                 if (iCurPatternFrame == (110 + 160))
+                {
+                    m_pGameInstance->StopSound(ENUM_CLASS(CHANNELID::SOUND_MONSTER_EFFECT));
+                    m_pGameInstance->PlaySoundW(L"GolemHandStomp.wav", ENUM_CLASS(CHANNELID::SOUND_MONSTER_EFFECT), g_fEFFECTVolume - 0.8f);
+                    dynamic_cast<CCamera_Follow*>(m_pGameInstance->Get_GameObject(m_pGameInstance->Get_CurrentLevel(), TEXT("Layer_Camera")))->Start_Shake(0.4f, 0.3);
                     CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::MONSTER_EFFECT, L"Prototype_Component_Boss_Erma_BigGolem_Stmap_FX",
                         *m_pTransformCom->Get_WorldMatrix(), matMonsterWorld);
+                }
+                    
 #pragma region Effect Reset
 
                 D3DXMatrixIdentity(&matScale);
@@ -315,8 +327,12 @@ void CErma_Hand_L::Update(_float fTimeDelta)
             _bool isLaserEnd = false;
 
             // Pattern
-            if (iCurPatternFrame == 1)
+            if (iCurPatternFrame == 1) {
+                m_pGameInstance->StopSound(ENUM_CLASS(CHANNELID::SOUND_MONSTER_EFFECT));
+                m_pGameInstance->PlaySoundW(L"GolemLaser.wav", ENUM_CLASS(CHANNELID::SOUND_MONSTER_LONG_EFFECT), g_fEFFECTVolume - 0.85f);
                 m_pAnimatorCom->Change_State(L"LaserStart");
+            }
+                
             if (IS_BETWEEN(iCurPatternFrame, 0, 50))
             {
                 _float3 vPos = {
@@ -508,8 +524,10 @@ void CErma_Hand_L::Update(_float fTimeDelta)
                 matMonsterWorld = matTransToOrigin * matScale * matRotateChild * matRotateChildtoPlayer * matTransReturn * matTransAddition;
 
 #pragma endregion
-                    CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::MONSTER_EFFECT, L"Prototype_Component_Boss_Erma_BigGolem_Stmap_FX",
-                        *m_pTransformCom->Get_WorldMatrix(), matMonsterWorld);
+                m_pGameInstance->StopSound(ENUM_CLASS(CHANNELID::SOUND_MONSTER_EFFECT));
+                m_pGameInstance->PlaySoundW(L"GolemHandStomp.wav", ENUM_CLASS(CHANNELID::SOUND_MONSTER_EFFECT), g_fEFFECTVolume - 0.8f);
+                CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::MONSTER_EFFECT, L"Prototype_Component_Boss_Erma_BigGolem_Stmap_FX",
+                    *m_pTransformCom->Get_WorldMatrix(), matMonsterWorld);
 #pragma region Effect Reset
 
                 D3DXMatrixIdentity(&matScale);
@@ -523,7 +541,7 @@ void CErma_Hand_L::Update(_float fTimeDelta)
                 matMonsterWorld = matTransToOrigin * matScale * matRotateChild * matRotateChildtoPlayer * matTransReturn * matTransAddition;
 
 #pragma endregion
-                    
+                dynamic_cast<CCamera_Follow*>(m_pGameInstance->Get_GameObject(m_pGameInstance->Get_CurrentLevel(), TEXT("Layer_Camera")))->Start_Shake(2.5f, 0.5);
                 dynamic_cast<CErma*>(CRoom_Manager::GetInstance()->Find_CurrentRoom_Monster(MONSTER_TYPE::ERMA))->ChangeKeyInputPattern();
 
                 m_isPatternPlaying = false;

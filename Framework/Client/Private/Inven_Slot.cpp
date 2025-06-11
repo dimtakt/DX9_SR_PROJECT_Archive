@@ -6,6 +6,7 @@
 #include "Gacha.h"
 #include "Gacha_Slot.h"
 #include "Tooltip.h"
+#include "Hud_Slot.h"
 CInven_Slot::CInven_Slot(LPDIRECT3DDEVICE9 pGraphic_Device) : CButton{ pGraphic_Device }
 {
 }
@@ -76,6 +77,7 @@ void CInven_Slot::Update(_float fTimeDelta)
 		m_pOldSlotItem = m_pSlotItem;
 	}
 	Item_Selete();
+	Subscribe_Item();
 	Setting_Item();
 	if (m_bIsOver)
 		__super::Update(fTimeDelta);
@@ -139,6 +141,19 @@ void CInven_Slot::Add_Item(CItem_Base* pItem)
 {
 	m_pSlotItem = pItem;
 	m_iItemCount += 1;
+}
+
+_bool CInven_Slot::Down_Item_Count()
+{
+	--m_iItemCount;
+
+	if (m_iItemCount <= 0)
+	{
+		Safe_Release(m_pSlotItem);
+		Safe_Release(m_pOldSlotItem);
+		return true;
+	}
+	return false;
 }
 
 void CInven_Slot::Push_Item(CItemObject* pItem)
@@ -261,6 +276,7 @@ void CInven_Slot::Item_Selete()
 			static_cast<CInventory*>(m_pGameInstance->Get_GameObject(ENUM_CLASS(LEVEL::LEVEL_STATIC),
 				TEXT("Layer_Inventory")))->Push_Item_Slot(static_cast<CItem_Base*>(m_pGameInstance->Pop_Item()), 
 					m_pGameInstance->Pop_Item_Count());
+			static_cast<CHud_Slot*>(m_pGameInstance->Find_UIObj(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Hud_Slot")))->SlotToItem(static_cast<CItem_Base*>(m_pGameInstance->Pop_Item()));
 
 			static_cast<CGacha_Slot*>(m_pGameInstance->Pop_Slot())->Release_Pop();
 
@@ -277,6 +293,7 @@ void CInven_Slot::Item_Selete()
 		
 			m_pSlotItem = static_cast<CItem_Base*>(m_pGameInstance->Pop_Item());
 			m_iItemCount = m_pGameInstance->Pop_Item_Count();
+			static_cast<CHud_Slot*>(m_pGameInstance->Find_UIObj(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Hud_Slot")))->SlotToItem(static_cast<CItem_Base*>(m_pGameInstance->Pop_Item()));
 
 			static_cast<CGacha_Slot*>(m_pGameInstance->Pop_Slot())->Release_Pop();
 
@@ -293,6 +310,17 @@ void CInven_Slot::Item_Selete()
 		
 	}
 	
+}
+
+void CInven_Slot::Subscribe_Item()
+{
+	if (Check_Key_Down(g_hWnd, VK_RBUTTON) && m_pSlotItem != nullptr)
+	{
+		if (m_pSlotItem->Item_Info()->iItemType == ENUM_CLASS(ITEM_TYPE::POTION) || m_pSlotItem->Item_Info()->iItemType == ENUM_CLASS(ITEM_TYPE::SKILLBOOK))
+		{
+			static_cast<CHud_Slot*>(m_pGameInstance->Find_UIObj(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Hud_Slot")))->Subscribe_Item(m_pSlotItem);
+		}
+	}
 }
 
 HRESULT CInven_Slot::Ready_Components()

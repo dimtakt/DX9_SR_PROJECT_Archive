@@ -375,6 +375,31 @@ CMonster* CRoom_Manager::Find_CurrentRoom_Monster(MONSTER_TYPE eType)
 	return pRoom->Find_Monster(eType);
 }
 
+void CRoom_Manager::CurrentRoom_AddObject(CGameObject* pGameObject)
+{
+	CRoom* pRoom = Get_CurrentRoom();
+	if (pGameObject->Get_ObjType() == GAMEOBJ_TYPE::ATIFACT || pGameObject->Get_ObjType() == GAMEOBJ_TYPE::STONE_TABLET)
+	{
+		pGameObject->Set_IsActive(true);
+		// collider
+		CCollider_OBB::OBB_DESC tColliderDesc;
+		tColliderDesc.vScale = _float3(0.5f, 1.f, 0.5f);
+		tColliderDesc.pOwner = pGameObject;
+		tColliderDesc.pTransform = dynamic_cast<CTransform*>(pGameObject->Find_Component(TEXT("Com_Transform")));
+		tColliderDesc.eType = pGameObject->Get_ObjType();;
+		CCollider_OBB* pCol = dynamic_cast<CCollider_OBB*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::COMPONENT, ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Collider_OBB"), &tColliderDesc));
+		m_pGameInstance->Add_Collider(pCol);
+	}
+	pRoom->Add_Object(pGameObject);
+}
+
+void CRoom_Manager::CurrentRoom_ForcePotalActive()
+{
+	CRoom* pRoom = Get_CurrentRoom();
+
+	pRoom->Set_Force_Active_Potal(true);
+}
+
 void CRoom_Manager::Free()
 {
 	for (auto& pair : m_mRooms)

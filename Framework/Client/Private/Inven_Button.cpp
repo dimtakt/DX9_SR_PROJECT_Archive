@@ -97,7 +97,7 @@ HRESULT CInven_Button::Ready_Components()
 HRESULT CInven_Button::Ready_ChildPrototype(LEVEL eLevel)
 {
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(eLevel), TEXT("Prototype_GameObject_UI_InvenButton_Guide"),
-		CUI_KeyGuide::Create(m_pGraphic_Device, TEXT("Z")))))
+		CUI_KeyGuide::Create(m_pGraphic_Device))))
 		return E_FAIL;
 
 	return S_OK;
@@ -106,8 +106,12 @@ HRESULT CInven_Button::Ready_ChildPrototype(LEVEL eLevel)
 HRESULT CInven_Button::Ready_Children()
 {
 	CUIObject* pGameObject = nullptr;
+	CUI_KeyGuide::KEYGUIDE_DESC Desc{};
 
-	pGameObject = dynamic_cast<CUIObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(m_eLevel), TEXT("Prototype_GameObject_UI_InvenButton_Guide")));
+	Desc.strKey = TEXT("Z");
+	Desc.Default = true;
+
+	pGameObject = dynamic_cast<CUIObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(m_eLevel), TEXT("Prototype_GameObject_UI_InvenButton_Guide"), &Desc));
 	if (nullptr == pGameObject)
 		return E_FAIL;
 	Add_Child(pGameObject);
