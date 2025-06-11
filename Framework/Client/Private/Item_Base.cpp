@@ -61,10 +61,7 @@ void CItem_Base::Late_Update(_float fTimeDelta, _float3 fPos)
 {
 	if (m_pGameInstance->IsKeyUp(VK_LBUTTON))
 		m_bisSelete = false;
-
-	m_pTransformCom->Rotation(_float3{ 0.f,0.f,-1.f }, D3DXToRadian(m_fAngle));
-	m_pTransformCom->Scaling(m_fSizeX, m_fSizeY, 1.f);
-	m_pTransformCom->Set_State(STATE::POSITION, fPos);
+	m_vDefaultPos = fPos;
 	m_pGameInstance->Add_RenderGroup(RENDERGROUP::RG_UI, this);
 }
 
@@ -74,9 +71,18 @@ HRESULT CItem_Base::Render()
 	if (FAILED(m_pTextureCom->Bind_Texture(m_iItemTextureID)))
 		return E_FAIL;
 	m_pVIBufferCom->Bind_Buffers();
-	
-	if (!m_bIsTooltip_Render)
+	if (m_bIsQuickSlot_Render)
 	{
+		if (FAILED(QuickSlot_Render()))
+			return E_FAIL;
+		m_bIsQuickSlot_Render = false;
+	}
+	else if (!m_bIsTooltip_Render)
+	{
+		m_pTransformCom->Rotation(_float3{ 0.f,0.f,-1.f }, D3DXToRadian(m_fAngle));
+		m_pTransformCom->Scaling(m_fSizeX, m_fSizeY, 1.f);
+		m_pTransformCom->Set_State(STATE::POSITION, m_vDefaultPos);
+
 		if (FAILED(Default_Render()))
 			return E_FAIL;
 
@@ -147,6 +153,13 @@ void CItem_Base::IsTooltip_Slate(_float3 TooltipSlotPos)
 	m_pGameInstance->Add_RenderGroup(RENDERGROUP::RG_UI_BLEND, this);
 }
 
+void CItem_Base::IsQuickSlot_Render(_float3 QuickSlotPos)
+{
+	m_bIsQuickSlot_Render = true;
+	m_vQuickSlotPos = QuickSlotPos;
+	m_pGameInstance->Add_RenderGroup(RENDERGROUP::RG_UI_BLEND, this);
+}
+
 
 HRESULT CItem_Base::Default_Render()
 {
@@ -189,6 +202,28 @@ HRESULT CItem_Base::Tooltip_Slate_Render()
 	m_pTransformCom->Scaling(m_fSizeX * 0.5f, m_fSizeY * 0.5f, 1.f);
 	m_pTransformCom->Rotation(_float3{ 0.f,0.f,-1.f }, D3DXToRadian(m_fAngle));
 	m_pTransformCom->Set_State(STATE::POSITION, m_vTooltipSlatePos);
+	__super::Begin();
+	m_pVIBufferCom->Render();
+	__super::End();
+
+	return S_OK;
+}
+
+HRESULT CItem_Base::QuickSlot_Render()
+{
+	_float3 vPos{};
+	
+	vPos.x = -(g_iWinSizeX * 0.5) + m_vQuickSlotPos.x;
+	vPos.y = (g_iWinSizeY * 0.5) - m_vQuickSlotPos.y;
+	vPos.z = 0;
+
+	if(m_iItemType == ENUM_CLASS(ITEM_TYPE::POTION))
+		m_pTransformCom->Scaling(m_fSizeX, m_fSizeY, 1.f);
+	else
+		m_pTransformCom->Scaling(m_fSizeX * 0.6, m_fSizeY*0.6, 1.f);
+
+	m_pTransformCom->Rotation(_float3{ 0.f,0.f,-1.f }, D3DXToRadian(0));
+	m_pTransformCom->Set_State(STATE::POSITION, vPos);
 	__super::Begin();
 	m_pVIBufferCom->Render();
 	__super::End();

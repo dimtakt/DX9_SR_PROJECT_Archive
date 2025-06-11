@@ -67,14 +67,23 @@ void CField_Item_Guide::Late_Update(_float fTimeDelta)
 
 HRESULT CField_Item_Guide::Render()
 {
-	if (FAILED(m_pTextureCom->Bind_Texture(0)))
-		return E_FAIL;
-	m_pVIBufferCom->Bind_Buffers();
-	__super::Begin();
-	m_pVIBufferCom->Render();
-	__super::End();
-	
-	Render_Font();
+	_int iGold = static_cast<CField_Item*>(m_pParent)->Get_Value();
+	if (CStat_Manager::GetInstance()->Get_CurStats()[ENUM_CLASS(STAT_INFO::GOLD)] >= iGold)
+	{
+		if (FAILED(m_pTextureCom->Bind_Texture(0)))
+			return E_FAIL;
+		m_pVIBufferCom->Bind_Buffers();
+		__super::Begin();
+		m_pVIBufferCom->Render();
+		__super::End();
+
+		Render_Font();
+	}
+	else
+	{
+		Rneder_Font_NotBuy();
+	}
+
 	return S_OK;
 }
 
@@ -129,22 +138,22 @@ void CField_Item_Guide::Target_Pos()
 
 void CField_Item_Guide::Render_Font()
 {
-	TCHAR szText[64];
+	TCHAR szText[MAX_PATH];
 	m_vTexRect.left = m_iWinPosX - 20;
 	m_vTexRect.right = m_iWinPosX + 20;
 	m_vTexRect.top = m_iWinPosY - 20;
 	m_vTexRect.bottom = m_iWinPosY + 20;
+	_int iGold = static_cast<CField_Item*>(m_pParent)->Get_Value();
+
 
 	_stprintf_s(szText, TEXT("F"));
 	m_pGameInstance->Render_Font(TEXT("UI_Font_18"), szText, m_vTexRect, D3DXCOLOR(1.f, 1.f, 1.f, 1.f), DT_CENTER | DT_VCENTER | DT_SINGLELINE);
 
-	_int iGold = static_cast<CField_Item*>(m_pParent)->Get_Value();
 	m_vTexRect.left += 35;
 	m_vTexRect.right += 200;
 	_stprintf_s(szText, TEXT("구매하기 %d$"), iGold);
 	m_pGameInstance->Render_Font(TEXT("UI_Font_18"), szText, m_vTexRect, D3DXCOLOR(1.f, 1.f, 1.f, 1.f), DT_LEFT | DT_VCENTER | DT_SINGLELINE);
-
-
+	
 	D3DXCOLOR TexColor{};
 
 	switch (g_ItemDataBase[m_iItemID].m_eRarity)
@@ -169,6 +178,21 @@ void CField_Item_Guide::Render_Font()
 	m_vTexRect.bottom = m_iWinPosY - 80;
 	
 	m_pGameInstance->Render_Font(TEXT("UI_Font_18"), g_ItemDataBase[m_iItemID].m_szName, m_vTexRect, TexColor, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
+
+}
+
+void CField_Item_Guide::Rneder_Font_NotBuy()
+{
+	TCHAR szText[MAX_PATH];
+	m_vTexRect.left = m_iWinPosX - 20;
+	m_vTexRect.right = m_iWinPosX + 20;
+	m_vTexRect.top = m_iWinPosY - 20;
+	m_vTexRect.bottom = m_iWinPosY + 20;
+	
+	m_vTexRect.left -= 15;
+	m_vTexRect.right += 110;
+	_stprintf_s(szText, TEXT("금액 부족"));
+	m_pGameInstance->Render_Font(TEXT("UI_Font_18"), szText, m_vTexRect, D3DXCOLOR(1.f, 0.f, 0.3f, 1.f), DT_CENTER | DT_VCENTER | DT_SINGLELINE);
 
 }
 

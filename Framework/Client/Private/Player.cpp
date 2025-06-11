@@ -704,6 +704,7 @@ void CPlayer::OnCollision(CGameObject* pGameObject)
     {
         if (pGameObject != nullptr)
         {
+            dynamic_cast<CField_Item*>(pGameObject)->RenderFont();
             if(m_pGameInstance->IsKeyDown('F'))
                 dynamic_cast<CField_Item*>(pGameObject)->Buy_Item();
         }

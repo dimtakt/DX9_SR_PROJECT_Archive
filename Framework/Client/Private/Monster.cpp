@@ -196,9 +196,13 @@ void CMonster::OnCollision(CGameObject* pGameObject)
 
 void CMonster::Set_Damage(_float fDamage)
 {
-	m_iCulHp += fDamage;
-	
-	Render_Font(static_cast<int>(fDamage * -1));
+
+	if (!m_bIsGodMode)
+	{
+		m_iCulHp += fDamage;
+
+		Render_Font(static_cast<int>(fDamage * -1));
+	}
 }
 
 HRESULT CMonster::Render_Font(_int iDamage)

@@ -218,13 +218,10 @@ HRESULT CLevel_Boss1::Ready_Layer_Room(const _wstring& strLayerTag)
 				tDesc.iLayerLevelIndex = ENUM_CLASS(LEVEL::LEVEL_BOSS1);
 				tDesc.iPrototypeLevelIndex = ENUM_CLASS(LEVEL::LEVEL_BOSS1);
 				tDesc.strLayerTag = strLayerTag;
-				//tDesc.strPrototypeTag = TEXT("Prototype_GameObject_ShortMonster");
-				//tDesc.strPrototypeTag = TEXT("Prototype_GameObject_Monster_Mole_A");
-				//tDesc.strPrototypeTag = TEXT("Prototype_GameObject_Monster_Oink_A");
-				//tDesc.strPrototypeTag = TEXT("Prototype_GameObject_Monster_LaserGhost_D");
 				tDesc.pTerrainBox = pRoom->Get_TerrainBox();
 
-
+#pragma region Erma Spawn...
+				
 				tDesc.strPrototypeTag = TEXT("Prototype_GameObject_Boss_Erma_Body");
 				DescList.push_back(tDesc);
 				CMonster_Factory::GetInstance()->Add_Monsters(pRoom, DescList, MONSTER_TYPE_A::MONSTER_BOSS_ERMA_BODY);
@@ -249,6 +246,23 @@ HRESULT CLevel_Boss1::Ready_Layer_Room(const _wstring& strLayerTag)
 				DescList.push_back(tDesc);
 				CMonster_Factory::GetInstance()->Add_Monsters(pRoom, DescList, MONSTER_TYPE_A::MONSTER_BOSS_ERMA);
 				DescList.clear();
+				
+#pragma endregion
+
+
+#pragma region Askard Spawn test...
+
+				//tDesc.strPrototypeTag = TEXT("Prototype_GameObject_Boss_Askard");
+				//DescList.push_back(tDesc);
+				//CMonster_Factory::GetInstance()->Add_Monsters(pRoom, DescList, MONSTER_TYPE_A::MONSTER_BOSS_ASKARD);
+				//DescList.clear();
+
+#pragma endregion
+
+
+
+
+
 			}
 
 			//CMonster_Factory::GetInstance()->Add_Monsters(pRoom, DescList, CMonster_Factory::MONSTER_TYPE::MONSTER_MOLE_A);

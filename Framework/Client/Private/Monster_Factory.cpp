@@ -12,6 +12,7 @@
 #include "Erma_Hand_R.h"
 #include "Erma_Head.h"
 #include "Askard.h"
+#include "Askard_Tentacle.h"
 
 IMPLEMENT_SINGLETON(CMonster_Factory)
 
@@ -69,6 +70,12 @@ HRESULT CMonster_Factory::Add_Monsters(CRoom* pRoom, list<CMonster::MONSTERDESC>
 		/* Askard */
 		case MONSTER_TYPE_A::MONSTER_BOSS_ASKARD:
 			pMonster = dynamic_cast<CAskard*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, desc.iPrototypeLevelIndex, desc.strPrototypeTag, &desc));
+			break;
+		/* Askard_Tentacle (temporary) */
+		case MONSTER_TYPE_A::MONSTER_BOSS_ASKARD_TENTACLE:
+			pMonster = dynamic_cast<CAskard_Tentacle*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, desc.iPrototypeLevelIndex, desc.strPrototypeTag, &desc));
+			break;
+
 
 		default:
 			break;

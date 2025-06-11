@@ -56,8 +56,8 @@ public:
     void Set_RoomType(ROOM_INFO eType) { m_eRoomType = eType; }
     ROOM_INFO Get_RoomType() { return m_eRoomType; }
     vector<CFire*> Get_FireList() { return m_vFire; }
+    void Set_Force_Active_Potal(_bool bActive) { m_bForcePotal_Active = bActive; }
     void Set_ParticleType(PARTICLE_TYPE eType) { m_eRoomParticle = eType; }
-
     void Set_ParticleOn() { m_bParticle = true; }       //µé¾î°£ ·ë¸¸ ÄÑÁà¾ßÇÔ. ¾È±×·³ ÆÄÆ¼Å¬ »¡¸®µ¼!
 
 public:
@@ -66,6 +66,7 @@ public:
     void Add_Object(class CGameObject* pVIBuffer){m_vObject.push_back(pVIBuffer);}
     void Insert_ID(_int iID){m_iID = iID;}
     void Compute_ObjectOffset(_int x, _int z);
+    
 
 public:
     CMonster* Find_Monster(MONSTER_TYPE eType);
@@ -92,6 +93,8 @@ protected:
     PARTICLE_TYPE m_eRoomParticle = PARTICLE_TYPE::PARTICLE_END;
 
     ROOM_INFO m_eRoomType = {};
+
+    _bool m_bForcePotal_Active = false;
 
 public:
     static CRoom* Create(LPDIRECT3DDEVICE9 pGraphic_Device);

@@ -460,6 +460,9 @@
     <Filter Include="02.GameObject\UI\HUD\HUD_BossHp\BossHp_Ema\ETC\SubHp">
       <UniqueIdentifier>{8169109e-c328-45a9-9998-484c3a8b9c4b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\UI\HUD\HUD_Quick_Slot\ETC">
+      <UniqueIdentifier>{45c39a05-2583-47e8-bf56-9cffa924211b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -810,9 +813,6 @@
     <ClInclude Include="..\public\Talent_Slot.h">
       <Filter>02.GameObject\UI\Window\Talent\Talent_Slot</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\Client_Struct.h">
-      <Filter>99.Defines</Filter>
-    </ClInclude>
     <ClInclude Include="..\public\Talent_Slot_Icon.h">
       <Filter>02.GameObject\UI\Window\Talent\Talent_Slot\Talent_Slot_Etc</Filter>
     </ClInclude>
@@ -945,9 +945,6 @@
     <ClInclude Include="..\public\Artefact_Tier_Icon.h">
       <Filter>02.GameObject\UI\Tooltip\Tooltip_Etc</Filter>
     </ClInclude>
-    <ClInclude Include="..\public\Hud_Quick_Slot.h">
-      <Filter>02.GameObject\UI\HUD\HUD_Quick_Slot</Filter>
-    </ClInclude>
     <ClInclude Include="..\public\Askard.h">
       <Filter>02.GameObject\Monster\Boss\Askard</Filter>
     </ClInclude>
@@ -1010,6 +1007,18 @@
     </ClInclude>
     <ClInclude Include="..\public\Ema_SubHpbar.h">
       <Filter>02.GameObject\UI\HUD\HUD_BossHp\BossHp_Ema\ETC\SubHp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Hud_Slot_Guide.h">
+      <Filter>02.GameObject\UI\HUD\HUD_Quick_Slot\ETC</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Hud_Quick_Slot.h">
+      <Filter>02.GameObject\UI\HUD\HUD_Quick_Slot</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Client_Struct.h">
+      <Filter>99.Defines</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Hud_Slot_CoolTime.h">
+      <Filter>02.GameObject\UI\HUD\HUD_Quick_Slot\ETC</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1458,9 +1467,6 @@
     <ClCompile Include="..\private\Artefact_Tier_Icon.cpp">
       <Filter>02.GameObject\UI\Tooltip\Tooltip_Etc</Filter>
     </ClCompile>
-    <ClCompile Include="..\private\Hud_Quick_Slot.cpp">
-      <Filter>02.GameObject\UI\HUD\HUD_Quick_Slot</Filter>
-    </ClCompile>
     <ClCompile Include="..\private\Askard.cpp">
       <Filter>02.GameObject\Monster\Boss\Askard</Filter>
     </ClCompile>
@@ -1523,6 +1529,15 @@
     </ClCompile>
     <ClCompile Include="..\private\Ema_SubHpbar.cpp">
       <Filter>02.GameObject\UI\HUD\HUD_BossHp\BossHp_Ema\ETC\SubHp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Hud_Slot_Guide.cpp">
+      <Filter>02.GameObject\UI\HUD\HUD_Quick_Slot\ETC</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Hud_Quick_Slot.cpp">
+      <Filter>02.GameObject\UI\HUD\HUD_Quick_Slot</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Hud_Slot_CoolTime.cpp">
+      <Filter>02.GameObject\UI\HUD\HUD_Quick_Slot\ETC</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
