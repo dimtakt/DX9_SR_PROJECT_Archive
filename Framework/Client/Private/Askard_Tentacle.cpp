@@ -189,7 +189,7 @@ void CAskard_Tentacle::Update(_float fTimeDelta)
 	{
 		// 돌출 이펙트
 		CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::NORMAL_EFFECT, L"Prototype_Component_Boss_Askard_BigRoot_Hall_Ready",
-			vMonsterPos + _float3{0, 1.01f, 0}, qRot, vScale);
+			vMonsterPos + _float3{0, 1.01f, 0}, qRot, vScale);		// 왜 얘만 올려줘야 제대로보임????
 	}
 	else if (m_iStackedFrames == 30)
 	{
@@ -344,7 +344,7 @@ void CAskard_Tentacle::Update(_float fTimeDelta)
 			_float fDistance = D3DXVec3Length(&vDiff);
 
 			// ksta value : 촉수가 근접 시 공격할 거리
-			if (fDistance <= 2.f)
+			if (fDistance <= 3.f)
 			{
 				m_ePattern = PATTERN_TENTACLE::PT_ATTACK;
 				m_pAnimatorCom->Change_State(L"Root_AttackReady");

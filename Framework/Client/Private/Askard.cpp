@@ -95,7 +95,8 @@ void CAskard::Update(_float fTimeDelta)
 
     _int iStandardPatternFrame = m_iElapsedFrame_Update % iPatternLoopCycle;
 
-    switch (iStandardPatternFrame)
+    //switch (iStandardPatternFrame)
+    switch (m_iElapsedFrame_Update)
     {
     case 30:
     {
@@ -593,7 +594,7 @@ void CAskard::Play_Spawn_Width()
         m_iElapsedFrame_Pattern == 200)
     {
         _bool isOddLine = (m_iElapsedFrame_Pattern == 120) ? true : false;
-        _float fZRandOffset = 1.f;
+        _float fZRandOffset = 1.5f;
 
         _int iNumX = 15;        // 가로 방향 촉수 개수
         _int iNumZ = 5;         // 세로 방향의 촉수 줄
@@ -612,7 +613,8 @@ void CAskard::Play_Spawn_Width()
             for (int i = 0; i < iNumZ; i++)
                 iZLine.push_back(iNumZ - (iNumZ - 1) + i * iNumZ + 2);
 
-
+        
+        _int iOddTentacleIndex = static_cast<_int>(m_pGameInstance->Compute_Random(0, iNumX * iNumZ));  // 별종 넣을 인덱스 선정
 
         for (int z = 0; z < iNumZ; z++)
         {
@@ -624,6 +626,9 @@ void CAskard::Play_Spawn_Width()
 
                 _float fRand = m_pGameInstance->Compute_Random(- fZRandOffset / 2, fZRandOffset / 2);    // Z축 랜덤값
                 _int iRandType = static_cast<_int>(m_pGameInstance->Compute_Random(0.f, 3.f));
+                
+                if ((iOddTentacleIndex == (z * iNumZ + j)) && m_iElapsedFrame_Pattern == 120)
+                    iRandType = 3; // 해당 인덱스에 별종 삽입
 
                 Summon_Tentacle(_float3{ fPosX, 0, fPosZ + fRand },static_cast<CAskard_Tentacle::TYPE_TENTACLE>(iRandType));
             }
