@@ -84,8 +84,10 @@ void CRoom::Priority_Update(_float fTimeDelta)
 
 void CRoom::Update(_float fTimeDelta)
 {
-	m_pGameInstance->Update(fTimeDelta, ENUM_CLASS(PARTICLE_TYPE::RAIN));
-
+	if (m_bParticle)
+	{
+		m_pGameInstance->Update(fTimeDelta, ENUM_CLASS(m_eRoomParticle));
+	}
 	if (!m_bDead) {
 		if (m_bIsActive)
 		{
@@ -138,7 +140,10 @@ void CRoom::Update(_float fTimeDelta)
 
 void CRoom::Late_Update(_float fTimeDelta)
 {
-	m_pGameInstance->Late_Update(fTimeDelta, ENUM_CLASS(PARTICLE_TYPE::RAIN));
+	if (m_bParticle)
+	{
+		m_pGameInstance->Late_Update(fTimeDelta, ENUM_CLASS(m_eRoomParticle));
+	}
 
 	if (!m_bDead)
 	{
@@ -540,13 +545,16 @@ HRESULT CRoom::Load_From_File(_uint iLayerLevelIndex, const _wstring& strLayerTa
 	CMonster_Factory::GetInstance()->Add_MonstersV2(this, MonsterDescList);
 	MonsterDescList.clear();
 
-	/*m_pGameInstance->Create_Particle(ENUM_CLASS(PARTICLE_TYPE::RAIN), iLayerLevelIndex, TEXT("Prototype_GameObject_Rain"), _float3(1.f, 1.f, 1.f));
-	CTransform* pTrasnform = static_cast<CTransform*>(m_pTerrainBox->Find_Component(TEXT("Com_Transform_TerrainBox")));
-	_float3 vPos = pTrasnform->Get_State(STATE::POSITION);
-	m_pGameInstance->Play(ENUM_CLASS(PARTICLE_TYPE::RAIN), _float3(vPos.x, 15.f , vPos.y));
-		*/
-	
+	/*m_pGameInstance->Create_Particle(ENUM_CLASS(PARTICLE_TYPE::RAIN), iLayerLevelIndex, TEXT("Prototype_GameObject_Rain"), _float3(0.5f, 1.f, 1.f));*/
+	return S_OK;
+}
 
+HRESULT CRoom::Load_Particle(PARTICLE_TYPE eType, const _wstring& strLayerTag, _uint iLayerLevelIndex, _float3 ParticleScaled, _int iOffSetType)
+{
+	if (eType == PARTICLE_TYPE::RAIN)
+		m_pGameInstance->Create_Particle_Fast(ENUM_CLASS(eType), iLayerLevelIndex, strLayerTag, iOffSetType, ParticleScaled );
+	else if (eType == PARTICLE_TYPE::FIRE)
+		m_pGameInstance->Create_Particle_Low(ENUM_CLASS(eType), iLayerLevelIndex, strLayerTag, iOffSetType);
 
 	return S_OK;
 }
@@ -616,6 +624,17 @@ void CRoom::Enter()
 		}
 		
 	}
+
+	if (m_eRoomParticle != PARTICLE_TYPE::PARTICLE_END)
+	{
+		CTransform* pTrasnform = static_cast<CTransform*>(m_pTerrainBox->Find_Component(TEXT("Com_Transform_TerrainBox")));
+		_float3 vPos = pTrasnform->Get_State(STATE::POSITION);
+		if(m_eRoomParticle == PARTICLE_TYPE::RAIN)
+			m_pGameInstance->Play(ENUM_CLASS(PARTICLE_TYPE::RAIN), _float3(vPos.x, 15.f, vPos.z));
+		else if(m_eRoomParticle == PARTICLE_TYPE::FIRE)
+			m_pGameInstance->Play(ENUM_CLASS(PARTICLE_TYPE::FIRE), _float3(vPos.x, 1.f, vPos.z));
+		m_bParticle = true;
+	}
 }
 
 void CRoom::Exit()
@@ -633,6 +652,7 @@ void CRoom::Exit()
 	}
 
 	m_bIsActive = false;
+	m_bParticle = false;
 }
 
 void CRoom::Activate()

@@ -16,8 +16,9 @@ CLevel_Boss1::CLevel_Boss1(LPDIRECT3DDEVICE9 pGraphic_Device)
 HRESULT CLevel_Boss1::Initialize()
 {
 	CRoom_Manager::GetInstance()->Clear(ENUM_CLASS(LEVEL::LEVEL_STAGE4));
-	g_hCursor = LoadCursorFromFile(L"Resources/Sephiria/UI/Cursor/Cursor_Combat.cur");
+	m_pGameInstance->Clear(); //파티클 초기화
 
+	g_hCursor = LoadCursorFromFile(L"Resources/Sephiria/UI/Cursor/Cursor_Combat.cur");
 
 	if (FAILED(Ready_Layer_BackGround(TEXT("Layer_BackGround"))))
 		return E_FAIL;
@@ -179,8 +180,15 @@ HRESULT CLevel_Boss1::Ready_Layer_Room(const _wstring& strLayerTag)
 				ROOMCHANGE EventDesc;
 				EventDesc.vPosition = dynamic_cast<CTransform*>(pRoom->Get_TerrainBox()->Find_Component(TEXT("Com_Transform_TerrainBox")))->Get_State(STATE::POSITION);
 				m_pGameInstance->Broadcast(ENUM_CLASS(EVENT_TYPE::ROOMCHANGE), &EventDesc);
+
 			}
 
+			//if (iNumber == 1)
+			//{
+			//	pRoom->Load_Particle(PARTICLE_TYPE::DUST, TEXT("Prototype_GameObject_FireParticle"), ENUM_CLASS(LEVEL::LEVEL_BOSS1), _float3(0.5f, 0.5f, 1.f), 2);
+			//	pRoom->Set_ParticleType(PARTICLE_TYPE::DUST);
+			//	pRoom->Set_ParticleOn();
+			//}
 			//여기에 몬스터 배치, 아래는 이전 스테이지에서 몬스터 배치 하는 방식, 참고할려면 참고해서 배치하기!
 
 			//list<CMonster::MONSTERDESC> DescList;

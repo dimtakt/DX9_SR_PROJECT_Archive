@@ -27,6 +27,9 @@ CLevel_Stage1::CLevel_Stage1(LPDIRECT3DDEVICE9 pGraphic_Device)
 
 HRESULT CLevel_Stage1::Initialize()
 {
+	CRoom_Manager::GetInstance()->Clear(ENUM_CLASS(LEVEL::LEVEL_TOWN));
+	m_pGameInstance->Clear();	//파티클 초기화
+
 	g_hCursor = LoadCursorFromFile(L"Resources/Sephiria/UI/Cursor/Cursor_Combat.cur");
 
 	
@@ -145,7 +148,8 @@ HRESULT CLevel_Stage1::Ready_Layer_Room(const _wstring& strLayerTag)
 	{
 		
 		pRoom = dynamic_cast<CRoom*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::LEVEL_STAGE1), TEXT("Prototype_GameObject_Room")));
-		NULL_CHECK_RETURN(pRoom, E_FAIL);
+		NULL_CHECK_RETURN(pRoom, E_FAIL);						
+		pRoom->Set_ParticleType(PARTICLE_TYPE::RAIN);			//파티클 쓰는거 스테이지로 통일한다함. 그러면 그스테이지 룸 파티클 설정값 켜줘야함.
 
 		_int RoomX = RoomIndex[iCount].first;
 		_int RoomZ = RoomIndex[iCount].second;
@@ -162,6 +166,10 @@ HRESULT CLevel_Stage1::Ready_Layer_Room(const _wstring& strLayerTag)
 				ROOMCHANGE EventDesc;
 				EventDesc.vPosition = dynamic_cast<CTransform*>(pRoom->Get_TerrainBox()->Find_Component(TEXT("Com_Transform_TerrainBox")))->Get_State(STATE::POSITION);
 				m_pGameInstance->Broadcast(ENUM_CLASS(EVENT_TYPE::ROOMCHANGE), &EventDesc);
+
+				pRoom->Load_Particle(PARTICLE_TYPE::RAIN, TEXT("Prototype_GameObject_Rain"), ENUM_CLASS(LEVEL::LEVEL_STAGE1), _float3(0.5f, 1.f, 1.f), 1);
+				pRoom->Set_ParticleOn();
+				pRoom->Set_ParticleType(PARTICLE_TYPE::RAIN);
 			}
 
 		//// 룸매니저 투입
@@ -177,6 +185,7 @@ HRESULT CLevel_Stage1::Ready_Layer_Room(const _wstring& strLayerTag)
 
 	//앤드포탈 생성 1회
 	CRoom_Manager::GetInstance()->Check_END_Potal(ENUM_CLASS(LEVEL::LEVEL_STAGE1), strLayerTag, iIndex);
+
 
 	return S_OK;
 }

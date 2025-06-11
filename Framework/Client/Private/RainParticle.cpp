@@ -20,6 +20,11 @@ HRESULT CRainParticle::Initialize_Prototype()
 
 HRESULT CRainParticle::Initialize(void* pArg)
 {
+    PARTICLE_DESC* pDesc = static_cast<PARTICLE_DESC*>(pArg);
+
+    if (pArg != nullptr)
+        m_iTextureType = pDesc->iType;          //추후 이거로 같은 기능 텍스처만 다르게 설정할 수 있을듯 ?
+
     if (FAILED(Ready_Components()))
         return E_FAIL;
 
@@ -31,14 +36,17 @@ HRESULT CRainParticle::Initialize(void* pArg)
 
     if (pArg != nullptr)
     {
-        PARTICLE_DESC* pDesc = static_cast<PARTICLE_DESC*>(pArg);
 
         m_pTransformCom->Set_State(STATE::POSITION, pDesc->vPos);
 
         m_pTransformCom->Scaling(pDesc->vScale.x, pDesc->vScale.y, pDesc->vScale.z);
 
         m_pTextureCom->Bind_Texture(m_iTextureIndex);
-        m_eObjType = GAMEOBJ_TYPE::PARTICLE;
+
+        m_fLifeTime = pDesc->fLifeTime;
+        m_fSpawnTimer = pDesc->fSpwanTimer;
+        m_fSpeed = pDesc->fSpeed;
+        m_eObjType = GAMEOBJ_TYPE::PARTICLE; 
     }
 
     return S_OK;
@@ -54,9 +62,8 @@ void CRainParticle::Update(_float fTimeDelta)       //한꺼번에 생성해서 각자 따�
     if (!m_bIsActive)
     {
         _float m_fPlayTimer = 0.f;
-        _float m_fPlayInterval = 5.f;
         m_fPlayTimer += fTimeDelta;
-        if (m_fPlayTimer >= m_fPlayInterval)
+        if (m_fPlayTimer >= m_fSpawnTimer)
         {
             m_bIsActive = true;
         }
@@ -127,6 +134,8 @@ HRESULT CRainParticle::Ready_Components()
     if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_VIBuffer_Rect"),
         TEXT("Com_VIBuffer"), reinterpret_cast<CComponent**>(&m_pVIBufferCom))))
         return E_FAIL;
+
+    //if (m_iTextureTytpe == 0 ) 무슨 텍스쳐 세팅할지 선택할 수 있지않을까.
 
     /* For.Com_Texture */
     if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Rain"),
