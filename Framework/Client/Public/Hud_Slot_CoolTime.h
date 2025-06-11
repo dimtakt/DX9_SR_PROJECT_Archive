@@ -22,11 +22,13 @@ public:
 	virtual HRESULT				Render() override;
 
 public:
-	void						HpBar_Set(_int iCulValue, _int iMaxValue);
+	void						Progerss_Set(_int iCulValue, _int iMaxValue);
 private:
 	CVIBuffer_Rect*				m_pVIBufferCom = { nullptr };
 	_bool						m_isFontRender = { true };
 
+	void						Set_RenderState();
+	void						Reset_RenderState();
 private:
 	HRESULT						Ready_Components();
 
