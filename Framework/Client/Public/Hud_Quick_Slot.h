@@ -19,23 +19,32 @@ public:
 	virtual void					Update(_float fTimeDelta) override;
 	virtual void					Late_Update(_float fTimeDelta) override;
 	virtual HRESULT					Render() override;
+	
+public:
+	CItem_Base*						Get_Itme() {return m_pSlotItem;}
+	void							Push_Item(CItem_Base* pItem) { m_pSlotItem = pItem; }
+	void							Selete_Slot(_int iKey);
+	void							Release_Item() { m_pSlotItem = nullptr; }
 
 private:
 	LEVEL							m_eLevel = {};
 	_int							m_iIndex = {};
+	_tchar							m_szVkKey = {};
+	_bool							m_bSelete = { false };
+
+	CItem_Base*						m_pSlotItem = { nullptr };
 
 	_bool							m_bIsPick = {};
 	_uint							m_iSlotIndex = {};
 	_int							m_iSlotItem_Tex = {};
 
-	CItem_Base*						m_pSlotItem = { nullptr };
-	CItem_Base*						m_pOldSlotItem = { nullptr };
-	
 private:
 	HRESULT							Ready_Components();
 
 	HRESULT							Ready_ChildPrototype(LEVEL eLevel);
 	HRESULT							Ready_Children();
+
+	void							Use_Item();
 public:
 	static CHud_Quick_Slot*			Create(LPDIRECT3DDEVICE9 pGraphic_Device, LEVEL eLevel);
 	virtual CGameObject*			Clone(void* pArg) override;

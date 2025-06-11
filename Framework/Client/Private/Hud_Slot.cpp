@@ -1,6 +1,5 @@
 #include "Hud_Slot.h"
 #include "GameInstance.h"
-#include "Hud_Quick_Slot.h"
 
 CHud_Slot::CHud_Slot(LPDIRECT3DDEVICE9 pGraphic_Device) : CUIObject(pGraphic_Device)
 {
@@ -67,7 +66,8 @@ void CHud_Slot::Update(_float fTimeDelta)
 
 	if (!m_bIsUpdate)
 		return;
-
+	
+	Selete_Slot();
 	__super::Update(fTimeDelta);
 }
 
@@ -85,6 +85,48 @@ void CHud_Slot::Late_Update(_float fTimeDelta)
 HRESULT CHud_Slot::Render()
 {
 	return S_OK;
+}
+
+void CHud_Slot::SlotToItem(CItem_Base* pItem)
+{
+	for (_int i = 0; i < m_vecQuickSlot.size(); ++i)
+	{
+		if (pItem->Item_Info()->iItemType == ENUM_CLASS(ITEM_TYPE::ARTEFACT)
+			|| pItem->Item_Info()->iItemType == ENUM_CLASS(ITEM_TYPE::STONE))
+			return;
+
+		if (m_vecQuickSlot[i]->Get_Itme() != nullptr)
+		{
+			if (m_vecQuickSlot[i]->Get_Itme()->Item_Info()->iItemID == pItem->Item_Info()->iItemID)
+				return;
+		}
+		else
+		{
+			m_vecQuickSlot[i]->Push_Item(pItem);
+			return;
+		}
+	}
+}
+
+void CHud_Slot::Subscribe_Item(CItem_Base* pItem)
+{
+	for (_int i = 0; i < m_vecQuickSlot.size(); ++i)
+	{
+		if (m_vecQuickSlot[i]->Get_Itme() == pItem)
+		{
+			m_vecQuickSlot[i]->Release_Item();
+			return;
+		}
+	}
+
+	for (_int i = 0; i < m_vecQuickSlot.size(); ++i)
+	{
+		if (m_vecQuickSlot[i]->Get_Itme() == nullptr)
+		{
+			m_vecQuickSlot[i]->Push_Item(pItem);
+			return;
+		}
+	}
 }
 
 HRESULT CHud_Slot::Ready_Components()
@@ -114,13 +156,45 @@ HRESULT CHud_Slot::Ready_Children()
 	Desc.fZ = iSlotValue;
 	for (_int i = 0; i < iSlotValue; ++i)
 	{
+		Desc.fY = i + 1;
 		Desc.fX = i;
 		pGameObject = dynamic_cast<CUIObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(m_eLevel), TEXT("Prototype_GameObject_UI_Hud_QuickSlot"), &Desc));
 		if (nullptr == pGameObject)
 			return E_FAIL;
 		Add_Child(pGameObject);
+		m_vecQuickSlot.push_back(static_cast<CHud_Quick_Slot*>(pGameObject));
+		Safe_AddRef(m_vecQuickSlot[i]);
 	}
 	return S_OK;
+}
+
+void CHud_Slot::Selete_Slot()
+{
+	if (m_pGameInstance->IsKeyDown('1'))
+	{
+		for (_int i = 0; i < 5; ++i)
+			m_vecQuickSlot[i]->Selete_Slot(1);
+	}
+	else if (m_pGameInstance->IsKeyDown('2'))
+	{
+		for (_int i = 0; i < 5; ++i)
+			m_vecQuickSlot[i]->Selete_Slot(2);
+	}
+	else if (m_pGameInstance->IsKeyDown('3'))
+	{
+		for (_int i = 0; i < 5; ++i)
+			m_vecQuickSlot[i]->Selete_Slot(3);
+	}
+	else if (m_pGameInstance->IsKeyDown('4'))
+	{
+		for (_int i = 0; i < 5; ++i)
+			m_vecQuickSlot[i]->Selete_Slot(4);
+	}
+	else if (m_pGameInstance->IsKeyDown('5'))
+	{
+		for (_int i = 0; i < 5; ++i)
+			m_vecQuickSlot[i]->Selete_Slot(5);
+	}
 }
 
 CHud_Slot* CHud_Slot::Create(LPDIRECT3DDEVICE9 pGraphic_Device, LEVEL eLevel)
@@ -149,5 +223,9 @@ CGameObject* CHud_Slot::Clone(void* pArg)
 
 void CHud_Slot::Free()
 {
+	for (auto& pItemObject : m_vecQuickSlot)
+		Safe_Release(pItemObject);
+	m_vecQuickSlot.clear();
+
 	__super::Free();
 }

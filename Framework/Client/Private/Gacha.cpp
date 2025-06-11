@@ -132,7 +132,6 @@ void CGacha::UI_Switch()
 	{
 		m_pGameInstance->All_Update_On();
 		m_bIsOpen = false;
-		CStat_Manager::GetInstance()->Set_UIOpen(false);
 	}
 	else
 	{

@@ -145,7 +145,7 @@ HRESULT CHud_LevelUp::Ready_Components()
 HRESULT CHud_LevelUp::Ready_ChildPrototype(LEVEL eLevel)
 {
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(eLevel), TEXT("Prototype_GameObject_UI_LevelUp_Guide"),
-		CUI_KeyGuide::Create(m_pGraphic_Device, TEXT("R")))))
+		CUI_KeyGuide::Create(m_pGraphic_Device))))
 		return E_FAIL;
 
 	return S_OK;
@@ -154,7 +154,9 @@ HRESULT CHud_LevelUp::Ready_ChildPrototype(LEVEL eLevel)
 HRESULT CHud_LevelUp::Ready_Children()
 {
 	CUIObject* pGameObject = nullptr;
-	CUIObject::UIOBJECT_DESC Desc = {};
+	CUI_KeyGuide::KEYGUIDE_DESC Desc = {};
+	Desc.strKey = TEXT("R");
+	Desc.Default = false;
 
 	Desc.fX = -35;
 	Desc.fY = 60;

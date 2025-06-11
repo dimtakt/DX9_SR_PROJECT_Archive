@@ -19,7 +19,7 @@ public:
 	
 protected:
 	void						Progress_UpdateX();
-
+	void						Progress_UpdateY();
 protected:
 	_int						m_iCulMaxValue = {};
 	_int						m_iPreMaxValue = {};
