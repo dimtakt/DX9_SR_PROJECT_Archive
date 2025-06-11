@@ -32,6 +32,7 @@ HRESULT CRoom::Initialize(void* pArg)
 
 void CRoom::Priority_Update(_float fTimeDelta)
 {
+
 	if (!m_bDead) 
 	{
 		if (m_bIsActive)
@@ -82,6 +83,8 @@ void CRoom::Priority_Update(_float fTimeDelta)
 
 void CRoom::Update(_float fTimeDelta)
 {
+	m_pGameInstance->Update(fTimeDelta, ENUM_CLASS(PARTICLE_TYPE::RAIN));
+
 	if (!m_bDead) {
 		if (m_bIsActive)
 		{
@@ -134,6 +137,8 @@ void CRoom::Update(_float fTimeDelta)
 
 void CRoom::Late_Update(_float fTimeDelta)
 {
+	m_pGameInstance->Late_Update(fTimeDelta, ENUM_CLASS(PARTICLE_TYPE::RAIN));
+
 	if (!m_bDead)
 	{
 		if (m_bIsVisited)
@@ -533,6 +538,14 @@ HRESULT CRoom::Load_From_File(_uint iLayerLevelIndex, const _wstring& strLayerTa
 
 	CMonster_Factory::GetInstance()->Add_MonstersV2(this, MonsterDescList);
 	MonsterDescList.clear();
+
+	/*m_pGameInstance->Create_Particle(ENUM_CLASS(PARTICLE_TYPE::RAIN), iLayerLevelIndex, TEXT("Prototype_GameObject_Rain"), _float3(1.f, 1.f, 1.f));
+	CTransform* pTrasnform = static_cast<CTransform*>(m_pTerrainBox->Find_Component(TEXT("Com_Transform_TerrainBox")));
+	_float3 vPos = pTrasnform->Get_State(STATE::POSITION);
+	m_pGameInstance->Play(ENUM_CLASS(PARTICLE_TYPE::RAIN), _float3(vPos.x, 15.f , vPos.y));
+		*/
+	
+
 
 	return S_OK;
 }

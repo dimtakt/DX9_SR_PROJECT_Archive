@@ -42,6 +42,7 @@
 #include "Potal.h"
 #include "Interaction_Normal.h"
 #include "Fire.h"
+#include "RainParticle.h"
 
 CLoader::CLoader(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: m_pGraphic_Device{ pGraphic_Device }
@@ -204,6 +205,11 @@ HRESULT CLoader::Loading_For_Town_Level()
 		CCamera_Follow::Create(m_pGraphic_Device))))
 		return E_FAIL;
 
+	// Camera
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_TOWN), TEXT("Prototype_GameObject_Camera_Mouse"),
+		CCamera_Mouse::Create(m_pGraphic_Device))))
+		return E_FAIL;
+
 	/* Prototype_GameObject_Land*/
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_TOWN), TEXT("Prototype_GameObject_Room"),
 		CRoom::Create(m_pGraphic_Device))))
@@ -231,6 +237,11 @@ HRESULT CLoader::Loading_For_Town_Level()
 
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_TOWN), TEXT("Prototype_GameObject_Potal"),
 		CPotal::Create(m_pGraphic_Device))))
+		return E_FAIL;
+
+	/* Rain */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_TOWN), TEXT("Prototype_GameObject_Rain"),
+		CRainParticle::Create(m_pGraphic_Device))))
 		return E_FAIL;
 
 

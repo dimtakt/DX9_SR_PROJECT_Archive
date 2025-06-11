@@ -427,6 +427,12 @@
     <Filter Include="02.GameObject\Object\Fire">
       <UniqueIdentifier>{b5b251be-c460-488e-8190-35995c8cb7c8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\Particle">
+      <UniqueIdentifier>{d63b5b87-031a-4979-a01b-257c7b034658}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Particle\RainParicle">
+      <UniqueIdentifier>{8e64aac7-3dec-4bf1-9984-f08eba41c47a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -936,6 +942,9 @@
     <ClInclude Include="..\Public\Fire.h">
       <Filter>02.GameObject\Object\Fire</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\RainParticle.h">
+      <Filter>02.GameObject\Particle\RainParicle</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -1406,6 +1415,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\Fire.cpp">
       <Filter>02.GameObject\Object\Fire</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\RainParticle.cpp">
+      <Filter>02.GameObject\Particle\RainParicle</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
