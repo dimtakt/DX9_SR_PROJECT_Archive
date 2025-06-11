@@ -153,6 +153,7 @@
     <ClInclude Include="..\public\Askard_Frame.h" />
     <ClInclude Include="..\public\Askard.h" />
     <ClInclude Include="..\public\Askard_Tentacle.h" />
+    <ClInclude Include="..\public\Askard_Hpbar.h" />
     <ClInclude Include="..\Public\BackGround.h" />
     <ClInclude Include="..\public\BossHp_Askard.h" />
     <ClInclude Include="..\public\BossHp_Ema.h" />
@@ -331,6 +332,7 @@
     <ClCompile Include="..\private\Askard_Frame.cpp" />
     <ClCompile Include="..\private\Askard.cpp" />
     <ClCompile Include="..\private\Askard_Tentacle.cpp" />
+    <ClCompile Include="..\private\Askard_Hpbar.cpp" />
     <ClCompile Include="..\Private\BackGround.cpp" />
     <ClCompile Include="..\private\BossHp_Askard.cpp" />
     <ClCompile Include="..\private\BossHp_Ema.cpp" />
