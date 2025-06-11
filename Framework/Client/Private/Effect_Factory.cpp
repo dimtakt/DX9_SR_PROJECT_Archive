@@ -22,7 +22,7 @@ HRESULT CEffect_Factory::Initialize()
 }
 
 // 벡터 위치, 쿼터니언 회전, 벡터 스케일 정보로 생성
-void CEffect_Factory::Create_Effect(GAMEOBJ_TYPE eType, const _wstring& strEffectTag, _float3 vPos, D3DXQUATERNION qRot, _float3 vScale, _bool isFlippedX)
+void CEffect_Factory::Create_Effect(GAMEOBJ_TYPE eType, const _wstring& strEffectTag, _float3 vPos, D3DXQUATERNION qRot, _float3 vScale, _float fLifeTimeSec, _bool isFlippedX)
 {
 	CEffect::EFFECT_DESC EffectDesc;
 	EffectDesc.strEffectTag = strEffectTag;
@@ -30,6 +30,7 @@ void CEffect_Factory::Create_Effect(GAMEOBJ_TYPE eType, const _wstring& strEffec
 	EffectDesc.eType = eType;
 	EffectDesc.qRot = qRot;
 	EffectDesc.vScale = vScale;
+	EffectDesc.fLifeTimeSec = fLifeTimeSec;
 
 	m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_STATIC), L"Layer_Effect",
 		ENUM_CLASS(LEVEL::LEVEL_STATIC), L"Prototype_GameObject_GameEffect", &EffectDesc);
