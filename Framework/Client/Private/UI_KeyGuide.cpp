@@ -8,10 +8,8 @@ CUI_KeyGuide::CUI_KeyGuide(const CUI_KeyGuide& Prototype) : CUIObject(Prototype)
 {
 }
 
-HRESULT CUI_KeyGuide::Initialize_Prototype(const _wstring& strPrototypeTag)
+HRESULT CUI_KeyGuide::Initialize_Prototype()
 {
-	m_strKey = strPrototypeTag;
-
 	return S_OK;
 }
 
@@ -20,7 +18,9 @@ HRESULT CUI_KeyGuide::Initialize(void* pArg)
 	KEYGUIDE_DESC* Desc = static_cast<KEYGUIDE_DESC*>(pArg);
 	m_fSizeX = 25;
 	m_fSizeY = 25;
-	if (Desc == nullptr)
+	m_strKey = Desc->strKey;
+
+	if (Desc->Default)
 	{
 		m_fX = -m_fSizeX * 0.5;
 		m_fY = m_fSizeY * 0.5;
@@ -141,11 +141,11 @@ void CUI_KeyGuide::Target_Pos()
 	m_pTransformCom->Set_State(STATE::POSITION, m_vWorldPos);
 }
 
-CUI_KeyGuide* CUI_KeyGuide::Create(LPDIRECT3DDEVICE9 pGraphic_Device, const _wstring& strPrototypeTag)
+CUI_KeyGuide* CUI_KeyGuide::Create(LPDIRECT3DDEVICE9 pGraphic_Device)
 {
 	CUI_KeyGuide* pInstance = new CUI_KeyGuide(pGraphic_Device);
 
-	if (FAILED(pInstance->Initialize_Prototype(strPrototypeTag)))
+	if (FAILED(pInstance->Initialize_Prototype()))
 	{
 		MSG_BOX(TEXT("Failed to Created : CUI_KeyGuide"));
 		Safe_Release(pInstance);

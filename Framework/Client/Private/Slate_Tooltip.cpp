@@ -139,7 +139,7 @@ HRESULT CSlate_Tooltip::Ready_ChildPrototype(LEVEL eLevel)
 		return E_FAIL;
 
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(eLevel), TEXT("Prototype_GameObject_UI_Slate_Guide"),
-		CUI_KeyGuide::Create(m_pGraphic_Device, TEXT("R")))))
+		CUI_KeyGuide::Create(m_pGraphic_Device))))
 		return E_FAIL;
 
 
@@ -164,6 +164,9 @@ HRESULT CSlate_Tooltip::Ready_Children()
 	Add_Child(pGameObject);
 
 	CUI_KeyGuide::KEYGUIDE_DESC KeyDesc{};
+
+	KeyDesc.strKey = TEXT("R");
+	KeyDesc.Default = false;
 	KeyDesc.fX = 55;
 	KeyDesc.fY = 217;
 	KeyDesc.fZ = 4;

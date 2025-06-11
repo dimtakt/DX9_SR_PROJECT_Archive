@@ -11,12 +11,12 @@ public:
 		PT_IDLE,
 
 		// 단순 등장 및 사라짐
-		PT_UP,
+		//PT_UP,
 		PT_DOWNWAIT,
-		PT_DOWN,
+		PT_DOWN,	
 
 		// 별종
-		PT_EYEOPEN,
+		//PT_EYEOPEN,
 		PT_WAITTARGET,
 		PT_ATTACK,
 
@@ -36,9 +36,12 @@ public:
 
 	typedef struct tagTentacleDesc
 	{
-		_float4x4		matTransform;	// 생성 위치
+		_float3		vPosition;	// 생성 위치
 
 		TYPE_TENTACLE	eType;	// 생성될 타입
+
+		CTerrainBox* pTerrainBox;
+
 	}TENTACLE_DESC;
 
 private:
@@ -62,9 +65,16 @@ public:
 
 private:
 	// 컴포넌트들
+
+	CTexture*	m_pTextureCom_Root_Standby				= { nullptr };
+
 	CTexture*	m_pTextureCom_Root_Up_1					= { nullptr };
 	CTexture*	m_pTextureCom_Root_Up_2					= { nullptr };
 	CTexture*	m_pTextureCom_Root_Up_3					= { nullptr };
+
+	CTexture*	m_pTextureCom_Root_DownWait_1			= { nullptr };
+	CTexture*	m_pTextureCom_Root_DownWait_2			= { nullptr };
+	CTexture*	m_pTextureCom_Root_DownWait_3			= { nullptr };
 
 	CTexture*	m_pTextureCom_Root_Down_1				= { nullptr };
 	CTexture*	m_pTextureCom_Root_Down_2				= { nullptr };
@@ -79,15 +89,18 @@ private:
 
 
 	CAnimator*	m_pAnimatorCom							= { nullptr };
+	CAnimator*	m_pAnimatorPatternCom					= { nullptr };
+
 
 	CTransform*	m_pTargetTransformCom					= { nullptr };
+	CTransform* m_pTerrainTransformCom					= { nullptr };
 
 	// 로컬 변수들
 
 	TYPE_TENTACLE		m_eType		= TYPE_TENTACLE::TYPE_END;
 	PATTERN_TENTACLE	m_ePattern	= PATTERN_TENTACLE::PT_IDLE;
 
-
+	_int				m_iStackedFrames = 0;	// Update 문 마지막에서 매 프레임마다 ++
 
 public:
 	static CAskard_Tentacle* Create(LPDIRECT3DDEVICE9 pGraphic_Device);

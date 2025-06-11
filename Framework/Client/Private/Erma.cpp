@@ -49,8 +49,8 @@ HRESULT CErma::Initialize(void* pArg)
     m_isSummoned = true;
     Ready_Object();
 
-    m_iMaxHp = 100;
-    m_iCulHp = 100;
+    m_iMaxHp = 2000;
+    m_iCulHp = 2000;
 
     m_eMonsterType = MONSTER_TYPE::ERMA;
 

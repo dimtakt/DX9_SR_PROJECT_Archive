@@ -39,6 +39,13 @@ void CLevel_Logo::Update(_float fTimeDelta)
 			return;
 	}
 
+
+	if (GetKeyState('O') & 0x8000)
+	{
+		if (FAILED(m_pGameInstance->Open_Level(static_cast<_uint>(LEVEL::LEVEL_LOADING), CLevel_Loading::Create(m_pGraphic_Device, LEVEL::LEVEL_BOSS2))))
+			return;
+	}
+
 	return;
 }
 

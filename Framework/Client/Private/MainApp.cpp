@@ -342,10 +342,20 @@ HRESULT CMainApp::Ready_Texture_Setting()
 		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/BleakSwordDX/Object/Fire/FX_Fire_00_0.png"), 1))))
 		return E_FAIL;
 
-	/* Rain */
+	/* RainParticle */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Rain"),
 		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/BleakSwordDX/Particle/Window_Rain.png"), 1))))
 		return E_FAIL;
+
+	/* FireParticle, Fire */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_FireParticle"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/BleakSwordDX/Particle/FireParticle_%d.png"), 3))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_DustParticle"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/BleakSwordDX/Particle/DustParticle.png"), 1))))
+		return E_FAIL;
+
 
 	// Roll
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Player_Roll"),
@@ -994,6 +1004,12 @@ void CMainApp::Ready_Key_Setting()
 	m_pGameInstance->AddTrackingKey(VK_F4);
 	m_pGameInstance->AddTrackingKey(VK_F5);
 	m_pGameInstance->AddTrackingKey(VK_F6);
+	m_pGameInstance->AddTrackingKey('1');
+	m_pGameInstance->AddTrackingKey('2');
+	m_pGameInstance->AddTrackingKey('3');
+	m_pGameInstance->AddTrackingKey('4');
+	m_pGameInstance->AddTrackingKey('5');
+	m_pGameInstance->AddTrackingKey('R');
 	// 임시 테스트용
 #if _DEBUG
 	m_pGameInstance->AddTrackingKey('J');
@@ -1064,7 +1080,7 @@ void CMainApp::Ready_Font_Setting()
 		MSG_BOX(TEXT("FAILED to Font"));
 	if (FAILED(m_pGameInstance->Ready_Font(TEXT("UI_Font_16_Tooltip"), TEXT("../Bin/Resources/Font/Galmuri9.ttf"), TEXT("Galmuri9 Regular"), 0, 16, 600)))
 		MSG_BOX(TEXT("FAILED to Font"));
-	if (FAILED(m_pGameInstance->Ready_Font(TEXT("UI_Font_14"), TEXT("../Bin/Resources/Font/Galmuri9.ttf"), TEXT("Galmuri9 Regular"), 0, 14, 900)))
+	if (FAILED(m_pGameInstance->Ready_Font(TEXT("UI_Font_14"), TEXT("../Bin/Resources/Font/Galmuri9.ttf"), TEXT("Galmuri9 Regular"), 0, 14, 700)))
 		MSG_BOX(TEXT("FAILED to Font"));
 	if (FAILED(m_pGameInstance->Ready_Font(TEXT("UI_Font_12"), TEXT("../Bin/Resources/Font/Galmuri9.ttf"), TEXT("Galmuri9 Regular"), 14, 13, 700)))
 		MSG_BOX(TEXT("FAILED to Font"));
@@ -1115,6 +1131,11 @@ HRESULT CMainApp::Ready_Manager_Setting()
 HRESULT CMainApp::Ready_UI_Stting()
 {
 	/* Prototype_GameObject_UI*/
+
+	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Layer_Slot"),
+		ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_Hud_Slot"))))
+		return E_FAIL;
+
 	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Layer_Inventory"),
 		ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_Inventory"))))
 		return E_FAIL;
@@ -1147,9 +1168,6 @@ HRESULT CMainApp::Ready_UI_Stting()
 		ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_Field_Npc_Face"))))
 		return E_FAIL;
 	
-	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Layer_Slot"),
-		ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_Hud_Slot"))))
-		return E_FAIL;
 	return S_OK;
 }
 

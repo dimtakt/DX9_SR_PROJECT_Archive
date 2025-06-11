@@ -32,6 +32,7 @@ public:
 	void						Close_UI();
 	void						Push_Item_Slot(CItem_Base* pItem, _uint iCount);
 
+	_bool						Use_Item(CItem_Base* pItem);
 private:
 	CVIBuffer_Rect*				m_pVIBufferCom = { nullptr };
 	CTexture*					m_pTextureCom = { nullptr };

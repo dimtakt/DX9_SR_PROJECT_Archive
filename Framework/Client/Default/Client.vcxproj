@@ -192,6 +192,7 @@
     <ClInclude Include="..\Public\Field_Npc_Chat.h" />
     <ClInclude Include="..\Public\Field_Npc_Face.h" />
     <ClInclude Include="..\Public\Fire.h" />
+    <ClInclude Include="..\Public\FireParticle.h" />
     <ClInclude Include="..\Public\FogPlane.h" />
     <ClInclude Include="..\public\Gacha.h" />
     <ClInclude Include="..\public\Gacha_Button_Icon.h" />
@@ -204,6 +205,8 @@
     <ClInclude Include="..\public\Hud_LevelUp.h" />
     <ClInclude Include="..\public\Hud_Quick_Slot.h" />
     <ClInclude Include="..\public\Hud_Slot.h" />
+    <ClInclude Include="..\public\Hud_Slot_CoolTime.h" />
+    <ClInclude Include="..\public\Hud_Slot_Guide.h" />
     <ClInclude Include="..\public\Item_Tooltip_Bottom.h" />
     <ClInclude Include="..\public\Item_Tooltip_Mid.h" />
     <ClInclude Include="..\public\LaserGhost_D.h" />
@@ -371,6 +374,7 @@
     <ClCompile Include="..\Private\Field_Npc_Chat.cpp" />
     <ClCompile Include="..\Private\Field_Npc_Face.cpp" />
     <ClCompile Include="..\Private\Fire.cpp" />
+    <ClCompile Include="..\Private\FireParticle.cpp" />
     <ClCompile Include="..\Private\FogPlane.cpp" />
     <ClCompile Include="..\private\Gacha.cpp" />
     <ClCompile Include="..\private\Gacha_Button_Icon.cpp" />
@@ -383,6 +387,8 @@
     <ClCompile Include="..\private\Hud_LevelUp.cpp" />
     <ClCompile Include="..\private\Hud_Quick_Slot.cpp" />
     <ClCompile Include="..\private\Hud_Slot.cpp" />
+    <ClCompile Include="..\private\Hud_Slot_CoolTime.cpp" />
+    <ClCompile Include="..\private\Hud_Slot_Guide.cpp" />
     <ClCompile Include="..\private\Item_Tooltip_Bottom.cpp" />
     <ClCompile Include="..\private\Item_Tooltip_Mid.cpp" />
     <ClCompile Include="..\Private\LaserGhost_D.cpp" />

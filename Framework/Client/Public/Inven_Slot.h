@@ -30,6 +30,7 @@ public:
 	void							Add_Item(CItem_Base* pItem);
 	void							Release_Item() { m_pSlotItem = nullptr; }
 	void							Add_Item_Count() { ++m_iItemCount; }
+	_bool							Down_Item_Count();
 
 	const _int						Get_SlotGrade() { return m_iSlotGradeCount; }
 	virtual void					Push_Item(CItemObject* pItem) override;
@@ -64,7 +65,7 @@ private:
 private:
 	void							Setting_Item();
 	void							Item_Selete();
-	
+	void							Subscribe_Item();
 
 private:
 	HRESULT							Ready_Components();

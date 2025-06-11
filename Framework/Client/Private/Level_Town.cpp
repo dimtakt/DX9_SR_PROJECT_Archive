@@ -176,6 +176,9 @@ HRESULT CLevel_Town::Ready_Layer_Room(const _wstring& strLayerTag)
 		pRoom->Load_From_File(ENUM_CLASS(LEVEL::LEVEL_TOWN), strLayerTag, TEXT("../../data/Town.txt"), iNumber, iRoomX, iRoomZ, ROOM_INFO::EVENT_NORMAL);
 		iNumber++;
 
+		pRoom->Load_Particle(PARTICLE_TYPE::FIRE, TEXT("Prototype_GameObject_FireParticle"), ENUM_CLASS(LEVEL::LEVEL_TOWN), _float3(0.5f, 0.5f, 1.f), 1);
+		pRoom->Set_ParticleType(PARTICLE_TYPE::FIRE);
+		pRoom->Set_ParticleOn();
 		
 		CPlayer* pPlayer = dynamic_cast<CPlayer*>(m_pGameInstance->Get_GameObject(ENUM_CLASS(LEVEL::LEVEL_TOWN), TEXT("Layer_Player")));
 		pPlayer->Change_TerrainBox(dynamic_cast<CTerrainBox*>(pRoom->Get_TerrainBox()), iNumber);

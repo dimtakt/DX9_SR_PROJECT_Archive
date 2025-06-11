@@ -230,7 +230,13 @@ void CArtefact_Tooltip::Render_Font()
 	m_vTexRect.left += 50;
 
 	m_pGameInstance->Render_Font(TEXT("UI_Font_16_Tooltip"), szText, m_vTexRect, TexColor, DT_LEFT | DT_TOP);
-
+	
+	if (g_ItemDataBase[iItemID].m_eType == ITEM_TYPE::SKILLBOOK)
+	{
+		m_vTexRect.right -= 50;
+		_stprintf_s(szText, TEXT("[Äü½½·Ô µî·Ï]"));
+		m_pGameInstance->Render_Font(TEXT("UI_Font_16_Tooltip"), szText, m_vTexRect, D3DXCOLOR(1.f, 1.f, 1.f, 1.f), DT_RIGHT | DT_TOP);
+	}
 	if (g_ItemEffect[g_ItemDataBase[iItemID].m_iARTEFACT_Value].m_eType == ITEM_EFFECT::VALUE_TYPE)
 	{
 		for (_int i = 0; i < g_ItemEffect[g_ItemDataBase[iItemID].m_iARTEFACT_Value].m_vecValue.size(); ++i)

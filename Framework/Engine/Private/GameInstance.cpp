@@ -539,17 +539,30 @@ void CGameInstance::Late_Update(_float fTimeDelta, _uint iParticleType)
 {
     m_pParticle_Manager->Late_Update(fTimeDelta, iParticleType);
 }
-HRESULT CGameInstance::Create_Particle(_uint iParticleType, _uint iLayerLevelIndex, const _wstring& strLayerTag, _float3 vScale, _bool bUseOrtho)
+
+HRESULT CGameInstance::Create_Particle_Fast(_uint iParticleType, _uint iLayerLevelIndex, const _wstring& strLayerTag, _int iOffSetType, _float3 vScale, _bool bUseOrtho)
 {
-    m_pParticle_Manager->Create_Particle(iParticleType, iLayerLevelIndex, strLayerTag, vScale, bUseOrtho);
+    m_pParticle_Manager->Create_Particle_Fast(iParticleType, iLayerLevelIndex, strLayerTag, iOffSetType, vScale, bUseOrtho);
+
+    return S_OK;    
+}
+
+HRESULT CGameInstance::Create_Particle_Low(_uint iParticleType, _uint iLayerLevelIndex, const _wstring& strLayerTag, _int iOffSetType, _bool bUseOrtho)
+{
+    m_pParticle_Manager->Create_Particle_Low(iParticleType, iLayerLevelIndex, strLayerTag, iOffSetType, bUseOrtho);
 
     return S_OK;
 }
+
 HRESULT CGameInstance::Play(_uint iParticleType, _float3 vPos)
 {
     m_pParticle_Manager->Play(iParticleType, vPos);
 
     return S_OK;
+}
+void CGameInstance::Clear()
+{
+    m_pParticle_Manager->Clear();
 }
 #pragma endregion
 
@@ -606,7 +619,7 @@ void CGameInstance::Release_Engine()
     Safe_Release(m_pItem_Manager);
 
     Safe_Release(m_pItem_Manager);//
-   // Safe_Release(m_pParticle_Manager);
+    Safe_Release(m_pParticle_Manager);
 
 }
 
