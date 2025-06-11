@@ -1,13 +1,28 @@
 #include "BossHp_Ema.h"
 #include "GameInstance.h"
-#include "Askard_Frame.h"
-
+#include "Ema_Frame.h"
+#include "BossHp_SubHp.h"
+#include "Ema_SubHpbar.h"
+#include "Ema_Hpbar.h"
 CBossHp_Ema::CBossHp_Ema(LPDIRECT3DDEVICE9 pGraphic_Device) : CUIObject(pGraphic_Device)
 {
 }
 
 CBossHp_Ema::CBossHp_Ema(const CBossHp_Ema& Prototype) : CUIObject(Prototype), m_eLevel(Prototype.m_eLevel)
 {
+}
+
+void CBossHp_Ema::Render_Hpbar(_int iCulTopHp, _int iCulTopMaxHp, _int iCulBottomHp, _int iCulBottomMaxHp, _float fTimeDelta)
+{
+	if (!m_bIsUpdate)
+		return;
+	
+	static_cast<CEma_SubHpbar*>(m_vecChildren[1])->HpBar_Set(iCulTopHp, iCulTopMaxHp);
+
+	static_cast<CEma_Hpbar*>(m_vecChildren[2])->HpBar_Set(iCulBottomHp, iCulBottomMaxHp);
+
+	m_pGameInstance->Add_RenderGroup(RENDERGROUP::RG_UI, this);
+	__super::Late_Update(fTimeDelta);
 }
 
 HRESULT CBossHp_Ema::Initialize_Prototype(LEVEL eLevel)
@@ -23,7 +38,6 @@ HRESULT CBossHp_Ema::Initialize_Prototype(LEVEL eLevel)
 HRESULT CBossHp_Ema::Initialize(void* pArg)
 {
 	UIOBJECT_DESC* Desc = static_cast<UIOBJECT_DESC*>(pArg);
-
 	m_fSizeX = 610;
 	m_fSizeY = 45;
 	m_fX = g_iWinSizeX * 0.5f;
@@ -44,33 +58,23 @@ HRESULT CBossHp_Ema::Initialize(void* pArg)
 	if (FAILED(Ready_Children()))
 		return E_FAIL;
 
+	m_pGameInstance->Add_UIObject(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("BossHp_Ema"), this);
+
 	return S_OK;
 }
 
 void CBossHp_Ema::Priority_Update(_float fTimeDelta)
 {
-	if (!m_bIsUpdate)
-		return;
 
-	__super::Priority_Update(fTimeDelta);
 }
 
 void CBossHp_Ema::Update(_float fTimeDelta)
 {
-	if (!m_bIsUpdate)
-		return;
 
-	__super::Update(fTimeDelta);
 }
 
 void CBossHp_Ema::Late_Update(_float fTimeDelta)
 {
-	if (!m_bIsUpdate)
-		return;
-
-	m_pGameInstance->Add_RenderGroup(RENDERGROUP::RG_UI, this);
-
-	__super::Late_Update(fTimeDelta);
 }
 
 HRESULT CBossHp_Ema::Render()
@@ -100,8 +104,20 @@ HRESULT CBossHp_Ema::Ready_Components()
 
 HRESULT CBossHp_Ema::Ready_ChildPrototype(LEVEL eLevel)
 {
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(eLevel), TEXT("Prototype_GameObject_UI_BossHp_Askard_Frame"),
-		CAskard_Frame::Create(m_pGraphic_Device))))
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(eLevel), TEXT("Prototype_GameObject_UI_BossHp_Ema_SubHpFrame"),
+		CBossHp_SubHp::Create(m_pGraphic_Device,m_eLevel))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(eLevel), TEXT("Prototype_GameObject_UI_BossHp_Ema_SubHpBar"),
+		CEma_SubHpbar::Create(m_pGraphic_Device))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(eLevel), TEXT("Prototype_GameObject_UI_BossHp_Ema_HpBar"),
+		CEma_Hpbar::Create(m_pGraphic_Device))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(eLevel), TEXT("Prototype_GameObject_UI_BossHp_Ema_Frame"),
+		CEma_Frame::Create(m_pGraphic_Device))))
 		return E_FAIL;
 
 	return S_OK;
@@ -110,8 +126,23 @@ HRESULT CBossHp_Ema::Ready_ChildPrototype(LEVEL eLevel)
 HRESULT CBossHp_Ema::Ready_Children()
 {
 	CUIObject* pGameObject = nullptr;
+	
+	pGameObject = dynamic_cast<CUIObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(m_eLevel), TEXT("Prototype_GameObject_UI_BossHp_Ema_SubHpFrame")));
+	if (nullptr == pGameObject)
+		return E_FAIL;
+	Add_Child(pGameObject);
 
-	pGameObject = dynamic_cast<CUIObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(m_eLevel), TEXT("Prototype_GameObject_UI_BossHp_Askard_Frame")));
+	pGameObject = dynamic_cast<CUIObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(m_eLevel), TEXT("Prototype_GameObject_UI_BossHp_Ema_SubHpBar")));
+	if (nullptr == pGameObject)
+		return E_FAIL;
+	Add_Child(pGameObject);
+
+	pGameObject = dynamic_cast<CUIObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(m_eLevel), TEXT("Prototype_GameObject_UI_BossHp_Ema_HpBar")));
+	if (nullptr == pGameObject)
+		return E_FAIL;
+	Add_Child(pGameObject);
+
+	pGameObject = dynamic_cast<CUIObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(m_eLevel), TEXT("Prototype_GameObject_UI_BossHp_Ema_Frame")));
 	if (nullptr == pGameObject)
 		return E_FAIL;
 	Add_Child(pGameObject);

@@ -7,12 +7,12 @@ class CVIBuffer_Rect;
 END
 
 BEGIN(Client)
-class CAskard_Hpbar final : public CProgressBar
+class CEma_SubHpbar final : public CProgressBar
 {
 private:
-	CAskard_Hpbar(LPDIRECT3DDEVICE9 pGraphic_Device);
-	CAskard_Hpbar(const CAskard_Hpbar& Prototype);
-	virtual					~CAskard_Hpbar() = default;
+							CEma_SubHpbar(LPDIRECT3DDEVICE9 pGraphic_Device);
+							CEma_SubHpbar(const CEma_SubHpbar& Prototype);
+	virtual					~CEma_SubHpbar() = default;
 public:
 	virtual HRESULT			Initialize_Prototype() override;
 	virtual HRESULT			Initialize(void* pArg) override;
@@ -31,7 +31,7 @@ private:
 	HRESULT					Ready_Components();
 
 public:
-	static CAskard_Hpbar*	Create(LPDIRECT3DDEVICE9 pGraphic_Device);
+	static CEma_SubHpbar*	Create(LPDIRECT3DDEVICE9 pGraphic_Device);
 	virtual CGameObject*	Clone(void* pArg) override;
 	virtual void			Free() override;
 };

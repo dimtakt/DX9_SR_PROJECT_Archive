@@ -11,6 +11,16 @@ CBossHp_Askard::CBossHp_Askard(const CBossHp_Askard& Prototype) : CUIObject(Prot
 {
 }
 
+void CBossHp_Askard::Render_Hpbar(_int iCulvalue, _int iMaxValue, _float fTimeDelta)
+{
+	if (!m_bIsUpdate)
+		return;
+
+	static_cast<CAskard_Hpbar*>(m_vecChildren[0])->HpBar_Set(iCulvalue, iMaxValue);
+	m_pGameInstance->Add_RenderGroup(RENDERGROUP::RG_UI, this);
+	__super::Late_Update(fTimeDelta);
+}
+
 HRESULT CBossHp_Askard::Initialize_Prototype(LEVEL eLevel)
 {
 	m_eLevel = eLevel;
@@ -24,7 +34,6 @@ HRESULT CBossHp_Askard::Initialize_Prototype(LEVEL eLevel)
 HRESULT CBossHp_Askard::Initialize(void* pArg)
 {
 	UIOBJECT_DESC* Desc = static_cast<UIOBJECT_DESC*>(pArg);
-
 	m_fSizeX = 610;
 	m_fSizeY = 40;
 	m_fX = g_iWinSizeX * 0.5f;
@@ -45,33 +54,20 @@ HRESULT CBossHp_Askard::Initialize(void* pArg)
 	if (FAILED(Ready_Children()))
 		return E_FAIL;
 
+	m_pGameInstance->Add_UIObject(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("BossHp_Askard"), this);
 	return S_OK;
 }
 
 void CBossHp_Askard::Priority_Update(_float fTimeDelta)
 {
-	if (!m_bIsUpdate)
-		return;
-
-	__super::Priority_Update(fTimeDelta);
 }
 
 void CBossHp_Askard::Update(_float fTimeDelta)
 {
-	if (!m_bIsUpdate)
-		return;
-
-	__super::Update(fTimeDelta);
 }
 
 void CBossHp_Askard::Late_Update(_float fTimeDelta)
 {
-	if (!m_bIsUpdate)
-		return;
-
-	m_pGameInstance->Add_RenderGroup(RENDERGROUP::RG_UI, this);
-
-	__super::Late_Update(fTimeDelta);
 }
 
 HRESULT CBossHp_Askard::Render()
