@@ -966,6 +966,9 @@
     <ClInclude Include="Ema_Frame.h">
       <Filter>02.GameObject\UI\HUD\HUD_BossHp\BossHp_Ema\ETC</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\Askard_Hpbar.h">
+      <Filter>02.GameObject\UI\HUD\HUD_BossHp\BossHp_Askard\ETC</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -1451,6 +1454,9 @@
     </ClCompile>
     <ClCompile Include="Ema_Frame.cpp">
       <Filter>02.GameObject\UI\HUD\HUD_BossHp\BossHp_Ema\ETC</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Askard_Hpbar.cpp">
+      <Filter>02.GameObject\UI\HUD\HUD_BossHp\BossHp_Askard\ETC</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

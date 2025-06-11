@@ -151,6 +151,7 @@
     <ClInclude Include="..\public\Artefact_Tier_Icon.h" />
     <ClInclude Include="..\public\Artefact_Tooltip.h" />
     <ClInclude Include="..\public\Askard_Frame.h" />
+    <ClInclude Include="..\public\Askard_Hpbar.h" />
     <ClInclude Include="..\Public\BackGround.h" />
     <ClInclude Include="..\public\BossHp_Askard.h" />
     <ClInclude Include="..\public\BossHp_Ema.h" />
@@ -326,6 +327,7 @@
     <ClCompile Include="..\private\Artefact_Tier_Icon.cpp" />
     <ClCompile Include="..\private\Artefact_Tooltip.cpp" />
     <ClCompile Include="..\private\Askard_Frame.cpp" />
+    <ClCompile Include="..\private\Askard_Hpbar.cpp" />
     <ClCompile Include="..\Private\BackGround.cpp" />
     <ClCompile Include="..\private\BossHp_Askard.cpp" />
     <ClCompile Include="..\private\BossHp_Ema.cpp" />

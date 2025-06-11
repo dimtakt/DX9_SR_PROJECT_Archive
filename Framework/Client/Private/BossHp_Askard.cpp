@@ -1,6 +1,7 @@
 #include "BossHp_Askard.h"
 #include "GameInstance.h"
 #include "Askard_Frame.h"
+#include "Askard_Hpbar.h"
 
 CBossHp_Askard::CBossHp_Askard(LPDIRECT3DDEVICE9 pGraphic_Device) : CUIObject(pGraphic_Device)
 {
@@ -25,7 +26,7 @@ HRESULT CBossHp_Askard::Initialize(void* pArg)
 	UIOBJECT_DESC* Desc = static_cast<UIOBJECT_DESC*>(pArg);
 
 	m_fSizeX = 610;
-	m_fSizeY = 45;
+	m_fSizeY = 40;
 	m_fX = g_iWinSizeX * 0.5f;
 	m_fY = g_iWinSizeY - 130;
 	m_fZ = UI_DEPTH::BOSSHP;
@@ -76,7 +77,6 @@ void CBossHp_Askard::Late_Update(_float fTimeDelta)
 HRESULT CBossHp_Askard::Render()
 {
 	m_pGraphic_Device->SetTexture(0, NULL);
-
 	m_pVIBufferCom->Bind_Buffers();
 	__super::Begin();
 	m_pVIBufferCom->Render();
@@ -100,6 +100,10 @@ HRESULT CBossHp_Askard::Ready_Components()
 
 HRESULT CBossHp_Askard::Ready_ChildPrototype(LEVEL eLevel)
 {
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(eLevel), TEXT("Prototype_GameObject_UI_BossHp_Askard_Hp"),
+		CAskard_Hpbar::Create(m_pGraphic_Device))))
+		return E_FAIL;
+
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(eLevel), TEXT("Prototype_GameObject_UI_BossHp_Askard_Frame"),
 		CAskard_Frame::Create(m_pGraphic_Device))))
 		return E_FAIL;
@@ -110,6 +114,11 @@ HRESULT CBossHp_Askard::Ready_ChildPrototype(LEVEL eLevel)
 HRESULT CBossHp_Askard::Ready_Children()
 {
 	CUIObject* pGameObject = nullptr;
+
+	pGameObject = dynamic_cast<CUIObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(m_eLevel), TEXT("Prototype_GameObject_UI_BossHp_Askard_Hp")));
+	if (nullptr == pGameObject)
+		return E_FAIL;
+	Add_Child(pGameObject);
 
 	pGameObject = dynamic_cast<CUIObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(m_eLevel), TEXT("Prototype_GameObject_UI_BossHp_Askard_Frame")));
 	if (nullptr == pGameObject)
