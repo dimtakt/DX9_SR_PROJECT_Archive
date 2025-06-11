@@ -318,7 +318,7 @@ void CAskard_Tentacle::Update(_float fTimeDelta)
 			// ksta : 공격 이펙트 생성
 			if (m_pAnimatorCom->Change_State(L"Root_Attack"))
 				CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::MONSTER_EFFECT, L"Prototype_Component_Boss_Askard_BigRoot_Root_FX_Swing",
-					vPos + _float3(0, 1, 0) + _float3{0.f, 0.f, -0.01f}, qRot, vScale * 1.8f);
+					vPos + _float3(0, 0.5f, 0) + _float3{0.f, 0.f, -0.01f}, qRot, vScale * 1.8f);
 		}
 		else if (strCurStateTag == L"Root_Attack")
 		{
@@ -438,60 +438,60 @@ HRESULT CAskard_Tentacle::Ready_Components(void* pArg)
 	
 
 
-	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_BOSS1), L"Prototype_Component_Boss_Askard_BigRoot_Root_Standby",
+	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_BOSS2), L"Prototype_Component_Boss_Askard_BigRoot_Root_Standby",
 		TEXT("Com_Texture_Root_Standby"), reinterpret_cast<CComponent**>(&m_pTextureCom_Root_Standby))))
 		return E_FAIL;
 
 
-	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_BOSS1), L"Prototype_Component_Boss_Askard_BigRoot_Root1_Up",
+	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_BOSS2), L"Prototype_Component_Boss_Askard_BigRoot_Root1_Up",
 		TEXT("Com_Texture_Root_Up_1"), reinterpret_cast<CComponent**>(&m_pTextureCom_Root_Up_1))))
 		return E_FAIL;
-	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_BOSS1), L"Prototype_Component_Boss_Askard_BigRoot_Root2_Up",
+	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_BOSS2), L"Prototype_Component_Boss_Askard_BigRoot_Root2_Up",
 		TEXT("Com_Texture_Root_Up_2"), reinterpret_cast<CComponent**>(&m_pTextureCom_Root_Up_2))))
 		return E_FAIL;
-	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_BOSS1), L"Prototype_Component_Boss_Askard_BigRoot_Root3_Up",
+	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_BOSS2), L"Prototype_Component_Boss_Askard_BigRoot_Root3_Up",
 		TEXT("Com_Texture_Root_Up_3"), reinterpret_cast<CComponent**>(&m_pTextureCom_Root_Up_3))))
 		return E_FAIL;
 
-	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_BOSS1), L"Prototype_Component_Boss_Askard_BigRoot_Root1_DownWait",
+	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_BOSS2), L"Prototype_Component_Boss_Askard_BigRoot_Root1_DownWait",
 		TEXT("Com_Texture_Root_DownWait_1"), reinterpret_cast<CComponent**>(&m_pTextureCom_Root_DownWait_1))))
 		return E_FAIL;
-	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_BOSS1), L"Prototype_Component_Boss_Askard_BigRoot_Root2_DownWait",
+	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_BOSS2), L"Prototype_Component_Boss_Askard_BigRoot_Root2_DownWait",
 		TEXT("Com_Texture_Root_DownWait_2"), reinterpret_cast<CComponent**>(&m_pTextureCom_Root_DownWait_2))))
 		return E_FAIL;
-	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_BOSS1), L"Prototype_Component_Boss_Askard_BigRoot_Root3_DownWait",
+	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_BOSS2), L"Prototype_Component_Boss_Askard_BigRoot_Root3_DownWait",
 		TEXT("Com_Texture_Root_DownWait_3"), reinterpret_cast<CComponent**>(&m_pTextureCom_Root_DownWait_3))))
 		return E_FAIL;
 
 
 
 
-	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_BOSS1), L"Prototype_Component_Boss_Askard_BigRoot_Root1_Down",
+	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_BOSS2), L"Prototype_Component_Boss_Askard_BigRoot_Root1_Down",
 		TEXT("Com_Texture_Root_Down_1"), reinterpret_cast<CComponent**>(&m_pTextureCom_Root_Down_1))))
 		return E_FAIL;
-	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_BOSS1), L"Prototype_Component_Boss_Askard_BigRoot_Root2_Down",
+	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_BOSS2), L"Prototype_Component_Boss_Askard_BigRoot_Root2_Down",
 		TEXT("Com_Texture_Root_Down_2"), reinterpret_cast<CComponent**>(&m_pTextureCom_Root_Down_2))))
 		return E_FAIL;
-	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_BOSS1), L"Prototype_Component_Boss_Askard_BigRoot_Root3_Down",
+	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_BOSS2), L"Prototype_Component_Boss_Askard_BigRoot_Root3_Down",
 		TEXT("Com_Texture_Root_Down_3"), reinterpret_cast<CComponent**>(&m_pTextureCom_Root_Down_3))))
 		return E_FAIL;
 
-	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_BOSS1), L"Prototype_Component_Boss_Askard_BigRoot_Root_EyeOpen",
+	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_BOSS2), L"Prototype_Component_Boss_Askard_BigRoot_Root_EyeOpen",
 		TEXT("Com_Texture_Root_EyeOpen"), reinterpret_cast<CComponent**>(&m_pTextureCom_Root_EyeOpen))))
 		return E_FAIL;
 	// Hall_FX_EyeOpen (6)
-	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_BOSS1), L"Prototype_Component_Boss_Askard_BigRoot_Root_EyeOpened",
+	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_BOSS2), L"Prototype_Component_Boss_Askard_BigRoot_Root_EyeOpened",
 		TEXT("Com_Texture_Root_EyeOpened"), reinterpret_cast<CComponent**>(&m_pTextureCom_Root_EyeOpened))))
 		return E_FAIL;
-	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_BOSS1), L"Prototype_Component_Boss_Askard_BigRoot_Root_AttackReady",
+	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_BOSS2), L"Prototype_Component_Boss_Askard_BigRoot_Root_AttackReady",
 		TEXT("Com_Texture_Root_AttackReady"), reinterpret_cast<CComponent**>(&m_pTextureCom_Root_AttackReady))))
 		return E_FAIL;
-	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_BOSS1), L"Prototype_Component_Boss_Askard_BigRoot_Root_Attack",
+	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_BOSS2), L"Prototype_Component_Boss_Askard_BigRoot_Root_Attack",
 		TEXT("Com_Texture_Root_Attack"), reinterpret_cast<CComponent**>(&m_pTextureCom_Root_Attack))))
 		return E_FAIL;
 	// Root_FX_Swing (6)
 
-	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_BOSS1), L"Prototype_Component_Boss_Askard_BigRoot_Root_ExplosionReady",
+	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_BOSS2), L"Prototype_Component_Boss_Askard_BigRoot_Root_ExplosionReady",
 		TEXT("Com_Texture_Root_ExplosionReady"), reinterpret_cast<CComponent**>(&m_pTextureCom_Root_ExplosionReady))))
 		return E_FAIL;
 	// Root_FX_Explosion (8)

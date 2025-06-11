@@ -50,6 +50,7 @@ HRESULT CAskard::Initialize(void* pArg)
     m_iCulHp = 2000;
 
     m_eMonsterType = MONSTER_TYPE::ASKARD; // ksta
+    m_ePattern = PATTERN_ASKARD::PT_SPAWN_WIDTH;
 
     return S_OK;
 }
@@ -84,84 +85,46 @@ void CAskard::Update(_float fTimeDelta)
     // Update
     // 
 
-
-
-    // 아래에서 사용할 변수들
-#pragma region Variables Setting
-
-    _uint iCurLevel = CGameInstance::GetInstance()->Get_CurrentLevel();
-
-    CTransform* pTargetTransform = dynamic_cast<CTransform*>(m_pGameInstance->GetInstance()->Get_Component(iCurLevel, TEXT("Layer_Player"), TEXT("Com_Transform")));
-
-    _float3 vMonsterPos = m_pTransformCom->Get_State(STATE::POSITION);
-    _float3 vTargetPos = pTargetTransform->Get_State(STATE::POSITION);
-
-    _float3 vDiff = -vMonsterPos + vTargetPos;
-    _float fDistance = D3DXVec3Length(&vDiff);
-
-
-    // ********* matMonster 구하기
-    _float4x4 matMonsterWorld = *m_pTransformCom->Get_WorldMatrix();
-
-    _wstring strCurStateTag = m_pAnimatorCom->Get_CurStateTag();
-
-#pragma endregion
-
-    // **** 이펙트 크기조절용 초기설정
-#pragma region Effect Setting
-
-    // 이펙트용
-    // 1. 원점으로 이동
-    _float4x4 matTransToOrigin = {};
-    D3DXMatrixIdentity(&matTransToOrigin);
-    D3DXMatrixTranslation(&matTransToOrigin, -matMonsterWorld._41, -matMonsterWorld._42, -matMonsterWorld._43);
-
-    // 2. 크기
-    _float4x4 matScale = {};
-    D3DXMatrixIdentity(&matScale);
-    D3DXMatrixScaling(&matScale, -1.5f, 1.f, 1.f);
-
-    // 3. 자전
-    _float4x4 matRotateChild = {};
-    D3DXMatrixIdentity(&matRotateChild);
-    //D3DXMatrixRotationX(&matRotateChild, D3DXToRadian(-90)); // 안되면 -90도도 해보기
-
-    _float4x4 matRotateChildtoPlayer = {};
-    D3DXMatrixIdentity(&matRotateChildtoPlayer);
-    _float fAngle = atan2f(vTargetPos.x - vMonsterPos.x, vTargetPos.z - vMonsterPos.z);
-    _float fDegree = D3DXToDegree(fAngle) + 180;
-    //D3DXMatrixRotationY(&matRotateChildtoPlayer, D3DXToRadian(fDegree));
-
-    // 4. 원래 위치(몬스터)로 재이동
-    _float4x4 matTransReturn = {};
-    D3DXMatrixIdentity(&matTransReturn);
-    D3DXMatrixTranslation(&matTransReturn, matMonsterWorld._41, matMonsterWorld._42, matMonsterWorld._43);
-
-    // 5. 거기에 추가 이동 (플레이어 방향)
-    _float4x4 matTransAddition = {};
-    D3DXMatrixIdentity(&matTransAddition);
-    //_float3 vDiff = -vPlayerPos + vMonsterPos;       // 플레이어 위치에서 마우스 교차좌표로 가는 벡터
-    D3DXVec3Normalize(&vDiff, &vDiff);              // 를 단위벡터화, 안되면 vDiff 순서 바꿔보기
-    _float fDistanceOffset = 1.0f;                   // ** ksta : 중점으로부터 떨어져 있을 거리 **
-    vDiff *= fDistanceOffset;
-    //D3DXMatrixTranslation(&matTransAddition, vDiff.x, 0, vDiff.z);
-
-    matMonsterWorld = matTransToOrigin * matScale * matRotateChild * matRotateChildtoPlayer * matTransReturn * matTransAddition;
-
-#pragma endregion
-    // ***********************
-
-
-    // ksta3 : 패턴 구현..w
-    // switch
-
-
-    if (m_pAnimatorCom->Get_CurStackedFrame() == 10)
+    // ksta3 : 패턴 구현..
+    
+    switch (m_ePattern)
     {
-        Summon_Tentacle({ vMonsterPos.x - 5, vMonsterPos.y, vMonsterPos.z - 5 }, CAskard_Tentacle::TYPE_TENTACLE::TYPE_NORMAL_1);
-        Summon_Tentacle({ vMonsterPos.x, vMonsterPos.y, vMonsterPos.z - 5 }, CAskard_Tentacle::TYPE_TENTACLE::TYPE_NORMAL_2);
-        Summon_Tentacle({ vMonsterPos.x + 5, vMonsterPos.y, vMonsterPos.z - 5 }, CAskard_Tentacle::TYPE_TENTACLE::TYPE_NORMAL_3);
-        Summon_Tentacle({ vMonsterPos.x, vMonsterPos.y, vMonsterPos.z - 10 }, CAskard_Tentacle::TYPE_TENTACLE::TYPE_ODD_1);
+
+    case Client::CAskard::PATTERN_ASKARD::PT_IDLE:
+        break;
+
+        /* ***** Phase 1 ***** */
+    case Client::CAskard::PATTERN_ASKARD::PT_SPAWN_WIDTH:
+        Play_Spawn_Width();
+        break;
+    case Client::CAskard::PATTERN_ASKARD::PT_FOLLOWING_EYES:
+        break;
+    case Client::CAskard::PATTERN_ASKARD::PT_CORNER_LASER:
+        break;
+    case Client::CAskard::PATTERN_ASKARD::PT_SPAWN_CROSS:
+        break;
+    case Client::CAskard::PATTERN_ASKARD::PT_SPAWN_LINE:
+        break;
+    case Client::CAskard::PATTERN_ASKARD::PT_SPARK:
+        break;
+
+        /* ***** Phase 2 ***** */
+    case Client::CAskard::PATTERN_ASKARD::PT_DARK_TENTACLE:
+        break;
+    case Client::CAskard::PATTERN_ASKARD::PT_SPAWN_WIDTH_ADV:
+        break;
+    case Client::CAskard::PATTERN_ASKARD::PT_FOLLOWING_EYES_ADV:
+        break;
+    case Client::CAskard::PATTERN_ASKARD::PT_CORNER_LASER_ADV:
+        break;
+    case Client::CAskard::PATTERN_ASKARD::PT_SPAWN_CROSS_ADV:
+        break;
+    case Client::CAskard::PATTERN_ASKARD::PT_SPAWN_LINE_ADV:
+        break;
+    case Client::CAskard::PATTERN_ASKARD::PT_SPARK_ADV:
+        break;
+    default:
+        break;
     }
 
 
@@ -169,8 +132,16 @@ void CAskard::Update(_float fTimeDelta)
 
 
 
+    // Tentacle Test
+    //if (m_pAnimatorCom->Get_CurStackedFrame() == 10)
+    //{
+    //    Summon_Tentacle({ vMonsterPos.x - 5, vMonsterPos.y, vMonsterPos.z - 5 }, CAskard_Tentacle::TYPE_TENTACLE::TYPE_NORMAL_1);
+    //    Summon_Tentacle({ vMonsterPos.x, vMonsterPos.y, vMonsterPos.z - 5 }, CAskard_Tentacle::TYPE_TENTACLE::TYPE_NORMAL_2);
+    //    Summon_Tentacle({ vMonsterPos.x + 5, vMonsterPos.y, vMonsterPos.z - 5 }, CAskard_Tentacle::TYPE_TENTACLE::TYPE_NORMAL_3);
+    //    Summon_Tentacle({ vMonsterPos.x, vMonsterPos.y, vMonsterPos.z - 10 }, CAskard_Tentacle::TYPE_TENTACLE::TYPE_ODD_1);
+    //}
 
-
+    m_iElapsedFrame_Update++;
 
     if (m_pTerrainBox != nullptr) {
         m_pTerrainBox->SetUp_OnTerrainBox(m_pTransformCom, _float3(0.05f, 0.8f, 0.05f));
@@ -335,6 +306,8 @@ HRESULT CAskard::Ready_Components(void* pArg)
 
     // State 삽입
 
+#pragma region States...
+
     // Phase 1
     m_pAnimatorCom->Add_State(L"P1_Idle",           { m_pTextureCom_P1_Idle         , 4, true });
 
@@ -363,6 +336,8 @@ HRESULT CAskard::Ready_Components(void* pArg)
     //m_pAnimatorCom->Add_State(L"P2_Tentacle_Unlit", { m_pTextureCom_P2_Tentacle_Unlit, 4, true });
     m_pAnimatorCom->Add_State(L"P2_Wave",           { m_pTextureCom_P2_Wave			, 4, true });
 
+#pragma endregion
+
 
     return S_OK;
 }
@@ -384,7 +359,7 @@ void CAskard::Summon_Tentacle(_float3 vPosition, CAskard_Tentacle::TYPE_TENTACLE
 
 
     m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_STATIC), L"Layer_Effect",
-        ENUM_CLASS(LEVEL::LEVEL_BOSS1), L"Prototype_GameObject_Boss_Askard_Tentacle", &pDesc);
+        ENUM_CLASS(LEVEL::LEVEL_BOSS2), L"Prototype_GameObject_Boss_Askard_Tentacle", &pDesc);
 }
 
 
@@ -458,4 +433,147 @@ void CAskard::Free()
     Safe_Release(m_pAnimatorCom);
 
     //Safe_Release(m_pAnimatorCom);
+}
+
+
+
+
+
+// *------------------------------*
+// * 이하 패턴 함수들
+// *------------------------------*
+
+
+void CAskard::Play_Spawn_Width()
+{
+    // 아래에서 사용할 변수들
+#pragma region Variables Setting
+
+    _uint iCurLevel = CGameInstance::GetInstance()->Get_CurrentLevel();
+
+    CTransform* pTargetTransform = dynamic_cast<CTransform*>(m_pGameInstance->GetInstance()->Get_Component(iCurLevel, TEXT("Layer_Player"), TEXT("Com_Transform")));
+
+    _float3 vMonsterPos = m_pTransformCom->Get_State(STATE::POSITION);
+    _float3 vTargetPos = pTargetTransform->Get_State(STATE::POSITION);
+
+    _float3 vDiff = -vMonsterPos + vTargetPos;
+    _float fDistance = D3DXVec3Length(&vDiff);
+
+
+    // ********* matMonster 구하기
+    _float4x4 matMonsterWorld = *m_pTransformCom->Get_WorldMatrix();
+
+    _wstring strCurStateTag = m_pAnimatorCom->Get_CurStateTag();
+
+
+    _float3 vTerrainPos = m_pTerrainTransformCom->Get_State(STATE::POSITION);
+    _float3 vTerrainScale = m_pTerrainTransformCom->Get_Scaled();
+
+#pragma endregion
+
+    // 이펙트 크기조절용 초기설정
+#pragma region Effect Setting
+
+    // 이펙트용
+    // 1. 원점으로 이동
+    _float4x4 matTransToOrigin = {};
+    D3DXMatrixIdentity(&matTransToOrigin);
+    D3DXMatrixTranslation(&matTransToOrigin, -matMonsterWorld._41, -matMonsterWorld._42, -matMonsterWorld._43);
+
+    // 2. 크기
+    _float4x4 matScale = {};
+    D3DXMatrixIdentity(&matScale);
+    D3DXMatrixScaling(&matScale, -1.5f, 1.f, 1.f);
+
+    // 3. 자전
+    _float4x4 matRotateChild = {};
+    D3DXMatrixIdentity(&matRotateChild);
+    //D3DXMatrixRotationX(&matRotateChild, D3DXToRadian(-90)); // 안되면 -90도도 해보기
+
+    _float4x4 matRotateChildtoPlayer = {};
+    D3DXMatrixIdentity(&matRotateChildtoPlayer);
+    _float fAngle = atan2f(vTargetPos.x - vMonsterPos.x, vTargetPos.z - vMonsterPos.z);
+    _float fDegree = D3DXToDegree(fAngle) + 180;
+    //D3DXMatrixRotationY(&matRotateChildtoPlayer, D3DXToRadian(fDegree));
+
+    // 4. 원래 위치(몬스터)로 재이동
+    _float4x4 matTransReturn = {};
+    D3DXMatrixIdentity(&matTransReturn);
+    D3DXMatrixTranslation(&matTransReturn, matMonsterWorld._41, matMonsterWorld._42, matMonsterWorld._43);
+
+    // 5. 거기에 추가 이동 (플레이어 방향)
+    _float4x4 matTransAddition = {};
+    D3DXMatrixIdentity(&matTransAddition);
+    //_float3 vDiff = -vPlayerPos + vMonsterPos;       // 플레이어 위치에서 마우스 교차좌표로 가는 벡터
+    D3DXVec3Normalize(&vDiff, &vDiff);              // 를 단위벡터화, 안되면 vDiff 순서 바꿔보기
+    _float fDistanceOffset = 1.0f;                   // ** ksta : 중점으로부터 떨어져 있을 거리 **
+    vDiff *= fDistanceOffset;
+    //D3DXMatrixTranslation(&matTransAddition, vDiff.x, 0, vDiff.z);
+
+    matMonsterWorld = matTransToOrigin * matScale * matRotateChild * matRotateChildtoPlayer * matTransReturn * matTransAddition;
+
+#pragma endregion
+
+    int iMaxFrame_Pattern;      // 이 패턴은 몇프레임동안 플레이될 것인가
+
+    // - 생성 조건?
+    // 1.2초 (72프레임) 주기로 3회, 번갈아서 일렬로 4줄 가량의 촉수를 쫙 깔음.
+    // 촉수의 모양은 1~3번 중 랜덤히 설정
+    // 2번째 소환 시 변종촉수 1기 랜덤히 소환
+
+    // vTerrainScale 은 각각 방향으로 30. (x, z 기준)
+    // vTerrainPos.z 기준 +-3.75, +-11.25 만큼 차이나는 선분 기준으로 깔아야 함
+    // x축 선분상의 소환 갯수는 원작 기준 11개. 이는 보고 조절
+    // 대신 z축 상의 랜덤 오프셋이 필요해보임. 한 +-0.5정도?
+
+    // 우선 줄만큼 나오도록 만들어보고
+    // 여기에 랜덤성 (타입, 위치 오프셋) 추가
+    // 그 후 변종 발동조건 추가
+
+    // - 구현..
+
+
+
+    if (m_iElapsedFrame_Pattern == 0)
+    {
+
+        _int iNumZ = 4;         // 촉수가 몇줄에 깔릴 것인지
+        _int iNumX = 11;        // 한줄에 깔릴 촉수갯수
+
+
+        for (int i = 0; i < iNumZ; i++)
+        {
+            _float fFirstPosZ = vTerrainPos.z - vTerrainScale.z * iNumZ * (iNumZ - 1);
+            _float fPosZ = fFirstPosZ + vTerrainScale.z / 2 * i;    // 촉수가 생성될 z축
+
+            for (int j = 0; j < iNumX; j++)
+            {
+                _float fFirstPosX = vTerrainPos.x - vTerrainScale.x * iNumX * (iNumX - 1);
+                _float fPosX = fFirstPosX + vTerrainScale.x / 2 * j;    // 촉수가 생성될 x축
+
+                _float fRand = m_pGameInstance->Compute_Random(-0.5f, 0.5f);
+                _int iRandType = static_cast<_int>(m_pGameInstance->Compute_Random(0.f, 3.f));
+
+                // ksta now : 촉수 여기에서 랜덤값 주고 소환하는 걸, 
+                // 일정 주기마다 진행하도록 만들면 될듯
+
+                Summon_Tentacle(_float3{ fPosX, 0, fPosZ + fRand }, static_cast<CAskard_Tentacle::TYPE_TENTACLE>(iRandType));
+            }
+        }
+
+
+    }
+
+
+
+    // *******
+
+
+
+
+    m_iElapsedFrame_Pattern++;
+
+    // m_iElapsedFrame_Pattern 으로, 언제 어떤 패턴이 실행될 지를 제어
+    // 각 패턴 종료시간 도달 시 
+    // m_iElapsedFrame_Pattern 변수를 0으로 만들기
 }

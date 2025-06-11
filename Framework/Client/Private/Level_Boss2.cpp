@@ -185,8 +185,8 @@ HRESULT CLevel_Boss2::Ready_Layer_Room(const _wstring& strLayerTag)
 		if (iCount == 1)
 		{
 			CMonster::MONSTERDESC tDesc = {};
-			tDesc.iLayerLevelIndex = ENUM_CLASS(LEVEL::LEVEL_BOSS1);
-			tDesc.iPrototypeLevelIndex = ENUM_CLASS(LEVEL::LEVEL_BOSS1);
+			tDesc.iLayerLevelIndex = ENUM_CLASS(LEVEL::LEVEL_BOSS2);
+			tDesc.iPrototypeLevelIndex = ENUM_CLASS(LEVEL::LEVEL_BOSS2);
 			tDesc.strLayerTag = strLayerTag;
 			tDesc.pTerrainBox = pRoom->Get_TerrainBox();
 
