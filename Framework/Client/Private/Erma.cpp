@@ -83,8 +83,9 @@ void CErma::Priority_Update(_float fTimeDelta)
         m_iStackedFrame = 0;
         m_iPatternRandOffset = 0;
 
-        m_pObj_Hand_L->PlayPattern(CErma_Hand_L::PATTERN_HAND_L::PT_IDLE);
-        m_pObj_Hand_R->PlayPattern(CErma_Hand_R::PATTERN_HAND_R::PT_IDLE);
+        m_pObj_Head->PlayPattern(CErma_Head::PATTERN_HEAD::PT_IDLE, true);
+        m_pObj_Hand_L->PlayPattern(CErma_Hand_L::PATTERN_HAND_L::PT_IDLE, true);
+        m_pObj_Hand_R->PlayPattern(CErma_Hand_R::PATTERN_HAND_R::PT_IDLE, true);
     }
     if (m_iCulHp <= 0)
     {

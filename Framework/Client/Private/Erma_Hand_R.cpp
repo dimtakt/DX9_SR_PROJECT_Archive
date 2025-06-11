@@ -690,6 +690,10 @@ void CErma_Hand_R::PlayPattern(PATTERN_HAND_R ePattern, _bool isForced)
 
     switch (ePattern)
     {
+    case Client::CErma_Hand_R::PATTERN_HAND_R::PT_IDLE:
+        m_pAnimatorCom->Change_State(L"Idle", true, 0.f, true);
+        m_isPatternPlaying = false;
+        break;
     case Client::CErma_Hand_R::PATTERN_HAND_R::PT_STRIKE:  
         fPatternTime = 8.f;
         strPatternTag = L"Strike";  // 이거 확인하고 패턴마다 바뀌도록,
