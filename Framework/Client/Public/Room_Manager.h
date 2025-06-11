@@ -23,6 +23,7 @@ public:
 	HRESULT Check_SpecialRoom(LEVEL eLevel, const _wstring& strLayerTag, _int iRoomID);
 	HRESULT Check_Potal_Coll(POTAL_TYPE ePotalType, _float3 &vNextPos);
 	HRESULT Check_END_Potal(_uint iLayerLevelIndex, const _wstring& strLayerTag, _int iIndex);
+	//HRESULT Check_Particle(PARTICLE_TYPE eType, const _wstring& strLayerTag, _uint iLayerLevelIndex, _float3 ParticleScaled);
 	CRoom* Get_CurrentRoom();
 	CRoom* Get_RoomByID(_int iRoomID);
 	CRoom* Find_Room(_int iRoomIndexX, _int iRoomIndexZ);
@@ -45,6 +46,7 @@ private:
 	vector<pair<_int, _int>> m_RoomIndex = {};
 
 	_bool m_bCheckEnd = false;
+
 public:
 	virtual void Free() override;
 

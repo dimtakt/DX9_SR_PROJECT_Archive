@@ -192,6 +192,7 @@
     <ClInclude Include="..\Public\Field_Npc_Chat.h" />
     <ClInclude Include="..\Public\Field_Npc_Face.h" />
     <ClInclude Include="..\Public\Fire.h" />
+    <ClInclude Include="..\Public\FireParticle.h" />
     <ClInclude Include="..\Public\FogPlane.h" />
     <ClInclude Include="..\public\Gacha.h" />
     <ClInclude Include="..\public\Gacha_Button_Icon.h" />
@@ -373,6 +374,7 @@
     <ClCompile Include="..\Private\Field_Npc_Chat.cpp" />
     <ClCompile Include="..\Private\Field_Npc_Face.cpp" />
     <ClCompile Include="..\Private\Fire.cpp" />
+    <ClCompile Include="..\Private\FireParticle.cpp" />
     <ClCompile Include="..\Private\FogPlane.cpp" />
     <ClCompile Include="..\private\Gacha.cpp" />
     <ClCompile Include="..\private\Gacha_Button_Icon.cpp" />

@@ -45,6 +45,7 @@
 #include "Interaction_Normal.h"
 #include "Fire.h"
 #include "RainParticle.h"
+#include "FireParticle.h"
 
 CLoader::CLoader(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: m_pGraphic_Device{ pGraphic_Device }
@@ -246,6 +247,10 @@ HRESULT CLoader::Loading_For_Town_Level()
 		CRainParticle::Create(m_pGraphic_Device))))
 		return E_FAIL;
 
+	/* Rain */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_TOWN), TEXT("Prototype_GameObject_FireParticle"),
+		CFireParticle::Create(m_pGraphic_Device))))
+		return E_FAIL;
 
 	/*for (size_t i = 0; i < 19000000000; i++)
 	{
@@ -460,6 +465,11 @@ HRESULT CLoader::Loading_For_Stage1_Level()
 
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STAGE1), TEXT("Prototype_GameObject_Potal"),
 		CPotal::Create(m_pGraphic_Device))))
+		return E_FAIL;
+
+	/* Rain */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STAGE1), TEXT("Prototype_GameObject_Rain"),
+		CRainParticle::Create(m_pGraphic_Device))))
 		return E_FAIL;
 
 	//lstrcpy(m_szLoadingText, TEXT("룸 데이터를 로딩중입니다."));
@@ -1513,6 +1523,11 @@ HRESULT CLoader::Loading_For_Boss1_Level()
 	/* Prototype_GameObject_TerrainBox*/
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_BOSS1), TEXT("Prototype_GameObject_TerrainBox"),
 		CTerrainBox::Create(m_pGraphic_Device))))
+		return E_FAIL;
+
+	/* Particle */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_TOWN), TEXT("Prototype_GameObject_FireParticle"),
+		CFireParticle::Create(m_pGraphic_Device))))
 		return E_FAIL;
 
 	/* Prototype_GameObject_Boss_Erma */
