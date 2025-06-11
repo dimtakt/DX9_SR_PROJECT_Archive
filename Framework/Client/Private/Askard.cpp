@@ -50,7 +50,7 @@ HRESULT CAskard::Initialize(void* pArg)
     m_iCulHp = 2000;
 
     m_eMonsterType = MONSTER_TYPE::ASKARD; // ksta
-    m_ePattern = PATTERN_ASKARD::PT_SPAWN_WIDTH;
+    m_ePattern = PATTERN_ASKARD::PT_IDLE;
 
     return S_OK;
 }
@@ -87,6 +87,45 @@ void CAskard::Update(_float fTimeDelta)
 
     // ksta3 : 패턴 구현..
     
+
+
+    // 동작
+
+    _int iPatternLoopCycle = 350;   // 주기 프레임
+
+    _int iStandardPatternFrame = m_iElapsedFrame_Update % iPatternLoopCycle;
+
+    switch (iStandardPatternFrame)
+    {
+    case 30:
+    {
+        m_ePattern = PATTERN_ASKARD::PT_SPAWN_WIDTH;
+    }
+        break;
+
+    default:
+        break;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    // 패턴 별 행동
+
     switch (m_ePattern)
     {
 
@@ -311,9 +350,9 @@ HRESULT CAskard::Ready_Components(void* pArg)
     // Phase 1
     m_pAnimatorCom->Add_State(L"P1_Idle",           { m_pTextureCom_P1_Idle         , 4, true });
 
-    m_pAnimatorCom->Add_State(L"P1_Attack",         { m_pTextureCom_P1_Attack		, 4, true });
-    m_pAnimatorCom->Add_State(L"P1_Attack_End",     { m_pTextureCom_P1_Attack_End	, 4, true });
-    m_pAnimatorCom->Add_State(L"P1_Attack_Ready",   { m_pTextureCom_P1_Attack_Ready	, 4, true });
+    m_pAnimatorCom->Add_State(L"P1_Attack",         { m_pTextureCom_P1_Attack		, 6, false });
+    m_pAnimatorCom->Add_State(L"P1_Attack_End",     { m_pTextureCom_P1_Attack_End	, 4, false });
+    m_pAnimatorCom->Add_State(L"P1_Attack_Ready",   { m_pTextureCom_P1_Attack_Ready	, 4, false });
     m_pAnimatorCom->Add_State(L"P1_Die",            { m_pTextureCom_P1_Die			, 4, true });
     m_pAnimatorCom->Add_State(L"P1_GroundIdle",     { m_pTextureCom_P1_GroundIdle	, 4, true });
     m_pAnimatorCom->Add_State(L"P1_Laser",          { m_pTextureCom_P1_Laser		, 4, true });
@@ -514,7 +553,7 @@ void CAskard::Play_Spawn_Width()
 
 #pragma endregion
 
-    int iMaxFrame_Pattern;      // 이 패턴은 몇프레임동안 플레이될 것인가
+    int iMaxFrame_Pattern = 300;      // 이 패턴은 몇프레임동안 플레이될 것인가
 
     // - 생성 조건?
     // 1.2초 (72프레임) 주기로 3회, 번갈아서 일렬로 4줄 가량의 촉수를 쫙 깔음.
@@ -534,35 +573,70 @@ void CAskard::Play_Spawn_Width()
 
 
 
-    if (m_iElapsedFrame_Pattern == 0)
+
+
+
+    // 시간에 따른 패턴 실행
+
+    if (m_iElapsedFrame_Pattern == 10)
     {
+        m_pAnimatorCom->Change_State(L"P1_Attack_Ready");
+    }
+    else if (m_iElapsedFrame_Pattern == 15)
+    {
+        CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::NORMAL_EFFECT, L"Prototype_Component_Boss_Askard_Attack_1_FX",
+            vMonsterPos + _float3{0.5f, 0, 0}, {0, 0, 0, 1}, {3, 3, 3});
+    }
+    else if
+        (m_iElapsedFrame_Pattern == 40 ||
+        m_iElapsedFrame_Pattern == 120 ||
+        m_iElapsedFrame_Pattern == 200)
+    {
+        _bool isOddLine = (m_iElapsedFrame_Pattern == 120) ? true : false;
+        _float fZRandOffset = 1.f;
 
-        _int iNumZ = 4;         // 촉수가 몇줄에 깔릴 것인지
-        _int iNumX = 11;        // 한줄에 깔릴 촉수갯수
+        _int iNumX = 15;        // 가로 방향 촉수 개수
+        _int iNumZ = 5;         // 세로 방향의 촉수 줄
 
 
-        for (int i = 0; i < iNumZ; i++)
+
+        _float fUnitZ = vTerrainScale.z / pow(iNumZ, 2);        // 줄 계산용
+        _float fStartZ = vTerrainPos.z - vTerrainScale.z / 2.f; // Z축의 아랫쪽 끝을 의미
+
+        vector<_int> iZLine = {};           // 몇번째 선에 생성될 것인가
+
+        if (!isOddLine)
+            for (int i = 0; i < iNumZ; i++)
+                iZLine.push_back(iNumZ - (iNumZ - 1) + i * iNumZ);
+        else
+            for (int i = 0; i < iNumZ; i++)
+                iZLine.push_back(iNumZ - (iNumZ - 1) + i * iNumZ + 2);
+
+
+
+        for (int z = 0; z < iNumZ; z++)
         {
-            _float fFirstPosZ = vTerrainPos.z - vTerrainScale.z * iNumZ * (iNumZ - 1);
-            _float fPosZ = fFirstPosZ + vTerrainScale.z / 2 * i;    // 촉수가 생성될 z축
+            _float fPosZ = fStartZ + fUnitZ * iZLine[z];
 
             for (int j = 0; j < iNumX; j++)
             {
-                _float fFirstPosX = vTerrainPos.x - vTerrainScale.x * iNumX * (iNumX - 1);
-                _float fPosX = fFirstPosX + vTerrainScale.x / 2 * j;    // 촉수가 생성될 x축
+                _float fPosX = vTerrainPos.x - vTerrainScale.x / 2.f + (vTerrainScale.x / (iNumX - 1)) * j;
 
-                _float fRand = m_pGameInstance->Compute_Random(-0.5f, 0.5f);
+                _float fRand = m_pGameInstance->Compute_Random(- fZRandOffset / 2, fZRandOffset / 2);    // Z축 랜덤값
                 _int iRandType = static_cast<_int>(m_pGameInstance->Compute_Random(0.f, 3.f));
 
-                // ksta now : 촉수 여기에서 랜덤값 주고 소환하는 걸, 
-                // 일정 주기마다 진행하도록 만들면 될듯
-
-                Summon_Tentacle(_float3{ fPosX, 0, fPosZ + fRand }, static_cast<CAskard_Tentacle::TYPE_TENTACLE>(iRandType));
+                Summon_Tentacle(_float3{ fPosX, 0, fPosZ + fRand },static_cast<CAskard_Tentacle::TYPE_TENTACLE>(iRandType));
             }
         }
-
-
     }
+
+
+    // 이전과 이어지는 동작 관리
+
+    if (strCurStateTag == L"P1_Attack_Ready")
+        m_pAnimatorCom->Change_State(L"P1_Attack");
+    else if (strCurStateTag == L"P1_Attack")
+        m_pAnimatorCom->Change_State(L"P1_Attack_End");
 
 
 
@@ -576,4 +650,12 @@ void CAskard::Play_Spawn_Width()
     // m_iElapsedFrame_Pattern 으로, 언제 어떤 패턴이 실행될 지를 제어
     // 각 패턴 종료시간 도달 시 
     // m_iElapsedFrame_Pattern 변수를 0으로 만들기
+
+    if (m_iElapsedFrame_Pattern >= iMaxFrame_Pattern)
+    {
+        m_iElapsedFrame_Pattern = 0;
+        m_ePattern = PATTERN_ASKARD::PT_IDLE;
+        m_pAnimatorCom->Change_State(L"P1_Idle");
+    }
+
 }

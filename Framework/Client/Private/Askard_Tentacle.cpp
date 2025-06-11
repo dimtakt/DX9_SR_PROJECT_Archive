@@ -189,7 +189,7 @@ void CAskard_Tentacle::Update(_float fTimeDelta)
 	{
 		// 돌출 이펙트
 		CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::NORMAL_EFFECT, L"Prototype_Component_Boss_Askard_BigRoot_Hall_Ready",
-			vPos, qRot, vScale);
+			vMonsterPos + _float3{0, 1.01f, 0}, qRot, vScale);
 	}
 	else if (m_iStackedFrames == 30)
 	{
@@ -201,6 +201,7 @@ void CAskard_Tentacle::Update(_float fTimeDelta)
 	}
 
 	if (m_iStackedFrames >= 40 &&			// 열린 이후 1프레임마다 계속 생성. 성능 많이 쓰면 바꿔야할듯
+		m_iStackedFrames % 4 == 0 &&
 		(m_ePattern == PATTERN_TENTACLE::PT_DOWNWAIT ||	// 이 상태에만 열려있어야 함
 		m_ePattern == PATTERN_TENTACLE::PT_WAITTARGET ||
 		m_ePattern == PATTERN_TENTACLE::PT_ATTACK))
@@ -508,15 +509,15 @@ HRESULT CAskard_Tentacle::Ready_Components(void* pArg)
 		return E_FAIL;
 
 	// 컴포넌트 추가해야함
-	m_pAnimatorCom->Add_State(L"Root_Ready_1",			{ m_pTextureCom_Root_Standby, 12, false });		// 1
-	m_pAnimatorCom->Add_State(L"Root_Ready_2",			{ m_pTextureCom_Root_Standby, 12, false });
-	m_pAnimatorCom->Add_State(L"Root_Ready_3",			{ m_pTextureCom_Root_Standby, 12, false });
+	m_pAnimatorCom->Add_State(L"Root_Ready_1",			{ m_pTextureCom_Root_Standby, 26, false });		// 1
+	m_pAnimatorCom->Add_State(L"Root_Ready_2",			{ m_pTextureCom_Root_Standby, 26, false });
+	m_pAnimatorCom->Add_State(L"Root_Ready_3",			{ m_pTextureCom_Root_Standby, 26, false });
 	m_pAnimatorCom->Add_State(L"Root_Up_1",				{ m_pTextureCom_Root_Up_1, 4, false });			// 4
 	m_pAnimatorCom->Add_State(L"Root_Up_2",				{ m_pTextureCom_Root_Up_2, 4, false });
 	m_pAnimatorCom->Add_State(L"Root_Up_3",				{ m_pTextureCom_Root_Up_3, 4, false });
-	m_pAnimatorCom->Add_State(L"Root_DownWait_1",		{ m_pTextureCom_Root_DownWait_1, 200, false }); // 1
-	m_pAnimatorCom->Add_State(L"Root_DownWait_2",		{ m_pTextureCom_Root_DownWait_2, 200, false });
-	m_pAnimatorCom->Add_State(L"Root_DownWait_3",		{ m_pTextureCom_Root_DownWait_3, 200, false });
+	m_pAnimatorCom->Add_State(L"Root_DownWait_1",		{ m_pTextureCom_Root_DownWait_1, 40, false }); // 1
+	m_pAnimatorCom->Add_State(L"Root_DownWait_2",		{ m_pTextureCom_Root_DownWait_2, 40, false });
+	m_pAnimatorCom->Add_State(L"Root_DownWait_3",		{ m_pTextureCom_Root_DownWait_3, 40, false });
 	m_pAnimatorCom->Add_State(L"Root_Down_1",			{ m_pTextureCom_Root_Down_1, 4, false });		// 5
 	m_pAnimatorCom->Add_State(L"Root_Down_2",			{ m_pTextureCom_Root_Down_2, 4, false });
 	m_pAnimatorCom->Add_State(L"Root_Down_3",			{ m_pTextureCom_Root_Down_3, 4, false });

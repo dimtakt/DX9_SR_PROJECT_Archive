@@ -1571,9 +1571,9 @@ HRESULT CLoader::Loading_For_Boss2_Level()
 		return E_FAIL;
 
 	// Prototype_Component_Texture_Boss_Askard (Effect)
-	// Attack_1_FX (16)
+	// Attack_1_FX (16) -> 10
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Boss_Askard_Attack_1_FX"),
-		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Boss/Askard/Effect/Attack_FX/Attack_1_FX_%02d.png"), 16))))
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Boss/Askard/Effect/Attack_FX/Attack_1_FX_%02d.png"), 10))))
 		return E_FAIL;
 	// Attack_1_FX_Cycle (4)
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Boss_Askard_Attack_1_FX_Cycle"),
