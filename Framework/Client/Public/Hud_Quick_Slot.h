@@ -22,6 +22,8 @@ public:
 
 private:
 	LEVEL							m_eLevel = {};
+	_int							m_iIndex = {};
+
 	_bool							m_bIsPick = {};
 	_uint							m_iSlotIndex = {};
 	_int							m_iSlotItem_Tex = {};
