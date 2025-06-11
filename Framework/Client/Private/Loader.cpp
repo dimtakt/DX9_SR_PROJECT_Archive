@@ -32,6 +32,7 @@
 #include "Erma_Hand_L.h"
 #include "Erma_Hand_R.h"
 #include "Erma_Head.h"
+#include "Askard.h"
 
 #include "TerrainBox.h"
 #include "Dagger.h"
@@ -1154,6 +1155,307 @@ HRESULT CLoader::Loading_For_Boss1_Level()
 
 
 
+	// 임시, 나중에 Boss2로 옮기고 수정
+	// 이펙트로 불러올 것은 Static으로 수정 필요
+#pragma region Askard Tmp Load. Consider before pushing
+
+	// Prototype_Component_Texture_Boss_Askard (Die)
+	// DIe (47)
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_BOSS1), TEXT("Prototype_Component_Boss_Askard_Die"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Boss/Askard/Body/Die/Askard_Die_%02d.png"), 47))))
+		return E_FAIL;
+	// Die_Red (31)
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_BOSS1), TEXT("Prototype_Component_Boss_Askard_Die_Red"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Boss/Askard/Body/Die/Askard_Die_Red_%02d.png"), 31))))
+		return E_FAIL;
+
+	// Prototype_Component_Texture_Boss_Askard (Revive)
+	// Revive (49)
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_BOSS1), TEXT("Prototype_Component_Boss_Askard_Revive"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Boss/Askard/Revive/Askard_Revive_%02d.png"), 49))))
+		return E_FAIL;
+	// Revive_Light (28)
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_BOSS1), TEXT("Prototype_Component_Boss_Askard_Revive_Light"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Boss/Askard/Revive/Askard_Revive_Light_%02d.png"), 28))))
+		return E_FAIL;
+
+	// Prototype_Component_Texture_Boss_Askard (Phase1)
+	// Attack (5)
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_BOSS1), TEXT("Prototype_Component_Boss_Askard_Phase1_Attack"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Boss/Askard/Body/Phase1/Askard_Phase1_Attack_%02d.png"), 5))))
+		return E_FAIL;
+	// Attack_End (1)
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_BOSS1), TEXT("Prototype_Component_Boss_Askard_Phase1_Attack_End"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Boss/Askard/Body/Phase1/Askard_Phase1_Attack_End_00.png"), 1))))
+		return E_FAIL;
+	// Attack_Ready (8)
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_BOSS1), TEXT("Prototype_Component_Boss_Askard_Phase1_Attack_Ready"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Boss/Askard/Body/Phase1/Askard_Phase1_Attack_Ready_%02d.png"), 8))))
+		return E_FAIL;
+	// Die (36)
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_BOSS1), TEXT("Prototype_Component_Boss_Askard_Phase1_Die"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Boss/Askard/Body/Phase1/Askard_Phase1_Die_%02d.png"), 36))))
+		return E_FAIL;
+	// GroundIdle (6)
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_BOSS1), TEXT("Prototype_Component_Boss_Askard_Phase1_GroundIdle"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Boss/Askard/Body/Phase1/Askard_Phase1_GroundIdle_%02d.png"), 6))))
+		return E_FAIL;
+	// Idle (12)
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_BOSS1), TEXT("Prototype_Component_Boss_Askard_Phase1_Idle"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Boss/Askard/Body/Phase1/Askard_Phase1_Idle_%02d.png"), 12))))
+		return E_FAIL;
+	// Laser (14)
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_BOSS1), TEXT("Prototype_Component_Boss_Askard_Phase1_Laser"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Boss/Askard/Body/Phase1/Askard_Phase1_Laser_%02d.png"), 14))))
+		return E_FAIL;
+	// PhaseChange (31)
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_BOSS1), TEXT("Prototype_Component_Boss_Askard_Phase1_PhaseChange"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Boss/Askard/Body/Phase1/Askard_Phase1_PhaseChange_%02d.png"), 31))))
+		return E_FAIL;
+	// PhaseChange_FX (6)			/ Effect
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_BOSS1), TEXT("Prototype_Component_Boss_Askard_Phase1_PhaseChange_FX"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Boss/Askard/Body/Phase1/Askard_Phase1_PhaseChange_FX_%02d.png"), 6))))
+		return E_FAIL;
+	// PhaseStart (8)
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_BOSS1), TEXT("Prototype_Component_Boss_Askard_Phase1_PhaseStart"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Boss/Askard/Body/Phase1/Askard_Phase1_PhaseStart_%02d.png"), 8))))
+		return E_FAIL;
+	// RangeAttack (13)
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_BOSS1), TEXT("Prototype_Component_Boss_Askard_Phase1_RangeAttack"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Boss/Askard/Body/Phase1/Askard_Phase1_RangeAttack_%02d.png"), 13))))
+		return E_FAIL;
+	// StaffIdle (6)
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_BOSS1), TEXT("Prototype_Component_Boss_Askard_Phase1_StaffIdle"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Boss/Askard/Body/Phase1/Askard_Phase1_StaffIdle_%02d.png"), 6))))
+		return E_FAIL;
+	// SummonStaff (17)
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_BOSS1), TEXT("Prototype_Component_Boss_Askard_Phase1_SummonStaff"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Boss/Askard/Body/Phase1/Askard_Phase1_SummonStaff_%02d.png"), 17))))
+		return E_FAIL;
+	// Wave (21)
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_BOSS1), TEXT("Prototype_Component_Boss_Askard_Phase1_Wave"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Boss/Askard/Body/Phase1/Askard_Phase1_Wave_%02d.png"), 21))))
+		return E_FAIL;
+	// Wave_Back (8)			/ Effect
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_BOSS1), TEXT("Prototype_Component_Boss_Askard_Phase1_Wave_Back"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Boss/Askard/Body/Phase1/Askard_Phase1_Wave_Back%02d.png"), 8))))
+		return E_FAIL;
+	// Wave_Burst_Ground (5)	/ Effect
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_BOSS1), TEXT("Prototype_Component_Boss_Askard_Phase1_Wave_Burst_Ground"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Boss/Askard/Body/Phase1/Askard_Phase1_Wave_Burst_Ground%02d.png"), 5))))
+		return E_FAIL;
+	// Wave_Burst (7)			/ Effect
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_BOSS1), TEXT("Prototype_Component_Boss_Askard_Phase1_Wave_Burst"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Boss/Askard/Body/Phase1/Askard_Phase1_Wave_Burst%02d.png"), 7))))
+		return E_FAIL;
+	// Wave_Front (9)			/ Effect
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_BOSS1), TEXT("Prototype_Component_Boss_Askard_Phase1_Wave_Front"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Boss/Askard/Body/Phase1/Askard_Phase1_Wave_Front%02d.png"), 9))))
+		return E_FAIL;
+
+	// Prototype_Component_Texture_Boss_Askard (Phase2)
+	// Attack (5)
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_BOSS1), TEXT("Prototype_Component_Boss_Askard_Phase2_Attack"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Boss/Askard/Body/Phase2/Askard_Phase2_Attack_%02d.png"), 5))))
+		return E_FAIL;
+	// Attack_End (1)
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_BOSS1), TEXT("Prototype_Component_Boss_Askard_Phase2_Attack_End"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Boss/Askard/Body/Phase2/Askard_Phase2_Attack_End_%02d.png"), 1))))
+		return E_FAIL;
+	// Attack_Ready (8)
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_BOSS1), TEXT("Prototype_Component_Boss_Askard_Phase2_Attack_Ready"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Boss/Askard/Body/Phase2/Askard_Phase2_Attack_Ready_%02d.png"), 8))))
+		return E_FAIL;
+	// Idle (12)
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_BOSS1), TEXT("Prototype_Component_Boss_Askard_Phase2_Idle"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Boss/Askard/Body/Phase2/Askard_Phase2_Idle_%02d.png"), 12))))
+		return E_FAIL;
+	// Laser (14)
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_BOSS1), TEXT("Prototype_Component_Boss_Askard_Phase2_Laser"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Boss/Askard/Body/Phase2/Askard_Phase2_Laser_%02d.png"), 14))))
+		return E_FAIL;
+	// RangeAttack (13)
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_BOSS1), TEXT("Prototype_Component_Boss_Askard_Phase2_RangeAttack"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Boss/Askard/Body/Phase2/Askard_Phase2_RangeAttack_%02d.png"), 13))))
+		return E_FAIL;
+	// Tentacle (16)
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_BOSS1), TEXT("Prototype_Component_Boss_Askard_Phase2_Tentacle"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Boss/Askard/Body/Phase2/Askard_Phase2_Tentacle_%02d.png"), 16))))
+		return E_FAIL;
+	// Tentacle_End (7)
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_BOSS1), TEXT("Prototype_Component_Boss_Askard_Phase2_Tentacle_End"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Boss/Askard/Body/Phase2/Askard_Phase2_Tentacle_End_%02d.png"), 7))))
+		return E_FAIL;
+	// Tentacle_Unlit (20)
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_BOSS1), TEXT("Prototype_Component_Boss_Askard_Phase2_Tentacle_Unlit"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Boss/Askard/Body/Phase2/Askard_Phase2_Tentacle_Unlit_%02d.png"), 20))))
+		return E_FAIL;
+	// Wave (21)
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_BOSS1), TEXT("Prototype_Component_Boss_Askard_Phase2_Wave"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Boss/Askard/Body/Phase2/Askard_Phase2_Wave_%02d.png"), 21))))
+		return E_FAIL;
+
+	// Prototype_Component_Texture_Boss_Askard (BigRoot, Summon)
+	// Hall_Close (7)
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_BOSS1), TEXT("Prototype_Component_Boss_Askard_BigRoot_Hall_Close"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Boss/Askard/Effect/BigRoot/BigRoot_Hall_Close%02d.png"), 7))))
+		return E_FAIL;
+	// Hall_FX_EyeOpen (6)		/ Effect
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_BOSS1), TEXT("Prototype_Component_Boss_Askard_BigRoot_Hall_FX_EyeOpen"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Boss/Askard/Effect/BigRoot/BigRoot_Hall_FX_EyeOpen%02d.png"), 6))))
+		return E_FAIL;
+	// Hall_FX_Open (8)			/ Effect
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_BOSS1), TEXT("Prototype_Component_Boss_Askard_BigRoot_Hall_FX_Open"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Boss/Askard/Effect/BigRoot/BigRoot_Hall_FX_Open%02d.png"), 8))))
+		return E_FAIL;
+	// Hall_Open (2)
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_BOSS1), TEXT("Prototype_Component_Boss_Askard_BigRoot_Hall_Open"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Boss/Askard/Effect/BigRoot/BigRoot_Hall_Open%02d.png"), 2))))
+		return E_FAIL;
+	// Hall_Opened (1)
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_BOSS1), TEXT("Prototype_Component_Boss_Askard_BigRoot_Hall_Opened"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Boss/Askard/Effect/BigRoot/BigRoot_Hall_Opened00.png"), 1))))
+		return E_FAIL;
+	// Hall_Ready (7)
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_BOSS1), TEXT("Prototype_Component_Boss_Askard_BigRoot_Hall_Ready"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Boss/Askard/Effect/BigRoot/BigRoot_Hall_Ready%02d.png"), 7))))
+		return E_FAIL;
+	// Root_Attack (7) ++
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_BOSS1), TEXT("Prototype_Component_Boss_Askard_BigRoot_Root_Attack"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Boss/Askard/Effect/BigRoot/BigRoot_Root_Attack%02d.png"), 7))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_BOSS1), TEXT("Prototype_Component_Boss_Askard_BigRoot_Root_Attack0"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Boss/Askard/Effect/BigRoot/BigRoot_Root_Attack%02d_0.png"), 7))))
+		return E_FAIL;
+	// Root_AttackReady (7) ++
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_BOSS1), TEXT("Prototype_Component_Boss_Askard_BigRoot_Root_AttackReady"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Boss/Askard/Effect/BigRoot/BigRoot_Root_AttackReady%02d.png"), 7))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_BOSS1), TEXT("Prototype_Component_Boss_Askard_BigRoot_Root_AttackReady0"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Boss/Askard/Effect/BigRoot/BigRoot_Root_AttackReady%02d_0.png"), 7))))
+		return E_FAIL;
+	// Root_Down (6)
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_BOSS1), TEXT("Prototype_Component_Boss_Askard_BigRoot_Root_Down"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Boss/Askard/Effect/BigRoot/BigRoot_Root_Down%02d.png"), 6))))
+		return E_FAIL;
+	// Root_ExplosionReady (5) ++
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_BOSS1), TEXT("Prototype_Component_Boss_Askard_BigRoot_Root_ExplosionReady"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Boss/Askard/Effect/BigRoot/BigRoot_Root_ExplosionReady%02d.png"), 5))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_BOSS1), TEXT("Prototype_Component_Boss_Askard_BigRoot_Root_ExplosionReady0"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Boss/Askard/Effect/BigRoot/BigRoot_Root_ExplosionReady%02d_0.png"), 5))))
+		return E_FAIL;
+	// Root_EyeOpen (3) ++
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_BOSS1), TEXT("Prototype_Component_Boss_Askard_BigRoot_Root_EyeOpen"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Boss/Askard/Effect/BigRoot/BigRoot_Root_EyeOpen%02d.png"), 3))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_BOSS1), TEXT("Prototype_Component_Boss_Askard_BigRoot_Root_EyeOpen0"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Boss/Askard/Effect/BigRoot/BigRoot_Root_EyeOpen%02d_0.png"), 3))))
+		return E_FAIL;
+	// Root_EyeOpened (1) - Custom
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_BOSS1), TEXT("Prototype_Component_Boss_Askard_BigRoot_Root_EyeOpened"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Boss/Askard/Effect/BigRoot/BigRoot_Root_EyeOpen02.png"), 1))))
+		return E_FAIL;
+	// Root_FX_Explosion (8)
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_BOSS1), TEXT("Prototype_Component_Boss_Askard_BigRoot_Root_FX_Explosion"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Boss/Askard/Effect/BigRoot/BigRoot_Root_FX_Explosion%02d.png"), 8))))
+		return E_FAIL;
+	// Root_FX_Swing (6)
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_BOSS1), TEXT("Prototype_Component_Boss_Askard_BigRoot_Root_FX_Swing"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Boss/Askard/Effect/BigRoot/BigRoot_Root_FX_Swing%02d.png"), 6))))
+		return E_FAIL;
+	// Root_Up (4)
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_BOSS1), TEXT("Prototype_Component_Boss_Askard_BigRoot_Root1_Up"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Boss/Askard/Effect/BigRoot/BigRoot_Root_Up%02d.png"), 4))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_BOSS1), TEXT("Prototype_Component_Boss_Askard_BigRoot_Root2_Up"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Boss/Askard/Effect/BigRoot/BigRoot_Root2_Up%02d.png"), 4))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_BOSS1), TEXT("Prototype_Component_Boss_Askard_BigRoot_Root3_Up"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Boss/Askard/Effect/BigRoot/BigRoot_Root3_Up%02d.png"), 4))))
+		return E_FAIL;
+	// Root_Down (5)
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_BOSS1), TEXT("Prototype_Component_Boss_Askard_BigRoot_Root1_Down"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Boss/Askard/Effect/BigRoot/BigRoot_Root_Down%02d.png"), 5))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_BOSS1), TEXT("Prototype_Component_Boss_Askard_BigRoot_Root2_Down"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Boss/Askard/Effect/BigRoot/BigRoot_Root2_Down%02d.png"), 5))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_BOSS1), TEXT("Prototype_Component_Boss_Askard_BigRoot_Root3_Down"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Boss/Askard/Effect/BigRoot/BigRoot_Root3_Down%02d.png"), 5))))
+		return E_FAIL;
+
+	// Prototype_Component_Texture_Boss_Askard (Tentacle, Summon)
+	// TentacleBullet (8)
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_BOSS1), TEXT("Prototype_Component_Boss_Askard_TentacleBullet"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Boss/Askard/Effect/Tentacle/Bullet/TentacleBullet_%02d.png"), 8))))
+		return E_FAIL;
+	// TentacleLaser (17)
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_BOSS1), TEXT("Prototype_Component_Boss_Askard_TentacleLaser"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Boss/Askard/Effect/Tentacle/Laser/TentacleLaser_%02d.png"), 17))))
+		return E_FAIL;
+
+	// Prototype_Component_Texture_Boss_Askard (Effect)
+	// Attack_1_FX (16)
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_BOSS1), TEXT("Prototype_Component_Boss_Askard_Attack_1_FX"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Boss/Askard/Effect/Attack_FX/Attack_1_FX_%02d.png"), 16))))
+		return E_FAIL;
+	// Attack_1_FX_Cycle (4)
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_BOSS1), TEXT("Prototype_Component_Boss_Askard_Attack_1_FX_Cycle"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Boss/Askard/Effect/Attack_FX/Attack_1_FX_Cycle_%02d.png"), 4))))
+		return E_FAIL;
+	// Attack_1_Second_FX (14)
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_BOSS1), TEXT("Prototype_Component_Boss_Askard_Attack_1_Second_FX"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Boss/Askard/Effect/Attack_FX_2/Attack_1_Second_FX_%02d.png"), 14))))
+		return E_FAIL;
+	// Attack_1_Small_FX (9)
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_BOSS1), TEXT("Prototype_Component_Boss_Askard_Attack_1_Small_FX"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Boss/Askard/Effect/Attack_FX_Small/Attack_1_Small_FX_%02d.png"), 9))))
+		return E_FAIL;
+	// Laser_Alert (14)
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_BOSS1), TEXT("Prototype_Component_Boss_Askard_Laser_Alert"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Boss/Askard/Effect/Laser_Alert/AskardLaser_Alert_%02d.png"), 14))))
+		return E_FAIL;
+	// Laser_FX (26)
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_BOSS1), TEXT("Prototype_Component_Boss_Askard_Laser_FX"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Boss/Askard/Effect/Laser_FX/Askard_Laser_FX_%02d.png"), 26))))
+		return E_FAIL;
+	// Laser_FX_Cycle (8)
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_BOSS1), TEXT("Prototype_Component_Boss_Askard_Laser_FX_Cycle"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Boss/Askard/Effect/Laser_FX/Askard_Laser_FX_Cycle_%02d.png"), 8))))
+		return E_FAIL;
+	// Laser_FX_V2 (26)
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_BOSS1), TEXT("Prototype_Component_Boss_Askard_Laser_FX_V2"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Boss/Askard/Effect/Laser_FX_V2/Askard_Laser_FX_V2_%02d.png"), 26))))
+		return E_FAIL;
+	// Laser_FX_V2_Cycle (8)
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_BOSS1), TEXT("Prototype_Component_Boss_Askard_Laser_FX_Cycle_V2"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Boss/Askard/Effect/Laser_FX_V2/Askard_Laser_FX_V2_Cycle_%02d.png"), 8))))
+		return E_FAIL;
+	// Laser (18)
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_BOSS1), TEXT("Prototype_Component_Boss_Askard_Laser"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Boss/Askard/Effect/Laser_Line/AskardLaser%02d.png"), 18))))
+		return E_FAIL;
+	// Laser_V2 (19)
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_BOSS1), TEXT("Prototype_Component_Boss_Askard_Laser_V2"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Boss/Askard/Effect/Laser_Line_V2/AskardLaser_V2_%02d.png"), 19))))
+		return E_FAIL;
+	// Laser_Minor (19)
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_BOSS1), TEXT("Prototype_Component_Boss_Askard_Laser_Minor"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Boss/Askard/Effect/Laser_Minor/AskardMinorLaser%02d.png"), 19))))
+		return E_FAIL;
+	
+
+
+
+
+
+#pragma endregion
+
+
+
+
+
 	lstrcpy(m_szLoadingText, TEXT("모델를 로딩중입니다."));
 
 	lstrcpy(m_szLoadingText, TEXT("쉐이더를 로딩중입니다."));
@@ -1201,6 +1503,18 @@ HRESULT CLoader::Loading_For_Boss1_Level()
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_BOSS1), TEXT("Prototype_GameObject_Boss_Erma_Head"),
 		CErma_Head::Create(m_pGraphic_Device))))
 		return E_FAIL;
+
+	// 임시, 나중에 Boss2로 옮기고 수정
+	// 이펙트로 불러올 것은 Static으로 수정 필요
+#pragma region Askard Tmp Load. Consider before pushing
+	/* Ptototype_GameObject_Boss_Askard */
+
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_BOSS1), TEXT("Prototype_GameObject_Boss_Askard"),
+		CAskard::Create(m_pGraphic_Device))))
+		return E_FAIL;
+
+#pragma endregion
+
 
 	//Tree
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_BOSS1), TEXT("Prototype_GameObject_Tree"),

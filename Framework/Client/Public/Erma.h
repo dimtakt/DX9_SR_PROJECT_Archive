@@ -78,7 +78,7 @@ private:
 	_int		m_iPatternRandOffset			= 0;
 
 	_bool		m_isAllStop						= false;
-	_bool		m_isTriggerKeyPattern = false;
+	_bool		m_isTriggerKeyPattern			= false;
 
 public:
 	static CErma* Create(LPDIRECT3DDEVICE9 pGraphic_Device);
