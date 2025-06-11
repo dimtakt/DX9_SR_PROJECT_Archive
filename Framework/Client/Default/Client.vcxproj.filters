@@ -463,6 +463,9 @@
     <Filter Include="02.GameObject\UI\HUD\HUD_Quick_Slot\ETC">
       <UniqueIdentifier>{45c39a05-2583-47e8-bf56-9cffa924211b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\Player\Planet">
+      <UniqueIdentifier>{63c37356-a1d6-497b-9572-b971d4111c16}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -1020,6 +1023,9 @@
     <ClInclude Include="..\public\Hud_Slot_CoolTime.h">
       <Filter>02.GameObject\UI\HUD\HUD_Quick_Slot\ETC</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Planet.h">
+      <Filter>02.GameObject\Player\Planet</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -1538,6 +1544,9 @@
     </ClCompile>
     <ClCompile Include="..\private\Hud_Slot_CoolTime.cpp">
       <Filter>02.GameObject\UI\HUD\HUD_Quick_Slot\ETC</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Planet.cpp">
+      <Filter>02.GameObject\Player\Planet</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
