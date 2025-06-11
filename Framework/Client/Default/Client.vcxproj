@@ -157,6 +157,7 @@
     <ClInclude Include="..\Public\BackGround.h" />
     <ClInclude Include="..\public\BossHp_Askard.h" />
     <ClInclude Include="..\public\BossHp_Ema.h" />
+    <ClInclude Include="..\public\BossHp_SubHp.h" />
     <ClInclude Include="..\Public\Buff_Frame.h" />
     <ClInclude Include="..\Public\Buff_Icon.h" />
     <ClInclude Include="..\Public\Buff_Type_Base.h" />
@@ -174,6 +175,9 @@
     <ClInclude Include="..\Public\Client_Defines_Item.h" />
     <ClInclude Include="..\Public\Client_Defines_Map.h" />
     <ClInclude Include="..\Public\Client_Struct.h" />
+    <ClInclude Include="..\Public\Ema_Frame.h" />
+    <ClInclude Include="..\public\Ema_Hpbar.h" />
+    <ClInclude Include="..\public\Ema_SubHpbar.h" />
     <ClInclude Include="..\public\Erma.h" />
     <ClInclude Include="..\public\Erma_Body.h" />
     <ClInclude Include="..\public\Erma_Hand_L.h" />
@@ -318,7 +322,6 @@
     <ClInclude Include="..\public\UI_KeyGuide.h" />
     <ClInclude Include="..\Public\Tree.h" />
     <ClInclude Include="Client.h" />
-    <ClInclude Include="Ema_Frame.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="targetver.h" />
@@ -337,6 +340,7 @@
     <ClCompile Include="..\Private\BackGround.cpp" />
     <ClCompile Include="..\private\BossHp_Askard.cpp" />
     <ClCompile Include="..\private\BossHp_Ema.cpp" />
+    <ClCompile Include="..\private\BossHp_SubHp.cpp" />
     <ClCompile Include="..\Private\Buff_Frame.cpp" />
     <ClCompile Include="..\Private\Buff_Icon.cpp" />
     <ClCompile Include="..\Private\Buff_Type_Base.cpp" />
@@ -350,6 +354,9 @@
     <ClCompile Include="..\private\ChapMap_Line.cpp" />
     <ClCompile Include="..\private\ChapMap_MapSymbol.cpp" />
     <ClCompile Include="..\private\ChapMap_PlayerSymbol.cpp" />
+    <ClCompile Include="..\Private\Ema_Frame.cpp" />
+    <ClCompile Include="..\private\Ema_Hpbar.cpp" />
+    <ClCompile Include="..\private\Ema_SubHpbar.cpp" />
     <ClCompile Include="..\private\Erma.cpp" />
     <ClCompile Include="..\private\Erma_Body.cpp" />
     <ClCompile Include="..\private\Erma_Hand_L.cpp" />
@@ -485,7 +492,6 @@
     <ClCompile Include="..\private\UI_KeyGuide.cpp" />
     <ClCompile Include="..\public\Animations\Anim_Player_Fury.cpp" />
     <ClCompile Include="Client.cpp" />
-    <ClCompile Include="Ema_Frame.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Client.rc" />

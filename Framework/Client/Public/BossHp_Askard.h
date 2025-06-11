@@ -12,6 +12,9 @@ private:
 								CBossHp_Askard(LPDIRECT3DDEVICE9 pGraphic_Device);
 								CBossHp_Askard(const CBossHp_Askard& Prototype);
 	virtual						~CBossHp_Askard() = default;
+
+public:
+	void						Render_Hpbar(_int iCulvalue, _int iMaxValue, _float fTimeDelta);
 public:
 	virtual HRESULT				Initialize_Prototype(LEVEL eLevel);
 	virtual HRESULT				Initialize(void* pArg) override;
