@@ -16,8 +16,6 @@ HRESULT CAskard_Hpbar::Initialize_Prototype()
 
 HRESULT CAskard_Hpbar::Initialize(void* pArg)
 {
-	m_iCulMaxValue = 100;
-	m_iCulValue = 100;
 	m_fSizeX = 610;
 	m_fSizeY = 40;
 	m_fX = 0;
@@ -44,8 +42,6 @@ void CAskard_Hpbar::Priority_Update(_float fTimeDelta)
 
 void CAskard_Hpbar::Update(_float fTimeDelta)
 {
-	if (m_pGameInstance->IsKeyDown(VK_F3))
-		m_iCulValue -= 1;
 }
 
 void CAskard_Hpbar::Late_Update(_float fTimeDelta)
@@ -62,6 +58,12 @@ HRESULT CAskard_Hpbar::Render()
 	m_pVIBufferCom->Render();
 	__super::End();
 	return S_OK;
+}
+
+void CAskard_Hpbar::HpBar_Set(_int iCulValue, _int iMaxValue)
+{
+	m_iCulValue = iCulValue;
+	m_iCulMaxValue = iMaxValue;
 }
 
 

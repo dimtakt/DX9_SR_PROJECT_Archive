@@ -21,6 +21,8 @@ public:
 	virtual void			Late_Update(_float fTimeDelta) override;
 	virtual HRESULT			Render() override;
 
+public:
+	void					HpBar_Set(_int iCulValue, _int iMaxValue);
 private:
 	CVIBuffer_Rect*			m_pVIBufferCom = { nullptr };
 	_bool					m_isFontRender = { true };

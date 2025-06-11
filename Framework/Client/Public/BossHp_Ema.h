@@ -9,9 +9,12 @@ BEGIN(Client)
 class CBossHp_Ema final : public CUIObject
 {
 private:
-	CBossHp_Ema(LPDIRECT3DDEVICE9 pGraphic_Device);
-	CBossHp_Ema(const CBossHp_Ema& Prototype);
+								CBossHp_Ema(LPDIRECT3DDEVICE9 pGraphic_Device);
+								CBossHp_Ema(const CBossHp_Ema& Prototype);
 	virtual						~CBossHp_Ema() = default;
+public:
+	void						Render_Hpbar(_int iCulTopHp, _int iCulTopMaxHp, _int iCulBottomHp, _int iCulBottomMaxHp, _float fTimeDelta);
+	
 public:
 	virtual HRESULT				Initialize_Prototype(LEVEL eLevel);
 	virtual HRESULT				Initialize(void* pArg) override;
@@ -21,7 +24,7 @@ public:
 	virtual HRESULT				Render() override;
 
 private:
-	CVIBuffer_Rect* m_pVIBufferCom = { nullptr };
+	CVIBuffer_Rect*				m_pVIBufferCom = { nullptr };
 	LEVEL						m_eLevel = {};
 
 private:
@@ -31,8 +34,8 @@ private:
 	HRESULT						Ready_Children();
 
 public:
-	static CBossHp_Ema* Create(LPDIRECT3DDEVICE9 pGraphic_Device, LEVEL eLevel);
-	virtual CGameObject* Clone(void* pArg) override;
+	static CBossHp_Ema*			Create(LPDIRECT3DDEVICE9 pGraphic_Device, LEVEL eLevel);
+	virtual CGameObject*		Clone(void* pArg) override;
 	virtual void				Free() override;
 };
 END
