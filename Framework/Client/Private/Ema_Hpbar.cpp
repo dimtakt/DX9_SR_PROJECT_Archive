@@ -1,25 +1,25 @@
-#include "Askard_Hpbar.h"
+#include "Ema_Hpbar.h"
 #include "GameInstance.h"
 
-CAskard_Hpbar::CAskard_Hpbar(LPDIRECT3DDEVICE9 pGraphic_Device) : CProgressBar(pGraphic_Device)
+CEma_Hpbar::CEma_Hpbar(LPDIRECT3DDEVICE9 pGraphic_Device) : CProgressBar(pGraphic_Device)
 {
 }
 
-CAskard_Hpbar::CAskard_Hpbar(const CAskard_Hpbar& Prototype) : CProgressBar(Prototype)
+CEma_Hpbar::CEma_Hpbar(const CEma_Hpbar& Prototype) : CProgressBar(Prototype)
 {
 }
 
-HRESULT CAskard_Hpbar::Initialize_Prototype()
+HRESULT CEma_Hpbar::Initialize_Prototype()
 {
 	return S_OK;
 }
 
-HRESULT CAskard_Hpbar::Initialize(void* pArg)
+HRESULT CEma_Hpbar::Initialize(void* pArg)
 {
-	m_fSizeX = 610;
+	m_fSizeX = 590;
 	m_fSizeY = 40;
 	m_fX = 0;
-	m_fY = 0;
+	m_fY = -5;
 	m_fZ = UI_DEPTH::BOSSHP;
 	m_iWinSizeX = g_iWinSizeX;
 	m_iWinSizeY = g_iWinSizeY;
@@ -35,22 +35,22 @@ HRESULT CAskard_Hpbar::Initialize(void* pArg)
 	return S_OK;
 }
 
-void CAskard_Hpbar::Priority_Update(_float fTimeDelta)
+void CEma_Hpbar::Priority_Update(_float fTimeDelta)
 {
 
 }
 
-void CAskard_Hpbar::Update(_float fTimeDelta)
+void CEma_Hpbar::Update(_float fTimeDelta)
 {
 }
 
-void CAskard_Hpbar::Late_Update(_float fTimeDelta)
+void CEma_Hpbar::Late_Update(_float fTimeDelta)
 {
 	Progress_UpdateX();
 	m_pGameInstance->Add_RenderGroup(RENDERGROUP::RG_UI, this);
 }
 
-HRESULT CAskard_Hpbar::Render()
+HRESULT CEma_Hpbar::Render()
 {
 	m_pGraphic_Device->SetTexture(0, NULL);
 	m_pVIBufferCom->Bind_Buffers();
@@ -60,16 +60,16 @@ HRESULT CAskard_Hpbar::Render()
 	return S_OK;
 }
 
-void CAskard_Hpbar::HpBar_Set(_int iCulValue, _int iMaxValue)
+void CEma_Hpbar::HpBar_Set(_int iCulValue, _int iMaxValue)
 {
 	m_iCulValue = iCulValue;
 	m_iCulMaxValue = iMaxValue;
 }
 
 
-HRESULT CAskard_Hpbar::Ready_Components()
+HRESULT CEma_Hpbar::Ready_Components()
 {
-	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Rect_UI_Hud_States_Hp"),
+	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Rect_UI_GreenblueRect"),
 		TEXT("Com_VIBuffer"), reinterpret_cast<CComponent**>(&m_pVIBufferCom))))
 		return E_FAIL;
 
@@ -80,31 +80,31 @@ HRESULT CAskard_Hpbar::Ready_Components()
 	return S_OK;
 }
 
-CAskard_Hpbar* CAskard_Hpbar::Create(LPDIRECT3DDEVICE9 pGraphic_Device)
+CEma_Hpbar* CEma_Hpbar::Create(LPDIRECT3DDEVICE9 pGraphic_Device)
 {
-	CAskard_Hpbar* pInstance = new CAskard_Hpbar(pGraphic_Device);
+	CEma_Hpbar* pInstance = new CEma_Hpbar(pGraphic_Device);
 
 	if (FAILED(pInstance->Initialize_Prototype()))
 	{
-		MSG_BOX(TEXT("Failed to Created : CAskard_Hpbar"));
+		MSG_BOX(TEXT("Failed to Created : CEma_Hpbar"));
 		Safe_Release(pInstance);
 	}
 	return pInstance;
 }
 
-CGameObject* CAskard_Hpbar::Clone(void* pArg)
+CGameObject* CEma_Hpbar::Clone(void* pArg)
 {
-	CAskard_Hpbar* pInstance = new CAskard_Hpbar(*this);
+	CEma_Hpbar* pInstance = new CEma_Hpbar(*this);
 
 	if (FAILED(pInstance->Initialize(pArg)))
 	{
-		MSG_BOX(TEXT("Failed to Clone : CAskard_Hpbar"));
+		MSG_BOX(TEXT("Failed to Clone : CEma_Hpbar"));
 		Safe_Release(pInstance);
 	}
 	return pInstance;
 }
 
-void CAskard_Hpbar::Free()
+void CEma_Hpbar::Free()
 {
 	__super::Free();
 	Safe_Release(m_pVIBufferCom);
