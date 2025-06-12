@@ -49,6 +49,7 @@
 #include "BossHp_Askard.h"
 #include "BossHp_Ema.h"
 #include "GoldLeaf.h"
+#include "Event_AZPattern.h"
 
 CMainApp::CMainApp()
 	: m_pGameInstance{ CGameInstance::GetInstance() }
@@ -172,6 +173,9 @@ HRESULT CMainApp::Ready_GameObject_Setting()
 
 
 	// UI
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_AZPattern"),
+		CEvent_AZPattern::Create(m_pGraphic_Device, LEVEL::LEVEL_STATIC))))
+		return E_FAIL;
 
 #pragma region Prototype_GameObject_Hud
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_Hud_States"),
@@ -542,7 +546,12 @@ HRESULT CMainApp::Ready_Texture_Setting()
 		return E_FAIL;
 
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Rect_NpcFace"),
-		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/UI/Npc/FaceIcon_%d.png"), 2))))
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/UI/Npc/FaceIcon_%d.png"), 5))))
+		return E_FAIL;
+#pragma endregion
+#pragma region Prototype_Component_Event
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Rect_EventKey"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/UI/Event/Event_Key_%d.png"), 2))))
 		return E_FAIL;
 #pragma endregion
 #pragma region Prototype_Component_Hud_Boss
@@ -1084,6 +1093,9 @@ void CMainApp::Ready_Font_Setting()
 		MSG_BOX(TEXT("FAILED to Font"));
 	if (FAILED(m_pGameInstance->Ready_Font(TEXT("UI_Font_12"), TEXT("../Bin/Resources/Font/Galmuri9.ttf"), TEXT("Galmuri9 Regular"), 14, 13, 700)))
 		MSG_BOX(TEXT("FAILED to Font"));
+	
+	if (FAILED(m_pGameInstance->Ready_Font(TEXT("UI_Font_12_QuickSlot"), TEXT("../Bin/Resources/Font/Galmuri9.ttf"), TEXT("Galmuri9 Regular"), 0, 12, 700)))
+		MSG_BOX(TEXT("FAILED to Font"));
 
 	if (FAILED(m_pGameInstance->Ready_Font(TEXT("UI_Font_Logo"), TEXT("../Bin/Resources/Font/Galmuri9.ttf"), TEXT("Galmuri9 Regular"), 31, 36, 400)))
 		MSG_BOX(TEXT("FAILED to Font"));
@@ -1166,6 +1178,10 @@ HRESULT CMainApp::Ready_UI_Stting()
 
 	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Layer_Field_Npc"),
 		ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_Field_Npc_Face"))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Layer_UI_Event"),
+		ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_AZPattern"))))
 		return E_FAIL;
 	
 	return S_OK;

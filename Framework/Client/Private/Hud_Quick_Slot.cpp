@@ -73,7 +73,7 @@ void CHud_Quick_Slot::Update(_float fTimeDelta)
 		static_cast<CHud_Slot_CoolTime*>(m_vecChildren[0])->Progerss_Set(m_fCoolTime, 60);
 		m_fCoolTime -= 1;
 	}
-
+	ItemCount();
 	if (m_bEating)
 	{
 		m_fEatSpeed += 1;
@@ -118,6 +118,10 @@ HRESULT CHud_Quick_Slot::Render()
 		if (FAILED(CButton::Bind_ButtonTex_Single(g_hWnd, 0)))
 			return E_FAIL;
 	}
+
+	if (m_pSlotItem != nullptr && m_pSlotItem->Item_Info()->iItemType == ENUM_CLASS(ITEM_TYPE::POTION))
+		Render_Font();
+
 	return S_OK;
 }
 
@@ -189,6 +193,41 @@ HRESULT CHud_Quick_Slot::Ready_Children()
 	return S_OK;
 }
 
+void CHud_Quick_Slot::Render_Font()
+{
+	CUIObject::Font_Rect_Update();
+	
+	TCHAR szText[MAX_PATH];
+	_int iValue = m_pSlotItem->Item_Info()->iItemValue;
+	_int iMaxItem = g_PotionDataBase[iValue].m_iMaxPotion;
+	m_vTexRect.top += -4;
+
+	m_vTexRect.left		+= 1;
+	m_vTexRect.top		+= 1;
+	m_vTexRect.right	+= 1;
+	m_vTexRect.bottom	+= 1;
+	_stprintf_s(szText, TEXT("%d/%d"), m_iItemCount, iMaxItem);
+	m_pGameInstance->Render_Font(TEXT("UI_Font_12_QuickSlot"), szText, m_vTexRect, D3DXCOLOR(0.f, 0.f, 0.f, 1.f), DT_CENTER | DT_TOP);
+
+	m_vTexRect.left		-= 1;
+	m_vTexRect.top		-= 1;
+	m_vTexRect.right	-= 1;
+	m_vTexRect.bottom	-= 1;
+	_stprintf_s(szText, TEXT("%d/%d"), m_iItemCount, iMaxItem);
+	m_pGameInstance->Render_Font(TEXT("UI_Font_12_QuickSlot"), szText, m_vTexRect, D3DXCOLOR(0.6f, 1.f, 0.f, 1.f), DT_CENTER | DT_TOP);
+}
+
+void CHud_Quick_Slot::ItemCount()
+{
+	if (m_pSlotItem != nullptr)
+	{
+		if (m_pSlotItem->Item_Info()->iItemType == ENUM_CLASS(ITEM_TYPE::POTION))
+		{
+			m_iItemCount = static_cast<CInventory*>(m_pGameInstance->Find_UIObj(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("UI_Inven")))->Item_Count(m_pSlotItem);
+		}
+	}
+}
+
 _bool CHud_Quick_Slot::Use_Item()
 {
 	if (!m_bSelete)
@@ -222,6 +261,7 @@ _bool CHud_Quick_Slot::Use_Item()
 
 			if (static_cast<CInventory*>(m_pGameInstance->Find_UIObj(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("UI_Inven")))->Use_Item(m_pSlotItem))
 			{
+				m_iItemCount = 0;
 				m_pSlotItem = nullptr;
 			}
 			m_bEating = false;

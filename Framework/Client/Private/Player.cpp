@@ -90,7 +90,7 @@ void CPlayer::Update(_float fTimeDelta)
     }
     if (m_pGameInstance->IsKeyDown(VK_LEFT))
     {
-        m_pChat->Cinematic_Chat(0, true);
+        m_pChat->Cinematic_Chat(2, true);
     }
     if (m_pGameInstance->IsKeyDown(VK_RIGHT))
     {
