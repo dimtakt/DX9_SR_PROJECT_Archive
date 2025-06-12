@@ -51,6 +51,10 @@
 #include "GoldLeaf.h"
 #include "Event_AZPattern.h"
 #include "Event_ClashPattern.h"
+#include "Planet.h"
+#include "ProjSword.h"
+#include "FrozenHammer.h"
+
 CMainApp::CMainApp()
 	: m_pGameInstance{ CGameInstance::GetInstance() }
 {
@@ -113,6 +117,8 @@ HRESULT CMainApp::Render()
 
 HRESULT CMainApp::Ready_Default_Setting()
 {
+	if (m_pGameInstance == nullptr)
+		return E_FAIL;
 	g_hCursor = LoadCursorFromFile(L"Resources/Sephiria/UI/Cursor/Cursor_Arrow.cur");
 
 	m_pGraphic_Device->SetRenderState(D3DRS_LIGHTING, FALSE);
@@ -129,6 +135,8 @@ HRESULT CMainApp::Ready_Default_Setting()
 
 HRESULT CMainApp::Ready_Static_Setting()
 {
+	if (m_pGameInstance == nullptr)
+		return E_FAIL;
 
 	if (FAILED(Ready_Animation_Setting()))
 		return E_FAIL;
@@ -320,6 +328,24 @@ HRESULT CMainApp::Ready_GameObject_Setting()
 #pragma region Prototype_GameObject_GoldLeaf
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_GoldLeaf"),
 		CGoldLeaf::Create(m_pGraphic_Device))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region Prototype_GameObject_Planet
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_Planet"),
+		CPlanet::Create(m_pGraphic_Device))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region Prototype_GameObject_ProjSword
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_ProjSword"),
+		CProjSword::Create(m_pGraphic_Device))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region Prototype_GameObject_FrozenHammer
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_FrozenHammer"),
+		CFrozenHammer::Create(m_pGraphic_Device))))
 		return E_FAIL;
 #pragma endregion
 
@@ -913,7 +939,43 @@ HRESULT CMainApp::Ready_Texture_Setting()
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Fog"),
 		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Fog/Fog.jpg"), 1))))
 		return E_FAIL;
+#pragma endregion
 
+#pragma region PLANET
+	// Planet
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Planet"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Item/Planet/Yellow/PlanetaryModel_ObjectC%d.png"), 9))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Planet_Bullet_Cycle"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Item/Planet/Yellow/Bullet/Cycle/PlanetBulletC_Big_Cycle%d.png"), 8))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Planet_Bullet_FX"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Item/Planet/Yellow/Bullet/FX/PlanetBulletC_Big_FX%d.png"), 7))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region PROJSWORD
+	// Planet
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_ProjSword"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Item/ProjSword/SwordOfLight%d.png"), 18))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region FROZENHAMMER
+	// HAMMER
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_FrozenHammer"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Item/FrozenHammer/FrozenHammer_Main.png"), 1))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_FrozenHammer_Shoot"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Item/FrozenHammer/Shoot/FrozenHammer_ShootFX%d.png"), 12))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_FrozenHammer_Hit"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Item/FrozenHammer/Hit/FrozenHammer_Hit_FX%d.png"), 8))))
+		return E_FAIL;
 #pragma endregion
 
 	return S_OK;
