@@ -13,6 +13,7 @@
 #include "Client_Defines_Event.h"
 #include "Field_Item.h"
 #include "GoldLeaf.h"
+#include "Event_AZPattern.h"
 #include "Planet.h"
 #include "ProjSword.h"
 #include "FrozenHammer.h"
@@ -89,18 +90,6 @@ void CPlayer::Priority_Update(_float fTimeDelta)
 
 void CPlayer::Update(_float fTimeDelta)
 {    
-    if (m_pGameInstance->IsKeyDown(VK_DOWN))
-    {
-        m_pChat->On_Chat(0, true);
-    }
-    if (m_pGameInstance->IsKeyDown(VK_LEFT))
-    {
-        m_pChat->Cinematic_Chat(0, true);
-    }
-    if (m_pGameInstance->IsKeyDown(VK_RIGHT))
-    {
-        m_pChat->Off_Chat();
-    }
     //m_pCollider->Update_Collider();
     if (m_pTerrainBox != nullptr) {
         m_pTerrainBox->SetUp_OnTerrainBox(m_pTransformCom, _float3(0.f, 0.3f, 0.f));

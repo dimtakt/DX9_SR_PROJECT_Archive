@@ -40,6 +40,9 @@ namespace Client
 		static constexpr float HUD_STATUS = 0.23f;
 		static constexpr float HUD_WALLET = 0.23f;
 		static constexpr float HUD_Qyick_Slot = 0.23f;
+		
+		//EVENT
+		static constexpr float EVENT_AZ = 0.2f;
 
 		//BOSSHP
 		static constexpr float BOSSHP = 0.23f;

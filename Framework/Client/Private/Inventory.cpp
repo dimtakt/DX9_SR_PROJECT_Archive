@@ -57,9 +57,9 @@ HRESULT CInventory::Initialize(void* pArg)
 	Add_Item_Inven(15);
 	Add_Item_Inven(4);
 	Add_Item_Inven(5);
-	Add_Item_Inven(14);
+	/*Add_Item_Inven(14);
 	Add_Item_Inven(0);
-	Add_Item_Inven(27);
+	Add_Item_Inven(27);*/
 
 	return S_OK;
 }
@@ -230,6 +230,18 @@ _bool CInventory::Use_Item(CItem_Base* pItem)
 		}
 	}
 	return false;
+}
+
+_int CInventory::Item_Count(CItem_Base* pItem)
+{
+	for (_int i = 0; i < m_vecInventory.size(); ++i)
+	{
+		if (m_vecInventory[i]->Pop_Item() == pItem)
+		{
+			return m_vecInventory[i]->Pop_Item_Count();
+		}
+	}
+	return 0;
 }
 
 void CInventory::Set_Grade()

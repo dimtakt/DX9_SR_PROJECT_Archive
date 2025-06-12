@@ -463,6 +463,21 @@
     <Filter Include="02.GameObject\UI\HUD\HUD_Quick_Slot\ETC">
       <UniqueIdentifier>{45c39a05-2583-47e8-bf56-9cffa924211b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\UI\Event">
+      <UniqueIdentifier>{990ee739-c01d-4429-a815-7fdcede8c135}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\UI\Event\ETC">
+      <UniqueIdentifier>{b9e36ba1-7612-437a-b98a-3f3c84c9dea9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\UI\Event\AZPattern">
+      <UniqueIdentifier>{88c344e2-df4f-4385-a90b-7ef6f11386b0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\UI\Event\AZPattern\ETC">
+      <UniqueIdentifier>{dbd5de2b-bf38-421c-a5e2-1e16cad586c4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\UI\Event\ClashPatten">
+      <UniqueIdentifier>{26d0d347-a2c9-4e48-8678-213851017f37}</UniqueIdentifier>
+    </Filter>
     <Filter Include="02.GameObject\Player\Planet">
       <UniqueIdentifier>{63c37356-a1d6-497b-9572-b971d4111c16}</UniqueIdentifier>
     </Filter>
@@ -1035,6 +1050,24 @@
     <ClInclude Include="..\public\Hud_Slot_EatPotion.h">
       <Filter>02.GameObject\UI\HUD\HUD_Quick_Slot\ETC</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\Event_Rect.h">
+      <Filter>02.GameObject\UI\Event\ETC</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Event_AZPattern.h">
+      <Filter>02.GameObject\UI\Event\AZPattern</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\EventKey.h">
+      <Filter>02.GameObject\UI\Event\AZPattern\ETC</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Event_Result.h">
+      <Filter>02.GameObject\UI\Event\AZPattern\ETC</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Event_Timer.h">
+      <Filter>02.GameObject\UI\Event\AZPattern\ETC</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Event_ClashPattern.h">
+      <Filter>02.GameObject\UI\Event\ClashPatten</Filter>
+    </ClInclude>
     <ClInclude Include="..\Public\ProjSword.h">
       <Filter>02.GameObject\Player\ProjSword</Filter>
     </ClInclude>
@@ -1565,6 +1598,24 @@
     </ClCompile>
     <ClCompile Include="..\private\Hud_Slot_EatPotion.cpp">
       <Filter>02.GameObject\UI\HUD\HUD_Quick_Slot\ETC</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Event_Rect.cpp">
+      <Filter>02.GameObject\UI\Event\ETC</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Event_AZPattern.cpp">
+      <Filter>02.GameObject\UI\Event\AZPattern</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\EventKey.cpp">
+      <Filter>02.GameObject\UI\Event\AZPattern\ETC</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Event_Result.cpp">
+      <Filter>02.GameObject\UI\Event\AZPattern\ETC</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Event_Timer.cpp">
+      <Filter>02.GameObject\UI\Event\AZPattern\ETC</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Event_ClashPattern.cpp">
+      <Filter>02.GameObject\UI\Event\ClashPatten</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\ProjSword.cpp">
       <Filter>02.GameObject\Player\ProjSword</Filter>

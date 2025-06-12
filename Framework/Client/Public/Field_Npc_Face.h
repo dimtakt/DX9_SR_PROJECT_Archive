@@ -18,7 +18,7 @@ public:
 	void							Render_SmallFace_On(_int iNumber);
 	void							Render_SmallFace_Off();
 
-	void							Render_Face_On(_int iNumber);
+	void							Render_Face_On(_int iNumber, _bool bCinematic);
 	void							Render_Face_Off();
 
 public:
@@ -34,6 +34,7 @@ private:
 	CTexture*						m_pTextureCom = { nullptr };
 	LEVEL							m_eLevel = {};
 
+	_bool							m_bCinematicFace = { false };
 	_bool							m_bIsSmallRender = { false };
 	_bool							m_bIsRender = {false};
 	_int							m_iTexIndex = {};

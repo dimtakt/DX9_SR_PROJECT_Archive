@@ -48,6 +48,8 @@ private:
 	_float3					m_vTooltipSlatePos = {};
 	_float3					m_vQuickSlotPos = {};
 	
+	_float					m_fEating = {};
+	_float					m_fAcctime = {};
 public:
 	static CItem_Base*		Create(LPDIRECT3DDEVICE9 pGraphic_Device);
 	virtual CGameObject*	Clone(void* pArg) override;
