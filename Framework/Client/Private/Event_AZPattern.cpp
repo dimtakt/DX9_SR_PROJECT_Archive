@@ -40,6 +40,12 @@ void CEvent_AZPattern::Start_Event()
 void CEvent_AZPattern::End_Event()
 {
 	m_bIsEvent = false;
+	m_bIsResult = false;
+	m_bIsClear = false;
+	m_bIsOver = false;
+	m_bReset = false;
+	m_bOneClick = false;
+	m_bIsStart = false;
 	m_pGameInstance->All_Update_On();
 	Reset_Player();
 	Reset_Boss();

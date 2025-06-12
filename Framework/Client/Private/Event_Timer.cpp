@@ -61,6 +61,7 @@ HRESULT CEvent_Timer::Render()
 	m_pVIBufferCom->Render();
 	__super::End();
 
+	Render_Font();
 	return S_OK;
 }
 
@@ -123,7 +124,7 @@ void CEvent_Timer::Render_Font()
 	Font_Rect_Update();
 	TCHAR szText[MAX_PATH];
 	_stprintf_s(szText, TEXT("%.1f ÃÊ"), m_fRealTime);
-	m_pGameInstance->Render_Font(TEXT("UI_Font_18"), szText, m_vTexRect, D3DXCOLOR(1.f, 1.f, 1.f, 1.f), DT_RIGHT | DT_VCENTER | DT_SINGLELINE);
+	m_pGameInstance->Render_Font(TEXT("UI_Font_18"), szText, m_vTexRect, D3DXCOLOR(1.f, 1.f, 1.f, 1.f), DT_CENTER | DT_VCENTER | DT_SINGLELINE);
 }
 
 CEvent_Timer* CEvent_Timer::Create(LPDIRECT3DDEVICE9 pGraphic_Device)

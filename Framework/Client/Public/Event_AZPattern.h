@@ -15,7 +15,6 @@ public:
 	void							Start_Event();
 	void							End_Event();
 
-
 public:
 	virtual HRESULT					Initialize_Prototype(LEVEL eLevel);
 	virtual HRESULT					Initialize(void* pArg) override;
