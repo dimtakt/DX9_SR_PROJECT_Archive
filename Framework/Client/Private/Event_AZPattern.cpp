@@ -391,5 +391,8 @@ void CEvent_AZPattern::Free()
 		Safe_Release(pEventKey);
 	m_vecEventKey.clear();
 
+	m_vecInputKey_Boss.clear();
+	m_pBoss = nullptr;
+
 	__super::Free();
 }

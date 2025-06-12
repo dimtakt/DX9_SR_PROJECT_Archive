@@ -50,7 +50,7 @@
 #include "BossHp_Ema.h"
 #include "GoldLeaf.h"
 #include "Event_AZPattern.h"
-
+#include "Event_ClashPattern.h"
 CMainApp::CMainApp()
 	: m_pGameInstance{ CGameInstance::GetInstance() }
 {
@@ -173,10 +173,15 @@ HRESULT CMainApp::Ready_GameObject_Setting()
 
 
 	// UI
+#pragma region Prototype_GameObject_Event
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_AZPattern"),
 		CEvent_AZPattern::Create(m_pGraphic_Device, LEVEL::LEVEL_STATIC))))
 		return E_FAIL;
 
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_ClashPattern"),
+		CEvent_ClashPattern::Create(m_pGraphic_Device, LEVEL::LEVEL_STATIC))))
+		return E_FAIL;
+#pragma endregion
 #pragma region Prototype_GameObject_Hud
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_Hud_States"),
 		CHud_States_Frame::Create(m_pGraphic_Device, LEVEL::LEVEL_STATIC))))
@@ -1189,6 +1194,9 @@ HRESULT CMainApp::Ready_UI_Stting()
 		ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_Field_Npc_Face"))))
 		return E_FAIL;
 	
+	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Layer_Event"),
+		ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_ClashPattern"))))
+		return E_FAIL;
 	return S_OK;
 }
 
