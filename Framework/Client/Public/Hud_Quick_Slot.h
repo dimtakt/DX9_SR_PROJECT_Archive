@@ -40,12 +40,16 @@ private:
 
 	_float							m_fCoolTime = {};
 	_float							m_fPotionCool = {};
+	_int							m_iItemCount = {};
+
 private:
 	HRESULT							Ready_Components();
 
 	HRESULT							Ready_ChildPrototype(LEVEL eLevel);
 	HRESULT							Ready_Children();
 
+	void							Render_Font();
+	void							ItemCount();
 	_bool							Use_Item();
 public:
 	static CHud_Quick_Slot*			Create(LPDIRECT3DDEVICE9 pGraphic_Device, LEVEL eLevel);

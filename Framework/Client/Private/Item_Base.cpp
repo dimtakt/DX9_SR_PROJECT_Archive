@@ -17,6 +17,8 @@ HRESULT CItem_Base::Initialize(void* pArg)
 {
 	CItemObject::ITEMOBJECT_DESC* Desc = static_cast<ITEMOBJECT_DESC*>(pArg);
 
+	m_fAcctime = 0.f;
+	m_fEating = 0.1f;
 	m_fSizeX = 55;
 	m_fSizeY = 55;
 	m_fX = g_iWinSizeX * 0.5;
@@ -59,6 +61,7 @@ void CItem_Base::Update(_float fTimeDelta)
 
 void CItem_Base::Late_Update(_float fTimeDelta, _float3 fPos)
 {
+
 	if (m_pGameInstance->IsKeyUp(VK_LBUTTON))
 		m_bisSelete = false;
 	m_vDefaultPos = fPos;
@@ -189,7 +192,13 @@ void CItem_Base::IsEat_Render(CTransform* pTarget)
 		m_pTransformCom->Rotation(_float3{ 0.f,0.f,-1.f }, D3DXToRadian(225));
 		vPos.x += 0.5;
 	}
-	vPos.y += 0.5f;
+	m_fAcctime += 0.16;
+	if (m_fAcctime > 1.f)
+	{
+		m_fEating = m_fEating * -1.f;
+		m_fAcctime = 0.f;
+	}
+	vPos.y += 0.5f + m_fEating;
 	m_pTransformCom->Set_State(STATE::POSITION, vPos);
 	m_pTransformCom->Scaling(1.5f, 1.5f, 1.5f);
 	m_pGameInstance->Add_RenderGroup(RENDERGROUP::RG_UI, this);

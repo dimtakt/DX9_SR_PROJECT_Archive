@@ -230,6 +230,18 @@ _bool CInventory::Use_Item(CItem_Base* pItem)
 	return false;
 }
 
+_int CInventory::Item_Count(CItem_Base* pItem)
+{
+	for (_int i = 0; i < m_vecInventory.size(); ++i)
+	{
+		if (m_vecInventory[i]->Pop_Item() == pItem)
+		{
+			return m_vecInventory[i]->Pop_Item_Count();
+		}
+	}
+	return 0;
+}
+
 void CInventory::Set_Grade()
 {
 	for (size_t i = 0; i < m_vecInventory.size(); ++i)

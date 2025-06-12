@@ -13,7 +13,7 @@
 #include "Client_Defines_Event.h"
 #include "Field_Item.h"
 #include "GoldLeaf.h"
-
+#include "Event_AZPattern.h"
 CPlayer::CPlayer(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CGameObject{ pGraphic_Device }
 {
@@ -84,17 +84,13 @@ void CPlayer::Priority_Update(_float fTimeDelta)
 
 void CPlayer::Update(_float fTimeDelta)
 {    
-    if (m_pGameInstance->IsKeyDown(VK_DOWN))
-    {
-        m_pChat->On_Chat(0, true);
-    }
     if (m_pGameInstance->IsKeyDown(VK_LEFT))
     {
-        m_pChat->Cinematic_Chat(0, true);
+        static_cast<CEvent_AZPattern*>(m_pGameInstance->Find_UIObj(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("EVENT_AZ")))->Start_Event();
     }
     if (m_pGameInstance->IsKeyDown(VK_RIGHT))
     {
-        m_pChat->Off_Chat();
+        static_cast<CEvent_AZPattern*>(m_pGameInstance->Find_UIObj(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("EVENT_AZ")))->End_Event();
     }
     //m_pCollider->Update_Collider();
     if (m_pTerrainBox != nullptr) {
