@@ -559,6 +559,7 @@ void CErma::PlayKeyInputPattern()
 
     if (m_iPauseLeftFrame == 0 && m_isTriggerKeyPattern)
     {
+        m_isTriggerSuccess = false;
         m_iPauseLeftFrame = iPauseFrame;
         Set_AllPartsStop(true);
         m_isTriggerKeyPattern = false;
@@ -567,7 +568,7 @@ void CErma::PlayKeyInputPattern()
     if (!(m_isInCombat &&
         m_iPauseLeftFrame > 0))
         return;
-\
+
 
     // 최초 프레임에 한해 입력해야 할 키 생성
     if (iPauseFrame == m_iPauseLeftFrame)
@@ -579,11 +580,12 @@ void CErma::PlayKeyInputPattern()
         for (int i = 0; i < iKeyNum; i++)
         {
             _int iKey = static_cast<_int>(m_pGameInstance->Compute_Random(0, vecKeysTable.size()));
-            m_listKeys.push_back(vecKeysTable[iKey]);
+            m_vecKeys.push_back(vecKeysTable[iKey]);
+            m_vecOriginKeys.push_back(vecKeysTable[iKey]);
         }
 
         std::cout << "Input Keys... : ";
-        for (auto it = m_listKeys.begin(); it != m_listKeys.end(); ++it) {
+        for (auto it = m_vecKeys.begin(); it != m_vecKeys.end(); ++it) {
             std::cout << "[" << static_cast<char>(*it) << "] ";
         }
         std::wcout << std::endl;
@@ -591,20 +593,69 @@ void CErma::PlayKeyInputPattern()
 
     m_iPauseLeftFrame--;
 
-    // 키 입력 시 맨 앞의 원소와 일치하는지 확인, 일치 시 pop front로 제거
-    if (m_pGameInstance->IsKeyDown(m_listKeys.front()))
-        m_listKeys.pop_front();
+
+    // 입력한 키가 잘못되었는지 검사
+    _bool isWrongKey = false;
+    for (auto key : vecKeysTable) {
+        if (key != m_vecKeys.front() && m_pGameInstance->IsKeyDown(key)) {
+            m_vecInputKeys.push_back(key);
+            isWrongKey = true;
+        }
+    }
+
+    // 키 입력 시 맨 앞의 원소와 일치하는지 확인, 일치 시 제거
+    if (m_pGameInstance->IsKeyDown(m_vecKeys.front()))
+    {
+        m_vecInputKeys.push_back(m_vecKeys.front());
+
+        std::cout << "Inputed Keys... : ";
+        for (auto it = m_vecInputKeys.begin(); it != m_vecInputKeys.end(); ++it) {
+            std::cout << "[" << static_cast<char>(*it) << "] ";
+        }
+        std::cout << std::endl;
+
+        if (!m_vecKeys.empty())
+            m_vecKeys.erase(m_vecKeys.begin());
+    }
+    
+    if (isWrongKey)
+    {
+        // 실패 시 다시 생성
+        // 키 갯수만큼 생성하여 벡터에 삽입
+        m_vecKeys.clear();
+        m_vecOriginKeys.clear();
+        m_vecInputKeys.clear();
+        
+        _int iKeyNum = static_cast<_int>(m_pGameInstance->Compute_Random(iKeyNumMin, ikeyNumMax));
+
+        for (int i = 0; i < iKeyNum; i++)
+        {
+            _int iKey = static_cast<_int>(m_pGameInstance->Compute_Random(0, vecKeysTable.size()));
+            m_vecKeys.push_back(vecKeysTable[iKey]);
+            m_vecOriginKeys.push_back(vecKeysTable[iKey]);
+        }
+
+        std::cout << "Input Keys... : ";
+        for (auto it = m_vecKeys.begin(); it != m_vecKeys.end(); ++it) {
+            std::cout << "[" << static_cast<char>(*it) << "] ";
+        }
+        std::wcout << std::endl;
+    }
+
 
     // 입력을 다 마치면 성공, 아니면 실패
-    if (m_listKeys.empty())
+    if (m_vecKeys.empty())
     {
         m_iPauseLeftFrame = 0;
         // kstaA : 패턴 파훼 성공으로, 보상을 주거나 보스의 체력을 깎는 기능을 삽입.
 
 
         std::cout << "Success" << std::endl;
-        m_listKeys.clear();
+        m_vecKeys.clear();
+        m_vecOriginKeys.clear();
+        m_vecInputKeys.clear();
         Set_AllPartsStop(false);
+        m_isTriggerSuccess = true;
     }
     else if (m_iPauseLeftFrame == 0)
     {
@@ -613,7 +664,9 @@ void CErma::PlayKeyInputPattern()
 
 
         std::cout << "Fail" << std::endl;
-        m_listKeys.clear();
+        m_vecKeys.clear();
+        m_vecOriginKeys.clear();
+        m_vecInputKeys.clear();
         Set_AllPartsStop(false);
     }
 
