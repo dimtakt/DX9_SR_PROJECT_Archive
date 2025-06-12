@@ -487,6 +487,9 @@
     <Filter Include="02.GameObject\Player\FrozenHammer">
       <UniqueIdentifier>{ef988741-fc70-43b3-9f0d-63acb52d8f8a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\NPC">
+      <UniqueIdentifier>{3be993b1-dff7-4b52-bed1-06eb778c27ad}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -1074,6 +1077,9 @@
     <ClInclude Include="..\Public\FrozenHammer.h">
       <Filter>02.GameObject\Player\FrozenHammer</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Npc.h">
+      <Filter>02.GameObject\NPC</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -1622,6 +1628,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\FrozenHammer.cpp">
       <Filter>02.GameObject\Player\FrozenHammer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Npc.cpp">
+      <Filter>02.GameObject\NPC</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
