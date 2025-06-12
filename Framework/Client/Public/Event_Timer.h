@@ -32,11 +32,12 @@ private:
 	_float						m_fPreTime = {};
 	_float						m_fPreMaxTime = {};
 
+	_float						m_fRealTime = { };
 private:
 	void						ProgerssX();
 private:
 	HRESULT						Ready_Components();
-
+	void						Render_Font();
 public:
 	static CEvent_Timer* Create(LPDIRECT3DDEVICE9 pGraphic_Device);
 	virtual CGameObject* Clone(void* pArg) override;

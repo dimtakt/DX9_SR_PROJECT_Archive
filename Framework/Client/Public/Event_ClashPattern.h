@@ -21,6 +21,8 @@ public:
 private:
 	LEVEL							m_eLevel = {};
 
+	_bool							m_bIsOpen = {};
+
 private:
 	HRESULT							Ready_Components();
 

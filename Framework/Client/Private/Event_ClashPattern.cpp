@@ -44,7 +44,7 @@ HRESULT CEvent_ClashPattern::Initialize(void* pArg)
 	if (FAILED(Ready_Children()))
 		return E_FAIL;
 
-	m_pGameInstance->Add_UIObject(Desc->m_iLevel, TEXT("EVENT_Clash"), this);
+	//m_pGameInstance->Add_UIObject(Desc->m_iLevel, TEXT("EVENT_Clash"), this);
 
 	return S_OK;
 }
@@ -54,9 +54,14 @@ void CEvent_ClashPattern::Priority_Update(_float fTimeDelta)
 	if (m_pGameInstance->Get_CurrentLevel() == ENUM_CLASS(LEVEL::LEVEL_LOADING) || m_pGameInstance->Get_CurrentLevel() == ENUM_CLASS(LEVEL::LEVEL_LOGO) || m_pGameInstance->Get_CurrentLevel() == ENUM_CLASS(LEVEL::LEVEL_MAPEDIT))
 		return;
 
+	if (m_pGameInstance->IsKeyDown(VK_DOWN))
+		m_bIsOpen = true;
+
 	if (!m_bIsUpdate)
 		return;
 
+	if (!m_bIsOpen)
+		return;
 	__super::Priority_Update(fTimeDelta);
 }
 
@@ -68,6 +73,9 @@ void CEvent_ClashPattern::Update(_float fTimeDelta)
 	if (!m_bIsUpdate)
 		return;
 
+	if (!m_bIsOpen)
+		return;
+
 	__super::Update(fTimeDelta);
 }
 
@@ -77,6 +85,9 @@ void CEvent_ClashPattern::Late_Update(_float fTimeDelta)
 		return;
 
 	if (!m_bIsUpdate)
+		return;
+
+	if (!m_bIsOpen)
 		return;
 
 	__super::Late_Update(fTimeDelta);
@@ -109,11 +120,17 @@ HRESULT CEvent_ClashPattern::Ready_Children()
 {
 	CUIObject* pGameObject = nullptr;
 
-	pGameObject = dynamic_cast<CUIObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(m_eLevel), TEXT("Prototype_GameObject_UI_Clash_Rect")));
-	if (nullptr == pGameObject)
-		return E_FAIL;
-	Add_Child(pGameObject);
+	UIOBJECT_DESC Desc{};
 
+	for (_int i = 0; i < 2; ++i)
+	{
+		Desc.fZ = i;
+
+		pGameObject = dynamic_cast<CUIObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(m_eLevel), TEXT("Prototype_GameObject_UI_Clash_Rect"), &Desc));
+		if (nullptr == pGameObject)
+			return E_FAIL;
+		Add_Child(pGameObject);
+	}
 	return S_OK;
 }
 
