@@ -1188,10 +1188,6 @@ HRESULT CMainApp::Ready_UI_Stting()
 	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Layer_Field_Npc"),
 		ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_Field_Npc_Face"))))
 		return E_FAIL;
-
-	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Layer_UI_Event"),
-		ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_AZPattern"))))
-		return E_FAIL;
 	
 	return S_OK;
 }

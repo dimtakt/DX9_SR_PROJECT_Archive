@@ -338,8 +338,11 @@ void CErma::Update(_float fTimeDelta)
         {
         case 30:
             m_isTriggerSuccess = false;
-            m_pObj_Hand_L->PlayPattern(CErma_Hand_L::PATTERN_HAND_L::PT_STRIKE);
-            m_pObj_Hand_R->PlayPattern(CErma_Hand_R::PATTERN_HAND_R::PT_STRIKE);
+            //Å×½ºÆ®
+            m_pObj_Hand_L->PlayPattern(CErma_Hand_L::PATTERN_HAND_L::PT_KEYPATTERN);
+
+            //m_pObj_Hand_L->PlayPattern(CErma_Hand_L::PATTERN_HAND_L::PT_STRIKE);
+            //m_pObj_Hand_R->PlayPattern(CErma_Hand_R::PATTERN_HAND_R::PT_STRIKE);
             break;
         case 510:
             m_pObj_Hand_L->PlayPattern(CErma_Hand_L::PATTERN_HAND_L::PT_LASER);
