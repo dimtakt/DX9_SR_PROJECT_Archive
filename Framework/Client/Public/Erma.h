@@ -53,7 +53,7 @@ public:
 	AZPATTERN_DESC Get_AZPatternDesc()
 	{
 		return AZPATTERN_DESC{
-			m_isTriggerKeyPattern,
+			m_isTriggerKeyPattern_Activated,
 			m_vecOriginKeys,
 			m_vecInputKeys,
 			m_isTriggerSuccess,
@@ -109,6 +109,11 @@ private:
 	_bool		m_bStart						= false;
 	_int		m_iChatCount					= 0;
 	_int		m_iCulChatCount					= 0;
+
+
+	_bool		m_isTriggerKeyPattern_Activated = false;
+
+
 public:
 	static CErma* Create(LPDIRECT3DDEVICE9 pGraphic_Device);
 	virtual CGameObject* Clone(void* pArg) override;

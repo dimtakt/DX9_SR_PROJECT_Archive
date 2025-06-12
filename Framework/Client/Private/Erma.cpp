@@ -564,6 +564,7 @@ void CErma::PlayKeyInputPattern()
         m_iPauseLeftFrame = iPauseFrame;
         Set_AllPartsStop(true);
         m_isTriggerKeyPattern = false;
+        m_isTriggerKeyPattern_Activated = true;
     }
 
     if (!(m_isInCombat &&
@@ -657,6 +658,8 @@ void CErma::PlayKeyInputPattern()
         m_vecInputKeys.clear();
         Set_AllPartsStop(false);
         m_isTriggerSuccess = true;
+
+        m_isTriggerKeyPattern_Activated = false;
     }
     else if (m_iPauseLeftFrame == 0)
     {
@@ -669,6 +672,8 @@ void CErma::PlayKeyInputPattern()
         m_vecOriginKeys.clear();
         m_vecInputKeys.clear();
         Set_AllPartsStop(false);
+
+        m_isTriggerKeyPattern_Activated = false;
     }
 
 
