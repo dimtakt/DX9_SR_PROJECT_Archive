@@ -662,7 +662,7 @@ void CAskard::Play_Spawn_Cross(_float fTimeDelta)
 #pragma endregion
 
     _int iPatternCycleFrame = 85;
-    _int iCalcedCycleFrame = m_iElapsedFrame_Pattern % 85;
+    _int iCalcedCycleFrame = m_iElapsedFrame_Pattern % iPatternCycleFrame;
 
     _int iMaxFrame_Pattern = iPatternCycleFrame * 3;      // 이 패턴은 몇프레임동안 플레이될 것인가
 
@@ -671,7 +671,7 @@ void CAskard::Play_Spawn_Cross(_float fTimeDelta)
 
     // 1. 플레이어의 방향을 구함
     // 2. 플레이어 기준으로 vTargettedPos 4종을 정한 뒤, 행렬 등 연산을 통해 90도씩 전환한 방향을 구함
-    // 3. 해당 방향으로 3프레임 당 각 방향마다 1개씩 촉수 생성
+    // 3. 해당 방향으로 1프레임 당 각 방향마다 1개씩 촉수 생성
     // 4. 단, 현재 Terrain 좌표를 벗어난다면 생성 X
     // 옵션1. 2번째에서 생성 시에 랜덤하게 변종 하나 섞어야함
     // 옵션2. 전체적인 촉수 방향에 랜덤값을 약간 줌, 개별 촉수 생성위치 역시 랜덤값을 약간 줌  
@@ -681,6 +681,8 @@ void CAskard::Play_Spawn_Cross(_float fTimeDelta)
     _float fTentacleSpace = 2.f;    // 촉수 소환 간격
     _float fRandOffsetRange = 1.f;  // 촉수 개별마다의 소환위치 랜덤성 강도
 
+
+
     _float3 vToTargetDir = m_vTargettedPos - vMonsterPos;
     vToTargetDir.y = 0;
     D3DXVec3Normalize(&vToTargetDir, &vToTargetDir);
@@ -688,6 +690,8 @@ void CAskard::Play_Spawn_Cross(_float fTimeDelta)
     _float4x4 matRotY90;                   // Y축 기준 90도 회전하는 행렬
     D3DXMatrixIdentity(&matRotY90);
     D3DXMatrixRotationY(&matRotY90, D3DXToRadian(90));
+
+
 
     if (iCalcedCycleFrame == 5)
     {
@@ -715,6 +719,10 @@ void CAskard::Play_Spawn_Cross(_float fTimeDelta)
         if (iCalcedCycleFrame == 40)
             m_vTargettedPos = vTargetPos;   // 이전 위치 저장
 
+        _int iOddTentacleIndex = -1;
+        if (iPatternCycleFrame + 45 == m_iElapsedFrame_Pattern) // 2번째 공격이라면.. 변종 1개 섞음
+            iOddTentacleIndex = m_pGameInstance->Compute_Random(0.f, 4.f);
+
         _int iFrame = iCalcedCycleFrame - 40;
 
         vToTargetDir = m_vTargettedPos - vMonsterPos;
@@ -730,7 +738,10 @@ void CAskard::Play_Spawn_Cross(_float fTimeDelta)
             _float3 vSummonPos = vMonsterPos + vToTargetDir * fTentacleSpace * (iFrame + 1) + 
                                 _float3{fRandOffsetX, 0, fRandOffsetZ}; // 소환위치 랜덤성 부여
 
+            if (iOddTentacleIndex != -1 && iOddTentacleIndex == i)  // 변종 소환
+                iRandType = 3;
 
+            // 소환할 좌표가 터레인 외부면 소환하지 않음
             if ((IS_BETWEEN(vSummonPos.x, vTerrainPos.x - vTerrainScale.x / 2, vTerrainPos.x + vTerrainScale.x / 2)) &&
                 (IS_BETWEEN(vSummonPos.z, vTerrainPos.z - vTerrainScale.z / 2, vTerrainPos.z + vTerrainScale.z / 2)))
                 Summon_Tentacle(vSummonPos, static_cast<CAskard_Tentacle::TYPE_TENTACLE>(iRandType));  // 각도 맞춰 위치반영 소환
@@ -758,5 +769,171 @@ void CAskard::Play_Spawn_Cross(_float fTimeDelta)
 
 void CAskard::Play_Spawn_Line(_float fTimeDelta)
 {
+    // 아래에서 사용할 변수들
+#pragma region Variables Setting
 
+    _uint iCurLevel = CGameInstance::GetInstance()->Get_CurrentLevel();
+
+    CTransform* pTargetTransform = dynamic_cast<CTransform*>(m_pGameInstance->GetInstance()->Get_Component(iCurLevel, TEXT("Layer_Player"), TEXT("Com_Transform")));
+
+    const _float3 vMonsterPos = m_pTransformCom->Get_State(STATE::POSITION);
+    _float3 vTargetPos = pTargetTransform->Get_State(STATE::POSITION);
+
+    _float3 vDiff = -vMonsterPos + vTargetPos;
+    _float fDistance = D3DXVec3Length(&vDiff);
+
+
+    // ********* matMonster 구하기
+    _float4x4 matMonsterWorld = *m_pTransformCom->Get_WorldMatrix();
+
+    _wstring strCurStateTag = m_pAnimatorCom->Get_CurStateTag();
+
+
+    _float3 vTerrainPos = m_pTerrainTransformCom->Get_State(STATE::POSITION);
+    _float3 vTerrainScale = m_pTerrainTransformCom->Get_Scaled();
+
+#pragma endregion
+
+    _int iPatternCycleFrame = 100;
+    _int iCalcedCycleFrame = m_iElapsedFrame_Pattern % iPatternCycleFrame;
+
+    _int iMaxFrame_Pattern = iPatternCycleFrame * 3;      // 이 패턴은 몇프레임동안 플레이될 것인가
+
+
+    // 플레이어에게서 떨어져서 촉수 두 줄 소환
+    // 촉수는 직선형이 아닌, 플레이어가 맞게끔 약간의 곡선형으로 감
+    // 플레이어 거리까지는 직선형으로, 이후 곡선형으로 보내도 될 듯
+
+
+
+    _float fMoveSpeed = 1.5f;       // 아스카드 도약 이속
+
+    _float fTentacleSpace = 2.f;    // 촉수 소환 간격
+    _float fRandOffsetRange = 1.f;  // 촉수 개별마다의 소환위치 랜덤성 강도
+
+
+
+    _float3 vToTargetDir = m_vTargettedPos - vMonsterPos;
+    vToTargetDir.y = 0;
+    D3DXVec3Normalize(&vToTargetDir, &vToTargetDir);
+
+    _float4x4 matRotY5, matRotYM5;                   // Y축 기준 5도 회전하는 행렬
+    D3DXMatrixIdentity(&matRotY5);
+    D3DXMatrixIdentity(&matRotYM5);
+    D3DXMatrixRotationY(&matRotY5, D3DXToRadian(5));
+    D3DXMatrixRotationY(&matRotYM5, D3DXToRadian(-5));
+
+
+
+
+    if (iCalcedCycleFrame == 5)
+    {
+        m_pAnimatorCom->Change_State(L"P1_Attack_Ready");
+    }
+    else if (iCalcedCycleFrame == 15)
+    {
+        if (m_iElapsedFrame_Pattern == iCalcedCycleFrame)
+            CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::NORMAL_EFFECT, L"Prototype_Component_Boss_Askard_Attack_1_FX",
+                vMonsterPos + _float3{ 0.5f, 0, 0 }, { 0, 0, 0, 1 }, { 3, 3, 3 });
+        else
+            CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::NORMAL_EFFECT, L"Prototype_Component_Boss_Askard_Attack_1_FX_Cycle",
+                vMonsterPos + _float3{ 0.5f, 0, 0 }, { 0, 0, 0, 1 }, { 3, 3, 3 });
+    }
+    else if (IS_BETWEEN(iCalcedCycleFrame, 30, 40))
+    {
+        if (iCalcedCycleFrame == 30)
+        {
+            m_vTargettedPos = vTargetPos;
+ 
+            // 저장했던 플레이어의 위치를 기준으로, 해당 사분면을 제외하고 랜덤한 사분면으로 이동
+
+            _float3 vMovePos{};
+            _float fPosOffset = 12.f;
+        
+            _float3 vMovePosList[4] = {};
+            vMovePosList[0] = vTerrainPos + _float3{-fPosOffset, 0, fPosOffset};
+            vMovePosList[1] = vTerrainPos + _float3{fPosOffset, 0, fPosOffset};
+            vMovePosList[2] = vTerrainPos + _float3{fPosOffset, 0, -fPosOffset};
+            vMovePosList[3] = vTerrainPos + _float3{-fPosOffset, 0, -fPosOffset};
+
+            _bool isPlayerPosX_Positive = (vTerrainPos.x < m_vTargettedPos.x)? true : false;
+            _bool isPlayerPosZ_Positive = (vTerrainPos.z < m_vTargettedPos.z)? true : false;
+        
+            _int iNotMovePosIndex;
+            if          (!isPlayerPosX_Positive && isPlayerPosZ_Positive)       iNotMovePosIndex = 0;
+            else if     (isPlayerPosX_Positive && isPlayerPosZ_Positive)        iNotMovePosIndex = 1;
+            else if     (isPlayerPosX_Positive && !isPlayerPosZ_Positive)       iNotMovePosIndex = 2;
+            else if     (!isPlayerPosX_Positive && !isPlayerPosZ_Positive)      iNotMovePosIndex = 3;
+        
+            _int iRandPosIndex = static_cast<_int>(m_pGameInstance->Compute_Random(0.f, 4.f));
+            if (iNotMovePosIndex == iRandPosIndex)
+                iRandPosIndex = (iRandPosIndex + 2) % 4;
+
+            m_vMovePos = vMovePosList[iRandPosIndex]; // 최종 정해진 이동 위치
+        }
+
+        _float3 vDiff = vTargetPos - vMonsterPos;
+        _float fDiff = D3DXVec3Length(&vDiff);
+
+        // 실제 이동
+        
+        m_pTransformCom->Move_To(m_vMovePos, fTimeDelta * fDiff * fMoveSpeed, 0.5f);
+
+    }
+    else if (IS_BETWEEN(iCalcedCycleFrame, 40, 55))
+    {
+        if (iCalcedCycleFrame == 40)
+            m_vTargettedPos = vTargetPos;   // 이전 위치 저장
+
+        _int iOddTentacleIndex = -1;
+        if (iPatternCycleFrame + 45 == m_iElapsedFrame_Pattern) // 2번째 공격이라면.. 변종 1개 섞음
+            iOddTentacleIndex = m_pGameInstance->Compute_Random(0.f, 4.f);
+
+        _int iFrame = iCalcedCycleFrame - 40;
+
+        vToTargetDir = m_vTargettedPos - vMonsterPos;
+        vToTargetDir.y = 0;
+        D3DXVec3Normalize(&vToTargetDir, &vToTargetDir);
+
+        for (int i = 0; i < 2; i++)
+        {
+            _int iRandType = static_cast<_int>(m_pGameInstance->Compute_Random(0.f, 3.f));
+            _float fRandOffsetX = m_pGameInstance->Compute_Random(-fRandOffsetRange / 2, +fRandOffsetRange / 2);
+            _float fRandOffsetZ = m_pGameInstance->Compute_Random(-fRandOffsetRange / 2, +fRandOffsetRange / 2);
+
+            _float3 vSummonPos = vMonsterPos + vToTargetDir * fTentacleSpace * (iFrame + 1) +
+                _float3{ fRandOffsetX, 0, fRandOffsetZ }; // 소환위치 랜덤성 부여
+
+
+            for (int i = 0; i < 2; i++) D3DXVec3TransformNormal(&vToTargetDir, &vToTargetDir, &matRotYM5);
+
+            // 소환할 좌표가 터레인 외부면 소환하지 않음
+            if ((IS_BETWEEN(vSummonPos.x, vTerrainPos.x - vTerrainScale.x / 2, vTerrainPos.x + vTerrainScale.x / 2)) &&
+                (IS_BETWEEN(vSummonPos.z, vTerrainPos.z - vTerrainScale.z / 2, vTerrainPos.z + vTerrainScale.z / 2)))
+                Summon_Tentacle(vSummonPos, static_cast<CAskard_Tentacle::TYPE_TENTACLE>(iRandType));  // 각도 맞춰 위치반영 소환
+
+            D3DXVec3TransformNormal(&vToTargetDir, &vToTargetDir, &matRotY5);
+        }
+
+    }
+
+
+
+
+
+
+
+    if (strCurStateTag == L"P1_Attack_Ready")
+        m_pAnimatorCom->Change_State(L"P1_Attack");
+    else if (strCurStateTag == L"P1_Attack")
+        m_pAnimatorCom->Change_State(L"P1_Attack_End");
+
+    m_iElapsedFrame_Pattern++;
+
+    if (m_iElapsedFrame_Pattern >= iMaxFrame_Pattern)
+    {
+        m_iElapsedFrame_Pattern = 0;
+        m_ePattern = PATTERN_ASKARD::PT_IDLE;
+        m_pAnimatorCom->Change_State(L"P1_Idle");
+    }
 }

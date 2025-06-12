@@ -100,6 +100,7 @@ private:
 	_int			m_iElapsedFrame_Pattern			= 0;
 	_int			m_iElapsedFrame_Update			= 0;
 	_float3			m_vTargettedPos					= {};
+	_float3			m_vMovePos						= {};
 
 private:
 	// Patterns
