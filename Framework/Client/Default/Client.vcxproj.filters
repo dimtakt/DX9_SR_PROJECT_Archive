@@ -475,6 +475,9 @@
     <Filter Include="02.GameObject\UI\Event\AZPattern\ETC">
       <UniqueIdentifier>{dbd5de2b-bf38-421c-a5e2-1e16cad586c4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\UI\Event\NewFilter1">
+      <UniqueIdentifier>{26d0d347-a2c9-4e48-8678-213851017f37}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">

@@ -97,8 +97,7 @@ void CField_Npc_Chat::Cinematic_Chat(_int iFaceNum, _bool bIsFace)
 		m_pGameInstance->All_Update_On();
 		End_Chat();
 		CStat_Manager::GetInstance()->Set_UIOpen(false);
-		if (bIsFace)
-			static_cast<CField_Npc_Face*>(m_pGameInstance->Find_UIObj(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("UI_NpcFace")))->Render_Face_Off();
+		static_cast<CField_Npc_Face*>(m_pGameInstance->Find_UIObj(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("UI_NpcFace")))->Render_Face_Off();
 	}
 }
 

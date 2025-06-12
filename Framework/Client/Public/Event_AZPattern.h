@@ -2,6 +2,7 @@
 #include "UIObject.h"
 #include "Client_Defines.h"
 #include "EventKey.h"
+#include "Erma.h"
 BEGIN(Client)
 class CEvent_AZPattern final : public CUIObject
 {
@@ -25,6 +26,7 @@ public:
 
 private:
 	LEVEL							m_eLevel = {};
+	CErma*							m_pBoss = { nullptr };
 
 	_bool							m_bIsEvent = { false };
 	_bool							m_bIsResult = { false };
@@ -38,7 +40,6 @@ private:
 
 	vector<CEventKey*>				m_vecEventKey;
 	vector<_int>					m_vecInputKey_Boss;
-	vector<_int>					m_vecInputKey_Player;
 
 private:
 	HRESULT							Setting_Event();
