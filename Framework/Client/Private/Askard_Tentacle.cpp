@@ -189,7 +189,7 @@ void CAskard_Tentacle::Update(_float fTimeDelta)
 	{
 		// 돌출 이펙트
 		CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::NORMAL_EFFECT, L"Prototype_Component_Boss_Askard_BigRoot_Hall_Ready",
-			vMonsterPos + _float3{0, 1.01f, 0}, qRot, vScale);		// 왜 얘만 올려줘야 제대로보임????
+			vPos, qRot, vScale);		// 왜 얘만 올려줘야 제대로보임????
 	}
 	else if (m_iStackedFrames == 30)
 	{
@@ -515,9 +515,9 @@ HRESULT CAskard_Tentacle::Ready_Components(void* pArg)
 	m_pAnimatorCom->Add_State(L"Root_Up_1",				{ m_pTextureCom_Root_Up_1, 4, false });			// 4
 	m_pAnimatorCom->Add_State(L"Root_Up_2",				{ m_pTextureCom_Root_Up_2, 4, false });
 	m_pAnimatorCom->Add_State(L"Root_Up_3",				{ m_pTextureCom_Root_Up_3, 4, false });
-	m_pAnimatorCom->Add_State(L"Root_DownWait_1",		{ m_pTextureCom_Root_DownWait_1, 40, false }); // 1
-	m_pAnimatorCom->Add_State(L"Root_DownWait_2",		{ m_pTextureCom_Root_DownWait_2, 40, false });
-	m_pAnimatorCom->Add_State(L"Root_DownWait_3",		{ m_pTextureCom_Root_DownWait_3, 40, false });
+	m_pAnimatorCom->Add_State(L"Root_DownWait_1",		{ m_pTextureCom_Root_DownWait_1, 20, false }); // 1
+	m_pAnimatorCom->Add_State(L"Root_DownWait_2",		{ m_pTextureCom_Root_DownWait_2, 20, false });
+	m_pAnimatorCom->Add_State(L"Root_DownWait_3",		{ m_pTextureCom_Root_DownWait_3, 20, false });
 	m_pAnimatorCom->Add_State(L"Root_Down_1",			{ m_pTextureCom_Root_Down_1, 4, false });		// 5
 	m_pAnimatorCom->Add_State(L"Root_Down_2",			{ m_pTextureCom_Root_Down_2, 4, false });
 	m_pAnimatorCom->Add_State(L"Root_Down_3",			{ m_pTextureCom_Root_Down_3, 4, false });

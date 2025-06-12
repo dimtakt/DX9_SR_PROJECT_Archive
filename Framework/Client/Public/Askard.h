@@ -85,7 +85,7 @@ private:
 	CTexture*		m_pTextureCom_P2_RangeAttack			= { nullptr };
 	CTexture*		m_pTextureCom_P2_Tentacle				= { nullptr };
 	CTexture*		m_pTextureCom_P2_Tentacle_End			= { nullptr };
-	CTexture*		m_pTextureCom_P2_Tentacle_Unlit			= { nullptr };
+	//CTexture*		m_pTextureCom_P2_Tentacle_Unlit			= { nullptr };
 	CTexture*		m_pTextureCom_P2_Wave					= { nullptr };
 
 	CTransform*		m_pTerrainTransformCom					= { nullptr };
@@ -99,9 +99,13 @@ private:
 
 	_int			m_iElapsedFrame_Pattern			= 0;
 	_int			m_iElapsedFrame_Update			= 0;
+	_float3			m_vTargettedPos					= {};
 
 private:
-	void			Play_Spawn_Width();
+	// Patterns
+	void			Play_Spawn_Width(_float fTimeDelta);
+	void			Play_Spawn_Cross(_float fTimeDelta);
+	void			Play_Spawn_Line(_float fTimeDelta);
 
 public:
 	static CAskard* Create(LPDIRECT3DDEVICE9 pGraphic_Device);
