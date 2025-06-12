@@ -29,12 +29,12 @@ struct VS_IN
 // 정점 출력 구조체
 struct VS_OUT
 {
-    float4 vPosition : POSITION;
+    float4 vPosition : SV_POSITION;
     float2 vTexUV : TEXCOORD0;
 };
 
 // 정점 셰이더
-VS_OUT VS_MAIN(VS_IN In)
+VS_OUT main(VS_IN In)
 {
     VS_OUT Out;
 
@@ -70,7 +70,7 @@ technique DefaultTechnique
         SrcBlend = SRCALPHA;
         DestBlend = INVSRCALPHA;
 
-        VertexShader = compile vs_3_0 VS_MAIN();
-        PixelShader = compile ps_3_0 PS_MAIN();
+        VertexShader = compile vs_2_0 main();
+        PixelShader = compile ps_2_0 PS_MAIN();
     }
 }

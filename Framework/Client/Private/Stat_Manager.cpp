@@ -57,6 +57,7 @@ HRESULT CStat_Manager::Initialize()
     m_mapHasItem.emplace(TEXT("Bule Planet"), false);
     m_mapHasItem.emplace(TEXT("Ice Bolt"), false);
     m_mapHasItem.emplace(TEXT("Lightning Bolt"), false);
+    m_mapHasItem.emplace(TEXT("Projection Sword"), false);
 
     return S_OK;
 }
@@ -86,6 +87,12 @@ void CStat_Manager::Cal_Stats(STAT_INFO eStat, float fValue)
 
     if (m_fCurStats[static_cast<int>(eStat)] <= 0)
         m_fCurStats[static_cast<int>(eStat)] = 0;
+
+    if (m_fCurStats[static_cast<int>(STAT_INFO::CULHP)] >= m_fCurStats[static_cast<int>(STAT_INFO::MAXHP)])
+        m_fCurStats[static_cast<int>(STAT_INFO::CULHP)] = m_fCurStats[static_cast<int>(STAT_INFO::MAXHP)];
+
+    if (m_fCurStats[static_cast<int>(STAT_INFO::CULMP)] >= m_fCurStats[static_cast<int>(STAT_INFO::MAXMP)])
+        m_fCurStats[static_cast<int>(STAT_INFO::CULMP)] = m_fCurStats[static_cast<int>(STAT_INFO::MAXMP)];
 
     if (eStat == STAT_INFO::EXP)
     {
@@ -141,6 +148,14 @@ _float CStat_Manager::Get_Player_Damage(DAMAGE eDamage)
     else if (eDamage == DAMAGE::DASH)
     {
         fDamage = m_fCurStats[static_cast<int>(STAT_INFO::CULDAMAGE)] + 5;
+    }
+    else if (eDamage == DAMAGE::PLANET)
+    {
+        fDamage = m_fCurStats[static_cast<int>(STAT_INFO::CULDAMAGE)] - 3;
+    }
+    else if (eDamage == DAMAGE::FROZENHAMMER)
+    {
+        fDamage = m_fCurStats[static_cast<int>(STAT_INFO::CULDAMAGE)] - 3;
     }
     
     _float fRand = m_pGameInstance->Compute_Random(0, 99);

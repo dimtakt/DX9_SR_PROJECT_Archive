@@ -478,6 +478,15 @@
     <Filter Include="02.GameObject\UI\Event\ClashPatten">
       <UniqueIdentifier>{26d0d347-a2c9-4e48-8678-213851017f37}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\Player\Planet">
+      <UniqueIdentifier>{63c37356-a1d6-497b-9572-b971d4111c16}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Player\ProjSword">
+      <UniqueIdentifier>{9abb35bd-aa52-4ed7-aa4f-a776368ce7c3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Player\FrozenHammer">
+      <UniqueIdentifier>{ef988741-fc70-43b3-9f0d-63acb52d8f8a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -1035,6 +1044,9 @@
     <ClInclude Include="..\public\Hud_Slot_CoolTime.h">
       <Filter>02.GameObject\UI\HUD\HUD_Quick_Slot\ETC</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Planet.h">
+      <Filter>02.GameObject\Player\Planet</Filter>
+    </ClInclude>
     <ClInclude Include="..\public\Hud_Slot_EatPotion.h">
       <Filter>02.GameObject\UI\HUD\HUD_Quick_Slot\ETC</Filter>
     </ClInclude>
@@ -1055,6 +1067,12 @@
     </ClInclude>
     <ClInclude Include="..\public\Event_ClashPattern.h">
       <Filter>02.GameObject\UI\Event\ClashPatten</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\ProjSword.h">
+      <Filter>02.GameObject\Player\ProjSword</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\FrozenHammer.h">
+      <Filter>02.GameObject\Player\FrozenHammer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1575,6 +1593,9 @@
     <ClCompile Include="..\private\Hud_Slot_CoolTime.cpp">
       <Filter>02.GameObject\UI\HUD\HUD_Quick_Slot\ETC</Filter>
     </ClCompile>
+    <ClCompile Include="..\Private\Planet.cpp">
+      <Filter>02.GameObject\Player\Planet</Filter>
+    </ClCompile>
     <ClCompile Include="..\private\Hud_Slot_EatPotion.cpp">
       <Filter>02.GameObject\UI\HUD\HUD_Quick_Slot\ETC</Filter>
     </ClCompile>
@@ -1595,6 +1616,12 @@
     </ClCompile>
     <ClCompile Include="..\private\Event_ClashPattern.cpp">
       <Filter>02.GameObject\UI\Event\ClashPatten</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\ProjSword.cpp">
+      <Filter>02.GameObject\Player\ProjSword</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\FrozenHammer.cpp">
+      <Filter>02.GameObject\Player\FrozenHammer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
