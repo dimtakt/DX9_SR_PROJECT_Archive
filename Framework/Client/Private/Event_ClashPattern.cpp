@@ -1,13 +1,28 @@
 #include "Event_ClashPattern.h"
 #include "GameInstance.h"
 #include "Event_Rect.h"
-
+#include "Stat_Manager.h"
 CEvent_ClashPattern::CEvent_ClashPattern(LPDIRECT3DDEVICE9 pGraphic_Device) : CUIObject(pGraphic_Device)
 {
 }
 
 CEvent_ClashPattern::CEvent_ClashPattern(const CEvent_ClashPattern& Prototype) : CUIObject(Prototype), m_eLevel{ Prototype.m_eLevel }
 {
+}
+
+void CEvent_ClashPattern::Start_Event()
+{
+	m_pGameInstance->All_Update_Off();
+	m_bIsUpdate = true;
+	m_bIsOpen = true;
+	CStat_Manager::GetInstance()->Set_UIOpen(true);
+}
+
+void CEvent_ClashPattern::End_Event()
+{
+	m_bIsOpen = false;
+	m_pGameInstance->All_Update_On();
+	CStat_Manager::GetInstance()->Set_UIOpen(false);
 }
 
 HRESULT CEvent_ClashPattern::Initialize_Prototype(LEVEL eLevel)
@@ -44,7 +59,7 @@ HRESULT CEvent_ClashPattern::Initialize(void* pArg)
 	if (FAILED(Ready_Children()))
 		return E_FAIL;
 
-	//m_pGameInstance->Add_UIObject(Desc->m_iLevel, TEXT("EVENT_Clash"), this);
+	m_pGameInstance->Add_UIObject(ENUM_CLASS(m_eLevel), TEXT("EVENT_Clash"), this);
 
 	return S_OK;
 }
@@ -55,7 +70,11 @@ void CEvent_ClashPattern::Priority_Update(_float fTimeDelta)
 		return;
 
 	if (m_pGameInstance->IsKeyDown(VK_DOWN))
-		m_bIsOpen = true;
+		Start_Event();
+
+	if (m_pGameInstance->IsKeyDown(VK_LEFT))
+		End_Event();
+
 
 	if (!m_bIsUpdate)
 		return;

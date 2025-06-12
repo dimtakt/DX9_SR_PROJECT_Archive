@@ -11,6 +11,9 @@ private:
 	virtual							~CEvent_ClashPattern() = default;
 
 public:
+	void							Start_Event();
+	void							End_Event();
+public:
 	virtual HRESULT					Initialize_Prototype(LEVEL eLevel);
 	virtual HRESULT					Initialize(void* pArg) override;
 	virtual void					Priority_Update(_float fTimeDelta) override;
