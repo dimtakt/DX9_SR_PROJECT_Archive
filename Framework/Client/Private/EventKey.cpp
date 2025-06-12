@@ -21,7 +21,7 @@ HRESULT CEventKey::Initialize(void* pArg)
 
 	m_fSizeX = 50;
 	m_fSizeY = 50;
-	m_fX = Desc->fX * 55 - (Desc->fZ - 1) * 55 / 2;;
+	m_fX = Desc->fX * 60 - (Desc->fZ - 1) * 60 / 2;;
 	m_fY = 0;
 	m_fZ = UI_DEPTH::EVENT_AZ;
 
@@ -64,7 +64,7 @@ HRESULT CEventKey::Render()
 	__super::End();
 
 	Font_Rect_Update();
-	m_pGameInstance->Render_Font(TEXT("UI_Font_14"), TEXT("Q"), m_vTexRect, D3DXCOLOR(1.f, 1.f, 1.f, 1.f), DT_CENTER | DT_VCENTER | DT_SINGLELINE);
+	m_pGameInstance->Render_Font(TEXT("UI_Font_22"), TEXT("Q"), m_vTexRect, D3DXCOLOR(1.f, 1.f, 1.f, 1.f), DT_CENTER | DT_VCENTER | DT_SINGLELINE);
 
 	return S_OK;
 }

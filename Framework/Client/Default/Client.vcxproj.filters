@@ -466,8 +466,11 @@
     <Filter Include="02.GameObject\UI\Event">
       <UniqueIdentifier>{990ee739-c01d-4429-a815-7fdcede8c135}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\UI\Event\EventKey">
-      <UniqueIdentifier>{85f8ad43-b4c6-4296-8c1d-773b7a5dc720}</UniqueIdentifier>
+    <Filter Include="02.GameObject\UI\Event\ETC">
+      <UniqueIdentifier>{b9e36ba1-7612-437a-b98a-3f3c84c9dea9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\UI\Event\AZPattern">
+      <UniqueIdentifier>{88c344e2-df4f-4385-a90b-7ef6f11386b0}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1029,11 +1032,14 @@
     <ClInclude Include="..\public\Hud_Slot_EatPotion.h">
       <Filter>02.GameObject\UI\HUD\HUD_Quick_Slot\ETC</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\Event_Rect.h">
+      <Filter>02.GameObject\UI\Event\ETC</Filter>
+    </ClInclude>
     <ClInclude Include="..\public\Event_AZPattern.h">
-      <Filter>02.GameObject\UI\Event</Filter>
+      <Filter>02.GameObject\UI\Event\AZPattern</Filter>
     </ClInclude>
     <ClInclude Include="..\public\EventKey.h">
-      <Filter>02.GameObject\UI\Event\EventKey</Filter>
+      <Filter>02.GameObject\UI\Event\ETC</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1557,11 +1563,14 @@
     <ClCompile Include="..\private\Hud_Slot_EatPotion.cpp">
       <Filter>02.GameObject\UI\HUD\HUD_Quick_Slot\ETC</Filter>
     </ClCompile>
+    <ClCompile Include="..\private\Event_Rect.cpp">
+      <Filter>02.GameObject\UI\Event\ETC</Filter>
+    </ClCompile>
     <ClCompile Include="..\private\Event_AZPattern.cpp">
-      <Filter>02.GameObject\UI\Event</Filter>
+      <Filter>02.GameObject\UI\Event\AZPattern</Filter>
     </ClCompile>
     <ClCompile Include="..\private\EventKey.cpp">
-      <Filter>02.GameObject\UI\Event\EventKey</Filter>
+      <Filter>02.GameObject\UI\Event\ETC</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

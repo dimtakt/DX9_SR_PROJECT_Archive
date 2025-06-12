@@ -1,19 +1,16 @@
 #pragma once
 #include "UIObject.h"
 #include "Client_Defines.h"
-
+BEGIN(Engine)
+class CVIBuffer_Rect;
+END
 BEGIN(Client)
-class CEvent_AZPattern final : public CUIObject
+class CEvent_Rect final : public CUIObject
 {
 private:
-									CEvent_AZPattern(LPDIRECT3DDEVICE9 pGraphic_Device);
-									CEvent_AZPattern(const CEvent_AZPattern& Prototype);
-	virtual							~CEvent_AZPattern() = default;
-
-public:
-	void							Start_Event();
-	void							End_Event();
-
+									CEvent_Rect(LPDIRECT3DDEVICE9 pGraphic_Device);
+									CEvent_Rect(const CEvent_Rect& Prototype);
+	virtual							~CEvent_Rect() = default;
 
 public:
 	virtual HRESULT					Initialize_Prototype(LEVEL eLevel);
@@ -25,8 +22,8 @@ public:
 
 private:
 	LEVEL							m_eLevel = {};
+	CVIBuffer_Rect*					m_pVIBufferCom = { nullptr };
 
-	_bool							m_bIsEvent = {false};
 private:
 	HRESULT							Ready_Components();
 
@@ -34,8 +31,9 @@ private:
 	HRESULT							Ready_Children();
 
 public:
-	static CEvent_AZPattern* Create(LPDIRECT3DDEVICE9 pGraphic_Device, LEVEL eLevel);
-	virtual CGameObject* Clone(void* pArg) override;
+	static CEvent_Rect*				Create(LPDIRECT3DDEVICE9 pGraphic_Device, LEVEL eLevel);
+	virtual CGameObject*			Clone(void* pArg) override;
 	virtual void					Free() override;
 };
 END
+

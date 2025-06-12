@@ -1,12 +1,26 @@
 #include "Event_AZPattern.h"
 #include "GameInstance.h"
 #include "EventKey.h"
+#include "Event_Rect.h"
 CEvent_AZPattern::CEvent_AZPattern(LPDIRECT3DDEVICE9 pGraphic_Device) : CUIObject(pGraphic_Device)
 {
 }
 
 CEvent_AZPattern::CEvent_AZPattern(const CEvent_AZPattern& Prototype) : CUIObject(Prototype), m_eLevel{ Prototype.m_eLevel }
 {
+}
+
+void CEvent_AZPattern::Start_Event()
+{
+	m_bIsEvent = true;
+	m_pGameInstance->All_Update_Off();
+	m_bIsUpdate = true;
+}
+
+void CEvent_AZPattern::End_Event()
+{
+	m_bIsEvent = false;
+	m_pGameInstance->All_Update_On();
 }
 
 HRESULT CEvent_AZPattern::Initialize_Prototype(LEVEL eLevel)
@@ -26,7 +40,7 @@ HRESULT CEvent_AZPattern::Initialize(void* pArg)
 	m_fSizeX = 0;
 	m_fSizeY = 0;
 	m_fX = g_iWinSizeX * 0.5;
-	m_fY = g_iWinSizeY * 0.5 + 200;
+	m_fY = g_iWinSizeY * 0.5 + 150;
 	m_fZ = UI_DEPTH::EVENT_AZ;
 	m_iWinSizeX = g_iWinSizeX;
 	m_iWinSizeY = g_iWinSizeY;
@@ -43,7 +57,7 @@ HRESULT CEvent_AZPattern::Initialize(void* pArg)
 	if (FAILED(Ready_Children()))
 		return E_FAIL;
 
-	//m_pGameInstance->Add_UIObject(Desc->m_iLevel, TEXT("EVENT_AZ"), this);
+	m_pGameInstance->Add_UIObject(ENUM_CLASS(m_eLevel), TEXT("EVENT_AZ"), this);
 
 	return S_OK;
 }
@@ -55,7 +69,8 @@ void CEvent_AZPattern::Priority_Update(_float fTimeDelta)
 
 	if (!m_bIsUpdate)
 		return;
-
+	if (!m_bIsEvent)
+		return;
 	__super::Priority_Update(fTimeDelta);
 }
 
@@ -65,7 +80,8 @@ void CEvent_AZPattern::Update(_float fTimeDelta)
 		return;
 	if (!m_bIsUpdate)
 		return;
-
+	if (!m_bIsEvent)
+		return;
 	__super::Update(fTimeDelta);
 }
 
@@ -77,6 +93,8 @@ void CEvent_AZPattern::Late_Update(_float fTimeDelta)
 	if (!m_bIsUpdate)
 		return;
 
+	if (!m_bIsEvent)
+		return;
 	__super::Late_Update(fTimeDelta);
 }
 
@@ -100,6 +118,9 @@ HRESULT CEvent_AZPattern::Ready_ChildPrototype(LEVEL eLevel)
 		CEventKey::Create(m_pGraphic_Device))))
 		return E_FAIL;
 
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(eLevel), TEXT("Prototype_GameObject_Event_Rect"),
+		CEvent_Rect::Create(m_pGraphic_Device, m_eLevel))))
+		return E_FAIL;
 	return S_OK;
 }
 
@@ -107,7 +128,15 @@ HRESULT CEvent_AZPattern::Ready_Children()
 {
 	CUIObject* pGameObject = nullptr;
 	CEventKey::SLOT_KEYGUIDE_DESC Desc{};
-
+	
+	for (_int i = 0; i < 2; ++i)
+	{
+		Desc.fZ = i;
+		pGameObject = dynamic_cast<CUIObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(m_eLevel), TEXT("Prototype_GameObject_Event_Rect"), &Desc));
+		if (nullptr == pGameObject)
+			return E_FAIL;
+		Add_Child(pGameObject);
+	}
 	Desc.fZ = 8;
 
 	for (_int i = 0; i < 8; ++i)
