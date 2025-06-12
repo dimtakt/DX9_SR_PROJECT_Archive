@@ -8,6 +8,27 @@ CEventKey::CEventKey(const CEventKey& Prototype) : CUIObject(Prototype), m_strKe
 {
 }
 
+void CEventKey::Input_KeySetting()
+{
+	m_fY = -20;
+	m_iTexIndex = 2;
+	__super::Update_Position();
+}
+
+void CEventKey::Clear_KeySetting()
+{
+	m_fY = 0;
+	m_iTexIndex = 1;
+	__super::Update_Position();
+}
+
+void CEventKey::Reset_KeySetting()
+{
+	m_fY = 0;
+	m_iTexIndex = 0;
+	__super::Update_Position();
+}
+
 HRESULT CEventKey::Initialize_Prototype()
 {
 	return S_OK;
@@ -18,7 +39,7 @@ HRESULT CEventKey::Initialize(void* pArg)
 	SLOT_KEYGUIDE_DESC* Desc = static_cast<SLOT_KEYGUIDE_DESC*>(pArg);
 
 	m_strKey = Desc->strKey;
-
+	m_iTexIndex = 0;
 	m_fSizeX = 50;
 	m_fSizeY = 50;
 	m_fX = Desc->fX * 60 - (Desc->fZ - 1) * 60 / 2;;
@@ -50,12 +71,12 @@ void CEventKey::Update(_float fTimeDelta)
 
 void CEventKey::Late_Update(_float fTimeDelta)
 {
-	m_pGameInstance->Add_RenderGroup(RENDERGROUP::RG_UI_BLEND, this);
+	m_pGameInstance->Add_RenderGroup(RENDERGROUP::RG_UI, this);
 }
 
 HRESULT CEventKey::Render()
 {
-	if (FAILED(m_pTextureCom->Bind_Texture(0)))
+	if (FAILED(m_pTextureCom->Bind_Texture(m_iTexIndex)))
 		return E_FAIL;
 
 	m_pVIBufferCom->Bind_Buffers();
@@ -64,7 +85,7 @@ HRESULT CEventKey::Render()
 	__super::End();
 
 	Font_Rect_Update();
-	m_pGameInstance->Render_Font(TEXT("UI_Font_22"), TEXT("Q"), m_vTexRect, D3DXCOLOR(1.f, 1.f, 1.f, 1.f), DT_CENTER | DT_VCENTER | DT_SINGLELINE);
+	m_pGameInstance->Render_Font(TEXT("UI_Font_22"), m_strKey, m_vTexRect, D3DXCOLOR(1.f, 1.f, 1.f, 1.f), DT_CENTER | DT_VCENTER | DT_SINGLELINE);
 
 	return S_OK;
 }

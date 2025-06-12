@@ -8,22 +8,15 @@ class CTexture;
 END
 
 BEGIN(Client)
-class CEventKey final : public CUIObject
+class CEvent_Result final : public CUIObject
 {
-public:
-	typedef struct tagSlot_Key_Guide : public UIOBJECT_DESC
-	{
-		_wstring    strKey;
-	}SLOT_KEYGUIDE_DESC;
-
 private:
-								CEventKey(LPDIRECT3DDEVICE9 pGraphic_Device);
-								CEventKey(const CEventKey& Prototype);
-	virtual						~CEventKey() = default;
+								CEvent_Result(LPDIRECT3DDEVICE9 pGraphic_Device);
+								CEvent_Result(const CEvent_Result& Prototype);
+	virtual						~CEvent_Result() = default;
 public:
-	void						Input_KeySetting();
-	void						Clear_KeySetting();
-	void						Reset_KeySetting();
+	void						Succes_Setting();
+	void						Fail_Setting();
 
 public:
 	virtual HRESULT				Initialize_Prototype();
@@ -35,15 +28,21 @@ public:
 private:
 	CVIBuffer_Rect*				m_pVIBufferCom = { nullptr };
 	CTexture*					m_pTextureCom = { nullptr };
+	
+	_bool						m_bIsSucces = {false};
+	_bool						m_bIsRender = {false};
 	_int						m_iTexIndex = {};
 	_wstring					m_strKey = {};
 
 private:
 	HRESULT						Ready_Components();
 
+	void						Set_Renderstate();
+	void						Reset_Renderstate();
+
 public:
-	static						CEventKey* Create(LPDIRECT3DDEVICE9 pGraphic_Device);
-	virtual	CGameObject*		Clone(void* pArg) override;
+	static						CEvent_Result* Create(LPDIRECT3DDEVICE9 pGraphic_Device);
+	virtual	CGameObject* Clone(void* pArg) override;
 	virtual void				Free() override;
 
 };

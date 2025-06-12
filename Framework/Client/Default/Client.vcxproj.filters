@@ -472,6 +472,9 @@
     <Filter Include="02.GameObject\UI\Event\AZPattern">
       <UniqueIdentifier>{88c344e2-df4f-4385-a90b-7ef6f11386b0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\UI\Event\AZPattern\ETC">
+      <UniqueIdentifier>{dbd5de2b-bf38-421c-a5e2-1e16cad586c4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -1039,7 +1042,13 @@
       <Filter>02.GameObject\UI\Event\AZPattern</Filter>
     </ClInclude>
     <ClInclude Include="..\public\EventKey.h">
-      <Filter>02.GameObject\UI\Event\ETC</Filter>
+      <Filter>02.GameObject\UI\Event\AZPattern\ETC</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Event_Result.h">
+      <Filter>02.GameObject\UI\Event\AZPattern\ETC</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Event_Timer.h">
+      <Filter>02.GameObject\UI\Event\AZPattern\ETC</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1570,7 +1579,13 @@
       <Filter>02.GameObject\UI\Event\AZPattern</Filter>
     </ClCompile>
     <ClCompile Include="..\private\EventKey.cpp">
-      <Filter>02.GameObject\UI\Event\ETC</Filter>
+      <Filter>02.GameObject\UI\Event\AZPattern\ETC</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Event_Result.cpp">
+      <Filter>02.GameObject\UI\Event\AZPattern\ETC</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Event_Timer.cpp">
+      <Filter>02.GameObject\UI\Event\AZPattern\ETC</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

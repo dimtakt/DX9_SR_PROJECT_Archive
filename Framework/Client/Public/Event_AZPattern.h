@@ -1,7 +1,7 @@
 #pragma once
 #include "UIObject.h"
 #include "Client_Defines.h"
-
+#include "EventKey.h"
 BEGIN(Client)
 class CEvent_AZPattern final : public CUIObject
 {
@@ -26,7 +26,26 @@ public:
 private:
 	LEVEL							m_eLevel = {};
 
-	_bool							m_bIsEvent = {false};
+	_bool							m_bIsEvent = { false };
+	_bool							m_bIsResult = { false };
+	_bool							m_bIsClear = { false };
+	_bool							m_bIsOver = {false};
+
+	_float							m_fAcctime = {};
+	
+	_float							m_fEventTime = {};
+	_float							m_fEventTimeOver = {};
+
+	vector<CEventKey*>				m_vecEventKey;
+	vector<_int>					m_vecInputKey_Boss;
+	vector<_int>					m_vecInputKey_Player;
+
+private:
+	HRESULT							Setting_Event();
+	void							KeyDown_Player();
+	void							Reset_Player();
+	void							Reset_Boss();
+
 private:
 	HRESULT							Ready_Components();
 

@@ -186,6 +186,8 @@
     <ClInclude Include="..\public\EventKey.h" />
     <ClInclude Include="..\public\Event_AZPattern.h" />
     <ClInclude Include="..\public\Event_Rect.h" />
+    <ClInclude Include="..\public\Event_Result.h" />
+    <ClInclude Include="..\public\Event_Timer.h" />
     <ClInclude Include="..\Public\EXP_Ball.h" />
     <ClInclude Include="..\Public\Face_Rect.h" />
     <ClInclude Include="..\Public\Face_Rect_Small.h" />
@@ -372,6 +374,8 @@
     <ClCompile Include="..\private\EventKey.cpp" />
     <ClCompile Include="..\private\Event_AZPattern.cpp" />
     <ClCompile Include="..\private\Event_Rect.cpp" />
+    <ClCompile Include="..\private\Event_Result.cpp" />
+    <ClCompile Include="..\private\Event_Timer.cpp" />
     <ClCompile Include="..\Private\EXP_Ball.cpp" />
     <ClCompile Include="..\Private\Face_Rect.cpp" />
     <ClCompile Include="..\Private\Face_Rect_Small.cpp" />
