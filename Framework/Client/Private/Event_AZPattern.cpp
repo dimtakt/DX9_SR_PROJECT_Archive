@@ -5,6 +5,7 @@
 #include "Event_Result.h"
 #include "Event_Timer.h"
 #include "Room_Manager.h"
+#include "Stat_Manager.h"
 CEvent_AZPattern::CEvent_AZPattern(LPDIRECT3DDEVICE9 pGraphic_Device) : CUIObject(pGraphic_Device)
 {
 }
@@ -16,9 +17,10 @@ CEvent_AZPattern::CEvent_AZPattern(const CEvent_AZPattern& Prototype) : CUIObjec
 void CEvent_AZPattern::Start_Event()
 {
 
-	if (m_vecInputKey_Boss.size() == 0)
+	if (m_vecInputKey_Boss.size() == 0 && !m_bIsStart)
 	{
-		m_fEventTime = 7.f;
+		m_bIsStart = true;
+		m_fEventTime = m_pBoss->Get_AZPatternDesc().fLeftTime;
 		m_fEventTimeOver = m_fEventTime;
 
 		m_bIsEvent = true;
@@ -30,6 +32,8 @@ void CEvent_AZPattern::Start_Event()
 			m_vecInputKey_Boss.push_back(m_pBoss->Get_AZPatternDesc().vecRequiredInputs[i]);
 		}
 		Setting_Event();
+
+		CStat_Manager::GetInstance()->Set_UIOpen(true);
 	}
 }
 
@@ -50,6 +54,7 @@ void CEvent_AZPattern::End_Event()
 	}
 
 	m_vecChildren.erase(m_vecChildren.begin() + 4, m_vecChildren.end());
+	CStat_Manager::GetInstance()->Set_UIOpen(false);
 }
 
 HRESULT CEvent_AZPattern::Initialize_Prototype(LEVEL eLevel)
@@ -105,6 +110,7 @@ void CEvent_AZPattern::Priority_Update(_float fTimeDelta)
 	if (m_pBoss->Get_AZPatternDesc().isPatternStart)
 		Start_Event();
 
+
 	if (!m_bIsEvent)
 		return;
 	__super::Priority_Update(fTimeDelta);
@@ -119,35 +125,64 @@ void CEvent_AZPattern::Update(_float fTimeDelta)
 	if (!m_bIsEvent)
 		return;
 
-	
-	if (m_fEventTimeOver <= 0)
+	if (m_pBoss->Get_AZPatternDesc().isSuccess)
+	{
+		m_bIsResult = true;
+		m_bIsClear = true;
+		static_cast<CEvent_Result*>(m_vecChildren[3])->Succes_Setting();
+		return;
+	}
+
+	if (m_pBoss->Get_AZPatternDesc().fLeftTime <= 0)
 	{
 		m_bIsOver = true;
 		m_bIsResult = true;
 		static_cast<CEvent_Result*>(m_vecChildren[3])->Fail_Setting();
+		return;
+	}
+	_int iSize = {};
+	if (m_pBoss->Get_AZPatternDesc().vecRequiredInputs.size() > m_vecInputKey_Boss.size())
+	{
+		iSize = m_vecInputKey_Boss.size();		
+	}
+	else
+	{
+		iSize = m_pBoss->Get_AZPatternDesc().vecRequiredInputs.size();
 	}
 
-	//if(!m_bIsResult)
-	//	KeyDown_Player();
+
+	for (_int i = 0; i < iSize; ++i)
+	{
+		if (m_pBoss->Get_AZPatternDesc().vecRequiredInputs[i] != m_vecInputKey_Boss[i])
+		{
+			Reset_Pattern();
+			m_bIsResult = true;
+			static_cast<CEvent_Result*>(m_vecChildren[3])->Fail_Setting();
+			break;
+		}
+	}
+
+	//최초 클릭인지 체크
+	if (m_pBoss->Get_AZPatternDesc().vecInputs.size() >= 1)
+		m_bOneClick = true;
+
+	//리셋인지 체크
+	if (m_pBoss->Get_AZPatternDesc().vecInputs.size() == 0 && m_bOneClick)
+		m_bReset = true;
+
+	//리셋이면 UI 초기화
+	if (m_bReset) 
+	{
+		Reset_Pattern();
+		m_bIsResult = true;
+		static_cast<CEvent_Result*>(m_vecChildren[3])->Fail_Setting();
+	}
 
 	for (int i = 0; i < m_pBoss->Get_AZPatternDesc().vecInputs.size(); ++i)
 	{
-		if (m_vecInputKey_Boss[m_vecInputKey_Boss.size() - 1] == m_pBoss->Get_AZPatternDesc().vecInputs[m_pBoss->Get_AZPatternDesc().vecInputs.size() - 1])
-		{
-			m_bIsResult = true;
-			m_bIsClear = true;
-			static_cast<CEvent_Result*>(m_vecChildren[3])->Succes_Setting();
-			break;
-		}
 		if (m_vecInputKey_Boss[i] == m_pBoss->Get_AZPatternDesc().vecInputs[i])
 		{
 			m_vecEventKey[i]->Clear_KeySetting();
-		}
-		else
-		{
-			Reset_Player();
-			m_bIsResult = true;
-			static_cast<CEvent_Result*>(m_vecChildren[3])->Fail_Setting();
 		}
 	}
 
@@ -156,7 +191,6 @@ void CEvent_AZPattern::Update(_float fTimeDelta)
 		m_vecEventKey[m_pBoss->Get_AZPatternDesc().vecInputs.size()]->Input_KeySetting();
 	}
 
-	//m_fEventTimeOver -= fTimeDelta;
 	static_cast<CEvent_Timer*>(m_vecChildren[2])->Progerss_Set(m_pBoss->Get_AZPatternDesc().fLeftTime, m_fEventTime);
 	
 	__super::Update(fTimeDelta);
@@ -231,29 +265,6 @@ HRESULT CEvent_AZPattern::Setting_Event()
 	}
 }
 
-void CEvent_AZPattern::KeyDown_Player()
-{
-
-	//if (m_pGameInstance->IsKeyDown('Q'))
-	//	(*m_vecInputKey_Player).push_back('Q');
-	//else if (m_pGameInstance->IsKeyDown('W'))
-	//	(*m_vecInputKey_Player).push_back('W');
-	//else if (m_pGameInstance->IsKeyDown('E'))
-	//	(*m_vecInputKey_Player).push_back('E');
-	//else if (m_pGameInstance->IsKeyDown('R'))
-	//	(*m_vecInputKey_Player).push_back('R');
-	//else if (m_pGameInstance->IsKeyDown('A'))
-	//	(*m_vecInputKey_Player).push_back('A');
-	//else if (m_pGameInstance->IsKeyDown('S'))
-	//	(*m_vecInputKey_Player).push_back('S');
-	//else if (m_pGameInstance->IsKeyDown('D'))
-	//	(*m_vecInputKey_Player).push_back('D');
-	//else if (m_pGameInstance->IsKeyDown('E'))
-	//	(*m_vecInputKey_Player).push_back('E');
-	//else if (m_pGameInstance->IsKeyDown('F'))
-	//	(*m_vecInputKey_Player).push_back('F');
-}
-
 void CEvent_AZPattern::Reset_Player()
 {
 	for (_int i = 0; i < m_vecEventKey.size(); ++i)
@@ -265,6 +276,33 @@ void CEvent_AZPattern::Reset_Player()
 void CEvent_AZPattern::Reset_Boss()
 {
 	m_vecInputKey_Boss.clear();
+}
+
+void CEvent_AZPattern::Reset_Pattern()
+{
+	Reset_Player();
+	Reset_Boss();
+
+	for (auto& pEventKey : m_vecEventKey)
+		Safe_Release(pEventKey);
+	m_vecEventKey.clear();
+
+	for (_int i = 4; i < m_vecChildren.size(); ++i)
+	{
+		Safe_Release(m_vecChildren[i]);
+	}
+
+	m_vecChildren.erase(m_vecChildren.begin() + 4, m_vecChildren.end());
+
+	for (_int i = 0; i < m_pBoss->Get_AZPatternDesc().vecRequiredInputs.size(); ++i)
+	{
+		m_vecInputKey_Boss.push_back(m_pBoss->Get_AZPatternDesc().vecRequiredInputs[i]);
+	}
+
+	Setting_Event();
+
+	m_bReset = false;
+	m_bOneClick = false;
 }
 
 HRESULT CEvent_AZPattern::Ready_Components()
@@ -289,7 +327,6 @@ HRESULT CEvent_AZPattern::Ready_ChildPrototype(LEVEL eLevel)
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(eLevel), TEXT("Prototype_GameObject_Event_Result"),
 		CEvent_Result::Create(m_pGraphic_Device))))
 		return E_FAIL;
-
 
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(eLevel), TEXT("Prototype_GameObject_Event_Timer"),
 		CEvent_Timer::Create(m_pGraphic_Device))))
@@ -353,6 +390,9 @@ void CEvent_AZPattern::Free()
 	for (auto& pEventKey : m_vecEventKey)
 		Safe_Release(pEventKey);
 	m_vecEventKey.clear();
+
+	m_vecInputKey_Boss.clear();
+	m_pBoss = nullptr;
 
 	__super::Free();
 }

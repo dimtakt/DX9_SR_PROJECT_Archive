@@ -475,7 +475,7 @@
     <Filter Include="02.GameObject\UI\Event\AZPattern\ETC">
       <UniqueIdentifier>{dbd5de2b-bf38-421c-a5e2-1e16cad586c4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\UI\Event\NewFilter1">
+    <Filter Include="02.GameObject\UI\Event\ClashPatten">
       <UniqueIdentifier>{26d0d347-a2c9-4e48-8678-213851017f37}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -1053,6 +1053,9 @@
     <ClInclude Include="..\public\Event_Timer.h">
       <Filter>02.GameObject\UI\Event\AZPattern\ETC</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\Event_ClashPattern.h">
+      <Filter>02.GameObject\UI\Event\ClashPatten</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -1589,6 +1592,9 @@
     </ClCompile>
     <ClCompile Include="..\private\Event_Timer.cpp">
       <Filter>02.GameObject\UI\Event\AZPattern\ETC</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Event_ClashPattern.cpp">
+      <Filter>02.GameObject\UI\Event\ClashPatten</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
