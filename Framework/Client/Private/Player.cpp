@@ -13,6 +13,10 @@
 #include "Client_Defines_Event.h"
 #include "Field_Item.h"
 #include "GoldLeaf.h"
+#include "Event_AZPattern.h"
+#include "Planet.h"
+#include "ProjSword.h"
+#include "FrozenHammer.h"
 
 CPlayer::CPlayer(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CGameObject{ pGraphic_Device }
@@ -41,9 +45,11 @@ HRESULT CPlayer::Initialize(void* pArg)
     
     m_pGameInstance->Add_Timer(m_strTimerTag);      // 마지막으로 상태가 바뀐지 지난 시간을 측정할 타이머
     m_pGameInstance->Compute_TimeDelta(m_strTimerTag);
-    m_pGameInstance->Subscribe(ENUM_CLASS(EVENT_TYPE::UICHANGE), this);
+    m_pGameInstance->Subscribe(ENUM_CLASS(EVENT_TYPE::GETITEM), this);
     Ready_Object();
     m_dwHitTime = 0.f;
+
+    Ready_Item(pArg);
     
     return S_OK;
 }
@@ -84,18 +90,6 @@ void CPlayer::Priority_Update(_float fTimeDelta)
 
 void CPlayer::Update(_float fTimeDelta)
 {    
-    if (m_pGameInstance->IsKeyDown(VK_DOWN))
-    {
-        m_pChat->On_Chat(0, true);
-    }
-    if (m_pGameInstance->IsKeyDown(VK_LEFT))
-    {
-        m_pChat->Cinematic_Chat(0, true);
-    }
-    if (m_pGameInstance->IsKeyDown(VK_RIGHT))
-    {
-        m_pChat->Off_Chat();
-    }
     //m_pCollider->Update_Collider();
     if (m_pTerrainBox != nullptr) {
         m_pTerrainBox->SetUp_OnTerrainBox(m_pTransformCom, _float3(0.f, 0.3f, 0.f));
@@ -354,6 +348,10 @@ void CPlayer::Update(_float fTimeDelta)
                 // 무적 설정..
                 m_bIsHit = true;
                 m_fGodModeTime = 0.f;
+
+                FROZENHAMMER hammerDesc{};
+                hammerDesc.vDir = m_vDashDir;
+                m_pGameInstance->Broadcast(ENUM_CLASS(EVENT_TYPE::FROZENHAMMER), &hammerDesc);
             }
         }
     }
@@ -737,14 +735,28 @@ void CPlayer::ChangeStat(STAT_INFO eStat, float fValue)
 
 void CPlayer::OnEvent(_uint iTypeindex, const EVENTDATA* pData)
 {
-    //if (static_cast<EVENT_TYPE>(iTypeindex) == EVENT_TYPE::UICHANGE) {
-    //    auto pStat = static_cast<const STATCHANGE*>(pData);
-    //    if (pStat->eStatType == STAT_INFO::CULDAMAGE)
-    //    {
-    //        //데미지 처리
+    if (static_cast<EVENT_TYPE>(iTypeindex) == EVENT_TYPE::GETITEM) {
+        auto pAction = static_cast<const ACTIONEVENT*>(pData);
+        if (pAction->strActionName == TEXT("FrozenHammer"))
+        {
+            CFrozenHammer::FROZENHAMMERDESC frozenHammerDesc{};
+            frozenHammerDesc.pTargetTransform = m_pTransformCom;
+            m_pGameInstance->Add_GameObject_ToLayer(m_pGameInstance->Get_CurrentLevel(), TEXT("Layer_Item"), ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_FrozenHammer"), &frozenHammerDesc);
 
-    //    }
-    //}
+        }
+        else if (pAction->strActionName == TEXT("Planet"))
+        {
+            CPlanet::PLANETDESC planetDesc{};
+            planetDesc.pTargetTransform = m_pTransformCom;
+            m_pGameInstance->Add_GameObject_ToLayer(m_pGameInstance->Get_CurrentLevel(), TEXT("Layer_Item"), ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_Planet"), &planetDesc);
+        }
+        else if (pAction->strActionName == TEXT("Projection Sword"))
+        {
+            CProjSword::PROJSWORDDESC projSwordDesc{};
+            projSwordDesc.pTargetTransform = m_pTransformCom;
+            m_pGameInstance->Add_GameObject_ToLayer(m_pGameInstance->Get_CurrentLevel(), TEXT("Layer_Item"), ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_ProjSword"), &projSwordDesc);
+        }
+    }
 }
 
 void CPlayer::Hit(_int iDamage)
@@ -935,6 +947,43 @@ HRESULT CPlayer::Ready_Object()
     return S_OK;
 }
 
+HRESULT CPlayer::Ready_Item(void* pArg)
+{
+
+    PLAYERDESC* pDesc = static_cast<PLAYERDESC*>(pArg);
+    if (CStat_Manager::GetInstance()->Get_HasItem(TEXT("Yellow Planet")))
+    {
+        CPlanet::PLANETDESC planetDesc{};
+        planetDesc.pTargetTransform = m_pTransformCom;
+
+        if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(pDesc->iLayerIndex, TEXT("Layer_Item"),
+            ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_Planet"), &planetDesc)))
+            return E_FAIL;
+    }
+    
+    if (CStat_Manager::GetInstance()->Get_HasItem(TEXT("Projection Sword")))
+    {
+        CProjSword::PROJSWORDDESC projSwordDesc{};
+        projSwordDesc.pTargetTransform = m_pTransformCom;
+
+        if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(pDesc->iLayerIndex, TEXT("Layer_Item"),
+            ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_ProjSword"), &projSwordDesc)))
+            return E_FAIL;
+    }
+    
+    if (CStat_Manager::GetInstance()->Get_HasItem(TEXT("Snow Hamer")))
+    {
+        CFrozenHammer::FROZENHAMMERDESC frozenHammerDesc{};
+        frozenHammerDesc.pTargetTransform = m_pTransformCom;
+
+        if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(pDesc->iLayerIndex, TEXT("Layer_Item"),
+            ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_FrozenHammer"), &frozenHammerDesc)))
+            return E_FAIL;
+    }
+   
+    return S_OK;
+}
+
 HRESULT CPlayer::Render_Font(_int iDamage)
 {
     CField_Font::FIELD_FONT_DESC Desc = {};
@@ -1057,8 +1106,7 @@ CGameObject* CPlayer::Clone(void* pArg)
 
 void CPlayer::Free()
 {
-    m_pGameInstance->Unsubscribe(ENUM_CLASS(EVENT_TYPE::UICHANGE), this);
-
+    m_pGameInstance->Unsubscribe(ENUM_CLASS(EVENT_TYPE::GETITEM), this);
     Safe_Release(m_pVIBufferCom);
     Safe_Release(m_pTransformCom);
 

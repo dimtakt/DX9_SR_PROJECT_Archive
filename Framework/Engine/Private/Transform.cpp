@@ -214,6 +214,51 @@ void CTransform::RotationByParent(const _float3 axis, CTransform* parent, _float
 	return;
 }
 
+void CTransform::Set_OrbitInfo_AroundY(const CTransform* pTargetTransform, _float fSpeed)
+{
+	if (!pTargetTransform) return;
+
+	_float3 vTargetPos = pTargetTransform->Get_State(STATE::POSITION);
+	_float3 vMyPos = Get_State(STATE::POSITION);
+
+	m_vOrbitOffset = vMyPos - vTargetPos; // 반경 벡터
+	m_fOrbitSpeed = fSpeed;
+	m_fOrbitAngle = 0.f;
+}
+
+void CTransform::Orbit(_float fDeltaTime, _float3 vTargetCenterPos)
+{
+	// 1. 공전 각도 누적
+	m_fOrbitAngle += m_fOrbitSpeed * fDeltaTime;
+
+	// 2. 회전 행렬 (Y축 기준)
+	D3DXMATRIX matRot;
+	D3DXMatrixRotationY(&matRot, m_fOrbitAngle);
+
+	// 3. 회전된 반경 오프셋
+	D3DXVECTOR3 vRotatedOffset;
+	D3DXVec3TransformCoord(&vRotatedOffset, &m_vOrbitOffset, &matRot);
+	vRotatedOffset.y = 0.f; // Y는 무시
+
+	// 4. 목표 위치 = 중심 위치 + 회전 오프셋
+	_float3 vCenter = vTargetCenterPos;
+	_float3 vTargetPos = vCenter + *(_float3*)&vRotatedOffset;
+	vTargetPos.y = vCenter.y;
+
+	// 5. 현재 위치
+	_float3 vCurPos = Get_State(STATE::POSITION);
+
+	// 6. 보간 (Lerp로 부드럽게 따라감)
+	const _float fFollowLerpSpeed = 5.f; // 커질수록 빠르게 따라감 (1~10 추천)
+	_float fT = 1.f - expf(-fFollowLerpSpeed * fDeltaTime); // 프레임 속도 무관 보간 계수
+
+	_float3 vSmoothedPos;
+	D3DXVec3Lerp(&vSmoothedPos, &vCurPos, &vTargetPos, fT);
+
+	// 7. 최종 위치 적용
+	Set_State(STATE::POSITION, vSmoothedPos);
+}
+
 void CTransform::ApplyEulerRotation(const _float3& vEuler)
 {
 	_float3			vScaled = Get_Scaled();

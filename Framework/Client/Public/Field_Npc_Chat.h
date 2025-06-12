@@ -61,6 +61,7 @@ private:
 	_bool						m_bIsRenderchat = { false };
 	_bool						m_bIsFinish = { false };
 
+
 	vector<_wstring>			m_vecChatting;
 	_int						m_iVecIndex = {};			//벡터안에 텍스트 개수
 	

@@ -59,6 +59,9 @@ void CChapMap::Priority_Update(_float fTimeDelta)
 	if (!m_bIsUpdate)
 		return;
 	
+	if (m_pGameInstance->IsKeyDown(VK_F5))
+		Open_Ui();
+
 	if (!m_bisOpen)
 		return;
 

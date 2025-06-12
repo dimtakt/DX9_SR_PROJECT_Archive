@@ -14,6 +14,11 @@ namespace Client
 		_float3		vPosition;
 	}ROOMCHANGE;
 
+	typedef struct tagFrozenHammerEvent : public EVENTDATA
+	{
+		_float3		vDir;
+	}FROZENHAMMER;
+
 	typedef struct tagActionEvent : public EVENTDATA
 	{
 		_wstring strActionName;

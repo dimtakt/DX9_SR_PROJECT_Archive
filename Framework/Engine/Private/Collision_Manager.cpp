@@ -49,8 +49,8 @@ void CCollision_Manager::Check_RoomCollisions()
         }
     }
 
-      for (size_t i = 0; i < m_vColliders.size(); ++i)
-    {
+    for (size_t i = 0; i < m_vColliders.size(); ++i)
+    {   
         for (size_t j = i + 1; j < m_vColliders.size(); ++j)
         {  
             if (m_vColliders[i] == nullptr || 
@@ -99,7 +99,7 @@ void CCollision_Manager::Check_RoomCollisions()
             }*/
 
             if (Check_3DOBBto3DOBB(m_vColliders[i], m_vColliders[j]) && Check_Y_Overlap(m_vColliders[i], m_vColliders[j]))
-            {
+            {                
                 m_vColliders[i]->Get_Owner()->OnCollision(m_vColliders[j]->Get_Owner());
                 m_vColliders[j]->Get_Owner()->OnCollision(m_vColliders[i]->Get_Owner());
             }
