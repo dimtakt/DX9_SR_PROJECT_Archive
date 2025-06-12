@@ -166,7 +166,7 @@ namespace Client
 	
 	const vector<Item_Effect> g_ItemEffect
 	{
-		Item_Effect(0, ITEM_EFFECT::VALUE_TYPE, {{STAT_INFO::CULDAMAGE, TEXT("공격력 증가 +%d"),2, 2}}),
+		Item_Effect(0, ITEM_EFFECT::VALUE_TYPE, {{STAT_INFO::CULDAMAGE, TEXT("공격력 증가 +%d"),2, 2}}, TEXT("Projection Sword")),
 		Item_Effect(1, ITEM_EFFECT::VALUE_TYPE, {{STAT_INFO::MAXDASH, TEXT("최대 대쉬 횟수 증가 +%d"),1, 1}}),
 		Item_Effect(2, ITEM_EFFECT::VALUE_TYPE, {{STAT_INFO::MAXHP,TEXT("최대 체력 증가 +%d"), 10, 15}}),
 		Item_Effect(3, ITEM_EFFECT::VALUE_TYPE, {{STAT_INFO::CULDAMAGE, TEXT("공격력 증가 +%d"), 5, 10}}),
@@ -181,7 +181,7 @@ namespace Client
 		Item_Effect(12, ITEM_EFFECT::SPAWN_TYPE, {{STAT_INFO::STAT_END,TEXT("노란 행성 소환"), 0, 0}}, TEXT("Yellow Planet")),
 		Item_Effect(13, ITEM_EFFECT::SPAWN_TYPE, {{STAT_INFO::STAT_END,TEXT("붉은 행성 소환"), 0, 0}}, TEXT("Red Planet")),
 		Item_Effect(14, ITEM_EFFECT::SPAWN_TYPE, {{STAT_INFO::STAT_END,TEXT("푸른 행성 소환"), 0, 0}}, TEXT("Bule Planet")),
-		Item_Effect(15, ITEM_EFFECT::SKILLBOOK_TYPE, {{STAT_INFO::STAT_END,TEXT("아이슬 볼트 획득"), 0, 0}}, TEXT("Ice Bolt")),
+		Item_Effect(15, ITEM_EFFECT::SKILLBOOK_TYPE, {{STAT_INFO::STAT_END,TEXT("아이스 볼트 획득"), 0, 0}}, TEXT("Ice Bolt")),
 		Item_Effect(16, ITEM_EFFECT::SKILLBOOK_TYPE, {{STAT_INFO::STAT_END,TEXT("라이트닝 볼트 획득"), 0, 0}}, TEXT("Lightning Bolt")),
 	};
 

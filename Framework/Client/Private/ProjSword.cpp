@@ -26,7 +26,7 @@ HRESULT CProjSword::Initialize(void* pArg)
     if (FAILED(Ready_Components(pArg)))
         return E_FAIL;
 
-    m_eObjType = GAMEOBJ_TYPE::PLANET;
+    m_eObjType = GAMEOBJ_TYPE::NORMAL_EFFECT;
 
     PROJSWORDDESC* pDesc = static_cast<PROJSWORDDESC*>(pArg);
     m_pTargetTransform = pDesc->pTargetTransform;
@@ -48,6 +48,13 @@ void CProjSword::Priority_Update(_float fTimeDelta)
 
 void CProjSword::Update(_float fTimeDelta)
 {
+    _float3 vDelta = m_pTargetTransform->Get_State(STATE::POSITION) - m_pTransformCom_0->Get_State(STATE::POSITION);
+    _float fDistSq = D3DXVec3LengthSq(&vDelta);
+    if (sqrt(fDistSq) > 10)
+    {
+        m_pTransformCom_0->Set_State(STATE::POSITION, m_pTargetTransform->Get_State(STATE::POSITION));
+        m_pTransformCom_1->Set_State(STATE::POSITION, m_pTargetTransform->Get_State(STATE::POSITION));
+    }
     Follow_Player_Side(m_pTransformCom_0, fTimeDelta, SWORDDIR::LEFT);
     Follow_Player_Side(m_pTransformCom_1, fTimeDelta, SWORDDIR::RIGHT);
     

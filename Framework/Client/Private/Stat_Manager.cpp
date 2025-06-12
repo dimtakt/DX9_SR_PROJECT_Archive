@@ -57,6 +57,7 @@ HRESULT CStat_Manager::Initialize()
     m_mapHasItem.emplace(TEXT("Bule Planet"), false);
     m_mapHasItem.emplace(TEXT("Ice Bolt"), false);
     m_mapHasItem.emplace(TEXT("Lightning Bolt"), false);
+    m_mapHasItem.emplace(TEXT("Projection Sword"), false);
 
     return S_OK;
 }
@@ -149,6 +150,10 @@ _float CStat_Manager::Get_Player_Damage(DAMAGE eDamage)
         fDamage = m_fCurStats[static_cast<int>(STAT_INFO::CULDAMAGE)] + 5;
     }
     else if (eDamage == DAMAGE::PLANET)
+    {
+        fDamage = m_fCurStats[static_cast<int>(STAT_INFO::CULDAMAGE)] - 3;
+    }
+    else if (eDamage == DAMAGE::FROZENHAMMER)
     {
         fDamage = m_fCurStats[static_cast<int>(STAT_INFO::CULDAMAGE)] - 3;
     }

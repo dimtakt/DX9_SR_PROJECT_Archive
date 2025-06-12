@@ -46,6 +46,12 @@ void CPlanet::Priority_Update(_float fTimeDelta)
 
 void CPlanet::Update(_float fTimeDelta)
 {
+    _float3 vDelta = m_pTargetTransform->Get_State(STATE::POSITION) - m_pTransformCom->Get_State(STATE::POSITION);
+    _float fDistSq = D3DXVec3LengthSq(&vDelta);
+    if (sqrt(fDistSq) > 10)
+    {
+        m_pTransformCom->Set_State(STATE::POSITION, m_pTargetTransform->Get_State(STATE::POSITION));
+    }
     m_pTransformCom->Orbit(fTimeDelta, m_pTargetTransform->Get_State(STATE::POSITION));
 
 
@@ -84,6 +90,9 @@ void CPlanet::Update(_float fTimeDelta)
                 _float4x4 matMonsterWorld = *m_pTransformCom->Get_WorldMatrix();
                 CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::PLAYER_EFFECT, L"Prototype_Component_Texture_Planet_Bullet_Cycle",
                     *m_pTransformCom->Get_WorldMatrix(), tempMat, vThrownDir, fThrownPower, fThrownAtkLifeTime, 0.f, true);
+
+                m_pGameInstance->StopSound(ENUM_CLASS(CHANNELID::ITEM_EFFECT));
+                m_pGameInstance->PlaySoundW(L"attackPlanetRicochet.wav", ENUM_CLASS(CHANNELID::ITEM_EFFECT), g_fEFFECTVolume - 0.7f);
 
             }
 

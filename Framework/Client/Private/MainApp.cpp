@@ -51,6 +51,8 @@
 #include "GoldLeaf.h"
 #include "Planet.h"
 #include "ProjSword.h"
+#include "FrozenHammer.h"
+
 CMainApp::CMainApp()
 	: m_pGameInstance{ CGameInstance::GetInstance() }
 {
@@ -328,6 +330,12 @@ HRESULT CMainApp::Ready_GameObject_Setting()
 #pragma region Prototype_GameObject_ProjSword
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_ProjSword"),
 		CProjSword::Create(m_pGraphic_Device))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region Prototype_GameObject_FrozenHammer
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_FrozenHammer"),
+		CFrozenHammer::Create(m_pGraphic_Device))))
 		return E_FAIL;
 #pragma endregion
 
@@ -928,6 +936,21 @@ HRESULT CMainApp::Ready_Texture_Setting()
 	// Planet
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_ProjSword"),
 		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Item/ProjSword/SwordOfLight%d.png"), 18))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region FROZENHAMMER
+	// HAMMER
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_FrozenHammer"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Item/FrozenHammer/FrozenHammer_Main.png"), 1))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_FrozenHammer_Shoot"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Item/FrozenHammer/Shoot/FrozenHammer_ShootFX%d.png"), 12))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_FrozenHammer_Hit"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Item/FrozenHammer/Hit/FrozenHammer_Hit_FX%d.png"), 8))))
 		return E_FAIL;
 #pragma endregion
 

@@ -58,6 +58,8 @@ HRESULT CInventory::Initialize(void* pArg)
 	Add_Item_Inven(4);
 	Add_Item_Inven(5);
 	Add_Item_Inven(14);
+	Add_Item_Inven(0);
+	Add_Item_Inven(27);
 
 	return S_OK;
 }
@@ -340,6 +342,11 @@ void CInventory::StatToPlayer()
 					m_fInvenStats[ENUM_CLASS(eStat)] += fValue1 + iItem_MaxGarde * fValue2;
 				else
 					m_fInvenStats[ENUM_CLASS(eStat)] += fValue1 + fGarde * fValue2;
+			}
+
+			if (g_ItemEffect[iItem_Effect].m_iIndex == 0)
+			{
+				CStat_Manager::GetInstance()->HasItem(g_ItemEffect[iItem_Effect].m_szEffectTag, true);
 			}
 		}
 		else if (g_ItemEffect[iItem_Effect].m_eType == ITEM_EFFECT::SKILLBOOK_TYPE)

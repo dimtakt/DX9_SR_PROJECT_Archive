@@ -4,6 +4,7 @@
 #include "Monster.h"
 #include "Player.h"
 #include "Erma.h"
+#include "Effect_Factory.h"
 CGameEffect::CGameEffect(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CEffect(pGraphic_Device)
 {
@@ -254,6 +255,10 @@ void CGameEffect::Ready_Collision()
 			{
 				tColliderDesc.vScale = _float3(0.8f, 0.7f, 0.9f);
 			}
+			else if (m_strEffectTag == TEXT("Prototype_Component_Texture_FrozenHammer_Shoot"))
+			{
+				tColliderDesc.vScale = _float3(0.8f, 0.7f, 0.9f);
+			}
 		}
 		else {
 			// 레이저 고스트
@@ -384,6 +389,15 @@ void CGameEffect::OnCollision(CGameObject* pGameObject)
 				else if (m_strEffectTag == TEXT("Prototype_Component_Texture_Planet_Bullet_Cycle"))
 				{
 					pMonster->Set_Damage(-(CStat_Manager::GetInstance()->Get_Player_Damage(DAMAGE::PLANET)));
+				}
+				else if (m_strEffectTag == TEXT("Prototype_Component_Texture_FrozenHammer_Shoot"))
+				{
+					pMonster->Set_Damage(-(CStat_Manager::GetInstance()->Get_Player_Damage(DAMAGE::FROZENHAMMER)));
+					m_bDead = true;
+					_float4x4 tempMat{};
+					D3DXMatrixIdentity(&tempMat);
+					CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::MONSTER_EFFECT, L"Prototype_Component_Texture_FrozenHammer_Hit",
+						*m_pTransformCom->Get_WorldMatrix(), tempMat, true);
 				}
 				pMonster->Set_IsHit(TRUE);
 			}

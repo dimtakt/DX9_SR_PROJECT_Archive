@@ -469,6 +469,9 @@
     <Filter Include="02.GameObject\Player\ProjSword">
       <UniqueIdentifier>{9abb35bd-aa52-4ed7-aa4f-a776368ce7c3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\Player\FrozenHammer">
+      <UniqueIdentifier>{ef988741-fc70-43b3-9f0d-63acb52d8f8a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -1035,6 +1038,9 @@
     <ClInclude Include="..\Public\ProjSword.h">
       <Filter>02.GameObject\Player\ProjSword</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\FrozenHammer.h">
+      <Filter>02.GameObject\Player\FrozenHammer</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -1562,6 +1568,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\ProjSword.cpp">
       <Filter>02.GameObject\Player\ProjSword</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\FrozenHammer.cpp">
+      <Filter>02.GameObject\Player\FrozenHammer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
