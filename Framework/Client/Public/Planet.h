@@ -15,10 +15,8 @@ BEGIN(Client)
 class CPlanet final : public CGameObject
 {
 public:
-	enum class PLANET_TYPE { YELLOW, RED, BLUE };
 	typedef struct tagPlanetDesc
 	{
-		PLANET_TYPE	eType;
 		CTransform* pTargetTransform;
 	}PLANETDESC;
 private:
@@ -43,7 +41,8 @@ private:
 	CTexture* m_pTextureCom = { nullptr };
 	CAnimator* m_pAnimatorCom = { nullptr };
 	CTransform* m_pTargetTransform = { nullptr };
-	PLANET_TYPE m_eType = {};
+
+	_float m_fAttackFrame = {0.f};
 
 private:
 	HRESULT Ready_Components(void* pArg);

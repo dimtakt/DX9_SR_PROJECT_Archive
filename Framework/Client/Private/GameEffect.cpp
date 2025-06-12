@@ -250,6 +250,10 @@ void CGameEffect::Ready_Collision()
 			{
 				tColliderDesc.vScale = _float3(0.8f, 0.7f, 0.9f);
 			}
+			else if (m_strEffectTag == TEXT("Prototype_Component_Texture_Planet_Bullet_Cycle"))
+			{
+				tColliderDesc.vScale = _float3(0.8f, 0.7f, 0.9f);
+			}
 		}
 		else {
 			// 레이저 고스트
@@ -376,6 +380,10 @@ void CGameEffect::OnCollision(CGameObject* pGameObject)
 				else if (m_strEffectTag == TEXT("Prototype_Component_Texture_Effect_Blade0_Parry"))
 				{
 					pMonster->Set_Damage(-(CStat_Manager::GetInstance()->Get_Player_Damage(DAMAGE::SPECIAL)));
+				}
+				else if (m_strEffectTag == TEXT("Prototype_Component_Texture_Planet_Bullet_Cycle"))
+				{
+					pMonster->Set_Damage(-(CStat_Manager::GetInstance()->Get_Player_Damage(DAMAGE::PLANET)));
 				}
 				pMonster->Set_IsHit(TRUE);
 			}

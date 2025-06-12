@@ -148,6 +148,10 @@ _float CStat_Manager::Get_Player_Damage(DAMAGE eDamage)
     {
         fDamage = m_fCurStats[static_cast<int>(STAT_INFO::CULDAMAGE)] + 5;
     }
+    else if (eDamage == DAMAGE::PLANET)
+    {
+        fDamage = m_fCurStats[static_cast<int>(STAT_INFO::CULDAMAGE)] - 3;
+    }
     
     _float fRand = m_pGameInstance->Compute_Random(0, 99);
 

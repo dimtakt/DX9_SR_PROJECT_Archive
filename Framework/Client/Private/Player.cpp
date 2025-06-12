@@ -13,6 +13,7 @@
 #include "Client_Defines_Event.h"
 #include "Field_Item.h"
 #include "GoldLeaf.h"
+#include "Planet.h"
 
 CPlayer::CPlayer(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CGameObject{ pGraphic_Device }
@@ -44,6 +45,8 @@ HRESULT CPlayer::Initialize(void* pArg)
     m_pGameInstance->Subscribe(ENUM_CLASS(EVENT_TYPE::UICHANGE), this);
     Ready_Object();
     m_dwHitTime = 0.f;
+
+    Ready_Item();
     
     return S_OK;
 }
@@ -932,6 +935,18 @@ HRESULT CPlayer::Ready_Object()
     m_pChat->Add_Chat(TEXT("¾È³çÇÏ¼¼¿ä2"));
     m_pChat->Add_Chat(TEXT("¾È³çÇÏ¼¼¿ä3"));
     m_pChat->Add_Chat(TEXT("¾È³çÇÏ¼¼¿ä4"));
+    return S_OK;
+}
+
+HRESULT CPlayer::Ready_Item()
+{
+    CPlanet::PLANETDESC desc{};
+    desc.pTargetTransform = m_pTransformCom;
+
+    if(FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_TOWN), TEXT("Layer_Item"),
+        ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_Planet"), &desc)))
+        return E_FAIL;
+
     return S_OK;
 }
 

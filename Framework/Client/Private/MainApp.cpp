@@ -49,6 +49,7 @@
 #include "BossHp_Askard.h"
 #include "BossHp_Ema.h"
 #include "GoldLeaf.h"
+#include "Planet.h"
 
 CMainApp::CMainApp()
 	: m_pGameInstance{ CGameInstance::GetInstance() }
@@ -315,6 +316,12 @@ HRESULT CMainApp::Ready_GameObject_Setting()
 #pragma region Prototype_GameObject_GoldLeaf
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_GoldLeaf"),
 		CGoldLeaf::Create(m_pGraphic_Device))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region Prototype_GameObject_Planet
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_Planet"),
+		CPlanet::Create(m_pGraphic_Device))))
 		return E_FAIL;
 #pragma endregion
 
@@ -894,7 +901,21 @@ HRESULT CMainApp::Ready_Texture_Setting()
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Fog"),
 		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Fog/Fog.jpg"), 1))))
 		return E_FAIL;
+#pragma endregion
 
+#pragma region PLANET
+	// Planet
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Planet"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Item/Planet/Yellow/PlanetaryModel_ObjectC%d.png"), 9))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Planet_Bullet_Cycle"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Item/Planet/Yellow/Bullet/Cycle/PlanetBulletC_Big_Cycle%d.png"), 8))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Planet_Bullet_FX"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Item/Planet/Yellow/Bullet/FX/PlanetBulletC_Big_FX%d.png"), 7))))
+		return E_FAIL;
 #pragma endregion
 
 	return S_OK;
