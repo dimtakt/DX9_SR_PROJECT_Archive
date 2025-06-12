@@ -337,6 +337,7 @@ void CErma::Update(_float fTimeDelta)
         switch (iStandardPatternFrame)
         {
         case 30:
+            m_isTriggerSuccess = false;
             m_pObj_Hand_L->PlayPattern(CErma_Hand_L::PATTERN_HAND_L::PT_STRIKE);
             m_pObj_Hand_R->PlayPattern(CErma_Hand_R::PATTERN_HAND_R::PT_STRIKE);
             break;
@@ -358,6 +359,7 @@ void CErma::Update(_float fTimeDelta)
             m_pObj_Hand_L->PlayPattern(CErma_Hand_L::PATTERN_HAND_L::PT_KEYPATTERN);
             break;
         case 2620:
+            m_isTriggerSuccess = false;
             m_pObj_Hand_R->PlayPattern(CErma_Hand_R::PATTERN_HAND_R::PT_KEYPATTERN);
             break;
         }
@@ -559,7 +561,6 @@ void CErma::PlayKeyInputPattern()
 
     if (m_iPauseLeftFrame == 0 && m_isTriggerKeyPattern)
     {
-        m_isTriggerSuccess = false;
         m_iPauseLeftFrame = iPauseFrame;
         Set_AllPartsStop(true);
         m_isTriggerKeyPattern = false;
