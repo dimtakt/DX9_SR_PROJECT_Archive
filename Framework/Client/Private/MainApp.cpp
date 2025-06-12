@@ -112,6 +112,8 @@ HRESULT CMainApp::Render()
 
 HRESULT CMainApp::Ready_Default_Setting()
 {
+	if (m_pGameInstance == nullptr)
+		return E_FAIL;
 	g_hCursor = LoadCursorFromFile(L"Resources/Sephiria/UI/Cursor/Cursor_Arrow.cur");
 
 	m_pGraphic_Device->SetRenderState(D3DRS_LIGHTING, FALSE);
@@ -128,6 +130,8 @@ HRESULT CMainApp::Ready_Default_Setting()
 
 HRESULT CMainApp::Ready_Static_Setting()
 {
+	if (m_pGameInstance == nullptr)
+		return E_FAIL;
 
 	if (FAILED(Ready_Animation_Setting()))
 		return E_FAIL;
