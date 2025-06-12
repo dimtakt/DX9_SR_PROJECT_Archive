@@ -189,7 +189,7 @@ void CAskard_Tentacle::Update(_float fTimeDelta)
 	{
 		// 돌출 이펙트
 		CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::NORMAL_EFFECT, L"Prototype_Component_Boss_Askard_BigRoot_Hall_Ready",
-			vPos, qRot, vScale);
+			vMonsterPos + _float3{0, 1.01f, 0}, qRot, vScale);		// 왜 얘만 올려줘야 제대로보임????
 	}
 	else if (m_iStackedFrames == 30)
 	{
@@ -201,6 +201,7 @@ void CAskard_Tentacle::Update(_float fTimeDelta)
 	}
 
 	if (m_iStackedFrames >= 40 &&			// 열린 이후 1프레임마다 계속 생성. 성능 많이 쓰면 바꿔야할듯
+		m_iStackedFrames % 4 == 0 &&
 		(m_ePattern == PATTERN_TENTACLE::PT_DOWNWAIT ||	// 이 상태에만 열려있어야 함
 		m_ePattern == PATTERN_TENTACLE::PT_WAITTARGET ||
 		m_ePattern == PATTERN_TENTACLE::PT_ATTACK))
@@ -318,7 +319,7 @@ void CAskard_Tentacle::Update(_float fTimeDelta)
 			// ksta : 공격 이펙트 생성
 			if (m_pAnimatorCom->Change_State(L"Root_Attack"))
 				CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::MONSTER_EFFECT, L"Prototype_Component_Boss_Askard_BigRoot_Root_FX_Swing",
-					vPos + _float3(0, 1, 0) + _float3{0.f, 0.f, -0.01f}, qRot, vScale * 1.8f);
+					vPos + _float3(0, 0.5f, 0) + _float3{0.f, 0.f, -0.01f}, qRot, vScale * 1.8f);
 		}
 		else if (strCurStateTag == L"Root_Attack")
 		{
@@ -343,7 +344,7 @@ void CAskard_Tentacle::Update(_float fTimeDelta)
 			_float fDistance = D3DXVec3Length(&vDiff);
 
 			// ksta value : 촉수가 근접 시 공격할 거리
-			if (fDistance <= 2.f)
+			if (fDistance <= 3.f)
 			{
 				m_ePattern = PATTERN_TENTACLE::PT_ATTACK;
 				m_pAnimatorCom->Change_State(L"Root_AttackReady");
@@ -438,60 +439,60 @@ HRESULT CAskard_Tentacle::Ready_Components(void* pArg)
 	
 
 
-	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_BOSS1), L"Prototype_Component_Boss_Askard_BigRoot_Root_Standby",
+	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_BOSS2), L"Prototype_Component_Boss_Askard_BigRoot_Root_Standby",
 		TEXT("Com_Texture_Root_Standby"), reinterpret_cast<CComponent**>(&m_pTextureCom_Root_Standby))))
 		return E_FAIL;
 
 
-	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_BOSS1), L"Prototype_Component_Boss_Askard_BigRoot_Root1_Up",
+	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_BOSS2), L"Prototype_Component_Boss_Askard_BigRoot_Root1_Up",
 		TEXT("Com_Texture_Root_Up_1"), reinterpret_cast<CComponent**>(&m_pTextureCom_Root_Up_1))))
 		return E_FAIL;
-	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_BOSS1), L"Prototype_Component_Boss_Askard_BigRoot_Root2_Up",
+	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_BOSS2), L"Prototype_Component_Boss_Askard_BigRoot_Root2_Up",
 		TEXT("Com_Texture_Root_Up_2"), reinterpret_cast<CComponent**>(&m_pTextureCom_Root_Up_2))))
 		return E_FAIL;
-	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_BOSS1), L"Prototype_Component_Boss_Askard_BigRoot_Root3_Up",
+	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_BOSS2), L"Prototype_Component_Boss_Askard_BigRoot_Root3_Up",
 		TEXT("Com_Texture_Root_Up_3"), reinterpret_cast<CComponent**>(&m_pTextureCom_Root_Up_3))))
 		return E_FAIL;
 
-	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_BOSS1), L"Prototype_Component_Boss_Askard_BigRoot_Root1_DownWait",
+	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_BOSS2), L"Prototype_Component_Boss_Askard_BigRoot_Root1_DownWait",
 		TEXT("Com_Texture_Root_DownWait_1"), reinterpret_cast<CComponent**>(&m_pTextureCom_Root_DownWait_1))))
 		return E_FAIL;
-	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_BOSS1), L"Prototype_Component_Boss_Askard_BigRoot_Root2_DownWait",
+	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_BOSS2), L"Prototype_Component_Boss_Askard_BigRoot_Root2_DownWait",
 		TEXT("Com_Texture_Root_DownWait_2"), reinterpret_cast<CComponent**>(&m_pTextureCom_Root_DownWait_2))))
 		return E_FAIL;
-	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_BOSS1), L"Prototype_Component_Boss_Askard_BigRoot_Root3_DownWait",
+	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_BOSS2), L"Prototype_Component_Boss_Askard_BigRoot_Root3_DownWait",
 		TEXT("Com_Texture_Root_DownWait_3"), reinterpret_cast<CComponent**>(&m_pTextureCom_Root_DownWait_3))))
 		return E_FAIL;
 
 
 
 
-	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_BOSS1), L"Prototype_Component_Boss_Askard_BigRoot_Root1_Down",
+	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_BOSS2), L"Prototype_Component_Boss_Askard_BigRoot_Root1_Down",
 		TEXT("Com_Texture_Root_Down_1"), reinterpret_cast<CComponent**>(&m_pTextureCom_Root_Down_1))))
 		return E_FAIL;
-	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_BOSS1), L"Prototype_Component_Boss_Askard_BigRoot_Root2_Down",
+	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_BOSS2), L"Prototype_Component_Boss_Askard_BigRoot_Root2_Down",
 		TEXT("Com_Texture_Root_Down_2"), reinterpret_cast<CComponent**>(&m_pTextureCom_Root_Down_2))))
 		return E_FAIL;
-	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_BOSS1), L"Prototype_Component_Boss_Askard_BigRoot_Root3_Down",
+	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_BOSS2), L"Prototype_Component_Boss_Askard_BigRoot_Root3_Down",
 		TEXT("Com_Texture_Root_Down_3"), reinterpret_cast<CComponent**>(&m_pTextureCom_Root_Down_3))))
 		return E_FAIL;
 
-	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_BOSS1), L"Prototype_Component_Boss_Askard_BigRoot_Root_EyeOpen",
+	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_BOSS2), L"Prototype_Component_Boss_Askard_BigRoot_Root_EyeOpen",
 		TEXT("Com_Texture_Root_EyeOpen"), reinterpret_cast<CComponent**>(&m_pTextureCom_Root_EyeOpen))))
 		return E_FAIL;
 	// Hall_FX_EyeOpen (6)
-	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_BOSS1), L"Prototype_Component_Boss_Askard_BigRoot_Root_EyeOpened",
+	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_BOSS2), L"Prototype_Component_Boss_Askard_BigRoot_Root_EyeOpened",
 		TEXT("Com_Texture_Root_EyeOpened"), reinterpret_cast<CComponent**>(&m_pTextureCom_Root_EyeOpened))))
 		return E_FAIL;
-	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_BOSS1), L"Prototype_Component_Boss_Askard_BigRoot_Root_AttackReady",
+	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_BOSS2), L"Prototype_Component_Boss_Askard_BigRoot_Root_AttackReady",
 		TEXT("Com_Texture_Root_AttackReady"), reinterpret_cast<CComponent**>(&m_pTextureCom_Root_AttackReady))))
 		return E_FAIL;
-	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_BOSS1), L"Prototype_Component_Boss_Askard_BigRoot_Root_Attack",
+	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_BOSS2), L"Prototype_Component_Boss_Askard_BigRoot_Root_Attack",
 		TEXT("Com_Texture_Root_Attack"), reinterpret_cast<CComponent**>(&m_pTextureCom_Root_Attack))))
 		return E_FAIL;
 	// Root_FX_Swing (6)
 
-	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_BOSS1), L"Prototype_Component_Boss_Askard_BigRoot_Root_ExplosionReady",
+	if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_BOSS2), L"Prototype_Component_Boss_Askard_BigRoot_Root_ExplosionReady",
 		TEXT("Com_Texture_Root_ExplosionReady"), reinterpret_cast<CComponent**>(&m_pTextureCom_Root_ExplosionReady))))
 		return E_FAIL;
 	// Root_FX_Explosion (8)
@@ -508,15 +509,15 @@ HRESULT CAskard_Tentacle::Ready_Components(void* pArg)
 		return E_FAIL;
 
 	// 컴포넌트 추가해야함
-	m_pAnimatorCom->Add_State(L"Root_Ready_1",			{ m_pTextureCom_Root_Standby, 12, false });		// 1
-	m_pAnimatorCom->Add_State(L"Root_Ready_2",			{ m_pTextureCom_Root_Standby, 12, false });
-	m_pAnimatorCom->Add_State(L"Root_Ready_3",			{ m_pTextureCom_Root_Standby, 12, false });
+	m_pAnimatorCom->Add_State(L"Root_Ready_1",			{ m_pTextureCom_Root_Standby, 26, false });		// 1
+	m_pAnimatorCom->Add_State(L"Root_Ready_2",			{ m_pTextureCom_Root_Standby, 26, false });
+	m_pAnimatorCom->Add_State(L"Root_Ready_3",			{ m_pTextureCom_Root_Standby, 26, false });
 	m_pAnimatorCom->Add_State(L"Root_Up_1",				{ m_pTextureCom_Root_Up_1, 4, false });			// 4
 	m_pAnimatorCom->Add_State(L"Root_Up_2",				{ m_pTextureCom_Root_Up_2, 4, false });
 	m_pAnimatorCom->Add_State(L"Root_Up_3",				{ m_pTextureCom_Root_Up_3, 4, false });
-	m_pAnimatorCom->Add_State(L"Root_DownWait_1",		{ m_pTextureCom_Root_DownWait_1, 200, false }); // 1
-	m_pAnimatorCom->Add_State(L"Root_DownWait_2",		{ m_pTextureCom_Root_DownWait_2, 200, false });
-	m_pAnimatorCom->Add_State(L"Root_DownWait_3",		{ m_pTextureCom_Root_DownWait_3, 200, false });
+	m_pAnimatorCom->Add_State(L"Root_DownWait_1",		{ m_pTextureCom_Root_DownWait_1, 40, false }); // 1
+	m_pAnimatorCom->Add_State(L"Root_DownWait_2",		{ m_pTextureCom_Root_DownWait_2, 40, false });
+	m_pAnimatorCom->Add_State(L"Root_DownWait_3",		{ m_pTextureCom_Root_DownWait_3, 40, false });
 	m_pAnimatorCom->Add_State(L"Root_Down_1",			{ m_pTextureCom_Root_Down_1, 4, false });		// 5
 	m_pAnimatorCom->Add_State(L"Root_Down_2",			{ m_pTextureCom_Root_Down_2, 4, false });
 	m_pAnimatorCom->Add_State(L"Root_Down_3",			{ m_pTextureCom_Root_Down_3, 4, false });

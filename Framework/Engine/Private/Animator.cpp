@@ -137,7 +137,7 @@ _bool CAnimator::Change_State(const _wstring strStateTag, _bool isChangeCurFrame
 	m_fElapsedTimes = 0;
 	m_fElapsedTimesCheck = fLoopTime;
 
-	std::wcout << "[CAnimator::Change_State] State Changed to \""<< strStateTag << "\"." << std::endl;
+	//std::wcout << "[CAnimator::Change_State] State Changed to \""<< strStateTag << "\"." << std::endl;
 
 	// 프레임 순서 유지 불필요시에만 갱신
 	if (isChangeCurFrame)
