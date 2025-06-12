@@ -50,7 +50,7 @@
 #include "BossHp_Ema.h"
 #include "GoldLeaf.h"
 #include "Planet.h"
-
+#include "ProjSword.h"
 CMainApp::CMainApp()
 	: m_pGameInstance{ CGameInstance::GetInstance() }
 {
@@ -322,6 +322,12 @@ HRESULT CMainApp::Ready_GameObject_Setting()
 #pragma region Prototype_GameObject_Planet
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_Planet"),
 		CPlanet::Create(m_pGraphic_Device))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region Prototype_GameObject_ProjSword
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_ProjSword"),
+		CProjSword::Create(m_pGraphic_Device))))
 		return E_FAIL;
 #pragma endregion
 
@@ -915,6 +921,13 @@ HRESULT CMainApp::Ready_Texture_Setting()
 
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Planet_Bullet_FX"),
 		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Item/Planet/Yellow/Bullet/FX/PlanetBulletC_Big_FX%d.png"), 7))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region PROJSWORD
+	// Planet
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_ProjSword"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Item/ProjSword/SwordOfLight%d.png"), 18))))
 		return E_FAIL;
 #pragma endregion
 

@@ -238,6 +238,7 @@
     <ClInclude Include="..\Public\Planet.h" />
     <ClInclude Include="..\Public\Point.h" />
     <ClInclude Include="..\public\Potion_Tooltip.h" />
+    <ClInclude Include="..\Public\ProjSword.h" />
     <ClInclude Include="..\Public\RainParticle.h" />
     <ClInclude Include="..\public\Slate_Tooltip.h" />
     <ClInclude Include="..\public\Slate_Tooltip_Slot.h" />
@@ -446,6 +447,7 @@
     <ClCompile Include="..\Private\Planet.cpp" />
     <ClCompile Include="..\Private\Point.cpp" />
     <ClCompile Include="..\private\Potion_Tooltip.cpp" />
+    <ClCompile Include="..\Private\ProjSword.cpp" />
     <ClCompile Include="..\Private\RainParticle.cpp" />
     <ClCompile Include="..\private\Slate_Tooltip.cpp" />
     <ClCompile Include="..\private\Slate_Tooltip_Slot.cpp" />

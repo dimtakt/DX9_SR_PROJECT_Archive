@@ -466,6 +466,9 @@
     <Filter Include="02.GameObject\Player\Planet">
       <UniqueIdentifier>{63c37356-a1d6-497b-9572-b971d4111c16}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\Player\ProjSword">
+      <UniqueIdentifier>{9abb35bd-aa52-4ed7-aa4f-a776368ce7c3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -1029,6 +1032,9 @@
     <ClInclude Include="..\public\Hud_Slot_EatPotion.h">
       <Filter>02.GameObject\UI\HUD\HUD_Quick_Slot\ETC</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\ProjSword.h">
+      <Filter>02.GameObject\Player\ProjSword</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -1553,6 +1559,9 @@
     </ClCompile>
     <ClCompile Include="..\private\Hud_Slot_EatPotion.cpp">
       <Filter>02.GameObject\UI\HUD\HUD_Quick_Slot\ETC</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\ProjSword.cpp">
+      <Filter>02.GameObject\Player\ProjSword</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

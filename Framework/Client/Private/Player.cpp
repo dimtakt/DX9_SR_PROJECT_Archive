@@ -14,6 +14,7 @@
 #include "Field_Item.h"
 #include "GoldLeaf.h"
 #include "Planet.h"
+#include "ProjSword.h"
 
 CPlayer::CPlayer(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CGameObject{ pGraphic_Device }
@@ -940,11 +941,18 @@ HRESULT CPlayer::Ready_Object()
 
 HRESULT CPlayer::Ready_Item()
 {
-    CPlanet::PLANETDESC desc{};
-    desc.pTargetTransform = m_pTransformCom;
+    CPlanet::PLANETDESC planetDesc{};
+    planetDesc.pTargetTransform = m_pTransformCom;
 
     if(FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_TOWN), TEXT("Layer_Item"),
-        ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_Planet"), &desc)))
+        ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_Planet"), &planetDesc)))
+        return E_FAIL;
+
+    CProjSword::PROJSWORDDESC projSwordDesc{};
+    projSwordDesc.pTargetTransform = m_pTransformCom;
+
+    if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_TOWN), TEXT("Layer_Item"),
+        ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_ProjSword"), &projSwordDesc)))
         return E_FAIL;
 
     return S_OK;
