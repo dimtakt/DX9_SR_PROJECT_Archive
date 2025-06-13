@@ -1211,7 +1211,7 @@ HRESULT CLoader::Loading_For_Boss1_Level()
 		return E_FAIL;
 
 	/* Particle */
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_TOWN), TEXT("Prototype_GameObject_FireParticle"),
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_BOSS1), TEXT("Prototype_GameObject_FireParticle"),
 		CFireParticle::Create(m_pGraphic_Device))))
 		return E_FAIL;
 

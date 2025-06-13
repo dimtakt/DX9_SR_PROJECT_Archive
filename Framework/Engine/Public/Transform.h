@@ -74,7 +74,6 @@ public:
 	void RotationByParent(const _float3 axis, CTransform* parent, _float fRadian);
 	void Set_OrbitInfo_AroundY(const CTransform* pTargetTransform, _float fSpeed);
 
-
 	void Orbit(_float fDeltaTime, _float3 vTargetCenterPos);
 	//void StartShake(_float fDuration, _float fStrength, _float fTime);
 

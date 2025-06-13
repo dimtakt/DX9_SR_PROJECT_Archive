@@ -89,7 +89,29 @@ void CGameEffect::Priority_Update(_float fTimeDelta)
 {
 	if (m_pAnimatorCom->Get_IsLastFrame() &&
 		m_iStackedFrame >= m_fLifeTimeSec * 60.f)
-		m_bDead = true;
+	{
+		if (m_strEffectTag == TEXT("Prototype_Component_Texture_IceBolt"))
+		{
+			m_bDead = true;
+
+			_float4x4 matOffset{};
+			_float4x4 matTemp{};
+			D3DXMatrixIdentity(&matOffset);
+			matTemp = *m_pTransformCom->Get_WorldMatrix();
+
+			CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::PLAYER_SKILL,
+				L"Prototype_Component_Texture_Effect_IceBolt",
+				*m_pTransformCom->Get_WorldMatrix(),         
+				matOffset,          
+				false);
+		}
+		else 
+		{
+			m_bDead = true;
+		}
+		
+	}
+		
 }
 
 void CGameEffect::Update(_float fTimeDelta)

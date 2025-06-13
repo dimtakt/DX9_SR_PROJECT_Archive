@@ -17,7 +17,7 @@ public:
 		
 
 	void Create_OffSet_20();
-	void Create_Offset_30();
+	void Create_OffSet_30();
 	void Clear();
 
 	void Priority_Update(_float fTimeDelta);

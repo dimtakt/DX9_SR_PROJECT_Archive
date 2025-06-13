@@ -487,6 +487,12 @@
     <Filter Include="02.GameObject\Player\FrozenHammer">
       <UniqueIdentifier>{ef988741-fc70-43b3-9f0d-63acb52d8f8a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\Player\Magic">
+      <UniqueIdentifier>{6f0c16be-20c8-4d8e-91be-05e5af8962b4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Player\Magic\Bolt">
+      <UniqueIdentifier>{856eea84-f8c7-4bb9-b134-1a00a6a58baf}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -1074,6 +1080,9 @@
     <ClInclude Include="..\Public\FrozenHammer.h">
       <Filter>02.GameObject\Player\FrozenHammer</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\IceBolt.h">
+      <Filter>02.GameObject\Player\Magic\Bolt</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -1622,6 +1631,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\FrozenHammer.cpp">
       <Filter>02.GameObject\Player\FrozenHammer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\IceBolt.cpp">
+      <Filter>02.GameObject\Player\Magic\Bolt</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

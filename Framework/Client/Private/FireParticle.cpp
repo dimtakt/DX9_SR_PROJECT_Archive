@@ -20,11 +20,11 @@ HRESULT CFireParticle::Initialize_Prototype()
 
 HRESULT CFireParticle::Initialize(void* pArg)
 {
-    PARTICLE_DESC* pDesc = static_cast<PARTICLE_DESC*>(pArg);
-
     if (pArg != nullptr)
+    {
+        PARTICLE_DESC* pDesc = static_cast<PARTICLE_DESC*>(pArg);
         m_iTextureType = pDesc->iType;          //추후 이거로 같은 기능 텍스처만 다르게 설정할 수 있을듯 ?
-
+    }
 
     if (FAILED(Ready_Components()))
         return E_FAIL;
@@ -37,18 +37,17 @@ HRESULT CFireParticle::Initialize(void* pArg)
 
     if (pArg != nullptr)
     {
- 
+        PARTICLE_DESC* pDesc = static_cast<PARTICLE_DESC*>(pArg);
+
         m_pTransformCom->Set_State(STATE::POSITION, pDesc->vPos);
 
         m_pTransformCom->Scaling(pDesc->vScale.x, pDesc->vScale.y, pDesc->vScale.z);
-
-        m_pTextureCom->Bind_Texture(m_iTextureIndex);
 
         m_fLifeTime = pDesc->fLifeTime;
         m_fSpawnTimer = pDesc->fSpwanTimer;
         m_fSpeed = pDesc->fSpeed;
         m_iTextureIndex = pDesc->iTexture;
-        if (m_iTextureType == 2)        //먼지면 텍스쳐 인덱스 고정
+        if (m_iTextureType != 1)        //먼지면 텍스쳐 인덱스 고정
             m_iTextureIndex = 0;
 
         m_eObjType = GAMEOBJ_TYPE::PARTICLE;
@@ -125,84 +124,86 @@ void CFireParticle::SetUp_RenderState()
 {
 
     // 조금 쨍한 버전
-    //m_pGraphic_Device->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
-    //m_pGraphic_Device->SetRenderState(D3DRS_ALPHAREF, 50);
-    //m_pGraphic_Device->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER);
 
-    //m_pGraphic_Device->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);    
-    //m_pGraphic_Device->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_ONE);
-    //m_pGraphic_Device->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_ONE);
 
-    //m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_POINT);
-    //m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_POINT);
-    //m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MIPFILTER, D3DTEXF_NONE);
+    m_pGraphic_Device->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
+    m_pGraphic_Device->SetRenderState(D3DRS_ALPHAREF, 50);
+    m_pGraphic_Device->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER);
+
+    m_pGraphic_Device->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);    
+    m_pGraphic_Device->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_ONE);
+    m_pGraphic_Device->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_ONE);
+
+    m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_POINT);
+    m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_POINT);
+    m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MIPFILTER, D3DTEXF_NONE);
 
 
  
 
-    m_pGraphic_Device->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
-    m_pGraphic_Device->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
-    m_pGraphic_Device->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
+    //m_pGraphic_Device->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
+    //m_pGraphic_Device->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
+    //m_pGraphic_Device->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
 
-    // 흐리게 할려면 알파 테스트 반드시 꺼야 한다고 함.
-    m_pGraphic_Device->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
+    //// 흐리게 할려면 알파 테스트 반드시 꺼야 한다고 함.
+    //m_pGraphic_Device->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
 
-    // 알파 적용
-    DWORD dwAlpha = static_cast<DWORD>(m_fCurrentAlpha * 255.f);
-    m_pGraphic_Device->SetRenderState(D3DRS_TEXTUREFACTOR, D3DCOLOR_ARGB(dwAlpha, 255, 255, 255));
+    //// 알파 적용
+    //DWORD dwAlpha = static_cast<DWORD>(m_fCurrentAlpha * 255.f);
+    //m_pGraphic_Device->SetRenderState(D3DRS_TEXTUREFACTOR, D3DCOLOR_ARGB(dwAlpha, 255, 255, 255));
 
-    // 컬러도 팩터 곱해주기
-    m_pGraphic_Device->SetTextureStageState(0, D3DTSS_COLOROP, D3DTOP_MODULATE);
-    m_pGraphic_Device->SetTextureStageState(0, D3DTSS_COLORARG1, D3DTA_TEXTURE);
-    m_pGraphic_Device->SetTextureStageState(0, D3DTSS_COLORARG2, D3DTA_TFACTOR);
+    //// 컬러도 팩터 곱해주기
+    //m_pGraphic_Device->SetTextureStageState(0, D3DTSS_COLOROP, D3DTOP_MODULATE);
+    //m_pGraphic_Device->SetTextureStageState(0, D3DTSS_COLORARG1, D3DTA_TEXTURE);
+    //m_pGraphic_Device->SetTextureStageState(0, D3DTSS_COLORARG2, D3DTA_TFACTOR);
 
-    // 알파 팩터 적용
-    m_pGraphic_Device->SetTextureStageState(0, D3DTSS_ALPHAOP, D3DTOP_MODULATE);
-    m_pGraphic_Device->SetTextureStageState(0, D3DTSS_ALPHAARG1, D3DTA_TEXTURE);
-    m_pGraphic_Device->SetTextureStageState(0, D3DTSS_ALPHAARG2, D3DTA_TFACTOR);
+    //// 알파 팩터 적용
+    //m_pGraphic_Device->SetTextureStageState(0, D3DTSS_ALPHAOP, D3DTOP_MODULATE);
+    //m_pGraphic_Device->SetTextureStageState(0, D3DTSS_ALPHAARG1, D3DTA_TEXTURE);
+    //m_pGraphic_Device->SetTextureStageState(0, D3DTSS_ALPHAARG2, D3DTA_TFACTOR);
 }
 
 
 
 void CFireParticle::Reset_RenderState()
 {
-    //m_pGraphic_Device->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
-
-    //m_pGraphic_Device->SetRenderState(D3DRS_ALPHABLENDENABLE, FALSE);    
-    //m_pGraphic_Device->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
-    //m_pGraphic_Device->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
-
-
-    //m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_LINEAR);
-    //m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);
-    //m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MIPFILTER, D3DTEXF_LINEAR);
-
-    //m_pGraphic_Device->SetTexture(0, NULL);
-
-
-      // 기본적인 렌더 상태 복원
-    m_pGraphic_Device->SetRenderState(D3DRS_ALPHABLENDENABLE, FALSE);
     m_pGraphic_Device->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
 
+    m_pGraphic_Device->SetRenderState(D3DRS_ALPHABLENDENABLE, FALSE);    
     m_pGraphic_Device->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
     m_pGraphic_Device->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
 
-    // TextureFactor 초기화 (알파 255로)
-    m_pGraphic_Device->SetRenderState(D3DRS_TEXTUREFACTOR, D3DCOLOR_ARGB(255, 255, 255, 255));
-
-    m_pGraphic_Device->SetTextureStageState(0, D3DTSS_COLOROP, D3DTOP_MODULATE);
-    m_pGraphic_Device->SetTextureStageState(0, D3DTSS_COLORARG1, D3DTA_TEXTURE);
-    m_pGraphic_Device->SetTextureStageState(0, D3DTSS_COLORARG2, D3DTA_CURRENT);
-
-    m_pGraphic_Device->SetTextureStageState(0, D3DTSS_ALPHAOP, D3DTOP_MODULATE);
-    m_pGraphic_Device->SetTextureStageState(0, D3DTSS_ALPHAARG1, D3DTA_TEXTURE);
-    m_pGraphic_Device->SetTextureStageState(0, D3DTSS_ALPHAARG2, D3DTA_CURRENT);
 
     m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_LINEAR);
     m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);
     m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MIPFILTER, D3DTEXF_LINEAR);
 
     m_pGraphic_Device->SetTexture(0, NULL);
+
+
+    //  // 기본적인 렌더 상태 복원
+    //m_pGraphic_Device->SetRenderState(D3DRS_ALPHABLENDENABLE, FALSE);
+    //m_pGraphic_Device->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
+
+    //m_pGraphic_Device->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
+    //m_pGraphic_Device->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
+
+    //// TextureFactor 초기화 (알파 255로)
+    //m_pGraphic_Device->SetRenderState(D3DRS_TEXTUREFACTOR, D3DCOLOR_ARGB(255, 255, 255, 255));
+
+    //m_pGraphic_Device->SetTextureStageState(0, D3DTSS_COLOROP, D3DTOP_MODULATE);
+    //m_pGraphic_Device->SetTextureStageState(0, D3DTSS_COLORARG1, D3DTA_TEXTURE);
+    //m_pGraphic_Device->SetTextureStageState(0, D3DTSS_COLORARG2, D3DTA_CURRENT);
+
+    //m_pGraphic_Device->SetTextureStageState(0, D3DTSS_ALPHAOP, D3DTOP_MODULATE);
+    //m_pGraphic_Device->SetTextureStageState(0, D3DTSS_ALPHAARG1, D3DTA_TEXTURE);
+    //m_pGraphic_Device->SetTextureStageState(0, D3DTSS_ALPHAARG2, D3DTA_CURRENT);
+
+    //m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_LINEAR);
+    //m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);
+    //m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MIPFILTER, D3DTEXF_LINEAR);
+
+    //m_pGraphic_Device->SetTexture(0, NULL);
 }
 
 HRESULT CFireParticle::Ready_Components()
@@ -219,9 +220,15 @@ HRESULT CFireParticle::Ready_Components()
             TEXT("Com_Texture"), reinterpret_cast<CComponent**>(&m_pTextureCom))))
             return E_FAIL;
     }
-    else if (m_iTextureIndex == 2)
+    else if (m_iTextureType == 2)
     {
         if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_DustParticle"),
+            TEXT("Com_Texture"), reinterpret_cast<CComponent**>(&m_pTextureCom))))
+            return E_FAIL;
+    }
+    else if (m_iTextureType == 3)
+    {
+        if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_LightParticle"),
             TEXT("Com_Texture"), reinterpret_cast<CComponent**>(&m_pTextureCom))))
             return E_FAIL;
     }

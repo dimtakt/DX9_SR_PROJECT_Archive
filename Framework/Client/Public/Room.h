@@ -90,6 +90,8 @@ protected:
     _float3 m_ObjectOffset = {};
 
     _bool m_bParticle = false;
+    _bool m_bParticleRoom = false;
+
     PARTICLE_TYPE m_eRoomParticle = PARTICLE_TYPE::PARTICLE_END;
 
     ROOM_INFO m_eRoomType = {};
