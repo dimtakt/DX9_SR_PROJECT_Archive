@@ -372,7 +372,10 @@ void CRoom_Manager::Clear(_uint iLevelIndex)
 CMonster* CRoom_Manager::Find_CurrentRoom_Monster(MONSTER_TYPE eType)
 {
 	CRoom* pRoom = Get_CurrentRoom();
-	return pRoom->Find_Monster(eType);
+	if (pRoom != nullptr)
+		return pRoom->Find_Monster(eType);
+	else
+		return nullptr;
 }
 
 void CRoom_Manager::CurrentRoom_AddObject(CGameObject* pGameObject)

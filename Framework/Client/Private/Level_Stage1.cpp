@@ -157,6 +157,8 @@ HRESULT CLevel_Stage1::Ready_Layer_Room(const _wstring& strLayerTag)
 	
 			//현재 정해진 ID값의 룸에 지형, 오브젝트 세팅 내부에서 지형 위치 자동 배치
 		pRoom->Load_From_File(ENUM_CLASS(LEVEL::LEVEL_STAGE1), strLayerTag, TEXT("../../data/Stage1_Map%d.txt"), iCount, RoomX, RoomZ,static_cast<ROOM_INFO>(0));
+		pRoom->Set_ParticleOn();
+		pRoom->Set_ParticleType(PARTICLE_TYPE::RAIN);
 
 			if (iCount == 0)
 			{

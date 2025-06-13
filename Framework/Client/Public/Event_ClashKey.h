@@ -8,22 +8,20 @@ class CTexture;
 END
 
 BEGIN(Client)
-class CEvent_Result final : public CUIObject
+class CEvent_ClashKey final : public CUIObject
 {
 public:
-	typedef struct tagResult_Event : public UIOBJECT_DESC
+	typedef struct tagSlot_Key_Guide : public UIOBJECT_DESC
 	{
-		_wstring    strFont;
-	}RESUlT_DESC;
+		_wstring    strKey;
+	}SLOT_KEYGUIDE_DESC;
 
 private:
-								CEvent_Result(LPDIRECT3DDEVICE9 pGraphic_Device);
-								CEvent_Result(const CEvent_Result& Prototype);
-	virtual						~CEvent_Result() = default;
+	CEvent_ClashKey(LPDIRECT3DDEVICE9 pGraphic_Device);
+	CEvent_ClashKey(const CEvent_ClashKey& Prototype);
+	virtual						~CEvent_ClashKey() = default;
 public:
-	void						Perfect_Setting();
-	void						Succes_Setting();
-	void						Fail_Setting();
+	void						Input_KeySetting(_int iIndex);
 
 public:
 	virtual HRESULT				Initialize_Prototype();
@@ -35,20 +33,16 @@ public:
 private:
 	CVIBuffer_Rect*				m_pVIBufferCom = { nullptr };
 	CTexture*					m_pTextureCom = { nullptr };
-	
-	_bool						m_bIsRender = {false};
+
 	_int						m_iTexIndex = {};
 	_wstring					m_strKey = {};
-	_wstring					m_strFont = {};
+
 private:
 	HRESULT						Ready_Components();
 
-	void						Set_Renderstate();
-	void						Reset_Renderstate();
-
 public:
-	static						CEvent_Result* Create(LPDIRECT3DDEVICE9 pGraphic_Device);
-	virtual	CGameObject* Clone(void* pArg) override;
+	static						CEvent_ClashKey* Create(LPDIRECT3DDEVICE9 pGraphic_Device );
+	virtual	CGameObject*		Clone(void* pArg) override;
 	virtual void				Free() override;
 
 };

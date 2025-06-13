@@ -570,6 +570,22 @@ HRESULT CInteraction_Normal::Merchant_Initialize()
         m_vShopItem.push_back(dynamic_cast<CField_Item*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_Field_Item"), &desc)));
     }
 
+    CField_Npc_Chat::FIELD_CHAT_DESC chatDesc{};
+
+    chatDesc.pTransform = m_pTransformCom;
+
+    chatDesc.m_iLevel = ENUM_CLASS(LEVEL::LEVEL_TOWN);
+    chatDesc.szChatTag = TEXT("BlackSmith_CHAT");
+    chatDesc.fY = -100;
+    if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_TOWN), TEXT("Layer_UI_Chat"), ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_Field_Npc_Chat"), &chatDesc)))
+        return E_FAIL;
+
+    m_pChat = static_cast<CField_Npc_Chat*>(m_pGameInstance->Find_UIObj(ENUM_CLASS(LEVEL::LEVEL_TOWN), TEXT("BlackSmith_CHAT")));
+
+    m_pChat->Add_Chat(TEXT("에베베"));
+    m_pChat->Add_Chat(TEXT("바바"));
+    
+
     return S_OK;
 }
 
@@ -762,11 +778,28 @@ void CInteraction_Normal::OnCollision(CGameObject* pGameObject)
                 }
             }
         }
-        else
+        else if (m_eObjType == GAMEOBJ_TYPE::MERCAHNT)
         {
             if (pGameObject->Get_ObjType() == GAMEOBJ_TYPE::PLAYER)
             {
+                m_pChat->On_Chat(1, true);
+                if (m_pGameInstance->IsKeyDown('F'))
+                {
+                    m_pChat->Cinematic_Chat(1, true);
+                }
+            }
+        }
+    }
+}
 
+void CInteraction_Normal::OffCollision(CGameObject* pGameObject)
+{
+    if (m_bActive) {
+        if (m_eObjType == GAMEOBJ_TYPE::MERCAHNT)
+        {
+            if (pGameObject->Get_ObjType() == GAMEOBJ_TYPE::PLAYER)
+            {
+                m_pChat->Off_Chat();
             }
         }
     }
@@ -807,7 +840,7 @@ void CInteraction_Normal::Free()
     Safe_Release(m_pTextureCom_0);
     Safe_Release(m_pTextureCom_1);
     Safe_Release(m_pAnimatorCom_0);   
-
+    Safe_Release(m_pChat);
     for (auto& Item : m_vShopItem)
     {
         Safe_Release(Item);

@@ -60,6 +60,10 @@ void CGameObject::OnCollision(CGameObject* pGameObject)
 {
 }
 
+void CGameObject::OffCollision(CGameObject* pGameObject)
+{
+}
+
 HRESULT CGameObject::Add_Component(_uint iPrototypeLevelIndex, const _wstring& strPrototypeTag, const _wstring& strComponentTag, CComponent** ppOut, void* pArg)
 {
 	if (nullptr != Find_Component(strComponentTag))

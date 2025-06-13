@@ -10,6 +10,8 @@
 #include "Field_Item.h"
 #include "Field_Npc_Chat.h"
 #include "BossHp_Askard.h"
+#include "IceBolt.h"
+#include "Npc.h"
 CLevel_Town::CLevel_Town(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CLevel{ pGraphic_Device }
 {
@@ -37,6 +39,9 @@ HRESULT CLevel_Town::Initialize()
 	if (FAILED(Ready_Layer_UI(TEXT("Layer_UI"))))
 		return E_FAIL;
 
+	if (FAILED(Ready_Layer_NPC(TEXT("Layer_NPC"))))
+		return E_FAIL;
+
 	m_pGameInstance->StopAll();
 	m_pGameInstance->PlayBGM(L"bunnyville.wav", g_fBGMVolume - 0.9f);
 
@@ -45,7 +50,6 @@ HRESULT CLevel_Town::Initialize()
 
 void CLevel_Town::Update(_float fTimeDelta)
 {
-
 	return ;
 }
 
@@ -131,6 +135,7 @@ HRESULT CLevel_Town::Ready_Layer_Player(const _wstring& strLayerTag)
 		ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_Player"), &PlayerDesc)))
 		return E_FAIL;
 
+
 	return S_OK;
 }
 
@@ -156,6 +161,7 @@ HRESULT CLevel_Town::Ready_Layer_UI(const _wstring& strLayerTag)
 		ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_Hud_Dash"), &Desc)))
 		return E_FAIL;
 	
+
 	return S_OK;
 }
 
@@ -176,8 +182,8 @@ HRESULT CLevel_Town::Ready_Layer_Room(const _wstring& strLayerTag)
 		pRoom->Load_From_File(ENUM_CLASS(LEVEL::LEVEL_TOWN), strLayerTag, TEXT("../../data/Town.txt"), iNumber, iRoomX, iRoomZ, ROOM_INFO::EVENT_NORMAL);
 		iNumber++;
 
-		pRoom->Load_Particle(PARTICLE_TYPE::FIRE, TEXT("Prototype_GameObject_FireParticle"), ENUM_CLASS(LEVEL::LEVEL_TOWN), _float3(0.5f, 0.5f, 1.f), 1);
-		pRoom->Set_ParticleType(PARTICLE_TYPE::FIRE);
+		pRoom->Load_Particle(PARTICLE_TYPE::LIGHT, TEXT("Prototype_GameObject_FireParticle"), ENUM_CLASS(LEVEL::LEVEL_TOWN), _float3(0.5f, 0.5f, 1.f), 1);
+		pRoom->Set_ParticleType(PARTICLE_TYPE::LIGHT);
 		pRoom->Set_ParticleOn();
 		
 		CPlayer* pPlayer = dynamic_cast<CPlayer*>(m_pGameInstance->Get_GameObject(ENUM_CLASS(LEVEL::LEVEL_TOWN), TEXT("Layer_Player")));
@@ -195,6 +201,35 @@ HRESULT CLevel_Town::Ready_Layer_Room(const _wstring& strLayerTag)
 		CRoom_Manager::GetInstance()->Check_SpecialRoom(LEVEL::LEVEL_TOWN, strLayerTag, 0); //¸¶À»Àº ·ëÀÎµ¦½º 0 ÇÑ°³
 	
 	
+
+	return S_OK;
+}
+
+HRESULT CLevel_Town::Ready_Layer_NPC(const _wstring& strLayerTag)
+{
+	CNpc::NPCDESC desc1{};
+
+	desc1.eType = CNpc::NPC_TYPE::BLACKSMITH;
+
+	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_TOWN), strLayerTag,
+		ENUM_CLASS(LEVEL::LEVEL_TOWN), TEXT("Prototype_GameObject_Npc"), &desc1)))
+		return E_FAIL;
+
+	CNpc::NPCDESC desc2{};
+
+	desc2.eType = CNpc::NPC_TYPE::ELDER;
+
+	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_TOWN), strLayerTag,
+		ENUM_CLASS(LEVEL::LEVEL_TOWN), TEXT("Prototype_GameObject_Npc"), &desc2)))
+		return E_FAIL;
+
+	CNpc::NPCDESC desc3{};
+
+	desc3.eType = CNpc::NPC_TYPE::SWORDSHIELD;
+
+	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_TOWN), strLayerTag,
+		ENUM_CLASS(LEVEL::LEVEL_TOWN), TEXT("Prototype_GameObject_Npc"), &desc3)))
+		return E_FAIL;
 
 	return S_OK;
 }

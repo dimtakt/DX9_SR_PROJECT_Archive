@@ -8,9 +8,15 @@ CEvent_Result::CEvent_Result(const CEvent_Result& Prototype) : CUIObject(Prototy
 {
 }
 
+void CEvent_Result::Perfect_Setting()
+{
+	m_bIsRender = true;
+	m_strKey = TEXT("PERFECT");
+	m_iTexIndex = 2;
+}
+
 void CEvent_Result::Succes_Setting()
 {
-	m_bIsSucces = true;
 	m_bIsRender = true;
 	m_strKey = TEXT("SUCCES");
 	m_iTexIndex = 0;
@@ -18,7 +24,6 @@ void CEvent_Result::Succes_Setting()
 
 void CEvent_Result::Fail_Setting()
 {
-	m_bIsSucces = false;
 	m_bIsRender = true;
 	m_strKey = TEXT("FAIL");
 	m_iTexIndex = 1;
@@ -31,11 +36,14 @@ HRESULT CEvent_Result::Initialize_Prototype()
 
 HRESULT CEvent_Result::Initialize(void* pArg)
 {
+	RESUlT_DESC* Desc = static_cast<RESUlT_DESC*>(pArg);
+
 	m_iTexIndex = 0;
-	m_fSizeX = 500;
-	m_fSizeY = 150;
-	m_fX = 0;
-	m_fY = 0;
+	m_strFont = Desc->strFont;
+	m_fSizeX = Desc->fSizeX;
+	m_fSizeY = Desc->fSizeY;
+	m_fX = Desc->fX;
+	m_fY = Desc->fY;
 	m_fZ = UI_DEPTH::EVENT_AZ;
 
 	m_iWinSizeX = g_iWinSizeX;
@@ -79,9 +87,7 @@ HRESULT CEvent_Result::Render()
 	__super::End();
 
 	Font_Rect_Update();
-
-	
-	m_pGameInstance->Render_Font(TEXT("UI_Font_50"), m_strKey, m_vTexRect, D3DXCOLOR(1.f, 1.f, 1.f, 1.f), DT_CENTER | DT_VCENTER | DT_SINGLELINE);
+	m_pGameInstance->Render_Font(m_strFont, m_strKey, m_vTexRect, D3DXCOLOR(1.f, 1.f, 1.f, 1.f), DT_CENTER | DT_VCENTER | DT_SINGLELINE);
 	
 	Reset_Renderstate();
 	return S_OK;

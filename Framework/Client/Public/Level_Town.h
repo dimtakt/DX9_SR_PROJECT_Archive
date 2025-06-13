@@ -23,6 +23,7 @@ private:
 	HRESULT Ready_Layer_Player(const _wstring& strLayerTag);
 	HRESULT Ready_Layer_UI(const _wstring& strLayerTag);
 	HRESULT Ready_Layer_Room(const _wstring& strLayerTag);
+	HRESULT Ready_Layer_NPC(const _wstring& strLayerTag);
 
 public:
 	static CLevel_Town* Create(LPDIRECT3DDEVICE9 pGraphic_Device);

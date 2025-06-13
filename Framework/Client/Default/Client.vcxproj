@@ -114,12 +114,12 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>../../Engine/Public/;../Public/;c:/vcpkg/installed/x64-windows/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../Engine/Public/;../Public/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>../../EngineSDK/Lib/;C:/vcpkg/installed/x64-windows/lib;../../Lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>../../EngineSDK/Lib/;../../Lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>Engine.lib;d3dx9.lib;d3d9.lib;imGuiCore.lib;fmod_vc.lib;fmodL_vc.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <FxCompile>
@@ -145,7 +145,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>Engine.lib;d3dx9.lib;fmod_vc.lib;fmodL_vc.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>../../EngineSDK/Lib/;C:/vcpkg/installed/x64-windows/lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>../../EngineSDK/Lib/;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <FxCompile>
       <ShaderType>Effect</ShaderType>
@@ -167,6 +167,7 @@
     <ClInclude Include="..\public\Askard_Tentacle.h" />
     <ClInclude Include="..\public\Askard_Hpbar.h" />
     <ClInclude Include="..\Public\BackGround.h" />
+    <ClInclude Include="..\Public\IceBolt.h" />
     <ClInclude Include="..\public\BossHp_Askard.h" />
     <ClInclude Include="..\public\BossHp_Ema.h" />
     <ClInclude Include="..\public\BossHp_SubHp.h" />
@@ -197,6 +198,9 @@
     <ClInclude Include="..\public\Erma_Head.h" />
     <ClInclude Include="..\public\EventKey.h" />
     <ClInclude Include="..\public\Event_AZPattern.h" />
+    <ClInclude Include="..\public\Event_Circle.h" />
+    <ClInclude Include="..\public\Event_Circle_Guide.h" />
+    <ClInclude Include="..\public\Event_ClashKey.h" />
     <ClInclude Include="..\public\Event_ClashPattern.h" />
     <ClInclude Include="..\public\Event_Rect.h" />
     <ClInclude Include="..\public\Event_Result.h" />
@@ -241,6 +245,7 @@
     <ClInclude Include="..\public\Minimap_Icon.h" />
     <ClInclude Include="..\public\Minimap_Node.h" />
     <ClInclude Include="..\public\Minimap_Player.h" />
+    <ClInclude Include="..\Public\Npc.h" />
     <ClInclude Include="..\Public\Planet.h" />
     <ClInclude Include="..\Public\Point.h" />
     <ClInclude Include="..\public\Potion_Tooltip.h" />
@@ -387,6 +392,7 @@
     <ClCompile Include="..\private\Askard_Tentacle.cpp" />
     <ClCompile Include="..\private\Askard_Hpbar.cpp" />
     <ClCompile Include="..\Private\BackGround.cpp" />
+    <ClCompile Include="..\Private\IceBolt.cpp" />
     <ClCompile Include="..\private\BossHp_Askard.cpp" />
     <ClCompile Include="..\private\BossHp_Ema.cpp" />
     <ClCompile Include="..\private\BossHp_SubHp.cpp" />
@@ -413,6 +419,9 @@
     <ClCompile Include="..\private\Erma_Head.cpp" />
     <ClCompile Include="..\private\EventKey.cpp" />
     <ClCompile Include="..\private\Event_AZPattern.cpp" />
+    <ClCompile Include="..\private\Event_Circle.cpp" />
+    <ClCompile Include="..\private\Event_Circle_Guide.cpp" />
+    <ClCompile Include="..\private\Event_ClashKey.cpp" />
     <ClCompile Include="..\private\Event_ClashPattern.cpp" />
     <ClCompile Include="..\private\Event_Rect.cpp" />
     <ClCompile Include="..\private\Event_Result.cpp" />
@@ -457,6 +466,7 @@
     <ClCompile Include="..\private\Minimap_Icon.cpp" />
     <ClCompile Include="..\private\Minimap_Node.cpp" />
     <ClCompile Include="..\private\Minimap_Player.cpp" />
+    <ClCompile Include="..\Private\Npc.cpp" />
     <ClCompile Include="..\Private\Planet.cpp" />
     <ClCompile Include="..\Private\Point.cpp" />
     <ClCompile Include="..\private\Potion_Tooltip.cpp" />
