@@ -242,7 +242,7 @@ HRESULT CGameEffect::Ready_Components()
 void CGameEffect::Ready_Collision()
 {
 
-	if (m_eObjType == GAMEOBJ_TYPE::MONSTER_EFFECT || m_eObjType == GAMEOBJ_TYPE::PLAYER_EFFECT)
+	if (m_eObjType == GAMEOBJ_TYPE::MONSTER_EFFECT || m_eObjType == GAMEOBJ_TYPE::PLAYER_EFFECT || m_eObjType == GAMEOBJ_TYPE::PLAYER_SKILL)
 	{
 
 		CCollider_OBB::OBB_DESC tColliderDesc;
@@ -278,6 +278,13 @@ void CGameEffect::Ready_Collision()
 				tColliderDesc.vScale = _float3(0.8f, 0.7f, 0.9f);
 			}
 			else if (m_strEffectTag == TEXT("Prototype_Component_Texture_FrozenHammer_Shoot"))
+			{
+				tColliderDesc.vScale = _float3(0.8f, 0.7f, 0.9f);
+			}
+		}
+		else if (m_eObjType == GAMEOBJ_TYPE::PLAYER_SKILL)
+		{
+			if (m_strEffectTag == TEXT("Prototype_Component_Texture_IceBolt"))
 			{
 				tColliderDesc.vScale = _float3(0.8f, 0.7f, 0.9f);
 			}
@@ -369,7 +376,7 @@ void CGameEffect::Reset_RenderState()
 
 void CGameEffect::OnCollision(CGameObject* pGameObject)
 {
-	if (m_eObjType == GAMEOBJ_TYPE::PLAYER_EFFECT) {
+	if (m_eObjType == GAMEOBJ_TYPE::PLAYER_EFFECT || m_eObjType == GAMEOBJ_TYPE::PLAYER_SKILL) {
 		if (pGameObject->Get_ObjType() == GAMEOBJ_TYPE::MONSTER)
 		{
 			CMonster* pMonster = dynamic_cast<CMonster*>(pGameObject);
@@ -420,6 +427,10 @@ void CGameEffect::OnCollision(CGameObject* pGameObject)
 					D3DXMatrixIdentity(&tempMat);
 					CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::MONSTER_EFFECT, L"Prototype_Component_Texture_FrozenHammer_Hit",
 						*m_pTransformCom->Get_WorldMatrix(), tempMat, true);
+				}
+				else if (m_strEffectTag == TEXT("Prototype_Component_Texture_IceBolt"))
+				{
+					pMonster->Set_Damage(-(CStat_Manager::GetInstance()->Get_Player_Damage(DAMAGE::PLANET)));
 				}
 				pMonster->Set_IsHit(TRUE);
 			}

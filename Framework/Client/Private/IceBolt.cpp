@@ -160,16 +160,10 @@ void CIceBolt::Create_Bolt()
     D3DXVec3Cross(&vUp, &vLook, &vRight);
     D3DXVec3Normalize(&vUp, &vUp);
 
-    _float4x4 matWorldBase;
-    ZeroMemory(&matWorldBase, sizeof(_float4x4));
-    memcpy(&matWorldBase.m[0][0], &vRight, sizeof(_float3));
-    memcpy(&matWorldBase.m[1][0], &vUp, sizeof(_float3));
-    memcpy(&matWorldBase.m[2][0], &vLook, sizeof(_float3));
-    matWorldBase.m[3][0] = vPlayerPos.x;
-    matWorldBase.m[3][1] = vPlayerPos.y;
-    matWorldBase.m[3][2] = vPlayerPos.z;
-    matWorldBase.m[3][3] = 1.f;
-
+    m_pTransformCom->Set_State(STATE::RIGHT, vRight);
+    m_pTransformCom->Set_State(STATE::UP, vUp);
+    m_pTransformCom->Set_State(STATE::LOOK, vLook);
+    m_pTransformCom->Set_State(STATE::POSITION, vPlayerPos);
 
     _float4x4 TempMat{};
     D3DXMatrixIdentity(&TempMat);
@@ -181,11 +175,13 @@ void CIceBolt::Create_Bolt()
     matOffset._42 = vForwardOffset.y;
     matOffset._43 = vForwardOffset.z;
 
+    m_pTransformCom->Scaling(2.f, 2.f, 2.f);
+
     // ---- 시작 이펙트는 회전 없이 사용 ----
     CEffect_Factory::GetInstance()->Create_Effect(
         GAMEOBJ_TYPE::PLAYER_SKILL,
         L"Prototype_Component_Texture_Effect_IceBoltStart",
-        matWorldBase,
+        *m_pTransformCom->Get_WorldMatrix(),
         matOffset,
         false);
 
@@ -194,7 +190,7 @@ void CIceBolt::Create_Bolt()
     D3DXMatrixRotationX(&matRotateX, D3DXToRadian(+90.f));
 
     // ---- 월드 행렬 만들고 누운 상태로 설정 ----
-    _float4x4 matWorld = matRotateX * matWorldBase;
+    _float4x4 matWorld = matRotateX * *m_pTransformCom->Get_WorldMatrix();
 
     m_pTransformCom->Set_State(STATE::RIGHT, _float3(matWorld.m[0][0], matWorld.m[0][1], matWorld.m[0][2]));
     m_pTransformCom->Set_State(STATE::UP, _float3(matWorld.m[1][0], matWorld.m[1][1], matWorld.m[1][2]));
@@ -205,7 +201,7 @@ void CIceBolt::Create_Bolt()
     CEffect_Factory::GetInstance()->Create_Effect(
         GAMEOBJ_TYPE::PLAYER_SKILL,
         L"Prototype_Component_Texture_IceBolt",
-        matWorld,
+        *m_pTransformCom->Get_WorldMatrix(),
         matOffset,
         m_vDirection,
         8.f,
