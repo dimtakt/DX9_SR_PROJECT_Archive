@@ -11,6 +11,22 @@ CItem_Manager::CItem_Manager(LPDIRECT3DDEVICE9 pGraphic_Device) : m_pGraphic_Dev
 
 HRESULT CItem_Manager::Initialize()
 {
+	m_mapItemMaxCool.emplace(TEXT("Snow Hamer"), 0.f);
+	m_mapItemMaxCool.emplace(TEXT("Yellow Planet"), 0.f);
+	m_mapItemMaxCool.emplace(TEXT("Red Planet"), 0.f);
+	m_mapItemMaxCool.emplace(TEXT("Bule Planet"), 0.f);
+	m_mapItemMaxCool.emplace(TEXT("Ice Bolt"), 0.f);
+	m_mapItemMaxCool.emplace(TEXT("Lightning Bolt"), 0.f);
+	m_mapItemMaxCool.emplace(TEXT("Projection Sword"), 0.f);
+
+	m_mapItemCulCool.emplace(TEXT("Snow Hamer"), 0.f);
+	m_mapItemCulCool.emplace(TEXT("Yellow Planet"), 0.f);
+	m_mapItemCulCool.emplace(TEXT("Red Planet"), 0.f);
+	m_mapItemCulCool.emplace(TEXT("Bule Planet"), 0.f);
+	m_mapItemCulCool.emplace(TEXT("Ice Bolt"), 0.f);
+	m_mapItemCulCool.emplace(TEXT("Lightning Bolt"), 0.f);
+	m_mapItemCulCool.emplace(TEXT("Projection Sword"), 0.f);
+
 	return S_OK;
 }
 
@@ -57,6 +73,24 @@ void CItem_Manager::Pick_Reset()
 	m_pPickSlot = nullptr;
 	m_iItemCount = 0;
 	m_iSlotType = 0;
+}
+
+void CItem_Manager::Item_CulCool(_wstring szEffectTag, _float fCulcool)
+{
+	m_mapItemCulCool.find(szEffectTag)->second = fCulcool;
+}
+
+void CItem_Manager::Item_MaxCool(_wstring szEffectTag, _float fMaxcool)
+{
+	m_mapItemMaxCool.find(szEffectTag)->second = fMaxcool;
+}
+
+const _float CItem_Manager::Get_ItemCool(bool bMaxCool, _wstring szEffectTag)
+{
+	if(bMaxCool)
+		return m_mapItemMaxCool.find(szEffectTag)->second;
+	else
+		return m_mapItemCulCool.find(szEffectTag)->second;
 }
 
 CItemObject* CItem_Manager::Get_ItemObject(_uint iIndex, _bool isInven)
@@ -122,6 +156,9 @@ CItem_Manager* CItem_Manager::Create(LPDIRECT3DDEVICE9 pGraphic_Device)
 void CItem_Manager::Free()
 {
 	__super::Free();
+
+	m_mapItemMaxCool.clear();
+	m_mapItemCulCool.clear();
 
 	for (auto& pItemObject : m_ItemObjects)
 		Safe_Release(pItemObject);

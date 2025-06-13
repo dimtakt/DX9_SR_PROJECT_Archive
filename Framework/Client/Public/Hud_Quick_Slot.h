@@ -38,8 +38,11 @@ private:
 	_bool							m_bEatPotion = { false };
 	_float							m_fEatSpeed = {};
 
-	_float							m_fCoolTime = {};
-	_float							m_fPotionCool = {};
+	_float							m_fItemCulCool = {};
+	_float							m_fItemCooltime = {};
+
+	_float							m_fPotionCulCool = {};
+	_float							m_fPotionCoolTime = {};
 	_int							m_iItemCount = {};
 
 private:
@@ -50,7 +53,7 @@ private:
 
 	void							Render_Font();
 	void							ItemCount();
-	_bool							Use_Item();
+	_bool							Use_Potion();
 public:
 	static CHud_Quick_Slot*			Create(LPDIRECT3DDEVICE9 pGraphic_Device, LEVEL eLevel);
 	virtual CGameObject*			Clone(void* pArg) override;
