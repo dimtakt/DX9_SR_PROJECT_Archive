@@ -166,6 +166,8 @@
     <ClInclude Include="..\public\Askard.h" />
     <ClInclude Include="..\public\Askard_Tentacle.h" />
     <ClInclude Include="..\public\Askard_Hpbar.h" />
+    <ClInclude Include="..\public\AttackFx.h" />
+    <ClInclude Include="..\public\AttackGauge.h" />
     <ClInclude Include="..\Public\BackGround.h" />
     <ClInclude Include="..\Public\IceBolt.h" />
     <ClInclude Include="..\public\BossHp_Askard.h" />
@@ -391,7 +393,9 @@
     <ClCompile Include="..\private\Askard.cpp" />
     <ClCompile Include="..\private\Askard_Tentacle.cpp" />
     <ClCompile Include="..\private\Askard_Hpbar.cpp" />
+    <ClCompile Include="..\private\AttackGauge.cpp" />
     <ClCompile Include="..\Private\BackGround.cpp" />
+    <ClCompile Include="..\private\AttackFx.cpp" />
     <ClCompile Include="..\Private\IceBolt.cpp" />
     <ClCompile Include="..\private\BossHp_Askard.cpp" />
     <ClCompile Include="..\private\BossHp_Ema.cpp" />

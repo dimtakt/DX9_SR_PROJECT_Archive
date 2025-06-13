@@ -62,6 +62,9 @@ void CGacha::Priority_Update(_float fTimeDelta)
 	if (!m_bIsUpdate)
 		return;
 
+	if (m_pGameInstance->IsKeyDown(VK_F9))
+		UI_Open(GACHA_TYPE::ALL);
+
 	if (!m_bIsOpen)
 		return;
 

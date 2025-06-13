@@ -49,7 +49,7 @@ void CMole_A::Update(_float fTimeDelta)
     if (m_bDead)
         return;
 
-
+ 
     _float fMinDist = 6.f;      // 추적 상태로 변할 기준 거리
     _float fMaxDist = 12.f;     // 어그로가 풀리는 기준 거리
     _float fAtkDist = 1.5f;     // 근접공격할 기준 거리
@@ -183,11 +183,17 @@ void CMole_A::Update(_float fTimeDelta)
         _float3 vNewMonsterPos = vMonsterPos + vPosDiff * fTimeDelta * fMoveSpeed;
         m_pTransformCom->Set_State(STATE::POSITION, vNewMonsterPos);
     }
-
-
+    if (m_pAnimatorCom->Get_CurStateTag() == L"Attack" && m_pAnimatorCom->Get_CurStackedFrame() < 20)
+    {
+        AttackDaley += 1;
+        m_pAttackFx->Render_Frame(m_pTransformCom, AttackDaley, 20);
+        if (AttackDaley >= 20)
+            AttackDaley = 0;
+    }
     if (m_pAnimatorCom->Get_CurStateTag() == L"Attack" &&
         m_pAnimatorCom->Get_CurStackedFrame() == 20)
     {
+      
         m_pGameInstance->StopSound(ENUM_CLASS(CHANNELID::SOUND_MONSTER_EFFECT));
         m_pGameInstance->PlaySoundW(L"attackSwish07.wav", ENUM_CLASS(CHANNELID::SOUND_MONSTER_EFFECT), g_fEFFECTVolume - 0.6f);
         CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::MONSTER_EFFECT, L"Prototype_Component_Texture_Mole_A_Effect_Swing",
@@ -328,7 +334,7 @@ HRESULT CMole_A::Ready_Components(void* pArg)
 HRESULT CMole_A::Ready_Object()
 {
     m_pHpBar = dynamic_cast<CField_Hp*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_Field_Hp")));
-
+    m_pAttackFx = dynamic_cast<CAttackFx*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_AttackFx")));
     return S_OK;
 }
 
@@ -407,6 +413,6 @@ void CMole_A::Free()
     Safe_Release(m_pTextureCom_Airborne);
 
 	Safe_Release(m_pAnimatorCom);
-
+    Safe_Release(m_pAttackFx);
     __super::Free();
 }

@@ -55,7 +55,8 @@
 #include "ProjSword.h"
 #include "FrozenHammer.h"
 #include "IceBolt.h"
-
+#include "AttackFx.h"
+#include "AttackGauge.h"
 CMainApp::CMainApp()
 	: m_pGameInstance{ CGameInstance::GetInstance() }
 {
@@ -351,6 +352,15 @@ HRESULT CMainApp::Ready_GameObject_Setting()
 		CFrozenHammer::Create(m_pGraphic_Device))))
 		return E_FAIL;
 #pragma endregion
+	
+	// Attack_Guide
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_AttackFx"),
+		CAttackFx::Create(m_pGraphic_Device, LEVEL::LEVEL_STATIC))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_Attack_Gauge"),
+		CAttackGauge::Create(m_pGraphic_Device, LEVEL::LEVEL_STATIC))))
+		return E_FAIL;
 
 	return S_OK;
 }
@@ -486,7 +496,7 @@ HRESULT CMainApp::Ready_Texture_Setting()
 
 
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Item"),
-		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/UI/Item/Item_Icon_%d.png"), 65))))
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/UI/Item/Item_Icon_%d.png"), 71))))
 		return E_FAIL;
 
 	//포탈 임시용 텍스처 세팅
@@ -538,9 +548,6 @@ HRESULT CMainApp::Ready_Texture_Setting()
 
 	// ---
 	
-
-	
-
 
 	/////UI//////////
 	/* Prototype_Component_Texture_HUD */
