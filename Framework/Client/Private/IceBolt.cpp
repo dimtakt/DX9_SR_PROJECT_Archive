@@ -67,76 +67,150 @@ HRESULT CIceBolt::Render()
 
 void CIceBolt::Create_Bolt()
 {
-    _float3 vMouseWorld = {};
-    _float fY = m_pPlayerTransformCom->Get_State(STATE::POSITION).y;                
+    //_float3 vMouseWorld = {};
+    //_float fY = m_pPlayerTransformCom->Get_State(STATE::POSITION).y;                
 
-    m_pGameInstance->Get_IntersectAtY(fY, vMouseWorld);                
+    //m_pGameInstance->Get_IntersectAtY(fY, vMouseWorld);                
+
+    //_float3 vPlayerPos = m_pPlayerTransformCom->Get_State(STATE::POSITION);
+    //m_vDirection = vMouseWorld - vPlayerPos;              //현재 마우스 방향 체크
+
+    //D3DXVec3Normalize(&m_vDirection, &m_vDirection);     // 마우스 방향 단일화
+
+    //_float4x4 matWorld = *m_pPlayerTransformCom->Get_WorldMatrix(); //현재 플레이어 월드행렬
+
+    //_float4x4 matOffset;
+    //D3DXMatrixIdentity(&matOffset);                     //마법진 오프셋값  
+
+    //_float3 vForwardOffset = m_vDirection * 0.5f;       //마우스가 있는 방향으로 + 오프셋 설정
+
+    ////마우스 방향에 맞춰 마법진 오프셋 설정
+    //matOffset._41 += vForwardOffset.x;
+    //matOffset._42 += vForwardOffset.y;
+    //matOffset._43 += vForwardOffset.z;
+
+    ////마법진 제작
+    //CEffect_Factory::GetInstance()->Create_Effect(
+    //    GAMEOBJ_TYPE::PLAYER_SKILL,
+    //    L"Prototype_Component_Texture_Effect_IceBoltStart",
+    //    matWorld,            // 시작위치
+    //    matOffset,           // 오프셋값
+    //    false);
+
+    ////m_vDirection.x;     // 왼쪽 쏠때 z가더 큼 , 오른쪽 쏠 때 x가 더 큼
+    ////m_vDirection.y;     //위 쏠 때 z가 더 큼 , 아래 쏠 때 x가더 큼
+    ////m_vDirection.z;
+
+    //m_pTransformCom->Set_State(STATE::POSITION, vPlayerPos);
+
+    //if (m_vDirection.x > m_vDirection.z)
+    //{
+    //    if (m_vDirection.x >= 0.8f) // 오른쪽  
+    //    {
+
+    //        m_pTransformCom->Rotation({ m_vDirection.x, 0.f, 0.f }, D3DXToRadian(90.f));
+    //        m_pTransformCom->Rotation({ 0.f, 0.f,  m_vDirection.z }, D3DXToRadian(90.f));
+    //    }
+    //    else   //아래
+    //        m_pTransformCom->Rotation({ m_vDirection.x, 0.f, 0.f }, D3DXToRadian(-90.f));
+    //}
+    //else
+    //{
+    //    if (m_vDirection.z >= 0.8f) // 위
+    //    {
+    //        m_pTransformCom->Rotation({ m_vDirection.x, 0.f, 0.f }, D3DXToRadian(90.f));
+    //    }
+    //    else  // 왼쪽
+    //    {
+    //        m_pTransformCom->Rotation({ m_vDirection.x, 0.f, 0.f }, D3DXToRadian(90.f));
+    //        m_pTransformCom->Rotation({ 0.f, 0.f,  m_vDirection.z }, D3DXToRadian(-90.f));
+    //    }
+    //}
+   
+    ////투사체 제작
+    //CEffect_Factory::GetInstance()->Create_Effect(
+    //    GAMEOBJ_TYPE::PLAYER_SKILL,
+    //    L"Prototype_Component_Texture_IceBolt",
+    //    *m_pTransformCom->Get_WorldMatrix(),       // 시작 위치
+    //    matOffset,                                // 발사 오프셋
+    //    m_vDirection,                             // 투사체 방향
+    //    8.f,                                     // 속도
+    //    1.f,                                     // 수명
+    //    0.f,                                    // 회전 없음
+    //    false);
+
+    _float3 vMouseWorld = {};
+    _float fY = m_pPlayerTransformCom->Get_State(STATE::POSITION).y;
+    m_pGameInstance->Get_IntersectAtY(fY, vMouseWorld);
 
     _float3 vPlayerPos = m_pPlayerTransformCom->Get_State(STATE::POSITION);
-    m_vDirection = vMouseWorld - vPlayerPos;              //현재 마우스 방향 체크
+    m_vDirection = vMouseWorld - vPlayerPos;
+    D3DXVec3Normalize(&m_vDirection, &m_vDirection);
 
-    D3DXVec3Normalize(&m_vDirection, &m_vDirection);     // 마우스 방향 단일화
+    // --- 방향 벡터들 계산 (Look 방향 기준) ---
+    _float3 vLook = m_vDirection;
+    _float3 vUp = { 0.f, 1.f, 0.f };
+    _float3 vRight;
 
-    _float4x4 matWorld = *m_pPlayerTransformCom->Get_WorldMatrix(); //현재 플레이어 월드행렬
+    if (fabsf(D3DXVec3Dot(&vLook, &vUp)) >= 0.99f)
+        vUp = { 0.f, 0.f, 1.f };
 
+    D3DXVec3Cross(&vRight, &vUp, &vLook);
+    D3DXVec3Normalize(&vRight, &vRight);
+    D3DXVec3Cross(&vUp, &vLook, &vRight);
+    D3DXVec3Normalize(&vUp, &vUp);
+
+    _float4x4 matWorldBase;
+    ZeroMemory(&matWorldBase, sizeof(_float4x4));
+    memcpy(&matWorldBase.m[0][0], &vRight, sizeof(_float3));
+    memcpy(&matWorldBase.m[1][0], &vUp, sizeof(_float3));
+    memcpy(&matWorldBase.m[2][0], &vLook, sizeof(_float3));
+    matWorldBase.m[3][0] = vPlayerPos.x;
+    matWorldBase.m[3][1] = vPlayerPos.y;
+    matWorldBase.m[3][2] = vPlayerPos.z;
+    matWorldBase.m[3][3] = 1.f;
+
+
+    _float4x4 TempMat{};
+    D3DXMatrixIdentity(&TempMat);
+    // ---- 오프셋 계산
     _float4x4 matOffset;
-    D3DXMatrixIdentity(&matOffset);                     //마법진 오프셋값  
+    D3DXMatrixIdentity(&matOffset);
+    _float3 vForwardOffset = m_vDirection * 0.5f;
+    matOffset._41 = vForwardOffset.x;
+    matOffset._42 = vForwardOffset.y;
+    matOffset._43 = vForwardOffset.z;
 
-    _float3 vForwardOffset = m_vDirection * 0.5f;       //마우스가 있는 방향으로 + 오프셋 설정
-
-    //마우스 방향에 맞춰 마법진 오프셋 설정
-    matOffset._41 += vForwardOffset.x;
-    matOffset._42 += vForwardOffset.y;
-    matOffset._43 += vForwardOffset.z;
-
-    //마법진 제작
+    // ---- 시작 이펙트는 회전 없이 사용 ----
     CEffect_Factory::GetInstance()->Create_Effect(
         GAMEOBJ_TYPE::PLAYER_SKILL,
         L"Prototype_Component_Texture_Effect_IceBoltStart",
-        matWorld,            // 시작위치
-        matOffset,           // 오프셋값
+        matWorldBase,
+        matOffset,
         false);
 
-    //m_vDirection.x;     // 왼쪽 쏠때 z가더 큼 , 오른쪽 쏠 때 x가 더 큼
-    //m_vDirection.y;     //위 쏠 때 z가 더 큼 , 아래 쏠 때 x가더 큼
-    //m_vDirection.z;
+    // ---- 아이스볼트용 회전 보정 (+90도 X축 회전) ----
+    _float4x4 matRotateX;
+    D3DXMatrixRotationX(&matRotateX, D3DXToRadian(+90.f));
 
-    m_pTransformCom->Set_State(STATE::POSITION, vPlayerPos);
+    // ---- 월드 행렬 만들고 누운 상태로 설정 ----
+    _float4x4 matWorld = matRotateX * matWorldBase;
 
-    if (m_vDirection.x > m_vDirection.z)
-    {
-        if (m_vDirection.x >= 0.8f) // 오른쪽  
-        {
+    m_pTransformCom->Set_State(STATE::RIGHT, _float3(matWorld.m[0][0], matWorld.m[0][1], matWorld.m[0][2]));
+    m_pTransformCom->Set_State(STATE::UP, _float3(matWorld.m[1][0], matWorld.m[1][1], matWorld.m[1][2]));
+    m_pTransformCom->Set_State(STATE::LOOK, _float3(matWorld.m[2][0], matWorld.m[2][1], matWorld.m[2][2]));
+    m_pTransformCom->Set_State(STATE::POSITION, _float3(matWorld.m[3][0], matWorld.m[3][1], matWorld.m[3][2]));
 
-            m_pTransformCom->Rotation({ m_vDirection.x, 0.f, 0.f }, D3DXToRadian(90.f));
-            m_pTransformCom->Rotation({ 0.f, 0.f,  m_vDirection.z }, D3DXToRadian(90.f));
-        }
-        else   //아래
-            m_pTransformCom->Rotation({ m_vDirection.x, 0.f, 0.f }, D3DXToRadian(-90.f));
-    }
-    else
-    {
-        if (m_vDirection.z >= 0.8f) // 위
-        {
-            m_pTransformCom->Rotation({ m_vDirection.x, 0.f, 0.f }, D3DXToRadian(90.f));
-        }
-        else  // 왼쪽
-        {
-            m_pTransformCom->Rotation({ m_vDirection.x, 0.f, 0.f }, D3DXToRadian(90.f));
-            m_pTransformCom->Rotation({ 0.f, 0.f,  m_vDirection.z }, D3DXToRadian(-90.f));
-        }
-    }
-   
-    //투사체 제작
+    // ---- 아이스볼트 발사
     CEffect_Factory::GetInstance()->Create_Effect(
         GAMEOBJ_TYPE::PLAYER_SKILL,
         L"Prototype_Component_Texture_IceBolt",
-        *m_pTransformCom->Get_WorldMatrix(),       // 시작 위치
-        matOffset,                                // 발사 오프셋
-        m_vDirection,                             // 투사체 방향
-        8.f,                                     // 속도
-        1.f,                                     // 수명
-        0.f,                                    // 회전 없음
+        matWorld,
+        matOffset,
+        m_vDirection,
+        8.f,
+        1.f,
+        0.f,
         false);
 
 
