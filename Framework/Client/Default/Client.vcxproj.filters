@@ -1062,9 +1062,6 @@
     <ClInclude Include="..\public\EventKey.h">
       <Filter>02.GameObject\UI\Event\AZPattern\ETC</Filter>
     </ClInclude>
-    <ClInclude Include="..\public\Event_Result.h">
-      <Filter>02.GameObject\UI\Event\AZPattern\ETC</Filter>
-    </ClInclude>
     <ClInclude Include="..\public\Event_Timer.h">
       <Filter>02.GameObject\UI\Event\AZPattern\ETC</Filter>
     </ClInclude>
@@ -1077,14 +1074,17 @@
     <ClInclude Include="..\Public\FrozenHammer.h">
       <Filter>02.GameObject\Player\FrozenHammer</Filter>
     </ClInclude>
-    <ClInclude Include="..\public\Event_Circle.h">
-      <Filter>02.GameObject\UI\Event\ClashPatten\ETC</Filter>
-    </ClInclude>
     <ClInclude Include="..\public\Event_ClashKey.h">
       <Filter>02.GameObject\UI\Event\ClashPatten\ETC</Filter>
     </ClInclude>
     <ClInclude Include="..\public\Event_Circle_Guide.h">
       <Filter>02.GameObject\UI\Event\ClashPatten\ETC</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Event_Circle.h">
+      <Filter>02.GameObject\UI\Event\ClashPatten</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Event_Result.h">
+      <Filter>02.GameObject\UI\Event\ETC</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1620,9 +1620,6 @@
     <ClCompile Include="..\private\EventKey.cpp">
       <Filter>02.GameObject\UI\Event\AZPattern\ETC</Filter>
     </ClCompile>
-    <ClCompile Include="..\private\Event_Result.cpp">
-      <Filter>02.GameObject\UI\Event\AZPattern\ETC</Filter>
-    </ClCompile>
     <ClCompile Include="..\private\Event_Timer.cpp">
       <Filter>02.GameObject\UI\Event\AZPattern\ETC</Filter>
     </ClCompile>
@@ -1635,14 +1632,17 @@
     <ClCompile Include="..\Private\FrozenHammer.cpp">
       <Filter>02.GameObject\Player\FrozenHammer</Filter>
     </ClCompile>
-    <ClCompile Include="..\private\Event_Circle.cpp">
-      <Filter>02.GameObject\UI\Event\ClashPatten\ETC</Filter>
-    </ClCompile>
     <ClCompile Include="..\private\Event_ClashKey.cpp">
       <Filter>02.GameObject\UI\Event\ClashPatten\ETC</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Event_Circle_Guide.cpp">
       <Filter>02.GameObject\UI\Event\ClashPatten\ETC</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Event_Circle.cpp">
+      <Filter>02.GameObject\UI\Event\ClashPatten</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Event_Result.cpp">
+      <Filter>02.GameObject\UI\Event\ETC</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
