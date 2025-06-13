@@ -49,6 +49,7 @@
 #include "BossHp_Askard.h"
 #include "BossHp_Ema.h"
 #include "GoldLeaf.h"
+#include "IceBolt.h"
 
 CMainApp::CMainApp()
 	: m_pGameInstance{ CGameInstance::GetInstance() }
@@ -170,6 +171,8 @@ HRESULT CMainApp::Ready_GameObject_Setting()
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_Interaction_Normal"), CInteraction_Normal::Create(m_pGraphic_Device))))
 		return E_FAIL;
 
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_IceBolt"), CIceBolt::Create(m_pGraphic_Device))))
+		return E_FAIL;
 
 	// UI
 
@@ -352,8 +355,14 @@ HRESULT CMainApp::Ready_Texture_Setting()
 		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/BleakSwordDX/Particle/FireParticle_%d.png"), 3))))
 		return E_FAIL;
 
+	// FireParticle, Dust
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_DustParticle"),
 		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/BleakSwordDX/Particle/DustParticle.png"), 1))))
+		return E_FAIL;
+
+	// FireParticle, Light
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_LightParticle"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/BleakSwordDX/Particle/LightParticle.png"), 1))))
 		return E_FAIL;
 
 
@@ -892,6 +901,23 @@ HRESULT CMainApp::Ready_Texture_Setting()
 		return E_FAIL;
 
 #pragma endregion
+
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_IceBolt"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Magic/IceBoltBullet.png"), 1))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Effect_IceBolt"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Magic/IceBoltFX_%d.png"), 5))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Effect_IceBoltStart"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Magic/Cycle_IceCircle_%d.png"), 8))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Effect_IceBoltEffect"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Magic/Wand_DashSwing_Ice_%d.png"), 4))))
+		return E_FAIL;
+	
 
 	return S_OK;
 }

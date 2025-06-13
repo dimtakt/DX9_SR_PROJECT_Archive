@@ -74,6 +74,8 @@ public:
 
 	void RotationByParent(const _float3 axis, CTransform* parent, _float fRadian);
 
+
+
 	//void StartShake(_float fDuration, _float fStrength, _float fTime);
 
 

@@ -170,6 +170,12 @@ HRESULT CLevel_Boss1::Ready_Layer_Room(const _wstring& strLayerTag)
 		NULL_CHECK_RETURN(pRoom, E_FAIL);
 
 			pRoom->Load_From_File(ENUM_CLASS(LEVEL::LEVEL_BOSS1), strLayerTag, TEXT("../../data/StageBoss1_Map%d.txt"), iNumber, iRoomX, iRoomZ, ROOM_INFO::EVENT_BOSS);
+			if (iNumber == 1)
+			{
+				pRoom->Load_Particle(PARTICLE_TYPE::DUST, TEXT("Prototype_GameObject_FireParticle"), ENUM_CLASS(LEVEL::LEVEL_BOSS1), _float3(0.5f, 0.5f, 1.f), 2);
+				pRoom->Set_ParticleType(PARTICLE_TYPE::DUST);
+				pRoom->Set_ParticleOn();
+			}
 			iNumber++;		
 			iRoomZ++;		//보스룸은 무조건 0,0 일반룸1  0,1 보스룸 설정
 			if (iCount == 0)
@@ -183,30 +189,6 @@ HRESULT CLevel_Boss1::Ready_Layer_Room(const _wstring& strLayerTag)
 
 			}
 
-			//if (iNumber == 1)
-			//{
-			//	pRoom->Load_Particle(PARTICLE_TYPE::DUST, TEXT("Prototype_GameObject_FireParticle"), ENUM_CLASS(LEVEL::LEVEL_BOSS1), _float3(0.5f, 0.5f, 1.f), 2);
-			//	pRoom->Set_ParticleType(PARTICLE_TYPE::DUST);
-			//	pRoom->Set_ParticleOn();
-			//}
-			//여기에 몬스터 배치, 아래는 이전 스테이지에서 몬스터 배치 하는 방식, 참고할려면 참고해서 배치하기!
-
-			//list<CMonster::MONSTERDESC> DescList;
-			//for (size_t i = 0; i < 2; i++)
-			//{
-			//	//CMonster::MONSTERDESC tDesc = {};
-			//	//tDesc.iLayerLevelIndex = ENUM_CLASS(LEVEL::LEVEL_BOSS1);
-			//	//tDesc.iPrototypeLevelIndex = ENUM_CLASS(LEVEL::LEVEL_BOSS1);
-			//	//tDesc.strLayerTag = strLayerTag;
-			//	////tDesc.strPrototypeTag = TEXT("Prototype_GameObject_ShortMonster");
-			//	//tDesc.strPrototypeTag = TEXT("Prototype_GameObject_Monster_Mole_A");
-			//	////tDesc.strPrototypeTag = TEXT("Prototype_GameObject_Monster_Oink_A");
-			//	////tDesc.strPrototypeTag = TEXT("Prototype_GameObject_Monster_LaserGhost_D");
-			//	//tDesc.pTerrainBox = pRoom->Get_TerrainBox();
-			//	//DescList.push_back(tDesc);
-			//}
-
-		
 
 
 			list<CMonster::MONSTERDESC> DescList;
