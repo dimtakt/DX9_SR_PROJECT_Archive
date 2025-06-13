@@ -1104,6 +1104,9 @@
     <ClInclude Include="..\public\Event_Result.h">
       <Filter>02.GameObject\UI\Event\ETC</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\Askard_Eye.h">
+      <Filter>02.GameObject\Monster\Boss\Askard</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -1670,6 +1673,9 @@
     </ClCompile>
     <ClCompile Include="..\private\Event_Result.cpp">
       <Filter>02.GameObject\UI\Event\ETC</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Askard_Eye.cpp">
+      <Filter>02.GameObject\Monster\Boss\Askard</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

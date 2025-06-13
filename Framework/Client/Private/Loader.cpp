@@ -1423,7 +1423,7 @@ HRESULT CLoader::Loading_For_Boss2_Level()
 		return E_FAIL;
 	// Wave (21)
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_BOSS2), TEXT("Prototype_Component_Boss_Askard_Phase1_Wave"),
-		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Boss/Askard/Body/Phase1/Askard_Phase1_Wave_%02d.png"), 21))))
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Boss/Askard/Body/Phase1/Askard_Phase1_Wave_%02d.png"), 17))))
 		return E_FAIL;
 	// Wave_Back (8)			/ Effect
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Boss_Askard_Phase1_Wave_Back"),
@@ -1649,6 +1649,11 @@ HRESULT CLoader::Loading_For_Boss2_Level()
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Boss_Askard_Laser_Minor"),
 		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Boss/Askard/Effect/Laser_Minor/AskardMinorLaser%02d.png"), 19))))
 		return E_FAIL;
+	// ShockWaveFX (6)			/ Effect
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Boss_Askard_ShockWaveFX"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Boss/Askard/Effect/Shockwave/ShockWaveFX%d.png"), 6))))
+		return E_FAIL;
+
 
 #pragma endregion
 

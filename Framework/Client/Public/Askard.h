@@ -2,8 +2,10 @@
 #include "Monster.h"
 #include "Client_Defines.h"
 
+#include "BossHp_Askard.h"
+
 #include "Askard_Tentacle.h"
-//#include "Askard_Eye.h"
+#include "Askard_Eye.h"
 
 
 BEGIN(Client)
@@ -94,6 +96,13 @@ private:
 
 	CAnimator*		m_pAnimatorCom							= { nullptr };
 
+
+
+
+
+	CBossHp_Askard*	m_pBossHp = { nullptr };
+
+
 	// 로컬 변수들
 
 	_int			m_iPhase						= 0;
@@ -105,6 +114,8 @@ private:
 	_float3			m_vMovePos						= {};
 	_float3			m_vLockedOnPos					= {};
 
+	_bool			m_isAllStop						= false;
+
 private:
 	void			Adjust_Scale();					// 임시, 리소스 크기 조정하면 삭제
 
@@ -113,7 +124,8 @@ private:
 	void			Play_Spawn_Cross(_float fTimeDelta);
 	void			Play_Spawn_Line(_float fTimeDelta);
 	void			Play_Corner_Laser(_float fTimeDelta);
-	void			Play_Following_Eyes(_float fTimeDelta);
+	//void			Play_Following_Eyes(_float fTimeDelta);
+	void			Play_Spark(_float fTimeDelta);
 
 public:
 	static CAskard* Create(LPDIRECT3DDEVICE9 pGraphic_Device);
