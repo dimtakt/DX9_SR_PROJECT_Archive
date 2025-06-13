@@ -154,6 +154,9 @@ public:
 	void						Pick_ItemSlot(class CItemObject* pPickItem, class CButton* pSlot, _uint iItemCount, _uint iSlottype);
 	void						Pick_Reset();
 	const vector<_int>			AcquiredItem_List();
+	void						Item_CulCool(_wstring szEffectTag, _float fCulcool);
+	void						Item_MaxCool(_wstring szEffectTag, _float fMaxcool);
+	const _float				Get_ItemCool(bool bMaxCool, _wstring szEffectTag);
 #pragma endregion
 
 #pragma region EVENT_MANAGER
