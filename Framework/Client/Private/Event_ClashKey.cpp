@@ -8,25 +8,9 @@ CEvent_ClashKey::CEvent_ClashKey(const CEvent_ClashKey& Prototype) : CUIObject(P
 {
 }
 
-void CEvent_ClashKey::Input_KeySetting()
+void CEvent_ClashKey::Input_KeySetting(_int iIndex)
 {
-	m_fY = -20;
-	m_iTexIndex = 2;
-	__super::Update_Position();
-}
-
-void CEvent_ClashKey::Clear_KeySetting()
-{
-	m_fY = 0;
-	m_iTexIndex = 1;
-	__super::Update_Position();
-}
-
-void CEvent_ClashKey::Reset_KeySetting()
-{
-	m_fY = 0;
-	m_iTexIndex = 0;
-	__super::Update_Position();
+	m_iTexIndex = iIndex;
 }
 
 HRESULT CEvent_ClashKey::Initialize_Prototype()
