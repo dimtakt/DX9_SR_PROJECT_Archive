@@ -475,6 +475,18 @@ const vector<_int> CGameInstance::AcquiredItem_List()
 {
     return m_pItem_Manager->AcquiredItem_List();
 }
+void CGameInstance::Item_CulCool(_wstring szEffectTag, _float fCulcool)
+{
+    m_pItem_Manager->Item_CulCool(szEffectTag, fCulcool);
+}
+void CGameInstance::Item_MaxCool(_wstring szEffectTag, _float fMaxcool)
+{
+    m_pItem_Manager->Item_MaxCool(szEffectTag, fMaxcool);
+}
+const _float CGameInstance::Get_ItemCool(bool bMaxCool, _wstring szEffectTag)
+{
+    return m_pItem_Manager->Get_ItemCool(bMaxCool, szEffectTag);
+}
 #pragma endregion
 
 #pragma region EVENT_MANAGER

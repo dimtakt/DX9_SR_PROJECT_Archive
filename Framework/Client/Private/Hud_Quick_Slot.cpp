@@ -29,9 +29,9 @@ HRESULT CHud_Quick_Slot::Initialize(void* pArg)
 
 	m_iIndex = Desc->fY;
 	m_szVkKey = TEXT('0') + m_iIndex;
-	m_fPotionCool = 60;
+	m_fPotionCoolTime = 60;
 	m_fEatSpeed = 0;
-
+	
 	if (m_iIndex == 1)
 		m_bSelete = true;
 	m_fSizeX = 50;
@@ -58,22 +58,46 @@ HRESULT CHud_Quick_Slot::Initialize(void* pArg)
 
 void CHud_Quick_Slot::Priority_Update(_float fTimeDelta)
 {
-
 }
 
 void CHud_Quick_Slot::Update(_float fTimeDelta)
 {
-	if (Use_Item())
+	if (m_pSlotItem == nullptr)
 	{
-		if(m_pSlotItem != nullptr)
-			m_fCoolTime = 60;
+		m_fItemCooltime = 0;
+		m_fItemCulCool = 0;
+		return;
 	}
-	if (m_fCoolTime > 0)
+
+	if (m_pSlotItem->Item_Info()->iItemType == ENUM_CLASS(ITEM_TYPE::POTION))
 	{
-		static_cast<CHud_Slot_CoolTime*>(m_vecChildren[0])->Progerss_Set(m_fCoolTime, 60);
-		m_fCoolTime -= 1;
+		if (Use_Potion())
+		{
+			if (m_pSlotItem != nullptr)
+				m_fPotionCulCool = 60;
+		}
+		ItemCount();
+		if (m_fPotionCulCool > 0)
+		{
+			static_cast<CHud_Slot_CoolTime*>(m_vecChildren[0])->Progerss_Set(m_fPotionCulCool, m_fPotionCoolTime);
+			m_fPotionCulCool -= 1;
+		}
 	}
-	ItemCount();
+	else if (m_pSlotItem->Item_Info()->iItemType == ENUM_CLASS(ITEM_TYPE::SKILLBOOK))
+	{
+		_int iEffectIndex = m_pSlotItem->Item_Info()->iArtefact_Value;
+		if (g_ItemEffect[iEffectIndex].m_eType != ITEM_EFFECT::VALUE_TYPE)
+		{
+			m_fItemCooltime = m_pGameInstance->Get_ItemCool(true, g_ItemEffect[iEffectIndex].m_szEffectTag);
+			m_fItemCulCool = m_pGameInstance->Get_ItemCool(false, g_ItemEffect[iEffectIndex].m_szEffectTag);
+		}
+
+		if (m_fItemCulCool > 0)
+		{
+			static_cast<CHud_Slot_CoolTime*>(m_vecChildren[0])->Progerss_Set(m_fItemCulCool, m_fItemCooltime);
+		}
+	}
+
 	if (m_bEating)
 	{
 		m_fEatSpeed += 1;
@@ -91,15 +115,25 @@ void CHud_Quick_Slot::Late_Update(_float fTimeDelta)
 {
 
 	m_pGameInstance->Add_RenderGroup(RENDERGROUP::RG_UI, this);
-	
-	if (m_fCoolTime > 0)
-		m_vecChildren[0]->Late_Update(fTimeDelta);
-	
+	if (m_pSlotItem != nullptr)
+	{
+		if (m_pSlotItem->Item_Info()->iItemType == ENUM_CLASS(ITEM_TYPE::POTION))
+		{
+			if (m_fPotionCulCool > 0)
+				m_vecChildren[0]->Late_Update(fTimeDelta);
+		}
+		else if (m_pSlotItem->Item_Info()->iItemType == ENUM_CLASS(ITEM_TYPE::SKILLBOOK))
+		{
+			if (m_fItemCulCool > 0)
+				m_vecChildren[0]->Late_Update(fTimeDelta);
+		}
+	}
 	if (m_bEating)
 	{
 		m_vecChildren[1]->Late_Update(fTimeDelta);
 		m_pSlotItem->IsEat_Render(static_cast<CTransform*>(m_pGameInstance->Get_Component(m_pGameInstance->Get_CurrentLevel(), TEXT("Layer_Player"), TEXT("Com_Transform"))));
 	}
+
 	if (m_pSlotItem != nullptr)
 		m_pSlotItem->IsQuickSlot_Render(m_vWorldPos);
 	
@@ -228,16 +262,11 @@ void CHud_Quick_Slot::ItemCount()
 	}
 }
 
-_bool CHud_Quick_Slot::Use_Item()
+_bool CHud_Quick_Slot::Use_Potion()
 {
 	if (!m_bSelete)
 		return false;
-	if (m_pSlotItem == nullptr)
-		return false;
-	if (m_pSlotItem->Item_Info()->iItemType != ENUM_CLASS(ITEM_TYPE::POTION))
-		return false;
-
-	if (m_fCoolTime <= 0 && m_pGameInstance->IsKeyHold('R'))
+	if (m_fPotionCulCool <= 0 && m_pGameInstance->IsKeyHold('R'))
 	{
 		m_bEating = true;
 		CStat_Manager::GetInstance()->Set_UIOpen(true);
