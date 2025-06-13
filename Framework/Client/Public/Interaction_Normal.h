@@ -2,6 +2,7 @@
 
 #include "Client_Defines.h"
 #include "GameObject.h"
+#include "Field_Npc_Chat.h"
 
 BEGIN(Engine)
 class CTexture;
@@ -99,6 +100,7 @@ private:
 	CTexture* m_pTextureCom_0 = { nullptr };
 	CTexture* m_pTextureCom_1 = { nullptr };
 	CAnimator* m_pAnimatorCom_0 = { nullptr };
+	CField_Npc_Chat* m_pChat = { nullptr };
 
 	_bool m_bActive = { TRUE };
 	_bool m_bUsing = { FALSE };
@@ -111,6 +113,7 @@ private:
 
 public:
 	virtual void OnCollision(CGameObject* pGameObject) override;
+	virtual void OffCollision(CGameObject* pGameObject) override;
 
 public:
 	static CInteraction_Normal* Create(LPDIRECT3DDEVICE9 pGraphic_Device);

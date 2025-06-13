@@ -24,6 +24,7 @@ public:
 	void					IsTooltip(_float3 TooltipPos);
 	void					IsTooltip_Slate(_float3 TooltipSlotPos);
 	void					IsQuickSlot_Render(_float3 QuickSlotPos);
+	void					IsEat_Render(CTransform* pTarget);
 
 private:
 	HRESULT					Default_Render();
@@ -31,6 +32,7 @@ private:
 	HRESULT					Tooltip_Render();
 	HRESULT					Tooltip_Slate_Render();
 	HRESULT					QuickSlot_Render();
+	HRESULT					EatPotion_Render();
 	HRESULT					Ready_Componet();
 
 private:
@@ -39,10 +41,15 @@ private:
 	_bool					m_bIsTooltip_Render = { false };
 	_bool					m_bIsTooltip_Slate_Render = { false };
 	_bool					m_bIsQuickSlot_Render = { false };
+	_bool					m_bIsEating = { false };
+
 	_float3					m_vDefaultPos = {};
 	_float3					m_vTooltipPos = {};
 	_float3					m_vTooltipSlatePos = {};
 	_float3					m_vQuickSlotPos = {};
+	
+	_float					m_fEating = {};
+	_float					m_fAcctime = {};
 public:
 	static CItem_Base*		Create(LPDIRECT3DDEVICE9 pGraphic_Device);
 	virtual CGameObject*	Clone(void* pArg) override;

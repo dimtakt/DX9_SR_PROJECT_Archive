@@ -50,7 +50,7 @@ void CHud_Slot_Guide::Update(_float fTimeDelta)
 
 void CHud_Slot_Guide::Late_Update(_float fTimeDelta)
 {
-	m_pGameInstance->Add_RenderGroup(RENDERGROUP::RG_UI, this);
+	m_pGameInstance->Add_RenderGroup(RENDERGROUP::RG_UI_BLEND, this);
 }
 
 HRESULT CHud_Slot_Guide::Render()

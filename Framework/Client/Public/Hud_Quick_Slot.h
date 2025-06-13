@@ -34,9 +34,13 @@ private:
 
 	CItem_Base*						m_pSlotItem = { nullptr };
 
-	_bool							m_bIsPick = {};
-	_uint							m_iSlotIndex = {};
-	_int							m_iSlotItem_Tex = {};
+	_bool							m_bEating = { false };
+	_bool							m_bEatPotion = { false };
+	_float							m_fEatSpeed = {};
+
+	_float							m_fCoolTime = {};
+	_float							m_fPotionCool = {};
+	_int							m_iItemCount = {};
 
 private:
 	HRESULT							Ready_Components();
@@ -44,7 +48,9 @@ private:
 	HRESULT							Ready_ChildPrototype(LEVEL eLevel);
 	HRESULT							Ready_Children();
 
-	void							Use_Item();
+	void							Render_Font();
+	void							ItemCount();
+	_bool							Use_Item();
 public:
 	static CHud_Quick_Slot*			Create(LPDIRECT3DDEVICE9 pGraphic_Device, LEVEL eLevel);
 	virtual CGameObject*			Clone(void* pArg) override;

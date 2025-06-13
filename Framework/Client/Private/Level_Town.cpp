@@ -11,7 +11,7 @@
 #include "Field_Npc_Chat.h"
 #include "BossHp_Askard.h"
 #include "IceBolt.h"
-
+#include "Npc.h"
 CLevel_Town::CLevel_Town(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CLevel{ pGraphic_Device }
 {
@@ -37,6 +37,9 @@ HRESULT CLevel_Town::Initialize()
 		return E_FAIL;
 
 	if (FAILED(Ready_Layer_UI(TEXT("Layer_UI"))))
+		return E_FAIL;
+
+	if (FAILED(Ready_Layer_NPC(TEXT("Layer_NPC"))))
 		return E_FAIL;
 
 	m_pGameInstance->StopAll();
@@ -198,6 +201,35 @@ HRESULT CLevel_Town::Ready_Layer_Room(const _wstring& strLayerTag)
 		CRoom_Manager::GetInstance()->Check_SpecialRoom(LEVEL::LEVEL_TOWN, strLayerTag, 0); //¸¶À»Àº ·ëÀÎµ¦½º 0 ÇÑ°³
 	
 	
+
+	return S_OK;
+}
+
+HRESULT CLevel_Town::Ready_Layer_NPC(const _wstring& strLayerTag)
+{
+	CNpc::NPCDESC desc1{};
+
+	desc1.eType = CNpc::NPC_TYPE::BLACKSMITH;
+
+	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_TOWN), strLayerTag,
+		ENUM_CLASS(LEVEL::LEVEL_TOWN), TEXT("Prototype_GameObject_Npc"), &desc1)))
+		return E_FAIL;
+
+	CNpc::NPCDESC desc2{};
+
+	desc2.eType = CNpc::NPC_TYPE::ELDER;
+
+	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_TOWN), strLayerTag,
+		ENUM_CLASS(LEVEL::LEVEL_TOWN), TEXT("Prototype_GameObject_Npc"), &desc2)))
+		return E_FAIL;
+
+	CNpc::NPCDESC desc3{};
+
+	desc3.eType = CNpc::NPC_TYPE::SWORDSHIELD;
+
+	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_TOWN), strLayerTag,
+		ENUM_CLASS(LEVEL::LEVEL_TOWN), TEXT("Prototype_GameObject_Npc"), &desc3)))
+		return E_FAIL;
 
 	return S_OK;
 }

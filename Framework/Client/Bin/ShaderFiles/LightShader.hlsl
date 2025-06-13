@@ -46,14 +46,14 @@ struct VS_IN
 
 struct VS_OUT
 {
-    float4 vPosition : POSITION;
+    float4 vPosition : SV_POSITION;
     float3 vNormal : TEXCOORD0;
     float2 vTexUV : TEXCOORD1;
     float3 vWorldPos : TEXCOORD2;
 };
 
 // ===== ¡§¡° ºŒ¿Ã¥ı =====
-VS_OUT VS_Main(VS_IN input)
+VS_OUT main(VS_IN input)
 {
     VS_OUT output;
 
@@ -133,7 +133,7 @@ technique MultiLightTechnique
         Lighting = TRUE;
         SpecularEnable = TRUE;
 
-        VertexShader = compile vs_3_0 VS_Main();
+        VertexShader = compile vs_3_0 main();
         PixelShader = compile ps_3_0 PS_Main();
     }
 }

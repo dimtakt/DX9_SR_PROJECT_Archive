@@ -32,6 +32,7 @@ public:
 
 public:
 	virtual void OnCollision(CGameObject* pGameObject);
+	virtual void OffCollision(CGameObject* pGameObject);
 
 protected:
 	LPDIRECT3DDEVICE9			m_pGraphic_Device = { nullptr };

@@ -3,6 +3,8 @@
 #include "Hud_Slot_Guide.h"
 #include "Stat_Manager.h"
 #include "Inventory.h"
+#include "Hud_Slot_CoolTime.h"
+#include "Hud_Slot_EatPotion.h"
 CHud_Quick_Slot::CHud_Quick_Slot(LPDIRECT3DDEVICE9 pGraphic_Device) : CButton{ pGraphic_Device }
 {
 }
@@ -27,7 +29,9 @@ HRESULT CHud_Quick_Slot::Initialize(void* pArg)
 
 	m_iIndex = Desc->fY;
 	m_szVkKey = TEXT('0') + m_iIndex;
-	
+	m_fPotionCool = 60;
+	m_fEatSpeed = 0;
+
 	if (m_iIndex == 1)
 		m_bSelete = true;
 	m_fSizeX = 50;
@@ -59,17 +63,47 @@ void CHud_Quick_Slot::Priority_Update(_float fTimeDelta)
 
 void CHud_Quick_Slot::Update(_float fTimeDelta)
 {
-	Use_Item();
+	if (Use_Item())
+	{
+		if(m_pSlotItem != nullptr)
+			m_fCoolTime = 60;
+	}
+	if (m_fCoolTime > 0)
+	{
+		static_cast<CHud_Slot_CoolTime*>(m_vecChildren[0])->Progerss_Set(m_fCoolTime, 60);
+		m_fCoolTime -= 1;
+	}
+	ItemCount();
+	if (m_bEating)
+	{
+		m_fEatSpeed += 1;
+		static_cast<CHud_Slot_CoolTime*>(m_vecChildren[1])->Progerss_Set(m_fEatSpeed, 60);
+		
+		if (m_fEatSpeed > 60)
+		{
+			m_fEatSpeed = 0;
+			m_bEatPotion = true;
+		}
+	}
 }
 
 void CHud_Quick_Slot::Late_Update(_float fTimeDelta)
 {
 
 	m_pGameInstance->Add_RenderGroup(RENDERGROUP::RG_UI, this);
-	__super::Late_Update(fTimeDelta);
-
+	
+	if (m_fCoolTime > 0)
+		m_vecChildren[0]->Late_Update(fTimeDelta);
+	
+	if (m_bEating)
+	{
+		m_vecChildren[1]->Late_Update(fTimeDelta);
+		m_pSlotItem->IsEat_Render(static_cast<CTransform*>(m_pGameInstance->Get_Component(m_pGameInstance->Get_CurrentLevel(), TEXT("Layer_Player"), TEXT("Com_Transform"))));
+	}
 	if (m_pSlotItem != nullptr)
 		m_pSlotItem->IsQuickSlot_Render(m_vWorldPos);
+	
+	m_vecChildren[2]->Late_Update(fTimeDelta);
 }
 
 HRESULT CHud_Quick_Slot::Render()
@@ -84,6 +118,10 @@ HRESULT CHud_Quick_Slot::Render()
 		if (FAILED(CButton::Bind_ButtonTex_Single(g_hWnd, 0)))
 			return E_FAIL;
 	}
+
+	if (m_pSlotItem != nullptr && m_pSlotItem->Item_Info()->iItemType == ENUM_CLASS(ITEM_TYPE::POTION))
+		Render_Font();
+
 	return S_OK;
 }
 
@@ -115,6 +153,14 @@ HRESULT CHud_Quick_Slot::Ready_Components()
 
 HRESULT CHud_Quick_Slot::Ready_ChildPrototype(LEVEL eLevel)
 {
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(eLevel), TEXT("Prototype_GameObject_UI_Slot_Cool"),
+		CHud_Slot_CoolTime::Create(m_pGraphic_Device))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(eLevel), TEXT("Prototype_GameObject_UI_Slot_Eat"),
+		CHud_Slot_EatPotion::Create(m_pGraphic_Device))))
+		return E_FAIL;
+
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(eLevel), TEXT("Prototype_GameObject_UI_Slot_Guide"),
 		CHud_Slot_Guide::Create(m_pGraphic_Device))))
 		return E_FAIL;
@@ -125,6 +171,16 @@ HRESULT CHud_Quick_Slot::Ready_ChildPrototype(LEVEL eLevel)
 HRESULT CHud_Quick_Slot::Ready_Children()
 {
 	CUIObject* pGameObject = nullptr;
+	
+	pGameObject = dynamic_cast<CUIObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(m_eLevel), TEXT("Prototype_GameObject_UI_Slot_Cool")));
+	if (nullptr == pGameObject)
+		return E_FAIL;
+	Add_Child(pGameObject);
+
+	pGameObject = dynamic_cast<CUIObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(m_eLevel), TEXT("Prototype_GameObject_UI_Slot_Eat")));
+	if (nullptr == pGameObject)
+		return E_FAIL;
+	Add_Child(pGameObject);
 
 	CHud_Slot_Guide::SLOT_KEYGUIDE_DESC Desc{};
 	
@@ -137,38 +193,91 @@ HRESULT CHud_Quick_Slot::Ready_Children()
 	return S_OK;
 }
 
-void CHud_Quick_Slot::Use_Item()
+void CHud_Quick_Slot::Render_Font()
 {
-	if (!m_bSelete)
-		return;
-	if (m_pSlotItem == nullptr)
-		return;
-	if (m_pSlotItem->Item_Info()->iItemType != ENUM_CLASS(ITEM_TYPE::POTION))
-		return;
+	CUIObject::Font_Rect_Update();
 	
-	if (m_pGameInstance->IsKeyDown('R'))
-	{
-		_int iValue = m_pSlotItem->Item_Info()->iItemValue;
-		_float fHealValue = g_PotionDataBase[iValue].m_iValue;
-		_float fMaxValue{};
-	
-		switch (g_PotionDataBase[iValue].m_iPotionType)
-		{
-		case 1:
-			fMaxValue = CStat_Manager::GetInstance()->Get_CurStats()[ENUM_CLASS(STAT_INFO::MAXHP)];
-			CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CULHP, fMaxValue * fHealValue * 0.1f);
-			break;
-		case 2:
-			fMaxValue = CStat_Manager::GetInstance()->Get_CurStats()[ENUM_CLASS(STAT_INFO::MAXMP)];
-			CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CULMP, fMaxValue * fHealValue * 0.1f);
-			break;
-		}
+	TCHAR szText[MAX_PATH];
+	_int iValue = m_pSlotItem->Item_Info()->iItemValue;
+	_int iMaxItem = g_PotionDataBase[iValue].m_iMaxPotion;
+	m_vTexRect.top += -4;
 
-		if (static_cast<CInventory*>(m_pGameInstance->Find_UIObj(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("UI_Inven")))->Use_Item(m_pSlotItem))
+	m_vTexRect.left		+= 1;
+	m_vTexRect.top		+= 1;
+	m_vTexRect.right	+= 1;
+	m_vTexRect.bottom	+= 1;
+	_stprintf_s(szText, TEXT("%d/%d"), m_iItemCount, iMaxItem);
+	m_pGameInstance->Render_Font(TEXT("UI_Font_12_QuickSlot"), szText, m_vTexRect, D3DXCOLOR(0.f, 0.f, 0.f, 1.f), DT_CENTER | DT_TOP);
+
+	m_vTexRect.left		-= 1;
+	m_vTexRect.top		-= 1;
+	m_vTexRect.right	-= 1;
+	m_vTexRect.bottom	-= 1;
+	_stprintf_s(szText, TEXT("%d/%d"), m_iItemCount, iMaxItem);
+	m_pGameInstance->Render_Font(TEXT("UI_Font_12_QuickSlot"), szText, m_vTexRect, D3DXCOLOR(0.6f, 1.f, 0.f, 1.f), DT_CENTER | DT_TOP);
+}
+
+void CHud_Quick_Slot::ItemCount()
+{
+	if (m_pSlotItem != nullptr)
+	{
+		if (m_pSlotItem->Item_Info()->iItemType == ENUM_CLASS(ITEM_TYPE::POTION))
 		{
-			m_pSlotItem = nullptr;
+			m_iItemCount = static_cast<CInventory*>(m_pGameInstance->Find_UIObj(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("UI_Inven")))->Item_Count(m_pSlotItem);
 		}
 	}
+}
+
+_bool CHud_Quick_Slot::Use_Item()
+{
+	if (!m_bSelete)
+		return false;
+	if (m_pSlotItem == nullptr)
+		return false;
+	if (m_pSlotItem->Item_Info()->iItemType != ENUM_CLASS(ITEM_TYPE::POTION))
+		return false;
+
+	if (m_fCoolTime <= 0 && m_pGameInstance->IsKeyHold('R'))
+	{
+		m_bEating = true;
+		CStat_Manager::GetInstance()->Set_UIOpen(true);
+		if (m_bEatPotion)
+		{
+			_int iValue = m_pSlotItem->Item_Info()->iItemValue;
+			_float fHealValue = g_PotionDataBase[iValue].m_iValue;
+			_float fMaxValue{};
+
+			switch (g_PotionDataBase[iValue].m_iPotionType)
+			{
+			case 1:
+				fMaxValue = CStat_Manager::GetInstance()->Get_CurStats()[ENUM_CLASS(STAT_INFO::MAXHP)];
+				CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CULHP, fMaxValue * fHealValue * 0.1f);
+				break;
+			case 2:
+				fMaxValue = CStat_Manager::GetInstance()->Get_CurStats()[ENUM_CLASS(STAT_INFO::MAXMP)];
+				CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CULMP, fMaxValue * fHealValue * 0.1f);
+				break;
+			}
+
+			if (static_cast<CInventory*>(m_pGameInstance->Find_UIObj(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("UI_Inven")))->Use_Item(m_pSlotItem))
+			{
+				m_iItemCount = 0;
+				m_pSlotItem = nullptr;
+			}
+			m_bEating = false;
+			m_fEatSpeed = 0;
+			m_bEatPotion = false;
+			CStat_Manager::GetInstance()->Set_UIOpen(false);
+			return true;
+		}
+	}
+	else
+	{
+		CStat_Manager::GetInstance()->Set_UIOpen(false);
+		m_bEating = false;
+		m_fEatSpeed = 0;
+	}
+	return false;
 }
 
 CHud_Quick_Slot* CHud_Quick_Slot::Create(LPDIRECT3DDEVICE9 pGraphic_Device, LEVEL eLevel)

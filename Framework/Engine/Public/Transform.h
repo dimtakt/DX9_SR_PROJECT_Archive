@@ -71,11 +71,10 @@ public:
 	void Turn(const _float3& vAxis, _float fTimeDelta);
 	void Scaling(_float fScaleX, _float fScaleY, _float fScaleZ);
 	void ApplyEulerRotation(const _float3& vEuler);
-
 	void RotationByParent(const _float3 axis, CTransform* parent, _float fRadian);
+	void Set_OrbitInfo_AroundY(const CTransform* pTargetTransform, _float fSpeed);
 
-
-
+	void Orbit(_float fDeltaTime, _float3 vTargetCenterPos);
 	//void StartShake(_float fDuration, _float fStrength, _float fTime);
 
 
@@ -88,6 +87,9 @@ private:
 	_float						m_fSpeedPerSec = { };
 	_float						m_fRotationPerSec = { };
 	_float3						m_vRotationEuler = {};
+	_float3						m_vOrbitOffset;   
+	_float						m_fOrbitAngle = 0.f;
+	_float						m_fOrbitSpeed = 0.f;
 
 	_bool						m_bFlipX = false;		// 플레이어 이미지 출력 좌우 반전용
 

@@ -24,18 +24,18 @@ sampler FogSampler = sampler_state
 
 struct VS_IN
 {
-    float3 vPosition : POSITION;
+    float3 vPosition : POSITION0;
     float2 vTexUV : TEXCOORD0;
 };
 
 struct VS_OUT
 {
-    float4 vPosition : POSITION;
+    float4 vPosition : SV_POSITION;
     float2 vTexUV : TEXCOORD0;
     float vWorldY : TEXCOORD1;
 };
 
-VS_OUT VS_MAIN(VS_IN In)
+VS_OUT main(VS_IN In)
 {
     VS_OUT Out;
 
@@ -83,7 +83,7 @@ technique DefaultTechnique
         ZEnable = TRUE;
         ZWriteEnable = FALSE;
 
-        VertexShader = compile vs_3_0 VS_MAIN();
-        PixelShader = compile ps_3_0 PS_MAIN();
+        VertexShader = compile vs_2_0 main();
+        PixelShader = compile ps_2_0 PS_MAIN();
     }
 }

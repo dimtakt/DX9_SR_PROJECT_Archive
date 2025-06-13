@@ -17,6 +17,8 @@ HRESULT CItem_Base::Initialize(void* pArg)
 {
 	CItemObject::ITEMOBJECT_DESC* Desc = static_cast<ITEMOBJECT_DESC*>(pArg);
 
+	m_fAcctime = 0.f;
+	m_fEating = 0.1f;
 	m_fSizeX = 55;
 	m_fSizeY = 55;
 	m_fX = g_iWinSizeX * 0.5;
@@ -59,6 +61,7 @@ void CItem_Base::Update(_float fTimeDelta)
 
 void CItem_Base::Late_Update(_float fTimeDelta, _float3 fPos)
 {
+
 	if (m_pGameInstance->IsKeyUp(VK_LBUTTON))
 		m_bisSelete = false;
 	m_vDefaultPos = fPos;
@@ -71,7 +74,18 @@ HRESULT CItem_Base::Render()
 	if (FAILED(m_pTextureCom->Bind_Texture(m_iItemTextureID)))
 		return E_FAIL;
 	m_pVIBufferCom->Bind_Buffers();
-	if (m_bIsQuickSlot_Render)
+	if (m_bIsEating)
+	{
+		if (FAILED(EatPotion_Render()))
+			return E_FAIL;
+
+		m_bIsEating = false;
+		m_pTransformCom->Set_State(STATE::POSITION, m_vDefaultPos);
+		m_pTransformCom->Scaling(m_fSizeX * 0.5f, m_fSizeY * 0.5f, 1.f);
+
+
+	}
+	else if (m_bIsQuickSlot_Render)
 	{
 		if (FAILED(QuickSlot_Render()))
 			return E_FAIL;
@@ -157,7 +171,38 @@ void CItem_Base::IsQuickSlot_Render(_float3 QuickSlotPos)
 {
 	m_bIsQuickSlot_Render = true;
 	m_vQuickSlotPos = QuickSlotPos;
-	m_pGameInstance->Add_RenderGroup(RENDERGROUP::RG_UI_BLEND, this);
+	m_pGameInstance->Add_RenderGroup(RENDERGROUP::RG_UI, this);
+}
+
+void CItem_Base::IsEat_Render(CTransform* pTarget)
+{
+	_float3 vPos = pTarget->Get_State(STATE::POSITION);
+
+	POINT mousePos;
+	GetCursorPos(&mousePos);
+	ScreenToClient(g_hWnd, &mousePos);
+
+	if (mousePos.x < g_iWinSizeX * 0.5)
+	{
+		m_pTransformCom->Rotation(_float3{ 0.f,0.f,-1.f }, D3DXToRadian(135));
+		vPos.x += -0.5;
+	}
+	else
+	{
+		m_pTransformCom->Rotation(_float3{ 0.f,0.f,-1.f }, D3DXToRadian(225));
+		vPos.x += 0.5;
+	}
+	m_fAcctime += 0.16;
+	if (m_fAcctime > 1.f)
+	{
+		m_fEating = m_fEating * -1.f;
+		m_fAcctime = 0.f;
+	}
+	vPos.y += 0.5f + m_fEating;
+	m_pTransformCom->Set_State(STATE::POSITION, vPos);
+	m_pTransformCom->Scaling(1.5f, 1.5f, 1.5f);
+	m_pGameInstance->Add_RenderGroup(RENDERGROUP::RG_UI, this);
+	m_bIsEating = true;
 }
 
 
@@ -228,6 +273,13 @@ HRESULT CItem_Base::QuickSlot_Render()
 	m_pVIBufferCom->Render();
 	__super::End();
 
+	return S_OK;
+}
+
+HRESULT CItem_Base::EatPotion_Render()
+{
+	m_pTransformCom->Bind_Matrix();
+	m_pVIBufferCom->Render();
 	return S_OK;
 }
 

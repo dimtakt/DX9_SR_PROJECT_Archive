@@ -94,6 +94,7 @@ private:
 private:
 	HRESULT Ready_Components(void* pArg);
 	HRESULT Ready_Object();					//필드 HP바 테스트용
+	HRESULT Ready_Item(void* pArg);
 	HRESULT Ready_Skill(void* pArg);
 	void SetUp_RenderState();
 	void Reset_RenderState();
