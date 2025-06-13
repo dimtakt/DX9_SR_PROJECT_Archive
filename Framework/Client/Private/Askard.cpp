@@ -6,18 +6,18 @@
 
 
 CAskard::CAskard(LPDIRECT3DDEVICE9 pGraphic_Device)
-	: CMonster{ pGraphic_Device }
+    : CMonster{ pGraphic_Device }
 {
 }
 
 CAskard::CAskard(const CAskard& Prototype)
-	: CMonster{ Prototype }
+    : CMonster{ Prototype }
 {
 }
 
 HRESULT CAskard::Initialize_Prototype()
 {
-	return S_OK;
+    return S_OK;
 }
 
 HRESULT CAskard::Initialize(void* pArg)
@@ -71,7 +71,7 @@ void CAskard::Priority_Update(_float fTimeDelta)
 
         // ksta4 : 연출용 페이즈 재생.. 그 후
         // m_iPhase++ 하여 다음 패턴 재생
-        
+
     }
     if (m_iPhase > 2)   // 2페이즈에서 체력 다 닳을 시 비로소 사망
     {
@@ -86,26 +86,27 @@ void CAskard::Update(_float fTimeDelta)
     // 
 
     // ksta3 : 패턴 구현..
-    
+
 
 
     // 동작
 
-    _int iPatternLoopCycle = 350;   // 주기 프레임
+    _int iPatternLoopCycle = 240;   // 주기 프레임
 
     _int iStandardPatternFrame = m_iElapsedFrame_Update % iPatternLoopCycle;
 
     //switch (iStandardPatternFrame)
-    switch (m_iElapsedFrame_Update)
+    switch (iStandardPatternFrame)
     {
     case 30:
     {
         //m_ePattern = PATTERN_ASKARD::PT_SPAWN_WIDTH;
         //m_ePattern = PATTERN_ASKARD::PT_SPAWN_CROSS;
-        m_ePattern = PATTERN_ASKARD::PT_SPAWN_LINE;
-        
+        //m_ePattern = PATTERN_ASKARD::PT_SPAWN_LINE;
+        m_ePattern = PATTERN_ASKARD::PT_CORNER_LASER;
+
     }
-        break;
+    break;
 
     default:
         break;
@@ -141,10 +142,10 @@ void CAskard::Update(_float fTimeDelta)
         Play_Spawn_Width(fTimeDelta);
         break;
     case Client::CAskard::PATTERN_ASKARD::PT_FOLLOWING_EYES:
-        //Play_Following_Eyes(fTimeDelta);
+        Play_Following_Eyes(fTimeDelta);
         break;
     case Client::CAskard::PATTERN_ASKARD::PT_CORNER_LASER:
-        //Play_Corner_Laser(fTimeDelta);
+        Play_Corner_Laser(fTimeDelta);
         break;
     case Client::CAskard::PATTERN_ASKARD::PT_SPAWN_CROSS:
         Play_Spawn_Cross(fTimeDelta);
@@ -219,6 +220,10 @@ HRESULT CAskard::Render()
 
     if (!m_pTransformCom)
         return S_OK;
+
+    Adjust_Scale();
+
+
 
     SetUp_RenderState();
 
@@ -371,7 +376,7 @@ HRESULT CAskard::Ready_Components(void* pArg)
     m_pAnimatorCom->Add_State(L"P1_Attack_Ready",   { m_pTextureCom_P1_Attack_Ready	, 4, false });
     m_pAnimatorCom->Add_State(L"P1_Die",            { m_pTextureCom_P1_Die			, 4, true });
     m_pAnimatorCom->Add_State(L"P1_GroundIdle",     { m_pTextureCom_P1_GroundIdle	, 4, true });
-    m_pAnimatorCom->Add_State(L"P1_Laser",          { m_pTextureCom_P1_Laser		, 4, true });
+    m_pAnimatorCom->Add_State(L"P1_Laser",          { m_pTextureCom_P1_Laser		, 4, false });
     m_pAnimatorCom->Add_State(L"P1_PhaseChange",    { m_pTextureCom_P1_PhaseChange	, 4, true });
     m_pAnimatorCom->Add_State(L"P1_PhaseStart",     { m_pTextureCom_P1_PhaseStart	, 4, true });
     m_pAnimatorCom->Add_State(L"P1_RangeAttack",    { m_pTextureCom_P1_RangeAttack	, 4, true });
@@ -417,6 +422,26 @@ void CAskard::Summon_Tentacle(_float3 vPosition, CAskard_Tentacle::TYPE_TENTACLE
         ENUM_CLASS(LEVEL::LEVEL_BOSS2), L"Prototype_GameObject_Boss_Askard_Tentacle", &pDesc);
 }
 
+void CAskard::Summon_FollowingEye(_float3 vPosition)
+{
+    //CAskard_Eye::EYE_DESC pDesc = {};
+    //pDesc.vPosition = vPosition;
+
+    //pDesc.pTerrainBox = CRoom_Manager::GetInstance()->Get_CurrentRoom()->Get_TerrainBox();
+
+    //m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_STATIC), L"Layer_Effect",
+    //    ENUM_CLASS(LEVEL::LEVEL_BOSS2), L"Prototype_GameObject_Boss_Askard_Eye", &pDesc);
+}
+
+void CAskard::Adjust_Scale()    // 이미지 리소스를 수정하지 못한 상태에서, 크기를 맞추기 위한 임시 변환 용도. 삭제해도 괜찮습니다.
+{
+    _wstring strCurStateTag = m_pAnimatorCom->Get_CurStateTag();
+
+    if (strCurStateTag == L"P1_Laser")
+        m_pTransformCom->Scaling(3.f * 61.f / 84.f, 3.f * 53.f / 73.f, 3.f);
+    else
+        m_pTransformCom->Scaling(3.f, 3.f, 3.f);
+}
 
 void CAskard::OnCollision(CGameObject* pGameObject)
 {
@@ -555,12 +580,12 @@ void CAskard::Play_Spawn_Width(_float fTimeDelta)
     else if (m_iElapsedFrame_Pattern == 15)
     {
         CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::NORMAL_EFFECT, L"Prototype_Component_Boss_Askard_Attack_1_FX",
-            vMonsterPos + _float3{0.5f, 0, 0}, {0, 0, 0, 1}, {3, 3, 3});
+            vMonsterPos + _float3{ 0.5f, 0, 0 }, { 0, 0, 0, 1 }, { 3, 3, 3 });
     }
     else if
         (m_iElapsedFrame_Pattern == 40 ||
-        m_iElapsedFrame_Pattern == 120 ||
-        m_iElapsedFrame_Pattern == 200)
+            m_iElapsedFrame_Pattern == 120 ||
+            m_iElapsedFrame_Pattern == 200)
     {
         _bool isOddLine = (m_iElapsedFrame_Pattern == 120) ? true : false;
         _float fZRandOffset = 1.5f;
@@ -582,7 +607,7 @@ void CAskard::Play_Spawn_Width(_float fTimeDelta)
             for (int i = 0; i < iNumZ; i++)
                 iZLine.push_back(iNumZ - (iNumZ - 1) + i * iNumZ + 2);
 
-        
+
         _int iOddTentacleIndex = static_cast<_int>(m_pGameInstance->Compute_Random(0, iNumX * iNumZ));  // 별종 넣을 인덱스 선정
 
         for (int z = 0; z < iNumZ; z++)
@@ -593,13 +618,13 @@ void CAskard::Play_Spawn_Width(_float fTimeDelta)
             {
                 _float fPosX = vTerrainPos.x - vTerrainScale.x / 2.f + (vTerrainScale.x / (iNumX - 1)) * j;
 
-                _float fRand = m_pGameInstance->Compute_Random(- fZRandOffset / 2, fZRandOffset / 2);    // Z축 랜덤값
+                _float fRand = m_pGameInstance->Compute_Random(-fZRandOffset / 2, fZRandOffset / 2);    // Z축 랜덤값
                 _int iRandType = static_cast<_int>(m_pGameInstance->Compute_Random(0.f, 3.f));
-                
+
                 if ((iOddTentacleIndex == ((z + 1) * (j + 1) + j - 1)) && m_iElapsedFrame_Pattern == 120)
                     iRandType = 3; // 해당 인덱스에 별종 삽입
 
-                Summon_Tentacle(_float3{ fPosX, 0, fPosZ + fRand },static_cast<CAskard_Tentacle::TYPE_TENTACLE>(iRandType));
+                Summon_Tentacle(_float3{ fPosX, 0, fPosZ + fRand }, static_cast<CAskard_Tentacle::TYPE_TENTACLE>(iRandType));
             }
         }
     }
@@ -666,7 +691,7 @@ void CAskard::Play_Spawn_Cross(_float fTimeDelta)
 
     _int iMaxFrame_Pattern = iPatternCycleFrame * 3;      // 이 패턴은 몇프레임동안 플레이될 것인가
 
-   
+
     // 플레이어에게 다가와서 4방향 촉수 소환    
 
     // 1. 플레이어의 방향을 구함
@@ -686,7 +711,7 @@ void CAskard::Play_Spawn_Cross(_float fTimeDelta)
     _float3 vToTargetDir = m_vTargettedPos - vMonsterPos;
     vToTargetDir.y = 0;
     D3DXVec3Normalize(&vToTargetDir, &vToTargetDir);
-    
+
     _float4x4 matRotY90;                   // Y축 기준 90도 회전하는 행렬
     D3DXMatrixIdentity(&matRotY90);
     D3DXMatrixRotationY(&matRotY90, D3DXToRadian(90));
@@ -728,15 +753,15 @@ void CAskard::Play_Spawn_Cross(_float fTimeDelta)
         vToTargetDir = m_vTargettedPos - vMonsterPos;
         vToTargetDir.y = 0;
         D3DXVec3Normalize(&vToTargetDir, &vToTargetDir);
-        
+
         for (int i = 0; i < 4; i++)
         {
             _int iRandType = static_cast<_int>(m_pGameInstance->Compute_Random(0.f, 3.f));
             _float fRandOffsetX = m_pGameInstance->Compute_Random(-fRandOffsetRange / 2, +fRandOffsetRange / 2);
             _float fRandOffsetZ = m_pGameInstance->Compute_Random(-fRandOffsetRange / 2, +fRandOffsetRange / 2);
 
-            _float3 vSummonPos = vMonsterPos + vToTargetDir * fTentacleSpace * (iFrame + 1) + 
-                                _float3{fRandOffsetX, 0, fRandOffsetZ}; // 소환위치 랜덤성 부여
+            _float3 vSummonPos = vMonsterPos + vToTargetDir * fTentacleSpace * (iFrame + 1) +
+                _float3{ fRandOffsetX, 0, fRandOffsetZ }; // 소환위치 랜덤성 부여
 
             if (iOddTentacleIndex != -1 && iOddTentacleIndex == i)  // 변종 소환
                 iRandType = 3;
@@ -769,6 +794,9 @@ void CAskard::Play_Spawn_Cross(_float fTimeDelta)
 
 void CAskard::Play_Spawn_Line(_float fTimeDelta)
 {
+    // ksta : 나중에 Laser 상태 이미지 좀 늘릴 필요 있을 듯
+
+
     // 아래에서 사용할 변수들
 #pragma region Variables Setting
 
@@ -794,10 +822,10 @@ void CAskard::Play_Spawn_Line(_float fTimeDelta)
 
 #pragma endregion
 
-    _int iPatternCycleFrame = 100;
+    _int iPatternCycleFrame = 200;
     _int iCalcedCycleFrame = m_iElapsedFrame_Pattern % iPatternCycleFrame;
 
-    _int iMaxFrame_Pattern = iPatternCycleFrame * 3;      // 이 패턴은 몇프레임동안 플레이될 것인가
+    _int iMaxFrame_Pattern = iPatternCycleFrame;      // 이 패턴은 몇프레임동안 플레이될 것인가
 
 
     // 플레이어에게서 떨어져서 촉수 두 줄 소환
@@ -817,11 +845,11 @@ void CAskard::Play_Spawn_Line(_float fTimeDelta)
     vToTargetDir.y = 0;
     D3DXVec3Normalize(&vToTargetDir, &vToTargetDir);
 
-    _float4x4 matRotY5, matRotYM5;                   // Y축 기준 5도 회전하는 행렬
-    D3DXMatrixIdentity(&matRotY5);
-    D3DXMatrixIdentity(&matRotYM5);
-    D3DXMatrixRotationY(&matRotY5, D3DXToRadian(5));
-    D3DXMatrixRotationY(&matRotYM5, D3DXToRadian(-5));
+    _float4x4 matRotY1, matRotYM1;                   // Y축 기준 5도 회전하는 행렬
+    D3DXMatrixIdentity(&matRotY1);
+    D3DXMatrixIdentity(&matRotYM1);
+    D3DXMatrixRotationY(&matRotY1, D3DXToRadian(1));
+    D3DXMatrixRotationY(&matRotYM1, D3DXToRadian(-1));
 
 
 
@@ -844,27 +872,27 @@ void CAskard::Play_Spawn_Line(_float fTimeDelta)
         if (iCalcedCycleFrame == 30)
         {
             m_vTargettedPos = vTargetPos;
- 
+
             // 저장했던 플레이어의 위치를 기준으로, 해당 사분면을 제외하고 랜덤한 사분면으로 이동
 
             _float3 vMovePos{};
             _float fPosOffset = 12.f;
-        
-            _float3 vMovePosList[4] = {};
-            vMovePosList[0] = vTerrainPos + _float3{-fPosOffset, 0, fPosOffset};
-            vMovePosList[1] = vTerrainPos + _float3{fPosOffset, 0, fPosOffset};
-            vMovePosList[2] = vTerrainPos + _float3{fPosOffset, 0, -fPosOffset};
-            vMovePosList[3] = vTerrainPos + _float3{-fPosOffset, 0, -fPosOffset};
 
-            _bool isPlayerPosX_Positive = (vTerrainPos.x < m_vTargettedPos.x)? true : false;
-            _bool isPlayerPosZ_Positive = (vTerrainPos.z < m_vTargettedPos.z)? true : false;
-        
+            _float3 vMovePosList[4] = {};
+            vMovePosList[0] = vTerrainPos + _float3{ -fPosOffset, 0, fPosOffset };
+            vMovePosList[1] = vTerrainPos + _float3{ fPosOffset, 0, fPosOffset };
+            vMovePosList[2] = vTerrainPos + _float3{ fPosOffset, 0, -fPosOffset };
+            vMovePosList[3] = vTerrainPos + _float3{ -fPosOffset, 0, -fPosOffset };
+
+            _bool isPlayerPosX_Positive = (vTerrainPos.x < m_vTargettedPos.x) ? true : false;
+            _bool isPlayerPosZ_Positive = (vTerrainPos.z < m_vTargettedPos.z) ? true : false;
+
             _int iNotMovePosIndex;
-            if          (!isPlayerPosX_Positive && isPlayerPosZ_Positive)       iNotMovePosIndex = 0;
-            else if     (isPlayerPosX_Positive && isPlayerPosZ_Positive)        iNotMovePosIndex = 1;
-            else if     (isPlayerPosX_Positive && !isPlayerPosZ_Positive)       iNotMovePosIndex = 2;
-            else if     (!isPlayerPosX_Positive && !isPlayerPosZ_Positive)      iNotMovePosIndex = 3;
-        
+            if (!isPlayerPosX_Positive && isPlayerPosZ_Positive)       iNotMovePosIndex = 0;
+            else if (isPlayerPosX_Positive && isPlayerPosZ_Positive)        iNotMovePosIndex = 1;
+            else if (isPlayerPosX_Positive && !isPlayerPosZ_Positive)       iNotMovePosIndex = 2;
+            else if (!isPlayerPosX_Positive && !isPlayerPosZ_Positive)      iNotMovePosIndex = 3;
+
             _int iRandPosIndex = static_cast<_int>(m_pGameInstance->Compute_Random(0.f, 4.f));
             if (iNotMovePosIndex == iRandPosIndex)
                 iRandPosIndex = (iRandPosIndex + 2) % 4;
@@ -876,50 +904,65 @@ void CAskard::Play_Spawn_Line(_float fTimeDelta)
         _float fDiff = D3DXVec3Length(&vDiff);
 
         // 실제 이동
-        
+
         m_pTransformCom->Move_To(m_vMovePos, fTimeDelta * fDiff * fMoveSpeed, 0.5f);
 
     }
-    else if (IS_BETWEEN(iCalcedCycleFrame, 40, 55))
+    else if (IS_BETWEEN(iCalcedCycleFrame, 40, 55) ||
+        IS_BETWEEN(iCalcedCycleFrame, 90, 105) ||
+        IS_BETWEEN(iCalcedCycleFrame, 140, 155))
     {
-        if (iCalcedCycleFrame == 40)
+        if (iCalcedCycleFrame == 40 ||
+            iCalcedCycleFrame == 90 ||
+            iCalcedCycleFrame == 140)
             m_vTargettedPos = vTargetPos;   // 이전 위치 저장
 
         _int iOddTentacleIndex = -1;
-        if (iPatternCycleFrame + 45 == m_iElapsedFrame_Pattern) // 2번째 공격이라면.. 변종 1개 섞음
-            iOddTentacleIndex = m_pGameInstance->Compute_Random(0.f, 4.f);
+        _int iOddTentacleLineIndex = -1;
+        //if (iPatternCycleFrame == 90) // 2번째 공격이라면.. 변종 1개 섞음
+        //{
+        //    iOddTentacleIndex       = static_cast<_int>(m_pGameInstance->Compute_Random(2.f, 7.f));
+        //    iOddTentacleLineIndex   = static_cast<_int>(m_pGameInstance->Compute_Random(0.f, 2.f));
+        //}
 
-        _int iFrame = iCalcedCycleFrame - 40;
+        _int iFrame = (iCalcedCycleFrame) % 50 - 40;
+        iFrame = (iFrame < 0) ? iFrame + 50 : iFrame;
+
 
         vToTargetDir = m_vTargettedPos - vMonsterPos;
         vToTargetDir.y = 0;
         D3DXVec3Normalize(&vToTargetDir, &vToTargetDir);
 
+        for (int i = 0; i < iFrame + 1; i++)
+            D3DXVec3TransformNormal(&vToTargetDir, &vToTargetDir, &matRotY1);
+
         for (int i = 0; i < 2; i++)
         {
             _int iRandType = static_cast<_int>(m_pGameInstance->Compute_Random(0.f, 3.f));
+            if (iCalcedCycleFrame == 95)
+                iRandType = 3;
+
             _float fRandOffsetX = m_pGameInstance->Compute_Random(-fRandOffsetRange / 2, +fRandOffsetRange / 2);
             _float fRandOffsetZ = m_pGameInstance->Compute_Random(-fRandOffsetRange / 2, +fRandOffsetRange / 2);
 
             _float3 vSummonPos = vMonsterPos + vToTargetDir * fTentacleSpace * (iFrame + 1) +
                 _float3{ fRandOffsetX, 0, fRandOffsetZ }; // 소환위치 랜덤성 부여
 
+            //if (iOddTentacleIndex != -1 &&
+            //    iOddTentacleLineIndex == i &&
+            //    iOddTentacleIndex == (iCalcedCycleFrame - 90))  // 변종 소환
+            //    iRandType = 3;
 
-            for (int i = 0; i < 2; i++) D3DXVec3TransformNormal(&vToTargetDir, &vToTargetDir, &matRotYM5);
+            for (int i = 0; i < 8 + 1; i++)
+                D3DXVec3TransformNormal(&vToTargetDir, &vToTargetDir, &matRotYM1);
 
             // 소환할 좌표가 터레인 외부면 소환하지 않음
             if ((IS_BETWEEN(vSummonPos.x, vTerrainPos.x - vTerrainScale.x / 2, vTerrainPos.x + vTerrainScale.x / 2)) &&
                 (IS_BETWEEN(vSummonPos.z, vTerrainPos.z - vTerrainScale.z / 2, vTerrainPos.z + vTerrainScale.z / 2)))
                 Summon_Tentacle(vSummonPos, static_cast<CAskard_Tentacle::TYPE_TENTACLE>(iRandType));  // 각도 맞춰 위치반영 소환
-
-            D3DXVec3TransformNormal(&vToTargetDir, &vToTargetDir, &matRotY5);
         }
 
     }
-
-
-
-
 
 
 
@@ -936,4 +979,313 @@ void CAskard::Play_Spawn_Line(_float fTimeDelta)
         m_ePattern = PATTERN_ASKARD::PT_IDLE;
         m_pAnimatorCom->Change_State(L"P1_Idle");
     }
+}
+
+void CAskard::Play_Corner_Laser(_float fTimeDelta)
+{
+    // 아래에서 사용할 변수들
+#pragma region Variables Setting
+
+    _uint iCurLevel = CGameInstance::GetInstance()->Get_CurrentLevel();
+
+    CTransform* pTargetTransform = dynamic_cast<CTransform*>(m_pGameInstance->GetInstance()->Get_Component(iCurLevel, TEXT("Layer_Player"), TEXT("Com_Transform")));
+
+    const _float3 vMonsterPos = m_pTransformCom->Get_State(STATE::POSITION);
+    _float3 vTargetPos = pTargetTransform->Get_State(STATE::POSITION);
+
+    _float3 vDiff = -vMonsterPos + vTargetPos;
+    _float fDistance = D3DXVec3Length(&vDiff);
+
+
+    // ********* matMonster 구하기
+    _float4x4 matMonsterWorld = *m_pTransformCom->Get_WorldMatrix();
+
+    _wstring strCurStateTag = m_pAnimatorCom->Get_CurStateTag();
+
+
+    _float3 vTerrainPos = m_pTerrainTransformCom->Get_State(STATE::POSITION);
+    _float3 vTerrainScale = m_pTerrainTransformCom->Get_Scaled();
+
+#pragma endregion
+
+    // 이펙트 크기조절용 초기설정
+#pragma region Effect Setting
+
+    // 이펙트용
+    // 1. 원점으로 이동
+    _float4x4 matTransToOrigin = {};
+    D3DXMatrixIdentity(&matTransToOrigin);
+    D3DXMatrixTranslation(&matTransToOrigin, -matMonsterWorld._41, -matMonsterWorld._42, -matMonsterWorld._43);
+
+    // 2. 크기
+    _float4x4 matScale = {};
+    D3DXMatrixIdentity(&matScale);
+    D3DXMatrixScaling(&matScale, -1.f, 1.f, 1.f);
+
+    // 3. 자전
+    _float4x4 matRotateChild = {};
+    D3DXMatrixIdentity(&matRotateChild);
+    //D3DXMatrixRotationX(&matRotateChild, D3DXToRadian(-90)); // 안되면 -90도도 해보기
+
+    _float4x4 matRotateChildtoPlayer = {};
+    D3DXMatrixIdentity(&matRotateChildtoPlayer);
+    _float fAngle = atan2f(vTargetPos.x - vMonsterPos.x, vTargetPos.z - vMonsterPos.z);
+    _float fDegree = D3DXToDegree(fAngle) + 180;
+    //D3DXMatrixRotationY(&matRotateChildtoPlayer, D3DXToRadian(fDegree));  // 플레이어 방향을 보게 하고 싶다면 이쪽 주석을 해제
+
+    // 4. 원래 위치(몬스터)로 재이동
+    _float4x4 matTransReturn = {};
+    D3DXMatrixIdentity(&matTransReturn);
+    D3DXMatrixTranslation(&matTransReturn, matMonsterWorld._41, matMonsterWorld._42, matMonsterWorld._43);
+
+    // 5. 거기에 추가 이동 (y축 오프셋 후 플레이어 방향)
+    _float4x4 matTransOffset = {};
+    D3DXMatrixIdentity(&matTransOffset);
+    //D3DXMatrixTranslation(&matTransOffset, 0, -0.12f, 0);
+
+    _float4x4 matTransAddition = {};
+    D3DXMatrixIdentity(&matTransAddition);
+    //_float3 vDiff = -vPlayerPos + vMonsterPos;       // 플레이어 위치에서 마우스 교차좌표로 가는 벡터 
+    vDiff = -vMonsterPos + vTargetPos;
+    D3DXVec3Normalize(&vDiff, &vDiff);              // 를 단위벡터화, 안되면 vDiff 순서 바꿔보기
+    _float fDistanceOffset = 1.0f;                   // ** ksta : 중점으로부터 떨어져 있을 거리 **
+    vDiff *= fDistanceOffset;
+    //D3DXMatrixTranslation(&matTransAddition, vDiff.x, 0, vDiff.z);
+
+    matMonsterWorld = matTransToOrigin * matScale * matRotateChild * matRotateChildtoPlayer * matTransReturn * matTransOffset * matTransAddition;
+
+#pragma endregion
+
+    _int iMaxFrame_Pattern = 230;      // 이 패턴은 몇프레임동안 플레이될 것인가
+
+
+    // 완전한 가장자리로 가서 레이저 공격 후 플레이어에게 돌아옴
+
+
+    _float fMoveSpeed = 1.5f;       // 아스카드 도약 이속
+
+    if (IS_BETWEEN(m_iElapsedFrame_Pattern, 10, 25))
+    {
+        if (m_iElapsedFrame_Pattern == 10)
+        {
+            m_vTargettedPos = vTargetPos;
+
+            // 저장했던 플레이어의 위치를 기준으로, 해당 사분면을 제외하고 랜덤한 사분면으로 이동
+
+            _float3 vMovePos{};
+            _float fPosOffset = 14.9f;
+
+            _float3 vMovePosList[4] = {};
+            vMovePosList[0] = vTerrainPos + _float3{ -fPosOffset, 0, fPosOffset };
+            vMovePosList[1] = vTerrainPos + _float3{ fPosOffset, 0, fPosOffset };
+            vMovePosList[2] = vTerrainPos + _float3{ fPosOffset, 0, -fPosOffset };
+            vMovePosList[3] = vTerrainPos + _float3{ -fPosOffset, 0, -fPosOffset };
+
+            _bool isPlayerPosX_Positive = (vTerrainPos.x < m_vTargettedPos.x) ? true : false;
+            _bool isPlayerPosZ_Positive = (vTerrainPos.z < m_vTargettedPos.z) ? true : false;
+
+            _int iNotMovePosIndex;
+            if (!isPlayerPosX_Positive && isPlayerPosZ_Positive)           iNotMovePosIndex = 0;
+            else if (isPlayerPosX_Positive && isPlayerPosZ_Positive)            iNotMovePosIndex = 1;
+            else if (isPlayerPosX_Positive && !isPlayerPosZ_Positive)           iNotMovePosIndex = 2;
+            else if (!isPlayerPosX_Positive && !isPlayerPosZ_Positive)          iNotMovePosIndex = 3;
+
+            _int iRandPosIndex = static_cast<_int>(m_pGameInstance->Compute_Random(0.f, 4.f));
+            if (iNotMovePosIndex == iRandPosIndex)
+                iRandPosIndex = (iRandPosIndex + 2) % 4;
+
+            m_vMovePos = vMovePosList[iRandPosIndex]; // 최종 정해진 이동 위치
+        }
+
+        _float3 vDiff = vTargetPos - vMonsterPos;
+        _float fDiff = D3DXVec3Length(&vDiff);
+
+        // 실제 이동
+
+        m_pTransformCom->Move_To(m_vMovePos, fTimeDelta * (25.f - fDiff) * fMoveSpeed, 0.5f);
+    }
+    else if (m_iElapsedFrame_Pattern == 25)
+    {
+        // 레이저 준비 (상태변화)
+        CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::NORMAL_EFFECT, L"Prototype_Component_Boss_Askard_Laser_FX",
+            vMonsterPos + _float3{ 0, 0, 0 }, { 0, 0, 0, 1 }, { 3, 3, 3 });
+        m_pAnimatorCom->Change_State(L"P1_Laser");
+    }
+    else if (m_iElapsedFrame_Pattern == 85)
+    {
+        // 레이저 가이드
+        
+        _float fGuideOffset = 0.6f; // 4방향 표현을 위해 중점으로부터 얼만큼 이동시킬건지
+        _float fYPosOffset = 0.2f;
+
+        _float fGuideDeg = 0.f;
+        _float3 vGuidePosOffset = {};
+        if      (vMonsterPos.x < vTerrainPos.x && vMonsterPos.z < vTerrainPos.z){ // 제4 사분면
+            vGuidePosOffset = { -fGuideOffset, 0, -fGuideOffset };
+            // 각도 조건 넣어서 1143번째줄에 넣어줘야함
+            fGuideDeg = 0.f;
+        }
+        else if (vMonsterPos.x > vTerrainPos.x && vMonsterPos.z < vTerrainPos.z){ // 제3 사분면
+            vGuidePosOffset = { fGuideOffset, 0, -fGuideOffset };
+            fGuideDeg = 270.f;
+        }
+        else if (vMonsterPos.x > vTerrainPos.x && vMonsterPos.z > vTerrainPos.z){ // 제2 사분면
+            vGuidePosOffset = { fGuideOffset, 0, fGuideOffset };
+            fGuideDeg = 180.f;
+        }
+        else if (vMonsterPos.x < vTerrainPos.x && vMonsterPos.z > vTerrainPos.z){ // 제1 사분면
+            vGuidePosOffset = { -fGuideOffset, 0, fGuideOffset };
+            fGuideDeg = 90.f;
+        }
+
+#pragma region Effect Setting Change
+        _float4x4 matTargetWorld = *pTargetTransform->Get_WorldMatrix();
+
+        // 1. 원점으로 이동
+        _float4x4 matTransToOriginP = {};
+        D3DXMatrixIdentity(&matTransToOriginP);
+        D3DXMatrixTranslation(&matTransToOriginP, -matTargetWorld._41, -matTargetWorld._42, -matTargetWorld._43);
+
+        // 2. 크기
+        _float4x4 matScaleP = {};
+        D3DXMatrixIdentity(&matScaleP);
+        //D3DXMatrixScaling(&matScaleP, 0.5f, 0.5f, 0.5f);
+
+        // 3. 자전
+        _float4x4 matRotateChildP = {};
+        D3DXMatrixIdentity(&matRotateChildP);
+        D3DXMatrixRotationX(&matRotateChildP, D3DXToRadian(-90)); // 안되면 -90도도 해보기
+        _float4x4 matRotateChildP2 = {};
+        D3DXMatrixIdentity(&matRotateChildP2);
+        D3DXMatrixRotationY(&matRotateChildP2, D3DXToRadian(fGuideDeg)); // 안되면 -90도도 해보기
+
+        // 4. 원래 위치(플레이어)로 재이동
+        _float4x4 matTransReturnP = {};
+        D3DXMatrixIdentity(&matTransReturnP);
+        D3DXMatrixTranslation(&matTransReturnP, matTargetWorld._41, matTargetWorld._42, matTargetWorld._43);
+
+        // 5. 거기에 추가 이동
+        _float4x4 matTransOffsetP = {};
+        D3DXMatrixIdentity(&matTransOffsetP);
+        D3DXMatrixTranslation(&matTransOffsetP, vGuidePosOffset.x, vGuidePosOffset.y + fYPosOffset, vGuidePosOffset.z);
+
+        matTargetWorld = matTransToOriginP * matScaleP * matRotateChildP * matRotateChildP2 * matTransReturnP * matTransOffsetP;
+#pragma endregion
+        _float4x4 matEmpty;
+        D3DXMatrixIdentity(&matEmpty);
+
+        CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::NORMAL_EFFECT, L"Prototype_Component_Boss_Askard_Laser_Alert",
+            *pTargetTransform->Get_WorldMatrix(), matTargetWorld, pTargetTransform, 0.f);
+    }
+    else if (m_iElapsedFrame_Pattern == 119)
+    {
+#pragma region Laser Setting Change
+
+        // 사분면에 따라 + 랜덤값에 따라 최초 락온 지점이 다르게끔, 
+        // fLaserRotateDeg 값을 이용 바깥쪽 스타트 - 안쪽으로 돌게끔 조건 부여
+        _float fRotateSpeedDeg = 120.f;
+
+        _float fLaserRotateDeg = {};
+        _int iRand = static_cast<_int>(m_pGameInstance->Compute_Random(0, 2));// 레이저의 시작 각도, 도는 방향을 랜덤히 지정함
+        if (iRand == 0)
+        {
+            if (vMonsterPos.x < vTerrainPos.x) {
+                m_vLockedOnPos = { vTerrainPos.x - (vTerrainScale.x / 2), 0, vTerrainPos.z };
+                fLaserRotateDeg = (vMonsterPos.z < vTerrainPos.z) ? fRotateSpeedDeg : -fRotateSpeedDeg;
+            }
+            else {
+                m_vLockedOnPos = { vTerrainPos.x + (vTerrainScale.x / 2), 0, vTerrainPos.z };
+                fLaserRotateDeg = (vMonsterPos.z < vTerrainPos.z) ? -fRotateSpeedDeg : fRotateSpeedDeg;
+            }
+        }
+        else
+        {
+            if (vMonsterPos.z < vTerrainPos.z) {
+                m_vLockedOnPos = { vTerrainPos.x, 0, vTerrainPos.z - (vTerrainScale.z / 2) };
+                fLaserRotateDeg = (vMonsterPos.x < vTerrainPos.x) ? -fRotateSpeedDeg : fRotateSpeedDeg;
+            }
+            else {
+                m_vLockedOnPos = { vTerrainPos.x, 0, vTerrainPos.z + (vTerrainScale.z / 2) };
+                fLaserRotateDeg = (vMonsterPos.x < vTerrainPos.x) ? fRotateSpeedDeg : -fRotateSpeedDeg;
+            }
+        }
+
+        // -----------
+
+        // 크기 조절
+        D3DXMatrixScaling(&matScale, -4.f, 16.f, 16.f);
+
+        // 눕히기
+        matRotateChild = {};
+        D3DXMatrixIdentity(&matRotateChild);
+        D3DXMatrixRotationX(&matRotateChild, D3DXToRadian(-90));
+
+        matRotateChildtoPlayer = {};
+        D3DXMatrixIdentity(&matRotateChildtoPlayer);
+        fAngle = atan2f(m_vLockedOnPos.x - vMonsterPos.x, m_vLockedOnPos.z - vMonsterPos.z);
+        fDegree = D3DXToDegree(fAngle) + 180;
+        D3DXMatrixRotationY(&matRotateChildtoPlayer, D3DXToRadian(fDegree));  // m_vLockedOnPos 방향을 보도록 함.
+
+        D3DXMatrixIdentity(&matTransOffset);
+
+        matTransAddition = {};
+        D3DXMatrixIdentity(&matTransAddition);
+        //_float3 vDiff = -vPlayerPos + vMonsterPos;       // 플레이어 위치에서 마우스 교차좌표로 가는 벡터 
+        vDiff = -vMonsterPos+m_vLockedOnPos;
+        D3DXVec3Normalize(&vDiff, &vDiff);              // 를 단위벡터화, 안되면 vDiff 순서 바꿔보기
+        _float fDistanceOffset = 20.f;                   // ** ksta : 중점으로부터 떨어져 있을 거리 **
+        vDiff *= fDistanceOffset;
+        D3DXMatrixTranslation(&matTransAddition, vDiff.x, 0, vDiff.z);
+
+        matMonsterWorld = matTransToOrigin * matScale * matRotateChild * matRotateChildtoPlayer * matTransReturn * matTransOffset * matTransAddition;
+
+#pragma endregion
+
+        // m_vLockedOnPos 를 기준으로 레이저 시작점 지정 (LaserGhost 처럼)
+        // 300번째 줄 확인하여 돌아갈 방향 지정
+        CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::MONSTER_EFFECT, L"Prototype_Component_Boss_Askard_Laser",
+            *m_pTransformCom->Get_WorldMatrix(), matMonsterWorld, { 0, 0, 0 }, 0.f, 0.f, D3DXToRadian(fLaserRotateDeg));
+#pragma region Setting Reset
+        D3DXMatrixIdentity(&matScale);
+        D3DXMatrixIdentity(&matRotateChildtoPlayer);
+        D3DXMatrixIdentity(&matTransAddition);
+
+        matMonsterWorld = matTransToOrigin * matScale * matRotateChild * matRotateChildtoPlayer * matTransReturn * matTransOffset * matTransAddition;
+#pragma endregion
+    }
+    else if (m_iElapsedFrame_Pattern == 124)
+    {
+        CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::NORMAL_EFFECT, L"Prototype_Component_Boss_Askard_Laser_FX_Cycle",
+            vMonsterPos + _float3{ 0, 0, 0 }, { 0, 0, 0, 1 }, { 3, 3, 3 }, 0.9f);
+    }
+    else if (IS_BETWEEN(m_iElapsedFrame_Pattern, 178, 188))
+    {
+        _float3 vDiff = vTargetPos - vMonsterPos;
+        _float fDiff = D3DXVec3Length(&vDiff);
+        m_pTransformCom->Move_To(m_vTargettedPos, fTimeDelta* fDiff* fMoveSpeed, 2.f);
+    }
+
+
+
+    if (strCurStateTag == L"P1_Attack_Ready")
+        m_pAnimatorCom->Change_State(L"P1_Attack");
+    else if (strCurStateTag == L"P1_Attack")
+        m_pAnimatorCom->Change_State(L"P1_Attack_End");
+
+    if (strCurStateTag == L"P1_Laser")
+        m_pAnimatorCom->Change_State(L"P1_Attack_End");
+
+    m_iElapsedFrame_Pattern++;
+
+    if (m_iElapsedFrame_Pattern >= iMaxFrame_Pattern)
+    {
+        m_iElapsedFrame_Pattern = 0;
+        m_ePattern = PATTERN_ASKARD::PT_IDLE;
+        m_pAnimatorCom->Change_State(L"P1_Idle");
+    }
+}
+
+void CAskard::Play_Following_Eyes(_float fTimeDelta)
+{
+
 }

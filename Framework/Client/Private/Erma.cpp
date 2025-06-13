@@ -200,7 +200,7 @@ void CErma::Update(_float fTimeDelta)
     D3DXMatrixIdentity(&matTransAddition);
     //_float3 vDiff = -vPlayerPos + vMonsterPos;       // 플레이어 위치에서 마우스 교차좌표로 가는 벡터
     D3DXVec3Normalize(&vDiff, &vDiff);              // 를 단위벡터화, 안되면 vDiff 순서 바꿔보기
-    _float fDistanceOffset = 1.0f;                   // ** ksta : 중점으로부터 떨어져 있을 거리 **
+    _float fDistanceOffset = 1.0f;                   // 중점으로부터 떨어져 있을 거리
     vDiff *= fDistanceOffset;
     //D3DXMatrixTranslation(&matTransAddition, vDiff.x, 0, vDiff.z);
 

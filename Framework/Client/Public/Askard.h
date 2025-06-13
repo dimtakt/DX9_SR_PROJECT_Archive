@@ -3,6 +3,7 @@
 #include "Client_Defines.h"
 
 #include "Askard_Tentacle.h"
+//#include "Askard_Eye.h"
 
 
 BEGIN(Client)
@@ -57,6 +58,7 @@ private:
 	HRESULT Ready_Object();
 
 	void Summon_Tentacle(_float3 vPosition, CAskard_Tentacle::TYPE_TENTACLE eType);
+	void Summon_FollowingEye(_float3 vPosition);
 
 public:
 	virtual void OnCollision(CGameObject* pGameObject) override;
@@ -101,12 +103,17 @@ private:
 	_int			m_iElapsedFrame_Update			= 0;
 	_float3			m_vTargettedPos					= {};
 	_float3			m_vMovePos						= {};
+	_float3			m_vLockedOnPos					= {};
 
 private:
+	void			Adjust_Scale();					// 임시, 리소스 크기 조정하면 삭제
+
 	// Patterns
 	void			Play_Spawn_Width(_float fTimeDelta);
 	void			Play_Spawn_Cross(_float fTimeDelta);
 	void			Play_Spawn_Line(_float fTimeDelta);
+	void			Play_Corner_Laser(_float fTimeDelta);
+	void			Play_Following_Eyes(_float fTimeDelta);
 
 public:
 	static CAskard* Create(LPDIRECT3DDEVICE9 pGraphic_Device);
