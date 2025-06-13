@@ -21,9 +21,7 @@ private:
 	CEvent_ClashKey(const CEvent_ClashKey& Prototype);
 	virtual						~CEvent_ClashKey() = default;
 public:
-	void						Input_KeySetting();
-	void						Clear_KeySetting();
-	void						Reset_KeySetting();
+	void						Input_KeySetting(_int iIndex);
 
 public:
 	virtual HRESULT				Initialize_Prototype();

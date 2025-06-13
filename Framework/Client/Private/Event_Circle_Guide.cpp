@@ -16,8 +16,10 @@ HRESULT CEvent_Circle_Guide::Initialize_Prototype(LEVEL eLevel)
 
 HRESULT CEvent_Circle_Guide::Initialize(void* pArg)
 {
-	m_fSizeX = 200;
-	m_fSizeY = 200;
+	UIOBJECT_DESC* Desc = static_cast<UIOBJECT_DESC*>(pArg);
+
+	m_fSizeX = Desc->fSizeX;
+	m_fSizeY = Desc->fSizeY;
 	m_fX = 0;
 	m_fY = 0;
 	m_fZ = UI_DEPTH::EVENT_AZ;

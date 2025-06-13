@@ -359,7 +359,14 @@ HRESULT CEvent_AZPattern::Ready_Children()
 		return E_FAIL;
 	Add_Child(pGameObject);
 
-	pGameObject = dynamic_cast<CUIObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(m_eLevel), TEXT("Prototype_GameObject_Event_Result")));
+	CEvent_Result::RESUlT_DESC Result_Desc{};
+	Result_Desc.fSizeX = 500;
+	Result_Desc.fSizeY = 150;
+	Result_Desc.fX = 0;
+	Result_Desc.fY = 0;
+	Result_Desc.strFont = TEXT("UI_Font_50");
+
+	pGameObject = dynamic_cast<CUIObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(m_eLevel), TEXT("Prototype_GameObject_Event_Result"),&Result_Desc));
 	if (nullptr == pGameObject)
 		return E_FAIL;
 	Add_Child(pGameObject);
