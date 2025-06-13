@@ -19,13 +19,12 @@ void CCollision_Manager::Clear_Colliders()
 {
     for (size_t i = 0; i < m_vColliders.size(); ++i)
     {
-        if (m_vColliders[i]->Get_Owner() == nullptr || 
-            m_vColliders[i]->Get_Owner()->Get_IsDead() || 
-            !m_vColliders[i]->Get_Owner()->Get_IsActive())
-        {
+        if (m_vColliders[i]->Get_Owner() == nullptr)
             Safe_Release(m_vColliders[i]);
-
-        }
+        else if (m_vColliders[i]->Get_Owner()->Get_IsDead())
+            Safe_Release(m_vColliders[i]);
+        else if (!m_vColliders[i]->Get_Owner()->Get_IsActive())
+            Safe_Release(m_vColliders[i]);
     }
 }
 
