@@ -77,9 +77,6 @@ void CEvent_ClashPattern::Priority_Update(_float fTimeDelta)
 	if (m_pGameInstance->Get_CurrentLevel() == ENUM_CLASS(LEVEL::LEVEL_LOADING) || m_pGameInstance->Get_CurrentLevel() == ENUM_CLASS(LEVEL::LEVEL_LOGO) || m_pGameInstance->Get_CurrentLevel() == ENUM_CLASS(LEVEL::LEVEL_MAPEDIT))
 		return;
 
-	if (m_pGameInstance->IsKeyDown(VK_DOWN))
-		Start_Event();
-
 	if (!m_bIsUpdate)
 		return;
 
