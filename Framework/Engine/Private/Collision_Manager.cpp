@@ -19,6 +19,8 @@ void CCollision_Manager::Clear_Colliders()
 {
     for (size_t i = 0; i < m_vColliders.size(); ++i)
     {
+        if (m_vColliders[i] == nullptr)
+            Safe_Release(m_vColliders[i]);
         if (m_vColliders[i]->Get_Owner() == nullptr)
             Safe_Release(m_vColliders[i]);
         else if (m_vColliders[i]->Get_Owner()->Get_IsDead())
@@ -33,7 +35,7 @@ void CCollision_Manager::Check_RoomCollisions()
 
     for (auto it = m_vColliders.begin(); it != m_vColliders.end();) {
         if (*it != nullptr) {
-            if ((*it)->Get_IsDead() || (*it)->Get_Owner() == nullptr || (*it)->Get_Owner()->Get_IsDead())
+            if ((*it)->Get_Owner() == nullptr || (*it)->Get_IsDead() || (*it)->Get_Owner()->Get_IsDead())
             {
                 Safe_Release(*it);
                 it = m_vColliders.erase(it);
