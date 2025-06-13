@@ -167,6 +167,7 @@
     <ClInclude Include="..\public\Askard_Tentacle.h" />
     <ClInclude Include="..\public\Askard_Hpbar.h" />
     <ClInclude Include="..\Public\BackGround.h" />
+    <ClInclude Include="..\Public\IceBolt.h" />
     <ClInclude Include="..\public\BossHp_Askard.h" />
     <ClInclude Include="..\public\BossHp_Ema.h" />
     <ClInclude Include="..\public\BossHp_SubHp.h" />
@@ -197,6 +198,9 @@
     <ClInclude Include="..\public\Erma_Head.h" />
     <ClInclude Include="..\public\EventKey.h" />
     <ClInclude Include="..\public\Event_AZPattern.h" />
+    <ClInclude Include="..\public\Event_Circle.h" />
+    <ClInclude Include="..\public\Event_Circle_Guide.h" />
+    <ClInclude Include="..\public\Event_ClashKey.h" />
     <ClInclude Include="..\public\Event_ClashPattern.h" />
     <ClInclude Include="..\public\Event_Rect.h" />
     <ClInclude Include="..\public\Event_Result.h" />
@@ -388,6 +392,7 @@
     <ClCompile Include="..\private\Askard_Tentacle.cpp" />
     <ClCompile Include="..\private\Askard_Hpbar.cpp" />
     <ClCompile Include="..\Private\BackGround.cpp" />
+    <ClCompile Include="..\Private\IceBolt.cpp" />
     <ClCompile Include="..\private\BossHp_Askard.cpp" />
     <ClCompile Include="..\private\BossHp_Ema.cpp" />
     <ClCompile Include="..\private\BossHp_SubHp.cpp" />
@@ -414,6 +419,9 @@
     <ClCompile Include="..\private\Erma_Head.cpp" />
     <ClCompile Include="..\private\EventKey.cpp" />
     <ClCompile Include="..\private\Event_AZPattern.cpp" />
+    <ClCompile Include="..\private\Event_Circle.cpp" />
+    <ClCompile Include="..\private\Event_Circle_Guide.cpp" />
+    <ClCompile Include="..\private\Event_ClashKey.cpp" />
     <ClCompile Include="..\private\Event_ClashPattern.cpp" />
     <ClCompile Include="..\private\Event_Rect.cpp" />
     <ClCompile Include="..\private\Event_Result.cpp" />

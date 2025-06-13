@@ -17,6 +17,7 @@
 #include "Planet.h"
 #include "ProjSword.h"
 #include "FrozenHammer.h"
+#include "IceBolt.h"
 
 CPlayer::CPlayer(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CGameObject{ pGraphic_Device }
@@ -50,7 +51,8 @@ HRESULT CPlayer::Initialize(void* pArg)
     m_dwHitTime = 0.f;
 
     Ready_Item(pArg);
-    
+    Ready_Skill(pArg);
+
     return S_OK;
 }
 
@@ -529,6 +531,8 @@ void CPlayer::Update(_float fTimeDelta)
 
 
 
+    //// 스킬 호출 테스트 /////
+
     //std::cout << "[Player::Update] PlayerPos : " << vPlayerPos.x << ", " << vPlayerPos.y << ", " << vPlayerPos.z << std::endl;
 }
 
@@ -944,6 +948,9 @@ HRESULT CPlayer::Ready_Object()
     m_pChat->Add_Chat(TEXT("안녕하세요2"));
     m_pChat->Add_Chat(TEXT("안녕하세요3"));
     m_pChat->Add_Chat(TEXT("안녕하세요4"));
+
+
+
     return S_OK;
 }
 
@@ -1041,6 +1048,19 @@ void CPlayer::Ready_Parry()
     
 
 }
+
+HRESULT CPlayer::Ready_Skill(void* pArg)
+{
+    PLAYERDESC* pDes = static_cast<PLAYERDESC*>(pArg);
+
+    CIceBolt::BOLTDESC BoltDesc{};;
+    BoltDesc.pPlayerTransform = m_pTransformCom;
+
+    if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(pDes->iLayerIndex, TEXT("Player_Skill"),
+        ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_IceBolt"), &BoltDesc)))
+        return E_FAIL;
+}
+
 
 _bool CPlayer::Get_IsGodMode()
 {

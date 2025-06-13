@@ -2,6 +2,7 @@
 #include "GameInstance.h"
 #include "Event_Rect.h"
 #include "Stat_Manager.h"
+#include "Event_Circle.h"
 CEvent_ClashPattern::CEvent_ClashPattern(LPDIRECT3DDEVICE9 pGraphic_Device) : CUIObject(pGraphic_Device)
 {
 }
@@ -132,6 +133,10 @@ HRESULT CEvent_ClashPattern::Ready_ChildPrototype(LEVEL eLevel)
 		CEvent_Rect::Create(m_pGraphic_Device, m_eLevel))))
 		return E_FAIL;
 
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(eLevel), TEXT("Prototype_GameObject_UI_Clash_Circle"),
+		CEvent_Circle::Create(m_pGraphic_Device, eLevel))))
+		return E_FAIL;
+
 	return S_OK;
 }
 
@@ -150,6 +155,11 @@ HRESULT CEvent_ClashPattern::Ready_Children()
 			return E_FAIL;
 		Add_Child(pGameObject);
 	}
+
+	pGameObject = dynamic_cast<CUIObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(m_eLevel), TEXT("Prototype_GameObject_UI_Clash_Circle"), &Desc));
+	if (nullptr == pGameObject)
+		return E_FAIL;
+	Add_Child(pGameObject);
 	return S_OK;
 }
 

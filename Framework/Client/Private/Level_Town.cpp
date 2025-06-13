@@ -10,6 +10,7 @@
 #include "Field_Item.h"
 #include "Field_Npc_Chat.h"
 #include "BossHp_Askard.h"
+#include "IceBolt.h"
 #include "Npc.h"
 CLevel_Town::CLevel_Town(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CLevel{ pGraphic_Device }
@@ -49,7 +50,6 @@ HRESULT CLevel_Town::Initialize()
 
 void CLevel_Town::Update(_float fTimeDelta)
 {
-
 	return ;
 }
 
@@ -135,6 +135,7 @@ HRESULT CLevel_Town::Ready_Layer_Player(const _wstring& strLayerTag)
 		ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_Player"), &PlayerDesc)))
 		return E_FAIL;
 
+
 	return S_OK;
 }
 
@@ -160,6 +161,7 @@ HRESULT CLevel_Town::Ready_Layer_UI(const _wstring& strLayerTag)
 		ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_Hud_Dash"), &Desc)))
 		return E_FAIL;
 	
+
 	return S_OK;
 }
 
@@ -180,8 +182,8 @@ HRESULT CLevel_Town::Ready_Layer_Room(const _wstring& strLayerTag)
 		pRoom->Load_From_File(ENUM_CLASS(LEVEL::LEVEL_TOWN), strLayerTag, TEXT("../../data/Town.txt"), iNumber, iRoomX, iRoomZ, ROOM_INFO::EVENT_NORMAL);
 		iNumber++;
 
-		pRoom->Load_Particle(PARTICLE_TYPE::FIRE, TEXT("Prototype_GameObject_FireParticle"), ENUM_CLASS(LEVEL::LEVEL_TOWN), _float3(0.5f, 0.5f, 1.f), 1);
-		pRoom->Set_ParticleType(PARTICLE_TYPE::FIRE);
+		pRoom->Load_Particle(PARTICLE_TYPE::LIGHT, TEXT("Prototype_GameObject_FireParticle"), ENUM_CLASS(LEVEL::LEVEL_TOWN), _float3(0.5f, 0.5f, 1.f), 1);
+		pRoom->Set_ParticleType(PARTICLE_TYPE::LIGHT);
 		pRoom->Set_ParticleOn();
 		
 		CPlayer* pPlayer = dynamic_cast<CPlayer*>(m_pGameInstance->Get_GameObject(ENUM_CLASS(LEVEL::LEVEL_TOWN), TEXT("Layer_Player")));
