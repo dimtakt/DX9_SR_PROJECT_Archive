@@ -6,6 +6,7 @@
 #include "Camera_Follow.h"
 #include "Dagger.h"
 #include "Player.h"
+#include "Npc.h"
 
 CLevel_Shelter::CLevel_Shelter(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CLevel{ pGraphic_Device }
@@ -34,6 +35,9 @@ HRESULT CLevel_Shelter::Initialize()
 		return E_FAIL;
 
 	if (FAILED(Ready_Layer_UI(TEXT("Layer_UI"))))
+		return E_FAIL;
+
+	if (FAILED(Ready_Layer_NPC(TEXT("Layer_NPC"))))
 		return E_FAIL;
 
 	m_pGameInstance->StopAll();
@@ -189,6 +193,20 @@ HRESULT CLevel_Shelter::Ready_Layer_Room(const _wstring& strLayerTag)
 
 	// Æ÷Å» ¼³Ä¡
 	CRoom_Manager::GetInstance()->Check_SpecialRoom(LEVEL::LEVEL_SHELTER, strLayerTag, 0); //¸¶À»Àº ·ëÀÎµ¦½º 0 ÇÑ°³
+}
+
+HRESULT CLevel_Shelter::Ready_Layer_NPC(const _wstring& strLayerTag)
+{
+
+	CNpc::NPCDESC desc{};
+
+	desc.eType = CNpc::NPC_TYPE::SHIELDDOG;
+
+	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_SHELTER), strLayerTag,
+		ENUM_CLASS(LEVEL::LEVEL_SHELTER), TEXT("Prototype_GameObject_Npc"), &desc)))
+		return E_FAIL;
+
+	return S_OK;
 }
 
 CLevel_Shelter* CLevel_Shelter::Create(LPDIRECT3DDEVICE9 pGraphic_Device)

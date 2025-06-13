@@ -64,8 +64,12 @@ void CErma::Priority_Update(_float fTimeDelta)
 {
     __super::Priority_Update(fTimeDelta);
 
-    if (m_iChatCount < m_iCulChatCount)
+    if (m_iChatCount < m_iCulChatCount) {
         m_bStart = true;
+        m_pChat->Off_Chat();
+        m_pChat->End_Chat();
+    }
+        
     
     /*if (m_pHpBar != nullptr &&
         m_isSummoned)
@@ -687,8 +691,10 @@ void CErma::OnCollision(CGameObject* pGameObject)
     switch (pGameObject->Get_ObjType())
     {
     case GAMEOBJ_TYPE::PLAYER:
+        m_pChat->On_Chat(0, false);
         if (m_pGameInstance->IsKeyDown('F'))
         {
+            m_pChat->Off_Chat();
             m_pChat->Cinematic_Chat(0, false);
             m_iCulChatCount++;
         }

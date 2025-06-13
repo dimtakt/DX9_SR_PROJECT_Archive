@@ -32,7 +32,7 @@ HRESULT CParticle_Manager::Create_Particle_Fast(_uint iParticleType, _uint iLaye
     if (iOffSetType == 1)
         Create_OffSet_20();     // 값하나 더 받아서 20으로 설정할건지 30으롷 할건지 조건으로 바꿔주면 될듯?
     else if (iOffSetType == 2)
-        Create_OffSet_20();
+        Create_OffSet_30();
 
     return S_OK;
 }
@@ -62,9 +62,10 @@ HRESULT CParticle_Manager::Create_Particle_Low(_uint iParticleType, _uint iLayer
     }
 
     if(iOffSetType == 1)
-      Create_OffSet_20();     // 값하나 더 받아서 20으로 설정할건지 30으롷 할건지 조건으로 바꿔주면 될듯?
+      Create_OffSet_20();     //일반룸 크기
     else if (iOffSetType == 2)
-      Create_OffSet_20();
+      Create_OffSet_30();   // 보스룸 크기
+
 
     return S_OK;
 }
@@ -99,9 +100,8 @@ void CParticle_Manager::Create_OffSet_20()
     }
 }
 
-void CParticle_Manager::Create_Offset_30()
+void CParticle_Manager::Create_OffSet_30()
 {
-    m_vOffSet.clear();
 
     for (int i = 0; i < 200; ++i)
     {

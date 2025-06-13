@@ -487,6 +487,15 @@
     <Filter Include="02.GameObject\Player\FrozenHammer">
       <UniqueIdentifier>{ef988741-fc70-43b3-9f0d-63acb52d8f8a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\Player\Magic">
+      <UniqueIdentifier>{6f0c16be-20c8-4d8e-91be-05e5af8962b4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Player\Magic\Bolt">
+      <UniqueIdentifier>{856eea84-f8c7-4bb9-b134-1a00a6a58baf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\NPC">
+      <UniqueIdentifier>{3be993b1-dff7-4b52-bed1-06eb778c27ad}</UniqueIdentifier>
+    </Filter>
     <Filter Include="02.GameObject\UI\Event\ClashPatten\ETC">
       <UniqueIdentifier>{d528ba89-0b28-4ca7-bc6d-09db6f138612}</UniqueIdentifier>
     </Filter>
@@ -1074,6 +1083,15 @@
     <ClInclude Include="..\Public\FrozenHammer.h">
       <Filter>02.GameObject\Player\FrozenHammer</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\IceBolt.h">
+      <Filter>02.GameObject\Player\Magic\Bolt</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Npc.h">
+      <Filter>02.GameObject\NPC</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Event_Circle.h">
+      <Filter>02.GameObject\UI\Event\ClashPatten\ETC</Filter>
+    </ClInclude>
     <ClInclude Include="..\public\Event_ClashKey.h">
       <Filter>02.GameObject\UI\Event\ClashPatten\ETC</Filter>
     </ClInclude>
@@ -1631,6 +1649,15 @@
     </ClCompile>
     <ClCompile Include="..\Private\FrozenHammer.cpp">
       <Filter>02.GameObject\Player\FrozenHammer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\IceBolt.cpp">
+      <Filter>02.GameObject\Player\Magic\Bolt</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Npc.cpp">
+      <Filter>02.GameObject\NPC</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Event_Circle.cpp">
+      <Filter>02.GameObject\UI\Event\ClashPatten\ETC</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Event_ClashKey.cpp">
       <Filter>02.GameObject\UI\Event\ClashPatten\ETC</Filter>
