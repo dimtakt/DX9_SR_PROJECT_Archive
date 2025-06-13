@@ -69,7 +69,7 @@ HRESULT CNpc::Initialize(void* pArg)
     else if (m_eType == NPC_TYPE::SHIELDDOG)
     {
         m_pTransformCom->Scaling(3.f, 3.f, 3.f);
-        m_pTransformCom->Set_State(STATE::POSITION, _float3(5.5f, 1.8f, 1.0f));
+        m_pTransformCom->Set_State(STATE::POSITION, _float3(-5.2f, 1.8f, 2.7f));
         chatDesc.m_iLevel = ENUM_CLASS(LEVEL::LEVEL_SHELTER);
         chatDesc.szChatTag = TEXT("ShieldDog_CHAT");
         if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_SHELTER), TEXT("Layer_UI_Chat"), ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_Field_Npc_Chat"), &chatDesc)))
@@ -227,6 +227,7 @@ void CNpc::OnCollision(CGameObject* pGameObject)
     {
         if (m_eType == NPC_TYPE::BLACKSMITH)
         {
+            m_pChat->On_Chat(2, false);
             if (m_pGameInstance->IsKeyDown('F'))
             {
                 m_pChat->Cinematic_Chat(2, true);
@@ -234,6 +235,7 @@ void CNpc::OnCollision(CGameObject* pGameObject)
         }
         else if (m_eType == NPC_TYPE::ELDER)
         {
+            m_pChat->On_Chat(3, false);
             if (m_pGameInstance->IsKeyDown('F'))
             {
                 m_pChat->Cinematic_Chat(3, true);
@@ -241,6 +243,7 @@ void CNpc::OnCollision(CGameObject* pGameObject)
         }
         else if (m_eType == NPC_TYPE::SHIELDDOG)
         {
+            m_pChat->On_Chat(0, false);
             if (m_pGameInstance->IsKeyDown('F'))
             {
                 m_pChat->Cinematic_Chat(0, true);
@@ -248,6 +251,7 @@ void CNpc::OnCollision(CGameObject* pGameObject)
         }
         else if (m_eType == NPC_TYPE::SWORDSHIELD)
         {
+            m_pChat->On_Chat(4, false);
             if (m_pGameInstance->IsKeyDown('F'))
             {
                 m_pChat->Cinematic_Chat(4, true);
@@ -255,6 +259,14 @@ void CNpc::OnCollision(CGameObject* pGameObject)
         }
     }
     
+}
+
+void CNpc::OffCollision(CGameObject* pGameObject)
+{
+    if (pGameObject->Get_ObjType() == GAMEOBJ_TYPE::PLAYER)
+    {
+        m_pChat->Off_Chat();
+    }
 }
 
 CNpc* CNpc::Create(LPDIRECT3DDEVICE9 pGraphic_Device)

@@ -103,6 +103,11 @@ void CCollision_Manager::Check_RoomCollisions()
                 m_vColliders[i]->Get_Owner()->OnCollision(m_vColliders[j]->Get_Owner());
                 m_vColliders[j]->Get_Owner()->OnCollision(m_vColliders[i]->Get_Owner());
             }
+            else
+            {
+                m_vColliders[i]->Get_Owner()->OffCollision(m_vColliders[j]->Get_Owner());
+                m_vColliders[j]->Get_Owner()->OffCollision(m_vColliders[i]->Get_Owner());
+            }
         }
     }
 }

@@ -50,6 +50,7 @@ private:
 
 public:
 	virtual void OnCollision(CGameObject* pGameObject) override;
+	virtual void OffCollision(CGameObject* pGameObject) override;
 
 public:
 	static CNpc* Create(LPDIRECT3DDEVICE9 pGraphic_Device);
