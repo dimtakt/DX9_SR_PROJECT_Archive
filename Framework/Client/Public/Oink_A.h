@@ -2,7 +2,7 @@
 #include "Monster.h"
 #include "Client_Defines.h"
 #include "Field_Hp.h"
-
+#include "AttackFx.h"
 BEGIN(Client)
 
 class COink_A final : public CMonster
@@ -43,6 +43,9 @@ private:
 
 	_bool		m_isFlippedX					= false;
 	_int		m_iAtkCooldownFrames			= 0;
+
+	_int		AttackDaley = {};
+	CAttackFx*	m_pAttackFx = { nullptr };
 
 public:
 	static COink_A* Create(LPDIRECT3DDEVICE9 pGraphic_Device);

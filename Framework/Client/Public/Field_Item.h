@@ -61,7 +61,7 @@ private:
 
 	HRESULT					Ready_ChildPrototype(LEVEL eLevel);
 	HRESULT					Ready_Children();
-
+	void					Item_Rand(_uint iItemID);
 public:
 	virtual void OnCollision(CGameObject* pGameObject) override;
 	void RenderFont();

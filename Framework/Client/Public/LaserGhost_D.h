@@ -2,6 +2,7 @@
 #include "Monster.h"
 #include "Client_Defines.h"
 #include "Field_Hp.h"
+#include "AttackFx.h"
 
 BEGIN(Client)
 
@@ -45,6 +46,9 @@ private:
 
 	//_int		m_iAtkCooldownFrames = 0;
 	_float		m_fTurnDir					= 0.f;
+
+	_int		AttackDaley = {};
+	CAttackFx*	m_pAttackFx = { nullptr };
 
 public:
 	static CLaserGhost_D* Create(LPDIRECT3DDEVICE9 pGraphic_Device);

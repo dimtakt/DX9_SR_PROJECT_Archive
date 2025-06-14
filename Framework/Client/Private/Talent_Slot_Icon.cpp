@@ -182,9 +182,9 @@ void CTalent_Slot_Icon::Special_Gift_Update()
 			break;
 		case 1:
 			if (m_iTexIdex == 0 && m_bIsGetGift == true)
-				CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::REGENDASH, 1.2f);
+				CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::REGENDASH, 10.f);
 			else if (m_iTexIdex == 0 && m_bIsGetGift == false)
-				CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::REGENDASH, -1.2f);
+				CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::REGENDASH, 10.f);
 
 			if (m_iTexIdex == 1 && m_bIsGetGift == true)
 				CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::MAXDASH, 1);
@@ -193,9 +193,9 @@ void CTalent_Slot_Icon::Special_Gift_Update()
 			break;
 		case 2:
 			if (m_iTexIdex == 0 && m_bIsGetGift == true)
-				CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::MAXHP, 20);
+				CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::MAXHP, 10);
 			else if (m_iTexIdex == 0 && m_bIsGetGift == false)
-				CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::MAXHP, -20);
+				CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::MAXHP, -10);
 
 			if (m_iTexIdex == 1 && m_bIsGetGift == true)
 				CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CULDEF, 10);
@@ -210,13 +210,13 @@ void CTalent_Slot_Icon::Special_Gift_Update()
 
 			if (m_iTexIdex == 1 && m_bIsGetGift == true)
 			{
-				CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CULMP, 20);
-				CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CULHP, 10);
+				CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::MAXMP, 20);
+				CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::MAXHP, 10);
 			}
 			else if (m_iTexIdex == 1 && m_bIsGetGift == false)
 			{
-				CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CULMP, -20);
-				CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CULHP, -10);
+				CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::MAXMP, -20);
+				CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::MAXHP, -10);
 			}
 			break;
 		}

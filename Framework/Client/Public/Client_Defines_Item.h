@@ -39,6 +39,7 @@ namespace Client
 			_wstring		m_szText;					//효과 텍스트
 			_float			m_fStat_Value1;				//올릴 스탯량
 			_float			m_fStat_Value2;				//1별마다 올라갈 스탯량
+			_bool			m_bPersent;					//퍼센트 값인지 일반값인지 체크
 		};
 
 		_int				m_iIndex;					//효과 번호
@@ -120,6 +121,13 @@ namespace Client
 		ItemData(29, 62,ITEM_TYPE::ARTEFACT, ITEM_RARITY::RARE,TEXT("푸른 행성"), TEXT("도서관에 전시되어 있던 푸른 행성"), 6, 14),
 		ItemData(30, 63,ITEM_TYPE::SKILLBOOK, ITEM_RARITY::RARE,TEXT("아이스 볼트"), TEXT("아이스 볼트 마법이 적혀있는 책"), 1, 15),
 		ItemData(31, 64,ITEM_TYPE::SKILLBOOK, ITEM_RARITY::NORMAL,TEXT("라이트닝 볼트"), TEXT("라이트닝 볼트 마법이 적혀있는 책"), 1, 16),
+		
+		ItemData(32, 68,ITEM_TYPE::ARTEFACT, ITEM_RARITY::NORMAL,TEXT("말라버린 꽃"), TEXT("푸석푸석하다...."), 2, 17),
+		ItemData(33, 65,ITEM_TYPE::ARTEFACT, ITEM_RARITY::RARE,TEXT("스타 아쿠아마린"), TEXT("별이 된 사람에 눈"), 2, 18),
+		ItemData(34, 69,ITEM_TYPE::ARTEFACT, ITEM_RARITY::LEGENDARY,TEXT("따뜻한 돌"), TEXT("겨울에 들고다니면 따뜻하다."), 3, 19),
+		ItemData(35, 66,ITEM_TYPE::ARTEFACT, ITEM_RARITY::RARE,TEXT("유리 망치"), TEXT("한번쓰면 깨질 것 같다."), 3, 20),
+		ItemData(36, 70,ITEM_TYPE::ARTEFACT, ITEM_RARITY::LEGENDARY,TEXT("하얀 나뭇가지"), TEXT("어떤 나무에서 떨어진..."), 4, 21),
+		ItemData(37, 67,ITEM_TYPE::ARTEFACT, ITEM_RARITY::NORMAL,TEXT("용골 파편"), TEXT("용에 뼈의 조각"), 3, 22),
 
 		//ItemData(12, 12,ITEM_TYPE::STONE, ITEM_RARITY::NORMAL,TEXT("시선"), TEXT(""), 4),
 		//ItemData(13, 13,ITEM_TYPE::STONE, ITEM_RARITY::NORMAL,TEXT("악수"), TEXT(""), 5),
@@ -166,23 +174,31 @@ namespace Client
 	
 	const vector<Item_Effect> g_ItemEffect
 	{
-		Item_Effect(0, ITEM_EFFECT::VALUE_TYPE, {{STAT_INFO::CULDAMAGE, TEXT("공격력 증가 +%d"),2, 2}}, TEXT("Projection Sword")),
-		Item_Effect(1, ITEM_EFFECT::VALUE_TYPE, {{STAT_INFO::MAXDASH, TEXT("최대 대쉬 횟수 증가 +%d"),1, 1}}),
-		Item_Effect(2, ITEM_EFFECT::VALUE_TYPE, {{STAT_INFO::MAXHP,TEXT("최대 체력 증가 +%d"), 10, 15}}),
-		Item_Effect(3, ITEM_EFFECT::VALUE_TYPE, {{STAT_INFO::CULDAMAGE, TEXT("공격력 증가 +%d"), 5, 10}}),
-		Item_Effect(4, ITEM_EFFECT::VALUE_TYPE, {{STAT_INFO::CULDEF,TEXT("방어력 +%d"), 5, 10}}),
-		Item_Effect(5, ITEM_EFFECT::VALUE_TYPE, {{STAT_INFO::CULCRITICAL,TEXT("크리티컬 확률 증가 +%d%%"), 1, 3}, {STAT_INFO::CULDAMAGE, TEXT("공격력 증가 %d"), 1, 2}}),
-		Item_Effect(6, ITEM_EFFECT::VALUE_TYPE, {{STAT_INFO::REGENDASH,TEXT("대쉬 회복 속도 증가 +%d%%"), 10.f, 10.f}}),
-		Item_Effect(7, ITEM_EFFECT::VALUE_TYPE, {{STAT_INFO::CULCRITICAL,TEXT("크리티컬 확률 증가 +%d%%"), 3, 5}}),
-		Item_Effect(8, ITEM_EFFECT::VALUE_TYPE, {{STAT_INFO::CULDAMAGE,TEXT("공격력 증가 +%d"), 2, 2}}),
-		Item_Effect(9, ITEM_EFFECT::VALUE_TYPE, {{STAT_INFO::CULDAMAGE,TEXT("공격력 증가 +%d"), 2, 5}, {STAT_INFO::CRITICALDAMAGE,TEXT("크리티컬 데미지 증가 +%d%%"), 2, 5}}),
-		Item_Effect(10, ITEM_EFFECT::VALUE_TYPE, {{STAT_INFO::REGENDASH, TEXT("대쉬 회복 속도 증가 +%d%%"),2.f, 2.f}}),
-		Item_Effect(11, ITEM_EFFECT::SPAWN_TYPE, {{STAT_INFO::STAT_END,TEXT("대시를 하면 얼음 망치를 날림(7초)"), 0, 0}}, TEXT("Snow Hamer")),
-		Item_Effect(12, ITEM_EFFECT::SPAWN_TYPE, {{STAT_INFO::STAT_END,TEXT("노란 행성 소환"), 0, 0}}, TEXT("Yellow Planet")),
-		Item_Effect(13, ITEM_EFFECT::SPAWN_TYPE, {{STAT_INFO::STAT_END,TEXT("붉은 행성 소환"), 0, 0}}, TEXT("Red Planet")),
-		Item_Effect(14, ITEM_EFFECT::SPAWN_TYPE, {{STAT_INFO::STAT_END,TEXT("푸른 행성 소환"), 0, 0}}, TEXT("Bule Planet")),
-		Item_Effect(15, ITEM_EFFECT::SKILLBOOK_TYPE, {{STAT_INFO::STAT_END,TEXT("아이스 볼트 획득"), 0, 0}}, TEXT("Ice Bolt")),
-		Item_Effect(16, ITEM_EFFECT::SKILLBOOK_TYPE, {{STAT_INFO::STAT_END,TEXT("라이트닝 볼트 획득"), 0, 0}}, TEXT("Lightning Bolt")),
+		Item_Effect(0, ITEM_EFFECT::VALUE_TYPE, {{STAT_INFO::CULDAMAGE, TEXT("공격력 증가 +%d"),2, 2, false}}, TEXT("Projection Sword")),
+		Item_Effect(1, ITEM_EFFECT::VALUE_TYPE, {{STAT_INFO::MAXDASH, TEXT("최대 대쉬 횟수 증가 +%d"),1, 1, false}}),
+		Item_Effect(2, ITEM_EFFECT::VALUE_TYPE, {{STAT_INFO::MAXHP,TEXT("최대 체력 증가 +%d"), 10, 15, false}}),
+		Item_Effect(3, ITEM_EFFECT::VALUE_TYPE, {{STAT_INFO::CULDAMAGE, TEXT("공격력 증가 +%d"), 5, 10, false}}),
+		Item_Effect(4, ITEM_EFFECT::VALUE_TYPE, {{STAT_INFO::CULDEF,TEXT("방어력 +%d"), 5, 10, false}}),
+		Item_Effect(5, ITEM_EFFECT::VALUE_TYPE, {{STAT_INFO::CULCRITICAL,TEXT("크리티컬 확률 증가 +%d%%"), 1, 3, false}, {STAT_INFO::CULDAMAGE, TEXT("공격력 증가 %d"), 1, 2, false}}),
+		Item_Effect(6, ITEM_EFFECT::VALUE_TYPE, {{STAT_INFO::REGENDASH,TEXT("대쉬 회복 속도 증가 +%d%%"), 10.f, 10.f, false}}),
+		Item_Effect(7, ITEM_EFFECT::VALUE_TYPE, {{STAT_INFO::CULCRITICAL,TEXT("크리티컬 확률 증가 +%d%%"), 3, 5, false}}),
+		Item_Effect(8, ITEM_EFFECT::VALUE_TYPE, {{STAT_INFO::CULDAMAGE,TEXT("공격력 증가 +%d"), 2, 2, false}}),
+		Item_Effect(9, ITEM_EFFECT::VALUE_TYPE, {{STAT_INFO::CULDAMAGE,TEXT("공격력 증가 +%d"), 2, 5, false}, {STAT_INFO::CRITICALDAMAGE,TEXT("크리티컬 데미지 증가 +%d%%"), 2, 5, false}}),
+		Item_Effect(10, ITEM_EFFECT::VALUE_TYPE, {{STAT_INFO::REGENDASH, TEXT("대쉬 회복 속도 증가 +%d%%"),2.f, 2.f, false}}),
+		Item_Effect(11, ITEM_EFFECT::SPAWN_TYPE, {{STAT_INFO::STAT_END,TEXT("대시를 하면 얼음 망치를 날림(7초)"), 0, 0, false}}, TEXT("Snow Hamer")),
+		Item_Effect(12, ITEM_EFFECT::SPAWN_TYPE, {{STAT_INFO::STAT_END,TEXT("노란 행성 소환"), 0, 0, false}}, TEXT("Yellow Planet")),
+		Item_Effect(13, ITEM_EFFECT::SPAWN_TYPE, {{STAT_INFO::STAT_END,TEXT("붉은 행성 소환"), 0, 0, false}}, TEXT("Red Planet")),
+		Item_Effect(14, ITEM_EFFECT::SPAWN_TYPE, {{STAT_INFO::STAT_END,TEXT("푸른 행성 소환"), 0, 0, false}}, TEXT("Bule Planet")),
+		Item_Effect(15, ITEM_EFFECT::SKILLBOOK_TYPE, {{STAT_INFO::STAT_END,TEXT("아이스 볼트 획득"), 0, 0, false}}, TEXT("Ice Bolt")),
+		Item_Effect(16, ITEM_EFFECT::SKILLBOOK_TYPE, {{STAT_INFO::STAT_END,TEXT("라이트닝 볼트 획득"), 0, 0, false}}, TEXT("Lightning Bolt")),
+		
+		//신규 추가
+		Item_Effect(17, ITEM_EFFECT::VALUE_TYPE, {{STAT_INFO::CULCRITICAL,TEXT("크리티컬 확률 증가 +%d%%"), 2, 2, false}, {STAT_INFO::MAXMP, TEXT("최대 MP 증가 %d"), 2, 2, false}}),
+		Item_Effect(18, ITEM_EFFECT::VALUE_TYPE, {{STAT_INFO::MAXMP,TEXT("최대 MP +%d%%"), 10, 10, true}}),
+		Item_Effect(19, ITEM_EFFECT::VALUE_TYPE, {{STAT_INFO::CRITICALDAMAGE,TEXT("크리티컬 데미지 증가 +%d%%"), 10, 10, false}}),
+		Item_Effect(20, ITEM_EFFECT::VALUE_TYPE, {{STAT_INFO::CULDAMAGE,TEXT("공격력 증가 +%d%%"), 3, 3, true}, {STAT_INFO::MAXHP,TEXT("최대 HP %d%%"), -3, -3}}),
+		Item_Effect(21, ITEM_EFFECT::VALUE_TYPE, {{STAT_INFO::MAXMP,TEXT("최대 MP 증가 +%d"), 10, 10}}),
+		Item_Effect(22, ITEM_EFFECT::VALUE_TYPE, {{STAT_INFO::MAXHP,TEXT("최대 HP 증가 +%d"), 10, 10}})
 	};
 
 	const vector<Slate> g_SlateDataBase
