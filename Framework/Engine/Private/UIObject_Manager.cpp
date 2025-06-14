@@ -74,7 +74,10 @@ void CUIObject_Manager::Clear_UiObj(_uint iLevelIndex)
 
     for (auto& Pair : m_pUIObjects[iLevelIndex])
     {
-        Safe_Release(Pair.second);
+        // 확인필요
+        /*if (Pair.second != nullptr)
+            Safe_Release(Pair.second);*/
+        Pair.second == nullptr;
     }
     m_pUIObjects[iLevelIndex].clear();
 
@@ -111,8 +114,13 @@ void CUIObject_Manager::Free()
     for (_int i = 0; i < m_iNumLevels; ++i)
     {
         for (auto& Pair : m_pUIObjects[i])
-            Safe_Release(Pair.second);
-
+        {
+            // 확인필요
+            if (Pair.second != nullptr)
+                Safe_Release(Pair.second);
+            //Pair.second = nullptr;
+        }
+        
         m_pUIObjects[i].clear();
     }
 

@@ -25,6 +25,7 @@ HRESULT CField_Hp::Initialize_Prototype(LEVEL eLevel)
 
 	if (FAILED(Ready_ChildPrototype(eLevel)))
 		return E_FAIL;
+	return S_OK;
 }
 
 HRESULT CField_Hp::Initialize(void* pArg)

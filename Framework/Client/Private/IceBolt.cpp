@@ -32,7 +32,7 @@ HRESULT CIceBolt::Initialize(void* pArg)
 void CIceBolt::Priority_Update(_float fTimeDelta)
 {
     if (m_fCurrentCoolTime > 0.f)
-        m_fCurrentCoolTime -= fTimeDelta;
+        m_fCurrentCoolTime -= 1;
 }
 
 void CIceBolt::Update(_float fTimeDelta)
@@ -265,7 +265,8 @@ void CIceBolt::Free()
     Safe_Release(m_pVIBufferCom);
     Safe_Release(m_pTransformCom);
     Safe_Release(m_pTextureCom);
-    Safe_Release(m_pPlayerTransformCom);
+    //Safe_Release(m_pPlayerTransformCom);
+    m_pPlayerTransformCom = nullptr;
 
     __super::Free();
 }

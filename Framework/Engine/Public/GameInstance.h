@@ -92,7 +92,10 @@ public:
 #pragma region COLLISION_MANAGER
 	// 해당 구간 추후 좀더 추가 예정
 	HRESULT Add_Collider(class CCollider_OBB* pCollider);
+	void Check_RoomCollisions();
 	void Clear_Colliders();
+	void Clear_AllColliders();
+	void Set_Next(_bool bNext);
 #pragma endregion
 
 #pragma region FONT_MANAGER
@@ -157,6 +160,7 @@ public:
 	void						Item_CulCool(_wstring szEffectTag, _float fCulcool);
 	void						Item_MaxCool(_wstring szEffectTag, _float fMaxcool);
 	const _float				Get_ItemCool(bool bMaxCool, _wstring szEffectTag);
+	void						AcquiredItem_List_Add(_int iIndex);
 #pragma endregion
 
 #pragma region EVENT_MANAGER

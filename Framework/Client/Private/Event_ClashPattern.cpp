@@ -3,6 +3,7 @@
 #include "Event_Rect.h"
 #include "Stat_Manager.h"
 #include "Event_Circle.h"
+
 CEvent_ClashPattern::CEvent_ClashPattern(LPDIRECT3DDEVICE9 pGraphic_Device) : CUIObject(pGraphic_Device)
 {
 }
@@ -80,6 +81,9 @@ void CEvent_ClashPattern::Priority_Update(_float fTimeDelta)
 	if (!m_bIsUpdate)
 		return;
 
+	if (m_pGameInstance->IsKeyDown(VK_DOWN))
+		Start_Event();
+
 	if (!m_bIsPlaying)
 		return;
 	__super::Priority_Update(fTimeDelta);
@@ -117,7 +121,7 @@ void CEvent_ClashPattern::Late_Update(_float fTimeDelta)
 	if (m_bIsGameEnd)
 	{
 		m_fEndAccTime += fTimeDelta;
-		if(m_fEndAccTime > 0.5)
+		if(m_fEndAccTime > 0.7)
 			End_Event();
 	}
 		

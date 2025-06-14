@@ -177,6 +177,7 @@ _int CInven_Slot::Slot_Info(ITEM_INFO eInfo)
 	case ITEM_INFO::ITEM_COUNT:
 		return m_iItemCount;
 	}
+	return 0;
 }
 
 void CInven_Slot::Add_GradeCount(_int iValue)
@@ -276,6 +277,8 @@ void CInven_Slot::Item_Selete()
 			static_cast<CInventory*>(m_pGameInstance->Get_GameObject(ENUM_CLASS(LEVEL::LEVEL_STATIC),
 				TEXT("Layer_Inventory")))->Push_Item_Slot(static_cast<CItem_Base*>(m_pGameInstance->Pop_Item()), 
 					m_pGameInstance->Pop_Item_Count());
+
+			m_pGameInstance->AcquiredItem_List_Add(static_cast<CItem_Base*>(m_pGameInstance->Pop_Item())->Item_Info()->iItemID);
 			static_cast<CHud_Slot*>(m_pGameInstance->Find_UIObj(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Hud_Slot")))->SlotToItem(static_cast<CItem_Base*>(m_pGameInstance->Pop_Item()));
 
 			static_cast<CGacha_Slot*>(m_pGameInstance->Pop_Slot())->Release_Pop();
@@ -292,6 +295,7 @@ void CInven_Slot::Item_Selete()
 		{
 		
 			m_pSlotItem = static_cast<CItem_Base*>(m_pGameInstance->Pop_Item());
+			m_pGameInstance->AcquiredItem_List_Add(static_cast<CItem_Base*>(m_pGameInstance->Pop_Item())->Item_Info()->iItemID);
 			m_iItemCount = m_pGameInstance->Pop_Item_Count();
 			static_cast<CHud_Slot*>(m_pGameInstance->Find_UIObj(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Hud_Slot")))->SlotToItem(static_cast<CItem_Base*>(m_pGameInstance->Pop_Item()));
 

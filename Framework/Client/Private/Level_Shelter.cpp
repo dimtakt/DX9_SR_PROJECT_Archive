@@ -87,6 +87,7 @@ HRESULT CLevel_Shelter::Ready_Layer_Camera(const _wstring& strLayerTag)
 	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_SHELTER), strLayerTag,
 		ENUM_CLASS(LEVEL::LEVEL_SHELTER), TEXT("Prototype_GameObject_Camera_Follow"), &desc)))
 		return E_FAIL;
+	return S_OK;
 }
 
 HRESULT CLevel_Shelter::Ready_Layer_BackGround(const _wstring& strLayerTag)
@@ -193,6 +194,7 @@ HRESULT CLevel_Shelter::Ready_Layer_Room(const _wstring& strLayerTag)
 
 	// ∆˜≈ª º≥ƒ°
 	CRoom_Manager::GetInstance()->Check_SpecialRoom(LEVEL::LEVEL_SHELTER, strLayerTag, 0); //∏∂¿ª¿∫ ∑Î¿Œµ¶Ω∫ 0 «—∞≥
+	return S_OK;
 }
 
 HRESULT CLevel_Shelter::Ready_Layer_NPC(const _wstring& strLayerTag)

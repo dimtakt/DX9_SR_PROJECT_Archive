@@ -540,12 +540,14 @@ HRESULT CAskard_Tentacle::Ready_Components(void* pArg)
 
 
 	
-
+	return S_OK;
 
 }
 
 void CAskard_Tentacle::OnCollision(CGameObject* pGameObject)
 {
+	if (pGameObject == nullptr)
+		return;
 	__super::OnCollision(pGameObject);
 }
 

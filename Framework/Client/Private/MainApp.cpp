@@ -65,6 +65,7 @@ CMainApp::CMainApp()
 	Safe_AddRef(m_pGameInstance);
 }
 
+#pragma optimize("", off)
 HRESULT CMainApp::Initialize()
 {	
 	ENGINE_DESC		EngineDesc{};
@@ -101,6 +102,7 @@ HRESULT CMainApp::Initialize()
 
 	return S_OK;
 }
+#pragma optimize("", on)
 
 void CMainApp::Update(_float fTimeDelta)
 {
@@ -507,7 +509,7 @@ HRESULT CMainApp::Ready_Texture_Setting()
 
 
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Item"),
-		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/UI/Item/Item_Icon_%d.png"), 71))))
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/UI/Item/Item_Icon_%d.png"), 72))))
 		return E_FAIL;
 
 	//포탈 임시용 텍스처 세팅

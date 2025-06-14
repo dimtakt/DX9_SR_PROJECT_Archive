@@ -399,6 +399,19 @@ HRESULT CRoom::Off_Fire()
 	return S_OK;
 }
 
+vector<CMonster*> CRoom::Get_MonsterList()
+{
+	vector<CMonster*> vMonsterList{};
+	for (auto& pMonster : m_vMonster) {
+		if (pMonster->Get_Summoned())
+		{
+			vMonsterList.push_back(pMonster);
+		}
+	}
+
+	return vMonsterList;
+}
+
 HRESULT CRoom::Load_From_File(_uint iLayerLevelIndex, const _wstring& strLayerTag, const _tchar* pLoadFileTag, _int iIndex, _int RoomX , _int RoomZ, ROOM_INFO Event)
 {
 	Compute_ObjectOffset(RoomX, RoomZ);
@@ -641,6 +654,7 @@ void CRoom::Enter()
 
 		m_bParticleRoom = true;
 	}
+	m_pGameInstance->Set_Next(true);
 }
 
 void CRoom::Exit()
@@ -656,6 +670,9 @@ void CRoom::Exit()
 		if(pObject != nullptr)
 			pObject->Set_IsActive(false);
 	}
+
+	m_pGameInstance->Set_Next(true);
+	m_pGameInstance->Clear_Colliders();
 
 	m_bIsActive = false;
 	m_bParticleRoom = false;

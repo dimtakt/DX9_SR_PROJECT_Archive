@@ -107,6 +107,7 @@ HRESULT CField_Npc_Chat::Initialize_Prototype(LEVEL eLevel)
 
 	if (FAILED(Ready_ChildPrototype(eLevel)))
 		return E_FAIL;
+	return S_OK;
 }
 
 HRESULT CField_Npc_Chat::Initialize(void* pArg)
@@ -169,6 +170,8 @@ void CField_Npc_Chat::Update(_float fTimeDelta)
 			if (m_fAccTime >= m_fDeleyTime)
 			{
 				m_fAccTime = 0.f;
+				m_pGameInstance->StopSound(ENUM_CLASS(CHANNELID::EVENT_CLICK));
+				m_pGameInstance->PlaySoundW(TEXT("Npc_Talk.wav"), ENUM_CLASS(CHANNELID::EVENT_CLICK), g_fUIVolume);
 
 				m_szRenderText += m_szAllText[m_iTextIndex];
 				m_iTextIndex++;
@@ -194,7 +197,8 @@ void CField_Npc_Chat::Late_Update(_float fTimeDelta)
 
 		if (m_bIsFinish)
 			m_vecChildren[0]->Late_Update(fTimeDelta);
-	} else	if (m_bIsOn)
+	} 
+	else if (m_bIsOn)
 	{
 		Target_Pos();
 		m_pGameInstance->Add_RenderGroup(RENDERGROUP::RG_UI_BLEND, this);
@@ -308,12 +312,6 @@ void CField_Npc_Chat::Render_Font()
 
 
 	m_pGameInstance->Render_Font(TEXT("UI_Font_18"), m_szRenderText, m_vTexRect, D3DXCOLOR(1.f, 1.f, 1.f, 1.f), DT_LEFT | DT_VCENTER | DT_SINGLELINE);
-
-	//m_vTexRect.left += 35;
-	//m_vTexRect.right += 70;
-	//_stprintf_s(szText, TEXT("구매하기"));
-	//m_pGameInstance->Render_Font(TEXT("UI_Font_18"), szText, m_vTexRect, D3DXCOLOR(1.f, 1.f, 1.f, 1.f), DT_LEFT | DT_VCENTER | DT_SINGLELINE);
-
 }
 
 void CField_Npc_Chat::On_Chat_Font()
