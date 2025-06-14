@@ -1125,6 +1125,9 @@
     <ClInclude Include="..\Public\Meteor.h">
       <Filter>02.GameObject\Player\Magic\Meteor</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\Askard_Dark_Tentacle.h">
+      <Filter>02.GameObject\Monster\Boss\Askard</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -1703,6 +1706,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\Meteor.cpp">
       <Filter>02.GameObject\Player\Magic\Meteor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Askard_Dark_Tentacle.cpp">
+      <Filter>02.GameObject\Monster\Boss\Askard</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

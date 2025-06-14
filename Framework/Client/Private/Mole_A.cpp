@@ -183,6 +183,12 @@ void CMole_A::Update(_float fTimeDelta)
         _float3 vNewMonsterPos = vMonsterPos + vPosDiff * fTimeDelta * fMoveSpeed;
         m_pTransformCom->Set_State(STATE::POSITION, vNewMonsterPos);
     }
+
+    if (m_pAnimatorCom->Get_CurStateTag() != L"Attack")
+    {
+        AttackDaley = 0;
+    }
+
     if (m_pAnimatorCom->Get_CurStateTag() == L"Attack" && m_pAnimatorCom->Get_CurStackedFrame() < 20)
     {
         AttackDaley += 1;

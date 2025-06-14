@@ -250,6 +250,11 @@ void CLaserGhost_D::Update(_float fTimeDelta)
         m_pTransformCom->Set_State(STATE::POSITION, vNewMonsterPos);
     }
 
+    if (m_pAnimatorCom->Get_CurStateTag() != L"AttackReady")
+    {
+        AttackDaley = 0;
+    }
+
     if (m_pAnimatorCom->Get_CurStateTag() == L"AttackReady" && m_pAnimatorCom->Get_CurStackedFrame() < 180)
     {
         AttackDaley += 1;

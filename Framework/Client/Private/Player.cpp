@@ -763,6 +763,20 @@ void CPlayer::OnEvent(_uint iTypeindex, const EVENTDATA* pData)
             projSwordDesc.pTargetTransform = m_pTransformCom;
             m_pGameInstance->Add_GameObject_ToLayer(m_pGameInstance->Get_CurrentLevel(), TEXT("Layer_Item"), ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_ProjSword"), &projSwordDesc);
         }
+        else if (pAction->strActionName == TEXT("Ice Bolt"))
+        {
+            CIceBolt::BOLTDESC BoltDesc{};;
+            BoltDesc.pPlayerTransform = m_pTransformCom;
+
+            m_pGameInstance->Add_GameObject_ToLayer(m_pGameInstance->Get_CurrentLevel(), TEXT("Player_Skill"), ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_IceBolt"), &BoltDesc);
+        }
+        else if (pAction->strActionName == TEXT("Meteor"))
+        {
+            CMeteor::METEORESC MeteorDesc{};;
+            MeteorDesc.pPlayerTransform = m_pTransformCom;
+
+           m_pGameInstance->Add_GameObject_ToLayer(m_pGameInstance->Get_CurrentLevel(), TEXT("Player_Skill"),ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_Meteor"), &MeteorDesc);
+        }
     }
 }
 
@@ -1056,25 +1070,27 @@ void CPlayer::Ready_Parry()
 
 HRESULT CPlayer::Ready_Skill(void* pArg)
 {
-    // UI 아이스볼트 책 먹었을 때 생성할 수 있게 가져와서 확인해주고 만들어야 함.
     PLAYERDESC* pDes = static_cast<PLAYERDESC*>(pArg);
 
-    CIceBolt::BOLTDESC BoltDesc{};;
-    BoltDesc.pPlayerTransform = m_pTransformCom;
+    if (CStat_Manager::GetInstance()->Get_HasItem(TEXT("Ice Bolt")))
+    {
+        CIceBolt::BOLTDESC BoltDesc{};;
+        BoltDesc.pPlayerTransform = m_pTransformCom;
 
-    if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(pDes->iLayerIndex, TEXT("Player_Skill"),
-        ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_IceBolt"), &BoltDesc)))
-        return E_FAIL;
+        if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(pDes->iLayerIndex, TEXT("Player_Skill"),
+            ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_IceBolt"), &BoltDesc)))
+            return E_FAIL;
+    }
 
+    if (CStat_Manager::GetInstance()->Get_HasItem(TEXT("Meteor")))
+    {
+        CMeteor::METEORESC MeteorDesc{};;
+        MeteorDesc.pPlayerTransform = m_pTransformCom;
 
-   //UI 메테오 책 먹었을 때 생성할 수 있게 가져와서 확인해주고 만들어야 함.
-    CMeteor::METEORESC MeteorDesc{};;
-    MeteorDesc.pPlayerTransform = m_pTransformCom;
-
-    if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(pDes->iLayerIndex, TEXT("Player_Skill"),
-        ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_Meteor"), &BoltDesc)))
-        return E_FAIL;
-    return S_OK;
+        if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(pDes->iLayerIndex, TEXT("Player_Skill"),
+            ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_Meteor"), &MeteorDesc)))
+            return E_FAIL;
+    }
 }
 
 

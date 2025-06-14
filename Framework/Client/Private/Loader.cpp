@@ -34,6 +34,7 @@
 #include "Erma_Head.h"
 #include "Askard.h"
 #include "Askard_Tentacle.h"
+#include "Askard_Dark_Tentacle.h"
 
 #include "TerrainBox.h"
 #include "Dagger.h"
@@ -1599,12 +1600,24 @@ HRESULT CLoader::Loading_For_Boss2_Level()
 
 	// Prototype_Component_Texture_Boss_Askard (Tentacle, Summon)
 	// TentacleBullet (8)
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_BOSS2), TEXT("Prototype_Component_Boss_Askard_TentacleBullet"),
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Boss_Askard_TentacleBullet"),
 		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Boss/Askard/Effect/Tentacle/Bullet/TentacleBullet_%02d.png"), 8))))
 		return E_FAIL;
 	// TentacleLaser (17)
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_BOSS2), TEXT("Prototype_Component_Boss_Askard_TentacleLaser"),
-		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Boss/Askard/Effect/Tentacle/Laser/TentacleLaser_%02d.png"), 17))))
+	//if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_BOSS2), TEXT("Prototype_Component_Boss_Askard_TentacleLaser"),
+	//	CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Boss/Askard/Effect/Tentacle/Laser/TentacleLaser_%02d.png"), 17))))
+	//	return E_FAIL;
+	// TentaclaLaser_Start (8)
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Boss_Askard_TentacleLaser_Start"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Boss/Askard/Effect/Tentacle/Laser/SeparateByState/TentacleLaser_Start_%02d.png"), 8))))
+		return E_FAIL;
+	// TentacleLaser_Progress (4)
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Boss_Askard_TentacleLaser_Progress"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Boss/Askard/Effect/Tentacle/Laser/SeparateByState/TentacleLaser_Progress_%02d.png"), 4))))
+		return E_FAIL;
+	// TentacleLaser_End (4)
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Boss_Askard_TentacleLaser_End"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Boss/Askard/Effect/Tentacle/Laser/SeparateByState/TentacleLaser_End_%02d.png"), 4))))
 		return E_FAIL;
 
 	// Prototype_Component_Texture_Boss_Askard (Effect)
@@ -1716,6 +1729,9 @@ HRESULT CLoader::Loading_For_Boss2_Level()
 		return E_FAIL;
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_BOSS2), TEXT("Prototype_GameObject_Boss_Askard_Tentacle"),
 		CAskard_Tentacle::Create(m_pGraphic_Device))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_BOSS2), TEXT("Prototype_GameObject_Boss_Askard_Dark_Tentacle"),
+		CAskard_Dark_Tentacle::Create(m_pGraphic_Device))))
 		return E_FAIL;
 
 #pragma endregion

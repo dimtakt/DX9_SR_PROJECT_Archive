@@ -19,6 +19,7 @@ public:
 	void							Pick_ItemSlot(class CItemObject* pPickItem, class CButton* pSlot, _uint iItemCount, _uint iSlottype);
 	void							Pick_Reset();
 	const vector<_int>				AcquiredItem_List() { return m_vecAcquiredItems; }
+	void							AcquiredItem_List_Add(_int iIndex) { m_vecAcquiredItems.push_back(iIndex); }
 
 	//아이템 남은 쿨타임 보관 시키는 함수
 	void							Item_CulCool(_wstring szEffectTag, _float fCulcool);

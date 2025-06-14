@@ -374,6 +374,10 @@ void CGameInstance::Clear_AllColliders()
 {
     m_pCollision_Manager->Clear_AllColliders();
 }
+void CGameInstance::Set_Next(_bool bNext)
+{
+    m_pCollision_Manager->Set_Next(bNext);
+}
 #pragma endregion
 
 #pragma region FONT_MANAGER
@@ -495,6 +499,10 @@ void CGameInstance::Item_MaxCool(_wstring szEffectTag, _float fMaxcool)
 const _float CGameInstance::Get_ItemCool(bool bMaxCool, _wstring szEffectTag)
 {
     return m_pItem_Manager->Get_ItemCool(bMaxCool, szEffectTag);
+}
+void CGameInstance::AcquiredItem_List_Add(_int iIndex)
+{
+    return m_pItem_Manager->AcquiredItem_List_Add(iIndex);
 }
 #pragma endregion
 

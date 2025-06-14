@@ -105,7 +105,7 @@ void CCollision_Manager::Check_RoomCollisions()
             it = m_vColliders.erase(it);
         }
     }
-
+    m_bNext = false;
     for (size_t i = 0; i < m_vColliders.size(); ++i)
     {   
         for (size_t j = i + 1; j < m_vColliders.size(); ++j)
@@ -143,9 +143,39 @@ void CCollision_Manager::Check_RoomCollisions()
                     continue;
             }
 
+            if (m_vColliders[j]->Get_Owner()->Get_ObjType() == GAMEOBJ_TYPE::OBJECT)
+            {
+                if (m_vColliders[i]->Get_Owner()->Get_ObjType() == GAMEOBJ_TYPE::OBJECT)
+                    continue;
+            }
+
+            if (m_vColliders[j]->Get_Owner()->Get_ObjType() == GAMEOBJ_TYPE::OBJECT_DECO)
+            {
+                if (m_vColliders[i]->Get_Owner()->Get_ObjType() == GAMEOBJ_TYPE::OBJECT_DECO)
+                    continue;
+            }
+
+            if (m_vColliders[j]->Get_Owner()->Get_ObjType() == GAMEOBJ_TYPE::OBJECT)
+            {
+                if (m_vColliders[i]->Get_Owner()->Get_ObjType() == GAMEOBJ_TYPE::OBJECT_DECO)
+                    continue;
+            }
+
+            if (m_vColliders[j]->Get_Owner()->Get_ObjType() == GAMEOBJ_TYPE::OBJECT_DECO)
+            {
+                if (m_vColliders[i]->Get_Owner()->Get_ObjType() == GAMEOBJ_TYPE::OBJECT)
+                    continue;
+            }
+
             if (Check_3DOBBto3DOBB(m_vColliders[i], m_vColliders[j]))
             {                
+                if (m_bNext)
+                    return;
                 m_vColliders[i]->Get_Owner()->OnCollision(m_vColliders[j]->Get_Owner());
+
+
+                if (m_bNext)
+                    return;
                 m_vColliders[j]->Get_Owner()->OnCollision(m_vColliders[i]->Get_Owner());
             }
             /*else

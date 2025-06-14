@@ -654,6 +654,7 @@ void CRoom::Enter()
 
 		m_bParticleRoom = true;
 	}
+	m_pGameInstance->Set_Next(true);
 }
 
 void CRoom::Exit()
@@ -670,6 +671,7 @@ void CRoom::Exit()
 			pObject->Set_IsActive(false);
 	}
 
+	m_pGameInstance->Set_Next(true);
 	m_pGameInstance->Clear_Colliders();
 
 	m_bIsActive = false;

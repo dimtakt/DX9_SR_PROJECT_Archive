@@ -62,7 +62,9 @@ HRESULT CStat_Manager::Initialize()
     m_mapHasItem.emplace(TEXT("Ice Bolt"), false);
     m_mapHasItem.emplace(TEXT("Lightning Bolt"), false);
     m_mapHasItem.emplace(TEXT("Projection Sword"), false);
-
+    m_mapHasItem.emplace(TEXT("Projection Sword"), false);
+ 
+    m_mapHasItem.emplace(TEXT("Meteor"), false);
     return S_OK;
 }
 
