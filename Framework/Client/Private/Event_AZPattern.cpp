@@ -269,6 +269,7 @@ HRESULT CEvent_AZPattern::Setting_Event()
 		m_vecEventKey.push_back(static_cast<CEventKey*>(pGameObject));
 		Safe_AddRef(pGameObject);
 	}
+	return S_OK;
 }
 
 void CEvent_AZPattern::Reset_Player()

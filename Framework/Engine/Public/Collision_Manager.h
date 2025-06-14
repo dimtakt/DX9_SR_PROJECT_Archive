@@ -13,6 +13,7 @@ private:
 public:
 	HRESULT Add_OBB_Collider(CCollider_OBB* pCollider);
 	void Clear_Colliders();
+	void Clear_AllColliders();
 	void Check_RoomCollisions();
 
 private:

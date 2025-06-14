@@ -65,6 +65,7 @@ CMainApp::CMainApp()
 	Safe_AddRef(m_pGameInstance);
 }
 
+#pragma optimize("", off)
 HRESULT CMainApp::Initialize()
 {	
 	ENGINE_DESC		EngineDesc{};
@@ -101,6 +102,7 @@ HRESULT CMainApp::Initialize()
 
 	return S_OK;
 }
+#pragma optimize("", on)
 
 void CMainApp::Update(_float fTimeDelta)
 {

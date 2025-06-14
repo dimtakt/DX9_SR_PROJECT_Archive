@@ -392,6 +392,8 @@ void CGameEffect::Reset_RenderState()
 
 void CGameEffect::OnCollision(CGameObject* pGameObject)
 {
+	if (pGameObject == nullptr)
+		return;
 	if (m_eObjType == GAMEOBJ_TYPE::PLAYER_EFFECT || m_eObjType == GAMEOBJ_TYPE::PLAYER_SKILL) {
 		if (pGameObject->Get_ObjType() == GAMEOBJ_TYPE::MONSTER)
 		{

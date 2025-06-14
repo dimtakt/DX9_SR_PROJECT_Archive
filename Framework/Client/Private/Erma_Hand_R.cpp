@@ -687,6 +687,8 @@ HRESULT CErma_Hand_R::Ready_Object()
 
 void CErma_Hand_R::OnCollision(CGameObject* pGameObject)
 {
+    if (pGameObject == nullptr)
+        return;
     __super::OnCollision(pGameObject);
 
     switch (pGameObject->Get_ObjType())

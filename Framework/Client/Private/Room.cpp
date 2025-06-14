@@ -670,6 +670,8 @@ void CRoom::Exit()
 			pObject->Set_IsActive(false);
 	}
 
+	m_pGameInstance->Clear_Colliders();
+
 	m_bIsActive = false;
 	m_bParticleRoom = false;
 }

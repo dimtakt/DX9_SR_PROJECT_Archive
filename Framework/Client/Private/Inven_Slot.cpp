@@ -177,6 +177,7 @@ _int CInven_Slot::Slot_Info(ITEM_INFO eInfo)
 	case ITEM_INFO::ITEM_COUNT:
 		return m_iItemCount;
 	}
+	return 0;
 }
 
 void CInven_Slot::Add_GradeCount(_int iValue)

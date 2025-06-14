@@ -107,7 +107,7 @@ HRESULT CLevel_Town::Ready_Layer_Camera(const _wstring& strLayerTag)
 	//if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_TOWN), strLayerTag,
 	//	ENUM_CLASS(LEVEL::LEVEL_TOWN), TEXT("Prototype_GameObject_Camera_Mouse", &desc))))
 	//	return E_FAIL;
-
+	return S_OK;
 }
 
 HRESULT CLevel_Town::Ready_Layer_BackGround(const _wstring& strLayerTag)

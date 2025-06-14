@@ -686,6 +686,8 @@ void CErma::PlayKeyInputPattern()
 
 void CErma::OnCollision(CGameObject* pGameObject)
 {
+    if (pGameObject == nullptr)
+        return;
     __super::OnCollision(pGameObject);
 
     switch (pGameObject->Get_ObjType())

@@ -166,5 +166,6 @@ void CItem_Manager::Free()
 
 	m_pPickItem = nullptr;
 	Safe_Release(m_pGraphic_Device);
-	Safe_Release(m_pGameInstance);
+	//Safe_Release(m_pGameInstance);
+
 }

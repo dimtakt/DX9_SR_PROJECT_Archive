@@ -23,6 +23,7 @@ HRESULT CAttackGauge::Initialize_Prototype(LEVEL eLevel)
 
 	if (FAILED(Ready_ChildPrototype(eLevel)))
 		return E_FAIL;
+	return S_OK;
 }
 
 HRESULT CAttackGauge::Initialize(void* pArg)

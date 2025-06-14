@@ -713,6 +713,8 @@ HRESULT CInteraction_Normal::Ready_Components()
 
 void CInteraction_Normal::OnCollision(CGameObject* pGameObject)
 {
+    if (pGameObject == nullptr)
+        return;
     if (m_bActive) {
         if (m_eObjType == GAMEOBJ_TYPE::EXP)
         {

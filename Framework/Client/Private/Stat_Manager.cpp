@@ -121,7 +121,10 @@ void CStat_Manager::Interaction_Obj_Stat(GAMEOBJ_TYPE eType)
     if (eType == GAMEOBJ_TYPE::EXP)
     {
         m_fCurStats[static_cast<int>(STAT_INFO::LEVEL)] += 1.f;
+        m_fCurStats[static_cast<int>(STAT_INFO::LEVELUPPOINT)] += 1.f;
         m_fCurStats[static_cast<int>(STAT_INFO::EXP)] = 0.f;
+        m_pGameInstance->StopSound(ENUM_CLASS(CHANNELID::SOUND_UI));
+        m_pGameInstance->PlaySoundW(L"spellHeal02.wav", ENUM_CLASS(CHANNELID::SOUND_UI), g_fUIVolume - 0.7f);
     }
     else if (eType == GAMEOBJ_TYPE::HP)
     {
