@@ -89,36 +89,36 @@ void CTalent_Button_Tip::Font_Render()
 	switch (m_iIndex)
 	{
 	case 0:
-		_stprintf_s(szText, TEXT("치명타 피해가 20%% 증가합니다."));
-		m_pGameInstance->Render_Font(TEXT("UI_Font_22"), szText, m_vTexRect, D3DXCOLOR(1.f, 1.f, 1.f, 1.0f), DT_LEFT | DT_VCENTER | DT_SINGLELINE);
+		_stprintf_s(szText, TEXT("치명타 피해가 20%% 증가합니다"));
+		m_pGameInstance->Render_Font(TEXT("UI_Font_22_Talent"), szText, m_vTexRect, D3DXCOLOR(1.f, 1.f, 1.f, 1.0f), DT_LEFT | DT_VCENTER | DT_SINGLELINE);
 		break;
 	case 1:
-		_stprintf_s(szText, TEXT("치명타 확률이 20%% 증가합니다."));
-		m_pGameInstance->Render_Font(TEXT("UI_Font_22"), szText, m_vTexRect, D3DXCOLOR(1.f, 1.f, 1.f, 1.0f), DT_LEFT | DT_VCENTER | DT_SINGLELINE);
+		_stprintf_s(szText, TEXT("치명타 확률이 20%% 증가합니다"));
+		m_pGameInstance->Render_Font(TEXT("UI_Font_22_Talent"), szText, m_vTexRect, D3DXCOLOR(1.f, 1.f, 1.f, 1.0f), DT_LEFT | DT_VCENTER | DT_SINGLELINE);
 		break;
 	case 2:
-		_stprintf_s(szText, TEXT("대시 회복 속도가 10%% 증가합니다."));
-		m_pGameInstance->Render_Font(TEXT("UI_Font_22"), szText, m_vTexRect, D3DXCOLOR(1.f, 1.f, 1.f, 1.0f), DT_LEFT | DT_VCENTER | DT_SINGLELINE);
+		_stprintf_s(szText, TEXT("대시 회복 속도가 10%% 증가합니다"));
+		m_pGameInstance->Render_Font(TEXT("UI_Font_22_Talent"), szText, m_vTexRect, D3DXCOLOR(1.f, 1.f, 1.f, 1.0f), DT_LEFT | DT_VCENTER | DT_SINGLELINE);
 		break;
 	case 3:
-		_stprintf_s(szText, TEXT("대시 횟수가 1 증가합니다."));
-		m_pGameInstance->Render_Font(TEXT("UI_Font_22"), szText, m_vTexRect, D3DXCOLOR(1.f, 1.f, 1.f, 1.0f), DT_LEFT | DT_VCENTER | DT_SINGLELINE);
+		_stprintf_s(szText, TEXT("대시 횟수가 1 증가합니다"));
+		m_pGameInstance->Render_Font(TEXT("UI_Font_22_Talent"), szText, m_vTexRect, D3DXCOLOR(1.f, 1.f, 1.f, 1.0f), DT_LEFT | DT_VCENTER | DT_SINGLELINE);
 		break;
 	case 4:
-		_stprintf_s(szText, TEXT("최대 HP +10 증갑합니다."));
-		m_pGameInstance->Render_Font(TEXT("UI_Font_22"), szText, m_vTexRect, D3DXCOLOR(1.f, 1.f, 1.f, 1.0f), DT_LEFT | DT_VCENTER | DT_SINGLELINE);
+		_stprintf_s(szText, TEXT("최대 HP +10 증갑합니다"));
+		m_pGameInstance->Render_Font(TEXT("UI_Font_22_Talent"), szText, m_vTexRect, D3DXCOLOR(1.f, 1.f, 1.f, 1.0f), DT_LEFT | DT_VCENTER | DT_SINGLELINE);
 		break;
 	case 5:
-		_stprintf_s(szText, TEXT("방어력 +10 증가합니다."));
-		m_pGameInstance->Render_Font(TEXT("UI_Font_22"), szText, m_vTexRect, D3DXCOLOR(1.f, 1.f, 1.f, 1.0f), DT_LEFT | DT_VCENTER | DT_SINGLELINE);
+		_stprintf_s(szText, TEXT("방어력 +10 증가합니다"));
+		m_pGameInstance->Render_Font(TEXT("UI_Font_22_Talent"), szText, m_vTexRect, D3DXCOLOR(1.f, 1.f, 1.f, 1.0f), DT_LEFT | DT_VCENTER | DT_SINGLELINE);
 		break;
 	case 6:
-		_stprintf_s(szText, TEXT("공격력 +10 증갑합니다."));
-		m_pGameInstance->Render_Font(TEXT("UI_Font_22"), szText, m_vTexRect, D3DXCOLOR(1.f, 1.f, 1.f, 1.0f), DT_RIGHT | DT_VCENTER | DT_SINGLELINE);
+		_stprintf_s(szText, TEXT("공격력 +10 증가합니다"));
+		m_pGameInstance->Render_Font(TEXT("UI_Font_22_Talent"), szText, m_vTexRect, D3DXCOLOR(1.f, 1.f, 1.f, 1.0f), DT_RIGHT | DT_VCENTER | DT_SINGLELINE);
 		break;
 	case 7:
-		_stprintf_s(szText, TEXT("최대 HP +10, 최대 MP +20 증가합니다."));
-		m_pGameInstance->Render_Font(TEXT("UI_Font_22"), szText, m_vTexRect, D3DXCOLOR(1.f, 1.f, 1.f, 1.0f), DT_RIGHT | DT_VCENTER | DT_SINGLELINE);
+		_stprintf_s(szText, TEXT("최대 HP +10, 최대 MP +20 증가합니다"));
+		m_pGameInstance->Render_Font(TEXT("UI_Font_22_Talent"), szText, m_vTexRect, D3DXCOLOR(1.f, 1.f, 1.f, 1.0f), DT_RIGHT | DT_VCENTER | DT_SINGLELINE);
 		break;
 	}
 

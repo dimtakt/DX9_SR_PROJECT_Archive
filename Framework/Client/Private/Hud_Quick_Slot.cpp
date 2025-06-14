@@ -5,6 +5,7 @@
 #include "Inventory.h"
 #include "Hud_Slot_CoolTime.h"
 #include "Hud_Slot_EatPotion.h"
+
 CHud_Quick_Slot::CHud_Quick_Slot(LPDIRECT3DDEVICE9 pGraphic_Device) : CButton{ pGraphic_Device }
 {
 }
@@ -85,6 +86,7 @@ void CHud_Quick_Slot::Update(_float fTimeDelta)
 	}
 	else if (m_pSlotItem->Item_Info()->iItemType == ENUM_CLASS(ITEM_TYPE::SKILLBOOK))
 	{
+
 		_int iEffectIndex = m_pSlotItem->Item_Info()->iArtefact_Value;
 		if (g_ItemEffect[iEffectIndex].m_eType != ITEM_EFFECT::VALUE_TYPE)
 		{
@@ -96,6 +98,7 @@ void CHud_Quick_Slot::Update(_float fTimeDelta)
 		{
 			static_cast<CHud_Slot_CoolTime*>(m_vecChildren[0])->Progerss_Set(m_fItemCulCool, m_fItemCooltime);
 		}
+
 	}
 
 	if (m_bEating)

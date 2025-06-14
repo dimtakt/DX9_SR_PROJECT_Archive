@@ -328,7 +328,7 @@ void CInventory::StatToPlayer()
 		CStat_Manager::GetInstance()->Cal_Stats(static_cast<STAT_INFO>(i), -m_fInvenStats[i]);
 		m_fInvenStats[i] = 0;
 	}
-	CStat_Manager::GetInstance()->HasItem_Reset();
+	//CStat_Manager::GetInstance()->HasItem_Reset();
 
 	for (_int i = 0; i < m_vecInventory.size(); ++i)
 	{
@@ -347,15 +347,37 @@ void CInventory::StatToPlayer()
 		{
 			for (_int j = 0; j < g_ItemEffect[iItem_Effect].m_vecValue.size(); ++j)
 			{
-				STAT_INFO eStat = g_ItemEffect[iItem_Effect].m_vecValue[j].m_eStat;
-				_float fValue1 = g_ItemEffect[iItem_Effect].m_vecValue[j].m_fStat_Value1;
-				_float fValue2 = g_ItemEffect[iItem_Effect].m_vecValue[j].m_fStat_Value2;
-				_float fGarde = static_cast<CInven_Slot*>(m_vecInventory[i])->Get_SlotGrade();
-				_float iItem_MaxGarde = m_vecInventory[i]->Pop_Item()->Item_Info()->iItemValue;
-				if(iItem_MaxGarde < fGarde)
-					m_fInvenStats[ENUM_CLASS(eStat)] += fValue1 + iItem_MaxGarde * fValue2;
+				if (g_ItemEffect[iItem_Effect].m_vecValue[j].m_bPersent)
+				{
+					STAT_INFO eStat = g_ItemEffect[iItem_Effect].m_vecValue[j].m_eStat;
+					_float fValue1 = g_ItemEffect[iItem_Effect].m_vecValue[j].m_fStat_Value1;
+					_float fValue2 = g_ItemEffect[iItem_Effect].m_vecValue[j].m_fStat_Value2;
+					_float fGarde = static_cast<CInven_Slot*>(m_vecInventory[i])->Get_SlotGrade();
+					_float iItem_MaxGarde = m_vecInventory[i]->Pop_Item()->Item_Info()->iItemValue;
+					_float fStat = CStat_Manager::GetInstance()->Get_CurStats()[ENUM_CLASS(eStat)];
+					
+					if (iItem_MaxGarde < fGarde)
+					{
+
+						m_fInvenStats[ENUM_CLASS(eStat)] += fStat * ((fValue1 + iItem_MaxGarde * fValue2) * 0.01);
+					}
+					else
+					{
+						m_fInvenStats[ENUM_CLASS(eStat)] += fStat * ((fValue1 + fGarde * fValue2) * 0.01);
+					}
+				}
 				else
-					m_fInvenStats[ENUM_CLASS(eStat)] += fValue1 + fGarde * fValue2;
+				{
+					STAT_INFO eStat = g_ItemEffect[iItem_Effect].m_vecValue[j].m_eStat;
+					_float fValue1 = g_ItemEffect[iItem_Effect].m_vecValue[j].m_fStat_Value1;
+					_float fValue2 = g_ItemEffect[iItem_Effect].m_vecValue[j].m_fStat_Value2;
+					_float fGarde = static_cast<CInven_Slot*>(m_vecInventory[i])->Get_SlotGrade();
+					_float iItem_MaxGarde = m_vecInventory[i]->Pop_Item()->Item_Info()->iItemValue;
+					if (iItem_MaxGarde < fGarde)
+						m_fInvenStats[ENUM_CLASS(eStat)] += fValue1 + iItem_MaxGarde * fValue2;
+					else
+						m_fInvenStats[ENUM_CLASS(eStat)] += fValue1 + fGarde * fValue2;
+				}
 			}
 
 			if (g_ItemEffect[iItem_Effect].m_iIndex == 0)
@@ -365,11 +387,13 @@ void CInventory::StatToPlayer()
 		}
 		else if (g_ItemEffect[iItem_Effect].m_eType == ITEM_EFFECT::SKILLBOOK_TYPE)
 		{
-			CStat_Manager::GetInstance()->HasItem(g_ItemEffect[iItem_Effect].m_szEffectTag, true);
+			if(!CStat_Manager::GetInstance()->Get_HasItem(g_ItemEffect[iItem_Effect].m_szEffectTag))
+				CStat_Manager::GetInstance()->HasItem(g_ItemEffect[iItem_Effect].m_szEffectTag, true);
 		}
 		else if (g_ItemEffect[iItem_Effect].m_eType == ITEM_EFFECT::SPAWN_TYPE)
 		{
-			CStat_Manager::GetInstance()->HasItem(g_ItemEffect[iItem_Effect].m_szEffectTag, true);
+			if (!CStat_Manager::GetInstance()->Get_HasItem(g_ItemEffect[iItem_Effect].m_szEffectTag))
+				CStat_Manager::GetInstance()->HasItem(g_ItemEffect[iItem_Effect].m_szEffectTag, true);
 		}	
 	}
 

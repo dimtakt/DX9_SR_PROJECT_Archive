@@ -65,6 +65,9 @@ void CChapMap::Priority_Update(_float fTimeDelta)
 	if (!m_bisOpen)
 		return;
 
+	if (m_pGameInstance->IsKeyDown(VK_ESCAPE))
+		Open_Ui();
+
 	__super::Priority_Update(fTimeDelta);
 }
 
@@ -113,8 +116,6 @@ void CChapMap::Open_Ui()
 	UI_Switch();
 
 	__super::Update_Position();
-
-	CStat_Manager::GetInstance()->Set_UIOpen(true);
 }
 
 void CChapMap::UI_Switch()
@@ -123,9 +124,11 @@ void CChapMap::UI_Switch()
 	{
 		m_pGameInstance->All_Update_On();
 		m_bisOpen = false;
+		CStat_Manager::GetInstance()->Set_UIOpen(false);
 	}
 	else
 	{
+		CStat_Manager::GetInstance()->Set_UIOpen(true);
 		m_bIsUpdate = true;
 		m_bisOpen = true;
 	}

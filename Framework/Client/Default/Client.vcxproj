@@ -162,10 +162,13 @@
     <ClInclude Include="..\Public\Animations\Anim_Player_Parry.h" />
     <ClInclude Include="..\public\Artefact_Tier_Icon.h" />
     <ClInclude Include="..\public\Artefact_Tooltip.h" />
+    <ClInclude Include="..\public\Askard_Eye.h" />
     <ClInclude Include="..\public\Askard_Frame.h" />
     <ClInclude Include="..\public\Askard.h" />
     <ClInclude Include="..\public\Askard_Tentacle.h" />
     <ClInclude Include="..\public\Askard_Hpbar.h" />
+    <ClInclude Include="..\public\AttackFx.h" />
+    <ClInclude Include="..\public\AttackGauge.h" />
     <ClInclude Include="..\Public\BackGround.h" />
     <ClInclude Include="..\Public\IceBolt.h" />
     <ClInclude Include="..\public\BossHp_Askard.h" />
@@ -239,6 +242,7 @@
     <ClInclude Include="..\Public\Level_Stage3.h" />
     <ClInclude Include="..\Public\Level_Stage4.h" />
     <ClInclude Include="..\Public\Level_Town.h" />
+    <ClInclude Include="..\Public\Meteor.h" />
     <ClInclude Include="..\public\Minimap.h" />
     <ClInclude Include="..\public\Minimap_Button.h" />
     <ClInclude Include="..\public\Minimap_Frame.h" />
@@ -387,11 +391,14 @@
     <ClCompile Include="..\Private\Animations\Anim_Player_Parry.cpp" />
     <ClCompile Include="..\private\Artefact_Tier_Icon.cpp" />
     <ClCompile Include="..\private\Artefact_Tooltip.cpp" />
+    <ClCompile Include="..\private\Askard_Eye.cpp" />
     <ClCompile Include="..\private\Askard_Frame.cpp" />
     <ClCompile Include="..\private\Askard.cpp" />
     <ClCompile Include="..\private\Askard_Tentacle.cpp" />
     <ClCompile Include="..\private\Askard_Hpbar.cpp" />
+    <ClCompile Include="..\private\AttackGauge.cpp" />
     <ClCompile Include="..\Private\BackGround.cpp" />
+    <ClCompile Include="..\private\AttackFx.cpp" />
     <ClCompile Include="..\Private\IceBolt.cpp" />
     <ClCompile Include="..\private\BossHp_Askard.cpp" />
     <ClCompile Include="..\private\BossHp_Ema.cpp" />
@@ -460,6 +467,7 @@
     <ClCompile Include="..\Private\Level_Stage3.cpp" />
     <ClCompile Include="..\Private\Level_Stage4.cpp" />
     <ClCompile Include="..\Private\Level_Town.cpp" />
+    <ClCompile Include="..\Private\Meteor.cpp" />
     <ClCompile Include="..\private\Minimap.cpp" />
     <ClCompile Include="..\private\Minimap_Button.cpp" />
     <ClCompile Include="..\private\Minimap_Frame.cpp" />

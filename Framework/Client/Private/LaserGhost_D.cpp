@@ -250,6 +250,14 @@ void CLaserGhost_D::Update(_float fTimeDelta)
         m_pTransformCom->Set_State(STATE::POSITION, vNewMonsterPos);
     }
 
+    if (m_pAnimatorCom->Get_CurStateTag() == L"AttackReady" && m_pAnimatorCom->Get_CurStackedFrame() < 180)
+    {
+        AttackDaley += 1;
+        m_pAttackFx->Render_Frame(m_pTransformCom, AttackDaley, 180);
+        if (AttackDaley >= 180)
+            AttackDaley = 0;
+    }
+
     // 공격 패턴 분기
     if (m_pAnimatorCom->Get_CurStateTag() == L"AttackReady")
     {
@@ -564,7 +572,7 @@ HRESULT CLaserGhost_D::Ready_Components(void* pArg)
 HRESULT CLaserGhost_D::Ready_Object()
 {
     m_pHpBar = dynamic_cast<CField_Hp*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_Field_Hp")));
-
+    m_pAttackFx = dynamic_cast<CAttackFx*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_AttackFx")));
     return S_OK;
 }
 
@@ -644,6 +652,7 @@ CGameObject* CLaserGhost_D::Clone(void* pArg)
 void CLaserGhost_D::Free()
 {
     __super::Free();
+    Safe_Release(m_pAttackFx);
 
     Safe_Release(m_pTextureCom_Idle);
     Safe_Release(m_pTextureCom_Move);
