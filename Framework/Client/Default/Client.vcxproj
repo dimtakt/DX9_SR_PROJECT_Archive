@@ -162,7 +162,10 @@
     <ClInclude Include="..\Public\Animations\Anim_Player_Parry.h" />
     <ClInclude Include="..\public\Artefact_Tier_Icon.h" />
     <ClInclude Include="..\public\Artefact_Tooltip.h" />
-    <ClInclude Include="..\public\Askard_Eye.h" />
+    <ClInclude Include="..\public\Askard_Dark_Tentacle.h" />
+    <ClInclude Include="..\public\Askard_Eye.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="..\public\Askard_Frame.h" />
     <ClInclude Include="..\public\Askard.h" />
     <ClInclude Include="..\public\Askard_Tentacle.h" />
@@ -391,7 +394,10 @@
     <ClCompile Include="..\Private\Animations\Anim_Player_Parry.cpp" />
     <ClCompile Include="..\private\Artefact_Tier_Icon.cpp" />
     <ClCompile Include="..\private\Artefact_Tooltip.cpp" />
-    <ClCompile Include="..\private\Askard_Eye.cpp" />
+    <ClCompile Include="..\private\Askard_Dark_Tentacle.cpp" />
+    <ClCompile Include="..\private\Askard_Eye.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="..\private\Askard_Frame.cpp" />
     <ClCompile Include="..\private\Askard.cpp" />
     <ClCompile Include="..\private\Askard_Tentacle.cpp" />
