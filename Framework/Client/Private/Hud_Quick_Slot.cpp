@@ -117,11 +117,18 @@ void CHud_Quick_Slot::Update(_float fTimeDelta)
 	{
 		m_fEatSpeed += 1;
 		static_cast<CHud_Slot_CoolTime*>(m_vecChildren[1])->Progerss_Set(m_fEatSpeed, 60);
-		
+		m_pGameInstance->PlayLoopSound(TEXT("Drinking01.wav"), ENUM_CLASS(CHANNELID::UI_QUICKSLOT), g_fUIVolume - 0.4f);
+		//if (m_fEatSpeed == 0 || m_fEatSpeed == 20 || m_fEatSpeed == 40 || m_fEatSpeed == 60)
+		//{
+		//	m_pGameInstance->StopSound(ENUM_CLASS(CHANNELID::UI_QUICKSLOT));
+		//	m_pGameInstance->PlayLoopSound(TEXT("Drinking01.wav"), ENUM_CLASS(CHANNELID::UI_QUICKSLOT), g_fUIVolume - 0.4f);
+		//}
+
 		if (m_fEatSpeed > 60)
 		{
 			m_fEatSpeed = 0;
 			m_bEatPotion = true;
+			m_pGameInstance->StopSound(ENUM_CLASS(CHANNELID::UI_QUICKSLOT));
 		}
 	}
 }
