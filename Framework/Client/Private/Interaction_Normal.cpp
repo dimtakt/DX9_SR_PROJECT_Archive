@@ -577,13 +577,13 @@ HRESULT CInteraction_Normal::Merchant_Initialize()
 
     chatDesc.pTransform = m_pTransformCom;
 
-    chatDesc.m_iLevel = ENUM_CLASS(LEVEL::LEVEL_TOWN);
-    chatDesc.szChatTag = TEXT("BlackSmith_CHAT");
+    chatDesc.m_iLevel = m_pGameInstance->Get_CurrentLevel();
+    chatDesc.szChatTag = TEXT("Baba_CHAT");
     chatDesc.fY = -100;
-    if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_TOWN), TEXT("Layer_UI_Chat"), ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_Field_Npc_Chat"), &chatDesc)))
+    if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(m_pGameInstance->Get_CurrentLevel(), TEXT("Layer_UI_Chat"), ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_Field_Npc_Chat"), &chatDesc)))
         return E_FAIL;
 
-    m_pChat = static_cast<CField_Npc_Chat*>(m_pGameInstance->Find_UIObj(ENUM_CLASS(LEVEL::LEVEL_TOWN), TEXT("BlackSmith_CHAT")));
+    m_pChat = static_cast<CField_Npc_Chat*>(m_pGameInstance->Find_UIObj(m_pGameInstance->Get_CurrentLevel(), TEXT("Baba_CHAT")));
 
     m_pChat->Add_Chat(TEXT("에베베"));
     m_pChat->Add_Chat(TEXT("바바"));

@@ -487,6 +487,10 @@ const _float CGameInstance::Get_ItemCool(bool bMaxCool, _wstring szEffectTag)
 {
     return m_pItem_Manager->Get_ItemCool(bMaxCool, szEffectTag);
 }
+void CGameInstance::AcquiredItem_List_Add(_int iIndex)
+{
+    return m_pItem_Manager->AcquiredItem_List_Add(iIndex);
+}
 #pragma endregion
 
 #pragma region EVENT_MANAGER

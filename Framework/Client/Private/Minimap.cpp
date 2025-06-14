@@ -215,7 +215,7 @@ void CMinimap::Font_Render()
 	m_vTexRect.left = 0;
 	m_vTexRect.top = 0;
 	m_vTexRect.right = m_fSizeX + 1;
-	m_vTexRect.bottom = m_fSizeY - 130 + 1;
+	m_vTexRect.bottom = m_fSizeY - 120 + 1;
 
 	_stprintf_s(szText, TEXT("즉시 이동하려면 방을 클릭하세요."));
 	m_pGameInstance->Render_Font(TEXT("UI_Font_24_Minimap"), szText, m_vTexRect, D3DXCOLOR(0.f, 0.f, 0.f, 1.0f), DT_CENTER | DT_BOTTOM);
@@ -223,7 +223,7 @@ void CMinimap::Font_Render()
 	m_vTexRect.left = 0;
 	m_vTexRect.top = 0;
 	m_vTexRect.right = m_fSizeX;
-	m_vTexRect.bottom = m_fSizeY - 130;
+	m_vTexRect.bottom = m_fSizeY - 120;
 
 	_stprintf_s(szText, TEXT("즉시 이동하려면 방을 클릭하세요."));
 	m_pGameInstance->Render_Font(TEXT("UI_Font_24_Minimap"), szText, m_vTexRect, D3DXCOLOR(1.f, 1.f, 1.f, 1.0f), DT_CENTER | DT_BOTTOM);

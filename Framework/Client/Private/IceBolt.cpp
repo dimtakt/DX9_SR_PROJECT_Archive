@@ -32,7 +32,7 @@ HRESULT CIceBolt::Initialize(void* pArg)
 void CIceBolt::Priority_Update(_float fTimeDelta)
 {
     if (m_fCurrentCoolTime > 0.f)
-        m_fCurrentCoolTime -= fTimeDelta;
+        m_fCurrentCoolTime -= 1;
 }
 
 void CIceBolt::Update(_float fTimeDelta)
