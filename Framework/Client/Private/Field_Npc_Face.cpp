@@ -12,10 +12,12 @@ CField_Npc_Face::CField_Npc_Face(const CField_Npc_Face& Prototype) : CUIObject(P
 
 void CField_Npc_Face::Render_SmallFace_On(_int iNumber)
 {
-
-	m_iTexIndex = iNumber;
-	m_pTransformCom->Scaling(m_fSizeX * 0.7, m_fSizeY * 0.7, 1.f);
-	m_bIsSmallRender = true;
+	if (!m_bIsRender)
+	{
+		m_iTexIndex = iNumber;
+		m_pTransformCom->Scaling(m_fSizeX * 0.7, m_fSizeY * 0.7, 1.f);
+		m_bIsSmallRender = true;
+	}
 }
 
 void CField_Npc_Face::Render_SmallFace_Off()
@@ -83,11 +85,7 @@ void CField_Npc_Face::Update(_float fTimeDelta)
 
 void CField_Npc_Face::Late_Update(_float fTimeDelta)
 {
-	if (m_bIsSmallRender)
-	{
-		m_pGameInstance->Add_RenderGroup(RENDERGROUP::RG_UI, this);
-		m_vecChildren[2]->Late_Update(fTimeDelta);
-	}
+
 	if (m_bIsRender)
 	{
 		if(m_bCinematicFace)
@@ -95,6 +93,11 @@ void CField_Npc_Face::Late_Update(_float fTimeDelta)
 		
 		m_vecChildren[0]->Late_Update(fTimeDelta);
 		m_vecChildren[1]->Late_Update(fTimeDelta);
+	}
+	else if (m_bIsSmallRender)
+	{
+		m_pGameInstance->Add_RenderGroup(RENDERGROUP::RG_UI, this);
+		m_vecChildren[2]->Late_Update(fTimeDelta);
 	}
 }
 
@@ -205,6 +208,15 @@ void CField_Npc_Face::Render_Font_Small()
 	case 1:
 		_stprintf_s(szText, TEXT("마을 상인"));
 		break;
+	case 2:
+		_stprintf_s(szText, TEXT("대장장이"));
+		break;
+	case 3:
+		_stprintf_s(szText, TEXT("토끼 장로"));
+		break;
+	case 4:
+		_stprintf_s(szText, TEXT("모험가"));
+		break;
 	}
 	m_pGameInstance->Render_Font(TEXT("UI_Font_30"), szText, m_vTexRect, D3DXCOLOR(1.f, 1.f, 1.f, 1.0f), DT_RIGHT | DT_TOP);
 
@@ -217,6 +229,15 @@ void CField_Npc_Face::Render_Font_Small()
 		break;
 	case 1:
 		_stprintf_s(szText, TEXT("바바"));
+		break;
+	case 2:
+		_stprintf_s(szText, TEXT("켄"));
+		break;
+	case 3:
+		_stprintf_s(szText, TEXT("라일리"));
+		break;
+	case 4:
+		_stprintf_s(szText, TEXT("윌슨"));
 		break;
 	}
 	m_pGameInstance->Render_Font(TEXT("UI_Font_30"), szText, m_vTexRect, D3DXCOLOR(1.f, 1.f, 1.f, 1.0f), DT_RIGHT | DT_TOP);
