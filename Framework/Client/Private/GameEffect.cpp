@@ -483,7 +483,7 @@ void CGameEffect::OnCollision(CGameObject* pGameObject)
 				m_pGameInstance->PlaySoundW(L"HitPlayer.wav", ENUM_CLASS(CHANNELID::SOUND_MONSTER), g_fEFFECTVolume - 0.8f);
 				if (m_strEffectTag == TEXT("Prototype_Component_Texture_LaserGhost_D_Effect_Laser_Progress"))
 				{
-					iDamage = CStat_Manager::GetInstance()->Get_Monster_Damage(20.f);
+					iDamage = CStat_Manager::GetInstance()->Get_Monster_Damage(8.f);
 					CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CULHP, float(iDamage) * -1 );
 				}
 				else if (m_strEffectTag == TEXT("Prototype_Component_Texture_LaserGhost_D_Effect_Laser_End"))
@@ -494,48 +494,48 @@ void CGameEffect::OnCollision(CGameObject* pGameObject)
 				// µÎ´õÁö
 				else if (m_strEffectTag == TEXT("Prototype_Component_Texture_Mole_A_Effect_Swing"))
 				{
-					iDamage = CStat_Manager::GetInstance()->Get_Monster_Damage(7.f);
+					iDamage = CStat_Manager::GetInstance()->Get_Monster_Damage(4.f);
 					CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CULHP, float(iDamage) * -1);
 				}
 				// µÅÁö
 				else if (m_strEffectTag == TEXT("Prototype_Component_Texture_Oink_A_Effect_Swing"))
 				{
-					iDamage = CStat_Manager::GetInstance()->Get_Monster_Damage(10.f);
+					iDamage = CStat_Manager::GetInstance()->Get_Monster_Damage(4.f);
 					CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CULHP, float(iDamage) * -1);
 				}
 				else if (m_strEffectTag == TEXT("Prototype_Component_Texture_Oink_A_Effect_SpinSwing"))
 				{
-					iDamage = CStat_Manager::GetInstance()->Get_Monster_Damage(15.f);
+					iDamage = CStat_Manager::GetInstance()->Get_Monster_Damage(6.f);
 					CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CULHP, float(iDamage) * -1);
 				}
 				else if (m_strEffectTag == TEXT("Prototype_Component_Boss_Erma_BigGolem_LaserStart"))
 				{
-					iDamage = CStat_Manager::GetInstance()->Get_Monster_Damage(20.f);
+					iDamage = CStat_Manager::GetInstance()->Get_Monster_Damage(10.f);
 					CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CULHP, float(iDamage) * -1);
 				}
 				else if (m_strEffectTag == TEXT("Prototype_Component_Boss_Erma_BigGolem_LaserProgress"))
 				{
-					iDamage = CStat_Manager::GetInstance()->Get_Monster_Damage(20.f);
+					iDamage = CStat_Manager::GetInstance()->Get_Monster_Damage(10.f);
 					CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CULHP, float(iDamage) * -1);
 				}
 				else if (m_strEffectTag == TEXT("Prototype_Component_Boss_Erma_BigGolem_Stmap_FX"))
 				{
-					iDamage = CStat_Manager::GetInstance()->Get_Monster_Damage(15.f);
+					iDamage = CStat_Manager::GetInstance()->Get_Monster_Damage(13.f);
 					CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CULHP, float(iDamage) * -1);
 				}
 				else if (m_strEffectTag == TEXT("Prototype_Component_Boss_Erma_Bullet"))
 				{
-					iDamage = CStat_Manager::GetInstance()->Get_Monster_Damage(14.f);
+					iDamage = CStat_Manager::GetInstance()->Get_Monster_Damage(8.f);
 					CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CULHP, float(iDamage) * -1);
 				}
 				else if (m_strEffectTag == TEXT("Prototype_Component_Boss_Erma_Missile_Lower"))
 				{
-					iDamage = CStat_Manager::GetInstance()->Get_Monster_Damage(12.f);
+					iDamage = CStat_Manager::GetInstance()->Get_Monster_Damage(8.f);
 					CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CULHP, float(iDamage) * -1);
 				}
 				else if (m_strEffectTag == TEXT("Prototype_Component_Boss_Erma_Missile_Lower_Light"))
 				{
-					iDamage = CStat_Manager::GetInstance()->Get_Monster_Damage(13.f);
+					iDamage = CStat_Manager::GetInstance()->Get_Monster_Damage(10.f);
 					CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CULHP, float(iDamage) * -1);
 				}
 				pPlayer->Hit(iDamage);
