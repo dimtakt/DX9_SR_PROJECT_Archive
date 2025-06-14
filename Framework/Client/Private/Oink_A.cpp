@@ -259,7 +259,7 @@ void COink_A::Update(_float fTimeDelta)
 
 void COink_A::Late_Update(_float fTimeDelta)
 {
-    __super::Late_Update(fTimeDelta);
+    __super::Late_Update(fTimeDelta);    
 }
 
 HRESULT COink_A::Render()
@@ -298,7 +298,11 @@ HRESULT COink_A::Render()
 
         SetUp_RenderState();
 
-        m_pVIBufferCom->Render();
+        if (m_isSummoned)
+        {
+            m_pVIBufferCom->Render();
+        }
+        
 
         m_pTerrainBox->Render();
 

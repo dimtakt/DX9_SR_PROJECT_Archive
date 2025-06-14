@@ -17,17 +17,36 @@ HRESULT CCollision_Manager::Add_OBB_Collider(CCollider_OBB* pCollider)
 
 void CCollision_Manager::Clear_Colliders()
 {
-    for (size_t i = 0; i < m_vColliders.size(); ++i)
-    {
-        if (m_vColliders[i] == nullptr)
-            Safe_Release(m_vColliders[i]);
-        if (m_vColliders[i]->Get_Owner() == nullptr)
-            Safe_Release(m_vColliders[i]);
-        else if (m_vColliders[i]->Get_Owner()->Get_IsDead())
-            Safe_Release(m_vColliders[i]);
-        else if (!m_vColliders[i]->Get_Owner()->Get_IsActive())
-            Safe_Release(m_vColliders[i]);
+    for (auto it = m_vColliders.begin(); it != m_vColliders.end();) {
+        if (*it != nullptr) {
+            if (*it == nullptr) {
+                it = m_vColliders.erase(it);
+            }
+            else if ((*it)->Get_Owner() == nullptr)
+            {
+                Safe_Release(*it);
+                it = m_vColliders.erase(it);
+            }
+            else if ((*it)->Get_Owner()->Get_IsDead())
+            {
+                Safe_Release(*it);
+                it = m_vColliders.erase(it);
+            }
+            else if (!(*it)->Get_Owner()->Get_IsActive())
+            {
+                Safe_Release(*it);
+                it = m_vColliders.erase(it);
+            }                    
+            else {
+                it++;
+            }
+        }
+        else {
+            Safe_Release(*it);
+            it = m_vColliders.erase(it);
+        }
     }
+    
 }
 
 void CCollision_Manager::Check_RoomCollisions()
