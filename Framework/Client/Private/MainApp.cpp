@@ -848,8 +848,8 @@ HRESULT CMainApp::Ready_Texture_Setting()
 		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/UI/Loding/St4LoadingFront_%d.png"), 108))))
 		return E_FAIL;
 
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Rect_Prologue"),
-		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/UI/Loding/PrologueRole/PrologueRole-Tree%d.png"), 132))))
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Town_Loading"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/UI/Loding/TownLoading.png"), 1))))
 		return E_FAIL;
 
 #pragma endregion

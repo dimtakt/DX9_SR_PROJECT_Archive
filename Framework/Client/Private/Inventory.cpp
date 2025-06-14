@@ -51,12 +51,14 @@ HRESULT CInventory::Initialize(void* pArg)
 	m_pGameInstance->Add_UIObject(ENUM_CLASS(m_eLevel), TEXT("UI_Inven"), this);
 	CItemObject* pItem = nullptr;
 
-	Add_Item_Inven(26);
-	Add_Item_Inven(25);
-	Add_Item_Inven(2);
-	Add_Item_Inven(15);
+	//Add_Item_Inven(26);
+	//Add_Item_Inven(25);
+	//Add_Item_Inven(2);
+	//Add_Item_Inven(15);
 	Add_Item_Inven(4);
-	Add_Item_Inven(5);
+	Add_Item_Inven(4);
+	Add_Item_Inven(4);
+	//Add_Item_Inven(5);
 	/*Add_Item_Inven(14);
 	Add_Item_Inven(0);
 	Add_Item_Inven(27);*/

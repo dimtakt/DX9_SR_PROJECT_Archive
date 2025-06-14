@@ -36,12 +36,15 @@ HRESULT CFrozenHammer::Initialize(void* pArg)
     m_pTransformCom->Scaling(2.f, 2.f, 2.f);
 
     m_pGameInstance->Subscribe(ENUM_CLASS(EVENT_TYPE::FROZENHAMMER), this);
+    m_pGameInstance->Item_MaxCool(TEXT("Snow Hamer"), m_fAttackCool);
     m_fCulAttackCool = 0.f;
     return S_OK;
 }
 
 void CFrozenHammer::Priority_Update(_float fTimeDelta)
 {
+    m_pGameInstance->Item_CulCool(TEXT("Snow Hamer"), m_fCulAttackCool);
+
     if (m_fCulAttackCool > 0) {
         m_fCulAttackCool--;
     }

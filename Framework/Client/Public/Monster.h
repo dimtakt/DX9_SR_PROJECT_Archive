@@ -63,6 +63,8 @@ public:
 	void Set_HP(_int iHp) { m_iCulHp = iHp; }
 	void Fill_HP() { m_iCulHp = m_iMaxHp; }
 
+	_bool Get_Summoned() { return m_isSummoned; }
+
 protected:
 	class CTransform*		m_pTransformCom = { nullptr };
 	class CTexture*			m_pTextureCom = { nullptr };

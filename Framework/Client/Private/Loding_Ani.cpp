@@ -26,11 +26,11 @@ HRESULT CLoding_Ani::Initialize(void* pArg)
 
 	m_eLevel = desc->pNewLevel;
 
-	if (m_eLevel == LEVEL::LEVEL_TOWN) {
-		m_fSizeX = g_iWinSizeX;
-		m_fSizeY = g_iWinSizeX;
+	if (m_eLevel == LEVEL::LEVEL_TOWN || m_eLevel == LEVEL::LEVEL_BOSS1 || m_eLevel == LEVEL::LEVEL_SHELTER || m_eLevel == LEVEL::LEVEL_BOSS2) {
+		m_fSizeX = g_iWinSizeX + 50;
+		m_fSizeY = g_iWinSizeY + 280;
 		m_fX = 0;
-		m_fY = 0;
+		m_fY = -120;
 		m_fZ = UI_DEPTH::LODING;
 		m_iWinSizeX = g_iWinSizeX;
 		m_iWinSizeY = g_iWinSizeY;
@@ -44,10 +44,6 @@ HRESULT CLoding_Ani::Initialize(void* pArg)
 		m_iWinSizeX = g_iWinSizeX;
 		m_iWinSizeY = g_iWinSizeY;
 	}
-	
-
-	
-
 	
 
 	if (FAILED(__super::Initialize()))
@@ -121,7 +117,7 @@ HRESULT CLoding_Ani::Ready_Components()
 
 	if (m_eLevel == LEVEL::LEVEL_TOWN)
 	{
-		if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Rect_Prologue"),
+		if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Town_Loading"),
 			TEXT("Com_Texture"), reinterpret_cast<CComponent**>(&m_pTextureCom))))
 			return E_FAIL;
 	}
@@ -146,6 +142,24 @@ HRESULT CLoding_Ani::Ready_Components()
 	else if (m_eLevel == LEVEL::LEVEL_STAGE4)
 	{
 		if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Rect_Loding_4_BG"),
+			TEXT("Com_Texture"), reinterpret_cast<CComponent**>(&m_pTextureCom))))
+			return E_FAIL;
+	}
+	else if (m_eLevel == LEVEL::LEVEL_BOSS1)
+	{
+		if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Town_Loading"),
+			TEXT("Com_Texture"), reinterpret_cast<CComponent**>(&m_pTextureCom))))
+			return E_FAIL;
+	}
+	else if (m_eLevel == LEVEL::LEVEL_SHELTER)
+	{
+		if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Town_Loading"),
+			TEXT("Com_Texture"), reinterpret_cast<CComponent**>(&m_pTextureCom))))
+			return E_FAIL;
+	}
+	else if (m_eLevel == LEVEL::LEVEL_BOSS2)
+	{
+		if (FAILED(__super::Add_Component(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Town_Loading"),
 			TEXT("Com_Texture"), reinterpret_cast<CComponent**>(&m_pTextureCom))))
 			return E_FAIL;
 	}
