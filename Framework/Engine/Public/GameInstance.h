@@ -157,6 +157,7 @@ public:
 	void						Item_CulCool(_wstring szEffectTag, _float fCulcool);
 	void						Item_MaxCool(_wstring szEffectTag, _float fMaxcool);
 	const _float				Get_ItemCool(bool bMaxCool, _wstring szEffectTag);
+	void						AcquiredItem_List_Add(_int iIndex);
 #pragma endregion
 
 #pragma region EVENT_MANAGER

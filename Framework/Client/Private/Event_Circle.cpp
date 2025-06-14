@@ -75,6 +75,9 @@ void CEvent_Circle::Update(_float fTimeDelta)
 	{
 		if (iInput_Key == m_iInsertKey && m_fCircle_Size <= 1.08 && m_fCircle_Size >= 0.92)
 		{
+			m_pGameInstance->StopSound(ENUM_CLASS(CHANNELID::EVENT_CLICK));
+			m_pGameInstance->PlaySoundW(TEXT("legendaryItemFound.wav"), ENUM_CLASS(CHANNELID::EVENT_CLICK), g_fUIVolume - 0.4f);
+
 			static_cast<CEvent_ClashKey*>(m_vecChildren[0])->Input_KeySetting(1);
 			static_cast<CEvent_Result*>(m_vecChildren[2])->Perfect_Setting();
 
@@ -87,6 +90,9 @@ void CEvent_Circle::Update(_float fTimeDelta)
 		}
 		else
 		{
+			m_pGameInstance->StopSound(ENUM_CLASS(CHANNELID::EVENT_CLICK));
+			m_pGameInstance->PlaySoundW(TEXT("enchantEquipment.wav"), ENUM_CLASS(CHANNELID::EVENT_CLICK), g_fUIVolume - 0.4f);
+
 			static_cast<CEvent_ClashKey*>(m_vecChildren[0])->Input_KeySetting(3);
 			static_cast<CEvent_Result*>(m_vecChildren[2])->Fail_Setting();
 

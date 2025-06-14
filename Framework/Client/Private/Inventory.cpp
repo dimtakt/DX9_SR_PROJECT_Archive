@@ -58,6 +58,8 @@ HRESULT CInventory::Initialize(void* pArg)
 	Add_Item_Inven(4);
 	Add_Item_Inven(4);
 	Add_Item_Inven(4);
+	Add_Item_Inven(29);
+	Add_Item_Inven(28);
 	//Add_Item_Inven(5);
 	/*Add_Item_Inven(14);
 	Add_Item_Inven(0);

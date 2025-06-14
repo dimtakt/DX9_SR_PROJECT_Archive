@@ -169,6 +169,8 @@ void CField_Npc_Chat::Update(_float fTimeDelta)
 			if (m_fAccTime >= m_fDeleyTime)
 			{
 				m_fAccTime = 0.f;
+				m_pGameInstance->StopSound(ENUM_CLASS(CHANNELID::EVENT_CLICK));
+				m_pGameInstance->PlaySoundW(TEXT("Npc_Talk.wav"), ENUM_CLASS(CHANNELID::EVENT_CLICK), g_fUIVolume);
 
 				m_szRenderText += m_szAllText[m_iTextIndex];
 				m_iTextIndex++;

@@ -98,7 +98,19 @@ void CHud_Quick_Slot::Update(_float fTimeDelta)
 		{
 			static_cast<CHud_Slot_CoolTime*>(m_vecChildren[0])->Progerss_Set(m_fItemCulCool, m_fItemCooltime);
 		}
-
+		
+		if (m_fItemCulCool <= 0 && m_pGameInstance->IsKeyHold('R') && m_bSelete)
+		{
+			
+			if (g_ItemEffect[m_pSlotItem->Item_Info()->iArtefact_Value].m_szEffectTag == TEXT("Ice Bolt"))
+			{
+				m_pGameInstance->Broadcast(ENUM_CLASS(EVENT_TYPE::ICEBOLT), &pEvent);
+			}
+			else if(g_ItemEffect[m_pSlotItem->Item_Info()->iArtefact_Value].m_szEffectTag == TEXT("Meteor"))
+			{
+				m_pGameInstance->Broadcast(ENUM_CLASS(EVENT_TYPE::METEOR), &pEvent);
+			}
+		}
 	}
 
 	if (m_bEating)

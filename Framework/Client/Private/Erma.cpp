@@ -7,6 +7,7 @@
 #include "Erma_Head.h"
 #include "Interaction_Normal.h"
 #include "Room_Manager.h"
+#include "GameInstance.h"
 
 CErma::CErma(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CMonster{ pGraphic_Device }
@@ -612,6 +613,10 @@ void CErma::PlayKeyInputPattern()
     // 키 입력 시 맨 앞의 원소와 일치하는지 확인, 일치 시 제거
     if (m_pGameInstance->IsKeyDown(m_vecKeys.front()))
     {
+        //키 입력 체크 사운드
+        m_pGameInstance->StopSound(ENUM_CLASS(CHANNELID::EVENT_CLICK));
+        m_pGameInstance->PlaySoundW(TEXT("enchantEquipment.wav"), ENUM_CLASS(CHANNELID::EVENT_CLICK), g_fUIVolume-0.4f);
+
         m_vecInputKeys.push_back(m_vecKeys.front());
 
         std::cout << "Inputed Keys... : ";
@@ -626,6 +631,9 @@ void CErma::PlayKeyInputPattern()
     
     if (isWrongKey)
     {
+        m_pGameInstance->StopSound(ENUM_CLASS(CHANNELID::EVENT_FAIL));
+        m_pGameInstance->PlaySoundW(TEXT("Event_AZ_Fail.wav"), ENUM_CLASS(CHANNELID::EVENT_FAIL), g_fUIVolume);
+
         // 실패 시 다시 생성
         // 키 갯수만큼 생성하여 벡터에 삽입
         m_vecKeys.clear();
@@ -654,6 +662,9 @@ void CErma::PlayKeyInputPattern()
     {
         m_iPauseLeftFrame = 0;
         // kstaA : 패턴 파훼 성공으로, 보상을 주거나 보스의 체력을 깎는 기능을 삽입.
+        m_pGameInstance->StopSound(ENUM_CLASS(CHANNELID::EVENT_CLICK));
+        m_pGameInstance->StopSound(ENUM_CLASS(CHANNELID::EVENT_CLEAR));
+        m_pGameInstance->PlaySoundW(TEXT("legendaryItemFound.wav"), ENUM_CLASS(CHANNELID::EVENT_FAIL), g_fUIVolume);
 
 
         std::cout << "Success" << std::endl;
@@ -668,8 +679,9 @@ void CErma::PlayKeyInputPattern()
     else if (m_iPauseLeftFrame == 0)
     {
         // kstaA : 패턴 파훼 실패로, 플레이어의 체력을 깎는 기능을 삽입.
-
-
+        m_pGameInstance->StopSound(ENUM_CLASS(CHANNELID::EVENT_CLICK));
+        m_pGameInstance->StopSound(ENUM_CLASS(CHANNELID::EVENT_FAIL));
+        m_pGameInstance->PlaySoundW(TEXT("reroll.wav"), ENUM_CLASS(CHANNELID::EVENT_FAIL), g_fUIVolume);
 
         std::cout << "Fail" << std::endl;
         m_vecKeys.clear();
