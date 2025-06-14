@@ -343,7 +343,7 @@ void CAskard_Tentacle::Update(_float fTimeDelta)
 
 			_float fDistance = D3DXVec3Length(&vDiff);
 
-			// ksta value : 촉수가 근접 시 공격할 거리
+			// 촉수가 근접 시 공격할 거리
 			if (fDistance <= 3.f)
 			{
 				m_ePattern = PATTERN_TENTACLE::PT_ATTACK;
