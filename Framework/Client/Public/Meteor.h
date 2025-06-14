@@ -33,7 +33,7 @@ public:
 	virtual HRESULT Render() override;
 
 	virtual void OnEvent(_uint iTypeindex, const EVENTDATA* pData);
-	void Create_Bolt();
+	void Create_Meteor();
 
 private:
 	CVIBuffer_Rect* m_pVIBufferCom = { nullptr };
@@ -43,9 +43,15 @@ private:
 	_float3 m_vDirection = {};			//발사 방향
 
 	_float m_fCurrentCoolTime = 0.f;
-	_float m_fMaxCoolTime = 26.f;
+	_float m_fMaxCoolTime = 1560.f;				//1초에 60
 
+	CTransform* m_pTerrainTransformCom = { nullptr };
 	CTransform* m_pPlayerTransformCom = { nullptr };
+
+	_bool m_bMeteor = false;
+	_float m_fMeteorTimer = 0.f;
+	_int m_iMeteorCount = 7;
+
 
 private:
 	HRESULT Ready_Components(void* pArg);
