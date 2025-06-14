@@ -1091,6 +1091,8 @@ HRESULT CPlayer::Ready_Skill(void* pArg)
             ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_Meteor"), &MeteorDesc)))
             return E_FAIL;
     }
+
+    return S_OK;
 }
 
 

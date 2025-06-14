@@ -24,7 +24,7 @@ public:
 	
 		// Phase 1
 		PT_SPAWN_WIDTH,		// (3반복) 가로줄로 촉수 소환
-		PT_FOLLOWING_EYES,	// 눈달린 유도탄 5개 소환, 수명 다하면 폭발
+		//PT_FOLLOWING_EYES,	// 눈달린 유도탄 5개 소환, 수명 다하면 폭발
 		PT_CORNER_LASER,	// 구석에서 90도 돌아가는 레이저
 		PT_SPAWN_CROSS,		// 플레이어에게 다가와서 4방향 촉수 소환
 		PT_SPAWN_LINE,		// 플레이어로부터 떨어져서 2줄 촉수 소환
@@ -32,10 +32,10 @@ public:
 
 		// Phase 2		(Phase 1 패턴도 섞어씀, _ADV 붙은 건 1페 강화패턴)
 		PT_DARK_TENTACLE,		// 소등 후 화면을 덮는 거대한 촉수 피하기 패턴
-		PT_SPAWN_WIDTH_ADV,		// (강화패턴) 공격 빈도 증가 및 세로줄로도 공격
-		PT_FOLLOWING_EYES_ADV,	// (강화패턴) 유도탄 폭발 시 해당 위치에 장판 남김
+		//PT_SPAWN_WIDTH_ADV,		// (강화패턴) 공격 빈도 증가 및 세로줄로도 공격
+		//PT_FOLLOWING_EYES_ADV,	// (강화패턴) 유도탄 폭발 시 해당 위치에 장판 남김
 		PT_CORNER_LASER_ADV,	// (강화패턴) 레이저를 3방향에서 순차적으로 사용
-		PT_SPAWN_CROSS_ADV,		// (강화패턴) 촉수 생성위치의 랜덤성 증가?
+		//PT_SPAWN_CROSS_ADV,		// (강화패턴) 촉수 생성위치의 랜덤성 증가?
 		PT_SPAWN_LINE_ADV,		// (강화패턴) 2줄에서 3줄로 증가
 		PT_SPARK_ADV,			// (강화패턴) 분신 소환으로 충격파 3배
 
@@ -117,11 +117,14 @@ private:
 	_float3			m_vLockedOnPos					= {};
 
 	_bool			m_isAllStop						= false;
+	_bool			m_isFlippedX					= false;
+
+	std::vector<_float3>	m_vecLaserMovePos		= {};
 
 private:
 	void			Adjust_Scale();					// 임시, 리소스 크기 조정하면 삭제
 
-	// Patterns
+	// Patterns (Phase 1)
 	void			Play_Spawn_Width(_float fTimeDelta);
 	void			Play_Spawn_Cross(_float fTimeDelta);
 	void			Play_Spawn_Line(_float fTimeDelta);
@@ -129,6 +132,10 @@ private:
 	//void			Play_Following_Eyes(_float fTimeDelta);
 	void			Play_Spark(_float fTimeDelta);
 	void			Play_Dark_Tentacle(_float fTimeDelta);
+
+	// Patterns (Phase 2)
+	void			Play_Corner_Laser_ADV(_float fTimeDelta);
+
 
 public:
 	static CAskard* Create(LPDIRECT3DDEVICE9 pGraphic_Device);
