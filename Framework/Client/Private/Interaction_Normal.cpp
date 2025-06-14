@@ -573,20 +573,21 @@ HRESULT CInteraction_Normal::Merchant_Initialize()
         m_vShopItem.push_back(dynamic_cast<CField_Item*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_Field_Item"), &desc)));
     }
 
-    CField_Npc_Chat::FIELD_CHAT_DESC chatDesc{};
+    //NPC가 로고 레벨로 생성됨
+    //CField_Npc_Chat::FIELD_CHAT_DESC chatDesc{};
 
-    chatDesc.pTransform = m_pTransformCom;
+    //chatDesc.pTransform = m_pTransformCom;
 
-    chatDesc.m_iLevel = m_pGameInstance->Get_CurrentLevel();
-    chatDesc.szChatTag = TEXT("Baba_CHAT");
-    chatDesc.fY = -100;
-    if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(m_pGameInstance->Get_CurrentLevel(), TEXT("Layer_UI_Chat"), ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_Field_Npc_Chat"), &chatDesc)))
-        return E_FAIL;
+    //chatDesc.m_iLevel = m_pGameInstance->Get_CurrentLevel();
+    //chatDesc.szChatTag = TEXT("Baba_CHAT");
+    //chatDesc.fY = -100;
+    //if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(m_pGameInstance->Get_CurrentLevel(), TEXT("Layer_UI_Chat"), ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_Field_Npc_Chat"), &chatDesc)))
+    //    return E_FAIL;
 
-    m_pChat = static_cast<CField_Npc_Chat*>(m_pGameInstance->Find_UIObj(m_pGameInstance->Get_CurrentLevel(), TEXT("Baba_CHAT")));
+    //m_pChat = static_cast<CField_Npc_Chat*>(m_pGameInstance->Find_UIObj(m_pGameInstance->Get_CurrentLevel(), TEXT("Baba_CHAT")));
 
-    m_pChat->Add_Chat(TEXT("에베베"));
-    m_pChat->Add_Chat(TEXT("바바"));
+    //m_pChat->Add_Chat(TEXT("에베베"));
+    //m_pChat->Add_Chat(TEXT("바바"));
     
 
     return S_OK;
@@ -783,14 +784,15 @@ void CInteraction_Normal::OnCollision(CGameObject* pGameObject)
         }
         else if (m_eObjType == GAMEOBJ_TYPE::MERCAHNT)
         {
-            if (pGameObject->Get_ObjType() == GAMEOBJ_TYPE::PLAYER)
+            //NPC가 로고 레벨에서 생성됨
+            /*if (pGameObject->Get_ObjType() == GAMEOBJ_TYPE::PLAYER)
             {
                 m_pChat->On_Chat(1, true);
                 if (m_pGameInstance->IsKeyDown('F'))
                 {
                     m_pChat->Cinematic_Chat(1, true);
                 }
-            }
+            }*/
         }
     }
 }
@@ -802,7 +804,8 @@ void CInteraction_Normal::OffCollision(CGameObject* pGameObject)
         {
             if (pGameObject->Get_ObjType() == GAMEOBJ_TYPE::PLAYER)
             {
-                m_pChat->Off_Chat();
+                //채팅 페이스 안뜨는 이슈 수정하면 off챗 기능 내부에서 처리하도록 변경
+                //m_pChat->Off_Chat();
             }
         }
     }
