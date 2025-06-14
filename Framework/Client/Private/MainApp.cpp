@@ -1039,8 +1039,6 @@ HRESULT CMainApp::Ready_Texture_Setting()
 		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Magic/Meteor/Fire_FX_Front_%d.png"), 13))))
 		return E_FAIL;
 	
-
-
 #pragma endregion
 
 	return S_OK;

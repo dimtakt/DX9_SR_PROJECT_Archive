@@ -112,7 +112,7 @@ void CGameEffect::Priority_Update(_float fTimeDelta)
 			_float4x4 matOffset{};
 			_float4x4 matTemp{};
 			D3DXMatrixIdentity(&matOffset);
-			m_pTransformCom->Scaling(3.5f, 2.f, 2.f);
+			m_pTransformCom->Scaling(4.5f, 2.f, 1.5f);
 			matTemp = *m_pTransformCom->Get_WorldMatrix();
 
 			CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::PLAYER_SKILL,
@@ -304,6 +304,10 @@ void CGameEffect::Ready_Collision()
 			{
 				tColliderDesc.vScale = _float3(0.8f, 0.7f, 0.9f);
 			}
+			else if (m_strEffectTag == TEXT("Prototype_Component_Texture_Effect_Meteor"))
+			{
+				tColliderDesc.vScale = _float3(0.5f, 0.5f, 0.5f); //임의 크기로 일단 설정해둠 추후 테스트 해보고자 함.
+			}
 		}
 		else {
 			// 레이저 고스트
@@ -447,6 +451,10 @@ void CGameEffect::OnCollision(CGameObject* pGameObject)
 				else if (m_strEffectTag == TEXT("Prototype_Component_Texture_IceBolt"))
 				{
 					pMonster->Set_Damage(-(CStat_Manager::GetInstance()->Get_Player_Damage(DAMAGE::PLANET)));
+				}
+				else if (m_strEffectTag == TEXT("Prototype_Component_Texture_Effect_Meteor"))
+				{
+					pMonster->Set_Damage(-(CStat_Manager::GetInstance()->Get_Player_Damage(DAMAGE::FROZENHAMMER)));
 				}
 				pMonster->Set_IsHit(TRUE);
 			}
