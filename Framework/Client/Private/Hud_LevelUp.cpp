@@ -122,7 +122,7 @@ HRESULT CHud_LevelUp::Render()
 
 	Render_Font();
 	__super::End();
-
+	return S_OK;
 }
 
 HRESULT CHud_LevelUp::Ready_Components()

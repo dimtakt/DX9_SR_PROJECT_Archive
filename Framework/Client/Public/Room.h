@@ -50,7 +50,7 @@ public:
     _bool GetIsVisited() { return m_bIsVisited; }
     _int  GetID() { return m_iID; }
     CTerrainBox* Get_TerrainBox(){ return m_pTerrainBox; }
-    vector<CMonster*> Get_MonsterList() { return m_vMonster; }
+    vector<CMonster*> Get_MonsterList();
     _int Get_RoomX() { return m_iRoomX; }
     _int Get_RoomZ() { return m_iRoomZ; }
     void Set_RoomType(ROOM_INFO eType) { m_eRoomType = eType; }

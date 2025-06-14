@@ -18,6 +18,7 @@ HRESULT CItem_Manager::Initialize()
 	m_mapItemMaxCool.emplace(TEXT("Ice Bolt"), 0.f);
 	m_mapItemMaxCool.emplace(TEXT("Lightning Bolt"), 0.f);
 	m_mapItemMaxCool.emplace(TEXT("Projection Sword"), 0.f);
+	m_mapItemMaxCool.emplace(TEXT("Meteor"), 0.f);
 
 	m_mapItemCulCool.emplace(TEXT("Snow Hamer"), 0.f);
 	m_mapItemCulCool.emplace(TEXT("Yellow Planet"), 0.f);
@@ -26,6 +27,7 @@ HRESULT CItem_Manager::Initialize()
 	m_mapItemCulCool.emplace(TEXT("Ice Bolt"), 0.f);
 	m_mapItemCulCool.emplace(TEXT("Lightning Bolt"), 0.f);
 	m_mapItemCulCool.emplace(TEXT("Projection Sword"), 0.f);
+	m_mapItemCulCool.emplace(TEXT("Meteor"), 0.f);
 
 	return S_OK;
 }
@@ -166,5 +168,6 @@ void CItem_Manager::Free()
 
 	m_pPickItem = nullptr;
 	Safe_Release(m_pGraphic_Device);
-	Safe_Release(m_pGameInstance);
+	//Safe_Release(m_pGameInstance);
+
 }

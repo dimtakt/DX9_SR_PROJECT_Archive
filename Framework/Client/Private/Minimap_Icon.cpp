@@ -113,6 +113,7 @@ _wstring CMinimap_Icon::Value_Text()
 	case 6:
 		return TEXT("Prototype_Component_Texture_Rect_Minimap_Icon_DownStair");
 	}
+	return TEXT("");
 }
 
 CMinimap_Icon* CMinimap_Icon::Create(LPDIRECT3DDEVICE9 pGraphic_Device, LEVEL eLevel)

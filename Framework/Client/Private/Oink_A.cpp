@@ -201,14 +201,18 @@ void COink_A::Update(_float fTimeDelta)
         _float3 vNewMonsterPos = vMonsterPos + vPosDiff * fTimeDelta * fMoveSpeed;
         m_pTransformCom->Set_State(STATE::POSITION, vNewMonsterPos);
     }
+    if (m_pAnimatorCom->Get_CurStateTag() != L"Attack" && m_pAnimatorCom->Get_CurStateTag() != L"ChargeReady" && m_pAnimatorCom->Get_CurStateTag() != L"ChargeReady_Cycle")
+    {
+        AttackDaley = 0;
+    }
+
     if (m_pAnimatorCom->Get_CurStateTag() == L"Attack" && m_pAnimatorCom->Get_CurStackedFrame() < 24)
     {
         AttackDaley += 1;
         m_pAttackFx->Render_Frame(m_pTransformCom, AttackDaley, 24);
-        if (AttackDaley >= 24)
-            AttackDaley = 0;
+ 
     }
-
+    
     if (m_pAnimatorCom->Get_CurStateTag() == L"Attack" &&
         m_pAnimatorCom->Get_CurStackedFrame() == 24)
     {
@@ -217,18 +221,13 @@ void COink_A::Update(_float fTimeDelta)
         CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::MONSTER_EFFECT, L"Prototype_Component_Texture_Oink_A_Effect_Swing",
             *m_pTransformCom->Get_WorldMatrix(), matMonsterWorld, true);
     }
-    else if (m_pAnimatorCom->Get_CurStateTag() == L"Attack" &&
-        m_pAnimatorCom->Get_IsLastFrame())
-    {
-        if (m_pAnimatorCom->Change_State(L"Attack_Standby")) {}
-    }
+
 
     if (m_pAnimatorCom->Get_CurStateTag() == L"ChargeReady" || m_pAnimatorCom->Get_CurStateTag() == L"ChargeReady_Cycle")
     {
         AttackDaley += 1;
         m_pAttackFx->Render_Frame(m_pTransformCom, AttackDaley, 196);
-        if (AttackDaley >= 196)
-            AttackDaley = 0;
+
     }
 
     if (m_pAnimatorCom->Get_CurStateTag() == L"ChargeReady")
@@ -415,6 +414,8 @@ HRESULT COink_A::Ready_Object()
 
 void COink_A::OnCollision(CGameObject* pGameObject)
 {
+    if (pGameObject == nullptr)
+        return;
 	__super::OnCollision(pGameObject);
 
 

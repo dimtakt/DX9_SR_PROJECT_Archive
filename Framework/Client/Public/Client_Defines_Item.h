@@ -109,26 +109,28 @@ namespace Client
 		ItemData(17, 50,ITEM_TYPE::STONE, ITEM_RARITY::LEGENDARY,TEXT("압축"), TEXT(""), 42),
 		ItemData(18, 51,ITEM_TYPE::STONE, ITEM_RARITY::LEGENDARY,TEXT("과거"), TEXT(""), 43),
 		ItemData(19, 52,ITEM_TYPE::STONE, ITEM_RARITY::LEGENDARY,TEXT("단절"), TEXT(""), 44),
-		ItemData(20, 54,ITEM_TYPE::ARTEFACT, ITEM_RARITY::NORMAL,TEXT("부정한 붕대"), TEXT("춤추는 그을은 연기처럼."), 3, 5),
-		ItemData(21, 55,ITEM_TYPE::ARTEFACT, ITEM_RARITY::NORMAL,TEXT("압박 밴드"), TEXT("더 빠르게 움직일 수 있는 것 같다."), 2, 6),
-		ItemData(22, 56,ITEM_TYPE::ARTEFACT, ITEM_RARITY::RARE,TEXT("열망의 부적"), TEXT("바라건대 이 몸에 강인한 영혼을."), 3, 7),
+		ItemData(20, 53,ITEM_TYPE::ARTEFACT, ITEM_RARITY::NORMAL,TEXT("부정한 붕대"), TEXT("춤추는 그을은 연기처럼."), 3, 5),
+		ItemData(21, 54,ITEM_TYPE::ARTEFACT, ITEM_RARITY::NORMAL,TEXT("압박 밴드"), TEXT("더 빠르게 움직일 수 있는 것 같다."), 2, 6),
+		ItemData(22, 55,ITEM_TYPE::ARTEFACT, ITEM_RARITY::RARE,TEXT("열망의 부적"), TEXT("바라건대 이 몸에 강인한 영혼을."), 3, 7),
 		ItemData(23, 56,ITEM_TYPE::ARTEFACT, ITEM_RARITY::RARE,TEXT("힘의 부적"), TEXT("믿음직스럽지 않게 '힘'이라 적혀 있다."), 3, 8),
 		ItemData(24, 57,ITEM_TYPE::ARTEFACT, ITEM_RARITY::RARE,TEXT("은접시"), TEXT("피가 그 열쇠다."), 2, 9),
 		ItemData(25, 58,ITEM_TYPE::ARTEFACT, ITEM_RARITY::RARE,TEXT("경고 문서"), TEXT("상인연합 긴급 공문"), 1, 10),
 		ItemData(26, 59,ITEM_TYPE::SKILLBOOK, ITEM_RARITY::LEGENDARY,TEXT("눈보라 망치"), TEXT("푸른 불 용광로 옆에 놓여있었다."), 6, 11),
 		ItemData(27, 60,ITEM_TYPE::ARTEFACT, ITEM_RARITY::RARE,TEXT("노란 행성"), TEXT("도서관에 전시되어 있던 노란 행성"), 6, 12),
-		ItemData(28, 61,ITEM_TYPE::ARTEFACT, ITEM_RARITY::RARE,TEXT("붉은 행성"), TEXT("도서관에 전시되어 있던 붉은 행성"), 6, 13),
-		ItemData(29, 62,ITEM_TYPE::ARTEFACT, ITEM_RARITY::RARE,TEXT("푸른 행성"), TEXT("도서관에 전시되어 있던 푸른 행성"), 6, 14),
-		ItemData(30, 63,ITEM_TYPE::SKILLBOOK, ITEM_RARITY::RARE,TEXT("아이스 볼트"), TEXT("아이스 볼트 마법이 적혀있는 책"), 1, 15),
-		ItemData(31, 64,ITEM_TYPE::SKILLBOOK, ITEM_RARITY::NORMAL,TEXT("라이트닝 볼트"), TEXT("라이트닝 볼트 마법이 적혀있는 책"), 1, 16),
-		
-		ItemData(32, 68,ITEM_TYPE::ARTEFACT, ITEM_RARITY::NORMAL,TEXT("말라버린 꽃"), TEXT("푸석푸석하다...."), 2, 17),
-		ItemData(33, 65,ITEM_TYPE::ARTEFACT, ITEM_RARITY::RARE,TEXT("스타 아쿠아마린"), TEXT("별이 된 사람에 눈"), 2, 18),
-		ItemData(34, 69,ITEM_TYPE::ARTEFACT, ITEM_RARITY::LEGENDARY,TEXT("따뜻한 돌"), TEXT("겨울에 들고다니면 따뜻하다."), 3, 19),
-		ItemData(35, 66,ITEM_TYPE::ARTEFACT, ITEM_RARITY::RARE,TEXT("유리 망치"), TEXT("한번쓰면 깨질 것 같다."), 3, 20),
-		ItemData(36, 70,ITEM_TYPE::ARTEFACT, ITEM_RARITY::LEGENDARY,TEXT("하얀 나뭇가지"), TEXT("어떤 나무에서 떨어진..."), 4, 21),
-		ItemData(37, 67,ITEM_TYPE::ARTEFACT, ITEM_RARITY::NORMAL,TEXT("용골 파편"), TEXT("용에 뼈의 조각"), 3, 22),
+		ItemData(28, 63,ITEM_TYPE::SKILLBOOK, ITEM_RARITY::RARE,TEXT("아이스 볼트"), TEXT("아이스 볼트 마법이 적혀있는 책"), 1, 15),
+		ItemData(29, 71,ITEM_TYPE::SKILLBOOK, ITEM_RARITY::RARE,TEXT("메테오"), TEXT("메테오 마법이 적혀있는 책"), 1, 23),
 
+		ItemData(30, 68,ITEM_TYPE::ARTEFACT, ITEM_RARITY::NORMAL,TEXT("말라버린 꽃"), TEXT("푸석푸석하다...."), 2, 17),
+		ItemData(31, 65,ITEM_TYPE::ARTEFACT, ITEM_RARITY::RARE,TEXT("스타 아쿠아마린"), TEXT("별이 된 사람에 눈"), 2, 18),
+		ItemData(32, 69,ITEM_TYPE::ARTEFACT, ITEM_RARITY::LEGENDARY,TEXT("따뜻한 돌"), TEXT("겨울에 들고다니면 따뜻하다."), 3, 19),
+		ItemData(33, 66,ITEM_TYPE::ARTEFACT, ITEM_RARITY::RARE,TEXT("유리 망치"), TEXT("한번쓰면 깨질 것 같다."), 3, 20),
+		ItemData(34, 70,ITEM_TYPE::ARTEFACT, ITEM_RARITY::LEGENDARY,TEXT("하얀 나뭇가지"), TEXT("어떤 나무에서 떨어진..."), 4, 21),
+		ItemData(35, 67,ITEM_TYPE::ARTEFACT, ITEM_RARITY::NORMAL,TEXT("용골 파편"), TEXT("용에 뼈의 조각"), 3, 22),
+
+		//ItemData(28, 61,ITEM_TYPE::ARTEFACT, ITEM_RARITY::RARE,TEXT("붉은 행성"), TEXT("도서관에 전시되어 있던 붉은 행성"), 6, 13),
+		//ItemData(29, 62,ITEM_TYPE::ARTEFACT, ITEM_RARITY::RARE,TEXT("푸른 행성"), TEXT("도서관에 전시되어 있던 푸른 행성"), 6, 14),
+		//ItemData(31, 64,ITEM_TYPE::SKILLBOOK, ITEM_RARITY::NORMAL,TEXT("라이트닝 볼트"), TEXT("라이트닝 볼트 마법이 적혀있는 책"), 1, 16),
+		
 		//ItemData(12, 12,ITEM_TYPE::STONE, ITEM_RARITY::NORMAL,TEXT("시선"), TEXT(""), 4),
 		//ItemData(13, 13,ITEM_TYPE::STONE, ITEM_RARITY::NORMAL,TEXT("악수"), TEXT(""), 5),
 		//ItemData(14, 14,ITEM_TYPE::STONE, ITEM_RARITY::NORMAL,TEXT("운명"), TEXT(""), 7),
@@ -198,7 +200,9 @@ namespace Client
 		Item_Effect(19, ITEM_EFFECT::VALUE_TYPE, {{STAT_INFO::CRITICALDAMAGE,TEXT("크리티컬 데미지 증가 +%d%%"), 10, 10, false}}),
 		Item_Effect(20, ITEM_EFFECT::VALUE_TYPE, {{STAT_INFO::CULDAMAGE,TEXT("공격력 증가 +%d%%"), 3, 3, true}, {STAT_INFO::MAXHP,TEXT("최대 HP %d%%"), -3, -3}}),
 		Item_Effect(21, ITEM_EFFECT::VALUE_TYPE, {{STAT_INFO::MAXMP,TEXT("최대 MP 증가 +%d"), 10, 10}}),
-		Item_Effect(22, ITEM_EFFECT::VALUE_TYPE, {{STAT_INFO::MAXHP,TEXT("최대 HP 증가 +%d"), 10, 10}})
+		Item_Effect(22, ITEM_EFFECT::VALUE_TYPE, {{STAT_INFO::MAXHP,TEXT("최대 HP 증가 +%d"), 10, 10}}),
+
+		Item_Effect(23, ITEM_EFFECT::SKILLBOOK_TYPE, {{STAT_INFO::STAT_END,TEXT("메테오 획득"), 0, 0, false}}, TEXT("Meteor")),
 	};
 
 	const vector<Slate> g_SlateDataBase

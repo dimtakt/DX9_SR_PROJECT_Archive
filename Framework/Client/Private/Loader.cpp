@@ -336,9 +336,9 @@ HRESULT CLoader::Loading_For_Stage1_Level()
 		return E_FAIL;
 
 	/* Prototype_Component_Texture_Monster */
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STAGE1), TEXT("Prototype_Component_Texture_Monster"),
-		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Textures/Player/Player0.png"), 1))))
-		return E_FAIL;
+	//if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STAGE1), TEXT("Prototype_Component_Texture_Monster"),
+	//	CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Textures/Player/Player0.png"), 1))))
+	//	return E_FAIL;
 
 
 	// Prototype_Component_Texture_Monster (Mole_A)
@@ -448,9 +448,9 @@ HRESULT CLoader::Loading_For_Stage1_Level()
 		return E_FAIL;
 
 	// Camera
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STAGE1), TEXT("Prototype_GameObject_Camera_Mouse"),
+	/*if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STAGE1), TEXT("Prototype_GameObject_Camera_Mouse"),
 		CCamera_Mouse::Create(m_pGraphic_Device))))
-		return E_FAIL;
+		return E_FAIL;*/
 
 	/* Prototype_GameObject_Land*/
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STAGE1), TEXT("Prototype_GameObject_Room"),

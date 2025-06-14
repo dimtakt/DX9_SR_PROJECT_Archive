@@ -119,6 +119,7 @@ HRESULT CPotion_Tooltip::Ready_ChildPrototype(LEVEL eLevel)
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(eLevel), TEXT("Prototype_GameObject_UI_Potion_Tooltip_Bottom"),
 		CItem_Tooltip_Bottom::Create(m_pGraphic_Device, eLevel))))
 		return E_FAIL;
+	return S_OK;
 }
 
 HRESULT CPotion_Tooltip::Ready_Children()

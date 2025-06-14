@@ -193,8 +193,8 @@ void CField_Item::Item_Rand(_uint iItemID)
 		}
 		for (_int i = 0; i < 100; ++i)
 		{
-			_int iIndex1 = m_pGameInstance->Rand(0, vecIndex.size());
-			_int iIndex2 = m_pGameInstance->Rand(0, vecIndex.size());
+			_int iIndex1 = m_pGameInstance->Rand(0, vecIndex.size()-1);
+			_int iIndex2 = m_pGameInstance->Rand(0, vecIndex.size()-1);
 
 			if (iIndex1 != iIndex2)
 			{
@@ -213,6 +213,8 @@ void CField_Item::Item_Rand(_uint iItemID)
 
 void CField_Item::OnCollision(CGameObject* pGameObject)
 {
+	if (pGameObject == nullptr)
+		return;
 }
 
 void CField_Item::RenderFont()

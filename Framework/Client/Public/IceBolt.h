@@ -43,7 +43,7 @@ private:
 	_float3 m_vDirection = {};			//발사 방향
 
 	_float m_fCurrentCoolTime = 0.f;
-	_float m_fMaxCoolTime = 1.f;
+	_float m_fMaxCoolTime = 60.f;
 
 	CTransform* m_pPlayerTransformCom = { nullptr };
 

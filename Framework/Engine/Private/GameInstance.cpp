@@ -106,22 +106,22 @@ HRESULT CGameInstance::Initialize_Engine(const ENGINE_DESC& EngineDesc, LPDIRECT
 
 void CGameInstance::Update_Engine(_float fTimeDelta)
 {
-    if (IsKeyDown('B'))
-        m_pCollision_Manager->Set_IsRender();
-    // 콜리전 충돌확인
-    m_pCollision_Manager->Check_RoomCollisions();
     m_pKey_Manager->Update(fTimeDelta);
-
+    
     m_pObject_Manager->Priority_Update(fTimeDelta);
-
     m_pPicking->Update();
-    // 콜리전 동기화
-    m_pCollision_Manager->Update();
     m_pObject_Manager->Update(fTimeDelta);
     m_pItem_Manager->Update();
     m_pObject_Manager->Late_Update(fTimeDelta);
     m_pLevel_Manager->Update(fTimeDelta);
-  
+
+    // 콜리전 동기화
+    m_pCollision_Manager->Update();
+    // 콜리전 충돌확인
+    m_pCollision_Manager->Check_RoomCollisions();
+    if (IsKeyDown('B'))
+        m_pCollision_Manager->Set_IsRender();
+    
 }
 
 HRESULT CGameInstance::Clear_Resources(_uint iClearLevelID)
@@ -361,9 +361,22 @@ HRESULT CGameInstance::Add_Collider(class CCollider_OBB* pCollider)
     return m_pCollision_Manager->Add_OBB_Collider(pCollider);
 }
 
+void CGameInstance::Check_RoomCollisions()
+{
+    m_pCollision_Manager->Check_RoomCollisions();
+}
+
 void CGameInstance::Clear_Colliders()
 {
     m_pCollision_Manager->Clear_Colliders();
+}
+void CGameInstance::Clear_AllColliders()
+{
+    m_pCollision_Manager->Clear_AllColliders();
+}
+void CGameInstance::Set_Next(_bool bNext)
+{
+    m_pCollision_Manager->Set_Next(bNext);
 }
 #pragma endregion
 
@@ -486,6 +499,10 @@ void CGameInstance::Item_MaxCool(_wstring szEffectTag, _float fMaxcool)
 const _float CGameInstance::Get_ItemCool(bool bMaxCool, _wstring szEffectTag)
 {
     return m_pItem_Manager->Get_ItemCool(bMaxCool, szEffectTag);
+}
+void CGameInstance::AcquiredItem_List_Add(_int iIndex)
+{
+    return m_pItem_Manager->AcquiredItem_List_Add(iIndex);
 }
 #pragma endregion
 

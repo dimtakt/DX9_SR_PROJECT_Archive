@@ -37,7 +37,7 @@ void CLevel_Loading::Update(_float fTimeDelta)
 {
 	if (true == m_pLoader->isFinished())
 	{
-		m_pGameInstance->Clear_Colliders();
+		m_pGameInstance->Clear_AllColliders();
 
 		CLevel* pNewLevel = { nullptr };
 		

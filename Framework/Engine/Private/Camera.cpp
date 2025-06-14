@@ -78,7 +78,9 @@ HRESULT CCamera::Update_VP_Matrices()
 
 void CCamera::Free()
 {
+    // 확인필요
+    /*if (m_pTransformCom != nullptr)
+        Safe_Release(m_pTransformCom);
+    m_pTransformCom = nullptr;*/
     __super::Free();
-
-    Safe_Release(m_pTransformCom);
 }

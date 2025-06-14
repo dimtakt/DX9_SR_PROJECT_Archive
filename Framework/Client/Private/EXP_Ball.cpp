@@ -127,7 +127,8 @@ HRESULT CEXP_Ball::Ready_Components(void* pArg)
 
 void CEXP_Ball::OnCollision(CGameObject* pGameObject)
 {
-    
+    if (pGameObject == nullptr)
+        return;
 }
 
 CEXP_Ball* CEXP_Ball::Create(LPDIRECT3DDEVICE9 pGraphic_Device)

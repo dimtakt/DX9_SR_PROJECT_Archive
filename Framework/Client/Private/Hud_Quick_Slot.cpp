@@ -98,18 +98,37 @@ void CHud_Quick_Slot::Update(_float fTimeDelta)
 		{
 			static_cast<CHud_Slot_CoolTime*>(m_vecChildren[0])->Progerss_Set(m_fItemCulCool, m_fItemCooltime);
 		}
-
+		
+		if (m_fItemCulCool <= 0 && m_pGameInstance->IsKeyHold('R') && m_bSelete)
+		{
+			
+			if (g_ItemEffect[m_pSlotItem->Item_Info()->iArtefact_Value].m_szEffectTag == TEXT("Ice Bolt"))
+			{
+				m_pGameInstance->Broadcast(ENUM_CLASS(EVENT_TYPE::ICEBOLT), &pEvent);
+			}
+			else if(g_ItemEffect[m_pSlotItem->Item_Info()->iArtefact_Value].m_szEffectTag == TEXT("Meteor"))
+			{
+				m_pGameInstance->Broadcast(ENUM_CLASS(EVENT_TYPE::METEOR), &pEvent);
+			}
+		}
 	}
 
 	if (m_bEating)
 	{
 		m_fEatSpeed += 1;
 		static_cast<CHud_Slot_CoolTime*>(m_vecChildren[1])->Progerss_Set(m_fEatSpeed, 60);
-		
+		m_pGameInstance->PlayLoopSound(TEXT("Drinking01.wav"), ENUM_CLASS(CHANNELID::UI_QUICKSLOT), g_fUIVolume - 0.4f);
+		//if (m_fEatSpeed == 0 || m_fEatSpeed == 20 || m_fEatSpeed == 40 || m_fEatSpeed == 60)
+		//{
+		//	m_pGameInstance->StopSound(ENUM_CLASS(CHANNELID::UI_QUICKSLOT));
+		//	m_pGameInstance->PlayLoopSound(TEXT("Drinking01.wav"), ENUM_CLASS(CHANNELID::UI_QUICKSLOT), g_fUIVolume - 0.4f);
+		//}
+
 		if (m_fEatSpeed > 60)
 		{
 			m_fEatSpeed = 0;
 			m_bEatPotion = true;
+			m_pGameInstance->StopSound(ENUM_CLASS(CHANNELID::UI_QUICKSLOT));
 		}
 	}
 }
@@ -283,11 +302,11 @@ _bool CHud_Quick_Slot::Use_Potion()
 			{
 			case 1:
 				fMaxValue = CStat_Manager::GetInstance()->Get_CurStats()[ENUM_CLASS(STAT_INFO::MAXHP)];
-				CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CULHP, fMaxValue * fHealValue * 0.1f);
+				CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CULHP, fMaxValue * fHealValue * 0.01f);
 				break;
 			case 2:
 				fMaxValue = CStat_Manager::GetInstance()->Get_CurStats()[ENUM_CLASS(STAT_INFO::MAXMP)];
-				CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CULMP, fMaxValue * fHealValue * 0.1f);
+				CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CULMP, fMaxValue * fHealValue * 0.01f);
 				break;
 			}
 
@@ -303,9 +322,10 @@ _bool CHud_Quick_Slot::Use_Potion()
 			return true;
 		}
 	}
-	else
+	else if (m_pGameInstance->IsKeyUp('R'))
 	{
-		CStat_Manager::GetInstance()->Set_UIOpen(false);
+		if(CStat_Manager::GetInstance()->Get_UIOpen())
+			CStat_Manager::GetInstance()->Set_UIOpen(false);
 		m_bEating = false;
 		m_fEatSpeed = 0;
 	}

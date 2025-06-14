@@ -78,7 +78,7 @@ HRESULT CObject_Manager::Remove_GameObject_ToLayer(_uint iLayerLevelIndex, const
         pLayer->Remove_GameObject(pGameObject);
         return S_OK;
     }
-    return E_NOTIMPL;
+    return S_OK;
 }
 
 HRESULT CObject_Manager::Add_ItemObject_ToLayer(_uint iLayerLevelIndex, const _wstring& strLayerTag, _uint iItemIndex, void* pArg)
@@ -146,6 +146,7 @@ void CObject_Manager::Late_Update(_float fTimeDelta)
                 Pair.second->Late_Update(fTimeDelta);
         }
     }
+    m_pGameInstance->Clear_Colliders();
 }
 
 void CObject_Manager::Clear(_uint iLevelIndex)

@@ -464,6 +464,8 @@ HRESULT CErma_Body::Ready_Object()
 
 void CErma_Body::OnCollision(CGameObject* pGameObject)
 {
+    if (pGameObject == nullptr)
+        return;
     __super::OnCollision(pGameObject);
 
     switch (pGameObject->Get_ObjType())

@@ -181,6 +181,8 @@ void CMonster::Ready_Gold()
 
 void CMonster::OnCollision(CGameObject* pGameObject)
 {
+	if (pGameObject == nullptr)
+		return;
 	switch (pGameObject->Get_ObjType())
 	{
 	case GAMEOBJ_TYPE::PLAYER_EFFECT:
@@ -216,6 +218,7 @@ HRESULT CMonster::Render_Font(_int iDamage)
 	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(m_pGameInstance->Get_CurrentLevel(), TEXT("Layer_Field_Font"),
 		ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_Field_Font"), &Desc)))
 		return E_FAIL;
+	return S_OK;
 }
 
 CMonster* CMonster::Create(LPDIRECT3DDEVICE9 pGraphic_Device)

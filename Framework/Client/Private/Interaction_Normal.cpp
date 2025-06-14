@@ -547,46 +547,53 @@ HRESULT CInteraction_Normal::Merchant_Initialize()
 {
     _float3 vMerchantPos = m_pTransformCom->Get_State(STATE::POSITION);
 
-    vector<size_t> m_iIndex;
-    m_iIndex.push_back(3);
-    m_iIndex.push_back(4);
-    m_iIndex.push_back(m_pGameInstance->Compute_Random(6, 10));
-    m_iIndex.push_back(m_pGameInstance->Compute_Random(11, 20));
-    m_iIndex.push_back(m_pGameInstance->Compute_Random(21, 29));
-    vector<_float3> m_vPos;
-    m_vPos.push_back(_float3(2.3f, 2.5f, 3.f));
-    m_vPos.push_back(_float3(1.3f, 2.5f, 1.f));
-    m_vPos.push_back(_float3(-0.1f, 2.5f, 3.f));
-    m_vPos.push_back(_float3(-1.5f, 2.5f, 1.f));
-    m_vPos.push_back(_float3(-2.6f, 2.5f, 3.f));
+    vector<size_t> iIndex;
+    iIndex.push_back(3);
+    iIndex.push_back(4);
+    iIndex.push_back(m_pGameInstance->Compute_Random(6, 10));
+    iIndex.push_back(m_pGameInstance->Compute_Random(11, 20));
+    iIndex.push_back(m_pGameInstance->Compute_Random(21, 29));
+    vector<_float3> vPos;
+    vPos.push_back(_float3(2.3f, 2.5f, 3.f));
+    vPos.push_back(_float3(1.3f, 2.5f, 1.f));
+    vPos.push_back(_float3(-0.1f, 2.5f, 3.f));
+    vPos.push_back(_float3(-1.5f, 2.5f, 1.f));
+    vPos.push_back(_float3(-2.6f, 2.5f, 3.f));
+    vector<_float> fGold;
+    fGold.push_back(m_pGameInstance->Compute_Random(10, 20));
+    fGold.push_back(m_pGameInstance->Compute_Random(20, 30));
+    fGold.push_back(m_pGameInstance->Compute_Random(40, 150));
+    fGold.push_back(m_pGameInstance->Compute_Random(40, 150));
+    fGold.push_back(m_pGameInstance->Compute_Random(40, 150));
 
     //m_vShopItem.push_back()
     for (size_t i = 0; i < 5; i++)
     {
         CField_Item::FIELD_ITEM_DESC desc{};
 
-        desc.m_vTargetPos = vMerchantPos - m_vPos[i];
-        desc.m_iItemID = m_iIndex[i];
+        desc.m_vTargetPos = vMerchantPos - vPos[i];
+        desc.m_iItemID = iIndex[i];
         desc.m_iLevel = m_pGameInstance->Get_CurrentLevel();
-        desc.m_iGold = 10;
+        desc.m_iGold = fGold[i];
 
         m_vShopItem.push_back(dynamic_cast<CField_Item*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_Field_Item"), &desc)));
     }
 
-    CField_Npc_Chat::FIELD_CHAT_DESC chatDesc{};
+    //NPC가 로고 레벨로 생성됨
+    //CField_Npc_Chat::FIELD_CHAT_DESC chatDesc{};
 
-    chatDesc.pTransform = m_pTransformCom;
+    //chatDesc.pTransform = m_pTransformCom;
 
-    chatDesc.m_iLevel = ENUM_CLASS(LEVEL::LEVEL_TOWN);
-    chatDesc.szChatTag = TEXT("BlackSmith_CHAT");
-    chatDesc.fY = -100;
-    if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_TOWN), TEXT("Layer_UI_Chat"), ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_Field_Npc_Chat"), &chatDesc)))
-        return E_FAIL;
+    //chatDesc.m_iLevel = m_pGameInstance->Get_CurrentLevel();
+    //chatDesc.szChatTag = TEXT("Baba_CHAT");
+    //chatDesc.fY = -100;
+    //if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(m_pGameInstance->Get_CurrentLevel(), TEXT("Layer_UI_Chat"), ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_Field_Npc_Chat"), &chatDesc)))
+    //    return E_FAIL;
 
-    m_pChat = static_cast<CField_Npc_Chat*>(m_pGameInstance->Find_UIObj(ENUM_CLASS(LEVEL::LEVEL_TOWN), TEXT("BlackSmith_CHAT")));
+    //m_pChat = static_cast<CField_Npc_Chat*>(m_pGameInstance->Find_UIObj(m_pGameInstance->Get_CurrentLevel(), TEXT("Baba_CHAT")));
 
-    m_pChat->Add_Chat(TEXT("에베베"));
-    m_pChat->Add_Chat(TEXT("바바"));
+    //m_pChat->Add_Chat(TEXT("에베베"));
+    //m_pChat->Add_Chat(TEXT("바바"));
     
 
     return S_OK;
@@ -707,6 +714,8 @@ HRESULT CInteraction_Normal::Ready_Components()
 
 void CInteraction_Normal::OnCollision(CGameObject* pGameObject)
 {
+    if (pGameObject == nullptr)
+        return;
     if (m_bActive) {
         if (m_eObjType == GAMEOBJ_TYPE::EXP)
         {
@@ -783,14 +792,15 @@ void CInteraction_Normal::OnCollision(CGameObject* pGameObject)
         }
         else if (m_eObjType == GAMEOBJ_TYPE::MERCAHNT)
         {
-            if (pGameObject->Get_ObjType() == GAMEOBJ_TYPE::PLAYER)
+            //NPC가 로고 레벨에서 생성됨
+            /*if (pGameObject->Get_ObjType() == GAMEOBJ_TYPE::PLAYER)
             {
                 m_pChat->On_Chat(1, true);
                 if (m_pGameInstance->IsKeyDown('F'))
                 {
                     m_pChat->Cinematic_Chat(1, true);
                 }
-            }
+            }*/
         }
     }
 }
@@ -802,7 +812,8 @@ void CInteraction_Normal::OffCollision(CGameObject* pGameObject)
         {
             if (pGameObject->Get_ObjType() == GAMEOBJ_TYPE::PLAYER)
             {
-                m_pChat->Off_Chat();
+                //채팅 페이스 안뜨는 이슈 수정하면 off챗 기능 내부에서 처리하도록 변경
+                //m_pChat->Off_Chat();
             }
         }
     }

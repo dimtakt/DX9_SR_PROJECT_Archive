@@ -120,7 +120,8 @@ HRESULT CGoldLeaf::Ready_Components(void* pArg)
 
 void CGoldLeaf::OnCollision(CGameObject* pGameObject)
 {
-
+    if (pGameObject == nullptr)
+        return;
 }
 
 CGoldLeaf* CGoldLeaf::Create(LPDIRECT3DDEVICE9 pGraphic_Device)

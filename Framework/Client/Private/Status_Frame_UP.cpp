@@ -101,6 +101,7 @@ HRESULT CStatus_Frame_UP::Ready_ChildPrototype(LEVEL eLevel)
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(eLevel), TEXT("Prototype_GameObject_UI_Status_Item_Slot"),
 		CStatus_Item_Slot::Create(m_pGraphic_Device, eLevel))))
 		return E_FAIL;
+	return S_OK;
 }
 
 HRESULT CStatus_Frame_UP::Ready_Children()
