@@ -544,6 +544,7 @@ CGameObject* CErma_Body::Clone(void* pArg)
 
 void CErma_Body::Free()
 {
+    m_pGameInstance->Remove_Collider_ByOwner(this);
     __super::Free();
 
     Safe_Release(m_pTextureCom_Body);

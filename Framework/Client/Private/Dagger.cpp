@@ -321,6 +321,7 @@ CGameObject* CDagger::Clone(void* pArg)
 
 void CDagger::Free()
 {
+	m_pGameInstance->Remove_Collider_ByOwner(this);
 	Safe_Release(m_pVIBufferCom);
 	Safe_Release(m_pTransformCom);
 	Safe_Release(m_pTextureCom_Normal);

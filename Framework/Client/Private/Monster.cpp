@@ -249,6 +249,7 @@ CGameObject* CMonster::Clone(void* pArg)
 
 void CMonster::Free()
 {
+	m_pGameInstance->Remove_Collider_ByOwner(this);
 	__super::Free();
 
 	Safe_Release(m_pTransformCom);

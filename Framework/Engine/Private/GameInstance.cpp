@@ -378,6 +378,10 @@ void CGameInstance::Set_Next(_bool bNext)
 {
     m_pCollision_Manager->Set_Next(bNext);
 }
+void CGameInstance::Remove_Collider_ByOwner(CGameObject* pOwner)
+{
+    m_pCollision_Manager->Remove_Collider_ByOwner(pOwner);
+}
 #pragma endregion
 
 #pragma region FONT_MANAGER

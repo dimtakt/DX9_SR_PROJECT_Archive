@@ -152,6 +152,7 @@ CGameObject* CGoldLeaf::Clone(void* pArg)
 
 void CGoldLeaf::Free()
 {
+    m_pGameInstance->Remove_Collider_ByOwner(this);
     __super::Free();
 
     Safe_Release(m_pVIBufferCom);

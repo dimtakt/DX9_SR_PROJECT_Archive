@@ -141,12 +141,11 @@ void COink_A::Update(_float fTimeDelta)
             _float fY = max(-0.005f * (float)pow(iCnt, 2) + 4.5f, 0.2f);
             m_pTerrainBox->SetUp_OnTerrainBox(m_pTransformCom, _float3(0.05f, fY, 0.05f));
         }
-        else
-            m_isSummoned = true;
     }
     else if (m_pAnimatorCom->Get_CurStateTag() == L"Summon_End")
     {
         m_pAnimatorCom->Change_State(L"Idle");
+        m_isSummoned = true;
     }
 
 #pragma endregion
@@ -445,7 +444,7 @@ void COink_A::OnCollision(CGameObject* pGameObject)
 
             _float3 vResult = vThisPos + vStunDir * 0.5f;    // 밀려날 정도 테스트
             m_pTransformCom->Set_State(STATE::POSITION, vResult);
-
+            m_isSummoned = true;
             //m_bIsHit = true;
         }
     }
@@ -482,6 +481,7 @@ CGameObject* COink_A::Clone(void* pArg)
 
 void COink_A::Free()
 {
+    m_pGameInstance->Remove_Collider_ByOwner(this);
     __super::Free();
     Safe_Release(m_pAttackFx);
 

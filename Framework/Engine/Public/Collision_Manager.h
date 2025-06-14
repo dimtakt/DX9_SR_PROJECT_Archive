@@ -22,7 +22,7 @@ private:
 	_bool Check_Y_Overlap(CCollider_OBB* pA, CCollider_OBB* pB);
 
 public:
-	void Remove_Collider(CCollider_OBB* pTarget);
+	void Remove_Collider_ByOwner(CGameObject* pOwner);
 
 public:
 	void Render();

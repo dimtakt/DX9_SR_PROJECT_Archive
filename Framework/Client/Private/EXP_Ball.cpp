@@ -159,6 +159,7 @@ CGameObject* CEXP_Ball::Clone(void* pArg)
 
 void CEXP_Ball::Free()
 {
+    m_pGameInstance->Remove_Collider_ByOwner(this);
     __super::Free();
 
     Safe_Release(m_pVIBufferCom);

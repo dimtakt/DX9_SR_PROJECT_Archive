@@ -104,6 +104,7 @@ void CGameEffect::Priority_Update(_float fTimeDelta)
 				*m_pTransformCom->Get_WorldMatrix(),         
 				matOffset,          
 				false);
+			m_pGameInstance->Set_Next(true);
 		}
 		else if (m_strEffectTag == TEXT("Prototype_Component_Texture_Meteor"))
 		{
@@ -120,10 +121,12 @@ void CGameEffect::Priority_Update(_float fTimeDelta)
 				*m_pTransformCom->Get_WorldMatrix(),
 				matOffset,
 				false);
+			m_pGameInstance->Set_Next(true);
 		}
 		else 
 		{
 			m_bDead = true;
+			m_pGameInstance->Set_Next(true);
 		}
 		
 	}
@@ -576,6 +579,7 @@ CGameObject* CGameEffect::Clone(void* pArg)
 
 void CGameEffect::Free()
 {
+	m_pGameInstance->Remove_Collider_ByOwner(this);
 	Safe_Release(m_pVIBufferCom);
 	Safe_Release(m_pTransformCom);
 	Safe_Release(m_pTextureCom);

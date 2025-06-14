@@ -770,6 +770,7 @@ CGameObject* CErma_Hand_R::Clone(void* pArg)
 
 void CErma_Hand_R::Free()
 {
+    m_pGameInstance->Remove_Collider_ByOwner(this);
     __super::Free();
 
     Safe_Release(m_pTextureCom_Normal);

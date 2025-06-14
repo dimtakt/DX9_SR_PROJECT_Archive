@@ -1158,6 +1158,7 @@ CGameObject* CPlayer::Clone(void* pArg)
 
 void CPlayer::Free()
 {
+    m_pGameInstance->Remove_Collider_ByOwner(this);
     m_pGameInstance->Unsubscribe(ENUM_CLASS(EVENT_TYPE::GETITEM), this);
     Safe_Release(m_pVIBufferCom);
     Safe_Release(m_pTransformCom);
