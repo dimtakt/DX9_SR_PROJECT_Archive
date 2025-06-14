@@ -113,7 +113,10 @@ HRESULT CField_Npc_Face::Render()
 	if (m_bIsRender)
 		Render_Font();
 	else if (m_bIsSmallRender)
+	{
 		Render_Font_Small();
+		m_bIsSmallRender = false;
+	}
 	return S_OK;
 }
 

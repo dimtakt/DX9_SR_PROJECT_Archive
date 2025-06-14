@@ -227,7 +227,7 @@ void CNpc::OnCollision(CGameObject* pGameObject)
     {
         if (m_eType == NPC_TYPE::BLACKSMITH)
         {
-            m_pChat->On_Chat(2, false);
+            m_pChat->On_Chat(2, true);
             if (m_pGameInstance->IsKeyDown('F'))
             {
                 m_pChat->Cinematic_Chat(2, true);
@@ -235,7 +235,7 @@ void CNpc::OnCollision(CGameObject* pGameObject)
         }
         else if (m_eType == NPC_TYPE::ELDER)
         {
-            m_pChat->On_Chat(3, false);
+            m_pChat->On_Chat(3, true);
             if (m_pGameInstance->IsKeyDown('F'))
             {
                 m_pChat->Cinematic_Chat(3, true);
@@ -243,7 +243,7 @@ void CNpc::OnCollision(CGameObject* pGameObject)
         }
         else if (m_eType == NPC_TYPE::SHIELDDOG)
         {
-            m_pChat->On_Chat(0, false);
+            m_pChat->On_Chat(0, true);
             if (m_pGameInstance->IsKeyDown('F'))
             {
                 m_pChat->Cinematic_Chat(0, true);
@@ -251,7 +251,7 @@ void CNpc::OnCollision(CGameObject* pGameObject)
         }
         else if (m_eType == NPC_TYPE::SWORDSHIELD)
         {
-            m_pChat->On_Chat(4, false);
+            m_pChat->On_Chat(4, true);
             if (m_pGameInstance->IsKeyDown('F'))
             {
                 m_pChat->Cinematic_Chat(4, true);
@@ -265,7 +265,7 @@ void CNpc::OffCollision(CGameObject* pGameObject)
 {
     if (pGameObject->Get_ObjType() == GAMEOBJ_TYPE::PLAYER)
     {
-        m_pChat->Off_Chat();
+        //m_pChat->Off_Chat();
     }
 }
 

@@ -295,11 +295,11 @@ _bool CHud_Quick_Slot::Use_Potion()
 			{
 			case 1:
 				fMaxValue = CStat_Manager::GetInstance()->Get_CurStats()[ENUM_CLASS(STAT_INFO::MAXHP)];
-				CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CULHP, fMaxValue * fHealValue * 0.1f);
+				CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CULHP, fMaxValue * fHealValue * 0.01f);
 				break;
 			case 2:
 				fMaxValue = CStat_Manager::GetInstance()->Get_CurStats()[ENUM_CLASS(STAT_INFO::MAXMP)];
-				CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CULMP, fMaxValue * fHealValue * 0.1f);
+				CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CULMP, fMaxValue * fHealValue * 0.01f);
 				break;
 			}
 
@@ -315,9 +315,10 @@ _bool CHud_Quick_Slot::Use_Potion()
 			return true;
 		}
 	}
-	else
+	else if (m_pGameInstance->IsKeyUp('R'))
 	{
-		CStat_Manager::GetInstance()->Set_UIOpen(false);
+		if(CStat_Manager::GetInstance()->Get_UIOpen())
+			CStat_Manager::GetInstance()->Set_UIOpen(false);
 		m_bEating = false;
 		m_fEatSpeed = 0;
 	}
