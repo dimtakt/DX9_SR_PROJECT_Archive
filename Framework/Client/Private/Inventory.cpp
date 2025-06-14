@@ -326,7 +326,7 @@ void CInventory::StatToPlayer()
 		CStat_Manager::GetInstance()->Cal_Stats(static_cast<STAT_INFO>(i), -m_fInvenStats[i]);
 		m_fInvenStats[i] = 0;
 	}
-	CStat_Manager::GetInstance()->HasItem_Reset();
+	//CStat_Manager::GetInstance()->HasItem_Reset();
 
 	for (_int i = 0; i < m_vecInventory.size(); ++i)
 	{
@@ -385,11 +385,13 @@ void CInventory::StatToPlayer()
 		}
 		else if (g_ItemEffect[iItem_Effect].m_eType == ITEM_EFFECT::SKILLBOOK_TYPE)
 		{
-			CStat_Manager::GetInstance()->HasItem(g_ItemEffect[iItem_Effect].m_szEffectTag, true);
+			if(!CStat_Manager::GetInstance()->Get_HasItem(g_ItemEffect[iItem_Effect].m_szEffectTag))
+				CStat_Manager::GetInstance()->HasItem(g_ItemEffect[iItem_Effect].m_szEffectTag, true);
 		}
 		else if (g_ItemEffect[iItem_Effect].m_eType == ITEM_EFFECT::SPAWN_TYPE)
 		{
-			CStat_Manager::GetInstance()->HasItem(g_ItemEffect[iItem_Effect].m_szEffectTag, true);
+			if (!CStat_Manager::GetInstance()->Get_HasItem(g_ItemEffect[iItem_Effect].m_szEffectTag))
+				CStat_Manager::GetInstance()->HasItem(g_ItemEffect[iItem_Effect].m_szEffectTag, true);
 		}	
 	}
 

@@ -63,7 +63,8 @@ HRESULT CField_Item::Initialize(void* pArg)
 	m_fRange = 0.2f;
 	m_fSpeed = m_pGameInstance->Rand(1.0, 1.5);
 
-	m_iItemID = Desc->m_iItemID;
+	Item_Rand(Desc->m_iItemID);
+
 	m_iItemTex = g_ItemDataBase[m_iItemID].m_iItemTextureID;
 	m_vTargetPos = Desc->m_vTargetPos;
 	m_vTargetPos.y += m_fY; 
@@ -149,6 +150,65 @@ HRESULT CField_Item::Ready_Children()
 	Add_Child(pGameObject);
 
 	return S_OK;
+}
+
+void CField_Item::Item_Rand(_uint iItemID)
+{
+	vector<_int> vecIndex;
+	_int iTemp{};
+	_bool bItemCheck = false;
+	for (_int i = 0; i < m_pGameInstance->AcquiredItem_List().size(); ++i)
+	{
+		if (iItemID == m_pGameInstance->AcquiredItem_List()[i])
+		{
+			bItemCheck = true;
+			break;
+		}
+	}
+
+	if (bItemCheck)
+	{
+		for (_int j = 0; j < g_ItemDataBase.size(); ++j)
+		{
+			if (g_ItemDataBase[j].m_eType != ITEM_TYPE::POTION)
+				vecIndex.push_back(g_ItemDataBase[j].m_iItemID);
+		}
+
+		for (auto iter = vecIndex.begin(); iter < vecIndex.end();)
+		{
+			_bool bErased = false;
+			_int iTemp = 0;
+			for (_int j = 0; j < m_pGameInstance->AcquiredItem_List().size(); ++j)
+			{
+				iTemp = m_pGameInstance->AcquiredItem_List()[j];
+				if (*(iter) == iTemp)
+				{
+					iter = vecIndex.erase(iter);
+					bErased = true;
+					break;
+				}
+			}
+			if (!bErased)
+				++iter;
+		}
+		for (_int i = 0; i < 100; ++i)
+		{
+			_int iIndex1 = m_pGameInstance->Rand(0, vecIndex.size());
+			_int iIndex2 = m_pGameInstance->Rand(0, vecIndex.size());
+
+			if (iIndex1 != iIndex2)
+			{
+				iTemp = vecIndex[iIndex1];
+				vecIndex[iIndex1] = vecIndex[iIndex2];
+				vecIndex[iIndex2] = iTemp;
+			}
+		}
+		m_iItemID = vecIndex[0];
+	}
+	else
+	{
+		m_iItemID = iItemID;
+	}
 }
 
 void CField_Item::OnCollision(CGameObject* pGameObject)
