@@ -16,6 +16,7 @@ HRESULT CField_Item_Guide::Initialize_Prototype(LEVEL eLevel)
 
 	if (FAILED(Ready_ChildPrototype(eLevel)))
 		return E_FAIL;
+	return S_OK;
 }
 
 HRESULT CField_Item_Guide::Initialize(void* pArg)

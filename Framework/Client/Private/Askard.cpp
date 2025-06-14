@@ -478,6 +478,9 @@ void CAskard::Adjust_Scale()    // 이미지 리소스를 수정하지 못한 상태에서, 크기�
 
 void CAskard::OnCollision(CGameObject* pGameObject)
 {
+    if (pGameObject == nullptr)
+        return;
+
     __super::OnCollision(pGameObject);
 
     switch (pGameObject->Get_ObjType())

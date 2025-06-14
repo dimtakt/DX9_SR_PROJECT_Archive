@@ -414,6 +414,8 @@ HRESULT COink_A::Ready_Object()
 
 void COink_A::OnCollision(CGameObject* pGameObject)
 {
+    if (pGameObject == nullptr)
+        return;
 	__super::OnCollision(pGameObject);
 
 

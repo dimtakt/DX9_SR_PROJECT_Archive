@@ -223,6 +223,8 @@ HRESULT CNpc::Ready_Components()
 
 void CNpc::OnCollision(CGameObject* pGameObject)
 {
+    if (pGameObject == nullptr)
+        return;
     if(pGameObject->Get_ObjType() == GAMEOBJ_TYPE::PLAYER)
     {
         if (m_eType == NPC_TYPE::BLACKSMITH)
@@ -263,6 +265,9 @@ void CNpc::OnCollision(CGameObject* pGameObject)
 
 void CNpc::OffCollision(CGameObject* pGameObject)
 {
+    if (pGameObject == nullptr)
+        return;
+
     if (pGameObject->Get_ObjType() == GAMEOBJ_TYPE::PLAYER)
     {
         //m_pChat->Off_Chat();

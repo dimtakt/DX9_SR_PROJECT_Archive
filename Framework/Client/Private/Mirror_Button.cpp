@@ -94,8 +94,9 @@ HRESULT CMirror_Button::Ready_ChildPrototype(LEVEL eLevel)
 {
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(eLevel), TEXT("Prototype_GameObject_UI_MirrorButton_Guide"),
 		CUI_KeyGuide::Create(m_pGraphic_Device))))
+		return E_FAIL;
 
-	return E_NOTIMPL;
+	return S_OK;
 }
 
 HRESULT CMirror_Button::Ready_Children()
