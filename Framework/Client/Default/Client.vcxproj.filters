@@ -505,6 +505,9 @@
     <Filter Include="02.GameObject\UI\Attack_Guide\AttackGauge">
       <UniqueIdentifier>{50aa5f3a-31bd-47b5-a216-e3845ce3f7cb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\Player\Magic\Meteor">
+      <UniqueIdentifier>{40c25fe3-f6fa-404e-a2d1-fe2c3de512d7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -1110,11 +1113,17 @@
     <ClInclude Include="..\public\Event_Result.h">
       <Filter>02.GameObject\UI\Event\ETC</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\Askard_Eye.h">
+      <Filter>02.GameObject\Monster\Boss\Askard</Filter>
+    </ClInclude>
     <ClInclude Include="..\public\AttackGauge.h">
       <Filter>02.GameObject\UI\Attack_Guide\AttackGauge</Filter>
     </ClInclude>
     <ClInclude Include="..\public\AttackFx.h">
       <Filter>02.GameObject\UI\Attack_Guide</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Meteor.h">
+      <Filter>02.GameObject\Player\Magic\Meteor</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1683,11 +1692,17 @@
     <ClCompile Include="..\private\Event_Result.cpp">
       <Filter>02.GameObject\UI\Event\ETC</Filter>
     </ClCompile>
+    <ClCompile Include="..\private\Askard_Eye.cpp">
+      <Filter>02.GameObject\Monster\Boss\Askard</Filter>
+    </ClCompile>
     <ClCompile Include="..\private\AttackFx.cpp">
       <Filter>02.GameObject\UI\Attack_Guide</Filter>
     </ClCompile>
     <ClCompile Include="..\private\AttackGauge.cpp">
       <Filter>02.GameObject\UI\Attack_Guide\AttackGauge</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Meteor.cpp">
+      <Filter>02.GameObject\Player\Magic\Meteor</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

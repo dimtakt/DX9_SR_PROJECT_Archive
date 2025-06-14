@@ -18,6 +18,7 @@
 #include "ProjSword.h"
 #include "FrozenHammer.h"
 #include "IceBolt.h"
+#include "Meteor.h"
 
 CPlayer::CPlayer(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CGameObject{ pGraphic_Device }
@@ -1051,6 +1052,7 @@ void CPlayer::Ready_Parry()
 
 HRESULT CPlayer::Ready_Skill(void* pArg)
 {
+    // UI 아이스볼트 책 먹었을 때 생성할 수 있게 가져와서 확인해주고 만들어야 함.
     PLAYERDESC* pDes = static_cast<PLAYERDESC*>(pArg);
 
     CIceBolt::BOLTDESC BoltDesc{};;
@@ -1058,6 +1060,15 @@ HRESULT CPlayer::Ready_Skill(void* pArg)
 
     if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(pDes->iLayerIndex, TEXT("Player_Skill"),
         ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_IceBolt"), &BoltDesc)))
+        return E_FAIL;
+
+
+   //UI 메테오 책 먹었을 때 생성할 수 있게 가져와서 확인해주고 만들어야 함.
+    CMeteor::METEORESC MeteorDesc{};;
+    MeteorDesc.pPlayerTransform = m_pTransformCom;
+
+    if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(pDes->iLayerIndex, TEXT("Player_Skill"),
+        ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_Meteor"), &BoltDesc)))
         return E_FAIL;
 }
 

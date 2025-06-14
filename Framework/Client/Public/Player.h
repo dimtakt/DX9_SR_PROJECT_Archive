@@ -91,6 +91,9 @@ private:
 	_bool					m_bIsHit						= { false };
 	_bool					m_bIsStun						= false;
 	DWORD					m_dwHitTime						= {};
+
+	CGameObject*			m_pSkillIceBolt					= {};
+
 private:
 	HRESULT Ready_Components(void* pArg);
 	HRESULT Ready_Object();					//필드 HP바 테스트용

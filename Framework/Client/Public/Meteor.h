@@ -12,17 +12,17 @@ END
 
 BEGIN(Client)
 
-class CIceBolt final : public CGameObject, public IEventListener
+class CMeteor final : public CGameObject, public IEventListener
 {
 public:
-	typedef struct tagBoltDesc
+	typedef struct tagMeteorDesc
 	{
 		CTransform* pPlayerTransform;
-	}BOLTDESC;
+	}METEORESC;
 private:
-	CIceBolt(LPDIRECT3DDEVICE9 pGraphic_Device);
-	CIceBolt(const CIceBolt& Prototype);
-	virtual ~CIceBolt() = default;
+	CMeteor(LPDIRECT3DDEVICE9 pGraphic_Device);
+	CMeteor(const CMeteor& Prototype);
+	virtual ~CMeteor() = default;
 
 public:
 	virtual HRESULT Initialize_Prototype() override;
@@ -43,7 +43,7 @@ private:
 	_float3 m_vDirection = {};			//발사 방향
 
 	_float m_fCurrentCoolTime = 0.f;
-	_float m_fMaxCoolTime = 1.f;
+	_float m_fMaxCoolTime = 26.f;
 
 	CTransform* m_pPlayerTransformCom = { nullptr };
 
@@ -51,7 +51,7 @@ private:
 	HRESULT Ready_Components(void* pArg);
 
 public:
-	static CIceBolt* Create(LPDIRECT3DDEVICE9 pGraphic_Device);
+	static CMeteor* Create(LPDIRECT3DDEVICE9 pGraphic_Device);
 	virtual CGameObject* Clone(void* pArg) override;
 	virtual void Free() override;
 };
