@@ -108,7 +108,8 @@ HRESULT CDagger::Render()
 
 void CDagger::OnCollision(CGameObject* pGameObject)
 {
-
+	if (pGameObject == nullptr)
+		return;
 }
 
 HRESULT	CDagger::Ready_Components(void* pArg)

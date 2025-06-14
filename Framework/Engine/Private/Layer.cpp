@@ -43,7 +43,7 @@ void CLayer::Priority_Update(_float fTimeDelta)
 	for (auto it = m_GameObjects.begin(); it != m_GameObjects.end(); ) {
 		if ((*it)->Get_IsDead()) {
 			Safe_Release(*it);
-			it = m_GameObjects.erase(it); 
+			it = m_GameObjects.erase(it); 			
 		}
 		else {
 			if (nullptr != *it)

@@ -92,6 +92,8 @@ HRESULT CAskard_Eye::Ready_Components(void* pArg)
 
 void CAskard_Eye::OnCollision(CGameObject* pGameObject)
 {
+	if (pGameObject == nullptr)
+		return;
 	__super::OnCollision(pGameObject);
 }
 

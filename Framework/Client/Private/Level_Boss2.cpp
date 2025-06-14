@@ -211,6 +211,8 @@ HRESULT CLevel_Boss2::Ready_Layer_Room(const _wstring& strLayerTag)
 
 	CRoom_Manager::GetInstance()->Check_Room(ENUM_CLASS(LEVEL::LEVEL_BOSS2), strLayerTag, 0);	//첫번째룸 포탈 설치 ( 보스방으로 이어짐 )
 	CRoom_Manager::GetInstance()->Check_SpecialRoom(LEVEL::LEVEL_BOSS2, strLayerTag, 1);		//보스룸 포탈 설치, 보스 잡으면 중앙에 생기게끔
+
+	return S_OK;
 }
 
 CLevel_Boss2* CLevel_Boss2::Create(LPDIRECT3DDEVICE9 pGraphic_Device)

@@ -213,6 +213,8 @@ void CField_Item::Item_Rand(_uint iItemID)
 
 void CField_Item::OnCollision(CGameObject* pGameObject)
 {
+	if (pGameObject == nullptr)
+		return;
 }
 
 void CField_Item::RenderFont()

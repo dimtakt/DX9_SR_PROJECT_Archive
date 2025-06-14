@@ -126,6 +126,7 @@ HRESULT CLevel_Stage3::Ready_Layer_Camera(const _wstring& strLayerTag)
 	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_STAGE3), strLayerTag,
 		ENUM_CLASS(LEVEL::LEVEL_STAGE3), TEXT("Prototype_GameObject_Camera_Follow"), &desc)))
 		return E_FAIL;
+	return S_OK;
 }
 
 HRESULT CLevel_Stage3::Ready_Layer_Player(const _wstring& strLayerTag)

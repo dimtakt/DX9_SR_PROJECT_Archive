@@ -583,6 +583,8 @@ HRESULT CLaserGhost_D::Ready_Object()
 
 void CLaserGhost_D::OnCollision(CGameObject* pGameObject)
 {
+    if (pGameObject == nullptr)
+        return;
     __super::OnCollision(pGameObject);
 
     //m_isTracking = true;

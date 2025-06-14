@@ -13,6 +13,7 @@ private:
 public:
 	HRESULT Add_OBB_Collider(CCollider_OBB* pCollider);
 	void Clear_Colliders();
+	void Clear_AllColliders();
 	void Check_RoomCollisions();
 
 private:
@@ -30,9 +31,11 @@ public:
 public:
 	_bool	Get_IsRender() { return m_bIsRender; }
 	void	Set_IsRender() { m_bIsRender = !m_bIsRender; }
+	void	Set_Next(_bool bNext) { m_bNext = bNext; }
 private:
 	vector<CCollider_OBB*>	m_vColliders = {};
 	_bool					m_bIsRender = { false };
+	_bool					m_bNext = { false };
 public:
 	static CCollision_Manager* Create();
 	virtual void Free() override;

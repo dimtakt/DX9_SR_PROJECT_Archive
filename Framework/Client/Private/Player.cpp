@@ -201,8 +201,8 @@ void CPlayer::Update(_float fTimeDelta)
             // 바꾸는 데에 성공시 1타공격 이펙트 출력
             if (m_pAnimatorCom->Change_State(strStateTag, true))
             {
-                m_pGameInstance->StopSound(ENUM_CLASS(CHANNELID::SOUND_PLAYER_EFFECT));
-                m_pGameInstance->PlaySoundW(L"DaggerAttack.wav", ENUM_CLASS(CHANNELID::SOUND_PLAYER_EFFECT), g_fEFFECTVolume - 0.6f);
+                m_pGameInstance->StopSound(ENUM_CLASS(CHANNELID::SOUND_PLAYER_EFFECT2));
+                m_pGameInstance->PlaySoundW(L"DaggerAttack.wav", ENUM_CLASS(CHANNELID::SOUND_PLAYER_EFFECT2), g_fEFFECTVolume - 0.6f);
                 CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::PLAYER_EFFECT, L"Prototype_Component_Texture_Effect_Blade0_Swing0",
                     *m_pTransformCom->Get_WorldMatrix(), matPlayerWorld, m_pTransformCom, 0.f);
             }
@@ -598,6 +598,8 @@ void CPlayer::Change_TerrainBox(CTerrainBox* pTerrainBox, _int iIndex)
 
 void CPlayer::OnCollision(CGameObject* pGameObject)
 {
+    if (pGameObject == nullptr)
+        return;
     switch (pGameObject->Get_ObjType())
     {
     case GAMEOBJ_TYPE::POTAL:
@@ -1017,6 +1019,7 @@ HRESULT CPlayer::Render_Font(_int iDamage)
     if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(m_pGameInstance->Get_CurrentLevel(), TEXT("Layer_Field_Font"),
         ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_Field_Font"), &Desc)))
         return E_FAIL;
+    return S_OK;
 }
 
 HRESULT CPlayer::Render_Font_Parry()
@@ -1030,6 +1033,7 @@ HRESULT CPlayer::Render_Font_Parry()
     if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(m_pGameInstance->Get_CurrentLevel(), TEXT("Layer_Field_Font"),
         ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_Field_Font"), &Desc)))
         return E_FAIL;
+    return S_OK;
 }
 
 void CPlayer::Ready_Parry()

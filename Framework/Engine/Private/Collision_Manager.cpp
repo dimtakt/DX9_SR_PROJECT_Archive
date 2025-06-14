@@ -42,11 +42,47 @@ void CCollision_Manager::Clear_Colliders()
             }
         }
         else {
-            Safe_Release(*it);
             it = m_vColliders.erase(it);
         }
     }
     
+}
+
+void CCollision_Manager::Clear_AllColliders()
+{
+    /*for (auto it = m_vColliders.begin(); it != m_vColliders.end();) {
+        if (*it != nullptr) {
+            if (*it == nullptr) {
+                it = m_vColliders.erase(it);
+            }
+            else if ((*it)->Get_Owner() == nullptr)
+            {
+                Safe_Release(*it);
+                it = m_vColliders.erase(it);
+            }
+            else if ((*it)->Get_Owner()->Get_IsDead())
+            {
+                Safe_Release(*it);
+                it = m_vColliders.erase(it);
+            }
+            else if (!(*it)->Get_Owner()->Get_IsActive())
+            {
+                Safe_Release(*it);
+                it = m_vColliders.erase(it);
+            }
+            else {
+                it++;
+            }
+        }
+        else {
+            it = m_vColliders.erase(it);
+        }
+    }*/
+    for (auto& Collider : m_vColliders)
+    {
+        Safe_Release(Collider);
+    }
+    m_vColliders.clear();
 }
 
 void CCollision_Manager::Check_RoomCollisions()
@@ -54,7 +90,8 @@ void CCollision_Manager::Check_RoomCollisions()
 
     for (auto it = m_vColliders.begin(); it != m_vColliders.end();) {
         if (*it != nullptr) {
-            if ((*it)->Get_Owner() == nullptr || (*it)->Get_IsDead() || (*it)->Get_Owner()->Get_IsDead())
+            auto pOwner = (*it)->Get_Owner();
+            if (pOwner == nullptr || (*it)->Get_IsDead() || pOwner->Get_IsDead())
             {
                 Safe_Release(*it);
                 it = m_vColliders.erase(it);
@@ -68,12 +105,12 @@ void CCollision_Manager::Check_RoomCollisions()
             it = m_vColliders.erase(it);
         }
     }
-
+    m_bNext = false;
     for (size_t i = 0; i < m_vColliders.size(); ++i)
     {   
         for (size_t j = i + 1; j < m_vColliders.size(); ++j)
-        {  
-            if (m_vColliders[i] == nullptr || 
+        {
+            if (m_vColliders[i] == nullptr ||
                 m_vColliders[j] == nullptr ||
                 m_vColliders[i]->Get_Owner() == nullptr ||
                 m_vColliders[j]->Get_Owner() == nullptr)
@@ -81,6 +118,7 @@ void CCollision_Manager::Check_RoomCollisions()
 
             if (m_vColliders[i]->Get_Owner()->Get_ObjType() == m_vColliders[j]->Get_Owner()->Get_ObjType())
                 continue;
+
             if (m_vColliders[i]->Get_Owner()->Get_ObjType() == GAMEOBJ_TYPE::PLAYER)
             {
                 if (m_vColliders[j]->Get_Owner()->Get_ObjType() == GAMEOBJ_TYPE::PLAYER_EFFECT)
@@ -105,29 +143,46 @@ void CCollision_Manager::Check_RoomCollisions()
                     continue;
             }
 
-           
-            if (m_vColliders[i]->Get_Owner()->Get_ObjType() == GAMEOBJ_TYPE::PLAYER)
+            if (m_vColliders[j]->Get_Owner()->Get_ObjType() == GAMEOBJ_TYPE::OBJECT)
             {
-                if (m_vColliders[j]->Get_Owner()->Get_ObjType() == GAMEOBJ_TYPE::MONSTER_EFFECT)
-                    int a = 1;
+                if (m_vColliders[i]->Get_Owner()->Get_ObjType() == GAMEOBJ_TYPE::OBJECT)
+                    continue;
             }
 
-            /*if (Check_OBBtoOBB(m_vColliders[i], m_vColliders[j]) && Check_Y_Overlap(m_vColliders[i], m_vColliders[j]))
+            if (m_vColliders[j]->Get_Owner()->Get_ObjType() == GAMEOBJ_TYPE::OBJECT_DECO)
             {
-                    m_vColliders[i]->Get_Owner()->OnCollision(m_vColliders[j]->Get_Owner());
-                    m_vColliders[j]->Get_Owner()->OnCollision(m_vColliders[i]->Get_Owner());
-            }*/
+                if (m_vColliders[i]->Get_Owner()->Get_ObjType() == GAMEOBJ_TYPE::OBJECT_DECO)
+                    continue;
+            }
 
-            if (Check_3DOBBto3DOBB(m_vColliders[i], m_vColliders[j]) && Check_Y_Overlap(m_vColliders[i], m_vColliders[j]))
+            if (m_vColliders[j]->Get_Owner()->Get_ObjType() == GAMEOBJ_TYPE::OBJECT)
+            {
+                if (m_vColliders[i]->Get_Owner()->Get_ObjType() == GAMEOBJ_TYPE::OBJECT_DECO)
+                    continue;
+            }
+
+            if (m_vColliders[j]->Get_Owner()->Get_ObjType() == GAMEOBJ_TYPE::OBJECT_DECO)
+            {
+                if (m_vColliders[i]->Get_Owner()->Get_ObjType() == GAMEOBJ_TYPE::OBJECT)
+                    continue;
+            }
+
+            if (Check_3DOBBto3DOBB(m_vColliders[i], m_vColliders[j]))
             {                
+                if (m_bNext)
+                    return;
                 m_vColliders[i]->Get_Owner()->OnCollision(m_vColliders[j]->Get_Owner());
+
+
+                if (m_bNext)
+                    return;
                 m_vColliders[j]->Get_Owner()->OnCollision(m_vColliders[i]->Get_Owner());
             }
-            else
+            /*else
             {
                 m_vColliders[i]->Get_Owner()->OffCollision(m_vColliders[j]->Get_Owner());
                 m_vColliders[j]->Get_Owner()->OffCollision(m_vColliders[i]->Get_Owner());
-            }
+            }*/
         }
     }
 }

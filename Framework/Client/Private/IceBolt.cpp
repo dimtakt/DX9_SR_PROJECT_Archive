@@ -265,7 +265,8 @@ void CIceBolt::Free()
     Safe_Release(m_pVIBufferCom);
     Safe_Release(m_pTransformCom);
     Safe_Release(m_pTextureCom);
-    Safe_Release(m_pPlayerTransformCom);
+    //Safe_Release(m_pPlayerTransformCom);
+    m_pPlayerTransformCom = nullptr;
 
     __super::Free();
 }
