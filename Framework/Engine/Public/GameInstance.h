@@ -95,6 +95,7 @@ public:
 	void Check_RoomCollisions();
 	void Clear_Colliders();
 	void Clear_AllColliders();
+	void Set_Next(_bool bNext);
 #pragma endregion
 
 #pragma region FONT_MANAGER

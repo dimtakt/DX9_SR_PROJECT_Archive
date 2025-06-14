@@ -374,6 +374,10 @@ void CGameInstance::Clear_AllColliders()
 {
     m_pCollision_Manager->Clear_AllColliders();
 }
+void CGameInstance::Set_Next(_bool bNext)
+{
+    m_pCollision_Manager->Set_Next(bNext);
+}
 #pragma endregion
 
 #pragma region FONT_MANAGER
