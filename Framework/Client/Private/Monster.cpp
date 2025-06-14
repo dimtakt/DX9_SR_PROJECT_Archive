@@ -54,7 +54,6 @@ void CMonster::Priority_Update(_float fTimeDelta)
 	}
 
 	if (m_iCulHp <= 0) {
-		m_bDead = true;
 
 		if (m_eMonsterType == MONSTER_TYPE::LASERGHOST)
 		{

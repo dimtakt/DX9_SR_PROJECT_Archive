@@ -43,13 +43,24 @@ void CLaserGhost_D::Priority_Update(_float fTimeDelta)
 {
     __super::Priority_Update(fTimeDelta);
     if (m_pHpBar != nullptr &&
-        m_isSummoned)
+        m_isSummoned && !m_bDying)
         m_pHpBar->Render_HP_Progress(m_pTransformCom, m_iCulHp, m_iMaxHp);
+    if (m_iCulHp <= 0) {
+        m_pAnimatorCom->Change_State(L"Dead");
+        m_isTracking = false;
+        m_bDying = true;
+    }
+
+    if (m_pAnimatorCom->Get_CurStateTag() == L"Dead" && m_pAnimatorCom->Get_IsLastFrame())
+    {
+        m_bDead = true;
+    }
+        
 }
 
 void CLaserGhost_D::Update(_float fTimeDelta)
 {
-    if (!m_pTerrainBox || !m_pTransformCom)
+    if (!m_pTerrainBox || !m_pTransformCom || m_bDying)
         return;
 
 
@@ -463,20 +474,22 @@ HRESULT CLaserGhost_D::Render()
     vTargetPos = pTargetTransform->Get_State(STATE::POSITION);
     vMonsterPos = m_pTransformCom->Get_State(STATE::POSITION);
 
-    // 좌우반전
-    if (vTargetPos.x < vMonsterPos.x && !m_isFlippedX)   // 좌측
+    if (!m_bDying)
     {
-        m_pVIBufferCom->ChangeUV_FlipX(true);
-        m_isFlippedX = true;
-        //std::cout << "[CPlayer::Update] FlippedX Changed to True." << std::endl;
+        // 좌우반전
+        if (vTargetPos.x < vMonsterPos.x && !m_isFlippedX)   // 좌측
+        {
+            m_pVIBufferCom->ChangeUV_FlipX(true);
+            m_isFlippedX = true;
+            //std::cout << "[CPlayer::Update] FlippedX Changed to True." << std::endl;
+        }
+        else if (vTargetPos.x > vMonsterPos.x && m_isFlippedX)    // 우측
+        {
+            m_pVIBufferCom->ChangeUV_FlipX(false);
+            m_isFlippedX = false;
+            //std::cout << "[CPlayer::Update] FlippedX Changed to False." << std::endl;
+        }
     }
-    else if (vTargetPos.x > vMonsterPos.x && m_isFlippedX)    // 우측
-    {
-        m_pVIBufferCom->ChangeUV_FlipX(false);
-        m_isFlippedX = false;
-        //std::cout << "[CPlayer::Update] FlippedX Changed to False." << std::endl;
-    }
-
 
 
     m_pTransformCom->Bind_Matrix();
@@ -492,7 +505,7 @@ HRESULT CLaserGhost_D::Render()
         m_pVIBufferCom->Render();
     }
     
-    m_pTerrainBox->Render();
+    //m_pTerrainBox->Render();
 
     if (m_isFlippedX)
     {
@@ -543,6 +556,11 @@ HRESULT CLaserGhost_D::Ready_Components(void* pArg)
         TEXT("Com_Texture_Airborne"), reinterpret_cast<CComponent**>(&m_pTextureCom_Airborne))))
         return E_FAIL;
 
+    // Dead
+    if (FAILED(__super::Add_Component(desc->iLayerLevelIndex, TEXT("Prototype_Component_Texture_LaserGhost_D_Dead"),
+        TEXT("Com_Texture_Dead"), reinterpret_cast<CComponent**>(&m_pTextureCom_Dead))))
+        return E_FAIL;
+
     /* For Com_Animator */
     CAnimator::ANIMSTATE_DESC StartAnimStateDesc{};
     StartAnimStateDesc.strTimerTag = L"Animator_Monster_LaserGhost_D_Main";   // 해당 애니메이터가 타이머에서 사용할 태그 key값
@@ -567,6 +585,7 @@ HRESULT CLaserGhost_D::Ready_Components(void* pArg)
     m_pAnimatorCom->Add_State(L"Attack_End",    { m_pTextureCom_Attack_End, 4, false });    // 8
     m_pAnimatorCom->Add_State(L"Airborne",      { m_pTextureCom_Airborne, 4, false });      // 3
     m_pAnimatorCom->Add_State(L"Attack_Standby",{ m_pTextureCom_Idle, 4, false });          // 14
+    m_pAnimatorCom->Add_State(L"Dead",          { m_pTextureCom_Dead, 3, false });          // 30
 
 
 
@@ -594,7 +613,8 @@ void CLaserGhost_D::OnCollision(CGameObject* pGameObject)
     {
     case GAMEOBJ_TYPE::PLAYER_EFFECT:
         if (!m_bIsHit) {
-
+            if (m_bDying)
+                return;
             if (m_pAnimatorCom->Get_CurStateTag() != TEXT("AttackReady") &&
                 m_pAnimatorCom->Get_CurStateTag() != TEXT("Attack_Start" &&
                     m_pAnimatorCom->Get_CurStateTag() != TEXT("Attack_Cycle") &&

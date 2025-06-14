@@ -41,13 +41,24 @@ void COink_A::Priority_Update(_float fTimeDelta)
 {
     __super::Priority_Update(fTimeDelta);
     if (m_pHpBar != nullptr &&
-        m_isSummoned)
+        m_isSummoned && !m_bDying)
         m_pHpBar->Render_HP_Progress(m_pTransformCom, m_iCulHp, m_iMaxHp);
+
+    if (m_iCulHp <= 0) {
+        m_pAnimatorCom->Change_State(L"Dead");
+        m_isTracking = false;
+        m_bDying = true;
+    }
+
+    if (m_pAnimatorCom->Get_CurStateTag() == L"Dead" && m_pAnimatorCom->Get_IsLastFrame()) {
+        m_bDead = true;
+    }
+        
 }
 
 void COink_A::Update(_float fTimeDelta)
 {    
-    if (m_bDead)
+    if (m_bDead || m_bDying)
         return;
 
     
@@ -287,19 +298,24 @@ HRESULT COink_A::Render()
         vTargetPos = pTargetTransform->Get_State(STATE::POSITION);
         vMonsterPos = m_pTransformCom->Get_State(STATE::POSITION);
 
-        // 좌우반전
-        if (vTargetPos.x < vMonsterPos.x && !m_isFlippedX)   // 좌측
-        {
-            m_pVIBufferCom->ChangeUV_FlipX(true);
-            m_isFlippedX = true;
-            //std::cout << "[CPlayer::Update] FlippedX Changed to True." << std::endl;
+
+        if (!m_bDying)
+        { 
+            // 좌우반전
+            if (vTargetPos.x < vMonsterPos.x && !m_isFlippedX)   // 좌측
+            {
+                m_pVIBufferCom->ChangeUV_FlipX(true);
+                m_isFlippedX = true;
+                //std::cout << "[CPlayer::Update] FlippedX Changed to True." << std::endl;
+            }
+            else if (vTargetPos.x > vMonsterPos.x && m_isFlippedX)    // 우측
+            {
+                m_pVIBufferCom->ChangeUV_FlipX(false);
+                m_isFlippedX = false;
+                //std::cout << "[CPlayer::Update] FlippedX Changed to False." << std::endl;
+            }
         }
-        else if (vTargetPos.x > vMonsterPos.x && m_isFlippedX)    // 우측
-        {
-            m_pVIBufferCom->ChangeUV_FlipX(false);
-            m_isFlippedX = false;
-            //std::cout << "[CPlayer::Update] FlippedX Changed to False." << std::endl;
-        }
+        
 
 
 
@@ -317,7 +333,7 @@ HRESULT COink_A::Render()
         }
         
 
-        m_pTerrainBox->Render();
+        //m_pTerrainBox->Render();
 
         if (m_isFlippedX)
         {
@@ -371,7 +387,10 @@ HRESULT COink_A::Ready_Components(void* pArg)
     if (FAILED(__super::Add_Component(desc->iLayerLevelIndex, TEXT("Prototype_Component_Texture_Oink_A_Charge_End"),
         TEXT("Com_Texture_Charge_End"), reinterpret_cast<CComponent**>(&m_pTextureCom_Charge_End))))
 		return E_FAIL;
-
+    // Charge_End
+    if (FAILED(__super::Add_Component(desc->iLayerLevelIndex, TEXT("Prototype_Component_Texture_Oink_A_Charge_Dead"),
+        TEXT("Com_Texture_Dead"), reinterpret_cast<CComponent**>(&m_pTextureCom_Dead))))
+        return E_FAIL;
 
     /* For Com_Animator */
     CAnimator::ANIMSTATE_DESC StartAnimStateDesc{};
@@ -398,6 +417,7 @@ HRESULT COink_A::Ready_Components(void* pArg)
 	m_pAnimatorCom->Add_State(L"Charge_Down",           { m_pTextureCom_Charge_Down, 4, false });
 	m_pAnimatorCom->Add_State(L"Charge_Airborne",       { m_pTextureCom_Charge_Airborne, 4, false });
     m_pAnimatorCom->Add_State(L"Attack_Standby",        { m_pTextureCom_Idle, 6, false });
+    m_pAnimatorCom->Add_State(L"Dead",                  { m_pTextureCom_Dead, 3, false });
     
 
     return S_OK;
@@ -422,6 +442,8 @@ void COink_A::OnCollision(CGameObject* pGameObject)
     {
     case GAMEOBJ_TYPE::PLAYER_EFFECT:
         if (!m_bIsHit) {
+            if (m_bDying)
+                return;
             wstring strStateTag = {};
             _float fPointY = 0.f;       // 교차 평면의 기준이 될 Y값
             _float3 vRayPoint = {};     // fPointY 값 기준 마우스 Ray와 교차하는 좌표

@@ -39,14 +39,26 @@ void CMole_A::Priority_Update(_float fTimeDelta)
 {
     __super::Priority_Update(fTimeDelta);
     if (m_pHpBar != nullptr &&
-        m_isSummoned)
+        m_isSummoned && !m_bDying)
         m_pHpBar->Render_HP_Progress(m_pTransformCom, m_iCulHp, m_iMaxHp);
+
+    if (m_iCulHp <= 0) {
+        m_pAnimatorCom->Change_State(L"Dead");
+        m_isTracking = false;
+        m_bDying = true;
+    }
+
+    if (m_pAnimatorCom->Get_CurStateTag() == L"Dead" && m_pAnimatorCom->Get_IsLastFrame())
+    {
+        m_bDead = true;
+    }
+        
     
 }
 
 void CMole_A::Update(_float fTimeDelta)
 {
-    if (m_bDead)
+    if (m_bDead || m_pAnimatorCom->Get_CurStateTag() == L"Dead")
         return;
 
  
@@ -245,18 +257,21 @@ HRESULT CMole_A::Render()
     vTargetPos = pTargetTransform->Get_State(STATE::POSITION);
     vMonsterPos = m_pTransformCom->Get_State(STATE::POSITION);
 
-    // 좌우반전
-    if (vTargetPos.x < vMonsterPos.x && !m_isFlippedX)   // 좌측
+    if (!m_bDying)
     {
-        m_pVIBufferCom->ChangeUV_FlipX(true);
-        m_isFlippedX = true;
-        //std::cout << "[CPlayer::Update] FlippedX Changed to True." << std::endl;
-    }
-    else if (vTargetPos.x > vMonsterPos.x && m_isFlippedX)    // 우측
-    {
-        m_pVIBufferCom->ChangeUV_FlipX(false);
-        m_isFlippedX = false;
-        //std::cout << "[CPlayer::Update] FlippedX Changed to False." << std::endl;
+        // 좌우반전
+        if (vTargetPos.x < vMonsterPos.x && !m_isFlippedX)   // 좌측
+        {
+            m_pVIBufferCom->ChangeUV_FlipX(true);
+            m_isFlippedX = true;
+            //std::cout << "[CPlayer::Update] FlippedX Changed to True." << std::endl;
+        }
+        else if (vTargetPos.x > vMonsterPos.x && m_isFlippedX)    // 우측
+        {
+            m_pVIBufferCom->ChangeUV_FlipX(false);
+            m_isFlippedX = false;
+            //std::cout << "[CPlayer::Update] FlippedX Changed to False." << std::endl;
+        }
     }
 
 
@@ -270,9 +285,10 @@ HRESULT CMole_A::Render()
 
     SetUp_RenderState();
 
-    m_pVIBufferCom->Render();
+    if(m_isSummoned)
+        m_pVIBufferCom->Render();
 
-    m_pTerrainBox->Render();
+    //m_pTerrainBox->Render();
 
     if (m_isFlippedX)
     {
@@ -311,6 +327,10 @@ HRESULT CMole_A::Ready_Components(void* pArg)
     if (FAILED(__super::Add_Component(desc->iLayerLevelIndex, TEXT("Prototype_Component_Texture_Mole_A_Airborne"),
         TEXT("Com_Texture_Airborne"), reinterpret_cast<CComponent**>(&m_pTextureCom_Airborne))))
         return E_FAIL;
+    // Dead
+    if (FAILED(__super::Add_Component(desc->iLayerLevelIndex, TEXT("Prototype_Component_Texture_Mole_A_Dead"),
+        TEXT("Com_Texture_Dead"), reinterpret_cast<CComponent**>(&m_pTextureCom_Dead))))
+        return E_FAIL;
 
 	/* For Com_Animator */
     CAnimator::ANIMSTATE_DESC StartAnimStateDesc{};
@@ -332,7 +352,7 @@ HRESULT CMole_A::Ready_Components(void* pArg)
 	m_pAnimatorCom->Add_State(L"Attack",        { m_pTextureCom_Attack, 6, false });    // 7
 	m_pAnimatorCom->Add_State(L"Attack_Standby",{ m_pTextureCom_Idle, 4, false });      // 6
 	m_pAnimatorCom->Add_State(L"Airborne",      { m_pTextureCom_Airborne, 4, false});   // 1
-
+    m_pAnimatorCom->Add_State(L"Dead",          { m_pTextureCom_Dead, 3, false });   // 29
 	return S_OK;
 }
 
@@ -356,6 +376,8 @@ void CMole_A::OnCollision(CGameObject* pGameObject)
     {
     case GAMEOBJ_TYPE::PLAYER_EFFECT:
         if (!m_bIsHit) {
+            if (m_bDying)
+                return;
             wstring strStateTag = {};
             _float fPointY = 0.f;       // 교차 평면의 기준이 될 Y값
             _float3 vRayPoint = {};     // fPointY 값 기준 마우스 Ray와 교차하는 좌표

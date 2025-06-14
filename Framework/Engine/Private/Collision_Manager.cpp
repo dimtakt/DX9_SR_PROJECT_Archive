@@ -321,6 +321,8 @@ _bool CCollision_Manager::Check_Y_Overlap(CCollider_OBB* pA, CCollider_OBB* pB)
 
 void CCollision_Manager::Remove_Collider_ByOwner(CGameObject* pOwner)
 {
+    if (this == nullptr)
+        return;
     for (auto it = m_vColliders.begin(); it != m_vColliders.end(); )
     {
         if (*it != nullptr && (*it)->Get_Owner() == pOwner)
