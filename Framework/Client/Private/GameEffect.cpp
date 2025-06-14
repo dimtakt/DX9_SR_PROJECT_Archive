@@ -406,7 +406,7 @@ void CGameEffect::OnCollision(CGameObject* pGameObject)
 					return;
 			}
 
-			if (!pMonster->Get_IsHit())
+			if (!pMonster->Get_IsHit() && pMonster->Get_Summoned())
 			{
 				m_pGameInstance->StopSound(ENUM_CLASS(CHANNELID::SOUND_PLAYER));
 				m_pGameInstance->PlaySoundW(L"hitSword02.wav", ENUM_CLASS(CHANNELID::SOUND_PLAYER), g_fEFFECTVolume - 0.6f);

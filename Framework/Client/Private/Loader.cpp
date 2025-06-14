@@ -274,10 +274,10 @@ HRESULT CLoader::Loading_For_Town_Level()
 		CNpc::Create(m_pGraphic_Device))))
 		return E_FAIL;
 
-	/*for (size_t i = 0; i < 19000000000; i++)
+	for (size_t i = 0; i < 10000000000; i++)
 	{
 		int a = 1;
-	}*/
+	}
 	lstrcpy(m_szLoadingText, TEXT("로딩이 완료되었습니다."));
 
 	m_isFinished = true;
@@ -1273,6 +1273,10 @@ HRESULT CLoader::Loading_For_Boss1_Level()
 	{
 		int a = 1;
 	}*/
+	for (size_t i = 0; i < 10000000000; i++)
+	{
+		int a = 1;
+	}
 
 	lstrcpy(m_szLoadingText, TEXT("로딩이 완료되었습니다."));
 
@@ -1332,7 +1336,10 @@ HRESULT CLoader::Loading_For_Shelter_Level()
 	//{
 	//	int a = 1;
 	//}
-
+	for (size_t i = 0; i < 10000000000; i++)
+	{
+		int a = 1;
+	}
 
 	lstrcpy(m_szLoadingText, TEXT("로딩이 완료되었습니다."));
 
@@ -1423,7 +1430,7 @@ HRESULT CLoader::Loading_For_Boss2_Level()
 		return E_FAIL;
 	// Wave (21)
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_BOSS2), TEXT("Prototype_Component_Boss_Askard_Phase1_Wave"),
-		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Boss/Askard/Body/Phase1/Askard_Phase1_Wave_%02d.png"), 21))))
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Boss/Askard/Body/Phase1/Askard_Phase1_Wave_%02d.png"), 17))))
 		return E_FAIL;
 	// Wave_Back (8)			/ Effect
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Boss_Askard_Phase1_Wave_Back"),
@@ -1637,9 +1644,9 @@ HRESULT CLoader::Loading_For_Boss2_Level()
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Boss_Askard_Laser_FX_Cycle_V2"),
 		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Boss/Askard/Effect/Laser_FX_V2/Askard_Laser_FX_V2_Cycle_%02d.png"), 8))))
 		return E_FAIL;
-	// Laser (18)
+	// Laser (18) -> 12
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Boss_Askard_Laser"),
-		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Boss/Askard/Effect/Laser_Line/AskardLaser%02d.png"), 18))))
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Boss/Askard/Effect/Laser_Line/AskardLaser%02d.png"), 12))))
 		return E_FAIL;
 	// Laser_V2 (19)
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Boss_Askard_Laser_V2"),
@@ -1649,6 +1656,11 @@ HRESULT CLoader::Loading_For_Boss2_Level()
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Boss_Askard_Laser_Minor"),
 		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Boss/Askard/Effect/Laser_Minor/AskardMinorLaser%02d.png"), 19))))
 		return E_FAIL;
+	// ShockWaveFX (6)			/ Effect
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Boss_Askard_ShockWaveFX"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Boss/Askard/Effect/Shockwave/ShockWaveFX%d.png"), 6))))
+		return E_FAIL;
+
 
 #pragma endregion
 
@@ -1715,6 +1727,10 @@ HRESULT CLoader::Loading_For_Boss2_Level()
 		int a = 1;
 	}*/
 
+	for (size_t i = 0; i < 10000000000; i++)
+	{
+		int a = 1;
+	}
 	lstrcpy(m_szLoadingText, TEXT("로딩이 완료되었습니다."));
 
 	m_isFinished = true;

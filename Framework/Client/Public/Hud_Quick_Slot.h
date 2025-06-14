@@ -45,6 +45,7 @@ private:
 	_float							m_fPotionCoolTime = {};
 	_int							m_iItemCount = {};
 
+	EVENTDATA						pEvent{};
 private:
 	HRESULT							Ready_Components();
 

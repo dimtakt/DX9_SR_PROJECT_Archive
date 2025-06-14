@@ -235,6 +235,7 @@ void CTalent_Slot_Button::On_Button()
 			m_pGameInstance->PlaySoundW(L"talentPerk.wav", ENUM_CLASS(CHANNELID::SOUND_UI), g_fUIVolume - 0.8f);
 			break;
 		}
+
 		if ((fOldPoint < 10 && static_cast<CTalent_Slot*>(m_pParent)->Get_Value() >= 10) || 
 			(static_cast<CTalent_Slot*>(m_pParent)->Get_Value() == 20))
 		{

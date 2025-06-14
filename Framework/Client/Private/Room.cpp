@@ -492,7 +492,8 @@ HRESULT CRoom::Load_From_File(_uint iLayerLevelIndex, const _wstring& strLayerTa
 			tDesc.iLayerLevelIndex = iLayerLevelIndex;
 			tDesc.iPrototypeLevelIndex = iLayerLevelIndex;
 			tDesc.strLayerTag = strLayerTag;
-			tDesc.vPosition = pDesc.vPos + +m_ObjectOffset;
+			tDesc.vPosition = pDesc.vPos + m_ObjectOffset;
+			tDesc.vPosition.y = 20.f;
 			if (pDesc.eType == GAMEOBJ_TYPE::MONSTER_MOLE) {
 				tDesc.strPrototypeTag = TEXT("Prototype_GameObject_Monster_Mole_A");
 				tDesc.eType = MONSTER_TYPE_A::MONSTER_MOLE_A;
@@ -518,7 +519,7 @@ HRESULT CRoom::Load_From_File(_uint iLayerLevelIndex, const _wstring& strLayerTa
 			tSrc.vPos = pDesc.vPos;
 			tSrc.vScale = pDesc.vScale;
 			tSrc.vRotate = pDesc.vRotate;
-
+			
 			CFire* pFire = dynamic_cast<CFire*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, iLayerLevelIndex, TEXT("Prototype_GameObject_Fire"), &tSrc));
 			m_vFire.push_back(pFire);
 		}

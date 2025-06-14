@@ -250,6 +250,14 @@ void CLaserGhost_D::Update(_float fTimeDelta)
         m_pTransformCom->Set_State(STATE::POSITION, vNewMonsterPos);
     }
 
+    if (m_pAnimatorCom->Get_CurStateTag() == L"AttackReady" && m_pAnimatorCom->Get_CurStackedFrame() < 180)
+    {
+        AttackDaley += 1;
+        m_pAttackFx->Render_Frame(m_pTransformCom, AttackDaley, 180);
+        if (AttackDaley >= 180)
+            AttackDaley = 0;
+    }
+
     // 공격 패턴 분기
     if (m_pAnimatorCom->Get_CurStateTag() == L"AttackReady")
     {
@@ -474,8 +482,11 @@ HRESULT CLaserGhost_D::Render()
 
     SetUp_RenderState();
 
-    m_pVIBufferCom->Render();
-
+    if (m_isSummoned)
+    {
+        m_pVIBufferCom->Render();
+    }
+    
     m_pTerrainBox->Render();
 
     if (m_isFlippedX)
@@ -561,7 +572,7 @@ HRESULT CLaserGhost_D::Ready_Components(void* pArg)
 HRESULT CLaserGhost_D::Ready_Object()
 {
     m_pHpBar = dynamic_cast<CField_Hp*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_Field_Hp")));
-
+    m_pAttackFx = dynamic_cast<CAttackFx*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_AttackFx")));
     return S_OK;
 }
 
@@ -576,30 +587,38 @@ void CLaserGhost_D::OnCollision(CGameObject* pGameObject)
     {
     case GAMEOBJ_TYPE::PLAYER_EFFECT:
         if (!m_bIsHit) {
-            wstring strStateTag = {};
-            _float fPointY = 0.f;       // 교차 평면의 기준이 될 Y값
-            _float3 vRayPoint = {};     // fPointY 값 기준 마우스 Ray와 교차하는 좌표
-            m_pGameInstance->Get_IntersectAtY(fPointY, vRayPoint);
 
-            _float3 vThisPos = {};    // 플레이어 좌표
-            vThisPos = m_pTransformCom->Get_State(STATE::POSITION);
+            if (m_pAnimatorCom->Get_CurStateTag() != TEXT("AttackReady") &&
+                m_pAnimatorCom->Get_CurStateTag() != TEXT("Attack_Start" &&
+                    m_pAnimatorCom->Get_CurStateTag() != TEXT("Attack_Cycle") &&
+                    m_pAnimatorCom->Get_CurStateTag() != TEXT("Attack_End")))
+            {
+                wstring strStateTag = {};
+                _float fPointY = 0.f;       // 교차 평면의 기준이 될 Y값
+                _float3 vRayPoint = {};     // fPointY 값 기준 마우스 Ray와 교차하는 좌표
+                m_pGameInstance->Get_IntersectAtY(fPointY, vRayPoint);
 
-            //strStateTag = (vRayPoint.z > vPlayerPos.z)?     L"Idle_Upper":
-                                                            //L"Idle_Lower";
+                _float3 vThisPos = {};    // 플레이어 좌표
+                vThisPos = m_pTransformCom->Get_State(STATE::POSITION);
 
-            //m_pAnimatorCom->Change_State(strStateTag, true, 2);
-            m_pAnimatorCom->Change_State(L"Airborne", false, 0.5, true); // 도중 Exit 불가 State라 상태변환이 안됨
+                //strStateTag = (vRayPoint.z > vPlayerPos.z)?     L"Idle_Upper":
+                                                                //L"Idle_Lower";
+
+                //m_pAnimatorCom->Change_State(strStateTag, true, 2);
+                m_pAnimatorCom->Change_State(L"Airborne", false, 0.5, true); // 도중 Exit 불가 State라 상태변환이 안됨
 
 
-            CTransform* pEnemyTransform = dynamic_cast<CTransform*>(pGameObject->Find_Component(L"Com_Transform"));
-            _float3 vEnemyPos = pEnemyTransform->Get_State(STATE::POSITION);
-            _float3 vStunDir = vThisPos - vEnemyPos;
-            D3DXVec3Normalize(&vStunDir, &vStunDir);
+                CTransform* pEnemyTransform = dynamic_cast<CTransform*>(pGameObject->Find_Component(L"Com_Transform"));
+                _float3 vEnemyPos = pEnemyTransform->Get_State(STATE::POSITION);
+                _float3 vStunDir = vThisPos - vEnemyPos;
+                D3DXVec3Normalize(&vStunDir, &vStunDir);
 
-            _float3 vResult = vThisPos + vStunDir * 0.5f;    // 밀려날 정도 테스트
-            m_pTransformCom->Set_State(STATE::POSITION, vResult);
+                _float3 vResult = vThisPos + vStunDir * 0.5f;    // 밀려날 정도 테스트
+                m_pTransformCom->Set_State(STATE::POSITION, vResult);
 
-            //m_bIsHit = true;
+                //m_bIsHit = true;
+            }
+            
         }
     }
 }
@@ -633,6 +652,7 @@ CGameObject* CLaserGhost_D::Clone(void* pArg)
 void CLaserGhost_D::Free()
 {
     __super::Free();
+    Safe_Release(m_pAttackFx);
 
     Safe_Release(m_pTextureCom_Idle);
     Safe_Release(m_pTextureCom_Move);

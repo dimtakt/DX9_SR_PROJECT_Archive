@@ -137,7 +137,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>../../EngineSDK/Inc/;../Public/;c:/vcpkg/installed/x64-windows/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../EngineSDK/Inc/;../Public/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -162,10 +162,13 @@
     <ClInclude Include="..\Public\Animations\Anim_Player_Parry.h" />
     <ClInclude Include="..\public\Artefact_Tier_Icon.h" />
     <ClInclude Include="..\public\Artefact_Tooltip.h" />
+    <ClInclude Include="..\public\Askard_Eye.h" />
     <ClInclude Include="..\public\Askard_Frame.h" />
     <ClInclude Include="..\public\Askard.h" />
     <ClInclude Include="..\public\Askard_Tentacle.h" />
     <ClInclude Include="..\public\Askard_Hpbar.h" />
+    <ClInclude Include="..\public\AttackFx.h" />
+    <ClInclude Include="..\public\AttackGauge.h" />
     <ClInclude Include="..\Public\BackGround.h" />
     <ClInclude Include="..\Public\IceBolt.h" />
     <ClInclude Include="..\public\BossHp_Askard.h" />
@@ -388,11 +391,14 @@
     <ClCompile Include="..\Private\Animations\Anim_Player_Parry.cpp" />
     <ClCompile Include="..\private\Artefact_Tier_Icon.cpp" />
     <ClCompile Include="..\private\Artefact_Tooltip.cpp" />
+    <ClCompile Include="..\private\Askard_Eye.cpp" />
     <ClCompile Include="..\private\Askard_Frame.cpp" />
     <ClCompile Include="..\private\Askard.cpp" />
     <ClCompile Include="..\private\Askard_Tentacle.cpp" />
     <ClCompile Include="..\private\Askard_Hpbar.cpp" />
+    <ClCompile Include="..\private\AttackGauge.cpp" />
     <ClCompile Include="..\Private\BackGround.cpp" />
+    <ClCompile Include="..\private\AttackFx.cpp" />
     <ClCompile Include="..\Private\IceBolt.cpp" />
     <ClCompile Include="..\private\BossHp_Askard.cpp" />
     <ClCompile Include="..\private\BossHp_Ema.cpp" />

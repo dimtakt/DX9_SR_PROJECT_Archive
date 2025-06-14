@@ -201,6 +201,13 @@ void COink_A::Update(_float fTimeDelta)
         _float3 vNewMonsterPos = vMonsterPos + vPosDiff * fTimeDelta * fMoveSpeed;
         m_pTransformCom->Set_State(STATE::POSITION, vNewMonsterPos);
     }
+    if (m_pAnimatorCom->Get_CurStateTag() == L"Attack" && m_pAnimatorCom->Get_CurStackedFrame() < 24)
+    {
+        AttackDaley += 1;
+        m_pAttackFx->Render_Frame(m_pTransformCom, AttackDaley, 24);
+        if (AttackDaley >= 24)
+            AttackDaley = 0;
+    }
 
     if (m_pAnimatorCom->Get_CurStateTag() == L"Attack" &&
         m_pAnimatorCom->Get_CurStackedFrame() == 24)
@@ -214,6 +221,14 @@ void COink_A::Update(_float fTimeDelta)
         m_pAnimatorCom->Get_IsLastFrame())
     {
         if (m_pAnimatorCom->Change_State(L"Attack_Standby")) {}
+    }
+
+    if (m_pAnimatorCom->Get_CurStateTag() == L"ChargeReady" || m_pAnimatorCom->Get_CurStateTag() == L"ChargeReady_Cycle")
+    {
+        AttackDaley += 1;
+        m_pAttackFx->Render_Frame(m_pTransformCom, AttackDaley, 196);
+        if (AttackDaley >= 196)
+            AttackDaley = 0;
     }
 
     if (m_pAnimatorCom->Get_CurStateTag() == L"ChargeReady")
@@ -259,7 +274,7 @@ void COink_A::Update(_float fTimeDelta)
 
 void COink_A::Late_Update(_float fTimeDelta)
 {
-    __super::Late_Update(fTimeDelta);
+    __super::Late_Update(fTimeDelta);    
 }
 
 HRESULT COink_A::Render()
@@ -298,7 +313,11 @@ HRESULT COink_A::Render()
 
         SetUp_RenderState();
 
-        m_pVIBufferCom->Render();
+        if (m_isSummoned)
+        {
+            m_pVIBufferCom->Render();
+        }
+        
 
         m_pTerrainBox->Render();
 
@@ -389,6 +408,7 @@ HRESULT COink_A::Ready_Components(void* pArg)
 HRESULT COink_A::Ready_Object()
 {
     m_pHpBar = dynamic_cast<CField_Hp*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_Field_Hp")));
+    m_pAttackFx = dynamic_cast<CAttackFx*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_AttackFx")));
 
     return S_OK;
 }
@@ -462,6 +482,7 @@ CGameObject* COink_A::Clone(void* pArg)
 void COink_A::Free()
 {
     __super::Free();
+    Safe_Release(m_pAttackFx);
 
     Safe_Release(m_pTextureCom_Idle);
     Safe_Release(m_pTextureCom_Move);

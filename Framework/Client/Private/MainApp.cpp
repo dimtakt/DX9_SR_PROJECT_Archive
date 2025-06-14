@@ -55,6 +55,8 @@
 #include "ProjSword.h"
 #include "FrozenHammer.h"
 #include "IceBolt.h"
+#include "AttackFx.h"
+#include "AttackGauge.h"
 #include "Meteor.h"
 
 CMainApp::CMainApp()
@@ -349,6 +351,15 @@ HRESULT CMainApp::Ready_GameObject_Setting()
 		CFrozenHammer::Create(m_pGraphic_Device))))
 		return E_FAIL;
 #pragma endregion
+	
+	// Attack_Guide
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_AttackFx"),
+		CAttackFx::Create(m_pGraphic_Device, LEVEL::LEVEL_STATIC))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_Attack_Gauge"),
+		CAttackGauge::Create(m_pGraphic_Device, LEVEL::LEVEL_STATIC))))
+		return E_FAIL;
 
 #pragma region Prototype_GameObject_IceBolt
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_IceBolt"), CIceBolt::Create(m_pGraphic_Device))))
@@ -496,7 +507,7 @@ HRESULT CMainApp::Ready_Texture_Setting()
 
 
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Item"),
-		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/UI/Item/Item_Icon_%d.png"), 65))))
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/UI/Item/Item_Icon_%d.png"), 71))))
 		return E_FAIL;
 
 	//포탈 임시용 텍스처 세팅
@@ -548,9 +559,6 @@ HRESULT CMainApp::Ready_Texture_Setting()
 
 	// ---
 	
-
-	
-
 
 	/////UI//////////
 	/* Prototype_Component_Texture_HUD */
@@ -851,8 +859,8 @@ HRESULT CMainApp::Ready_Texture_Setting()
 		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/UI/Loding/St4LoadingFront_%d.png"), 108))))
 		return E_FAIL;
 
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Rect_Prologue"),
-		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/UI/Loding/PrologueRole/PrologueRole-Tree%d.png"), 132))))
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Town_Loading"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/UI/Loding/TownLoading.png"), 1))))
 		return E_FAIL;
 
 #pragma endregion
@@ -1205,6 +1213,9 @@ void CMainApp::Ready_Font_Setting()
 		MSG_BOX(TEXT("FAILED to Font"));
 
 	if (FAILED(m_pGameInstance->Ready_Font(TEXT("UI_Font_24_Minimap"), TEXT("../Bin/Resources/Font/Galmuri9.ttf"), TEXT("Galmuri9 Regular"), 14, 18, 600)))
+		MSG_BOX(TEXT("FAILED to Font"));
+
+	if (FAILED(m_pGameInstance->Ready_Font(TEXT("UI_Font_22_Talent"), TEXT("../Bin/Resources/Font/Galmuri9.ttf"), TEXT("Galmuri9 Regular"), 0, 21, 700)))
 		MSG_BOX(TEXT("FAILED to Font"));
 
 	if (FAILED(m_pGameInstance->Ready_Font(TEXT("UI_Font_22"), TEXT("../Bin/Resources/Font/Galmuri9.ttf"), TEXT("Galmuri9 Regular"), 20, 22, 700)))
