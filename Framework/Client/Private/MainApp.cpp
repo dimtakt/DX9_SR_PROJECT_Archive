@@ -55,6 +55,7 @@
 #include "ProjSword.h"
 #include "FrozenHammer.h"
 #include "IceBolt.h"
+#include "Meteor.h"
 
 CMainApp::CMainApp()
 	: m_pGameInstance{ CGameInstance::GetInstance() }
@@ -178,9 +179,6 @@ HRESULT CMainApp::Ready_GameObject_Setting()
 
 	/* Prototype_GameObject_Interaction_Normal  */
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_Interaction_Normal"), CInteraction_Normal::Create(m_pGraphic_Device))))
-		return E_FAIL;
-
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_IceBolt"), CIceBolt::Create(m_pGraphic_Device))))
 		return E_FAIL;
 
 	// UI
@@ -351,6 +349,18 @@ HRESULT CMainApp::Ready_GameObject_Setting()
 		CFrozenHammer::Create(m_pGraphic_Device))))
 		return E_FAIL;
 #pragma endregion
+
+#pragma region Prototype_GameObject_IceBolt
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_IceBolt"), CIceBolt::Create(m_pGraphic_Device))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region Prototype_GameObject_Meteor
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_Meteor"), CMeteor::Create(m_pGraphic_Device))))
+		return E_FAIL;
+#pragma endregion
+
+
 
 	return S_OK;
 }
@@ -990,6 +1000,7 @@ HRESULT CMainApp::Ready_Texture_Setting()
 		return E_FAIL;
 #pragma endregion
 
+#pragma region ICEBOLT
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_IceBolt"),
 		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Magic/IceBoltBullet.png"), 1))))
 		return E_FAIL;
@@ -1005,7 +1016,24 @@ HRESULT CMainApp::Ready_Texture_Setting()
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Effect_IceBoltEffect"),
 		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Magic/Wand_DashSwing_Ice_%d.png"), 4))))
 		return E_FAIL;
+#pragma endregion
 	
+#pragma region METEOR
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Meteor"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Magic/Meteor/SmallMeteor_%d.png"), 6))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Effect_MeteorStart"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Magic/Meteor/FireCircle_%d.png"), 15))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Effect_Meteor"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Magic/Meteor/Fire_FX_Front_%d.png"), 13))))
+		return E_FAIL;
+	
+
+
+#pragma endregion
 
 	return S_OK;
 }

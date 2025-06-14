@@ -239,6 +239,7 @@
     <ClInclude Include="..\Public\Level_Stage3.h" />
     <ClInclude Include="..\Public\Level_Stage4.h" />
     <ClInclude Include="..\Public\Level_Town.h" />
+    <ClInclude Include="..\Public\Meteor.h" />
     <ClInclude Include="..\public\Minimap.h" />
     <ClInclude Include="..\public\Minimap_Button.h" />
     <ClInclude Include="..\public\Minimap_Frame.h" />
@@ -460,6 +461,7 @@
     <ClCompile Include="..\Private\Level_Stage3.cpp" />
     <ClCompile Include="..\Private\Level_Stage4.cpp" />
     <ClCompile Include="..\Private\Level_Town.cpp" />
+    <ClCompile Include="..\Private\Meteor.cpp" />
     <ClCompile Include="..\private\Minimap.cpp" />
     <ClCompile Include="..\private\Minimap_Button.cpp" />
     <ClCompile Include="..\private\Minimap_Frame.cpp" />

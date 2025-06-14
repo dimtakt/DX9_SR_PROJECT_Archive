@@ -1,4 +1,5 @@
 #include "Stat_Manager.h"
+#include "Stat_Manager.h"
 #include "GameInstance.h"
 
 IMPLEMENT_SINGLETON(CStat_Manager)

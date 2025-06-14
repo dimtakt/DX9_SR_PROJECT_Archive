@@ -2,6 +2,7 @@
 
 #include "Client_Defines.h"
 #include "GameObject.h"
+#include "EventListener.h"
 
 BEGIN(Engine)
 class CTexture;
@@ -11,7 +12,7 @@ END
 
 BEGIN(Client)
 
-class CIceBolt final : public CGameObject
+class CIceBolt final : public CGameObject, public IEventListener
 {
 public:
 	typedef struct tagBoltDesc
@@ -31,6 +32,7 @@ public:
 	virtual void Late_Update(_float fTimeDelta) override;
 	virtual HRESULT Render() override;
 
+	virtual void OnEvent(_uint iTypeindex, const EVENTDATA* pData);
 	void Create_Bolt();
 
 private:
@@ -40,6 +42,8 @@ private:
 
 	_float3 m_vDirection = {};			//발사 방향
 
+	_float m_fCurrentCoolTime = 0.f;
+	_float m_fMaxCoolTime = 1.f;
 
 	CTransform* m_pPlayerTransformCom = { nullptr };
 
