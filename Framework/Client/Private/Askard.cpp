@@ -59,23 +59,54 @@ HRESULT CAskard::Initialize(void* pArg)
 
 void CAskard::Priority_Update(_float fTimeDelta)
 {
-    __super::Priority_Update(fTimeDelta);
+    //__super::Priority_Update(fTimeDelta);
+    if (m_bIsHit)
+    {
+        m_dwHitTime += 1.f;
+    }
+
+    if (m_dwHitTime >= 10.f)
+    {
+        m_dwHitTime = 0.f;
+        m_bIsHit = false;
+    }
+
+
 
     if (m_pHpBar != nullptr &&
         m_isSummoned)
         m_pHpBar->Render_HP_Progress(m_pTransformCom, m_iCulHp, m_iMaxHp);
 
 
-    if (m_iCulHp <= 0)
+
+    // 페이즈 및 사망 관리
+
+    if (m_iCulHp <= 0 &&
+        !m_isPhaseChanging &&
+        m_iPhase == 0)
     {
         //m_iPhase++;
         m_iCulHp = m_iMaxHp;
-
+        m_isPhaseChanging = true;
         // ksta4 : 연출용 페이즈 재생.. 그 후
         // m_iPhase++ 하여 다음 패턴 재생
 
     }
-    if (m_iPhase > 2)   // 2페이즈에서 체력 다 닳을 시 비로소 사망
+    else if (m_iCulHp <= 0 && 
+        m_isPhaseChanging &&
+        m_iPhase == 0)
+    {
+        if (m_iPhase == 1)  // 페이즈 전환이 끝나면 페이즈가 1이 되도록 함.
+            m_iCulHp = m_iMaxHp;
+    }
+    else if (m_iCulHp <= 0 &&
+        m_iPhase == 1)
+    {
+        m_isPhaseChanging = true;
+    }
+
+
+    if (m_iPhase >= 2)   // 2페이즈에서 체력 다 닳을 시 비로소 사망
     {
         m_iCulHp = 0;
         m_bDead = true;
@@ -84,7 +115,50 @@ void CAskard::Priority_Update(_float fTimeDelta)
 
 void CAskard::Update(_float fTimeDelta)
 {
+    // 최초 진입시.
+    if (!m_bStart)
+    {
+        // 아래 if 조건문에 시작 조건 삽입
+        if (m_pGameInstance->IsKeyDown('P'))
+        {
+            m_bStart = true;
+            m_pAnimatorCom->Change_State(L"P1_Idle");
+        }
 
+        m_pTerrainBox->SetUp_OnTerrainBox(m_pTransformCom, _float3(0.05f, 0.8f, 0.05f));
+        return;
+    }
+    else if (m_isPhaseChanging && m_iPhase == 0)
+    {
+        // ksta : 임시 (1페이즈와 2페이즈 아스카드의 이미지 크기가 달라 크기 및 위치를 키움)
+        m_pAnimatorCom->Change_State(L"P1_PhaseChange");
+        m_pTerrainBox->SetUp_OnTerrainBox(m_pTransformCom, _float3(0.05f, 1.6f, 0.05f));
+        m_pTransformCom->Scaling(6.f, 6.f, 6.f);
+
+        if (m_pAnimatorCom->Get_CurStateTag() == L"P1_PhaseChange" &&
+            m_pAnimatorCom->Get_IsLastFrame())
+        {
+            m_pAnimatorCom->Change_State(L"P2_Idle");
+            m_isPhaseChanging = false;
+            m_iElapsedFrame_Update = 0;     // 패턴 진행 프레임 초기화
+            m_iPhase++;
+        }
+
+
+        return;
+    }
+    else if (m_isPhaseChanging && m_iPhase == 1)
+    {
+        // ksta : 임시 (1페이즈와 2페이즈 아스카드의 이미지 크기가 달라 크기 및 위치를 키움)
+        m_pAnimatorCom->Change_State(L"Askard_Die");
+        m_pTerrainBox->SetUp_OnTerrainBox(m_pTransformCom, _float3(0.05f, 3.2f, 0.05f));
+        m_pTransformCom->Scaling(6.f, 12.f, 12.f);
+
+        if (m_pAnimatorCom->Get_IsLastFrame())
+            m_iPhase++;
+
+        return;
+    }
 
 
     // ksta3 : 패턴 구현..
@@ -94,37 +168,67 @@ void CAskard::Update(_float fTimeDelta)
 
     // 동작
 
-    _int iPatternLoopCycle = 240;   // 주기 프레임
 
-    _int iStandardPatternFrame = m_iElapsedFrame_Update % iPatternLoopCycle;
-
-    //switch (iStandardPatternFrame)
-    switch (iStandardPatternFrame)
+    // 1페이즈 패턴
+    if (m_iPhase == 0)
     {
-    case 30:
+        _int iPatternLoopCycle = 2000;   // 주기 프레임
+        _int iStandardPatternFrame = m_iElapsedFrame_Update % iPatternLoopCycle;
+
+        switch (iStandardPatternFrame)
+        {
+            // Play_Corner_Laser_ADV    // 350
+            // Play_Dark_Tentacle       // 1300
+            // Play_Spark               // 150
+            // Play_Corner_Laser        // 230
+            // Play_Spawn_Line          // 200
+            // Play_Spawn_Cross         // 255
+            // Play_Spawn_Width         // 300 
+        case 30:    m_ePattern = PATTERN_ASKARD::PT_SPAWN_WIDTH;        break;
+        case 340:   m_ePattern = PATTERN_ASKARD::PT_CORNER_LASER;       break;
+        case 605:   m_ePattern = PATTERN_ASKARD::PT_SPAWN_CROSS;        break;
+        case 870:   m_ePattern = PATTERN_ASKARD::PT_SPAWN_LINE;         break;
+        case 1030:  m_ePattern = PATTERN_ASKARD::PT_SPARK;              break;
+        case 1240:  m_ePattern = PATTERN_ASKARD::PT_SPAWN_LINE;         break;
+        case 1505:  m_ePattern = PATTERN_ASKARD::PT_SPAWN_CROSS;        break;
+        case 1770:  m_ePattern = PATTERN_ASKARD::PT_CORNER_LASER;       break;  // 1770+230 = 2000
+
+
+        default:
+            break;
+        }
+    }
+    else if (m_iPhase == 1)
     {
-        //m_ePattern = PATTERN_ASKARD::PT_SPAWN_WIDTH;
-        //m_ePattern = PATTERN_ASKARD::PT_SPAWN_CROSS;
-        //m_ePattern = PATTERN_ASKARD::PT_SPAWN_LINE;
-        //m_ePattern = PATTERN_ASKARD::PT_CORNER_LASER;
-        //m_ePattern = PATTERN_ASKARD::PT_SPARK;
-        //m_ePattern = PATTERN_ASKARD::PT_DARK_TENTACLE;
-        m_ePattern = PATTERN_ASKARD::PT_CORNER_LASER_ADV;
-        
+        _int iPatternLoopCycle = 3550;   // 주기 프레임
+        _int iStandardPatternFrame = m_iElapsedFrame_Update % iPatternLoopCycle;
 
-        // 임시 테스트용 
-        _uint iCurLevel = m_pGameInstance->Get_CurrentLevel();
-        CTransform* pTargetTransform = dynamic_cast<CTransform*>(m_pGameInstance->GetInstance()->Get_Component(iCurLevel, TEXT("Layer_Player"), TEXT("Com_Transform")));
-        _float3 vTargetPos = pTargetTransform->Get_State(STATE::POSITION);
+        switch (iStandardPatternFrame)
+        {
+        case 30:    m_ePattern = PATTERN_ASKARD::PT_DARK_TENTACLE;      break;
+            // Play_Corner_Laser_ADV    // 350
+            // Play_Dark_Tentacle       // 1300
+            // Play_Spark               // 150
+            // Play_Corner_Laser        // 230
+            // Play_Spawn_Line          // 200
+            // Play_Spawn_Cross         // 255
+            // Play_Spawn_Width         // 300 
+        case 1340:  m_ePattern = PATTERN_ASKARD::PT_SPAWN_WIDTH;        break;
+        case 1650:  m_ePattern = PATTERN_ASKARD::PT_CORNER_LASER_ADV;   break;
+        case 2035:  m_ePattern = PATTERN_ASKARD::PT_SPAWN_CROSS;        break;
+        case 2300:  m_ePattern = PATTERN_ASKARD::PT_SPAWN_LINE;         break;
+        case 2460:  m_ePattern = PATTERN_ASKARD::PT_SPARK;              break;
+        case 2670:  m_ePattern = PATTERN_ASKARD::PT_SPAWN_LINE;         break;
+        case 2925:  m_ePattern = PATTERN_ASKARD::PT_SPAWN_CROSS;        break;
+        case 3190:  m_ePattern = PATTERN_ASKARD::PT_CORNER_LASER_ADV;   break;  // 3190+230 = 3420
 
-        //Summon_Dark_Tentacle(vTargetPos, CAskard_Dark_Tentacle::DARKTENTACLE_DIR::DIR_TO_XNEG);
-        //Summon_Dark_Tentacle(vTargetPos, CAskard_Dark_Tentacle::DARKTENTACLE_DIR::DIR_TO_ZNEG);
+
+
+        default:
+            break;
+        }
     }
-    break;
 
-    default:
-        break;
-    }
 
 
     // 격돌 진행중이라 멈춰있으면..
@@ -231,8 +335,13 @@ void CAskard::Update(_float fTimeDelta)
     m_iElapsedFrame_Update++;
 
     if (m_pTerrainBox != nullptr &&
-        !(strCurStateTag == L"P1_Wave")) {
-        m_pTerrainBox->SetUp_OnTerrainBox(m_pTransformCom, _float3(0.05f, 0.8f, 0.05f));
+        !(strCurStateTag == L"P1_Wave" ||
+            strCurStateTag == L"P2_Wave")) {
+        // ksta : 임시 (1페이즈와 2페이즈 아스카드의 이미지 크기가 달라 위치를 수정함)
+        if (m_iPhase == 0)
+            m_pTerrainBox->SetUp_OnTerrainBox(m_pTransformCom, _float3(0.05f, 0.8f, 0.05f));
+        else if (m_iPhase == 1)
+            m_pTerrainBox->SetUp_OnTerrainBox(m_pTransformCom, _float3(0.05f, 1.6f, 0.05f));
     }
 }
 
@@ -240,7 +349,8 @@ void CAskard::Late_Update(_float fTimeDelta)
 {
     __super::Late_Update(fTimeDelta);
 
-    m_pBossHp->Render_Hpbar(m_iCulHp, m_iMaxHp, fTimeDelta);
+    if (m_bStart)
+        m_pBossHp->Render_Hpbar(m_iCulHp, m_iMaxHp, fTimeDelta);
 
     //_float3 vPos = m_pTransformCom->Get_State(STATE::POSITION);
     //std::cout << "Askard Pos : " << vPos.x << ", " << vPos.y << ", " << vPos.z << std::endl;
@@ -411,6 +521,17 @@ HRESULT CAskard::Ready_Components(void* pArg)
     if (FAILED(__super::Add_Component(desc->iLayerLevelIndex, TEXT("Prototype_Component_Boss_Askard_Phase2_Wave"),
         TEXT("Com_Texture_P2_Wave"), reinterpret_cast<CComponent**>(&m_pTextureCom_P2_Wave))))
         return E_FAIL;
+    
+    // Askard_Die (47)
+    if (FAILED(__super::Add_Component(desc->iLayerLevelIndex, TEXT("Prototype_Component_Boss_Askard_Die"),
+        TEXT("Com_Texture_Askard_Die"), reinterpret_cast<CComponent**>(&m_pTextureCom_Askard_Die))))
+        return E_FAIL;
+    // Hidden (1)
+    if (FAILED(__super::Add_Component(desc->iLayerLevelIndex, TEXT("Prototype_Component_Boss_Askard_Hidden"),
+        TEXT("Com_Texture_Askard_Hidden"), reinterpret_cast<CComponent**>(&m_pTextureCom_Askard_Hidden))))
+        return E_FAIL;
+
+    
 #pragma endregion
 
 
@@ -433,32 +554,38 @@ HRESULT CAskard::Ready_Components(void* pArg)
 #pragma region States...
 
     // Phase 1
+    m_pAnimatorCom->Add_State(L"Standby",           { m_pTextureCom_P1_Idle         , 4, true });
     m_pAnimatorCom->Add_State(L"P1_Idle",           { m_pTextureCom_P1_Idle         , 4, true });
 
     m_pAnimatorCom->Add_State(L"P1_Attack",         { m_pTextureCom_P1_Attack		, 4, false });
     m_pAnimatorCom->Add_State(L"P1_Attack_End",     { m_pTextureCom_P1_Attack_End	, 4, false });
-    m_pAnimatorCom->Add_State(L"P1_Attack_Ready",   { m_pTextureCom_P1_Attack_Ready	, 4, false });
+    m_pAnimatorCom->Add_State(L"P1_Attack_Ready",   { m_pTextureCom_P1_Attack_Ready	, 8, false });
     m_pAnimatorCom->Add_State(L"P1_Die",            { m_pTextureCom_P1_Die			, 4, true });
     m_pAnimatorCom->Add_State(L"P1_GroundIdle",     { m_pTextureCom_P1_GroundIdle	, 4, true });
     m_pAnimatorCom->Add_State(L"P1_Laser",          { m_pTextureCom_P1_Laser		, 5, false });
     m_pAnimatorCom->Add_State(L"P1_PhaseChange",    { m_pTextureCom_P1_PhaseChange	, 4, true });
     m_pAnimatorCom->Add_State(L"P1_PhaseStart",     { m_pTextureCom_P1_PhaseStart	, 4, true });
-    m_pAnimatorCom->Add_State(L"P1_RangeAttack",    { m_pTextureCom_P1_RangeAttack	, 4, true });
+    m_pAnimatorCom->Add_State(L"P1_RangeAttack",    { m_pTextureCom_P1_RangeAttack	, 4, false });
     m_pAnimatorCom->Add_State(L"P1_StaffIdle",      { m_pTextureCom_P1_StaffIdle	, 4, true });
     m_pAnimatorCom->Add_State(L"P1_SummonStaff",    { m_pTextureCom_P1_SummonStaff	, 4, true });
     m_pAnimatorCom->Add_State(L"P1_Wave",           { m_pTextureCom_P1_Wave			, 4, false });
 
     // Phase 2
-    m_pAnimatorCom->Add_State(L"P2_Attack",         { m_pTextureCom_P2_Attack		, 4, true });
-    m_pAnimatorCom->Add_State(L"P2_Attack_End",     { m_pTextureCom_P2_Attack_End	, 4, true });
-    m_pAnimatorCom->Add_State(L"P2_Attack_Ready",   { m_pTextureCom_P2_Attack_Ready	, 4, true });
+    m_pAnimatorCom->Add_State(L"P2_Attack",         { m_pTextureCom_P2_Attack		, 4, false });
+    m_pAnimatorCom->Add_State(L"P2_Attack_End",     { m_pTextureCom_P2_Attack_End	, 4, false });
+    m_pAnimatorCom->Add_State(L"P2_Attack_Ready",   { m_pTextureCom_P2_Attack_Ready	, 4, false });
     m_pAnimatorCom->Add_State(L"P2_Idle",           { m_pTextureCom_P2_Idle			, 4, true });
-    m_pAnimatorCom->Add_State(L"P2_Laser",          { m_pTextureCom_P2_Laser		, 4, true });
-    m_pAnimatorCom->Add_State(L"P2_RangeAttack",    { m_pTextureCom_P2_RangeAttack	, 4, true });
-    m_pAnimatorCom->Add_State(L"P2_Tentacle",       { m_pTextureCom_P2_Tentacle		, 4, true });
-    m_pAnimatorCom->Add_State(L"P2_Tentacle_End",   { m_pTextureCom_P2_Tentacle_End	, 4, true });
+    m_pAnimatorCom->Add_State(L"P2_Laser",          { m_pTextureCom_P2_Laser		, 4, false });
+    m_pAnimatorCom->Add_State(L"P2_RangeAttack",    { m_pTextureCom_P2_RangeAttack	, 4, false });
+    m_pAnimatorCom->Add_State(L"P2_Tentacle",       { m_pTextureCom_P2_Tentacle		, 4, false });
+    m_pAnimatorCom->Add_State(L"P2_Tentacle_End",   { m_pTextureCom_P2_Tentacle_End	, 4, false });
     //m_pAnimatorCom->Add_State(L"P2_Tentacle_Unlit", { m_pTextureCom_P2_Tentacle_Unlit, 4, true });
     m_pAnimatorCom->Add_State(L"P2_Wave",           { m_pTextureCom_P2_Wave			, 4, true });
+
+    m_pAnimatorCom->Add_State(L"Askard_Die",        { m_pTextureCom_Askard_Die		, 4, false });
+    m_pAnimatorCom->Add_State(L"Hidden",            { m_pTextureCom_Askard_Hidden	, 4, true });
+
+    
 
 #pragma endregion
 
@@ -468,7 +595,7 @@ HRESULT CAskard::Ready_Components(void* pArg)
 
 HRESULT CAskard::Ready_Object()
 {
-    m_pHpBar = dynamic_cast<CField_Hp*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_Field_Hp")));
+    //m_pHpBar = dynamic_cast<CField_Hp*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_Field_Hp")));
 
     if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_BOSS2), TEXT("Layer_HPBar"), ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_BossHp_Askard"))))
         return E_FAIL;
@@ -591,7 +718,10 @@ void CAskard::Free()
     Safe_Release(m_pTextureCom_P2_Tentacle);
     Safe_Release(m_pTextureCom_P2_Tentacle_End);
     //Safe_Release(m_pTextureCom_P2_Tentacle_Unlit);
-    Safe_Release(m_pTextureCom_P2_Wave);            // 어딘가에서 텍스쳐 관련 Release가 두번 더 되는듯
+    Safe_Release(m_pTextureCom_P2_Wave);
+
+    Safe_Release(m_pTextureCom_Askard_Die);
+    Safe_Release(m_pTextureCom_Askard_Hidden);
 
 
     Safe_Release(m_pAnimatorCom);
@@ -712,7 +842,7 @@ void CAskard::Play_Spawn_Width(_float fTimeDelta)
                 if ((iOddTentacleIndex == ((z + 1) * (j + 1) + j - 1)) && m_iElapsedFrame_Pattern == 120)
                     iRandType = 3; // 해당 인덱스에 별종 삽입
 
-                Summon_Tentacle(_float3{ fPosX, 0, fPosZ + fRand }, static_cast<CAskard_Tentacle::TYPE_TENTACLE>(iRandType));
+                Summon_Tentacle(_float3{ fPosX, vMonsterPos.y, fPosZ + fRand }, static_cast<CAskard_Tentacle::TYPE_TENTACLE>(iRandType));
             }
         }
     }
@@ -786,6 +916,7 @@ void CAskard::Play_Spawn_Cross(_float fTimeDelta)
 
     _int iMaxFrame_Pattern = iPatternCycleFrame * 3;      // 이 패턴은 몇프레임동안 플레이될 것인가
 
+    //std::cout << iCalcedCycleFrame << std::endl;
 
     // 플레이어에게 다가와서 4방향 촉수 소환    
 
@@ -810,7 +941,6 @@ void CAskard::Play_Spawn_Cross(_float fTimeDelta)
     _float4x4 matRotY90;                   // Y축 기준 90도 회전하는 행렬
     D3DXMatrixIdentity(&matRotY90);
     D3DXMatrixRotationY(&matRotY90, D3DXToRadian(90));
-
 
 
     if (iCalcedCycleFrame == 5)
@@ -1324,7 +1454,7 @@ void CAskard::Play_Corner_Laser(_float fTimeDelta)
         // -----------
 
         // 크기 조절
-        D3DXMatrixScaling(&matScale, -3.f, 12.f, 12.f);
+        D3DXMatrixScaling(&matScale, -4.f, 12.f, 12.f);
 
         // 눕히기
         matRotateChild = {};
@@ -1346,7 +1476,7 @@ void CAskard::Play_Corner_Laser(_float fTimeDelta)
         D3DXVec3Normalize(&vDiff, &vDiff);              // 를 단위벡터화, 안되면 vDiff 순서 바꿔보기
         _float fDistanceOffset = 15.f;                   // ** ksta : 중점으로부터 떨어져 있을 거리 **
         vDiff *= fDistanceOffset;
-        D3DXMatrixTranslation(&matTransAddition, vDiff.x, 0, vDiff.z);
+        D3DXMatrixTranslation(&matTransAddition, vDiff.x, -0.3f, vDiff.z);
 
         matMonsterWorld = matTransToOrigin * matScale * matRotateChild * matRotateChildtoPlayer * matTransReturn * matTransOffset * matTransAddition;
 
@@ -1674,6 +1804,9 @@ void CAskard::Play_Dark_Tentacle(_float fTimeDelta)
 
     switch (m_iElapsedFrame_Pattern)
     {
+    case 30:
+        m_pAnimatorCom->Change_State(L"P2_Tentacle"); // Hidden 말고 점점 사라지는 이펙트 있었는데
+        break;
     case 180:
     case 260:
     case 336:
@@ -1787,13 +1920,22 @@ void CAskard::Play_Dark_Tentacle(_float fTimeDelta)
         }
     }
         break;
+    case 1160:
+    {
+        m_pAnimatorCom->Change_State(L"P2_Tentacle_End");
+        break;
+    }
+
     }
 
 
 
 
 
-
+    if (strCurStateTag == L"P2_Tentacle")
+        m_pAnimatorCom->Change_State(L"Hidden");
+    else if (strCurStateTag == L"P2_Tentacle_End")
+        m_pAnimatorCom->Change_State(L"P2_Idle");
 
 
     //if (strCurStateTag == L"P1_Wave")
@@ -1807,7 +1949,7 @@ void CAskard::Play_Dark_Tentacle(_float fTimeDelta)
     {
         m_iElapsedFrame_Pattern = 0;
         m_ePattern = PATTERN_ASKARD::PT_IDLE;
-        m_pAnimatorCom->Change_State(L"P1_Idle");
+        m_pAnimatorCom->Change_State(L"P2_Idle", true);
     }
 }
 
@@ -1886,7 +2028,7 @@ void CAskard::Play_Corner_Laser_ADV(_float fTimeDelta)
 
 #pragma endregion
 
-    _int iMaxFrame_Pattern = 500;      // 이 패턴은 몇프레임동안 플레이될 것인가
+    _int iMaxFrame_Pattern = 350;      // 이 패턴은 몇프레임동안 플레이될 것인가
 
 
     // 완전한 가장자리로 가서 레이저 공격 후 플레이어에게 돌아옴

@@ -1495,6 +1495,11 @@ HRESULT CLoader::Loading_For_Boss2_Level()
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_BOSS2), TEXT("Prototype_Component_Boss_Askard_Phase2_Wave"),
 		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Boss/Askard/Body/Phase2/Askard_Phase2_Wave_%02d.png"), 21))))
 		return E_FAIL;
+	// Hidden (1) / Custom
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_BOSS2), TEXT("Prototype_Component_Boss_Askard_Hidden"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Boss/Askard/Body/Phase2/Askard_Phase2_Hidden.png"), 1))))
+		return E_FAIL;
+
 
 	// Prototype_Component_Texture_Boss_Askard (BigRoot, Summon)
 	// Hall_Close (7)			/ Effect

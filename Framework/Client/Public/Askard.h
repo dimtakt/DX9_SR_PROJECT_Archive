@@ -94,6 +94,10 @@ private:
 	//CTexture*		m_pTextureCom_P2_Tentacle_Unlit			= { nullptr };
 	CTexture*		m_pTextureCom_P2_Wave					= { nullptr };
 
+	CTexture*		m_pTextureCom_Askard_Die				= { nullptr };
+	CTexture*		m_pTextureCom_Askard_Hidden				= { nullptr };
+
+
 	CTransform*		m_pTerrainTransformCom					= { nullptr };
 
 	CAnimator*		m_pAnimatorCom							= { nullptr };
@@ -118,6 +122,9 @@ private:
 
 	_bool			m_isAllStop						= false;
 	_bool			m_isFlippedX					= false;
+
+	_bool			m_bStart						= false;
+	_bool			m_isPhaseChanging				= false;
 
 	std::vector<_float3>	m_vecLaserMovePos		= {};
 
