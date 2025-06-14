@@ -2,7 +2,7 @@
 #include "Monster.h"
 #include "Client_Defines.h"
 #include "Field_Hp.h"
-
+#include "AttackFx.h"
 BEGIN(Client)
 
 class CMole_A final : public CMonster
@@ -23,7 +23,6 @@ public:
 private:
 	HRESULT Ready_Components(void* pArg);
 	HRESULT Ready_Object();
-
 public:
 	virtual void OnCollision(CGameObject* pGameObject) override;
 
@@ -36,8 +35,9 @@ private:
 
 	CAnimator*	m_pAnimatorCom				= { nullptr };
 
+	_int		AttackDaley					= {};
 	_bool		m_isFlippedX				= false;
-
+	CAttackFx*	m_pAttackFx					= { nullptr };
 public:
 	static CMole_A* Create(LPDIRECT3DDEVICE9 pGraphic_Device);
 	virtual CGameObject* Clone(void* pArg) override;

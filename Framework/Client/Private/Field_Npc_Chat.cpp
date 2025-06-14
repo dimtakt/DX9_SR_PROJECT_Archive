@@ -194,9 +194,7 @@ void CField_Npc_Chat::Late_Update(_float fTimeDelta)
 
 		if (m_bIsFinish)
 			m_vecChildren[0]->Late_Update(fTimeDelta);
-	}
-
-	if (m_bIsOn)
+	} else	if (m_bIsOn)
 	{
 		Target_Pos();
 		m_pGameInstance->Add_RenderGroup(RENDERGROUP::RG_UI_BLEND, this);
@@ -217,7 +215,7 @@ HRESULT CField_Npc_Chat::Render()
 
 		Render_Font();
 	}
-	if (m_bIsOn)
+	else if (m_bIsOn)
 	{
 		On_Chat_Font();
 	}

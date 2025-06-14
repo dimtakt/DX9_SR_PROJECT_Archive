@@ -113,7 +113,7 @@ void CStatus_Value::Update_Value()
 		m_iCulValue = 100;
 		break;
 	case 7:
-		m_iCulValue = 100;
+		m_iCulValue = (_int)CStat_Manager::GetInstance()->Get_CurStats()[ENUM_CLASS(STAT_INFO::REGENDASH)];
 		break;
 	}
 }

@@ -105,6 +105,22 @@ void CGameEffect::Priority_Update(_float fTimeDelta)
 				matOffset,          
 				false);
 		}
+		else if (m_strEffectTag == TEXT("Prototype_Component_Texture_Meteor"))
+		{
+			m_bDead = true;
+
+			_float4x4 matOffset{};
+			_float4x4 matTemp{};
+			D3DXMatrixIdentity(&matOffset);
+			m_pTransformCom->Scaling(3.5f, 2.f, 2.f);
+			matTemp = *m_pTransformCom->Get_WorldMatrix();
+
+			CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::PLAYER_SKILL,
+				L"Prototype_Component_Texture_Effect_Meteor",
+				*m_pTransformCom->Get_WorldMatrix(),
+				matOffset,
+				false);
+		}
 		else 
 		{
 			m_bDead = true;
@@ -390,7 +406,7 @@ void CGameEffect::OnCollision(CGameObject* pGameObject)
 					return;
 			}
 
-			if (!pMonster->Get_IsHit())
+			if (!pMonster->Get_IsHit() && pMonster->Get_Summoned())
 			{
 				m_pGameInstance->StopSound(ENUM_CLASS(CHANNELID::SOUND_PLAYER));
 				m_pGameInstance->PlaySoundW(L"hitSword02.wav", ENUM_CLASS(CHANNELID::SOUND_PLAYER), g_fEFFECTVolume - 0.6f);
