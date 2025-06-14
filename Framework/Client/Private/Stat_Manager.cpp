@@ -1,6 +1,9 @@
 #include "Stat_Manager.h"
 #include "Stat_Manager.h"
 #include "GameInstance.h"
+#include "FrozenHammer.h"
+#include "Planet.h"
+#include "ProjSword.h"
 
 IMPLEMENT_SINGLETON(CStat_Manager)
 
@@ -191,6 +194,27 @@ const _bool CStat_Manager::Get_HasItem(_wstring szEffectTag)
 
 void CStat_Manager::HasItem(_wstring szEffectTag, _bool bHasItme)
 {
+    if (szEffectTag == TEXT("Snow Hamer") && Get_HasItem(TEXT("Snow Hamer")) == false && bHasItme == true)
+    {
+        CFrozenHammer::FROZENHAMMERDESC frozenHammerDesc{};
+        frozenHammerDesc.pTargetTransform = dynamic_cast<CTransform*>(m_pGameInstance->Get_GameObject(m_pGameInstance->Get_CurrentLevel(), TEXT("Layer_Player"))->Find_Component(TEXT("Com_Transform")));
+
+        m_pGameInstance->Add_GameObject_ToLayer(m_pGameInstance->Get_CurrentLevel(), TEXT("Layer_Item"), ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_FrozenHammer"), &frozenHammerDesc);
+    }
+    else if (szEffectTag == TEXT("Yellow Planet") && Get_HasItem(TEXT("Yellow Planet")) == false && bHasItme == true)
+    {
+        CPlanet::PLANETDESC planetDesc{};
+        planetDesc.pTargetTransform = dynamic_cast<CTransform*>(m_pGameInstance->Get_GameObject(m_pGameInstance->Get_CurrentLevel(), TEXT("Layer_Player"))->Find_Component(TEXT("Com_Transform")));
+
+        m_pGameInstance->Add_GameObject_ToLayer(m_pGameInstance->Get_CurrentLevel(), TEXT("Layer_Item"), ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_Planet"), &planetDesc);
+    }
+    else if (szEffectTag == TEXT("Projection Sword") && Get_HasItem(TEXT("Projection Sword")) == false && bHasItme == true)
+    {
+        CProjSword::PROJSWORDDESC projSwordDesc{};
+        projSwordDesc.pTargetTransform = dynamic_cast<CTransform*>(m_pGameInstance->Get_GameObject(m_pGameInstance->Get_CurrentLevel(), TEXT("Layer_Player"))->Find_Component(TEXT("Com_Transform")));
+
+        m_pGameInstance->Add_GameObject_ToLayer(m_pGameInstance->Get_CurrentLevel(), TEXT("Layer_Item"), ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_ProjSword"), &projSwordDesc);
+    }
     m_mapHasItem.find(szEffectTag)->second = bHasItme;
 }
 
