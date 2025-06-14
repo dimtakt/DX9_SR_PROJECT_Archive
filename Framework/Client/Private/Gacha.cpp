@@ -28,7 +28,6 @@ HRESULT CGacha::Initialize_Prototype(LEVEL eLevel)
 HRESULT CGacha::Initialize(void* pArg)
 {
 	m_eGacha_Type = GACHA_TYPE::ALL;
-	CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::LEVELUPPOINT, 100);
 	m_fSizeX = g_iWinSizeX;
 	m_fSizeY = g_iWinSizeY;
 	m_fX = m_fSizeX * 0.5f;
