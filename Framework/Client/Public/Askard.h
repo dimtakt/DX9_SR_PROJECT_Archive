@@ -5,7 +5,8 @@
 #include "BossHp_Askard.h"
 
 #include "Askard_Tentacle.h"
-#include "Askard_Eye.h"
+#include "Askard_Dark_Tentacle.h"
+//#include "Askard_Eye.h"
 
 
 BEGIN(Client)
@@ -60,7 +61,8 @@ private:
 	HRESULT Ready_Object();
 
 	void Summon_Tentacle(_float3 vPosition, CAskard_Tentacle::TYPE_TENTACLE eType);
-	void Summon_FollowingEye(_float3 vPosition);
+	void Summon_Dark_Tentacle(_float3 vPosition, CAskard_Dark_Tentacle::DARKTENTACLE_DIR eDir);
+	//void Summon_FollowingEye(_float3 vPosition);
 
 public:
 	virtual void OnCollision(CGameObject* pGameObject) override;
@@ -126,6 +128,7 @@ private:
 	void			Play_Corner_Laser(_float fTimeDelta);
 	//void			Play_Following_Eyes(_float fTimeDelta);
 	void			Play_Spark(_float fTimeDelta);
+	void			Play_Dark_Tentacle(_float fTimeDelta);
 
 public:
 	static CAskard* Create(LPDIRECT3DDEVICE9 pGraphic_Device);

@@ -107,8 +107,17 @@ void CAskard::Update(_float fTimeDelta)
         //m_ePattern = PATTERN_ASKARD::PT_SPAWN_CROSS;
         //m_ePattern = PATTERN_ASKARD::PT_SPAWN_LINE;
         //m_ePattern = PATTERN_ASKARD::PT_CORNER_LASER;
-        m_ePattern = PATTERN_ASKARD::PT_SPARK;
+        //m_ePattern = PATTERN_ASKARD::PT_SPARK;
+        m_ePattern = PATTERN_ASKARD::PT_DARK_TENTACLE;
+        
 
+        // 임시 테스트용 
+        _uint iCurLevel = m_pGameInstance->Get_CurrentLevel();
+        CTransform* pTargetTransform = dynamic_cast<CTransform*>(m_pGameInstance->GetInstance()->Get_Component(iCurLevel, TEXT("Layer_Player"), TEXT("Com_Transform")));
+        _float3 vTargetPos = pTargetTransform->Get_State(STATE::POSITION);
+
+        //Summon_Dark_Tentacle(vTargetPos, CAskard_Dark_Tentacle::DARKTENTACLE_DIR::DIR_TO_XNEG);
+        //Summon_Dark_Tentacle(vTargetPos, CAskard_Dark_Tentacle::DARKTENTACLE_DIR::DIR_TO_ZNEG);
     }
     break;
 
@@ -129,12 +138,8 @@ void CAskard::Update(_float fTimeDelta)
         case Client::CEvent_ClashPattern::CLASH_RESULT::CLASH_PLAYING:
             return;
             break;
-        case Client::CEvent_ClashPattern::CLASH_RESULT::CLASH_CLEAR:
-        case Client::CEvent_ClashPattern::CLASH_RESULT::CLASH_FAIL:
-        case Client::CEvent_ClashPattern::CLASH_RESULT::CLASH_NONPLAYING:
-            m_isAllStop = false;
-            break;
         default:
+            m_isAllStop = false;
             break;
         }
     }
@@ -183,7 +188,7 @@ void CAskard::Update(_float fTimeDelta)
 
         /* ***** Phase 2 ***** */
     case Client::CAskard::PATTERN_ASKARD::PT_DARK_TENTACLE:
-        //Play_Dark_Tentacle(fTimeDelta);
+        Play_Dark_Tentacle(fTimeDelta);
         break;
     case Client::CAskard::PATTERN_ASKARD::PT_SPAWN_WIDTH_ADV:
         //Play_Spawn_Width_ADV(fTimeDelta);
@@ -455,16 +460,29 @@ void CAskard::Summon_Tentacle(_float3 vPosition, CAskard_Tentacle::TYPE_TENTACLE
         ENUM_CLASS(LEVEL::LEVEL_BOSS2), L"Prototype_GameObject_Boss_Askard_Tentacle", &pDesc);
 }
 
-void CAskard::Summon_FollowingEye(_float3 vPosition)
+void CAskard::Summon_Dark_Tentacle(_float3 vPosition, CAskard_Dark_Tentacle::DARKTENTACLE_DIR eDir)
 {
-    CAskard_Eye::EYE_DESC pDesc = {};
+    CAskard_Dark_Tentacle::DARKTENTACLE_DESC pDesc = {};
     pDesc.vPosition = vPosition;
+    pDesc.eDir = eDir;
 
     pDesc.pTerrainBox = CRoom_Manager::GetInstance()->Get_CurrentRoom()->Get_TerrainBox();
 
     m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_STATIC), L"Layer_Effect",
-        ENUM_CLASS(LEVEL::LEVEL_BOSS2), L"Prototype_GameObject_Boss_Askard_Eye", &pDesc);
+        ENUM_CLASS(LEVEL::LEVEL_BOSS2), L"Prototype_GameObject_Boss_Askard_Dark_Tentacle", &pDesc);
 }
+
+
+//void CAskard::Summon_FollowingEye(_float3 vPosition)
+//{
+//    CAskard_Eye::EYE_DESC pDesc = {};
+//    pDesc.vPosition = vPosition;
+//
+//    pDesc.pTerrainBox = CRoom_Manager::GetInstance()->Get_CurrentRoom()->Get_TerrainBox();
+//
+//    m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_STATIC), L"Layer_Effect",
+//        ENUM_CLASS(LEVEL::LEVEL_BOSS2), L"Prototype_GameObject_Boss_Askard_Eye", &pDesc);
+//}
 
 void CAskard::Adjust_Scale()    // 이미지 리소스를 수정하지 못한 상태에서, 크기를 맞추기 위한 임시 변환 용도. 삭제해도 괜찮습니다.
 {
@@ -1528,6 +1546,181 @@ void CAskard::Play_Spark(_float fTimeDelta)
     {
         m_pAnimatorCom->Change_State(L"P1_Idle");
     }
+
+    m_iElapsedFrame_Pattern++;
+
+    if (m_iElapsedFrame_Pattern >= iMaxFrame_Pattern)
+    {
+        m_iElapsedFrame_Pattern = 0;
+        m_ePattern = PATTERN_ASKARD::PT_IDLE;
+        m_pAnimatorCom->Change_State(L"P1_Idle");
+    }
+}
+
+void CAskard::Play_Dark_Tentacle(_float fTimeDelta)
+{
+
+    // 아래에서 사용할 변수들
+#pragma region Variables Setting
+
+    _uint iCurLevel = CGameInstance::GetInstance()->Get_CurrentLevel();
+
+    CTransform* pTargetTransform = dynamic_cast<CTransform*>(m_pGameInstance->GetInstance()->Get_Component(iCurLevel, TEXT("Layer_Player"), TEXT("Com_Transform")));
+
+    const _float3 vMonsterPos = m_pTransformCom->Get_State(STATE::POSITION);
+    _float3 vTargetPos = pTargetTransform->Get_State(STATE::POSITION);
+
+    _float3 vDiff = -vMonsterPos + vTargetPos;
+    _float fDistance = D3DXVec3Length(&vDiff);
+
+
+    // ********* matMonster 구하기
+    _float4x4 matMonsterWorld = *m_pTransformCom->Get_WorldMatrix();
+
+    _wstring strCurStateTag = m_pAnimatorCom->Get_CurStateTag();
+
+
+    _float3 vTerrainPos = m_pTerrainTransformCom->Get_State(STATE::POSITION);
+    _float3 vTerrainScale = m_pTerrainTransformCom->Get_Scaled();
+
+#pragma endregion
+
+    _int iMaxFrame_Pattern = 1300;   // 패턴 지속 시간이 꽤 김
+
+    // 최초 80프레임 간격에서 최종 24프레임 간격까지 줄어듬
+    // 14회 공격. 원작기준
+    // 1회 당 2~3프레임씩 줄이면 될 듯
+
+    // 아래는 15회, 4~5프레임씩 줄임
+
+    switch (m_iElapsedFrame_Pattern)
+    {
+    case 180:
+    case 260:
+    case 336:
+    case 408:
+    case 476:
+    case 540:
+    case 600:
+    case 656:
+    case 708:
+    case 756:
+    case 799:
+    case 837:
+    case 870:
+    case 898:
+    case 921:
+    {
+        // 방향 랜덤으로 정함
+        _uint iDir = m_pGameInstance->Compute_Random(0, 4);
+        CAskard_Dark_Tentacle::DARKTENTACLE_DIR eDir = static_cast<CAskard_Dark_Tentacle::DARKTENTACLE_DIR>(iDir);
+        //
+        // 촉수 소환
+        Summon_Dark_Tentacle(vTargetPos, eDir);
+    }
+        break;
+    case 1040:
+        // 촉수 마무리 패턴 (위치고정)
+    {
+        _int iLanes = 7;
+
+        for (int i = 0; i < iLanes; i++)
+        {
+            // 3개일 때는 1/7, 3/7, 5/7
+            // 5개일 때는 1/11, 3/11, 5/11, 7/11, 9/11
+            // n개일 때는 1/(2n+1), ... , (2n-1)/(2n+1)
+
+            _float fLaneStart = vTerrainPos.z - vTerrainScale.z / 2;
+            _float fLaneSpace = vTerrainScale.z / (iLanes * 2 + 1);
+
+            _float fPosZ = fLaneStart + fLaneSpace * (2 * (i + 1) - 1);
+
+            _float3 vResultPos = { vTargetPos.x, vTargetPos.y, fPosZ };
+
+            if (i != iLanes / 2)
+                Summon_Dark_Tentacle(vResultPos, CAskard_Dark_Tentacle::DARKTENTACLE_DIR::DIR_TO_XPOS);
+        }
+    }
+        break;
+    case 1110:
+    {
+        // 육각총알 발사 (위치고정)
+        _int iLanes = 7;
+
+        for (int i = iLanes / 2; i < iLanes / 2 + 1; i++)
+        {
+            _float fLaneStart = vTerrainPos.z - vTerrainScale.z / 2;
+            _float fLaneSpace = vTerrainScale.z / (iLanes * 2 + 1);
+
+            _float fPosZ = fLaneStart + fLaneSpace * (2 * (i + 1) - 1);
+            _float fPosX = vTerrainPos.x - vTerrainScale.x / 2;
+
+            _float3 vResultPos = { fPosX, vTargetPos.y, fPosZ };
+
+            _float4x4 matBulletFirst = {};
+            D3DXMatrixTranslation(&matBulletFirst, vResultPos.x, vResultPos.y, vResultPos.z);
+
+            // **** 이펙트 조절용 설정
+#pragma region Effect Setting
+
+            // 이펙트용
+            // 1. 원점으로 이동
+            _float4x4 matTransToOrigin = {};
+            D3DXMatrixIdentity(&matTransToOrigin);
+            D3DXMatrixTranslation(&matTransToOrigin, -vResultPos.x, -vResultPos.y, -vResultPos.z);
+
+            // 2. 크기
+            _float4x4 matScale = {};
+            D3DXMatrixIdentity(&matScale);
+            D3DXMatrixScaling(&matScale, -1.f, 3.f, 3.f);
+
+            // 3. 자전
+            _float4x4 matRotateChild = {};
+            D3DXMatrixIdentity(&matRotateChild);
+            D3DXMatrixRotationX(&matRotateChild, D3DXToRadian(90)); // 안되면 -90도도 해보기
+
+            _float4x4 matRotateChild2 = {};
+            D3DXMatrixIdentity(&matRotateChild2);
+            D3DXMatrixRotationY(&matRotateChild2, D3DXToRadian(90)); // 안되면 -90도도 해보기
+
+            // 4. 원래 위치(몬스터)로 재이동
+            _float4x4 matTransReturn = {};
+            D3DXMatrixIdentity(&matTransReturn);
+            D3DXMatrixTranslation(&matTransReturn, vResultPos.x, vResultPos.y, vResultPos.z);
+
+            // 5. 거기에 추가 이동 (플레이어 방향)
+            _float4x4 matTransAddition = {};
+            D3DXMatrixIdentity(&matTransAddition);
+            //_float3 vDiff = -vPlayerPos + vMonsterPos;       // 플레이어 위치에서 마우스 교차좌표로 가는 벡터
+            D3DXVec3Normalize(&vDiff, &vDiff);              // 를 단위벡터화, 안되면 vDiff 순서 바꿔보기
+            _float fDistanceOffset = 1.0f;                   // ** ksta : 중점으로부터 떨어져 있을 거리 **
+            vDiff *= fDistanceOffset;
+            //D3DXMatrixTranslation(&matTransAddition, vDiff.x, 0, vDiff.z);
+
+            matMonsterWorld = matTransToOrigin * matScale * matRotateChild * matRotateChild2 * matTransReturn * matTransAddition;
+
+#pragma endregion
+
+            CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::MONSTER_EFFECT, L"Prototype_Component_Boss_Askard_TentacleBullet",
+                matBulletFirst, matMonsterWorld, _float3{1, 0, 0}, 20.f, 1.5f, 0.f);
+            //Summon_Dark_Tentacle(vResultPos, CAskard_Dark_Tentacle::DARKTENTACoLE_DIR::DIR_TO_XPOS);
+            
+        }
+    }
+        break;
+    }
+
+
+
+
+
+
+
+
+    //if (strCurStateTag == L"P1_Wave")
+    //{
+    //    m_pAnimatorCom->Change_State(L"P1_Idle");
+    //}
 
     m_iElapsedFrame_Pattern++;
 
