@@ -5,7 +5,8 @@
 //#include "Askard_Tentacle.h"
 //#include "Askard_Eye.h"
 #include "Event_ClashPattern.h"
-
+#include "Camera_Follow.h"
+#include "Ending.h"
 
 CAskard::CAskard(LPDIRECT3DDEVICE9 pGraphic_Device)
     : CMonster{ pGraphic_Device }
@@ -48,12 +49,12 @@ HRESULT CAskard::Initialize(void* pArg)
     m_isSummoned = true;
     Ready_Object();
 
-    m_iMaxHp = 200;
-    m_iCulHp = 200;
+    m_iMaxHp = 9000;
+    m_iCulHp = 9000;
 
     m_eMonsterType = MONSTER_TYPE::ASKARD; // ksta
     m_ePattern = PATTERN_ASKARD::PT_IDLE;
-
+    Ready_Chat();
     return S_OK;
 }
 
@@ -108,19 +109,48 @@ void CAskard::Priority_Update(_float fTimeDelta)
 
     if (m_iPhase >= 2)   // 2페이즈에서 체력 다 닳을 시 비로소 사망
     {
+        if (!m_bFinish)
+            m_bFinish = true;
         m_iCulHp = 0;
-        m_bDead = true;
+        
+        
+        if (m_iChatNextPage + 1 != m_pChat_End->Get_ChatIndex() + 1 && m_pGameInstance->IsKeyDown('F'))
+        {
+            m_bIsChat = true;
+            m_pChat_End->Cinematic_Chat(0, false);
+        }
+
+        if (!m_bIsChat && m_pGameInstance->IsKeyDown('F'))
+        {
+            m_bDead = true;
+            static_cast<CEnding*>(m_pGameInstance->Find_UIObj(ENUM_CLASS(LEVEL::LEVEL_BOSS2), TEXT("UI_Ending")))->Start_Ending();
+        }
+
+        if (m_iChatNextPage + 1 <= m_pChat_End->Get_ChatIndex() + 1)
+        {
+            m_bIsChat = false;
+        }
     }
 }
 
 void CAskard::Update(_float fTimeDelta)
 {
+    if (m_bFinish)
+        return;
     // 최초 진입시.
     if (!m_bStart)
     {
         // 아래 if 조건문에 시작 조건 삽입
-        if (m_pGameInstance->IsKeyDown('P'))
+        if (m_pGameInstance->IsKeyDown('F') && m_bIsChat)
         {
+            m_pChat_Start->Cinematic_Chat(0, false);
+            
+            ++m_iChatCount;   
+        }
+        
+        if (m_iChatNextPage + 1  <= m_pChat_Start->Get_ChatIndex() + 1)
+        {
+            m_bIsChat = false;
             m_bStart = true;
             m_pAnimatorCom->Change_State(L"P1_Idle");
         }
@@ -747,6 +777,8 @@ void CAskard::Free()
 
     Safe_Release(m_pAnimatorCom);
 
+    m_pChat_Start = nullptr;
+    m_pChat_End = nullptr;
     __super::Free();
 }
 
@@ -828,6 +860,8 @@ void CAskard::Play_Spawn_Width(_float fTimeDelta)
             m_iElapsedFrame_Pattern == 120 ||
             m_iElapsedFrame_Pattern == 200)
     {
+        m_pGameInstance->StopSound(ENUM_CLASS(CHANNELID::SOUND_MONSTER_LONG_EFFECT3));
+        m_pGameInstance->PlaySoundW(L"askardTentacle.wav", ENUM_CLASS(CHANNELID::SOUND_MONSTER_LONG_EFFECT3), g_fEFFECTVolume - 0.5f);
         _bool isOddLine = (m_iElapsedFrame_Pattern == 120) ? true : false;
         _float fZRandOffset = 1.5f;
 
@@ -986,10 +1020,16 @@ void CAskard::Play_Spawn_Cross(_float fTimeDelta)
     else if (IS_BETWEEN(iCalcedCycleFrame, 30, 40))
     {
         if (iCalcedCycleFrame == 30)
+        {
+            m_pGameInstance->StopSound(ENUM_CLASS(CHANNELID::SOUND_MONSTER));
+            m_pGameInstance->PlaySound(L"Askard_Move.wav", ENUM_CLASS(CHANNELID::SOUND_MONSTER), g_fWALKVolume - 0.6f);
             m_vTargettedPos = vTargetPos;
+        }
+            
         _float3 vDiff = vTargetPos - vMonsterPos;
         _float fDiff = D3DXVec3Length(&vDiff);
         m_pTransformCom->Move_To(m_vTargettedPos, fTimeDelta * fDiff * fMoveSpeed, fLimitRange);
+
     }
     else if (IS_BETWEEN(iCalcedCycleFrame, 40, 55))
     {
@@ -1006,6 +1046,10 @@ void CAskard::Play_Spawn_Cross(_float fTimeDelta)
         vToTargetDir.y = 0;
         D3DXVec3Normalize(&vToTargetDir, &vToTargetDir);
 
+        if (iCalcedCycleFrame == 40)
+            m_pGameInstance->PlayLoopSound(L"askardTentacle.wav", ENUM_CLASS(CHANNELID::SOUND_MONSTER_LONG_EFFECT3), g_fEFFECTVolume - 0.5f);
+        else if (iCalcedCycleFrame == 55)
+            m_pGameInstance->StopSound(ENUM_CLASS(CHANNELID::SOUND_MONSTER_LONG_EFFECT3));
         for (int i = 0; i < 4; i++)
         {
             _int iRandType = static_cast<_int>(m_pGameInstance->Compute_Random(0.f, 3.f));
@@ -1160,6 +1204,8 @@ void CAskard::Play_Spawn_Line(_float fTimeDelta)
                 iRandPosIndex = (iRandPosIndex + 2) % 4;
 
             m_vMovePos = vMovePosList[iRandPosIndex]; // 최종 정해진 이동 위치
+            m_pGameInstance->StopSound(ENUM_CLASS(CHANNELID::SOUND_MONSTER));
+            m_pGameInstance->PlaySound(L"Askard_Move.wav", ENUM_CLASS(CHANNELID::SOUND_MONSTER), g_fWALKVolume - 0.6f);
         }
 
         _float3 vDiff = vTargetPos - vMonsterPos;
@@ -1198,6 +1244,14 @@ void CAskard::Play_Spawn_Line(_float fTimeDelta)
         for (int i = 0; i < iFrame + 1; i++)
             D3DXVec3TransformNormal(&vToTargetDir, &vToTargetDir, &matRotY1);
 
+
+        if (iCalcedCycleFrame == 40 || iCalcedCycleFrame == 90 || iCalcedCycleFrame == 140) {
+            m_pGameInstance->StopSound(ENUM_CLASS(CHANNELID::SOUND_MONSTER_LONG_EFFECT3));
+            m_pGameInstance->PlaySound(L"askardTentacle.wav", ENUM_CLASS(CHANNELID::SOUND_MONSTER_LONG_EFFECT3), g_fEFFECTVolume - 0.5f);
+        }
+            
+            
+
         for (int i = 0; i < 2; i++)
         {
             _int iRandType = static_cast<_int>(m_pGameInstance->Compute_Random(0.f, 3.f));
@@ -1217,7 +1271,6 @@ void CAskard::Play_Spawn_Line(_float fTimeDelta)
 
             for (int i = 0; i < 8 + 1; i++)
                 D3DXVec3TransformNormal(&vToTargetDir, &vToTargetDir, &matRotYM1);
-
             // 소환할 좌표가 터레인 외부면 소환하지 않음
             if ((IS_BETWEEN(vSummonPos.x, vTerrainPos.x - vTerrainScale.x / 2, vTerrainPos.x + vTerrainScale.x / 2)) &&
                 (IS_BETWEEN(vSummonPos.z, vTerrainPos.z - vTerrainScale.z / 2, vTerrainPos.z + vTerrainScale.z / 2)))
@@ -1364,6 +1417,8 @@ void CAskard::Play_Corner_Laser(_float fTimeDelta)
                 iRandPosIndex = (iRandPosIndex + 2) % 4;
 
             m_vMovePos = vMovePosList[iRandPosIndex]; // 최종 정해진 이동 위치
+            m_pGameInstance->StopSound(ENUM_CLASS(CHANNELID::SOUND_MONSTER));
+            m_pGameInstance->PlaySound(L"Askard_Move.wav", ENUM_CLASS(CHANNELID::SOUND_MONSTER), g_fWALKVolume - 0.6f);
         }
 
         _float3 vDiff = vTargetPos - vMonsterPos;
@@ -1513,6 +1568,8 @@ void CAskard::Play_Corner_Laser(_float fTimeDelta)
 
         // m_vLockedOnPos 를 기준으로 레이저 시작점 지정 (LaserGhost 처럼)
         // 300번째 줄 확인하여 돌아갈 방향 지정
+        m_pGameInstance->StopSound(ENUM_CLASS(CHANNELID::SOUND_MONSTER_LONG_EFFECT));
+        m_pGameInstance->PlaySoundW(L"askardWaveBegin.wav", ENUM_CLASS(CHANNELID::SOUND_MONSTER_LONG_EFFECT), g_fEFFECTVolume - 0.6f);
         CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::MONSTER_EFFECT, L"Prototype_Component_Boss_Askard_Laser",
             *m_pTransformCom->Get_WorldMatrix(), matMonsterWorld, { 0, 0, 0 }, 0.f, 0.f, D3DXToRadian(fLaserRotateDeg));
 #pragma region Setting Reset
@@ -1533,6 +1590,11 @@ void CAskard::Play_Corner_Laser(_float fTimeDelta)
         _float3 vDiff = vTargetPos - vMonsterPos;
         _float fDiff = D3DXVec3Length(&vDiff);
         m_pTransformCom->Move_To(m_vTargettedPos, fTimeDelta* fDiff* fMoveSpeed, 2.f);
+        if (m_iElapsedFrame_Pattern == 178)
+        {
+            m_pGameInstance->StopSound(ENUM_CLASS(CHANNELID::SOUND_MONSTER));
+            m_pGameInstance->PlaySound(L"Askard_Move.wav", ENUM_CLASS(CHANNELID::SOUND_MONSTER), g_fWALKVolume - 0.6f);
+        }
     }
 
 
@@ -1653,6 +1715,11 @@ void CAskard::Play_Spark(_float fTimeDelta)
         _float3 vDiff = vTargetPos - vMonsterPos;
         _float fDiff = D3DXVec3Length(&vDiff);
         m_pTransformCom->Move_To(m_vTargettedPos, fTimeDelta * fDiff * fMoveSpeed, 2.f);
+        if (m_iElapsedFrame_Pattern == 10)
+        {
+            m_pGameInstance->StopSound(ENUM_CLASS(CHANNELID::SOUND_MONSTER));
+            m_pGameInstance->PlaySound(L"Askard_Move.wav", ENUM_CLASS(CHANNELID::SOUND_MONSTER), g_fWALKVolume - 0.6f);
+        }
     }
     else if (IS_BETWEEN(m_iElapsedFrame_Pattern, 20, 80))
     {
@@ -1679,6 +1746,9 @@ void CAskard::Play_Spark(_float fTimeDelta)
     {
 
         m_pTerrainBox->SetUp_OnTerrainBox(m_pTransformCom, _float3(0.00f, 1.33f, 0.00f));
+
+        m_pGameInstance->StopSound(ENUM_CLASS(CHANNELID::SOUND_MONSTER));
+        m_pGameInstance->PlaySound(L"askardWaveBegin.wav", ENUM_CLASS(CHANNELID::SOUND_MONSTER), g_fWALKVolume - 0.6f);
 
         CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::MONSTER_EFFECT, L"Prototype_Component_Boss_Askard_Phase1_Wave_Burst",
             *m_pTransformCom->Get_WorldMatrix());
@@ -1759,6 +1829,8 @@ void CAskard::Play_Spark(_float fTimeDelta)
 
                 matMonsterWorld = matTransToOrigin * matScale * matRotateChild * matRotateChildtoPlayer * matTransReturn * matTransOffset * matTransAddition;
 #pragma endregion
+                m_pGameInstance->StopSound(ENUM_CLASS(CHANNELID::SOUND_MONSTER_LONG_EFFECT));
+                m_pGameInstance->PlaySound(L"Askark_Line.wav", ENUM_CLASS(CHANNELID::SOUND_MONSTER_LONG_EFFECT), g_fWALKVolume - 0.6f);
                 CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::MONSTER_EFFECT, L"Prototype_Component_Boss_Askard_ShockWaveFX",
                     *m_pTransformCom->Get_WorldMatrix(), matMonsterWorld, vThrownDir, fThrownPower, fThrownAtkLifeTime, 0.f);
 #pragma region Reset Effect
@@ -1847,6 +1919,7 @@ void CAskard::Play_Dark_Tentacle(_float fTimeDelta)
         m_pAnimatorCom->Change_State(L"P2_Tentacle"); // Hidden 말고 점점 사라지는 이펙트 있었는데
         CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::NORMAL_EFFECT, L"Prototype_Component_Boss_Askard_Phase2_Tentacle_Unlit",
             *m_pTransformCom->Get_WorldMatrix(), matTranslateUnlit);
+        dynamic_cast<CCamera_Follow*>(m_pGameInstance->Get_GameObject(m_pGameInstance->Get_CurrentLevel(), TEXT("Layer_Camera")))->Trigger_CinematicLookFromTop(18.f);
     }
         break;
     case 180:
@@ -1869,10 +1942,31 @@ void CAskard::Play_Dark_Tentacle(_float fTimeDelta)
         _uint iDir = m_pGameInstance->Compute_Random(0, 4);
         CAskard_Dark_Tentacle::DARKTENTACLE_DIR eDir = static_cast<CAskard_Dark_Tentacle::DARKTENTACLE_DIR>(iDir);
         //
-        // 촉수 소환
         Summon_Dark_Tentacle(vTargetPos, eDir);
     }
         break;
+
+    case 195:
+    case 275:
+    case 351:
+    case 423:
+    case 491:
+    case 555:
+    case 615:
+    case 671:
+    case 723:
+    case 771:
+    case 814:
+    case 852:
+    case 885:
+    case 913:
+    case 936:
+    {
+        // 촉수 소환
+        m_pGameInstance->StopSound(ENUM_CLASS(CHANNELID::SOUND_MONSTER_EFFECT2));
+        m_pGameInstance->PlaySoundW(L"askardTentacle.wav", ENUM_CLASS(CHANNELID::SOUND_MONSTER_EFFECT2), g_fEFFECTVolume - 0.6f);
+    }
+    break;
     case 1040:
         // 촉수 마무리 패턴 (위치고정)
     {
@@ -1894,7 +1988,13 @@ void CAskard::Play_Dark_Tentacle(_float fTimeDelta)
             if (i != iLanes / 2)
                 Summon_Dark_Tentacle(vResultPos, CAskard_Dark_Tentacle::DARKTENTACLE_DIR::DIR_TO_XPOS);
         }
+        m_pGameInstance->StopSound(ENUM_CLASS(CHANNELID::SOUND_MONSTER_EFFECT2));
+        m_pGameInstance->PlaySoundW(L"askardTentacle.wav", ENUM_CLASS(CHANNELID::SOUND_MONSTER_EFFECT2), g_fEFFECTVolume - 0.6f);
     }
+        break;
+    case 1055:
+        m_pGameInstance->StopSound(ENUM_CLASS(CHANNELID::SOUND_MONSTER_EFFECT2));
+        m_pGameInstance->PlaySoundW(L"askardTentacle.wav", ENUM_CLASS(CHANNELID::SOUND_MONSTER_EFFECT2), g_fEFFECTVolume - 0.6f);
         break;
     case 1110:
     {
@@ -2119,6 +2219,8 @@ void CAskard::Play_Corner_Laser_ADV(_float fTimeDelta)
                     i != iNotMovePosIndex)
                 m_vecLaserMovePos.push_back(vMovePosList[i]);
             }
+            m_pGameInstance->StopSound(ENUM_CLASS(CHANNELID::SOUND_MONSTER));
+            m_pGameInstance->PlaySound(L"Askard_Move.wav", ENUM_CLASS(CHANNELID::SOUND_MONSTER), g_fWALKVolume - 0.6f);
         }
 
         _float3 vDiff = vTargetPos - vMonsterPos;
@@ -2483,7 +2585,6 @@ void CAskard::Play_Corner_Laser_ADV(_float fTimeDelta)
     else if (m_iElapsedFrame_Pattern == 114)
     {
 #pragma region Laser Setting Change
-
         // 사분면에 따라 + 랜덤값에 따라 최초 락온 지점이 다르게끔, 
         // fLaserRotateDeg 값을 이용 바깥쪽 스타트 - 안쪽으로 돌게끔 조건 부여
         _float fRotateSpeedDeg = 120.f;
@@ -2546,6 +2647,8 @@ void CAskard::Play_Corner_Laser_ADV(_float fTimeDelta)
 
         // m_vLockedOnPos 를 기준으로 레이저 시작점 지정 (LaserGhost 처럼)
         // 300번째 줄 확인하여 돌아갈 방향 지정
+        m_pGameInstance->StopSound(ENUM_CLASS(CHANNELID::SOUND_MONSTER_LONG_EFFECT));
+        m_pGameInstance->PlaySoundW(L"askardWaveBegin.wav", ENUM_CLASS(CHANNELID::SOUND_MONSTER_LONG_EFFECT), g_fEFFECTVolume - 0.6f);
         CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::MONSTER_EFFECT, L"Prototype_Component_Boss_Askard_Laser",
             *m_pTransformCom->Get_WorldMatrix(), matMonsterWorld, { 0, 0, 0 }, 0.f, 0.f, D3DXToRadian(fLaserRotateDeg));
 #pragma region Setting Reset
@@ -2731,7 +2834,8 @@ void CAskard::Play_Corner_Laser_ADV(_float fTimeDelta)
         //D3DXMatrixTranslation(&matFakeAskardTranslate, vFakeAskardPos.x, vFakeAskardPos.y, vFakeAskardPos.z);
 
         //matFakeAskard = matFakeAskard * matFakeAskardScale * matFakeAskardTranslate;
-
+        m_pGameInstance->StopSound(ENUM_CLASS(CHANNELID::SOUND_MONSTER_LONG_EFFECT));
+        m_pGameInstance->PlaySoundW(L"askardWaveBegin.wav", ENUM_CLASS(CHANNELID::SOUND_MONSTER_LONG_EFFECT), g_fEFFECTVolume - 0.6f);
         CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::MONSTER_EFFECT, L"Prototype_Component_Boss_Askard_Laser",
             matFakeAskard, matMonsterWorld, {0, 0, 0}, 0.f, 0.f, D3DXToRadian(fLaserRotateDeg));
 
@@ -2912,7 +3016,8 @@ void CAskard::Play_Corner_Laser_ADV(_float fTimeDelta)
         //D3DXMatrixTranslation(&matFakeAskardTranslate, vFakeAskardPos.x, vFakeAskardPos.y, vFakeAskardPos.z);
 
         //matFakeAskard = matFakeAskard * matFakeAskardScale * matFakeAskardTranslate;
-
+        m_pGameInstance->StopSound(ENUM_CLASS(CHANNELID::SOUND_MONSTER_LONG_EFFECT));
+        m_pGameInstance->PlaySoundW(L"askardWaveBegin.wav", ENUM_CLASS(CHANNELID::SOUND_MONSTER_LONG_EFFECT), g_fEFFECTVolume - 0.6f);
         CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::MONSTER_EFFECT, L"Prototype_Component_Boss_Askard_Laser",
             matFakeAskard, matMonsterWorld, { 0, 0, 0 }, 0.f, 0.f, D3DXToRadian(fLaserRotateDeg));
 
@@ -3002,6 +3107,8 @@ void CAskard::Play_Corner_Laser_ADV(_float fTimeDelta)
     {
         _float3 vDiff = vTargetPos - vMonsterPos;
         _float fDiff = D3DXVec3Length(&vDiff);
+        m_pGameInstance->StopSound(ENUM_CLASS(CHANNELID::SOUND_MONSTER));
+        m_pGameInstance->PlaySound(L"Askard_Move.wav", ENUM_CLASS(CHANNELID::SOUND_MONSTER), g_fWALKVolume - 0.6f);
         m_pTransformCom->Move_To(m_vTargettedPos, fTimeDelta * fDiff * fMoveSpeed, 2.f);
     }
 
@@ -3027,4 +3134,40 @@ void CAskard::Play_Corner_Laser_ADV(_float fTimeDelta)
         m_ePattern = PATTERN_ASKARD::PT_IDLE;
         m_pAnimatorCom->Change_State(L"P2_Idle");
     }
+}
+
+HRESULT CAskard::Ready_Chat()
+{
+    CField_Npc_Chat::FIELD_CHAT_DESC desc{};
+
+    desc.pTransform = m_pTransformCom;
+    desc.szChatTag = TEXT("Askard_Chat_Start");
+    desc.m_iLevel = ENUM_CLASS(LEVEL::LEVEL_BOSS2);
+    desc.fY = -100;
+
+    if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_BOSS2), TEXT("Layer_UI_Chat"), ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_Field_Npc_Chat"), &desc)))
+        return E_FAIL;
+
+    m_pChat_Start = static_cast<CField_Npc_Chat*>(m_pGameInstance->Find_UIObj(ENUM_CLASS(LEVEL::LEVEL_BOSS2), TEXT("Askard_Chat_Start")));
+
+    m_pChat_Start->Add_Chat(TEXT("모험가여."));
+    m_pChat_Start->Add_Chat(TEXT("얌전히 멸망을 기다려라"));
+    m_pChat_Start->Add_Chat(TEXT("...죽어라"));
+    m_iChatNextPage = 3;
+    m_iChatCount = 0;
+    m_bIsChat = true;
+
+    desc.fY = 50;
+
+    desc.szChatTag = TEXT("Askard_Chat_End");
+    if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_BOSS2), TEXT("Layer_UI_Chat"), ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_Field_Npc_Chat"), &desc)))
+        return E_FAIL;
+
+    m_pChat_End = static_cast<CField_Npc_Chat*>(m_pGameInstance->Find_UIObj(ENUM_CLASS(LEVEL::LEVEL_BOSS2), TEXT("Askard_Chat_End")));
+
+    m_pChat_End->Add_Chat(TEXT("난..."));
+    m_pChat_End->Add_Chat(TEXT("다시.. 돌아.."));
+    m_pChat_End->Add_Chat(TEXT("올거다.."));
+
+    return S_OK;
 }

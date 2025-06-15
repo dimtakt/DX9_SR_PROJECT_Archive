@@ -121,22 +121,22 @@ void CLoding_UI::Font_Render()
 
 		///DT_VCENTER | DT_SINGLELINE
 		m_vTexRect.left = 0;
-		m_vTexRect.top = 120 + g_iWinSizeY * 0.5;
+		m_vTexRect.top = 100 + g_iWinSizeY * 0.5;
 		m_vTexRect.right = g_iWinSizeX;
 		m_vTexRect.bottom = g_iWinSizeY;
-		m_pGameInstance->Render_Font(TEXT("UI_Font_40"), szText, m_vTexRect, D3DXCOLOR(1.f, 1.f, 1.f, 1.f), DT_CENTER | DT_TOP);
+		m_pGameInstance->Render_Font(TEXT("UI_Font_40"), szText, m_vTexRect, D3DXCOLOR(0.7f, 0.7f, 0.7f, 1.f), DT_CENTER | DT_TOP);
 
 		_stprintf_s(szText, TEXT("마을"));
-		m_vTexRect.top = 160 + g_iWinSizeY * 0.5;
+		m_vTexRect.top = 150 + g_iWinSizeY * 0.5;
 		m_pGameInstance->Render_Font(TEXT("UI_Font_50"), szText, m_vTexRect, D3DXCOLOR(1.f, 1.f, 1.f, 1.f), DT_CENTER | DT_TOP);
 
-		/*_stprintf_s(szText, TEXT("당신은 탑의 운명을 바꾸기 위해 마을을 떠나 탑 아래로 내려갑니다."));
+		_stprintf_s(szText, TEXT("집을 잃은 주민들이 살아가고 있습니다."));
 		m_vTexRect.top = 220 + g_iWinSizeY * 0.5;
 		m_pGameInstance->Render_Font(TEXT("UI_Font_30"), szText, m_vTexRect, D3DXCOLOR(1.f, 1.f, 1.f, 1.f), DT_CENTER | DT_TOP);
 
-		_stprintf_s(szText, TEXT("토끼마을 아래에는 두더지들이 무리를 지어 살고 있습니다."));
+		_stprintf_s(szText, TEXT("모든 주민이 당신을 바라봅니다..."));
 		m_vTexRect.top = 260 + g_iWinSizeY * 0.5;
-		m_pGameInstance->Render_Font(TEXT("UI_Font_30"), szText, m_vTexRect, D3DXCOLOR(1.f, 1.f, 1.f, 1.f), DT_CENTER | DT_TOP);*/
+		m_pGameInstance->Render_Font(TEXT("UI_Font_30"), szText, m_vTexRect, D3DXCOLOR(1.f, 1.f, 1.f, 1.f), DT_CENTER | DT_TOP);
 	}
 	else if (m_eLevel == LEVEL::LEVEL_STAGE1)
 	{
@@ -144,20 +144,20 @@ void CLoding_UI::Font_Render()
 
 		///DT_VCENTER | DT_SINGLELINE
 		m_vTexRect.left = 0;
-		m_vTexRect.top = 50 + g_iWinSizeY * 0.5;
+		m_vTexRect.top = 60 + g_iWinSizeY * 0.5;
 		m_vTexRect.right = g_iWinSizeX;
 		m_vTexRect.bottom = g_iWinSizeY;
 		m_pGameInstance->Render_Font(TEXT("UI_Font_40"), szText, m_vTexRect, D3DXCOLOR(1.f, 1.f, 1.f, 1.f), DT_CENTER | DT_TOP);
 
-		_stprintf_s(szText, TEXT("1강의장"));
-		m_vTexRect.top = 100 + g_iWinSizeY * 0.5;
+		_stprintf_s(szText, TEXT("검은 오솔길"));
+		m_vTexRect.top = 135 + g_iWinSizeY * 0.5;
 		m_pGameInstance->Render_Font(TEXT("UI_Font_50"), szText, m_vTexRect, D3DXCOLOR(0.f, 0.f, 1.f, 1.f), DT_CENTER | DT_TOP);
 
-		_stprintf_s(szText, TEXT("당신은 쥬신게임아카데미의 새로운 기수로 학원에 입학하였습니다."));
+		_stprintf_s(szText, TEXT("검은색 나무가 무성한 것 같다."));
 		m_vTexRect.top = 220 + g_iWinSizeY * 0.5;
 		m_pGameInstance->Render_Font(TEXT("UI_Font_30"), szText, m_vTexRect, D3DXCOLOR(1.f, 1.f, 1.f, 1.f), DT_CENTER | DT_TOP);
 
-		_stprintf_s(szText, TEXT("강의장에는 새로운 기수 친구들이 가득합니다."));
+		_stprintf_s(szText, TEXT("누군가의 시선이 느껴진다."));
 		m_vTexRect.top = 260 + g_iWinSizeY * 0.5;
 		m_pGameInstance->Render_Font(TEXT("UI_Font_30"), szText, m_vTexRect, D3DXCOLOR(1.f, 1.f, 1.f, 1.f), DT_CENTER | DT_TOP);
 	}
@@ -167,20 +167,20 @@ void CLoding_UI::Font_Render()
 
 		///DT_VCENTER | DT_SINGLELINE
 		m_vTexRect.left = 0;
-		m_vTexRect.top = 50 + g_iWinSizeY * 0.5;
+		m_vTexRect.top = 60 + g_iWinSizeY * 0.5;
 		m_vTexRect.right = g_iWinSizeX;
 		m_vTexRect.bottom = g_iWinSizeY;
 		m_pGameInstance->Render_Font(TEXT("UI_Font_40"), szText, m_vTexRect, D3DXCOLOR(1.f, 1.f, 1.f, 1.f), DT_CENTER | DT_TOP);
 
-		_stprintf_s(szText, TEXT("WINAPI"));
-		m_vTexRect.top = 100 + g_iWinSizeY * 0.5;
+		_stprintf_s(szText, TEXT("검은 숲"));
+		m_vTexRect.top = 135 + g_iWinSizeY * 0.5;
 		m_pGameInstance->Render_Font(TEXT("UI_Font_50"), szText, m_vTexRect, D3DXCOLOR(0.f, 1.f, 0.f, 1.f), DT_CENTER | DT_TOP);
 
-		_stprintf_s(szText, TEXT("당신은 어느새 3개월차 WINAPI 시연회 준비에 들어갑니다."));
+		_stprintf_s(szText, TEXT("누군가 지나간 흔적이 보인다."));
 		m_vTexRect.top = 220 + g_iWinSizeY * 0.5;
 		m_pGameInstance->Render_Font(TEXT("UI_Font_30"), szText, m_vTexRect, D3DXCOLOR(1.f, 1.f, 1.f, 1.f), DT_CENTER | DT_TOP);
 
-		_stprintf_s(szText, TEXT("친구들은 무슨 게임을 할까 행복한 고민을 합니다."));
+		_stprintf_s(szText, TEXT("앞에 발자국이 끊겨 있다..."));
 		m_vTexRect.top = 260 + g_iWinSizeY * 0.5;
 		m_pGameInstance->Render_Font(TEXT("UI_Font_30"), szText, m_vTexRect, D3DXCOLOR(1.f, 1.f, 1.f, 1.f), DT_CENTER | DT_TOP);
 	}
@@ -190,20 +190,20 @@ void CLoding_UI::Font_Render()
 
 		///DT_VCENTER | DT_SINGLELINE
 		m_vTexRect.left = 0;
-		m_vTexRect.top = 50 + g_iWinSizeY * 0.5;
+		m_vTexRect.top = 60 + g_iWinSizeY * 0.5;
 		m_vTexRect.right = g_iWinSizeX;
 		m_vTexRect.bottom = g_iWinSizeY;
 		m_pGameInstance->Render_Font(TEXT("UI_Font_40"), szText, m_vTexRect, D3DXCOLOR(1.f, 1.f, 1.f, 1.f), DT_CENTER | DT_TOP);
 
-		_stprintf_s(szText, TEXT("3강의장"));
-		m_vTexRect.top = 100 + g_iWinSizeY * 0.5;
+		_stprintf_s(szText, TEXT("폐허"));
+		m_vTexRect.top = 135 + g_iWinSizeY * 0.5;
 		m_pGameInstance->Render_Font(TEXT("UI_Font_50"), szText, m_vTexRect, D3DXCOLOR(0.f, 0.f, 1.f, 1.f), DT_CENTER | DT_TOP);
 
-		_stprintf_s(szText, TEXT("당신은 2D 과정을 마치고 3강의장으로 이동합니다."));
+		_stprintf_s(szText, TEXT("주위에 낡은 건물들이 보인다."));
 		m_vTexRect.top = 220 + g_iWinSizeY * 0.5;
 		m_pGameInstance->Render_Font(TEXT("UI_Font_30"), szText, m_vTexRect, D3DXCOLOR(1.f, 1.f, 1.f, 1.f), DT_CENTER | DT_TOP);
 
-		_stprintf_s(szText, TEXT("3D과정에 신기한 친구들이 가득합니다."));
+		_stprintf_s(szText, TEXT("아직 남은 사람들이 있을까?"));
 		m_vTexRect.top = 260 + g_iWinSizeY * 0.5;
 		m_pGameInstance->Render_Font(TEXT("UI_Font_30"), szText, m_vTexRect, D3DXCOLOR(1.f, 1.f, 1.f, 1.f), DT_CENTER | DT_TOP);
 	}
@@ -213,20 +213,20 @@ void CLoding_UI::Font_Render()
 
 		///DT_VCENTER | DT_SINGLELINE
 		m_vTexRect.left = 0;
-		m_vTexRect.top = 50 + g_iWinSizeY * 0.5;
+		m_vTexRect.top = 60 + g_iWinSizeY * 0.5;
 		m_vTexRect.right = g_iWinSizeX;
 		m_vTexRect.bottom = g_iWinSizeY;
 		m_pGameInstance->Render_Font(TEXT("UI_Font_40"), szText, m_vTexRect, D3DXCOLOR(1.f, 1.f, 1.f, 1.f), DT_CENTER | DT_TOP);
 
-		_stprintf_s(szText, TEXT("SR"));
-		m_vTexRect.top = 100 + g_iWinSizeY * 0.5;
+		_stprintf_s(szText, TEXT("폐허 내부"));
+		m_vTexRect.top = 135 + g_iWinSizeY * 0.5;
 		m_pGameInstance->Render_Font(TEXT("UI_Font_50"), szText, m_vTexRect, D3DXCOLOR(0.f, 0.f, 1.f, 1.f), DT_CENTER | DT_TOP);
 
-		_stprintf_s(szText, TEXT("당신은 어느새 SR 시연회 준비에 들어갑니다.."));
+		_stprintf_s(szText, TEXT("누군가 도망가는 소리가 들린다.."));
 		m_vTexRect.top = 220 + g_iWinSizeY * 0.5;
 		m_pGameInstance->Render_Font(TEXT("UI_Font_30"), szText, m_vTexRect, D3DXCOLOR(1.f, 1.f, 1.f, 1.f), DT_CENTER | DT_TOP);
 
-		_stprintf_s(szText, TEXT("친구들은 누구와 팀이 될까 행복한 상상을 하게 됩니다.."));
+		_stprintf_s(szText, TEXT("쫒아가보자"));
 		m_vTexRect.top = 260 + g_iWinSizeY * 0.5;
 		m_pGameInstance->Render_Font(TEXT("UI_Font_30"), szText, m_vTexRect, D3DXCOLOR(1.f, 1.f, 1.f, 1.f), DT_CENTER | DT_TOP);
 	}
@@ -236,20 +236,20 @@ void CLoding_UI::Font_Render()
 
 		///DT_VCENTER | DT_SINGLELINE
 		m_vTexRect.left = 0;
-		m_vTexRect.top = 120 + g_iWinSizeY * 0.5;
+		m_vTexRect.top = 110 + g_iWinSizeY * 0.5;
 		m_vTexRect.right = g_iWinSizeX;
 		m_vTexRect.bottom = g_iWinSizeY;
 		m_pGameInstance->Render_Font(TEXT("UI_Font_40"), szText, m_vTexRect, D3DXCOLOR(1.f, 1.f, 1.f, 1.f), DT_CENTER | DT_TOP);
 
-		_stprintf_s(szText, TEXT("153기 에르마"));
+		_stprintf_s(szText, TEXT("에르마"));
 		m_vTexRect.top = 160 + g_iWinSizeY * 0.5;
 		m_pGameInstance->Render_Font(TEXT("UI_Font_50"), szText, m_vTexRect, D3DXCOLOR(0.f, 0.f, 1.f, 1.f), DT_CENTER | DT_TOP);
 
-		_stprintf_s(szText, TEXT("당신은 기수 친구인 에르마의 지정석으로 이동합니다."));
+		_stprintf_s(szText, TEXT("에르마는 겁이 많습니다."));
 		m_vTexRect.top = 220 + g_iWinSizeY * 0.5;
 		m_pGameInstance->Render_Font(TEXT("UI_Font_30"), szText, m_vTexRect, D3DXCOLOR(1.f, 1.f, 1.f, 1.f), DT_CENTER | DT_TOP);
 
-		_stprintf_s(szText, TEXT("에르마와 함께 지친 마음을 위로합니다."));
+		_stprintf_s(szText, TEXT("공포가 한계에 다다르면 무슨 짓을 할지 모르죠..."));
 		m_vTexRect.top = 260 + g_iWinSizeY * 0.5;
 		m_pGameInstance->Render_Font(TEXT("UI_Font_30"), szText, m_vTexRect, D3DXCOLOR(1.f, 1.f, 1.f, 1.f), DT_CENTER | DT_TOP);
 	}
@@ -264,15 +264,15 @@ void CLoding_UI::Font_Render()
 		m_vTexRect.bottom = g_iWinSizeY;
 		m_pGameInstance->Render_Font(TEXT("UI_Font_40"), szText, m_vTexRect, D3DXCOLOR(1.f, 1.f, 1.f, 1.f), DT_CENTER | DT_TOP);
 
-		_stprintf_s(szText, TEXT("아지트"));
+		_stprintf_s(szText, TEXT("복도"));
 		m_vTexRect.top = 160 + g_iWinSizeY * 0.5;
 		m_pGameInstance->Render_Font(TEXT("UI_Font_50"), szText, m_vTexRect, D3DXCOLOR(0.f, 0.f, 1.f, 1.f), DT_CENTER | DT_TOP);
 
-		_stprintf_s(szText, TEXT("당신은 지친 몸을 이끌고 아지트로 이동합니다."));
+		_stprintf_s(szText, TEXT("당신은 지친 몸을 이끌고 마지막 방으로 이동합니다."));
 		m_vTexRect.top = 220 + g_iWinSizeY * 0.5;
 		m_pGameInstance->Render_Font(TEXT("UI_Font_30"), szText, m_vTexRect, D3DXCOLOR(1.f, 1.f, 1.f, 1.f), DT_CENTER | DT_TOP);
 
-		_stprintf_s(szText, TEXT("작업을 진행하기 위해 아이스아메리카노를 구입합니다."));
+		_stprintf_s(szText, TEXT("당신이 쉴 수 있는 마지막 장소인 것 같습니다."));
 		m_vTexRect.top = 260 + g_iWinSizeY * 0.5;
 		m_pGameInstance->Render_Font(TEXT("UI_Font_30"), szText, m_vTexRect, D3DXCOLOR(1.f, 1.f, 1.f, 1.f), DT_CENTER | DT_TOP);
 	}
@@ -285,17 +285,17 @@ void CLoding_UI::Font_Render()
 		m_vTexRect.top = 120 + g_iWinSizeY * 0.5;
 		m_vTexRect.right = g_iWinSizeX;
 		m_vTexRect.bottom = g_iWinSizeY;
-		m_pGameInstance->Render_Font(TEXT("UI_Font_40"), szText, m_vTexRect, D3DXCOLOR(1.f, 1.f, 1.f, 1.f), DT_CENTER | DT_TOP);
+		m_pGameInstance->Render_Font(TEXT("UI_Font_40"), szText, m_vTexRect, D3DXCOLOR(1.f, 0.f, 0.f, 1.f), DT_CENTER | DT_TOP);
 
-		_stprintf_s(szText, TEXT("153기 아스카드"));
+		_stprintf_s(szText, TEXT("아스카드"));
 		m_vTexRect.top = 160 + g_iWinSizeY * 0.5;
-		m_pGameInstance->Render_Font(TEXT("UI_Font_50"), szText, m_vTexRect, D3DXCOLOR(0.f, 0.f, 1.f, 1.f), DT_CENTER | DT_TOP);
+		m_pGameInstance->Render_Font(TEXT("UI_Font_50"), szText, m_vTexRect, D3DXCOLOR(1.f, 0.f, 0.3f, 1.f), DT_CENTER | DT_TOP);
 
 		_stprintf_s(szText, TEXT("당신은 아스카드에게 찾아갑니다."));
 		m_vTexRect.top = 220 + g_iWinSizeY * 0.5;
 		m_pGameInstance->Render_Font(TEXT("UI_Font_30"), szText, m_vTexRect, D3DXCOLOR(1.f, 1.f, 1.f, 1.f), DT_CENTER | DT_TOP);
 
-		_stprintf_s(szText, TEXT("SR시연회 날짜를 늦출수 없냐고 물어보게 됩니다."));
+		_stprintf_s(szText, TEXT("조심하세요. 그는 귀여운 토끼라도 봐주지 않습니다."));
 		m_vTexRect.top = 260 + g_iWinSizeY * 0.5;
 		m_pGameInstance->Render_Font(TEXT("UI_Font_30"), szText, m_vTexRect, D3DXCOLOR(1.f, 1.f, 1.f, 1.f), DT_CENTER | DT_TOP);
 

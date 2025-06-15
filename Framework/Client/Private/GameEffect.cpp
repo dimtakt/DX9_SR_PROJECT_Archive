@@ -5,6 +5,7 @@
 #include "Player.h"
 #include "Erma.h"
 #include "Effect_Factory.h"
+#include "Askard.h"
 CGameEffect::CGameEffect(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CEffect(pGraphic_Device)
 {
@@ -367,31 +368,31 @@ void CGameEffect::Ready_Collision()
 			//아스카드
 			else if (m_strEffectTag == TEXT("Prototype_Component_Boss_Askard_BigRoot_Root_FX_Swing"))
 			{
-				tColliderDesc.vScale = _float3(0.7f, 1.f, 0.7f);
+				tColliderDesc.vScale = _float3(0.4f, 0.4f, 0.4f);
 			}
 			else if (m_strEffectTag == TEXT("Prototype_Component_Boss_Askard_BigRoot_Hall_FX_Open"))
 			{
-				tColliderDesc.vScale = _float3(0.7f, 1.f, 0.7f);
+				tColliderDesc.vScale = _float3(0.4f, 0.4f, 0.4f);
 			}
 			else if (m_strEffectTag == TEXT("Prototype_Component_Boss_Askard_Laser"))
 			{
-				tColliderDesc.vScale = _float3(0.7f, 1.f, 0.7f);
+				tColliderDesc.vScale = _float3(0.4f, 1.f, 0.4f);
 			}
 			else if (m_strEffectTag == TEXT("Prototype_Component_Boss_Askard_Phase1_Wave_Burst"))
 			{
-				tColliderDesc.vScale = _float3(0.7f, 1.f, 0.7f);
+				tColliderDesc.vScale = _float3(0.4f, 0.4f, 0.4f);
 			}
 			else if (m_strEffectTag == TEXT("Prototype_Component_Boss_Askard_ShockWaveFX"))
 			{
-				tColliderDesc.vScale = _float3(0.7f, 1.f, 0.7f);
+				tColliderDesc.vScale = _float3(0.4f, 0.4f, 0.4f);
 			}
 			else if (m_strEffectTag == TEXT("Prototype_Component_Boss_Askard_TentacleLaser_Progress"))
 			{
-				tColliderDesc.vScale = _float3(0.7f, 1.f, 0.7f);
+				tColliderDesc.vScale = _float3(0.4f, 1.f, 0.4f);
 			}
 			else if (m_strEffectTag == TEXT("Prototype_Component_Boss_Askard_TentacleBullet"))
 			{
-				tColliderDesc.vScale = _float3(0.7f, 1.f, 0.7f);
+				tColliderDesc.vScale = _float3(0.5f, 0.5f, 0.5f);
 			}
 		}
 
@@ -442,6 +443,15 @@ void CGameEffect::OnCollision(CGameObject* pGameObject)
 
 				if (pAni->Get_CurStateTag() == L"Idle" || pAni->Get_CurStateTag() == L"Move" || pAni->Get_CurStateTag() == L"AirBorne" ||
 					pAni->Get_CurStateTag() == L"Enter_Progress" || pAni->Get_CurStateTag() == L"Enter_End" || pAni->Get_CurStateTag() == L"Entered")
+					return;
+			}
+
+			if (pMonster->Get_MonsterType() == MONSTER_TYPE::ASKARD)
+			{
+				CAnimator* pAni = dynamic_cast<CAnimator*>((dynamic_cast<CAskard*>(pGameObject)->Find_Component(TEXT("Com_Animator"))));
+
+				if (pAni->Get_CurStateTag() == L"Standby" || pAni->Get_CurStateTag() == L"Askard_Die" || pAni->Get_CurStateTag() == L"P1_PhaseChange" ||
+					pAni->Get_CurStateTag() == L"Hidden" || pAni->Get_CurStateTag() == L"P2_Tentacle" || pAni->Get_CurStateTag() == L"P2_Tentacle_End")
 					return;
 			}
 
@@ -574,12 +584,12 @@ void CGameEffect::OnCollision(CGameObject* pGameObject)
 
 				else if (m_strEffectTag == TEXT("Prototype_Component_Boss_Askard_BigRoot_Root_FX_Swing"))
 				{
-					iDamage = CStat_Manager::GetInstance()->Get_Monster_Damage(10.f);
+					iDamage = CStat_Manager::GetInstance()->Get_Monster_Damage(7.f);
 					CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CULHP, float(iDamage) * -1);
 				}
 				else if (m_strEffectTag == TEXT("Prototype_Component_Boss_Askard_BigRoot_Hall_FX_Open"))
 				{
-					iDamage = CStat_Manager::GetInstance()->Get_Monster_Damage(10.f);
+					iDamage = CStat_Manager::GetInstance()->Get_Monster_Damage(8.f);
 					CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CULHP, float(iDamage) * -1);
 				}
 				else if (m_strEffectTag == TEXT("Prototype_Component_Boss_Askard_Laser"))
@@ -589,22 +599,22 @@ void CGameEffect::OnCollision(CGameObject* pGameObject)
 				}
 				else if (m_strEffectTag == TEXT("Prototype_Component_Boss_Askard_Phase1_Wave_Burst"))
 				{
-					iDamage = CStat_Manager::GetInstance()->Get_Monster_Damage(10.f);
+					iDamage = CStat_Manager::GetInstance()->Get_Monster_Damage(15.f);
 					CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CULHP, float(iDamage) * -1);
 				}
 				else if (m_strEffectTag == TEXT("Prototype_Component_Boss_Askard_ShockWaveFX"))
 				{
-					iDamage = CStat_Manager::GetInstance()->Get_Monster_Damage(10.f);
+					iDamage = CStat_Manager::GetInstance()->Get_Monster_Damage(7.f);
 					CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CULHP, float(iDamage) * -1);
 				}
 				else if (m_strEffectTag == TEXT("Prototype_Component_Boss_Askard_TentacleLaser_Progress"))
 				{
-					iDamage = CStat_Manager::GetInstance()->Get_Monster_Damage(10.f);
+					iDamage = CStat_Manager::GetInstance()->Get_Monster_Damage(15.f);
 					CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CULHP, float(iDamage) * -1);
 				}
 				else if (m_strEffectTag == TEXT("Prototype_Component_Boss_Askard_TentacleBullet"))
 				{
-					iDamage = CStat_Manager::GetInstance()->Get_Monster_Damage(10.f);
+					iDamage = CStat_Manager::GetInstance()->Get_Monster_Damage(30.f);
 					CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CULHP, float(iDamage) * -1);
 				}
 				pPlayer->Hit(iDamage);
