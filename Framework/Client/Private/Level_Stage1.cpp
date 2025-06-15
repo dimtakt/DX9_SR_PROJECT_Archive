@@ -149,7 +149,6 @@ HRESULT CLevel_Stage1::Ready_Layer_Room(const _wstring& strLayerTag)
 		
 		pRoom = dynamic_cast<CRoom*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::LEVEL_STAGE1), TEXT("Prototype_GameObject_Room")));
 		NULL_CHECK_RETURN(pRoom, E_FAIL);						
-		pRoom->Set_ParticleType(PARTICLE_TYPE::RAIN);			//파티클 쓰는거 스테이지로 통일한다함. 그러면 그스테이지 룸 파티클 설정값 켜줘야함.
 
 		_int RoomX = RoomIndex[iCount].first;
 		_int RoomZ = RoomIndex[iCount].second;
@@ -158,7 +157,7 @@ HRESULT CLevel_Stage1::Ready_Layer_Room(const _wstring& strLayerTag)
 			//현재 정해진 ID값의 룸에 지형, 오브젝트 세팅 내부에서 지형 위치 자동 배치
 		pRoom->Load_From_File(ENUM_CLASS(LEVEL::LEVEL_STAGE1), strLayerTag, TEXT("../../data/Stage1_Map%d.txt"), iCount, RoomX, RoomZ,static_cast<ROOM_INFO>(0));
 		pRoom->Set_ParticleOn();
-		pRoom->Set_ParticleType(PARTICLE_TYPE::RAIN);
+		pRoom->Set_ParticleType(PARTICLE_TYPE::RAIN);			//파티클 쓰는거 스테이지로 통일한다함. 그러면 그스테이지 룸 파티클 설정값 켜줘야함.
 
 			if (iCount == 0)
 			{

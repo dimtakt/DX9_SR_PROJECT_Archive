@@ -311,6 +311,8 @@ HRESULT CRoom::Ready_Potal(_uint iLayerLevelIndex, const _wstring& strLayerTag, 
 		pDesc.ePotalType = eType;
 	pDesc.iTextureIndex = 0;
 	pDesc.vScale = { 2.f, 2.f, 2.f };
+	if(eType == POTAL_TYPE::END_POTAL)
+		pDesc.vScale = { 3.5f, 3.5f, 3.5f };
 	pDesc.vRotate = { 90.f, 0.f, 0.f };
 	CTransform* pTransform = static_cast<CTransform*>(m_pTerrainBox->Find_Component(TEXT("Com_Transform_TerrainBox")));
 	pDesc.vPos = pTransform->Get_State(STATE::POSITION) + vOffset;
