@@ -187,20 +187,28 @@ void CAskard::Update(_float fTimeDelta)
 
         // Prototype_Component_Boss_Askard_Phase1_PhaseChange_FX
 
-        m_pTerrainBox->SetUp_OnTerrainBox(m_pTransformCom, _float3(0.00f, 2.67f, 0.00f));
-        m_pTransformCom->Scaling(10.f, 10.f, 10.f);
-
-        if (m_pAnimatorCom->Get_CurStateTag() == L"P1_PhaseChange" &&
-            m_pAnimatorCom->Get_IsLastFrame())
+        if (m_pAnimatorCom->Get_CurStateTag() == L"P1_PhaseChange" )
         {
-            m_pAnimatorCom->Change_State(L"P2_Idle", true, 0.0f, true);
-            m_ePattern = PATTERN_ASKARD::PT_IDLE;
-            m_isPhaseChanging = false;
-            m_iElapsedFrame_Update = 0;     // 패턴 진행 프레임 초기화
-            m_iElapsedFrame_Pattern = 0;
-            m_iPhase++;
-        }
+            m_pTransformCom->Scaling(10.f, 10.f, 10.f);
+            m_pTerrainBox->SetUp_OnTerrainBox(m_pTransformCom, _float3(0.00f, 2.67f, 0.00f));
 
+            if (m_pAnimatorCom->Get_IsLastFrame())
+            {
+                if (m_pAnimatorCom->Change_State(L"P2_Idle", true, 0.0f, true))
+                {
+                    m_ePattern = PATTERN_ASKARD::PT_IDLE;
+                    m_isPhaseChanging = false;
+                    m_iElapsedFrame_Update = 0;     // 패턴 진행 프레임 초기화
+                    m_iElapsedFrame_Pattern = 0;
+                    m_iPhase++;
+                }
+            }
+        }
+        else if (m_pAnimatorCom->Get_CurStateTag() == L"P1_SummonStaff")
+        {
+            m_pTransformCom->Scaling(10.f, 10.f, 10.f);
+            m_pTerrainBox->SetUp_OnTerrainBox(m_pTransformCom, _float3(0.00f, 2.67f, 0.00f));
+        }
 
         return;
     }
