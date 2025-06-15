@@ -112,21 +112,24 @@ void CAskard::Priority_Update(_float fTimeDelta)
         if (!m_bFinish)
             m_bFinish = true;
         m_iCulHp = 0;
-        m_bIsChat = true;
         
-        if (m_iChatNextPage + 1 <= m_pChat_End->Get_ChatIndex() + 1 && m_pGameInstance->IsKeyDown('F'))
+        
+        if (m_iChatNextPage + 1 != m_pChat_End->Get_ChatIndex() + 1 && m_pGameInstance->IsKeyDown('F'))
+        {
+            m_bIsChat = true;
+            m_pChat_End->Cinematic_Chat(0, false);
+        }
+
+        if (!m_bIsChat && m_pGameInstance->IsKeyDown('F'))
         {
             m_bDead = true;
             static_cast<CEnding*>(m_pGameInstance->Find_UIObj(ENUM_CLASS(LEVEL::LEVEL_BOSS2), TEXT("UI_Ending")))->Start_Ending();
         }
 
-        if (m_bFinish && m_pGameInstance->IsKeyDown('F'))
+        if (m_iChatNextPage + 1 <= m_pChat_End->Get_ChatIndex() + 1)
         {
-
-            m_pChat_End->Cinematic_Chat(0, false);
+            m_bIsChat = false;
         }
-
-
     }
 }
 
