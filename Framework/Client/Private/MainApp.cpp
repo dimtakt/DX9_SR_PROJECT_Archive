@@ -1248,6 +1248,9 @@ void CMainApp::Ready_Font_Setting()
 	if (FAILED(m_pGameInstance->Ready_Font(TEXT("UI_Font_22_Talent"), TEXT("../Bin/Resources/Font/Galmuri9.ttf"), TEXT("Galmuri9 Regular"), 0, 21, 700)))
 		MSG_BOX(TEXT("FAILED to Font"));
 
+	if (FAILED(m_pGameInstance->Ready_Font(TEXT("UI_Font_20_Talent"), TEXT("../Bin/Resources/Font/Galmuri9.ttf"), TEXT("Galmuri9 Regular"), 0, 20, 700)))
+		MSG_BOX(TEXT("FAILED to Font"));
+
 	if (FAILED(m_pGameInstance->Ready_Font(TEXT("UI_Font_22"), TEXT("../Bin/Resources/Font/Galmuri9.ttf"), TEXT("Galmuri9 Regular"), 20, 22, 700)))
 		MSG_BOX(TEXT("FAILED to Font"));
 
