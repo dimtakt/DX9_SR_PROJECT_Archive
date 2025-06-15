@@ -525,11 +525,6 @@ HRESULT CMainApp::Ready_Texture_Setting()
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Boss_Potal"),
 		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/BleakSwordDX/Object/Potal/Boss_Potal_Texture_%d.png"), 16))))
 		return E_FAIL;
-	
-	//스테이지(쉼터, 마을) Potal Texture
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Stage_Potal"),
-		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/BleakSwordDX/Object/Potal/Stage_Potal.png"), 1))))
-		return E_FAIL;
 
 	// Prototype_Component_Texture_Effect (Monster)
 	// ksta : 만약 모든 스테이지에서 사용하려는 것이 아니라면 LEVEL_STATIC을 바꿔줘야 할 듯?

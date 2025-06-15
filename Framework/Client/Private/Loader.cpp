@@ -724,6 +724,10 @@ HRESULT CLoader::Loading_For_Stage2_Level()
 		CPotal::Create(m_pGraphic_Device))))
 		return E_FAIL;
 
+	/* Rain */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STAGE2), TEXT("Prototype_GameObject_Rain"),
+		CRainParticle::Create(m_pGraphic_Device))))
+		return E_FAIL;
 	
 	/*for (size_t i = 0; i < 10000000000; i++)
 	{
@@ -1381,6 +1385,11 @@ HRESULT CLoader::Loading_For_Shelter_Level()
 		CNpc::Create(m_pGraphic_Device))))
 		return E_FAIL;
 
+	/* Particle */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_SHELTER), TEXT("Prototype_GameObject_FireParticle"),
+		CFireParticle::Create(m_pGraphic_Device))))
+		return E_FAIL;
+
 	//for (size_t i = 0; i < 10000000000; i++)
 	//{
 	//	int a = 1;
@@ -1777,6 +1786,10 @@ HRESULT CLoader::Loading_For_Boss2_Level()
 		CPotal::Create(m_pGraphic_Device))))
 		return E_FAIL;
 
+	/* Particle */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_BOSS2), TEXT("Prototype_GameObject_FireParticle"),
+		CFireParticle::Create(m_pGraphic_Device))))
+		return E_FAIL;
 
 #pragma region Askard Load.
 	/* Ptototype_GameObject_Boss_Askard */
