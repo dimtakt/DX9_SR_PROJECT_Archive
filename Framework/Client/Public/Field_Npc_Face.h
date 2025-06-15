@@ -21,6 +21,7 @@ public:
 	void							Render_Face_On(_int iNumber, _bool bCinematic);
 	void							Render_Face_Off();
 
+	void							Change_Deth(_float fDeth) { m_fZ = fDeth; }
 public:
 	virtual HRESULT					Initialize_Prototype(LEVEL eLevel);
 	virtual HRESULT					Initialize(void* pArg) override;

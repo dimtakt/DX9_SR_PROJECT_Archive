@@ -427,9 +427,6 @@
     <Filter Include="02.GameObject\UI\HUD\HUD_BossHp">
       <UniqueIdentifier>{a6803921-f49f-4ad6-a36b-de39dba8e189}</UniqueIdentifier>
     </Filter>
-    <Filter Include="99.Defines">
-      <UniqueIdentifier>{0b9f6ede-74ab-4dc8-813b-32276d487d12}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObject\UI\HUD\HUD_BossHp\BossHp_Askard">
       <UniqueIdentifier>{10e5cfe3-d673-416e-b759-7eb0946d3c6a}</UniqueIdentifier>
     </Filter>
@@ -507,6 +504,15 @@
     </Filter>
     <Filter Include="02.GameObject\Player\Magic\Meteor">
       <UniqueIdentifier>{40c25fe3-f6fa-404e-a2d1-fe2c3de512d7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\UI\Ending">
+      <UniqueIdentifier>{5f586038-0780-48c8-bef0-e4f83298f7e3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="99.Defines">
+      <UniqueIdentifier>{0b9f6ede-74ab-4dc8-813b-32276d487d12}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\UI\Ending\ETC">
+      <UniqueIdentifier>{ff392338-bf7c-450c-b4b8-6a83f7c52330}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1128,6 +1134,18 @@
     <ClInclude Include="..\Public\Askard_Dark_Tentacle.h">
       <Filter>02.GameObject\Monster\Boss\Askard</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\Ending.h">
+      <Filter>02.GameObject\UI\Ending</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Ending_Mole.h">
+      <Filter>02.GameObject\UI\Ending\ETC</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Ending_List.h">
+      <Filter>02.GameObject\UI\Ending\ETC</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Ending_Light.h">
+      <Filter>02.GameObject\UI\Ending\ETC</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -1709,6 +1727,18 @@
     </ClCompile>
     <ClCompile Include="..\Private\Askard_Dark_Tentacle.cpp">
       <Filter>02.GameObject\Monster\Boss\Askard</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Ending.cpp">
+      <Filter>02.GameObject\UI\Ending</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Ending_Mole.cpp">
+      <Filter>02.GameObject\UI\Ending\ETC</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Ending_List.cpp">
+      <Filter>02.GameObject\UI\Ending\ETC</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Ending_Light.cpp">
+      <Filter>02.GameObject\UI\Ending\ETC</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
