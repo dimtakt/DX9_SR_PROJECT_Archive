@@ -239,5 +239,5 @@ void CGacha_Slot::Free()
 {
 	__super::Free();
 	Safe_Release(m_pSlotItem);
-	Safe_Release(m_pOldSlotItem);
+	m_pOldSlotItem = nullptr;
 }

@@ -15,8 +15,8 @@ void CField_Npc_Face::Render_SmallFace_On(_int iNumber)
 	if (!m_bIsRender)
 	{
 		m_iTexIndex = iNumber;
-		m_pTransformCom->Scaling(m_fSizeX * 0.7, m_fSizeY * 0.7, 1.f);
 		m_bIsSmallRender = true;
+		m_bIsSmallRenderSwitch = false;
 	}
 }
 
@@ -29,7 +29,6 @@ void CField_Npc_Face::Render_Face_On(_int iNumber, _bool bCinematic)
 {
 	m_bCinematicFace = bCinematic;
 	m_iTexIndex = iNumber;
-	m_pTransformCom->Scaling(m_fSizeX, m_fSizeY, 1.f);
 	m_bIsRender = true;
 }
 
@@ -76,6 +75,13 @@ HRESULT CField_Npc_Face::Initialize(void* pArg)
 
 void CField_Npc_Face::Priority_Update(_float fTimeDelta)
 {
+	//fAcctime += fTimeDelta;
+
+	//if (m_bIsSmallRenderSwitch && fAcctime >= 2)
+	//{
+	//	m_bIsSmallRender = false;
+	//	fAcctime = 0;
+	//}
 }
 
 void CField_Npc_Face::Update(_float fTimeDelta)
@@ -103,6 +109,14 @@ void CField_Npc_Face::Late_Update(_float fTimeDelta)
 
 HRESULT CField_Npc_Face::Render()
 {
+	if (m_bIsRender)
+	{
+		m_pTransformCom->Scaling(m_fSizeX, m_fSizeY, 1.f);
+	}
+	else if (m_bIsSmallRender)
+	{
+		m_pTransformCom->Scaling(m_fSizeX * 0.7, m_fSizeY * 0.7, 1.f);
+	}
 	if (FAILED(m_pTextureCom->Bind_Texture(m_iTexIndex)))
 		return E_FAIL;
 	m_pVIBufferCom->Bind_Buffers();
@@ -115,8 +129,10 @@ HRESULT CField_Npc_Face::Render()
 	else if (m_bIsSmallRender)
 	{
 		Render_Font_Small();
-		m_bIsSmallRender = false;
+		//m_bIsSmallRender = false;
 	}
+
+	
 	return S_OK;
 }
 
