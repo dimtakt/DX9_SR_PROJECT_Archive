@@ -194,7 +194,7 @@ HRESULT CInteraction_Normal::EXP_Priority_Update(_float fTimeDelta)
         {
             _float3 vPos = m_pTransformCom->Get_State(STATE::POSITION);
             CEXP_Ball::EXPBALLDESC desc{};
-            desc.fValue = 0.f;
+            desc.fValue = 10.f;
             desc.vPosition = _float3(
                 m_pGameInstance->Compute_Random(vPos.x - 3.f, vPos.x + 3.f)
                 , 3.f
