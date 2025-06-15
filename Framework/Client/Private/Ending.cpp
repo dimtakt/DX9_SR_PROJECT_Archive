@@ -45,7 +45,7 @@ HRESULT CEnding::Initialize(void* pArg)
 	if (FAILED(Ready_Children()))
 		return E_FAIL;
 
-	m_pGameInstance->Add_UIObject(ENUM_CLASS(m_eLevel), TEXT("UI_Ending"), this);
+	m_pGameInstance->Add_UIObject(ENUM_CLASS(LEVEL::LEVEL_BOSS2), TEXT("UI_Ending"), this);
 
 	return S_OK;
 }
@@ -114,6 +114,7 @@ void CEnding::UI_Switch()
 	}
 	else
 	{
+		m_pGameInstance->All_Update_On();
 		m_pGameInstance->All_Update_Off();
 		m_pGameInstance->Update_On(ENUM_CLASS(LEVEL::LEVEL_BOSS2), TEXT("Ending_Chat"));
 		m_bIsUpdate = true;

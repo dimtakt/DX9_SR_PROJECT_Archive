@@ -70,6 +70,7 @@ void CField_Npc_Chat::Next_Chat()
 
 void CField_Npc_Chat::End_Chat()
 {
+	m_iChatCount = m_iChatIndex + 1;
 	m_bIschat = false;
 
 }

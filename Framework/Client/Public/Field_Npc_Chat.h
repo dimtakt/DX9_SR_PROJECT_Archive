@@ -42,6 +42,8 @@ public:
 	void						Cinematic_Chat(_int iFaceNum, _bool bIsFace);
 
 	void						StartToEnd_Chat_Normal();
+	
+	_int						Get_ChatIndex() { return m_iChatCount; }
 public:
 	virtual HRESULT				Initialize_Prototype(LEVEL eLevel);
 	virtual HRESULT				Initialize(void* pArg) override;
@@ -79,6 +81,7 @@ private:
 	_int						m_iWinPosX = {};
 	_int						m_iWinPosY = {};
 
+	_int						m_iChatCount = {};
 private:
 	HRESULT						Ready_Components();
 

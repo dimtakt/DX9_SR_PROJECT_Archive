@@ -6,6 +6,8 @@
 
 #include "Askard_Tentacle.h"
 #include "Askard_Dark_Tentacle.h"
+
+#include "Field_Npc_Chat.h"
 //#include "Askard_Eye.h"
 
 
@@ -102,10 +104,6 @@ private:
 
 	CAnimator*		m_pAnimatorCom							= { nullptr };
 
-
-
-
-
 	CBossHp_Askard*	m_pBossHp = { nullptr };
 
 
@@ -127,7 +125,13 @@ private:
 	_bool			m_isPhaseChanging				= false;
 
 	std::vector<_float3>	m_vecLaserMovePos		= {};
-
+	
+	CField_Npc_Chat* m_pChat_Start = { nullptr };
+	CField_Npc_Chat* m_pChat_End = { nullptr };
+	_bool			m_bIsChat						= {};
+	_uint			m_iChatNextPage					= {};
+	_uint			m_iChatCount					= {};
+	_bool			m_bFinish						= {};
 private:
 	//void			Adjust_Scale();					// 임시, 리소스 크기 조정하면 삭제
 
@@ -143,12 +147,11 @@ private:
 	// Patterns (Phase 2)
 	void			Play_Corner_Laser_ADV(_float fTimeDelta);
 
+	HRESULT			Ready_Chat();
 
 public:
 	static CAskard* Create(LPDIRECT3DDEVICE9 pGraphic_Device);
 	virtual CGameObject* Clone(void* pArg) override;
 	virtual void Free() override;
 };
-
-
 END

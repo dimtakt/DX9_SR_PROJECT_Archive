@@ -6,7 +6,7 @@
 //#include "Askard_Eye.h"
 #include "Event_ClashPattern.h"
 #include "Camera_Follow.h"
-
+#include "Ending.h"
 
 CAskard::CAskard(LPDIRECT3DDEVICE9 pGraphic_Device)
     : CMonster{ pGraphic_Device }
@@ -49,12 +49,12 @@ HRESULT CAskard::Initialize(void* pArg)
     m_isSummoned = true;
     Ready_Object();
 
-    m_iMaxHp = 200;
-    m_iCulHp = 200;
+    m_iMaxHp = 20;
+    m_iCulHp = 20;
 
     m_eMonsterType = MONSTER_TYPE::ASKARD; // ksta
     m_ePattern = PATTERN_ASKARD::PT_IDLE;
-
+    Ready_Chat();
     return S_OK;
 }
 
@@ -109,19 +109,45 @@ void CAskard::Priority_Update(_float fTimeDelta)
 
     if (m_iPhase >= 2)   // 2페이즈에서 체력 다 닳을 시 비로소 사망
     {
+        if (!m_bFinish)
+            m_bFinish = true;
         m_iCulHp = 0;
-        m_bDead = true;
+        m_bIsChat = true;
+        
+        if (m_iChatNextPage + 1 <= m_pChat_End->Get_ChatIndex() + 1 && m_pGameInstance->IsKeyDown('F'))
+        {
+            m_bDead = true;
+            static_cast<CEnding*>(m_pGameInstance->Find_UIObj(ENUM_CLASS(LEVEL::LEVEL_BOSS2), TEXT("UI_Ending")))->Start_Ending();
+        }
+
+        if (m_bFinish && m_pGameInstance->IsKeyDown('F'))
+        {
+
+            m_pChat_End->Cinematic_Chat(0, false);
+        }
+
+
     }
 }
 
 void CAskard::Update(_float fTimeDelta)
 {
+    if (m_bFinish)
+        return;
     // 최초 진입시.
     if (!m_bStart)
     {
         // 아래 if 조건문에 시작 조건 삽입
-        if (m_pGameInstance->IsKeyDown('P'))
+        if (m_pGameInstance->IsKeyDown('F') && m_bIsChat)
         {
+            m_pChat_Start->Cinematic_Chat(0, false);
+            
+            ++m_iChatCount;   
+        }
+        
+        if (m_iChatNextPage + 1  <= m_pChat_Start->Get_ChatIndex() + 1)
+        {
+            m_bIsChat = false;
             m_bStart = true;
             m_pAnimatorCom->Change_State(L"P1_Idle");
         }
@@ -748,6 +774,8 @@ void CAskard::Free()
 
     Safe_Release(m_pAnimatorCom);
 
+    m_pChat_Start = nullptr;
+    m_pChat_End = nullptr;
     __super::Free();
 }
 
@@ -3103,4 +3131,40 @@ void CAskard::Play_Corner_Laser_ADV(_float fTimeDelta)
         m_ePattern = PATTERN_ASKARD::PT_IDLE;
         m_pAnimatorCom->Change_State(L"P2_Idle");
     }
+}
+
+HRESULT CAskard::Ready_Chat()
+{
+    CField_Npc_Chat::FIELD_CHAT_DESC desc{};
+
+    desc.pTransform = m_pTransformCom;
+    desc.szChatTag = TEXT("Askard_Chat_Start");
+    desc.m_iLevel = ENUM_CLASS(LEVEL::LEVEL_BOSS2);
+    desc.fY = -100;
+
+    if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_BOSS2), TEXT("Layer_UI_Chat"), ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_Field_Npc_Chat"), &desc)))
+        return E_FAIL;
+
+    m_pChat_Start = static_cast<CField_Npc_Chat*>(m_pGameInstance->Find_UIObj(ENUM_CLASS(LEVEL::LEVEL_BOSS2), TEXT("Askard_Chat_Start")));
+
+    m_pChat_Start->Add_Chat(TEXT("모험가여."));
+    m_pChat_Start->Add_Chat(TEXT("얌전히 멸망을 기다려라"));
+    m_pChat_Start->Add_Chat(TEXT("...죽어라"));
+    m_iChatNextPage = 3;
+    m_iChatCount = 0;
+    m_bIsChat = true;
+
+    desc.fY = 50;
+
+    desc.szChatTag = TEXT("Askard_Chat_End");
+    if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_BOSS2), TEXT("Layer_UI_Chat"), ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_Field_Npc_Chat"), &desc)))
+        return E_FAIL;
+
+    m_pChat_End = static_cast<CField_Npc_Chat*>(m_pGameInstance->Find_UIObj(ENUM_CLASS(LEVEL::LEVEL_BOSS2), TEXT("Askard_Chat_End")));
+
+    m_pChat_End->Add_Chat(TEXT("난..."));
+    m_pChat_End->Add_Chat(TEXT("다시.. 돌아.."));
+    m_pChat_End->Add_Chat(TEXT("올거다.."));
+
+    return S_OK;
 }
