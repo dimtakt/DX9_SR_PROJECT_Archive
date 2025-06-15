@@ -78,12 +78,11 @@ void CInven_Slot::Update(_float fTimeDelta)
 	}
 	if (static_cast<CInventory*>(m_pParent)->Get_OpenUI())
 	{
+
 		Subscribe_Item();
 		Item_Selete();
 	}
-		
-		
-	
+
 	Setting_Item();
 	if (m_bIsOver)
 		__super::Update(fTimeDelta);

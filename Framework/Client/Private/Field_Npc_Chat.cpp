@@ -72,7 +72,33 @@ void CField_Npc_Chat::End_Chat()
 {
 	m_iChatCount = m_iChatIndex + 1;
 	m_bIschat = false;
+}
 
+void CField_Npc_Chat::StartToEnd_Chat_Normal()
+{
+	if (!m_bIschat)
+	{
+		static_cast<CField_Npc_Face*>(m_pGameInstance->Find_UIObj(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("UI_NpcFace")))->Change_Deth(0.1f);
+		Start_Chat();
+		CStat_Manager::GetInstance()->Set_UIOpen(true);
+	}
+	else if (!m_bIsFinish)
+		return;
+	else if (m_iChatIndex < m_iVecIndex - 1)
+		Next_Chat();
+	else
+	{
+		End_Chat();
+		CStat_Manager::GetInstance()->Set_UIOpen(false);
+	}
+}
+
+void CField_Npc_Chat::Set_Chat_Normal()
+{
+	m_bIsNormalChat = true;
+	m_fX = m_pTarget_Transform->Get_State(STATE::POSITION).x;
+	m_fY = m_pTarget_Transform->Get_State(STATE::POSITION).y - 200.f;
+	m_fZ = 0.05f;
 }
 
 void CField_Npc_Chat::Cinematic_Chat(_int iFaceNum, _bool bIsFace)
@@ -102,29 +128,7 @@ void CField_Npc_Chat::Cinematic_Chat(_int iFaceNum, _bool bIsFace)
 	}
 }
 
-void CField_Npc_Chat::StartToEnd_Chat_Normal()
-{
-	if (!m_bIschat)
-	{
-		m_fX = m_pTarget_Transform->Get_State(STATE::POSITION).x;
-		m_fY = m_pTarget_Transform->Get_State(STATE::POSITION).y - 200.f;
-		m_fZ = 0.05f;
-		static_cast<CField_Npc_Face*>(m_pGameInstance->Find_UIObj(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("UI_NpcFace")))->Change_Deth(0.1f);
 
-		CUIObject::Update_Position();
-		Start_Chat();
-		CStat_Manager::GetInstance()->Set_UIOpen(true);
-	}
-	else if (!m_bIsFinish)
-		return;
-	else if (m_iChatIndex < m_iVecIndex - 1)
-		Next_Chat();
-	else
-	{
-		End_Chat();
-		CStat_Manager::GetInstance()->Set_UIOpen(false);
-	}
-}
 
 HRESULT CField_Npc_Chat::Initialize_Prototype(LEVEL eLevel)
 {
@@ -219,10 +223,13 @@ void CField_Npc_Chat::Late_Update(_float fTimeDelta)
 	if (m_bIschat)
 	{
 		if (!m_bIsNormalChat)
+		{
 			Target_Pos();
+		}
+
 		m_pGameInstance->Add_RenderGroup(RENDERGROUP::RG_UI_BLEND, this);
 
-		if (m_bIsFinish)
+		if (m_bIsFinish && !m_bIsNormalChat)
 			m_vecChildren[0]->Late_Update(fTimeDelta);
 	} 
 	else if (m_bIsOn)
@@ -239,14 +246,31 @@ HRESULT CField_Npc_Chat::Render()
 {
 	if (m_bIschat)
 	{
-		if (FAILED(m_pTextureCom->Bind_Texture(0)))
-			return E_FAIL;
-		m_pVIBufferCom->Bind_Buffers();
-		__super::Begin();
-		m_pVIBufferCom->Render();
-		__super::End();
+		if (m_bIsNormalChat)
+		{
+			m_fX = g_iWinSizeX * 0.5;
+			m_fY = g_iWinSizeY * 0.5 - 200.f;
+			m_fZ = 0.02f;
+			CUIObject::Update_Position();
 
-		Render_Font();
+			if (FAILED(m_pTextureCom->Bind_Texture(0)))
+				return E_FAIL;
+			m_pVIBufferCom->Bind_Buffers();
+			__super::Begin();
+			m_pVIBufferCom->Render();
+			__super::End();
+			Render_Font_Nomal();
+		}
+		else
+		{
+			if (FAILED(m_pTextureCom->Bind_Texture(0)))
+				return E_FAIL;
+			m_pVIBufferCom->Bind_Buffers();
+			__super::Begin();
+			m_pVIBufferCom->Render();
+			__super::End();
+			Render_Font();
+		}
 	}
 	else if (m_bIsOn)
 	{
@@ -353,6 +377,16 @@ void CField_Npc_Chat::On_Chat_Font()
 	_stprintf_s(szText, TEXT("대화하기"));
 	m_pGameInstance->Render_Font(TEXT("UI_Font_18"), szText, m_vTexRect, D3DXCOLOR(1.f, 1.f, 1.f, 1.f), DT_CENTER | DT_TOP);
 
+}
+
+void CField_Npc_Chat::Render_Font_Nomal()
+{
+	m_vTexRect.left = g_iWinSizeX * 0.5 - 100;
+	m_vTexRect.right = g_iWinSizeX * 0.5 + 100;
+	m_vTexRect.top = g_iWinSizeY * 0.5 - 200.f - 115;
+	m_vTexRect.bottom = g_iWinSizeY * 0.5 - 200.f +100;
+
+	m_pGameInstance->Render_Font(TEXT("UI_Font_18"), m_szRenderText, m_vTexRect, D3DXCOLOR(1.f, 1.f, 1.f, 1.f), DT_LEFT | DT_VCENTER | DT_SINGLELINE);
 }
 
 CField_Npc_Chat* CField_Npc_Chat::Create(LPDIRECT3DDEVICE9 pGraphic_Device, LEVEL eLevel)
