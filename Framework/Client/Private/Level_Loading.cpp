@@ -46,11 +46,7 @@ void CLevel_Loading::Update(_float fTimeDelta)
 		case LEVEL::LEVEL_LOGO:
 			pNewLevel = CLevel_Logo::Create(m_pGraphic_Device);
 			break;
-<<<<<<< HEAD
-	/*	case LEVEL::LEVEL_MAPEDIT:
-=======
-		/*case LEVEL::LEVEL_MAPEDIT:
->>>>>>> 632a39d4b986445ad1a9a3452cb737b065342c97
+			/*case LEVEL::LEVEL_MAPEDIT:
 			pNewLevel = CLevel_MapEdit::Create(m_pGraphic_Device);
 			break;*/
 		case LEVEL::LEVEL_TOWN:
