@@ -129,7 +129,7 @@ private:
 	std::vector<_float3>	m_vecLaserMovePos		= {};
 
 private:
-	void			Adjust_Scale();					// 임시, 리소스 크기 조정하면 삭제
+	//void			Adjust_Scale();					// 임시, 리소스 크기 조정하면 삭제
 
 	// Patterns (Phase 1)
 	void			Play_Spawn_Width(_float fTimeDelta);

@@ -131,16 +131,29 @@ void CAskard::Update(_float fTimeDelta)
     else if (m_isPhaseChanging && m_iPhase == 0)
     {
         // ksta : 임시 (1페이즈와 2페이즈 아스카드의 이미지 크기가 달라 크기 및 위치를 키움)
-        m_pAnimatorCom->Change_State(L"P1_PhaseChange");
+        if (m_pAnimatorCom->Change_State(L"P1_SummonStaff"))
+            CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::NORMAL_EFFECT, L"Prototype_Component_Boss_Askard_Phase1_PhaseChange_FX",
+                m_pTransformCom->Get_State(STATE::POSITION) + _float3{0, -0.5f, 0}, {0, 0, 0, 1}, {3, 3, 3});
+
+        if (m_pAnimatorCom->Get_CurStateTag() == L"P1_SummonStaff")
+            if(m_pAnimatorCom->Change_State(L"P1_PhaseChange"))
+                CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::NORMAL_EFFECT, L"Prototype_Component_Boss_Askard_Phase1_PhaseChange_FX",
+                    m_pTransformCom->Get_State(STATE::POSITION) + _float3{ 0, -0.5f, 0 }, { 0, 0, 0, 1 }, { 3, 3, 3 });
+
+
+        // Prototype_Component_Boss_Askard_Phase1_PhaseChange_FX
+
         m_pTerrainBox->SetUp_OnTerrainBox(m_pTransformCom, _float3(0.05f, 1.6f, 0.05f));
         m_pTransformCom->Scaling(6.f, 6.f, 6.f);
 
         if (m_pAnimatorCom->Get_CurStateTag() == L"P1_PhaseChange" &&
             m_pAnimatorCom->Get_IsLastFrame())
         {
-            m_pAnimatorCom->Change_State(L"P2_Idle");
+            m_pAnimatorCom->Change_State(L"P2_Idle", true, 0.0f, true);
+            m_ePattern = PATTERN_ASKARD::PT_IDLE;
             m_isPhaseChanging = false;
             m_iElapsedFrame_Update = 0;     // 패턴 진행 프레임 초기화
+            m_iElapsedFrame_Pattern = 0;
             m_iPhase++;
         }
 
@@ -513,7 +526,7 @@ HRESULT CAskard::Ready_Components(void* pArg)
     if (FAILED(__super::Add_Component(desc->iLayerLevelIndex, TEXT("Prototype_Component_Boss_Askard_Phase2_Tentacle_End"),
         TEXT("Com_Texture_P2_Tentacle_End"), reinterpret_cast<CComponent**>(&m_pTextureCom_P2_Tentacle_End))))
         return E_FAIL;
-    // Tentacle_Unlit (20)  // 이펙트인듯, 나중에 제거or병합할것
+    // Tentacle_Unlit (20)
     //if (FAILED(__super::Add_Component(desc->iLayerLevelIndex, TEXT("Prototype_Component_Boss_Askard_Phase2_Tentacle_Unlit"),
     //    TEXT("Com_Texture_P2_Tentacle_Unlit"), reinterpret_cast<CComponent**>(&m_pTextureCom_P2_Tentacle_Unlit))))
     //    return E_FAIL;
@@ -563,11 +576,11 @@ HRESULT CAskard::Ready_Components(void* pArg)
     m_pAnimatorCom->Add_State(L"P1_Die",            { m_pTextureCom_P1_Die			, 4, true });
     m_pAnimatorCom->Add_State(L"P1_GroundIdle",     { m_pTextureCom_P1_GroundIdle	, 4, true });
     m_pAnimatorCom->Add_State(L"P1_Laser",          { m_pTextureCom_P1_Laser		, 5, false });
-    m_pAnimatorCom->Add_State(L"P1_PhaseChange",    { m_pTextureCom_P1_PhaseChange	, 4, true });
+    m_pAnimatorCom->Add_State(L"P1_PhaseChange",    { m_pTextureCom_P1_PhaseChange	, 4, false });
     m_pAnimatorCom->Add_State(L"P1_PhaseStart",     { m_pTextureCom_P1_PhaseStart	, 4, true });
     m_pAnimatorCom->Add_State(L"P1_RangeAttack",    { m_pTextureCom_P1_RangeAttack	, 4, false });
     m_pAnimatorCom->Add_State(L"P1_StaffIdle",      { m_pTextureCom_P1_StaffIdle	, 4, true });
-    m_pAnimatorCom->Add_State(L"P1_SummonStaff",    { m_pTextureCom_P1_SummonStaff	, 4, true });
+    m_pAnimatorCom->Add_State(L"P1_SummonStaff",    { m_pTextureCom_P1_SummonStaff	, 4, false });
     m_pAnimatorCom->Add_State(L"P1_Wave",           { m_pTextureCom_P1_Wave			, 4, false });
 
     // Phase 2
@@ -580,7 +593,7 @@ HRESULT CAskard::Ready_Components(void* pArg)
     m_pAnimatorCom->Add_State(L"P2_Tentacle",       { m_pTextureCom_P2_Tentacle		, 4, false });
     m_pAnimatorCom->Add_State(L"P2_Tentacle_End",   { m_pTextureCom_P2_Tentacle_End	, 4, false });
     //m_pAnimatorCom->Add_State(L"P2_Tentacle_Unlit", { m_pTextureCom_P2_Tentacle_Unlit, 4, true });
-    m_pAnimatorCom->Add_State(L"P2_Wave",           { m_pTextureCom_P2_Wave			, 4, true });
+    m_pAnimatorCom->Add_State(L"P2_Wave",           { m_pTextureCom_P2_Wave			, 4, false });
 
     m_pAnimatorCom->Add_State(L"Askard_Die",        { m_pTextureCom_Askard_Die		, 4, false });
     m_pAnimatorCom->Add_State(L"Hidden",            { m_pTextureCom_Askard_Hidden	, 4, true });
@@ -642,15 +655,15 @@ void CAskard::Summon_Dark_Tentacle(_float3 vPosition, CAskard_Dark_Tentacle::DAR
 //        ENUM_CLASS(LEVEL::LEVEL_BOSS2), L"Prototype_GameObject_Boss_Askard_Eye", &pDesc);
 //}
 
-void CAskard::Adjust_Scale()    // 이미지 리소스를 수정하지 못한 상태에서, 크기를 맞추기 위한 임시 변환 용도. 삭제해도 괜찮습니다.
-{
-    _wstring strCurStateTag = m_pAnimatorCom->Get_CurStateTag();
-
-    if (strCurStateTag == L"P1_Laser")
-        m_pTransformCom->Scaling(3.f * 61.f / 84.f, 3.f * 53.f / 73.f, 3.f);
-    else
-        m_pTransformCom->Scaling(3.f, 3.f, 3.f);
-}
+//void CAskard::Adjust_Scale()    // 이미지 리소스를 수정하지 못한 상태에서, 크기를 맞추기 위한 임시 변환 용도. 삭제해도 괜찮습니다.
+//{
+//    _wstring strCurStateTag = m_pAnimatorCom->Get_CurStateTag();
+//
+//    if (strCurStateTag == L"P1_Laser")
+//        m_pTransformCom->Scaling(3.f * 61.f / 84.f, 3.f * 53.f / 73.f, 3.f);
+//    else
+//        m_pTransformCom->Scaling(3.f, 3.f, 3.f);
+//}
 
 void CAskard::OnCollision(CGameObject* pGameObject)
 {
@@ -1805,7 +1818,17 @@ void CAskard::Play_Dark_Tentacle(_float fTimeDelta)
     switch (m_iElapsedFrame_Pattern)
     {
     case 30:
+    {
+#pragma region Effect Setting
+        _float4x4 matTranslateUnlit = {};
+        D3DXMatrixIdentity(&matTranslateUnlit);
+        D3DXMatrixTranslation(&matTranslateUnlit, 0.05f, 0.f, -0.01f);;
+#pragma endregion
+
         m_pAnimatorCom->Change_State(L"P2_Tentacle"); // Hidden 말고 점점 사라지는 이펙트 있었는데
+        CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::NORMAL_EFFECT, L"Prototype_Component_Boss_Askard_Phase2_Tentacle_Unlit",
+            *m_pTransformCom->Get_WorldMatrix(), matTranslateUnlit);
+    }
         break;
     case 180:
     case 260:
@@ -2099,13 +2122,15 @@ void CAskard::Play_Corner_Laser_ADV(_float fTimeDelta)
     // 아스카드 레이저 준비 FX이펙트 및 상태변화
     else if (m_iElapsedFrame_Pattern == 20)
     {
+        _float fOffsetY = -0.5f;
+
         // 레이저 준비 (상태변화)
         CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::NORMAL_EFFECT, L"Prototype_Component_Boss_Askard_Laser_FX",
-            vMonsterPos + _float3{ 0, 0, 0 }, { 0, 0, 0, 1 }, { 3, 3, 3 });
+            vMonsterPos + _float3{ 0, fOffsetY, 0 }, { 0, 0, 0, 1 }, { 3, 3, 3 });
         CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::NORMAL_EFFECT, L"Prototype_Component_Boss_Askard_Laser_FX",
-            m_vecLaserMovePos[0] + _float3{ 0, 0, 0 }, { 0, 0, 0, 1 }, { 3, 3, 3 });
+            m_vecLaserMovePos[0] + _float3{ 0, fOffsetY, 0 }, { 0, 0, 0, 1 }, { 3, 3, 3 });
         CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::NORMAL_EFFECT, L"Prototype_Component_Boss_Askard_Laser_FX",
-            m_vecLaserMovePos[1] + _float3{ 0, 0, 0 }, { 0, 0, 0, 1 }, { 3, 3, 3 });
+            m_vecLaserMovePos[1] + _float3{ 0, fOffsetY, 0 }, { 0, 0, 0, 1 }, { 3, 3, 3 });
         m_pAnimatorCom->Change_State(L"P2_Laser");
     }
     // 레이저 가이드 생성
