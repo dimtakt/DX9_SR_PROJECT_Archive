@@ -41,7 +41,6 @@ HRESULT CLaserGhost_D::Initialize(void* pArg)
 
 void CLaserGhost_D::Priority_Update(_float fTimeDelta)
 {
-    __super::Priority_Update(fTimeDelta);
     if (m_pHpBar != nullptr &&
         m_isSummoned && !m_bDying)
         m_pHpBar->Render_HP_Progress(m_pTransformCom, m_iCulHp, m_iMaxHp);
@@ -55,7 +54,7 @@ void CLaserGhost_D::Priority_Update(_float fTimeDelta)
     {
         m_bDead = true;
     }
-        
+    __super::Priority_Update(fTimeDelta);
 }
 
 void CLaserGhost_D::Update(_float fTimeDelta)
@@ -585,7 +584,7 @@ HRESULT CLaserGhost_D::Ready_Components(void* pArg)
     m_pAnimatorCom->Add_State(L"Attack_End",    { m_pTextureCom_Attack_End, 4, false });    // 8
     m_pAnimatorCom->Add_State(L"Airborne",      { m_pTextureCom_Airborne, 4, false });      // 3
     m_pAnimatorCom->Add_State(L"Attack_Standby",{ m_pTextureCom_Idle, 4, false });          // 14
-    m_pAnimatorCom->Add_State(L"Dead",          { m_pTextureCom_Dead, 3, false });          // 30
+    m_pAnimatorCom->Add_State(L"Dead",          { m_pTextureCom_Dead, 1, false });          // 30
 
 
 

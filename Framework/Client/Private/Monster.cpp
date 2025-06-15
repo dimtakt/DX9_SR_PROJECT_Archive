@@ -60,8 +60,12 @@ void CMonster::Priority_Update(_float fTimeDelta)
 			m_pGameInstance->StopSound(ENUM_CLASS(CHANNELID::SOUND_MONSTER_LONG_EFFECT));
 		}
 		
-		Ready_ExpBall();
-		Ready_Gold();
+		if (m_bDead || m_bDying)
+		{
+			Ready_ExpBall();
+			Ready_Gold();
+		}
+		
 	}
 		
 }

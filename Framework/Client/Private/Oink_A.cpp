@@ -39,7 +39,6 @@ HRESULT COink_A::Initialize(void* pArg)
 
 void COink_A::Priority_Update(_float fTimeDelta)
 {
-    __super::Priority_Update(fTimeDelta);
     if (m_pHpBar != nullptr &&
         m_isSummoned && !m_bDying)
         m_pHpBar->Render_HP_Progress(m_pTransformCom, m_iCulHp, m_iMaxHp);
@@ -53,7 +52,7 @@ void COink_A::Priority_Update(_float fTimeDelta)
     if (m_pAnimatorCom->Get_CurStateTag() == L"Dead" && m_pAnimatorCom->Get_IsLastFrame()) {
         m_bDead = true;
     }
-        
+    __super::Priority_Update(fTimeDelta);
 }
 
 void COink_A::Update(_float fTimeDelta)
@@ -417,7 +416,7 @@ HRESULT COink_A::Ready_Components(void* pArg)
 	m_pAnimatorCom->Add_State(L"Charge_Down",           { m_pTextureCom_Charge_Down, 4, false });
 	m_pAnimatorCom->Add_State(L"Charge_Airborne",       { m_pTextureCom_Charge_Airborne, 4, false });
     m_pAnimatorCom->Add_State(L"Attack_Standby",        { m_pTextureCom_Idle, 6, false });
-    m_pAnimatorCom->Add_State(L"Dead",                  { m_pTextureCom_Dead, 3, false });
+    m_pAnimatorCom->Add_State(L"Dead",                  { m_pTextureCom_Dead, 1, false });
     
 
     return S_OK;

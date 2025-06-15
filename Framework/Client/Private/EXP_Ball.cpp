@@ -51,7 +51,7 @@ void CEXP_Ball::Priority_Update(_float fTimeDelta)
 void CEXP_Ball::Update(_float fTimeDelta)
 {
     CTransform* pPlayerTransform = dynamic_cast<CTransform*>(m_pGameInstance->Get_GameObject(m_pGameInstance->Get_CurrentLevel(), TEXT("Layer_Player"))->Find_Component(TEXT("Com_Transform")));
-    m_pTransformCom->Move_To(pPlayerTransform->Get_State(STATE::POSITION), fTimeDelta * 1.2f, 0.f);
+    m_pTransformCom->Move_To(pPlayerTransform->Get_State(STATE::POSITION), fTimeDelta * 2.f, 0.f);
 }
 
 void CEXP_Ball::Late_Update(_float fTimeDelta)
