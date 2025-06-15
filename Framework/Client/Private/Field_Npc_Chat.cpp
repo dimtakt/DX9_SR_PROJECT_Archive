@@ -101,6 +101,30 @@ void CField_Npc_Chat::Cinematic_Chat(_int iFaceNum, _bool bIsFace)
 	}
 }
 
+void CField_Npc_Chat::StartToEnd_Chat_Normal()
+{
+	if (!m_bIschat)
+	{
+		m_fX = m_pTarget_Transform->Get_State(STATE::POSITION).x;
+		m_fY = m_pTarget_Transform->Get_State(STATE::POSITION).y - 200.f;
+		m_fZ = 0.05f;
+		static_cast<CField_Npc_Face*>(m_pGameInstance->Find_UIObj(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("UI_NpcFace")))->Change_Deth(0.1f);
+
+		CUIObject::Update_Position();
+		Start_Chat();
+		CStat_Manager::GetInstance()->Set_UIOpen(true);
+	}
+	else if (!m_bIsFinish)
+		return;
+	else if (m_iChatIndex < m_iVecIndex - 1)
+		Next_Chat();
+	else
+	{
+		End_Chat();
+		CStat_Manager::GetInstance()->Set_UIOpen(false);
+	}
+}
+
 HRESULT CField_Npc_Chat::Initialize_Prototype(LEVEL eLevel)
 {
 	m_eLevel = eLevel;
@@ -193,7 +217,8 @@ void CField_Npc_Chat::Late_Update(_float fTimeDelta)
 
 	if (m_bIschat)
 	{
-		Target_Pos();
+		if (!m_bIsNormalChat)
+			Target_Pos();
 		m_pGameInstance->Add_RenderGroup(RENDERGROUP::RG_UI_BLEND, this);
 
 		if (m_bIsFinish)
@@ -206,6 +231,7 @@ void CField_Npc_Chat::Late_Update(_float fTimeDelta)
 		m_vecChildren[1]->Late_Update(fTimeDelta);
 		Off_Chat();
 	}
+
 }
 
 HRESULT CField_Npc_Chat::Render()

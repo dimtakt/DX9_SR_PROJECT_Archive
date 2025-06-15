@@ -41,6 +41,7 @@ public:
 	//3. 시네마틱 대화(화면 상하단 검은색으로 표시됨(페이스 인덱스, 페이스 랜더할지 불값 )
 	void						Cinematic_Chat(_int iFaceNum, _bool bIsFace);
 
+	void						StartToEnd_Chat_Normal();
 public:
 	virtual HRESULT				Initialize_Prototype(LEVEL eLevel);
 	virtual HRESULT				Initialize(void* pArg) override;
@@ -61,7 +62,7 @@ private:
 	_bool						m_bIsRenderchat = { false };
 	_bool						m_bIsFinish = { false };
 	_bool						m_bIsOnchat = { false };
-
+	_bool						m_bIsNormalChat = { false };
 	vector<_wstring>			m_vecChatting;
 	_int						m_iVecIndex = {};			//벡터안에 텍스트 개수
 	

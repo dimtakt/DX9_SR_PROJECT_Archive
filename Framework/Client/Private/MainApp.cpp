@@ -58,7 +58,7 @@
 #include "AttackFx.h"
 #include "AttackGauge.h"
 #include "Meteor.h"
-
+#include "Ending.h"
 CMainApp::CMainApp()
 	: m_pGameInstance{ CGameInstance::GetInstance() }
 {
@@ -194,6 +194,11 @@ HRESULT CMainApp::Ready_GameObject_Setting()
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_ClashPattern"),
 		CEvent_ClashPattern::Create(m_pGraphic_Device, LEVEL::LEVEL_STATIC))))
 		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_Ending"),
+		CEnding::Create(m_pGraphic_Device, LEVEL::LEVEL_STATIC))))
+		return E_FAIL;
+
 #pragma endregion
 #pragma region Prototype_GameObject_Hud
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_Hud_States"),
@@ -563,6 +568,18 @@ HRESULT CMainApp::Ready_Texture_Setting()
 	
 
 	/////UI//////////
+	/* Prototype_Component_Ending */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Rect_Ending_Mole"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/UI/Ending/Mole_Cry_Flag%d.png"), 10))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Rect_List"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/UI/Ending/ListBase.png"), 1))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Rect_Light_Ending"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/UI/Ending/Light.png"), 1))))
+		return E_FAIL;
 	/* Prototype_Component_Texture_HUD */
 	D3DXCOLOR vRectCol = {};
 #pragma region Prototype_Component_UI_Default_Texture
@@ -725,6 +742,10 @@ HRESULT CMainApp::Ready_Texture_Setting()
 
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Rect_ChapMap_Node_4"),
 		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/UI/ChapMap/Cave_Node4_%d.png"), 3))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Rect_ChapMap_Node_5"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/UI/ChapMap/Cave_Node5_%d.png"), 3))))
 		return E_FAIL;
 
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Rect_ChapMap_Node_Symbol"),
