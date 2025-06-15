@@ -66,7 +66,7 @@ void CErma::Priority_Update(_float fTimeDelta)
 {
     __super::Priority_Update(fTimeDelta);
 
-    if (m_iChatCount < m_iCulChatCount) {
+    if (m_iChatCount < m_iCulChatCount && !m_bStart) {
         m_bStart = true;
         m_pChat->Off_Chat();
         m_pChat->End_Chat();
@@ -534,10 +534,11 @@ HRESULT CErma::Ready_Chat()
 
     m_pChat = static_cast<CField_Npc_Chat*>(m_pGameInstance->Find_UIObj(ENUM_CLASS(LEVEL::LEVEL_BOSS1), TEXT("ERMA_CHAT")));
 
-    m_pChat->Add_Chat(TEXT("집에가고 싶어요...."));
-    m_pChat->Add_Chat(TEXT("보내주세요..."));
+    m_pChat->Add_Chat(TEXT("ㄷ더..이상 가면 안 돼.."));
+    m_pChat->Add_Chat(TEXT("나난.. 죽을 수 없어.."));
+    m_pChat->Add_Chat(TEXT("널 막아서라도...."));
 
-    m_iChatCount = 2;
+    m_iChatCount = 3;
 
     return S_OK;
 }
@@ -706,7 +707,8 @@ void CErma::OnCollision(CGameObject* pGameObject)
     switch (pGameObject->Get_ObjType())
     {
     case GAMEOBJ_TYPE::PLAYER:
-        m_pChat->On_Chat(0, false);
+        if (!m_bStart)
+            m_pChat->On_Chat(0, false);
         if (m_pGameInstance->IsKeyDown('F'))
         {
             m_pChat->Off_Chat();

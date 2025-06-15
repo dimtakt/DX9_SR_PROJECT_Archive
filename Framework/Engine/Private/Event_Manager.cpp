@@ -7,6 +7,7 @@ CEvent_Manager::CEvent_Manager()
 void CEvent_Manager::Subscribe(_uint iTypeIndex, IEventListener* pListener)
 {
 	m_Listeners[iTypeIndex].push_back(pListener);
+	//Safe_AddRef(pListener);
 }
 
 void CEvent_Manager::Unsubscribe(_uint iTypeIndex, IEventListener* pListener)
@@ -36,7 +37,8 @@ void CEvent_Manager::Free()
 		for (IEventListener* pListener : pair.second)
 		{
 			if (pListener) {
-				Safe_Delete(pListener);
+				//Safe_Delete(pListener);
+				pListener = nullptr;
 			}
 				
 		}
