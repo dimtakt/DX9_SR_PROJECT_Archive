@@ -126,7 +126,7 @@ void CAskard::Priority_Update(_float fTimeDelta)
             static_cast<CEnding*>(m_pGameInstance->Find_UIObj(ENUM_CLASS(LEVEL::LEVEL_BOSS2), TEXT("UI_Ending")))->Start_Ending();
         }
 
-        if (m_iChatNextPage + 1 <= m_pChat_End->Get_ChatIndex() + 1)
+        if (m_iChatNextPage + 1 <= m_pChat_End->Get_ChatIndex() + 1 && m_bIsChat)
         {
             m_bIsChat = false;
         }
@@ -3157,7 +3157,7 @@ HRESULT CAskard::Ready_Chat()
     m_iChatCount = 0;
     m_bIsChat = true;
 
-    desc.fY = 50;
+    desc.fY = 460;
 
     desc.szChatTag = TEXT("Askard_Chat_End");
     if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_BOSS2), TEXT("Layer_UI_Chat"), ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_Field_Npc_Chat"), &desc)))

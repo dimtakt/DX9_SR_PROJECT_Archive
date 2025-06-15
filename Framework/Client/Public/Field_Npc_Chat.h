@@ -26,7 +26,8 @@ private:
 public:
 	//0. NPC 대화 추가 함수 (대화 추가 안해두면 텍스트 출력 안됨)
 	void						Add_Chat(_wstring szChatting);
-	
+	void						StartToEnd_Chat_Normal();
+	void						Set_Chat_Normal();
 	//1. 작은 캐릭터 이미지 랜더 함수 (페이스 인덱스, 페이스 랜더할지 불값 )0, 갑옷 강아지 / 1. 바바
 	void						On_Chat(_int iFaceNum, _bool bIsFace);
 	void						Off_Chat();
@@ -40,9 +41,6 @@ public:
 
 	//3. 시네마틱 대화(화면 상하단 검은색으로 표시됨(페이스 인덱스, 페이스 랜더할지 불값 )
 	void						Cinematic_Chat(_int iFaceNum, _bool bIsFace);
-
-	void						StartToEnd_Chat_Normal();
-	
 	_int						Get_ChatIndex() { return m_iChatCount; }
 public:
 	virtual HRESULT				Initialize_Prototype(LEVEL eLevel);
@@ -51,7 +49,7 @@ public:
 	virtual void				Update(_float fTimeDelta) override;
 	virtual void				Late_Update(_float fTimeDelta);
 	virtual HRESULT				Render() override;
-
+	
 private:
 	CVIBuffer_Rect*				m_pVIBufferCom = { nullptr };
 	CTexture*					m_pTextureCom = { nullptr };
@@ -91,6 +89,7 @@ private:
 	void						Target_Pos();
 	void						Render_Font();
 	void						On_Chat_Font();
+	void						Render_Font_Nomal();
 public:
 	static CField_Npc_Chat* Create(LPDIRECT3DDEVICE9 pGraphic_Device, LEVEL eLevel);
 	virtual CGameObject* Clone(void* pArg) override;

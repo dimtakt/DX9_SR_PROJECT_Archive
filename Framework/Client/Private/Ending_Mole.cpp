@@ -46,10 +46,7 @@ void CEnding_Mole::Priority_Update(_float fTimeDelta)
 
 void CEnding_Mole::Update(_float fTimeDelta)
 {
-	if (m_pGameInstance->IsKeyDown('F'))
-	{
-		m_pChat->StartToEnd_Chat_Normal();
-	}
+
 	m_fAccTime += fTimeDelta;
 	if (m_fAccTime >= 0.1)
 	{
@@ -66,6 +63,11 @@ void CEnding_Mole::Update(_float fTimeDelta)
 
 void CEnding_Mole::Late_Update(_float fTimeDelta)
 {
+	if (m_pGameInstance->IsKeyDown('F'))
+	{
+		m_pChat->StartToEnd_Chat_Normal();
+		m_pChat->Set_Chat_Normal();
+	}
 	m_pGameInstance->Add_RenderGroup(RENDERGROUP::RG_UI, this);
 }
 
@@ -116,7 +118,7 @@ HRESULT CEnding_Mole::Ready_Object()
 
 	m_pChat = static_cast<CField_Npc_Chat*>(m_pGameInstance->Find_UIObj(ENUM_CLASS(LEVEL::LEVEL_BOSS2), TEXT("Ending_Chat")));
 
-	m_pChat->Add_Chat(TEXT("세피 사람들을 지키고"));
+	m_pChat->Add_Chat(TEXT("세피는 주민들을 지키고"));
 	m_pChat->Add_Chat(TEXT("행복하게 살았습니다."));
 	m_pChat->Add_Chat(TEXT("게임을 봐주셔서 감사하며"));
 	m_pChat->Add_Chat(TEXT("모두 고생하셨습니다!"));
