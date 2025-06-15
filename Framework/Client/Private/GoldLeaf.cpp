@@ -51,7 +51,7 @@ void CGoldLeaf::Priority_Update(_float fTimeDelta)
 void CGoldLeaf::Update(_float fTimeDelta)
 {
     CTransform* pPlayerTransform = dynamic_cast<CTransform*>(m_pGameInstance->Get_GameObject(m_pGameInstance->Get_CurrentLevel(), TEXT("Layer_Player"))->Find_Component(TEXT("Com_Transform")));
-    m_pTransformCom->Move_To(pPlayerTransform->Get_State(STATE::POSITION), fTimeDelta * 1.2f, 0.f);
+    m_pTransformCom->Move_To(pPlayerTransform->Get_State(STATE::POSITION), fTimeDelta * 2.f, 0.f);
 }
 
 void CGoldLeaf::Late_Update(_float fTimeDelta)
@@ -152,6 +152,7 @@ CGameObject* CGoldLeaf::Clone(void* pArg)
 
 void CGoldLeaf::Free()
 {
+    m_pGameInstance->Remove_Collider_ByOwner(this);
     __super::Free();
 
     Safe_Release(m_pVIBufferCom);

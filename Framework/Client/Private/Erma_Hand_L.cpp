@@ -365,7 +365,7 @@ void CErma_Hand_L::Update(_float fTimeDelta)
                 m_pTransformCom->Move_To(vPos + vTerrainOffset, fTimeDelta * 3.f, 0.01f);
                 m_pTerrainBox->SetUp_OnTerrainBox(m_pTransformCom, vTerrainOffset);
             }
-            else if (IS_BETWEEN(iCurPatternFrame, 350, 500))
+            else if (IS_BETWEEN(iCurPatternFrame, 350, 400))
             {
                 _int iFrame = iCurPatternFrame - 350;
                 _float3 vPos = {
@@ -376,7 +376,7 @@ void CErma_Hand_L::Update(_float fTimeDelta)
                 m_pTransformCom->Move_To(vPos + vTerrainOffset, fTimeDelta * 3.f, 0.01f);
                 m_pTerrainBox->SetUp_OnTerrainBox(m_pTransformCom, vTerrainOffset);
             }
-            else if (IS_BETWEEN(iCurPatternFrame, 500, 550))
+            /*else if (IS_BETWEEN(iCurPatternFrame, 500, 550))
             {
                 _int iFrame = iCurPatternFrame - 500;
                 _float3 vPos = {
@@ -386,7 +386,7 @@ void CErma_Hand_L::Update(_float fTimeDelta)
                 };
                 m_pTransformCom->Move_To(vPos + vTerrainOffset, fTimeDelta * 3.f, 0.01f);
                 m_pTerrainBox->SetUp_OnTerrainBox(m_pTransformCom, vTerrainOffset);
-            }
+            }*/
             else
             {
                 isLaserEnd = true;
@@ -399,7 +399,7 @@ void CErma_Hand_L::Update(_float fTimeDelta)
                 m_pTransformCom->Move_To(vPos + vTerrainOffset, fTimeDelta * 4.f, 0.01f);
                 m_pTerrainBox->SetUp_OnTerrainBox(m_pTransformCom, vTerrainOffset);
 
-                if (iCurPatternFrame == 599)
+                if (iCurPatternFrame >= 420)
                 {
                     m_isPatternPlaying = false;
                     m_ePattern = PATTERN_HAND_L::PT_IDLE;
@@ -429,13 +429,13 @@ void CErma_Hand_L::Update(_float fTimeDelta)
                 CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::MONSTER_EFFECT, L"Prototype_Component_Boss_Erma_BigGolem_LaserStart",
                     *m_pTransformCom->Get_WorldMatrix(), matMonsterWorld, m_pTransformCom);
             }
-            else if (IS_BETWEEN(iCurPatternFrame, 100, 550) &&
+            else if (IS_BETWEEN(iCurPatternFrame, 100, 400) &&
                 (iCurPatternFrame - 1) % 9 == 0)
             {
                 CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::MONSTER_EFFECT, L"Prototype_Component_Boss_Erma_BigGolem_LaserProgress",
                     *m_pTransformCom->Get_WorldMatrix(), matMonsterWorld, m_pTransformCom);
             }
-            else if (iCurPatternFrame == 550)
+            else if (iCurPatternFrame == 401)
             {
                 CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::MONSTER_EFFECT, L"Prototype_Component_Boss_Erma_BigGolem_LaserEnd",
                     *m_pTransformCom->Get_WorldMatrix(), matMonsterWorld, m_pTransformCom);
@@ -466,7 +466,7 @@ void CErma_Hand_L::Update(_float fTimeDelta)
                 isLaserEnd)
                 m_pAnimatorCom->Change_State(L"Laser_End");
             else if (m_pAnimatorCom->Get_CurStateTag() == L"Laser_End")
-                m_pAnimatorCom->Change_State(L"Idle");
+                m_pAnimatorCom->Change_State(L"Idle", true, 0.f, true);
 #pragma endregion
         }
             break;
@@ -746,7 +746,7 @@ void CErma_Hand_L::PlayPattern(PATTERN_HAND_L ePattern, _bool isForced)
         //그리고 이게 패턴 switch 문 내에서 현재 프레임 구분의 조건이 되도록만들어야 함
         break;
     case Client::CErma_Hand_L::PATTERN_HAND_L::PT_LASER:
-        fPatternTime = 10.f;
+        fPatternTime = 7.f;
         strPatternTag = L"Laser";
         break;
     case Client::CErma_Hand_L::PATTERN_HAND_L::PT_KEYPATTERN:
@@ -793,6 +793,7 @@ CGameObject* CErma_Hand_L::Clone(void* pArg)
 
 void CErma_Hand_L::Free()
 {
+    m_pGameInstance->Remove_Collider_ByOwner(this);
     __super::Free();
 
     Safe_Release(m_pTextureCom_Normal);

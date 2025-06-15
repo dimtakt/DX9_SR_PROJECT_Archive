@@ -181,7 +181,7 @@ void CErma_Head::Update(_float fTimeDelta)
                         m_pGameInstance->StopSound(ENUM_CLASS(CHANNELID::SOUND_MONSTER_EFFECT));
                         m_pGameInstance->PlaySoundW(L"GolemSpreadShot.wav", ENUM_CLASS(CHANNELID::SOUND_MONSTER_EFFECT), g_fEFFECTVolume - 0.6f);
                     }
-                    for (int i = 0; i < 5; i++)
+                    for (int i = 0; i < 3; i++)
                     {
                         _float fAngle = 150;    // 방사 각도 수정용
 
@@ -196,6 +196,8 @@ void CErma_Head::Update(_float fTimeDelta)
 
                         _float fThrownPower = m_pGameInstance->Compute_Random(7.f, 12.f);
                         _float fThrownAtkLifeTime = fLifeTime;
+
+                        matMonsterWorld.m[3][1] -= 1.5f;
 
                         CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::MONSTER_EFFECT, L"Prototype_Component_Boss_Erma_Bullet",
                             *m_pTransformCom->Get_WorldMatrix(), matMonsterWorld, vThrownDir, fThrownPower, fThrownAtkLifeTime, 0.f, true);
@@ -458,6 +460,7 @@ CGameObject* CErma_Head::Clone(void* pArg)
 
 void CErma_Head::Free()
 {
+    m_pGameInstance->Remove_Collider_ByOwner(this);
     __super::Free();
 
     Safe_Release(m_pTextureCom_Standby);

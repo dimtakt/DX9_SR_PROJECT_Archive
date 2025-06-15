@@ -308,6 +308,7 @@ CGameObject* CAskard_Dark_Tentacle::Clone(void* pArg)
 
 void CAskard_Dark_Tentacle::Free()
 {
+	m_pGameInstance->Remove_Collider_ByOwner(this);
 	__super::Free();
 	//Safe_Release(m_pAnimatorCom);
 }
