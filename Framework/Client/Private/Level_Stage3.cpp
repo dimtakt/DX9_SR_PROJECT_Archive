@@ -204,22 +204,24 @@ HRESULT CLevel_Stage3::Ready_Layer_Room(const _wstring& strLayerTag)
 		{
 			if (iEventRoomEventID == 3 && iEventCheck == 0)
 			{	//3스테이지_3_Event%d 파일명 이렇게 지어줄 예정 , 타입 따로 넘겨줘야해서..
-				pRoom->Load_From_File(ENUM_CLASS(LEVEL::LEVEL_STAGE3), strLayerTag, TEXT("../../data/Stage3_1_Event%d.txt"), iEventCheck, RoomX, RoomZ, ROOM_INFO::EVENT_SHOP);
+		
+				pRoom->Load_From_File(ENUM_CLASS(LEVEL::LEVEL_STAGE3), strLayerTag, TEXT("../../data/Stage3_2_Event%d.txt"), iEventCheck, RoomX, RoomZ, ROOM_INFO::EVENT_ARTEFACT);
 				iEventCheck++;
 			}
 			else if (iEventRoomEventID == 3 && iEventCheck == 1)
 			{
-				pRoom->Load_From_File(ENUM_CLASS(LEVEL::LEVEL_STAGE3), strLayerTag, TEXT("../../data/Stage3_1_Event%d.txt"), iEventCheck, RoomX, RoomZ, ROOM_INFO::EVENT_HP);
+				pRoom->Load_From_File(ENUM_CLASS(LEVEL::LEVEL_STAGE3), strLayerTag, TEXT("../../data/Stage3_2_Event%d.txt"), iEventCheck, RoomX, RoomZ, ROOM_INFO::EVENT_STONE);
 				iEventCheck++;
 			}
 			else if (iEventRoomEventID == 4 && iEventCheck == 0)
 			{
-				pRoom->Load_From_File(ENUM_CLASS(LEVEL::LEVEL_STAGE3), strLayerTag, TEXT("../../data/Stage3_2_Event%d.txt"), iEventCheck, RoomX, RoomZ, ROOM_INFO::EVENT_ARTEFACT);
+			
+				pRoom->Load_From_File(ENUM_CLASS(LEVEL::LEVEL_STAGE3), strLayerTag, TEXT("../../data/Stage3_1_Event%d.txt"), iEventCheck, RoomX, RoomZ, ROOM_INFO::EVENT_SHOP);
 				iEventCheck++;
 			}
 			else
 			{
-				pRoom->Load_From_File(ENUM_CLASS(LEVEL::LEVEL_STAGE3), strLayerTag, TEXT("../../data/Stage3_2_Event%d.txt"), iEventCheck, RoomX, RoomZ, ROOM_INFO::EVENT_STONE);
+				pRoom->Load_From_File(ENUM_CLASS(LEVEL::LEVEL_STAGE3), strLayerTag, TEXT("../../data/Stage3_1_Event%d.txt"), iEventCheck, RoomX, RoomZ, ROOM_INFO::EVENT_HP);
 				iEventCheck++;
 			}
 		}

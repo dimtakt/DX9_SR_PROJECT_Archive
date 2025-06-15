@@ -54,8 +54,8 @@ HRESULT CErma_Body::Initialize(void* pArg)
     //Ready_Object();
 
     // юс╫ц
-    m_iMaxHp = 900;
-    m_iCulHp = 900;
+    m_iMaxHp = 7000;
+    m_iCulHp = 7000;
 
     m_eMonsterType = MONSTER_TYPE::ERMA_BODY;
 

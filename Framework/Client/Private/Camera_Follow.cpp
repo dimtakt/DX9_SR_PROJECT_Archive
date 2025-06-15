@@ -69,7 +69,8 @@ void CCamera_Follow::Priority_Update(_float fTimeDelta)
 {
 
 	if (m_pGameInstance->IsKeyDown(VK_F2)) {
-		Start_Shake(1.f, 0.2f);
+	/*	Start_Shake(1.f, 0.2f);*/
+		Trigger_CinematicLookFromTop(4.f);
 	}
 
 	Move_Angle(90.f, fTimeDelta);
@@ -243,6 +244,64 @@ _float3 CCamera_Follow::Follow_Target(_float fTimeDelta)
 				m_eCamTransitionState = CAM_TRANS_STATE::NONE;
 			}
 			break;
+		case CAM_TRANS_STATE::LOOK_FROM_TOP:
+		{
+			vNewCamPos = Lerp(m_vCamTransitionStartPos, m_vCamTransitionTargetPos, EaseInOutSine(fT));
+
+			// 카메라 고정 Look 방향 설정
+			_float3 vFixedLook = _float3(0.f, -0.5f, 1.f); // 비스듬히 아래 바라보기
+			D3DXVec3Normalize(&vFixedLook, &vFixedLook);
+
+			_float3 vUp = { 0.f, 1.f, 0.f };
+			_float3 vRight;
+			D3DXVec3Cross(&vRight, &vUp, &vFixedLook);
+			D3DXVec3Normalize(&vRight, &vRight);
+			D3DXVec3Cross(&vUp, &vFixedLook, &vRight);
+			D3DXVec3Normalize(&vUp, &vUp);
+
+			m_pTransformCom->Set_State(STATE::RIGHT, vRight);
+			m_pTransformCom->Set_State(STATE::UP, vUp);
+			m_pTransformCom->Set_State(STATE::LOOK, vFixedLook);
+			m_pTransformCom->Set_State(STATE::POSITION, vNewCamPos);
+
+			if (fT >= 1.f)
+			{
+				m_fHoldElapsed += fTimeDelta;
+
+				if (m_fHoldElapsed >= m_fHoldDuration)
+				{
+					m_vCamTransitionStartPos = m_vCamTransitionTargetPos;
+
+					// 플레이어 위치 기준 복귀
+					_float3 vPlayerPos = m_pTargetPlayerTransformCom->Get_State(STATE::POSITION);
+					_float fZRatio = (vPlayerPos.z - m_fZMin) / (m_fZMax - m_fZMin);
+					fZRatio = max(0.f, min(fZRatio, 1.f));
+
+					_float fYOffset = Lerp(4.5f, 8.5f, fZRatio);
+					_float fZTargetOffset = Lerp(8.0f, 10.5f, fZRatio);
+
+					m_vCamTransitionTargetPos = {
+						vPlayerPos.x,
+						vPlayerPos.y + fYOffset,
+						vPlayerPos.z - fZTargetOffset
+					};
+
+					m_fCamTransitionTimer = 0.f;
+					m_fCamTransitionDuration = 1.0f;
+					m_eCamTransitionState = CAM_TRANS_STATE::RETURN_FROM_TOP;
+				}
+			}
+		}
+			break;
+
+		case CAM_TRANS_STATE::RETURN_FROM_TOP:
+			vNewCamPos = Lerp(m_vCamTransitionStartPos, m_vCamTransitionTargetPos, EaseInOutSine(fT));
+			if (fT >= 1.f)
+			{
+				m_bCameraTransition = false;
+				m_eCamTransitionState = CAM_TRANS_STATE::NONE;
+			}
+			break;
 
 		default:
 			break;
@@ -357,6 +416,28 @@ _float3 CCamera_Follow::Apply_Shake(_float3 vBasePos, _float fTimeDelta)
 	_float fOffsetZ = (rand() % 2000 / 1000.f - 1.f) * fDampenedIntensity;
 
 	return vBasePos + _float3(fOffsetX, fOffsetY, fOffsetZ);
+}
+
+void CCamera_Follow::Trigger_CinematicLookFromTop(_float fHoldTime)
+{
+	if (m_bCameraTransition)
+		return;
+
+	m_vCamTransitionStartPos = m_pTransformCom->Get_State(STATE::POSITION);
+
+	_float3 vPlayerPos = m_pTargetPlayerTransformCom->Get_State(STATE::POSITION);
+
+	// 지형 기준으로 뒤쪽 위로 위치 잡기
+	_float3 vOffset = { 0.f, 15.f, -30.f };
+	m_vCamTransitionTargetPos = m_vTerrainPos + vOffset;
+
+	m_fCamTransitionTimer = 0.f;
+	m_fCamTransitionDuration = 1.0f;
+	m_fHoldElapsed = 0.f;
+	m_fHoldDuration = fHoldTime;
+
+	m_bCameraTransition = true;
+	m_eCamTransitionState = CAM_TRANS_STATE::LOOK_FROM_TOP;
 }
 
 CCamera_Follow* CCamera_Follow::Create(LPDIRECT3DDEVICE9 pGraphic_Device)

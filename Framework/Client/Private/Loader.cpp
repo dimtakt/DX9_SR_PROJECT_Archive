@@ -724,6 +724,10 @@ HRESULT CLoader::Loading_For_Stage2_Level()
 		CPotal::Create(m_pGraphic_Device))))
 		return E_FAIL;
 
+	/* Rain */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STAGE2), TEXT("Prototype_GameObject_Rain"),
+		CRainParticle::Create(m_pGraphic_Device))))
+		return E_FAIL;
 	
 	/*for (size_t i = 0; i < 10000000000; i++)
 	{
@@ -1381,6 +1385,11 @@ HRESULT CLoader::Loading_For_Shelter_Level()
 		CNpc::Create(m_pGraphic_Device))))
 		return E_FAIL;
 
+	/* Particle */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_SHELTER), TEXT("Prototype_GameObject_FireParticle"),
+		CFireParticle::Create(m_pGraphic_Device))))
+		return E_FAIL;
+
 	//for (size_t i = 0; i < 10000000000; i++)
 	//{
 	//	int a = 1;
@@ -1698,6 +1707,18 @@ HRESULT CLoader::Loading_For_Boss2_Level()
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Boss_Askard_Laser_Alert"),
 		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Boss/Askard/Effect/Laser_Alert/AskardLaser_Alert_%02d.png"), 14))))
 		return E_FAIL;
+	// Laser_Alert_Start (5)
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Boss_Askard_Laser_Alert_Start"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Boss/Askard/Effect/Laser_Alert/SeparateByState/AskardLaser_Alert_Start_%02d.png"), 5))))
+		return E_FAIL;
+	// Laser_Alert_Progress (1)
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Boss_Askard_Laser_Alert_Progress"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Boss/Askard/Effect/Laser_Alert/SeparateByState/AskardLaser_Alert_Progress.png"), 1))))
+		return E_FAIL;
+	// Laser_Alert_End (8)
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Boss_Askard_Laser_Alert_End"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Boss/Askard/Effect/Laser_Alert/SeparateByState/AskardLaser_Alert_End_%02d.png"), 8))))
+		return E_FAIL;
 	// Laser_FX (26)
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Boss_Askard_Laser_FX"),
 		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Boss/Askard/Effect/Laser_FX/Askard_Laser_FX_%02d.png"), 26))))
@@ -1777,6 +1798,10 @@ HRESULT CLoader::Loading_For_Boss2_Level()
 		CPotal::Create(m_pGraphic_Device))))
 		return E_FAIL;
 
+	/* Particle */
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_BOSS2), TEXT("Prototype_GameObject_FireParticle"),
+		CFireParticle::Create(m_pGraphic_Device))))
+		return E_FAIL;
 
 #pragma region Askard Load.
 	/* Ptototype_GameObject_Boss_Askard */

@@ -135,22 +135,22 @@ HRESULT CRoom_Manager::Check_Room(_uint iLayerLevelIndex, const _wstring& strLay
 		if(iNeighborRoomX == X - 1 && iNeighborRoomZ == Z)
 		{
 			//현재 찾은 ID의 룸에 포탈 생성 함수 자동 호출, _float3는 오프셋값 그 룸이 가지고 있는 지형을 중심 기줌으로 포탈의 위치를 - 준것
-			pRoom->Ready_Potal(iLayerLevelIndex, strLayerTag, _float3(-10.f, 2.f, 0.f), POTAL_TYPE::LEFT);
+			pRoom->Ready_Potal(iLayerLevelIndex, strLayerTag, _float3(-9.5f, 1.1f, 0.f), POTAL_TYPE::LEFT);
 		}
 
 		if(iNeighborRoomX == X + 1 && iNeighborRoomZ == Z)
 		{
-			pRoom->Ready_Potal(iLayerLevelIndex, strLayerTag, _float3(10.f, 2.f, 0.f), POTAL_TYPE::RIGHT);
+			pRoom->Ready_Potal(iLayerLevelIndex, strLayerTag, _float3(9.5f, 1.1f, 0.f), POTAL_TYPE::RIGHT);
 		}
 
 		if(iNeighborRoomZ == Z - 1 && iNeighborRoomX == X)
 		{
-			pRoom->Ready_Potal(iLayerLevelIndex, strLayerTag, _float3(0.f, 2.f, -10.f), POTAL_TYPE::DOWN);
+			pRoom->Ready_Potal(iLayerLevelIndex, strLayerTag, _float3(0.f, 1.1f, -9.5f), POTAL_TYPE::DOWN);
 		}
 
 		if(iNeighborRoomZ == Z + 1 && iNeighborRoomX == X)
 		{
-			pRoom->Ready_Potal(iLayerLevelIndex, strLayerTag, _float3(0.f, 2.f, 10.f), POTAL_TYPE::UP);
+			pRoom->Ready_Potal(iLayerLevelIndex, strLayerTag, _float3(0.f, 1.1f, 9.5f), POTAL_TYPE::UP);
 		}
 	}
 
@@ -163,13 +163,13 @@ HRESULT CRoom_Manager::Check_SpecialRoom(LEVEL eLevel, const _wstring& strLayerT
 	{
 		CRoom* pRoom = Get_RoomByID(iRoomID);
 
-		pRoom->Ready_Stage_Potal(ENUM_CLASS(eLevel), strLayerTag, _float3(0.f, 2.f, 8.f), POTAL_TYPE::STAGE_POTAL);
+		pRoom->Ready_Stage_Potal(ENUM_CLASS(eLevel), strLayerTag, _float3(0.f, 2.f, 7.7f), POTAL_TYPE::STAGE_POTAL);
 	}
 	else if (eLevel == LEVEL::LEVEL_BOSS1 || eLevel == LEVEL::LEVEL_BOSS2)
 	{
 		CRoom* pRoom = Get_RoomByID(iRoomID);
 
-		pRoom->Ready_Stage_Potal(ENUM_CLASS(eLevel), strLayerTag, _float3(0.f, 2.f, 0.f), POTAL_TYPE::STAGE_POTAL);
+		pRoom->Ready_Stage_Potal(ENUM_CLASS(eLevel), strLayerTag, _float3(0.f, 3.f, 0.f), POTAL_TYPE::STAGE_POTAL);
 	}
 	
 	return S_OK;
@@ -268,7 +268,7 @@ HRESULT CRoom_Manager::Check_END_Potal(_uint iLayerLevelIndex, const _wstring& s
 	if (pRoom->Get_RoomType() == ROOM_INFO::EVENT_NORMAL)
 	{
 		CheckEndPotal = true;
-		pRoom->Ready_Potal(iLayerLevelIndex, strLayerTag, _float3(0.f, 2.f, 0.f), POTAL_TYPE::END_POTAL);
+		pRoom->Ready_Potal(iLayerLevelIndex, strLayerTag, _float3(0.f, 1.1f, 0.f), POTAL_TYPE::END_POTAL);
 		m_bCheckEnd = true;
 		pRoom->Set_RoomType(ROOM_INFO::EVENT_ENDPOTAL);
 	}
@@ -389,7 +389,7 @@ void CRoom_Manager::CurrentRoom_AddObject(CGameObject* pGameObject)
 		tColliderDesc.vScale = _float3(0.5f, 1.f, 0.5f);
 		tColliderDesc.pOwner = pGameObject;
 		tColliderDesc.pTransform = dynamic_cast<CTransform*>(pGameObject->Find_Component(TEXT("Com_Transform")));
-		tColliderDesc.eType = pGameObject->Get_ObjType();;
+		tColliderDesc.eType = pGameObject->Get_ObjType();
 		CCollider_OBB* pCol = dynamic_cast<CCollider_OBB*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::COMPONENT, ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Collider_OBB"), &tColliderDesc));
 		m_pGameInstance->Add_Collider(pCol);
 	}

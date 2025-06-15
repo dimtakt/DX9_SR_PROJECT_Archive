@@ -517,13 +517,21 @@ HRESULT CMainApp::Ready_Texture_Setting()
 		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/UI/Item/Item_Icon_%d.png"), 72))))
 		return E_FAIL;
 
-	//포탈 임시용 텍스처 세팅
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Potal"),
-		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/BleakSwordDX/Object/Potal/Potal.png"), 1))))
+	//if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Potal_Start"),
+	//	CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/BleakSwordDX/Object/Potal/Potal_Texture_Start_%d.png"), 3))))
+	//	return E_FAIL;
+
+	//일반 Potal Texture
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Potal_Idle"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/BleakSwordDX/Object/Potal/Potal_Texture_Idle_%d.png"), 3))))
+		return E_FAIL;
+
+	//보스 Potal Texture
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Boss_Potal"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/BleakSwordDX/Object/Potal/Boss_Potal_Texture_%d.png"), 16))))
 		return E_FAIL;
 
 
-	
 	// Prototype_Component_Texture_Effect (Monster)
 	// ksta : 만약 모든 스테이지에서 사용하려는 것이 아니라면 LEVEL_STATIC을 바꿔줘야 할 듯?
 	// --- CTexture

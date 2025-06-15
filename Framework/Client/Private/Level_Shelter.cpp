@@ -16,6 +16,7 @@ CLevel_Shelter::CLevel_Shelter(LPDIRECT3DDEVICE9 pGraphic_Device)
 HRESULT CLevel_Shelter::Initialize()
 {
 	CRoom_Manager::GetInstance()->Clear(ENUM_CLASS(LEVEL::LEVEL_BOSS1));
+	m_pGameInstance->Clear(); //파티클 초기화
 
 	g_hCursor = LoadCursorFromFile(L"Resources/Sephiria/UI/Cursor/Cursor_Combat.cur");
 
@@ -179,6 +180,10 @@ HRESULT CLevel_Shelter::Ready_Layer_Room(const _wstring& strLayerTag)
 
 	pRoom->Load_From_File(ENUM_CLASS(LEVEL::LEVEL_SHELTER), strLayerTag, TEXT("../../data/Shelter.txt"), iNumber, iRoomX, iRoomZ, ROOM_INFO::EVENT_NORMAL);
 	iNumber++;
+
+	pRoom->Load_Particle(PARTICLE_TYPE::LIGHT, TEXT("Prototype_GameObject_FireParticle"), ENUM_CLASS(LEVEL::LEVEL_SHELTER), _float3(0.5f, 0.5f, 1.f), 1);
+	pRoom->Set_ParticleType(PARTICLE_TYPE::LIGHT);
+	pRoom->Set_ParticleOn();
 
 
 	CPlayer* pPlayer = dynamic_cast<CPlayer*>(m_pGameInstance->Get_GameObject(ENUM_CLASS(LEVEL::LEVEL_SHELTER), TEXT("Layer_Player")));
