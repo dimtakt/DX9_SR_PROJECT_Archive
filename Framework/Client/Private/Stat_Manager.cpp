@@ -74,7 +74,7 @@ void CStat_Manager::Update(_float fTimeDelta)
 {
     if (m_fCurStats[static_cast<int>(STAT_INFO::CULMP)] < m_fCurStats[static_cast<int>(STAT_INFO::MAXMP)])
     {
-        m_fCurStats[static_cast<int>(STAT_INFO::CULMP)] += fTimeDelta;
+        m_fCurStats[static_cast<int>(STAT_INFO::CULMP)] += fTimeDelta * 2.5f;
         if (m_fCurStats[static_cast<int>(STAT_INFO::CULMP)] >= m_fCurStats[static_cast<int>(STAT_INFO::MAXMP)])
             m_fCurStats[static_cast<int>(STAT_INFO::CULMP)] == m_fCurStats[static_cast<int>(STAT_INFO::MAXMP)];
     }
