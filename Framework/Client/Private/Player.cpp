@@ -690,7 +690,7 @@ void CPlayer::OnCollision(CGameObject* pGameObject)
 
     case GAMEOBJ_TYPE::MONSTER_EFFECT:
     {
-        if (!m_bIsHit) {
+        if (!m_bIsHit && !CStat_Manager::GetInstance()->Get_GodMode()) {
             _float3 vPlayerPos = {};    // 플레이어 좌표
             vPlayerPos = m_pTransformCom->Get_State(STATE::POSITION);
 

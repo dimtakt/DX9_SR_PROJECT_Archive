@@ -26,6 +26,9 @@ public:
 	void HasItem(_wstring szEffectTag, _bool bHasItme);
 	void HasItem_Reset();
 
+	_bool Get_GodMode() { return m_bGodMode; }
+	void Set_GodMode() { m_bGodMode = !m_bGodMode; }
+
 public:
 	_bool Get_Battle() { return m_bBattle; }
 	_bool Get_UIOpen() { return m_bUIOpen; }
@@ -42,6 +45,8 @@ private:
 
 	_bool m_bBattle = { false };
 	_bool m_bUIOpen = { false };
+
+	_bool m_bGodMode = { false };
 
 public:
 	virtual void Free() override;
