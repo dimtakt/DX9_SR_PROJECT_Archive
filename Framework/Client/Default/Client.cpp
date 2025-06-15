@@ -7,7 +7,7 @@
 
 #include "MainApp.h"
 #include "GameInstance.h"
-//#include "Imgui_Manager.h"
+#include "Imgui_Manager.h"
 
 #define MAX_LOADSTRING 100
 
@@ -211,13 +211,13 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 //  WM_DESTROY  - 종료 메시지를 게시하고 반환합니다.
 //
 //
-//extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     //IMGUI 설정
-    /*if (ImGui_ImplWin32_WndProcHandler(hWnd, message, wParam, lParam))
-        return true;*/
+    if (ImGui_ImplWin32_WndProcHandler(hWnd, message, wParam, lParam))
+        return true;
 
     switch (message)
     {
