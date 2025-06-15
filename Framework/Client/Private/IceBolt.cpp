@@ -2,6 +2,7 @@
 #include "GameInstance.h"
 #include "Client_Struct.h"
 #include "Effect_Factory.h"
+#include "Stat_Manager.h"
 
 CIceBolt::CIceBolt(LPDIRECT3DDEVICE9 pGraphic_Device)
     : CGameObject{ pGraphic_Device }
@@ -58,8 +59,9 @@ void CIceBolt::OnEvent(_uint iTypeindex, const EVENTDATA* pData)
 {
     if (static_cast<EVENT_TYPE>(iTypeindex) == EVENT_TYPE::ICEBOLT)
     {
-        if (m_fCurrentCoolTime <= 0.f)
+        if (m_fCurrentCoolTime <= 0.f && CStat_Manager::GetInstance()->Get_CurStats()[ENUM_CLASS(STAT_INFO::CULMP)] >= 10)
         {
+            CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CULMP, -10.f);
             _float3 vMouseWorld = {};
             _float fY = m_pPlayerTransformCom->Get_State(STATE::POSITION).y;
             m_pGameInstance->Get_IntersectAtY(fY, vMouseWorld);
