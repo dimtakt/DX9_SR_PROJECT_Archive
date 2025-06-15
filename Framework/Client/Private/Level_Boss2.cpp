@@ -16,6 +16,7 @@ CLevel_Boss2::CLevel_Boss2(LPDIRECT3DDEVICE9 pGraphic_Device)
 HRESULT CLevel_Boss2::Initialize()
 {
 	CRoom_Manager::GetInstance()->Clear(ENUM_CLASS(LEVEL::LEVEL_SHELTER));
+	m_pGameInstance->Clear(); //파티클 초기화
 	g_hCursor = LoadCursorFromFile(L"Resources/Sephiria/UI/Cursor/Cursor_Combat.cur");
 
 
@@ -177,6 +178,12 @@ HRESULT CLevel_Boss2::Ready_Layer_Room(const _wstring& strLayerTag)
 		NULL_CHECK_RETURN(pRoom, E_FAIL);
 
 		pRoom->Load_From_File(ENUM_CLASS(LEVEL::LEVEL_BOSS2), strLayerTag, TEXT("../../data/StageBoss2_Map%d.txt"), iNumber, iRoomX, iRoomZ, ROOM_INFO::EVENT_BOSS);
+		if (iNumber == 1)
+		{
+			pRoom->Load_Particle(PARTICLE_TYPE::FIRE, TEXT("Prototype_GameObject_FireParticle"), ENUM_CLASS(LEVEL::LEVEL_BOSS2), _float3(0.5f, 0.5f, 1.f), 2);
+			pRoom->Set_ParticleType(PARTICLE_TYPE::FIRE);
+			pRoom->Set_ParticleOn();
+		}
 		iNumber++;
 		iRoomZ++;		//보스룸은 무조건 0,0 일반룸1  0,1 보스룸 설정
 		if (iCount == 0)

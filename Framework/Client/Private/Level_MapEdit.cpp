@@ -179,7 +179,6 @@ void CLevel_MapEdit::ImGui_MenuBar_Render()
 				config.flags = ImGuiFileDialogFlags_ReadOnlyFileNameField;
 
 				// 파일 다이얼로그 열기
-				// ImGuiFileDialog::Instance()->OpenDialog("ChooseFileDlgKey", "Choose File", config);
 				ImGuiFileDialog::Instance()->OpenDialog("ChooseFileDlgKey", "Choose File", ".txt,.cpp,.h", config);
 			}
 			if (ImGui::MenuItem("Save"))

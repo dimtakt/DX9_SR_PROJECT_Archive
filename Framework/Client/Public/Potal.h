@@ -7,6 +7,7 @@ BEGIN(Engine)
 class CTexture;
 class CTransform;
 class CVIBuffer_Rect;
+class CAnimator;
 END
 
 BEGIN(Client)
@@ -29,10 +30,14 @@ public:
 
 	POTAL_TYPE Get_PotalType() { return m_eDirType; }
 
+	void SetUp_RenderState();
+	void Reset_RenderState();
+
 private:
 	CVIBuffer_Rect* m_pVIBufferCom = { nullptr };
 	CTransform* m_pTransformCom = { nullptr };
 	CTexture* m_pTextureCom = { nullptr };
+	CAnimator* m_pAnimatorCom = { nullptr };
 
 	_uint m_iTextureIndex = 0;
 	POTAL_TYPE m_eDirType = {};
