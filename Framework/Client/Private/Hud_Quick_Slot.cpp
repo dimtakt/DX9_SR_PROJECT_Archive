@@ -328,6 +328,7 @@ _bool CHud_Quick_Slot::Use_Potion()
 			CStat_Manager::GetInstance()->Set_UIOpen(false);
 		m_bEating = false;
 		m_fEatSpeed = 0;
+		m_pGameInstance->StopSound(ENUM_CLASS(CHANNELID::UI_QUICKSLOT));
 	}
 	return false;
 }

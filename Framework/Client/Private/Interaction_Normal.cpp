@@ -592,8 +592,9 @@ HRESULT CInteraction_Normal::Merchant_Initialize()
 
     //m_pChat = static_cast<CField_Npc_Chat*>(m_pGameInstance->Find_UIObj(m_pGameInstance->Get_CurrentLevel(), TEXT("Baba_CHAT")));
 
-    //m_pChat->Add_Chat(TEXT("에베베"));
-    //m_pChat->Add_Chat(TEXT("바바"));
+    //m_pChat->Add_Chat(TEXT("여기까지 오다니"));
+    //m_pChat->Add_Chat(TEXT("품질 좋은 물건 좀 볼 텐가?"));
+    //m_pChat->Add_Chat(TEXT("후회될 선택은 하지 말게"));
     
 
     return S_OK;

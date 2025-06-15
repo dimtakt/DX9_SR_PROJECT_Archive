@@ -8,6 +8,7 @@
 #include "Interaction_Normal.h"
 #include "Room_Manager.h"
 #include "GameInstance.h"
+#include "Client_Struct.h"
 
 CErma::CErma(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CMonster{ pGraphic_Device }
@@ -533,8 +534,9 @@ HRESULT CErma::Ready_Chat()
 
     m_pChat = static_cast<CField_Npc_Chat*>(m_pGameInstance->Find_UIObj(ENUM_CLASS(LEVEL::LEVEL_BOSS1), TEXT("ERMA_CHAT")));
 
-    m_pChat->Add_Chat(TEXT("집에가고 싶어요...."));
-    m_pChat->Add_Chat(TEXT("보내주세요..."));
+    m_pChat->Add_Chat(TEXT("ㄷ더.. 이상 가면 안 돼..."));
+    m_pChat->Add_Chat(TEXT("나난.. ㅈ죽을 수 없어.."));
+    m_pChat->Add_Chat(TEXT("널 막아서라도...."));
 
     m_iChatCount = 2;
 

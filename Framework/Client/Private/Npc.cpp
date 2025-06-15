@@ -50,8 +50,11 @@ HRESULT CNpc::Initialize(void* pArg)
 
         m_pChat = static_cast<CField_Npc_Chat*>(m_pGameInstance->Find_UIObj(ENUM_CLASS(LEVEL::LEVEL_TOWN), TEXT("BlackSmith_CHAT")));
 
-        m_pChat->Add_Chat(TEXT("에베베"));
-        m_pChat->Add_Chat(TEXT("스미스"));
+        m_pChat->Add_Chat(TEXT("새로운 모험가인가?"));
+        m_pChat->Add_Chat(TEXT("장비 수리가 필요..."));
+        m_pChat->Add_Chat(TEXT("없어 보이는군"));
+        m_pChat->Add_Chat(TEXT("아쉽지만 다음에 오게"));
+
     }
     else if (m_eType == NPC_TYPE::ELDER)
     {
@@ -63,8 +66,8 @@ HRESULT CNpc::Initialize(void* pArg)
             return E_FAIL;
 
         m_pChat = static_cast<CField_Npc_Chat*>(m_pGameInstance->Find_UIObj(ENUM_CLASS(LEVEL::LEVEL_TOWN), TEXT("Elder_CHAT")));
-        m_pChat->Add_Chat(TEXT("에베베"));
-        m_pChat->Add_Chat(TEXT("장로"));
+        m_pChat->Add_Chat(TEXT("자네만 믿겠네"));
+        m_pChat->Add_Chat(TEXT("무사히 돌아오게"));
     }
     else if (m_eType == NPC_TYPE::SHIELDDOG)
     {
@@ -76,8 +79,8 @@ HRESULT CNpc::Initialize(void* pArg)
             return E_FAIL;
 
         m_pChat = static_cast<CField_Npc_Chat*>(m_pGameInstance->Find_UIObj(ENUM_CLASS(LEVEL::LEVEL_SHELTER), TEXT("ShieldDog_CHAT")));
-        m_pChat->Add_Chat(TEXT("에베베"));
-        m_pChat->Add_Chat(TEXT("갑옷개"));
+        m_pChat->Add_Chat(TEXT("조심히 다녀오게"));
+        m_pChat->Add_Chat(TEXT("난 여기서 기다리지.."));
     }
     else if (m_eType == NPC_TYPE::SWORDSHIELD)
     {
@@ -89,8 +92,7 @@ HRESULT CNpc::Initialize(void* pArg)
             return E_FAIL;
 
         m_pChat = static_cast<CField_Npc_Chat*>(m_pGameInstance->Find_UIObj(ENUM_CLASS(LEVEL::LEVEL_TOWN), TEXT("SwordShield_CHAT")));
-        m_pChat->Add_Chat(TEXT("에베베"));
-        m_pChat->Add_Chat(TEXT("검방패"));
+        m_pChat->Add_Chat(TEXT("저도 마을을 지킬거에요"));
     }
 
     CCollider_OBB::OBB_DESC tColliderDesc;
@@ -107,7 +109,6 @@ HRESULT CNpc::Initialize(void* pArg)
 
 void CNpc::Priority_Update(_float fTimeDelta)
 {
-
 }
 
 void CNpc::Update(_float fTimeDelta)
@@ -260,7 +261,7 @@ void CNpc::OnCollision(CGameObject* pGameObject)
             }
         }
     }
-    
+
 }
 
 void CNpc::OffCollision(CGameObject* pGameObject)
@@ -270,7 +271,7 @@ void CNpc::OffCollision(CGameObject* pGameObject)
 
     if (pGameObject->Get_ObjType() == GAMEOBJ_TYPE::PLAYER)
     {
-        //m_pChat->Off_Chat();
+        m_pChat->Off_Chat();
     }
 }
 
@@ -302,11 +303,12 @@ CGameObject* CNpc::Clone(void* pArg)
 
 void CNpc::Free()
 {
+    m_pChat = nullptr;
     __super::Free();
 
     Safe_Release(m_pVIBufferCom);
     Safe_Release(m_pTransformCom);
     Safe_Release(m_pTextureCom);
     Safe_Release(m_pAnimatorCom);
-    Safe_Release(m_pChat);
+    
 }

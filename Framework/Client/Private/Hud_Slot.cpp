@@ -103,6 +103,7 @@ void CHud_Slot::SlotToItem(CItem_Base* pItem)
 		else
 		{
 			m_vecQuickSlot[i]->Push_Item(pItem);
+			Safe_AddRef(m_vecQuickSlot[i]);
 			return;
 		}
 	}

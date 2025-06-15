@@ -140,6 +140,7 @@ HRESULT CInven_Slot::Render()
 void CInven_Slot::Add_Item(CItem_Base* pItem)
 {
 	m_pSlotItem = pItem;
+	Safe_AddRef(m_pSlotItem);
 	m_iItemCount += 1;
 }
 
@@ -150,7 +151,7 @@ _bool CInven_Slot::Down_Item_Count()
 	if (m_iItemCount <= 0)
 	{
 		Safe_Release(m_pSlotItem);
-		Safe_Release(m_pOldSlotItem);
+		m_pOldSlotItem = nullptr;
 		return true;
 	}
 	return false;
@@ -478,6 +479,6 @@ CGameObject* CInven_Slot::Clone(void* pArg)
 void CInven_Slot::Free()
 {
 	Safe_Release(m_pSlotItem);
-	Safe_Release(m_pOldSlotItem);
+	m_pOldSlotItem = nullptr;
 	__super::Free();
 }
