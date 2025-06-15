@@ -102,6 +102,8 @@ _bool CAnimator::Change_State(const _wstring strStateTag, _bool isChangeCurFrame
 		if (strStateTag == m_strCurStateTag)
 			return false;
 
+
+
 		ANIMSTATE* pTmpState = Find_State(strStateTag);
 
 		// 즉시 전이가 가능한 State인 경우 전이,

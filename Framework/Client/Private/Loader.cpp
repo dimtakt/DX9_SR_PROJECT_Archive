@@ -1515,6 +1515,10 @@ HRESULT CLoader::Loading_For_Boss2_Level()
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_BOSS2), TEXT("Prototype_Component_Boss_Askard_Phase2_Idle"),
 		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Boss/Askard/Body/Phase2/Askard_Phase2_Idle_%02d.png"), 12))))
 		return E_FAIL;
+	// Idle (12)			/ for Effect
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Boss_Askard_Phase2_Idle"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Boss/Askard/Body/Phase2/Askard_Phase2_Idle_%02d.png"), 12))))
+		return E_FAIL;
 	// Laser (14)
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_BOSS2), TEXT("Prototype_Component_Boss_Askard_Phase2_Laser"),
 		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Boss/Askard/Body/Phase2/Askard_Phase2_Laser_%02d.png"), 14))))
@@ -1531,14 +1535,19 @@ HRESULT CLoader::Loading_For_Boss2_Level()
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_BOSS2), TEXT("Prototype_Component_Boss_Askard_Phase2_Tentacle_End"),
 		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Boss/Askard/Body/Phase2/Askard_Phase2_Tentacle_End_%02d.png"), 7))))
 		return E_FAIL;
-	// Tentacle_Unlit (20)
-	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_BOSS2), TEXT("Prototype_Component_Boss_Askard_Phase2_Tentacle_Unlit"),
+	// Tentacle_Unlit (20)		/ Effect
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Boss_Askard_Phase2_Tentacle_Unlit"),
 		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Boss/Askard/Body/Phase2/Askard_Phase2_Tentacle_Unlit_%02d.png"), 20))))
 		return E_FAIL;
 	// Wave (21)
 	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_BOSS2), TEXT("Prototype_Component_Boss_Askard_Phase2_Wave"),
 		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Boss/Askard/Body/Phase2/Askard_Phase2_Wave_%02d.png"), 21))))
 		return E_FAIL;
+	// Hidden (1) / Custom
+	if (FAILED(m_pGameInstance->Add_Prototype(ENUM_CLASS(LEVEL::LEVEL_BOSS2), TEXT("Prototype_Component_Boss_Askard_Hidden"),
+		CTexture::Create(m_pGraphic_Device, TEXTURE::RECT, TEXT("../Bin/Resources/Sephiria/Boss/Askard/Body/Phase2/Askard_Phase2_Hidden.png"), 1))))
+		return E_FAIL;
+
 
 	// Prototype_Component_Texture_Boss_Askard (BigRoot, Summon)
 	// Hall_Close (7)			/ Effect
