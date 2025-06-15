@@ -15,7 +15,7 @@ public:
 		_uint iLayerIndex;
 	}CAMERAFOLDESC;
 public:
-	enum class CAM_TRANS_STATE { NONE, ZOOM_OUT, ZOOM_IN_AFTER_TELEPORT };
+	enum class CAM_TRANS_STATE { NONE, ZOOM_OUT, ZOOM_IN_AFTER_TELEPORT, LOOK_FROM_TOP, RETURN_FROM_TOP };
 	
 private:
 	CCamera_Follow(LPDIRECT3DDEVICE9 pGraphic_Device);
@@ -52,6 +52,8 @@ private:
 	_float m_fShakeDuration = 0.f;
 	_float m_fShakeElapsed = 0.f;
 	_float m_fShakeIntensity = 0.f;
+	_float m_fHoldDuration = 0.f;        // 머무를 시간
+	_float m_fHoldElapsed = 0.f;         // 경과 시간
 
 private:
 	CTransform* m_pTargetPlayerTransformCom = { nullptr };
@@ -68,6 +70,9 @@ private:
 public:
 	void	Start_Shake(_float fDuration, _float fIntensity);
 	_float3	Apply_Shake(_float3 vBasePos, _float fTimeDelta);
+
+public:
+	void Trigger_CinematicLookFromTop(_float fHoldTime);
 
 public:
 	static CCamera_Follow* Create(LPDIRECT3DDEVICE9 pGraphic_Device);

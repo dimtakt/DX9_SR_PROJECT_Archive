@@ -81,9 +81,6 @@ void CEvent_ClashPattern::Priority_Update(_float fTimeDelta)
 	if (!m_bIsUpdate)
 		return;
 
-	if (m_pGameInstance->IsKeyDown(VK_DOWN))
-		Start_Event();
-
 	if (!m_bIsPlaying)
 		return;
 	__super::Priority_Update(fTimeDelta);
