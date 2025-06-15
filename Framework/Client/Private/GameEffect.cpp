@@ -450,7 +450,7 @@ void CGameEffect::OnCollision(CGameObject* pGameObject)
 			{
 				CAnimator* pAni = dynamic_cast<CAnimator*>((dynamic_cast<CAskard*>(pGameObject)->Find_Component(TEXT("Com_Animator"))));
 
-				if (pAni->Get_CurStateTag() == L"Standby" || pAni->Get_CurStateTag() == L"Askard_Die" || pAni->Get_CurStateTag() == L"P1_PhaseChange" ||
+				if (pAni->Get_CurStateTag() == L"Standby" || pAni->Get_CurStateTag() == L"Askard_Die" || pAni->Get_CurStateTag() == L"P1_PhaseChange" || pAni->Get_CurStateTag() == L"P1_SummonStaff" ||
 					pAni->Get_CurStateTag() == L"Hidden" || pAni->Get_CurStateTag() == L"P2_Tentacle" || pAni->Get_CurStateTag() == L"P2_Tentacle_End")
 					return;
 			}
