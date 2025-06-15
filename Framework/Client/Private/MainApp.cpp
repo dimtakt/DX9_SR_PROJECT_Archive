@@ -1177,6 +1177,7 @@ void CMainApp::Ready_Key_Setting()
 	m_pGameInstance->AddTrackingKey('R');
 	m_pGameInstance->AddTrackingKey('F');
 	m_pGameInstance->AddTrackingKey('B');
+	m_pGameInstance->AddTrackingKey('G');
 	m_pGameInstance->AddTrackingKey(VK_F1);
 	m_pGameInstance->AddTrackingKey(VK_F2);
 	m_pGameInstance->AddTrackingKey(VK_F3);
