@@ -51,7 +51,7 @@ HRESULT CAskard::Initialize(void* pArg)
 
     m_iMaxHp = 6000;
     m_iCulHp = 6000;
-
+    
     m_eMonsterType = MONSTER_TYPE::ASKARD; // ksta
     m_ePattern = PATTERN_ASKARD::PT_IDLE;
     Ready_Chat();
@@ -114,22 +114,36 @@ void CAskard::Priority_Update(_float fTimeDelta)
         m_iCulHp = 0;
         
         
-        if (m_iChatNextPage + 1 != m_pChat_End->Get_ChatIndex() + 1 && m_pGameInstance->IsKeyDown('F'))
+        if ((m_iChatNextPage + 1 != m_pChat_End->Get_ChatIndex() + 1) &&
+            m_pGameInstance->IsKeyDown('F'))
         {
             m_bIsChat = true;
             m_pChat_End->Cinematic_Chat(0, false);
+
+            // 엔딩 텍스트 종료 시 아스카드 사망
+            m_pAnimatorCom->Change_State(L"Askard_Die", true, 0.0f, true);
+            m_pTransformCom->Scaling(10.f, 20.f, 20.f);
+            m_pTerrainBox->SetUp_OnTerrainBox(m_pTransformCom, _float3(0.00f, 5.33f, 0.00f));
         }
 
         if (!m_bIsChat && m_pGameInstance->IsKeyDown('F'))
         {
-            m_bDead = true;
-            static_cast<CEnding*>(m_pGameInstance->Find_UIObj(ENUM_CLASS(LEVEL::LEVEL_BOSS2), TEXT("UI_Ending")))->Start_Ending();
+            //m_bDead = true;
+            //static_cast<CEnding*>(m_pGameInstance->Find_UIObj(ENUM_CLASS(LEVEL::LEVEL_BOSS2), TEXT("UI_Ending")))->Start_Ending();
         }
 
-        if (m_iChatNextPage + 1 <= m_pChat_End->Get_ChatIndex() + 1)
+        if (m_iChatNextPage + 1 <= m_pChat_End->Get_ChatIndex() + 1 && m_bIsChat)
         {
             m_bIsChat = false;
         }
+    }
+
+    if (m_pAnimatorCom->Get_CurStateTag() == L"Askard_Die" &&
+        m_pAnimatorCom->Get_IsLastFrame() == true)
+    {
+        // 다 죽으면 엔딩 재생
+        m_bDead = true;
+        static_cast<CEnding*>(m_pGameInstance->Find_UIObj(ENUM_CLASS(LEVEL::LEVEL_BOSS2), TEXT("UI_Ending")))->Start_Ending();
     }
 }
 
@@ -193,16 +207,18 @@ void CAskard::Update(_float fTimeDelta)
     else if (m_isPhaseChanging && m_iPhase == 1)
     {
         // ksta : 임시 (1페이즈와 2페이즈 아스카드의 이미지 크기가 달라 크기 및 위치를 키움)
-        if (m_pAnimatorCom->Get_CurStateTag() != L"Askard_Die")
-            m_pAnimatorCom->Change_State(L"Askard_Die", true, 0.0f, true);
-        m_pTerrainBox->SetUp_OnTerrainBox(m_pTransformCom, _float3(0.00f, 5.33f, 0.00f));
-        m_pTransformCom->Scaling(10.f, 20.f, 20.f);
+        if (m_pAnimatorCom->Get_CurStateTag() != L"Idle_Dead")
+        {
+            m_pAnimatorCom->Change_State(L"Idle_Dead", true, 0.0f, true);
+        }
+        m_pTerrainBox->SetUp_OnTerrainBox(m_pTransformCom, _float3(0.00f, 2.67f, 0.00f));
 
         if (m_pAnimatorCom->Get_IsLastFrame())
             m_iPhase++;
 
         return;
     }
+
 
 
     // ksta3 : 패턴 구현..
@@ -393,7 +409,7 @@ void CAskard::Late_Update(_float fTimeDelta)
 {
     __super::Late_Update(fTimeDelta);
 
-    if (m_bStart)
+    if (m_bStart && m_iPhase < 2)
         m_pBossHp->Render_Hpbar(m_iCulHp, m_iMaxHp, fTimeDelta);
 
     //_float3 vPos = m_pTransformCom->Get_State(STATE::POSITION);
@@ -636,6 +652,7 @@ HRESULT CAskard::Ready_Components(void* pArg)
     m_pAnimatorCom->Add_State(L"Askard_Die",        { m_pTextureCom_Askard_Die		, 4, false });
     m_pAnimatorCom->Add_State(L"Hidden",            { m_pTextureCom_Askard_Hidden	, 4, true });
 
+    m_pAnimatorCom->Add_State(L"Idle_Dead",         { m_pTextureCom_P2_Idle			, 4, true });
     
 
 #pragma endregion
@@ -3157,7 +3174,7 @@ HRESULT CAskard::Ready_Chat()
     m_iChatCount = 0;
     m_bIsChat = true;
 
-    desc.fY = 50;
+    desc.fY = 460;
 
     desc.szChatTag = TEXT("Askard_Chat_End");
     if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_BOSS2), TEXT("Layer_UI_Chat"), ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_Field_Npc_Chat"), &desc)))
