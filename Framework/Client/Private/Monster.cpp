@@ -54,15 +54,18 @@ void CMonster::Priority_Update(_float fTimeDelta)
 	}
 
 	if (m_iCulHp <= 0) {
-		m_bDead = true;
 
 		if (m_eMonsterType == MONSTER_TYPE::LASERGHOST)
 		{
 			m_pGameInstance->StopSound(ENUM_CLASS(CHANNELID::SOUND_MONSTER_LONG_EFFECT));
 		}
 		
-		Ready_ExpBall();
-		Ready_Gold();
+		if (m_bDead || m_bDying)
+		{
+			Ready_ExpBall();
+			Ready_Gold();
+		}
+		
 	}
 		
 }
@@ -249,6 +252,7 @@ CGameObject* CMonster::Clone(void* pArg)
 
 void CMonster::Free()
 {
+	m_pGameInstance->Remove_Collider_ByOwner(this);
 	__super::Free();
 
 	Safe_Release(m_pTransformCom);

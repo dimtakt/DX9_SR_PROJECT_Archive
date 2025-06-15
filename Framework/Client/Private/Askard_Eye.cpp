@@ -127,6 +127,7 @@ CGameObject* CAskard_Eye::Clone(void* pArg)
 
 void CAskard_Eye::Free()
 {
+	m_pGameInstance->Remove_Collider_ByOwner(this);
 	__super::Free();
 
 	Safe_Release(m_pAnimatorCom);

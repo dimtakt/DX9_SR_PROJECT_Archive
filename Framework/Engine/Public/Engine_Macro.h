@@ -25,6 +25,7 @@ namespace Engine
 #define ENGINE_DLL		_declspec(dllimport)
 #endif
 
+#define CHECK_VALID(p)  ((p) != nullptr && !IsBadReadPtr((p), sizeof(*(p))))
 
 #define NULL_CHECK( _ptr)	\
 		{if( _ptr == 0){ return;}}
