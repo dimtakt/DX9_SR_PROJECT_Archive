@@ -584,12 +584,12 @@ void CGameEffect::OnCollision(CGameObject* pGameObject)
 
 				else if (m_strEffectTag == TEXT("Prototype_Component_Boss_Askard_BigRoot_Root_FX_Swing"))
 				{
-					iDamage = CStat_Manager::GetInstance()->Get_Monster_Damage(10.f);
+					iDamage = CStat_Manager::GetInstance()->Get_Monster_Damage(7.f);
 					CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CULHP, float(iDamage) * -1);
 				}
 				else if (m_strEffectTag == TEXT("Prototype_Component_Boss_Askard_BigRoot_Hall_FX_Open"))
 				{
-					iDamage = CStat_Manager::GetInstance()->Get_Monster_Damage(10.f);
+					iDamage = CStat_Manager::GetInstance()->Get_Monster_Damage(8.f);
 					CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CULHP, float(iDamage) * -1);
 				}
 				else if (m_strEffectTag == TEXT("Prototype_Component_Boss_Askard_Laser"))
@@ -599,22 +599,22 @@ void CGameEffect::OnCollision(CGameObject* pGameObject)
 				}
 				else if (m_strEffectTag == TEXT("Prototype_Component_Boss_Askard_Phase1_Wave_Burst"))
 				{
-					iDamage = CStat_Manager::GetInstance()->Get_Monster_Damage(10.f);
+					iDamage = CStat_Manager::GetInstance()->Get_Monster_Damage(15.f);
 					CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CULHP, float(iDamage) * -1);
 				}
 				else if (m_strEffectTag == TEXT("Prototype_Component_Boss_Askard_ShockWaveFX"))
 				{
-					iDamage = CStat_Manager::GetInstance()->Get_Monster_Damage(10.f);
+					iDamage = CStat_Manager::GetInstance()->Get_Monster_Damage(7.f);
 					CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CULHP, float(iDamage) * -1);
 				}
 				else if (m_strEffectTag == TEXT("Prototype_Component_Boss_Askard_TentacleLaser_Progress"))
 				{
-					iDamage = CStat_Manager::GetInstance()->Get_Monster_Damage(10.f);
+					iDamage = CStat_Manager::GetInstance()->Get_Monster_Damage(15.f);
 					CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CULHP, float(iDamage) * -1);
 				}
 				else if (m_strEffectTag == TEXT("Prototype_Component_Boss_Askard_TentacleBullet"))
 				{
-					iDamage = CStat_Manager::GetInstance()->Get_Monster_Damage(10.f);
+					iDamage = CStat_Manager::GetInstance()->Get_Monster_Damage(30.f);
 					CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CULHP, float(iDamage) * -1);
 				}
 				pPlayer->Hit(iDamage);

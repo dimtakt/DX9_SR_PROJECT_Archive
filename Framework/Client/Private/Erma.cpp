@@ -51,8 +51,8 @@ HRESULT CErma::Initialize(void* pArg)
     m_isSummoned = true;
     Ready_Object();
 
-    m_iMaxHp = 100;
-    m_iCulHp = 100;
+    m_iMaxHp = 3000;
+    m_iCulHp = 3000;
 
     m_eMonsterType = MONSTER_TYPE::ERMA;
 
@@ -237,6 +237,8 @@ void CErma::Update(_float fTimeDelta)
                 if (vToPos.y <= fY)
                     vToPos.y = fY + 0.5f;
 
+
+                vToPos.y += 0.1f;
                 m_pTransformCom->Set_State(STATE::POSITION, vToPos);
             }
         }

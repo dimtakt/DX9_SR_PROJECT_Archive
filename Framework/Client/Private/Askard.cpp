@@ -49,8 +49,8 @@ HRESULT CAskard::Initialize(void* pArg)
     m_isSummoned = true;
     Ready_Object();
 
-    m_iMaxHp = 20;
-    m_iCulHp = 20;
+    m_iMaxHp = 9000;
+    m_iCulHp = 9000;
 
     m_eMonsterType = MONSTER_TYPE::ASKARD; // ksta
     m_ePattern = PATTERN_ASKARD::PT_IDLE;
