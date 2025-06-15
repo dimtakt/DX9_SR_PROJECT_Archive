@@ -103,6 +103,17 @@ void CArtefact_Tooltip::Late_Update(_float fTimeDelta)
 	if (m_pItemObject == nullptr)
 		return;
 
+	if (m_pOldItem != m_pItemObject)
+	{
+		for (auto iter = m_vecChildren.begin() + 2; iter != m_vecChildren.end(); ++iter)
+		{
+			Safe_Release(*(iter));
+		}
+		m_vecChildren.erase(m_vecChildren.begin() + 2, m_vecChildren.end());
+		m_pOldItem = m_pItemObject;
+		m_bTier = false;
+	}
+
 	for (_int i = 0; i < 2; ++i)
 		m_vecChildren[i]->Late_Update(fTimeDelta);
 		
