@@ -72,6 +72,11 @@ HRESULT CStat_Manager::Initialize()
 
 void CStat_Manager::Update(_float fTimeDelta)
 {
+    if (m_pGameInstance->IsKeyDown('G'))
+    {
+        Set_GodMode();
+    }
+
     if (m_fCurStats[static_cast<int>(STAT_INFO::CULMP)] < m_fCurStats[static_cast<int>(STAT_INFO::MAXMP)])
     {
         m_fCurStats[static_cast<int>(STAT_INFO::CULMP)] += fTimeDelta * 2.5f;
@@ -90,6 +95,9 @@ void CStat_Manager::Update(_float fTimeDelta)
 
 void CStat_Manager::Cal_Stats(STAT_INFO eStat, float fValue)
 {
+    if (eStat == STAT_INFO::CULHP && fValue < 0 && m_bGodMode == true)
+        return;
+
     m_fCurStats[static_cast<int>(eStat)] += fValue;
     
 
