@@ -221,8 +221,8 @@ void CAskard::Update(_float fTimeDelta)
         }
         m_pTerrainBox->SetUp_OnTerrainBox(m_pTransformCom, _float3(0.00f, 2.67f, 0.00f));
 
-        if (m_pAnimatorCom->Get_IsLastFrame())
-            m_iPhase++;
+
+        m_iPhase++;
 
         return;
     }
