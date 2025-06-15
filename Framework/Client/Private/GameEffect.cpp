@@ -363,6 +363,36 @@ void CGameEffect::Ready_Collision()
 			{
 				tColliderDesc.vScale = _float3(0.7f, 1.f, 0.7f);
 			}
+
+			//아스카드
+			else if (m_strEffectTag == TEXT("Prototype_Component_Boss_Askard_BigRoot_Root_FX_Swing"))
+			{
+				tColliderDesc.vScale = _float3(0.7f, 1.f, 0.7f);
+			}
+			else if (m_strEffectTag == TEXT("Prototype_Component_Boss_Askard_BigRoot_Hall_FX_Open"))
+			{
+				tColliderDesc.vScale = _float3(0.7f, 1.f, 0.7f);
+			}
+			else if (m_strEffectTag == TEXT("Prototype_Component_Boss_Askard_Laser"))
+			{
+				tColliderDesc.vScale = _float3(0.7f, 1.f, 0.7f);
+			}
+			else if (m_strEffectTag == TEXT("Prototype_Component_Boss_Askard_Phase1_Wave_Burst"))
+			{
+				tColliderDesc.vScale = _float3(0.7f, 1.f, 0.7f);
+			}
+			else if (m_strEffectTag == TEXT("Prototype_Component_Boss_Askard_ShockWaveFX"))
+			{
+				tColliderDesc.vScale = _float3(0.7f, 1.f, 0.7f);
+			}
+			else if (m_strEffectTag == TEXT("Prototype_Component_Boss_Askard_TentacleLaser_Progress"))
+			{
+				tColliderDesc.vScale = _float3(0.7f, 1.f, 0.7f);
+			}
+			else if (m_strEffectTag == TEXT("Prototype_Component_Boss_Askard_TentacleBullet"))
+			{
+				tColliderDesc.vScale = _float3(0.7f, 1.f, 0.7f);
+			}
 		}
 
 		CCollider_OBB* pCol = dynamic_cast<CCollider_OBB*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::COMPONENT, ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Collider_OBB"), &tColliderDesc));
@@ -537,6 +567,42 @@ void CGameEffect::OnCollision(CGameObject* pGameObject)
 					CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CULHP, float(iDamage) * -1);
 				}
 				else if (m_strEffectTag == TEXT("Prototype_Component_Boss_Erma_Missile_Lower_Light"))
+				{
+					iDamage = CStat_Manager::GetInstance()->Get_Monster_Damage(10.f);
+					CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CULHP, float(iDamage) * -1);
+				}
+
+				else if (m_strEffectTag == TEXT("Prototype_Component_Boss_Askard_BigRoot_Root_FX_Swing"))
+				{
+					iDamage = CStat_Manager::GetInstance()->Get_Monster_Damage(10.f);
+					CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CULHP, float(iDamage) * -1);
+				}
+				else if (m_strEffectTag == TEXT("Prototype_Component_Boss_Askard_BigRoot_Hall_FX_Open"))
+				{
+					iDamage = CStat_Manager::GetInstance()->Get_Monster_Damage(10.f);
+					CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CULHP, float(iDamage) * -1);
+				}
+				else if (m_strEffectTag == TEXT("Prototype_Component_Boss_Askard_Laser"))
+				{
+					iDamage = CStat_Manager::GetInstance()->Get_Monster_Damage(10.f);
+					CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CULHP, float(iDamage) * -1);
+				}
+				else if (m_strEffectTag == TEXT("Prototype_Component_Boss_Askard_Phase1_Wave_Burst"))
+				{
+					iDamage = CStat_Manager::GetInstance()->Get_Monster_Damage(10.f);
+					CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CULHP, float(iDamage) * -1);
+				}
+				else if (m_strEffectTag == TEXT("Prototype_Component_Boss_Askard_ShockWaveFX"))
+				{
+					iDamage = CStat_Manager::GetInstance()->Get_Monster_Damage(10.f);
+					CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CULHP, float(iDamage) * -1);
+				}
+				else if (m_strEffectTag == TEXT("Prototype_Component_Boss_Askard_TentacleLaser_Progress"))
+				{
+					iDamage = CStat_Manager::GetInstance()->Get_Monster_Damage(10.f);
+					CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CULHP, float(iDamage) * -1);
+				}
+				else if (m_strEffectTag == TEXT("Prototype_Component_Boss_Askard_TentacleBullet"))
 				{
 					iDamage = CStat_Manager::GetInstance()->Get_Monster_Damage(10.f);
 					CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CULHP, float(iDamage) * -1);
