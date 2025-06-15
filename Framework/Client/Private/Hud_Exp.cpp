@@ -138,7 +138,7 @@ CGameObject* CHud_Exp::Clone(void* pArg)
 
 void CHud_Exp::Free()
 {
-    m_pGameInstance->Unsubscribe(ENUM_CLASS(EVENT_TYPE::EXP), this);
+    //m_pGameInstance->Unsubscribe(ENUM_CLASS(EVENT_TYPE::EXP), this);
     __super::Free();
     Safe_Release(m_pVIBufferCom);
 }

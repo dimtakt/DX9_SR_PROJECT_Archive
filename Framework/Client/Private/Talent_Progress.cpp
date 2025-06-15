@@ -125,7 +125,7 @@ CGameObject* CTalent_Progress::Clone(void* pArg)
 
 void CTalent_Progress::Free()
 {
-	m_pGameInstance->Unsubscribe(ENUM_CLASS(EVENT_TYPE::PLAYERTSTATCHANGE), this);
+	//m_pGameInstance->Unsubscribe(ENUM_CLASS(EVENT_TYPE::PLAYERTSTATCHANGE), this);
 	__super::Free();
 	Safe_Release(m_pVIBufferCom);
 }

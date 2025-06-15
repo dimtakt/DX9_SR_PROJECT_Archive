@@ -31,7 +31,7 @@ public:
 	void						Open_UI(_float fX, _float fY);
 	void						Close_UI();
 	void						Push_Item_Slot(CItem_Base* pItem, _uint iCount);
-
+	_bool						Get_OpenUI() { return m_bIsOpen; }
 	_bool						Use_Item(CItem_Base* pItem);
 
 	_int						Item_Count(CItem_Base* pItem);
