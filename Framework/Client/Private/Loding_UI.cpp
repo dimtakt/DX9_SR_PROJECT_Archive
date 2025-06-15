@@ -285,11 +285,11 @@ void CLoding_UI::Font_Render()
 		m_vTexRect.top = 120 + g_iWinSizeY * 0.5;
 		m_vTexRect.right = g_iWinSizeX;
 		m_vTexRect.bottom = g_iWinSizeY;
-		m_pGameInstance->Render_Font(TEXT("UI_Font_40"), szText, m_vTexRect, D3DXCOLOR(1.f, 1.f, 1.f, 1.f), DT_CENTER | DT_TOP);
+		m_pGameInstance->Render_Font(TEXT("UI_Font_40"), szText, m_vTexRect, D3DXCOLOR(1.f, 0.f, 0.f, 1.f), DT_CENTER | DT_TOP);
 
 		_stprintf_s(szText, TEXT("아스카드"));
 		m_vTexRect.top = 160 + g_iWinSizeY * 0.5;
-		m_pGameInstance->Render_Font(TEXT("UI_Font_50"), szText, m_vTexRect, D3DXCOLOR(0.f, 0.f, 1.f, 1.f), DT_CENTER | DT_TOP);
+		m_pGameInstance->Render_Font(TEXT("UI_Font_50"), szText, m_vTexRect, D3DXCOLOR(1.f, 0.f, 0.3f, 1.f), DT_CENTER | DT_TOP);
 
 		_stprintf_s(szText, TEXT("당신은 아스카드에게 찾아갑니다."));
 		m_vTexRect.top = 220 + g_iWinSizeY * 0.5;
