@@ -150,7 +150,7 @@ CGameObject* CHp_Player::Clone(void* pArg)
 
 void CHp_Player::Free()
 {
-	m_pGameInstance->Unsubscribe(ENUM_CLASS(EVENT_TYPE::PLAYERTSTATCHANGE), this);
+	//m_pGameInstance->Unsubscribe(ENUM_CLASS(EVENT_TYPE::PLAYERTSTATCHANGE), this);
 	__super::Free();
 	Safe_Release(m_pVIBufferCom);
 }

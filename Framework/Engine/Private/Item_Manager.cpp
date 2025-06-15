@@ -135,7 +135,7 @@ HRESULT CItem_Manager::Setting_Item(void* pArg, _uint MaxItemIndex, _uint iLevel
 			return E_FAIL;
 		}
 		m_ItemObjects.push_back(pItemObject);
-		Safe_AddRef(pItemObject);
+		//Safe_AddRef(pItemObject);
 	}
 
 	m_iLevelIndex = iLevelIndex;

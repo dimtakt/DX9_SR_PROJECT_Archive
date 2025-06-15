@@ -76,7 +76,9 @@ void CInven_Slot::Update(_float fTimeDelta)
 		}
 		m_pOldSlotItem = m_pSlotItem;
 	}
-	Item_Selete();
+	if(static_cast<CInventory*>(m_pParent)->Get_OpenUI())
+		Item_Selete();
+		
 	Subscribe_Item();
 	Setting_Item();
 	if (m_bIsOver)
@@ -140,7 +142,7 @@ HRESULT CInven_Slot::Render()
 void CInven_Slot::Add_Item(CItem_Base* pItem)
 {
 	m_pSlotItem = pItem;
-	Safe_AddRef(m_pSlotItem);
+	//Safe_AddRef(m_pSlotItem);
 	m_iItemCount += 1;
 }
 
@@ -150,7 +152,8 @@ _bool CInven_Slot::Down_Item_Count()
 
 	if (m_iItemCount <= 0)
 	{
-		Safe_Release(m_pSlotItem);
+		//Safe_Release(m_pSlotItem);
+		m_pSlotItem = nullptr;
 		m_pOldSlotItem = nullptr;
 		return true;
 	}
@@ -160,6 +163,7 @@ _bool CInven_Slot::Down_Item_Count()
 void CInven_Slot::Push_Item(CItemObject* pItem)
 {
 	m_pSlotItem = static_cast<CItem_Base*>(pItem);
+	//Safe_AddRef(m_pSlotItem);
 }
 
 CItem_Base* CInven_Slot::Pop_Item()

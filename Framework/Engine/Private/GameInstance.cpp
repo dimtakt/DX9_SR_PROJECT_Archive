@@ -634,7 +634,6 @@ void CGameInstance::Release_Engine()
     Release();
 
     Safe_Release(m_pCollision_Manager);
-    Safe_Release(m_pUIObject_Manager);
     Safe_Release(m_pTimer_Manager);
     Safe_Release(m_pLevel_Manager);
     Safe_Release(m_pGraphic_Device);
@@ -649,6 +648,7 @@ void CGameInstance::Release_Engine()
     Safe_Release(m_pLight_Manager);
     Safe_Release(m_pAnimation_Manager);
     Safe_Release(m_pItem_Manager);
+    Safe_Release(m_pUIObject_Manager);
     
 }
 

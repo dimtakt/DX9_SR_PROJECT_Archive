@@ -359,7 +359,7 @@ CGameObject* CHud_Quick_Slot::Clone(void* pArg)
 
 void CHud_Quick_Slot::Free()
 {
-	m_pSlotItem = nullptr;
+	Safe_Release(m_pSlotItem);
 	__super::Free();
 
 }
