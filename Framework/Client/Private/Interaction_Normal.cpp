@@ -848,6 +848,7 @@ CGameObject* CInteraction_Normal::Clone(void* pArg)
 
 void CInteraction_Normal::Free()
 {
+    m_pGameInstance->Remove_Collider_ByOwner(this);
     __super::Free();
 
     Safe_Release(m_pVIBufferCom_0);

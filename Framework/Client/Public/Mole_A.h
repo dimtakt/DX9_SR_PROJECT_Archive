@@ -32,6 +32,7 @@ private:
 	CTexture*	m_pTextureCom_Down			= { nullptr }; 
 	CTexture*	m_pTextureCom_Attack		= { nullptr }; 
 	CTexture*	m_pTextureCom_Airborne		= { nullptr }; 
+	CTexture*	m_pTextureCom_Dead			= { nullptr };
 
 	CAnimator*	m_pAnimatorCom				= { nullptr };
 

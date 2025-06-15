@@ -66,7 +66,7 @@ void CErma::Priority_Update(_float fTimeDelta)
 {
     __super::Priority_Update(fTimeDelta);
 
-    if (m_iChatCount < m_iCulChatCount) {
+    if (m_iChatCount < m_iCulChatCount && !m_bStart) {
         m_bStart = true;
         m_pChat->Off_Chat();
         m_pChat->End_Chat();
@@ -538,7 +538,7 @@ HRESULT CErma::Ready_Chat()
     m_pChat->Add_Chat(TEXT("나난.. 죽을 수 없어.."));
     m_pChat->Add_Chat(TEXT("널 막아서라도...."));
 
-    m_iChatCount = 2;
+    m_iChatCount = 3;
 
     return S_OK;
 }
@@ -707,7 +707,8 @@ void CErma::OnCollision(CGameObject* pGameObject)
     switch (pGameObject->Get_ObjType())
     {
     case GAMEOBJ_TYPE::PLAYER:
-        m_pChat->On_Chat(0, false);
+        if (!m_bStart)
+            m_pChat->On_Chat(0, false);
         if (m_pGameInstance->IsKeyDown('F'))
         {
             m_pChat->Off_Chat();
@@ -747,6 +748,7 @@ CGameObject* CErma::Clone(void* pArg)
 
 void CErma::Free()
 {
+    m_pGameInstance->Remove_Collider_ByOwner(this);
     __super::Free();
 
     Safe_Release(m_pTextureCom_Idle);

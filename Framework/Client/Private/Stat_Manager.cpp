@@ -4,6 +4,8 @@
 #include "FrozenHammer.h"
 #include "Planet.h"
 #include "ProjSword.h"
+#include "IceBolt.h"
+#include "Meteor.h"
 
 IMPLEMENT_SINGLETON(CStat_Manager)
 
@@ -220,6 +222,23 @@ void CStat_Manager::HasItem(_wstring szEffectTag, _bool bHasItme)
 
         m_pGameInstance->Add_GameObject_ToLayer(m_pGameInstance->Get_CurrentLevel(), TEXT("Layer_Item"), ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_ProjSword"), &projSwordDesc);
     }
+    else if (szEffectTag == TEXT("Ice Bolt") && Get_HasItem(TEXT("Ice Bolt")) == false && bHasItme == true)
+    {
+        CIceBolt::BOLTDESC pBoltDesc{};
+        pBoltDesc.pPlayerTransform = dynamic_cast<CTransform*>(m_pGameInstance->Get_GameObject(m_pGameInstance->Get_CurrentLevel(), TEXT("Layer_Player"))->Find_Component(TEXT("Com_Transform")));
+
+        m_pGameInstance->Add_GameObject_ToLayer(m_pGameInstance->Get_CurrentLevel(), TEXT("Player_Skill"),
+            ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_IceBolt"), &pBoltDesc);
+   }
+    else if (szEffectTag == TEXT("Meteor") && Get_HasItem(TEXT("Meteor")) == false && bHasItme == true)
+    {
+        CMeteor::METEORESC pMeteorDesc{};
+        pMeteorDesc.pPlayerTransform = dynamic_cast<CTransform*>(m_pGameInstance->Get_GameObject(m_pGameInstance->Get_CurrentLevel(), TEXT("Layer_Player"))->Find_Component(TEXT("Com_Transform")));
+
+        m_pGameInstance->Add_GameObject_ToLayer(m_pGameInstance->Get_CurrentLevel(), TEXT("Player_Skill"),
+            ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_Meteor"), &pMeteorDesc);
+    }
+
     m_mapHasItem.find(szEffectTag)->second = bHasItme;
 }
 

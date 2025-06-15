@@ -3,7 +3,7 @@
 #include "Collider.h"
 #include "Collider_OBB.h"
 #include "GameObject.h"
-
+#define CHECK_VALID(p)  ((p) != nullptr && !IsBadReadPtr((p), sizeof(*(p))))
 USING(Engine)
 
 HRESULT CCollision_Manager::Add_OBB_Collider(CCollider_OBB* pCollider)
@@ -169,14 +169,33 @@ void CCollision_Manager::Check_RoomCollisions()
 
             if (Check_3DOBBto3DOBB(m_vColliders[i], m_vColliders[j]))
             {                
-                if (m_bNext)
+                /*if (m_bNext)
                     return;
                 m_vColliders[i]->Get_Owner()->OnCollision(m_vColliders[j]->Get_Owner());
 
 
                 if (m_bNext)
                     return;
-                m_vColliders[j]->Get_Owner()->OnCollision(m_vColliders[i]->Get_Owner());
+                m_vColliders[j]->Get_Owner()->OnCollision(m_vColliders[i]->Get_Owner());*/
+                CGameObject* pOwnerA = m_vColliders[i]->Get_Owner();
+                CGameObject* pOwnerB = m_vColliders[j]->Get_Owner();
+
+                if (!CHECK_VALID(pOwnerA) || !CHECK_VALID(pOwnerB))
+                    continue;
+
+                if (pOwnerA->Get_IsDead() || pOwnerB->Get_IsDead())
+                    continue;
+
+                pOwnerA->OnCollision(pOwnerB);
+
+                if (!CHECK_VALID(pOwnerA) || !CHECK_VALID(pOwnerB)) // 다시 체크
+                    continue;
+
+                if (pOwnerA->Get_IsDead() || pOwnerB->Get_IsDead())
+                    continue;
+
+                pOwnerB->OnCollision(pOwnerA);
+                
             }
             /*else
             {
@@ -298,6 +317,24 @@ _bool CCollision_Manager::Check_Y_Overlap(CCollider_OBB* pA, CCollider_OBB* pB)
     float maxB = vCenterB.y + vExtentB.y;
 
     return !(maxA < minB || maxB < minA);
+}
+
+void CCollision_Manager::Remove_Collider_ByOwner(CGameObject* pOwner)
+{
+    if (this == nullptr)
+        return;
+    for (auto it = m_vColliders.begin(); it != m_vColliders.end(); )
+    {
+        if (*it != nullptr && (*it)->Get_Owner() == pOwner)
+        {
+            Safe_Release(*it);
+            it = m_vColliders.erase(it);
+        }
+        else
+        {
+            ++it;
+        }
+    }
 }
 
 

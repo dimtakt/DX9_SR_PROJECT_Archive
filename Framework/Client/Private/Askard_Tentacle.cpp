@@ -37,7 +37,7 @@ HRESULT CAskard_Tentacle::Initialize(void* pArg)
 	m_pTerrainTransformCom = pTerrainTransform;
 	_float3 fTerrainPos = pTerrainTransform->Get_State(STATE::POSITION);
 	_float3 fTerrainScale = pTerrainTransform->Get_Scaled();
-	m_pTransformCom->Scaling(3.f, 3.f, 3.f);
+	m_pTransformCom->Scaling(6.f, 6.f, 6.f);
 
 	m_pTransformCom->Set_State(STATE::POSITION, desc->vPosition);
 
@@ -140,7 +140,7 @@ void CAskard_Tentacle::Update(_float fTimeDelta)
 	// 2. 크기
 	_float4x4 matScale = {};
 	D3DXMatrixIdentity(&matScale);
-	D3DXMatrixScaling(&matScale, -1.5f, 1.f, 1.f);
+	D3DXMatrixScaling(&matScale, 6.f, 6.f, 6.f);
 
 	// 3. 자전
 	_float4x4 matRotateChild = {};
@@ -182,14 +182,14 @@ void CAskard_Tentacle::Update(_float fTimeDelta)
 	D3DXQUATERNION qNonRot = { 0, 0, 0, 1 };
 
 	_float3 vAxis = { 1, 0, 0 };
-	_float3 vScale = { 3, 3, 3 };
+	_float3 vScale = { 6, 6, 6 };
 	D3DXQuaternionRotationAxis(&qRot, &vAxis, D3DXToRadian(90.f));
 
-	if (m_iStackedFrames == 0)
+	if (m_iStackedFrames == 1)
 	{
 		// 돌출 이펙트
 		CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::NORMAL_EFFECT, L"Prototype_Component_Boss_Askard_BigRoot_Hall_Ready",
-			vPos, qRot, vScale);		// 왜 얘만 올려줘야 제대로보임????
+			vPos, qRot, vScale);
 	}
 	else if (m_iStackedFrames == 30)
 	{
@@ -579,6 +579,7 @@ CGameObject* CAskard_Tentacle::Clone(void* pArg)
 
 void CAskard_Tentacle::Free()
 {
+	m_pGameInstance->Remove_Collider_ByOwner(this);
 	__super::Free();
 
 	Safe_Release(m_pTextureCom_Root_Standby);

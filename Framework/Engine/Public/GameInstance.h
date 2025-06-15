@@ -96,6 +96,7 @@ public:
 	void Clear_Colliders();
 	void Clear_AllColliders();
 	void Set_Next(_bool bNext);
+	void Remove_Collider_ByOwner(CGameObject* pOwner);
 #pragma endregion
 
 #pragma region FONT_MANAGER
