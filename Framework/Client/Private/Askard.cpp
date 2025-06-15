@@ -48,8 +48,8 @@ HRESULT CAskard::Initialize(void* pArg)
     m_isSummoned = true;
     Ready_Object();
 
-    m_iMaxHp = 2000;
-    m_iCulHp = 2000;
+    m_iMaxHp = 200;
+    m_iCulHp = 200;
 
     m_eMonsterType = MONSTER_TYPE::ASKARD; // ksta
     m_ePattern = PATTERN_ASKARD::PT_IDLE;
@@ -590,7 +590,7 @@ HRESULT CAskard::Ready_Components(void* pArg)
     m_pAnimatorCom->Add_State(L"P2_Idle",           { m_pTextureCom_P2_Idle			, 4, true });
     m_pAnimatorCom->Add_State(L"P2_Laser",          { m_pTextureCom_P2_Laser		, 4, false });
     m_pAnimatorCom->Add_State(L"P2_RangeAttack",    { m_pTextureCom_P2_RangeAttack	, 4, false });
-    m_pAnimatorCom->Add_State(L"P2_Tentacle",       { m_pTextureCom_P2_Tentacle		, 4, false });
+    m_pAnimatorCom->Add_State(L"P2_Tentacle",       { m_pTextureCom_P2_Tentacle		, 5, false });
     m_pAnimatorCom->Add_State(L"P2_Tentacle_End",   { m_pTextureCom_P2_Tentacle_End	, 4, false });
     //m_pAnimatorCom->Add_State(L"P2_Tentacle_Unlit", { m_pTextureCom_P2_Tentacle_Unlit, 4, true });
     m_pAnimatorCom->Add_State(L"P2_Wave",           { m_pTextureCom_P2_Wave			, 4, false });
@@ -2122,7 +2122,7 @@ void CAskard::Play_Corner_Laser_ADV(_float fTimeDelta)
     // 아스카드 레이저 준비 FX이펙트 및 상태변화
     else if (m_iElapsedFrame_Pattern == 20)
     {
-        _float fOffsetY = -0.5f;
+        _float fOffsetY = -2.f;
 
         // 레이저 준비 (상태변화)
         CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::NORMAL_EFFECT, L"Prototype_Component_Boss_Askard_Laser_FX",
@@ -2259,7 +2259,7 @@ void CAskard::Play_Corner_Laser_ADV(_float fTimeDelta)
         D3DXVec3Normalize(&vDiff, &vDiff);              // 를 단위벡터화, 안되면 vDiff 순서 바꿔보기
         _float fDistanceOffset = 15.f;                   // ** ksta : 중점으로부터 떨어져 있을 거리 **
         vDiff *= fDistanceOffset;
-        D3DXMatrixTranslation(&matTransAddition, vDiff.x, 0, vDiff.z);
+        D3DXMatrixTranslation(&matTransAddition, vDiff.x, -2.f, vDiff.z);
 
         matMonsterWorld = matTransToOrigin * matScale * matRotateChild * matRotateChildtoPlayer * matTransReturn * matTransOffset * matTransAddition;
 
@@ -2359,7 +2359,7 @@ void CAskard::Play_Corner_Laser_ADV(_float fTimeDelta)
         D3DXVec3Normalize(&vDiff, &vDiff);              // 를 단위벡터화, 안되면 vDiff 순서 바꿔보기
         _float fDistanceOffset = 15.f;                   // ** ksta : 중점으로부터 떨어져 있을 거리 **
         vDiff *= fDistanceOffset;
-        D3DXMatrixTranslation(&matTransAddition, vDiff.x, 0, vDiff.z);
+        D3DXMatrixTranslation(&matTransAddition, vDiff.x, -2.f, vDiff.z);
 
         matMonsterWorld = matTransToOrigin * matScale * matRotateChild * matRotateChildtoPlayer * matTransReturn * matTransOffset * matTransAddition;
 
@@ -2470,7 +2470,7 @@ void CAskard::Play_Corner_Laser_ADV(_float fTimeDelta)
         D3DXVec3Normalize(&vDiff, &vDiff);              // 를 단위벡터화, 안되면 vDiff 순서 바꿔보기
         _float fDistanceOffset = 15.f;                   // ** ksta : 중점으로부터 떨어져 있을 거리 **
         vDiff *= fDistanceOffset;
-        D3DXMatrixTranslation(&matTransAddition, vDiff.x, 0, vDiff.z);
+        D3DXMatrixTranslation(&matTransAddition, vDiff.x, -2.f, vDiff.z);
 
         matMonsterWorld = matTransToOrigin * matScale * matRotateChild * matRotateChildtoPlayer * matTransReturn * matTransOffset * matTransAddition;
 
