@@ -4,7 +4,7 @@
 #include "GameInstance.h"
 
 #include "Level_Logo.h"
-#include "Level_MapEdit.h"
+//#include "Level_MapEdit.h"
 #include "Level_Stage1.h"
 #include "Level_Stage2.h"
 #include "Level_Stage3.h"
@@ -46,9 +46,9 @@ void CLevel_Loading::Update(_float fTimeDelta)
 		case LEVEL::LEVEL_LOGO:
 			pNewLevel = CLevel_Logo::Create(m_pGraphic_Device);
 			break;
-		case LEVEL::LEVEL_MAPEDIT:
+	/*	case LEVEL::LEVEL_MAPEDIT:
 			pNewLevel = CLevel_MapEdit::Create(m_pGraphic_Device);
-			break;
+			break;*/
 		case LEVEL::LEVEL_TOWN:
 			pNewLevel = CLevel_Town::Create(m_pGraphic_Device);
 			break;
