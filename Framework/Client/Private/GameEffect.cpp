@@ -520,7 +520,7 @@ void CGameEffect::OnCollision(CGameObject* pGameObject)
 			_int iDamage{};
 			CPlayer* pPlayer = dynamic_cast<CPlayer*>(pGameObject);
 
-			if (!pPlayer->Get_IsHit()&& !pPlayer->Get_IsGodMode())
+			if (!pPlayer->Get_IsHit() && !pPlayer->Get_IsGodMode() && !CStat_Manager::GetInstance()->Get_GodMode())
 			{
 				m_pGameInstance->StopSound(ENUM_CLASS(CHANNELID::SOUND_MONSTER));
 				m_pGameInstance->PlaySoundW(L"HitPlayer.wav", ENUM_CLASS(CHANNELID::SOUND_MONSTER), g_fEFFECTVolume - 0.8f);
