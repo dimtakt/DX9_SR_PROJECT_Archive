@@ -5,6 +5,7 @@
 //#include "Askard_Tentacle.h"
 //#include "Askard_Eye.h"
 #include "Event_ClashPattern.h"
+#include "Camera_Follow.h"
 
 
 CAskard::CAskard(LPDIRECT3DDEVICE9 pGraphic_Device)
@@ -1828,6 +1829,7 @@ void CAskard::Play_Dark_Tentacle(_float fTimeDelta)
         m_pAnimatorCom->Change_State(L"P2_Tentacle"); // Hidden 말고 점점 사라지는 이펙트 있었는데
         CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::NORMAL_EFFECT, L"Prototype_Component_Boss_Askard_Phase2_Tentacle_Unlit",
             *m_pTransformCom->Get_WorldMatrix(), matTranslateUnlit);
+        dynamic_cast<CCamera_Follow*>(m_pGameInstance->Get_GameObject(m_pGameInstance->Get_CurrentLevel(), TEXT("Layer_Camera")))->Trigger_CinematicLookFromTop(18.f);
     }
         break;
     case 180:
