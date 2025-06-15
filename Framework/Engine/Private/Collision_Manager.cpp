@@ -143,29 +143,29 @@ void CCollision_Manager::Check_RoomCollisions()
                     continue;
             }
 
-            if (m_vColliders[j]->Get_Owner()->Get_ObjType() == GAMEOBJ_TYPE::OBJECT)
-            {
-                if (m_vColliders[i]->Get_Owner()->Get_ObjType() == GAMEOBJ_TYPE::OBJECT)
-                    continue;
-            }
+            //if (m_vColliders[j]->Get_Owner()->Get_ObjType() == GAMEOBJ_TYPE::OBJECT)
+            //{
+            //    if (m_vColliders[i]->Get_Owner()->Get_ObjType() == GAMEOBJ_TYPE::OBJECT)
+            //        continue;
+            //}
 
-            if (m_vColliders[j]->Get_Owner()->Get_ObjType() == GAMEOBJ_TYPE::OBJECT_DECO)
-            {
-                if (m_vColliders[i]->Get_Owner()->Get_ObjType() == GAMEOBJ_TYPE::OBJECT_DECO)
-                    continue;
-            }
+            //if (m_vColliders[j]->Get_Owner()->Get_ObjType() == GAMEOBJ_TYPE::OBJECT_DECO)
+            //{
+            //    if (m_vColliders[i]->Get_Owner()->Get_ObjType() == GAMEOBJ_TYPE::OBJECT_DECO)
+            //        continue;
+            //}
 
-            if (m_vColliders[j]->Get_Owner()->Get_ObjType() == GAMEOBJ_TYPE::OBJECT)
-            {
-                if (m_vColliders[i]->Get_Owner()->Get_ObjType() == GAMEOBJ_TYPE::OBJECT_DECO)
-                    continue;
-            }
+            //if (m_vColliders[j]->Get_Owner()->Get_ObjType() == GAMEOBJ_TYPE::OBJECT)
+            //{
+            //    if (m_vColliders[i]->Get_Owner()->Get_ObjType() == GAMEOBJ_TYPE::OBJECT_DECO)
+            //        continue;
+            //}
 
-            if (m_vColliders[j]->Get_Owner()->Get_ObjType() == GAMEOBJ_TYPE::OBJECT_DECO)
-            {
-                if (m_vColliders[i]->Get_Owner()->Get_ObjType() == GAMEOBJ_TYPE::OBJECT)
-                    continue;
-            }
+            //if (m_vColliders[j]->Get_Owner()->Get_ObjType() == GAMEOBJ_TYPE::OBJECT_DECO)
+            //{
+            //    if (m_vColliders[i]->Get_Owner()->Get_ObjType() == GAMEOBJ_TYPE::OBJECT)
+            //        continue;
+            //}
 
             if (Check_3DOBBto3DOBB(m_vColliders[i], m_vColliders[j]))
             {                
@@ -180,16 +180,16 @@ void CCollision_Manager::Check_RoomCollisions()
                 CGameObject* pOwnerA = m_vColliders[i]->Get_Owner();
                 CGameObject* pOwnerB = m_vColliders[j]->Get_Owner();
 
-                if (!CHECK_VALID(pOwnerA) || !CHECK_VALID(pOwnerB))
-                    continue;
+                /*if (!CHECK_VALID(pOwnerA) || !CHECK_VALID(pOwnerB))
+                    continue;*/
 
                 if (pOwnerA->Get_IsDead() || pOwnerB->Get_IsDead())
                     continue;
 
                 pOwnerA->OnCollision(pOwnerB);
 
-                if (!CHECK_VALID(pOwnerA) || !CHECK_VALID(pOwnerB)) // 다시 체크
-                    continue;
+                //if (!CHECK_VALID(pOwnerA) || !CHECK_VALID(pOwnerB)) // 다시 체크
+                //    continue;
 
                 if (pOwnerA->Get_IsDead() || pOwnerB->Get_IsDead())
                     continue;

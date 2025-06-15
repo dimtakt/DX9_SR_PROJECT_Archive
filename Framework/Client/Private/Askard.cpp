@@ -6,7 +6,7 @@
 //#include "Askard_Eye.h"
 #include "Event_ClashPattern.h"
 #include "Camera_Follow.h"
-
+#include "Ending.h"
 
 CAskard::CAskard(LPDIRECT3DDEVICE9 pGraphic_Device)
     : CMonster{ pGraphic_Device }
@@ -44,17 +44,17 @@ HRESULT CAskard::Initialize(void* pArg)
         0.f,
         fTerrainPos.z + fTerrainScale.z / 2 - 15.f));
 
-    m_pTransformCom->Scaling(3.f, 3.f, 3.f);
+    m_pTransformCom->Scaling(5.f, 5.f, 5.f);
 
     m_isSummoned = true;
     Ready_Object();
 
-    m_iMaxHp = 200;
-    m_iCulHp = 200;
+    m_iMaxHp = 9000;
+    m_iCulHp = 9000;
 
     m_eMonsterType = MONSTER_TYPE::ASKARD; // ksta
     m_ePattern = PATTERN_ASKARD::PT_IDLE;
-
+    Ready_Chat();
     return S_OK;
 }
 
@@ -109,24 +109,53 @@ void CAskard::Priority_Update(_float fTimeDelta)
 
     if (m_iPhase >= 2)   // 2페이즈에서 체력 다 닳을 시 비로소 사망
     {
+        if (!m_bFinish)
+            m_bFinish = true;
         m_iCulHp = 0;
-        m_bDead = true;
+        
+        
+        if (m_iChatNextPage + 1 != m_pChat_End->Get_ChatIndex() + 1 && m_pGameInstance->IsKeyDown('F'))
+        {
+            m_bIsChat = true;
+            m_pChat_End->Cinematic_Chat(0, false);
+        }
+
+        if (!m_bIsChat && m_pGameInstance->IsKeyDown('F'))
+        {
+            m_bDead = true;
+            static_cast<CEnding*>(m_pGameInstance->Find_UIObj(ENUM_CLASS(LEVEL::LEVEL_BOSS2), TEXT("UI_Ending")))->Start_Ending();
+        }
+
+        if (m_iChatNextPage + 1 <= m_pChat_End->Get_ChatIndex() + 1)
+        {
+            m_bIsChat = false;
+        }
     }
 }
 
 void CAskard::Update(_float fTimeDelta)
 {
+    if (m_bFinish)
+        return;
     // 최초 진입시.
     if (!m_bStart)
     {
         // 아래 if 조건문에 시작 조건 삽입
-        if (m_pGameInstance->IsKeyDown('P'))
+        if (m_pGameInstance->IsKeyDown('F') && m_bIsChat)
         {
+            m_pChat_Start->Cinematic_Chat(0, false);
+            
+            ++m_iChatCount;   
+        }
+        
+        if (m_iChatNextPage + 1  <= m_pChat_Start->Get_ChatIndex() + 1)
+        {
+            m_bIsChat = false;
             m_bStart = true;
             m_pAnimatorCom->Change_State(L"P1_Idle");
         }
 
-        m_pTerrainBox->SetUp_OnTerrainBox(m_pTransformCom, _float3(0.05f, 0.8f, 0.05f));
+        m_pTerrainBox->SetUp_OnTerrainBox(m_pTransformCom, _float3(0.00f, 1.33f, 0.00f));
         return;
     }
     else if (m_isPhaseChanging && m_iPhase == 0)
@@ -136,7 +165,7 @@ void CAskard::Update(_float fTimeDelta)
             CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::NORMAL_EFFECT, L"Prototype_Component_Boss_Askard_Phase1_PhaseChange_FX",
                 m_pTransformCom->Get_State(STATE::POSITION) + _float3{0, -0.5f, 0}, {0, 0, 0, 1}, {3, 3, 3});
 
-        if (m_pAnimatorCom->Get_CurStateTag() == L"P1_SummonStaff")
+        if (m_pAnimatorCom->Get_CurStateTag() == L"P1_SummonStaff") 
             if(m_pAnimatorCom->Change_State(L"P1_PhaseChange"))
                 CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::NORMAL_EFFECT, L"Prototype_Component_Boss_Askard_Phase1_PhaseChange_FX",
                     m_pTransformCom->Get_State(STATE::POSITION) + _float3{ 0, -0.5f, 0 }, { 0, 0, 0, 1 }, { 3, 3, 3 });
@@ -144,8 +173,8 @@ void CAskard::Update(_float fTimeDelta)
 
         // Prototype_Component_Boss_Askard_Phase1_PhaseChange_FX
 
-        m_pTerrainBox->SetUp_OnTerrainBox(m_pTransformCom, _float3(0.05f, 1.6f, 0.05f));
-        m_pTransformCom->Scaling(6.f, 6.f, 6.f);
+        m_pTerrainBox->SetUp_OnTerrainBox(m_pTransformCom, _float3(0.00f, 2.67f, 0.00f));
+        m_pTransformCom->Scaling(10.f, 10.f, 10.f);
 
         if (m_pAnimatorCom->Get_CurStateTag() == L"P1_PhaseChange" &&
             m_pAnimatorCom->Get_IsLastFrame())
@@ -164,9 +193,10 @@ void CAskard::Update(_float fTimeDelta)
     else if (m_isPhaseChanging && m_iPhase == 1)
     {
         // ksta : 임시 (1페이즈와 2페이즈 아스카드의 이미지 크기가 달라 크기 및 위치를 키움)
-        m_pAnimatorCom->Change_State(L"Askard_Die");
-        m_pTerrainBox->SetUp_OnTerrainBox(m_pTransformCom, _float3(0.05f, 3.2f, 0.05f));
-        m_pTransformCom->Scaling(6.f, 12.f, 12.f);
+        if (m_pAnimatorCom->Get_CurStateTag() != L"Askard_Die")
+            m_pAnimatorCom->Change_State(L"Askard_Die", true, 0.0f, true);
+        m_pTerrainBox->SetUp_OnTerrainBox(m_pTransformCom, _float3(0.00f, 5.33f, 0.00f));
+        m_pTransformCom->Scaling(10.f, 20.f, 20.f);
 
         if (m_pAnimatorCom->Get_IsLastFrame())
             m_iPhase++;
@@ -186,7 +216,7 @@ void CAskard::Update(_float fTimeDelta)
     // 1페이즈 패턴
     if (m_iPhase == 0)
     {
-        _int iPatternLoopCycle = 2000;   // 주기 프레임
+        _int iPatternLoopCycle = 2050;   // 주기 프레임
         _int iStandardPatternFrame = m_iElapsedFrame_Update % iPatternLoopCycle;
 
         switch (iStandardPatternFrame)
@@ -202,10 +232,10 @@ void CAskard::Update(_float fTimeDelta)
         case 340:   m_ePattern = PATTERN_ASKARD::PT_CORNER_LASER;       break;
         case 605:   m_ePattern = PATTERN_ASKARD::PT_SPAWN_CROSS;        break;
         case 870:   m_ePattern = PATTERN_ASKARD::PT_SPAWN_LINE;         break;
-        case 1030:  m_ePattern = PATTERN_ASKARD::PT_SPARK;              break;
-        case 1240:  m_ePattern = PATTERN_ASKARD::PT_SPAWN_LINE;         break;
-        case 1505:  m_ePattern = PATTERN_ASKARD::PT_SPAWN_CROSS;        break;
-        case 1770:  m_ePattern = PATTERN_ASKARD::PT_CORNER_LASER;       break;  // 1770+230 = 2000
+        case 1080:  m_ePattern = PATTERN_ASKARD::PT_SPARK;              break;
+        case 1290:  m_ePattern = PATTERN_ASKARD::PT_SPAWN_LINE;         break;
+        case 1555:  m_ePattern = PATTERN_ASKARD::PT_SPAWN_CROSS;        break;
+        case 1820:  m_ePattern = PATTERN_ASKARD::PT_CORNER_LASER;       break;  // 1770+230 = 2000
 
 
         default:
@@ -231,7 +261,7 @@ void CAskard::Update(_float fTimeDelta)
         case 1650:  m_ePattern = PATTERN_ASKARD::PT_CORNER_LASER_ADV;   break;
         case 2035:  m_ePattern = PATTERN_ASKARD::PT_SPAWN_CROSS;        break;
         case 2300:  m_ePattern = PATTERN_ASKARD::PT_SPAWN_LINE;         break;
-        case 2460:  m_ePattern = PATTERN_ASKARD::PT_SPARK;              break;
+        case 2510:  m_ePattern = PATTERN_ASKARD::PT_SPARK;              break;
         case 2670:  m_ePattern = PATTERN_ASKARD::PT_SPAWN_LINE;         break;
         case 2925:  m_ePattern = PATTERN_ASKARD::PT_SPAWN_CROSS;        break;
         case 3190:  m_ePattern = PATTERN_ASKARD::PT_CORNER_LASER_ADV;   break;  // 3190+230 = 3420
@@ -353,9 +383,9 @@ void CAskard::Update(_float fTimeDelta)
             strCurStateTag == L"P2_Wave")) {
         // ksta : 임시 (1페이즈와 2페이즈 아스카드의 이미지 크기가 달라 위치를 수정함)
         if (m_iPhase == 0)
-            m_pTerrainBox->SetUp_OnTerrainBox(m_pTransformCom, _float3(0.05f, 0.8f, 0.05f));
+            m_pTerrainBox->SetUp_OnTerrainBox(m_pTransformCom, _float3(0.00f, 1.33f, 0.00f));
         else if (m_iPhase == 1)
-            m_pTerrainBox->SetUp_OnTerrainBox(m_pTransformCom, _float3(0.05f, 1.6f, 0.05f));
+            m_pTerrainBox->SetUp_OnTerrainBox(m_pTransformCom, _float3(0.00f, 2.67f, 0.00f));
     }
 }
 
@@ -411,8 +441,15 @@ HRESULT CAskard::Render()
 
     m_pTransformCom->Bind_Matrix();
 
-
-    m_pAnimatorCom->Update_State(); // Bind_Texture
+    if (m_isAllStop)
+    {
+        _uint iImageMaxIndex = m_pAnimatorCom->Get_CurState()->pTextureCom->Get_NumTextures();
+        _uint iImageCurIndex = m_pAnimatorCom->Get_CurStackedFrame() / m_pAnimatorCom->Get_CurState()->iFramePerImage;
+        iImageCurIndex %= iImageMaxIndex;
+        m_pAnimatorCom->Get_CurState()->pTextureCom->Bind_Texture(iImageCurIndex);
+    }
+    else
+        m_pAnimatorCom->Update_State(); // Bind_Texture
 
     m_pVIBufferCom->Bind_Buffers();
 
@@ -573,10 +610,10 @@ HRESULT CAskard::Ready_Components(void* pArg)
 
     m_pAnimatorCom->Add_State(L"P1_Attack",         { m_pTextureCom_P1_Attack		, 4, false });
     m_pAnimatorCom->Add_State(L"P1_Attack_End",     { m_pTextureCom_P1_Attack_End	, 4, false });
-    m_pAnimatorCom->Add_State(L"P1_Attack_Ready",   { m_pTextureCom_P1_Attack_Ready	, 8, false });
-    m_pAnimatorCom->Add_State(L"P1_Die",            { m_pTextureCom_P1_Die			, 4, true });
+    m_pAnimatorCom->Add_State(L"P1_Attack_Ready",   { m_pTextureCom_P1_Attack_Ready	, 4, false });
+    m_pAnimatorCom->Add_State(L"P1_Die",            { m_pTextureCom_P1_Die			, 8, true });
     m_pAnimatorCom->Add_State(L"P1_GroundIdle",     { m_pTextureCom_P1_GroundIdle	, 4, true });
-    m_pAnimatorCom->Add_State(L"P1_Laser",          { m_pTextureCom_P1_Laser		, 5, false });
+    m_pAnimatorCom->Add_State(L"P1_Laser",          { m_pTextureCom_P1_Laser		, 8, false });
     m_pAnimatorCom->Add_State(L"P1_PhaseChange",    { m_pTextureCom_P1_PhaseChange	, 4, false });
     m_pAnimatorCom->Add_State(L"P1_PhaseStart",     { m_pTextureCom_P1_PhaseStart	, 4, true });
     m_pAnimatorCom->Add_State(L"P1_RangeAttack",    { m_pTextureCom_P1_RangeAttack	, 4, false });
@@ -589,7 +626,7 @@ HRESULT CAskard::Ready_Components(void* pArg)
     m_pAnimatorCom->Add_State(L"P2_Attack_End",     { m_pTextureCom_P2_Attack_End	, 4, false });
     m_pAnimatorCom->Add_State(L"P2_Attack_Ready",   { m_pTextureCom_P2_Attack_Ready	, 4, false });
     m_pAnimatorCom->Add_State(L"P2_Idle",           { m_pTextureCom_P2_Idle			, 4, true });
-    m_pAnimatorCom->Add_State(L"P2_Laser",          { m_pTextureCom_P2_Laser		, 4, false });
+    m_pAnimatorCom->Add_State(L"P2_Laser",          { m_pTextureCom_P2_Laser		, 8, false });
     m_pAnimatorCom->Add_State(L"P2_RangeAttack",    { m_pTextureCom_P2_RangeAttack	, 4, false });
     m_pAnimatorCom->Add_State(L"P2_Tentacle",       { m_pTextureCom_P2_Tentacle		, 5, false });
     m_pAnimatorCom->Add_State(L"P2_Tentacle_End",   { m_pTextureCom_P2_Tentacle_End	, 4, false });
@@ -740,6 +777,8 @@ void CAskard::Free()
 
     Safe_Release(m_pAnimatorCom);
 
+    m_pChat_Start = nullptr;
+    m_pChat_End = nullptr;
     __super::Free();
 }
 
@@ -811,8 +850,10 @@ void CAskard::Play_Spawn_Width(_float fTimeDelta)
     }
     else if (m_iElapsedFrame_Pattern == 15)
     {
+        _float fOffsetY = (m_iPhase == 0) ? -2.f : -4.f;
+        _float fOffsetX = (m_iPhase == 0) ? 0.6f : 1.2f;
         CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::NORMAL_EFFECT, L"Prototype_Component_Boss_Askard_Attack_1_FX",
-            vMonsterPos + _float3{ 0.5f, 0, 0 }, { 0, 0, 0, 1 }, { 3, 3, 3 });
+            vMonsterPos + _float3{ fOffsetX, fOffsetY, 0 }, { 0, 0, 0, 1 }, { 3, 3, 3 });
     }
     else if
         (m_iElapsedFrame_Pattern == 40 ||
@@ -966,12 +1007,15 @@ void CAskard::Play_Spawn_Cross(_float fTimeDelta)
     }
     else if (iCalcedCycleFrame == 15)
     {
+        _float fOffsetY = (m_iPhase == 0) ? -2.f : -4.f;
+        _float fOffsetX = (m_iPhase == 0) ? 0.6f : 1.2f;
+
         if (m_iElapsedFrame_Pattern == iCalcedCycleFrame)
             CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::NORMAL_EFFECT, L"Prototype_Component_Boss_Askard_Attack_1_FX",
-                vMonsterPos + _float3{ 0.5f, 0, 0 }, { 0, 0, 0, 1 }, { 3, 3, 3 });
+                vMonsterPos + _float3{ fOffsetX, fOffsetY, 0 }, { 0, 0, 0, 1 }, { 3, 3, 3 });
         else
             CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::NORMAL_EFFECT, L"Prototype_Component_Boss_Askard_Attack_1_FX_Cycle",
-                vMonsterPos + _float3{ 0.5f, 0, 0 }, { 0, 0, 0, 1 }, { 3, 3, 3 });
+                vMonsterPos + _float3{ fOffsetX, fOffsetY, 0 }, { 0, 0, 0, 1 }, { 3, 3, 3 });
     }
     else if (IS_BETWEEN(iCalcedCycleFrame, 30, 40))
     {
@@ -1119,12 +1163,15 @@ void CAskard::Play_Spawn_Line(_float fTimeDelta)
     }
     else if (iCalcedCycleFrame == 15)
     {
+        _float fOffsetY = (m_iPhase == 0) ? 0 : -2.f;
+        _float fOffsetX = (m_iPhase == 0) ? 0.6f : 1.2f;
+
         if (m_iElapsedFrame_Pattern == iCalcedCycleFrame)
             CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::NORMAL_EFFECT, L"Prototype_Component_Boss_Askard_Attack_1_FX",
-                vMonsterPos + _float3{ 0.5f, 0, 0 }, { 0, 0, 0, 1 }, { 3, 3, 3 });
+                vMonsterPos + _float3{ fOffsetX, fOffsetY, 0 }, { 0, 0, 0, 1 }, { 3, 3, 3 });
         else
             CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::NORMAL_EFFECT, L"Prototype_Component_Boss_Askard_Attack_1_FX_Cycle",
-                vMonsterPos + _float3{ 0.5f, 0, 0 }, { 0, 0, 0, 1 }, { 3, 3, 3 });
+                vMonsterPos + _float3{ fOffsetX, fOffsetY, 0 }, { 0, 0, 0, 1 }, { 3, 3, 3 });
     }
     else if (IS_BETWEEN(iCalcedCycleFrame, 30, 40))
     {
@@ -1491,7 +1538,7 @@ void CAskard::Play_Corner_Laser(_float fTimeDelta)
         // -----------
 
         // 크기 조절
-        D3DXMatrixScaling(&matScale, -4.f, 12.f, 12.f);
+        D3DXMatrixScaling(&matScale, -1.5f, 6.f, 6.f);
 
         // 눕히기
         matRotateChild = {};
@@ -1693,13 +1740,12 @@ void CAskard::Play_Spark(_float fTimeDelta)
 
         // 프레임마다의 위치를 정의 (공중에 떠있는)
         _float fPosY = (iFrame <= 51) ? 2 : -pow((0.2f * (iFrame - 52.92893f)), 2.f) + 2.f;
-        m_pTerrainBox->SetUp_OnTerrainBox(m_pTransformCom, _float3(0.05f, 0.8f + fPosY, 0.05f));
+        m_pTerrainBox->SetUp_OnTerrainBox(m_pTransformCom, _float3(0.00f, 1.33f + fPosY * 1.3f, 0.00f));
     }
     else if (m_iElapsedFrame_Pattern == 80)
     {
-        if      (m_iPhase == 0)     m_pAnimatorCom->Change_State(L"P1_Idle", true);
-        else if (m_iPhase == 1)     m_pAnimatorCom->Change_State(L"P2_Idle", true);
-        m_pTerrainBox->SetUp_OnTerrainBox(m_pTransformCom, _float3(0.05f, 0.8f, 0.05f));
+
+        m_pTerrainBox->SetUp_OnTerrainBox(m_pTransformCom, _float3(0.00f, 1.33f, 0.00f));
 
         m_pGameInstance->StopSound(ENUM_CLASS(CHANNELID::SOUND_MONSTER));
         m_pGameInstance->PlaySound(L"askardWaveBegin.wav", ENUM_CLASS(CHANNELID::SOUND_MONSTER), g_fWALKVolume - 0.6f);
@@ -1726,7 +1772,11 @@ void CAskard::Play_Spark(_float fTimeDelta)
 
     }
     else if (m_iElapsedFrame_Pattern == 81)
-    {
+    {        
+        if      (m_iPhase == 0)     m_pAnimatorCom->Change_State(L"P1_Idle", true, 0.0f, true);
+        else if (m_iPhase == 1)     m_pAnimatorCom->Change_State(L"P2_Idle", true, 0.0f, true);
+        
+        
         // 성공이면 패턴 넘김, 아니면 스파크 소환
          
         _uint iCurLevel = m_pGameInstance->Get_CurrentLevel();
@@ -2193,7 +2243,7 @@ void CAskard::Play_Corner_Laser_ADV(_float fTimeDelta)
     // 아스카드 레이저 준비 FX이펙트 및 상태변화
     else if (m_iElapsedFrame_Pattern == 20)
     {
-        _float fOffsetY = -2.f;
+        _float fOffsetY = (m_iPhase == 0) ? -2.f : -4.f;
 
         // 레이저 준비 (상태변화)
         CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::NORMAL_EFFECT, L"Prototype_Component_Boss_Askard_Laser_FX",
@@ -2204,8 +2254,8 @@ void CAskard::Play_Corner_Laser_ADV(_float fTimeDelta)
             m_vecLaserMovePos[1] + _float3{ 0, fOffsetY, 0 }, { 0, 0, 0, 1 }, { 3, 3, 3 });
         m_pAnimatorCom->Change_State(L"P2_Laser");
     }
-    // 레이저 가이드 생성
-    else if (m_iElapsedFrame_Pattern == 80)
+    // 레이저 가이드 생성 (Start)
+    else if (m_iElapsedFrame_Pattern == 21)
     {
         // 레이저 가이드
 
@@ -2214,9 +2264,10 @@ void CAskard::Play_Corner_Laser_ADV(_float fTimeDelta)
 
         _float fGuideDeg = 0.f;
         _float3 vGuidePosOffset = {};
+
+#pragma region Effect Setting Change
         if (vMonsterPos.x < vTerrainPos.x && vMonsterPos.z < vTerrainPos.z) {   // 제4 사분면
             vGuidePosOffset = { -fGuideOffset, 0, -fGuideOffset };
-            // 각도 조건 넣어서 1143번째줄에 넣어줘야함
             fGuideDeg = 0.f;
         }
         else if (vMonsterPos.x > vTerrainPos.x && vMonsterPos.z < vTerrainPos.z) { // 제3 사분면
@@ -2232,7 +2283,6 @@ void CAskard::Play_Corner_Laser_ADV(_float fTimeDelta)
             fGuideDeg = 90.f;
         }
 
-#pragma region Effect Setting Change
         _float4x4 matTargetWorld = *pTargetTransform->Get_WorldMatrix();
 
         // 1. 원점으로 이동
@@ -2267,10 +2317,270 @@ void CAskard::Play_Corner_Laser_ADV(_float fTimeDelta)
 #pragma endregion
         _float4x4 matEmpty;
         D3DXMatrixIdentity(&matEmpty);
-
-        CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::NORMAL_EFFECT, L"Prototype_Component_Boss_Askard_Laser_Alert",
+        CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::NORMAL_EFFECT, L"Prototype_Component_Boss_Askard_Laser_Alert_Start",
             *pTargetTransform->Get_WorldMatrix(), matTargetWorld, pTargetTransform, 0.f);
+
+
+#pragma region Effect Setting Change
+        matTargetWorld = *pTargetTransform->Get_WorldMatrix();
+
+        if (m_vecLaserMovePos[0].x < vTerrainPos.x && m_vecLaserMovePos[0].z < vTerrainPos.z) {   // 제4 사분면
+            vGuidePosOffset = { -fGuideOffset, 0, -fGuideOffset };
+            fGuideDeg = 0.f;
+        }
+        else if (m_vecLaserMovePos[0].x > vTerrainPos.x && m_vecLaserMovePos[0].z < vTerrainPos.z) { // 제3 사분면
+            vGuidePosOffset = { fGuideOffset, 0, -fGuideOffset };
+            fGuideDeg = 270.f;
+        }
+        else if (m_vecLaserMovePos[0].x > vTerrainPos.x && m_vecLaserMovePos[0].z > vTerrainPos.z) { // 제2 사분면
+            vGuidePosOffset = { fGuideOffset, 0, fGuideOffset };
+            fGuideDeg = 180.f;
+        }
+        else if (m_vecLaserMovePos[0].x < vTerrainPos.x && m_vecLaserMovePos[0].z > vTerrainPos.z) { // 제1 사분면
+            vGuidePosOffset = { -fGuideOffset, 0, fGuideOffset };
+            fGuideDeg = 90.f;
+        }
+
+        // 1. 원점으로 이동
+        D3DXMatrixIdentity(&matTransToOriginP);
+        D3DXMatrixTranslation(&matTransToOriginP, -matTargetWorld._41, -matTargetWorld._42, -matTargetWorld._43);
+
+        // 2. 크기
+        D3DXMatrixIdentity(&matScaleP);
+        //D3DXMatrixScaling(&matScaleP, 0.5f, 0.5f, 0.5f);
+
+        // 3. 자전
+        D3DXMatrixIdentity(&matRotateChildP);
+        D3DXMatrixRotationX(&matRotateChildP, D3DXToRadian(-90)); // 안되면 -90도도 해보기
+        D3DXMatrixIdentity(&matRotateChildP2);
+        D3DXMatrixRotationY(&matRotateChildP2, D3DXToRadian(fGuideDeg)); // 안되면 -90도도 해보기
+
+        // 4. 원래 위치(플레이어)로 재이동
+        D3DXMatrixIdentity(&matTransReturnP);
+        D3DXMatrixTranslation(&matTransReturnP, matTargetWorld._41, matTargetWorld._42, matTargetWorld._43);
+
+        // 5. 거기에 추가 이동
+        D3DXMatrixIdentity(&matTransOffsetP);
+        D3DXMatrixTranslation(&matTransOffsetP, vGuidePosOffset.x, vGuidePosOffset.y + fYPosOffset, vGuidePosOffset.z);
+
+        matTargetWorld = matTransToOriginP * matScaleP * matRotateChildP * matRotateChildP2 * matTransReturnP * matTransOffsetP;
+#pragma endregion
+        CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::NORMAL_EFFECT, L"Prototype_Component_Boss_Askard_Laser_Alert_Start",
+            *pTargetTransform->Get_WorldMatrix(), matTargetWorld, pTargetTransform, 0.f);
+#pragma region Effect Setting Change
+        matTargetWorld = *pTargetTransform->Get_WorldMatrix();
+
+        if (m_vecLaserMovePos[1].x < vTerrainPos.x && m_vecLaserMovePos[1].z < vTerrainPos.z) {   // 제4 사분면
+            vGuidePosOffset = { -fGuideOffset, 0, -fGuideOffset };
+            fGuideDeg = 0.f;
+        }
+        else if (m_vecLaserMovePos[1].x > vTerrainPos.x && m_vecLaserMovePos[1].z < vTerrainPos.z) { // 제3 사분면
+            vGuidePosOffset = { fGuideOffset, 0, -fGuideOffset };
+            fGuideDeg = 270.f;
+        }
+        else if (m_vecLaserMovePos[1].x > vTerrainPos.x && m_vecLaserMovePos[1].z > vTerrainPos.z) { // 제2 사분면
+            vGuidePosOffset = { fGuideOffset, 0, fGuideOffset };
+            fGuideDeg = 180.f;
+        }
+        else if (m_vecLaserMovePos[1].x < vTerrainPos.x && m_vecLaserMovePos[1].z > vTerrainPos.z) { // 제1 사분면
+            vGuidePosOffset = { -fGuideOffset, 0, fGuideOffset };
+            fGuideDeg = 90.f;
+        }
+
+        // 1. 원점으로 이동
+        D3DXMatrixIdentity(&matTransToOriginP);
+        D3DXMatrixTranslation(&matTransToOriginP, -matTargetWorld._41, -matTargetWorld._42, -matTargetWorld._43);
+
+        // 2. 크기
+        D3DXMatrixIdentity(&matScaleP);
+        //D3DXMatrixScaling(&matScaleP, 0.5f, 0.5f, 0.5f);
+
+        // 3. 자전
+        D3DXMatrixIdentity(&matRotateChildP);
+        D3DXMatrixRotationX(&matRotateChildP, D3DXToRadian(-90)); // 안되면 -90도도 해보기
+        D3DXMatrixIdentity(&matRotateChildP2);
+        D3DXMatrixRotationY(&matRotateChildP2, D3DXToRadian(fGuideDeg)); // 안되면 -90도도 해보기
+
+        // 4. 원래 위치(플레이어)로 재이동
+        D3DXMatrixIdentity(&matTransReturnP);
+        D3DXMatrixTranslation(&matTransReturnP, matTargetWorld._41, matTargetWorld._42, matTargetWorld._43);
+
+        // 5. 거기에 추가 이동
+        D3DXMatrixIdentity(&matTransOffsetP);
+        D3DXMatrixTranslation(&matTransOffsetP, vGuidePosOffset.x, vGuidePosOffset.y + fYPosOffset, vGuidePosOffset.z);
+
+        matTargetWorld = matTransToOriginP * matScaleP * matRotateChildP * matRotateChildP2 * matTransReturnP * matTransOffsetP;
+#pragma endregion
+        CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::NORMAL_EFFECT, L"Prototype_Component_Boss_Askard_Laser_Alert_Start",
+            *pTargetTransform->Get_WorldMatrix(), matTargetWorld, pTargetTransform, 0.f);
+
+        //CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::NORMAL_EFFECT, L"Prototype_Component_Boss_Askard_Laser_Alert",
+        //    *pTargetTransform->Get_WorldMatrix(), matTargetWorld, pTargetTransform, 0.f);
     }
+    
+    // 레이저 가이드 유지 (Progress)
+    else if (m_iElapsedFrame_Pattern == 45)
+    {
+        // 레이저 가이드
+
+        _float fGuideOffset = 0.8f; // 4방향 표현을 위해 중점으로부터 얼만큼 이동시킬건지
+        _float fYPosOffset = 0.2f;
+
+        _float fGuideDeg = 0.f;
+        _float3 vGuidePosOffset = {};
+
+#pragma region Effect Setting Change
+        if (vMonsterPos.x < vTerrainPos.x && vMonsterPos.z < vTerrainPos.z) {   // 제4 사분면
+            vGuidePosOffset = { -fGuideOffset, 0, -fGuideOffset };
+            fGuideDeg = 0.f;
+        }
+        else if (vMonsterPos.x > vTerrainPos.x && vMonsterPos.z < vTerrainPos.z) { // 제3 사분면
+            vGuidePosOffset = { fGuideOffset, 0, -fGuideOffset };
+            fGuideDeg = 270.f;
+        }
+        else if (vMonsterPos.x > vTerrainPos.x && vMonsterPos.z > vTerrainPos.z) { // 제2 사분면
+            vGuidePosOffset = { fGuideOffset, 0, fGuideOffset };
+            fGuideDeg = 180.f;
+        }
+        else if (vMonsterPos.x < vTerrainPos.x && vMonsterPos.z > vTerrainPos.z) { // 제1 사분면
+            vGuidePosOffset = { -fGuideOffset, 0, fGuideOffset };
+            fGuideDeg = 90.f;
+        }
+
+        _float4x4 matTargetWorld = *pTargetTransform->Get_WorldMatrix();
+
+        // 1. 원점으로 이동
+        _float4x4 matTransToOriginP = {};
+        D3DXMatrixIdentity(&matTransToOriginP);
+        D3DXMatrixTranslation(&matTransToOriginP, -matTargetWorld._41, -matTargetWorld._42, -matTargetWorld._43);
+
+        // 2. 크기
+        _float4x4 matScaleP = {};
+        D3DXMatrixIdentity(&matScaleP);
+        //D3DXMatrixScaling(&matScaleP, 0.5f, 0.5f, 0.5f);
+
+        // 3. 자전
+        _float4x4 matRotateChildP = {};
+        D3DXMatrixIdentity(&matRotateChildP);
+        D3DXMatrixRotationX(&matRotateChildP, D3DXToRadian(-90)); // 안되면 -90도도 해보기
+        _float4x4 matRotateChildP2 = {};
+        D3DXMatrixIdentity(&matRotateChildP2);
+        D3DXMatrixRotationY(&matRotateChildP2, D3DXToRadian(fGuideDeg)); // 안되면 -90도도 해보기
+
+        // 4. 원래 위치(플레이어)로 재이동
+        _float4x4 matTransReturnP = {};
+        D3DXMatrixIdentity(&matTransReturnP);
+        D3DXMatrixTranslation(&matTransReturnP, matTargetWorld._41, matTargetWorld._42, matTargetWorld._43);
+
+        // 5. 거기에 추가 이동
+        _float4x4 matTransOffsetP = {};
+        D3DXMatrixIdentity(&matTransOffsetP);
+        D3DXMatrixTranslation(&matTransOffsetP, vGuidePosOffset.x, vGuidePosOffset.y + fYPosOffset, vGuidePosOffset.z);
+
+        matTargetWorld = matTransToOriginP * matScaleP * matRotateChildP * matRotateChildP2 * matTransReturnP * matTransOffsetP;
+#pragma endregion
+        _float4x4 matEmpty;
+        D3DXMatrixIdentity(&matEmpty);
+        CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::NORMAL_EFFECT, L"Prototype_Component_Boss_Askard_Laser_Alert_Progress",
+            *pTargetTransform->Get_WorldMatrix(), matTargetWorld, pTargetTransform, 1.17f);
+
+
+#pragma region Effect Setting Change
+        matTargetWorld = *pTargetTransform->Get_WorldMatrix();
+
+        if (m_vecLaserMovePos[0].x < vTerrainPos.x && m_vecLaserMovePos[0].z < vTerrainPos.z) {   // 제4 사분면
+            vGuidePosOffset = { -fGuideOffset, 0, -fGuideOffset };
+            fGuideDeg = 0.f;
+        }
+        else if (m_vecLaserMovePos[0].x > vTerrainPos.x && m_vecLaserMovePos[0].z < vTerrainPos.z) { // 제3 사분면
+            vGuidePosOffset = { fGuideOffset, 0, -fGuideOffset };
+            fGuideDeg = 270.f;
+        }
+        else if (m_vecLaserMovePos[0].x > vTerrainPos.x && m_vecLaserMovePos[0].z > vTerrainPos.z) { // 제2 사분면
+            vGuidePosOffset = { fGuideOffset, 0, fGuideOffset };
+            fGuideDeg = 180.f;
+        }
+        else if (m_vecLaserMovePos[0].x < vTerrainPos.x && m_vecLaserMovePos[0].z > vTerrainPos.z) { // 제1 사분면
+            vGuidePosOffset = { -fGuideOffset, 0, fGuideOffset };
+            fGuideDeg = 90.f;
+        }
+
+        // 1. 원점으로 이동
+        D3DXMatrixIdentity(&matTransToOriginP);
+        D3DXMatrixTranslation(&matTransToOriginP, -matTargetWorld._41, -matTargetWorld._42, -matTargetWorld._43);
+
+        // 2. 크기
+        D3DXMatrixIdentity(&matScaleP);
+        //D3DXMatrixScaling(&matScaleP, 0.5f, 0.5f, 0.5f);
+
+        // 3. 자전
+        D3DXMatrixIdentity(&matRotateChildP);
+        D3DXMatrixRotationX(&matRotateChildP, D3DXToRadian(-90)); // 안되면 -90도도 해보기
+        D3DXMatrixIdentity(&matRotateChildP2);
+        D3DXMatrixRotationY(&matRotateChildP2, D3DXToRadian(fGuideDeg)); // 안되면 -90도도 해보기
+
+        // 4. 원래 위치(플레이어)로 재이동
+        D3DXMatrixIdentity(&matTransReturnP);
+        D3DXMatrixTranslation(&matTransReturnP, matTargetWorld._41, matTargetWorld._42, matTargetWorld._43);
+
+        // 5. 거기에 추가 이동
+        D3DXMatrixIdentity(&matTransOffsetP);
+        D3DXMatrixTranslation(&matTransOffsetP, vGuidePosOffset.x, vGuidePosOffset.y + fYPosOffset, vGuidePosOffset.z);
+
+        matTargetWorld = matTransToOriginP * matScaleP * matRotateChildP * matRotateChildP2 * matTransReturnP * matTransOffsetP;
+#pragma endregion
+        CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::NORMAL_EFFECT, L"Prototype_Component_Boss_Askard_Laser_Alert_Progress",
+            *pTargetTransform->Get_WorldMatrix(), matTargetWorld, pTargetTransform, 2.27f);
+#pragma region Effect Setting Change
+        matTargetWorld = *pTargetTransform->Get_WorldMatrix();
+
+        if (m_vecLaserMovePos[1].x < vTerrainPos.x && m_vecLaserMovePos[1].z < vTerrainPos.z) {   // 제4 사분면
+            vGuidePosOffset = { -fGuideOffset, 0, -fGuideOffset };
+            fGuideDeg = 0.f;
+        }
+        else if (m_vecLaserMovePos[1].x > vTerrainPos.x && m_vecLaserMovePos[1].z < vTerrainPos.z) { // 제3 사분면
+            vGuidePosOffset = { fGuideOffset, 0, -fGuideOffset };
+            fGuideDeg = 270.f;
+        }
+        else if (m_vecLaserMovePos[1].x > vTerrainPos.x && m_vecLaserMovePos[1].z > vTerrainPos.z) { // 제2 사분면
+            vGuidePosOffset = { fGuideOffset, 0, fGuideOffset };
+            fGuideDeg = 180.f;
+        }
+        else if (m_vecLaserMovePos[1].x < vTerrainPos.x && m_vecLaserMovePos[1].z > vTerrainPos.z) { // 제1 사분면
+            vGuidePosOffset = { -fGuideOffset, 0, fGuideOffset };
+            fGuideDeg = 90.f;
+        }
+
+        // 1. 원점으로 이동
+        D3DXMatrixIdentity(&matTransToOriginP);
+        D3DXMatrixTranslation(&matTransToOriginP, -matTargetWorld._41, -matTargetWorld._42, -matTargetWorld._43);
+
+        // 2. 크기
+        D3DXMatrixIdentity(&matScaleP);
+        //D3DXMatrixScaling(&matScaleP, 0.5f, 0.5f, 0.5f);
+
+        // 3. 자전
+        D3DXMatrixIdentity(&matRotateChildP);
+        D3DXMatrixRotationX(&matRotateChildP, D3DXToRadian(-90)); // 안되면 -90도도 해보기
+        D3DXMatrixIdentity(&matRotateChildP2);
+        D3DXMatrixRotationY(&matRotateChildP2, D3DXToRadian(fGuideDeg)); // 안되면 -90도도 해보기
+
+        // 4. 원래 위치(플레이어)로 재이동
+        D3DXMatrixIdentity(&matTransReturnP);
+        D3DXMatrixTranslation(&matTransReturnP, matTargetWorld._41, matTargetWorld._42, matTargetWorld._43);
+
+        // 5. 거기에 추가 이동
+        D3DXMatrixIdentity(&matTransOffsetP);
+        D3DXMatrixTranslation(&matTransOffsetP, vGuidePosOffset.x, vGuidePosOffset.y + fYPosOffset, vGuidePosOffset.z);
+
+        matTargetWorld = matTransToOriginP * matScaleP * matRotateChildP * matRotateChildP2 * matTransReturnP * matTransOffsetP;
+#pragma endregion
+        CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::NORMAL_EFFECT, L"Prototype_Component_Boss_Askard_Laser_Alert_Progress",
+            *pTargetTransform->Get_WorldMatrix(), matTargetWorld, pTargetTransform, 3.27f);
+
+        //CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::NORMAL_EFFECT, L"Prototype_Component_Boss_Askard_Laser_Alert",
+        //    *pTargetTransform->Get_WorldMatrix(), matTargetWorld, pTargetTransform, 0.f);
+        }
     // Laser1. 본체 레이저 발사각 계산 및 발사
     else if (m_iElapsedFrame_Pattern == 114)
     {
@@ -2307,7 +2617,7 @@ void CAskard::Play_Corner_Laser_ADV(_float fTimeDelta)
         // -----------
 
         // 크기 조절
-        D3DXMatrixScaling(&matScale, -3.f, 12.f, 12.f);
+        D3DXMatrixScaling(&matScale, -0.6f, 3.f, 3.f);
 
         // 눕히기
         matRotateChild = {};
@@ -2329,7 +2639,7 @@ void CAskard::Play_Corner_Laser_ADV(_float fTimeDelta)
         D3DXVec3Normalize(&vDiff, &vDiff);              // 를 단위벡터화, 안되면 vDiff 순서 바꿔보기
         _float fDistanceOffset = 15.f;                   // ** ksta : 중점으로부터 떨어져 있을 거리 **
         vDiff *= fDistanceOffset;
-        D3DXMatrixTranslation(&matTransAddition, vDiff.x, -2.f, vDiff.z);
+        D3DXMatrixTranslation(&matTransAddition, vDiff.x, -3.33f, vDiff.z);
 
         matMonsterWorld = matTransToOrigin * matScale * matRotateChild * matRotateChildtoPlayer * matTransReturn * matTransOffset * matTransAddition;
 
@@ -2348,16 +2658,86 @@ void CAskard::Play_Corner_Laser_ADV(_float fTimeDelta)
 
         matMonsterWorld = matTransToOrigin * matScale * matRotateChild * matRotateChildtoPlayer * matTransReturn * matTransOffset * matTransAddition;
 #pragma endregion
+
+
+
+
+
+
+        // 레이저 가이드
+
+        _float fGuideOffset = 0.8f; // 4방향 표현을 위해 중점으로부터 얼만큼 이동시킬건지
+        _float fYPosOffset = 0.2f;
+
+        _float fGuideDeg = 0.f;
+        _float3 vGuidePosOffset = {};
+
+#pragma region Effect Setting Change
+        if (vMonsterPos.x < vTerrainPos.x && vMonsterPos.z < vTerrainPos.z) {   // 제4 사분면
+            vGuidePosOffset = { -fGuideOffset, 0, -fGuideOffset };
+            fGuideDeg = 0.f;
+        }
+        else if (vMonsterPos.x > vTerrainPos.x && vMonsterPos.z < vTerrainPos.z) { // 제3 사분면
+            vGuidePosOffset = { fGuideOffset, 0, -fGuideOffset };
+            fGuideDeg = 270.f;
+        }
+        else if (vMonsterPos.x > vTerrainPos.x && vMonsterPos.z > vTerrainPos.z) { // 제2 사분면
+            vGuidePosOffset = { fGuideOffset, 0, fGuideOffset };
+            fGuideDeg = 180.f;
+        }
+        else if (vMonsterPos.x < vTerrainPos.x && vMonsterPos.z > vTerrainPos.z) { // 제1 사분면
+            vGuidePosOffset = { -fGuideOffset, 0, fGuideOffset };
+            fGuideDeg = 90.f;
+        }
+
+        _float4x4 matTargetWorld = *pTargetTransform->Get_WorldMatrix();
+
+        // 1. 원점으로 이동
+        _float4x4 matTransToOriginP = {};
+        D3DXMatrixIdentity(&matTransToOriginP);
+        D3DXMatrixTranslation(&matTransToOriginP, -matTargetWorld._41, -matTargetWorld._42, -matTargetWorld._43);
+
+        // 2. 크기
+        _float4x4 matScaleP = {};
+        D3DXMatrixIdentity(&matScaleP);
+        //D3DXMatrixScaling(&matScaleP, 0.5f, 0.5f, 0.5f);
+
+        // 3. 자전
+        _float4x4 matRotateChildP = {};
+        D3DXMatrixIdentity(&matRotateChildP);
+        D3DXMatrixRotationX(&matRotateChildP, D3DXToRadian(-90)); // 안되면 -90도도 해보기
+        _float4x4 matRotateChildP2 = {};
+        D3DXMatrixIdentity(&matRotateChildP2);
+        D3DXMatrixRotationY(&matRotateChildP2, D3DXToRadian(fGuideDeg)); // 안되면 -90도도 해보기
+
+        // 4. 원래 위치(플레이어)로 재이동
+        _float4x4 matTransReturnP = {};
+        D3DXMatrixIdentity(&matTransReturnP);
+        D3DXMatrixTranslation(&matTransReturnP, matTargetWorld._41, matTargetWorld._42, matTargetWorld._43);
+
+        // 5. 거기에 추가 이동
+        _float4x4 matTransOffsetP = {};
+        D3DXMatrixIdentity(&matTransOffsetP);
+        D3DXMatrixTranslation(&matTransOffsetP, vGuidePosOffset.x, vGuidePosOffset.y + fYPosOffset, vGuidePosOffset.z);
+
+        matTargetWorld = matTransToOriginP * matScaleP * matRotateChildP * matRotateChildP2 * matTransReturnP * matTransOffsetP;
+#pragma endregion
+        _float4x4 matEmpty;
+        D3DXMatrixIdentity(&matEmpty);
+        CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::NORMAL_EFFECT, L"Prototype_Component_Boss_Askard_Laser_Alert_End",
+            *pTargetTransform->Get_WorldMatrix(), matTargetWorld, pTargetTransform);
     }
     // LaserFX. 본체 및 분신들 레이저 사이클FX 이펙트
     else if (m_iElapsedFrame_Pattern == 119)
     {
+        _float fOffsetY = (m_iPhase == 0)? -2.f : -4.f;
+
         CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::NORMAL_EFFECT, L"Prototype_Component_Boss_Askard_Laser_FX_Cycle",
-            vMonsterPos + _float3{ 0, 0, 0 }, { 0, 0, 0, 1 }, { 3, 3, 3 }, 0.9f);
+            vMonsterPos + _float3{ 0, fOffsetY, 0 }, { 0, 0, 0, 1 }, { 3, 3, 3 }, 0.9f);
         CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::NORMAL_EFFECT, L"Prototype_Component_Boss_Askard_Laser_FX_Cycle",
-            m_vecLaserMovePos[0] + _float3{ 0, 0, 0 }, { 0, 0, 0, 1 }, { 3, 3, 3 }, 1.9f);
+            m_vecLaserMovePos[0] + _float3{ 0, fOffsetY, 0 }, { 0, 0, 0, 1 }, { 3, 3, 3 }, 1.9f);
         CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::NORMAL_EFFECT, L"Prototype_Component_Boss_Askard_Laser_FX_Cycle",
-            m_vecLaserMovePos[1] + _float3{ 0, 0, 0 }, { 0, 0, 0, 1 }, { 3, 3, 3 }, 2.9f);
+            m_vecLaserMovePos[1] + _float3{ 0, fOffsetY, 0 }, { 0, 0, 0, 1 }, { 3, 3, 3 }, 2.9f);
     }
     // Laser2. 분신[0] 레이저 발사각 계산 및 발사
     else if (m_iElapsedFrame_Pattern == 174)
@@ -2369,7 +2749,6 @@ void CAskard::Play_Corner_Laser_ADV(_float fTimeDelta)
 
         // 분신 위치
         _float3 vFakeAskardPos = m_vecLaserMovePos[0];
-
         _float fRotateSpeedDeg = 120.f;
 
         _float fLaserRotateDeg = {};
@@ -2403,7 +2782,7 @@ void CAskard::Play_Corner_Laser_ADV(_float fTimeDelta)
         D3DXMatrixTranslation(&matTransToOrigin, -vFakeAskardPos.x, -vFakeAskardPos.y, -vFakeAskardPos.z);
 
         // 크기 조절
-        D3DXMatrixScaling(&matScale, -3.f, 12.f, 12.f);
+        D3DXMatrixScaling(&matScale, -0.6f, 3.f, 3.f);
 
         // 눕히기
         matRotateChild = {};
@@ -2431,7 +2810,7 @@ void CAskard::Play_Corner_Laser_ADV(_float fTimeDelta)
         D3DXVec3Normalize(&vDiff, &vDiff);              // 를 단위벡터화, 안되면 vDiff 순서 바꿔보기
         _float fDistanceOffset = 15.f;                   // ** ksta : 중점으로부터 떨어져 있을 거리 **
         vDiff *= fDistanceOffset;
-        D3DXMatrixTranslation(&matTransAddition, vDiff.x, -2.f, vDiff.z);
+        D3DXMatrixTranslation(&matTransAddition, vDiff.x, -3.33f, vDiff.z);
 
         matMonsterWorld = matTransToOrigin * matScale * matRotateChild * matRotateChildtoPlayer * matTransReturn * matTransOffset * matTransAddition;
 
@@ -2470,6 +2849,76 @@ void CAskard::Play_Corner_Laser_ADV(_float fTimeDelta)
 
         matMonsterWorld = matTransToOrigin * matScale * matRotateChild * matRotateChildtoPlayer * matTransReturn * matTransOffset * matTransAddition;
 #pragma endregion
+
+
+
+
+
+
+
+        // 레이저 가이드
+
+        _float fGuideOffset = 0.8f; // 4방향 표현을 위해 중점으로부터 얼만큼 이동시킬건지
+        _float fYPosOffset = 0.2f;
+
+        _float fGuideDeg = 0.f;
+        _float3 vGuidePosOffset = {};
+
+#pragma region Effect Setting Change
+        if (m_vecLaserMovePos[0].x < vTerrainPos.x && m_vecLaserMovePos[0].z < vTerrainPos.z) {   // 제4 사분면
+            vGuidePosOffset = { -fGuideOffset, 0, -fGuideOffset };
+            fGuideDeg = 0.f;
+        }
+        else if (m_vecLaserMovePos[0].x > vTerrainPos.x && m_vecLaserMovePos[0].z < vTerrainPos.z) { // 제3 사분면
+            vGuidePosOffset = { fGuideOffset, 0, -fGuideOffset };
+            fGuideDeg = 270.f;
+        }
+        else if (m_vecLaserMovePos[0].x > vTerrainPos.x && m_vecLaserMovePos[0].z > vTerrainPos.z) { // 제2 사분면
+            vGuidePosOffset = { fGuideOffset, 0, fGuideOffset };
+            fGuideDeg = 180.f;
+        }
+        else if (m_vecLaserMovePos[0].x < vTerrainPos.x && m_vecLaserMovePos[0].z > vTerrainPos.z) { // 제1 사분면
+            vGuidePosOffset = { -fGuideOffset, 0, fGuideOffset };
+            fGuideDeg = 90.f;
+        }
+
+        _float4x4 matTargetWorld = *pTargetTransform->Get_WorldMatrix();
+
+        // 1. 원점으로 이동
+        _float4x4 matTransToOriginP = {};
+        D3DXMatrixIdentity(&matTransToOriginP);
+        D3DXMatrixTranslation(&matTransToOriginP, -matTargetWorld._41, -matTargetWorld._42, -matTargetWorld._43);
+
+        // 2. 크기
+        _float4x4 matScaleP = {};
+        D3DXMatrixIdentity(&matScaleP);
+        //D3DXMatrixScaling(&matScaleP, 0.5f, 0.5f, 0.5f);
+
+        // 3. 자전
+        _float4x4 matRotateChildP = {};
+        D3DXMatrixIdentity(&matRotateChildP);
+        D3DXMatrixRotationX(&matRotateChildP, D3DXToRadian(-90)); // 안되면 -90도도 해보기
+        _float4x4 matRotateChildP2 = {};
+        D3DXMatrixIdentity(&matRotateChildP2);
+        D3DXMatrixRotationY(&matRotateChildP2, D3DXToRadian(fGuideDeg)); // 안되면 -90도도 해보기
+
+        // 4. 원래 위치(플레이어)로 재이동
+        _float4x4 matTransReturnP = {};
+        D3DXMatrixIdentity(&matTransReturnP);
+        D3DXMatrixTranslation(&matTransReturnP, matTargetWorld._41, matTargetWorld._42, matTargetWorld._43);
+
+        // 5. 거기에 추가 이동
+        _float4x4 matTransOffsetP = {};
+        D3DXMatrixIdentity(&matTransOffsetP);
+        D3DXMatrixTranslation(&matTransOffsetP, vGuidePosOffset.x, vGuidePosOffset.y + fYPosOffset, vGuidePosOffset.z);
+
+        matTargetWorld = matTransToOriginP * matScaleP * matRotateChildP * matRotateChildP2 * matTransReturnP * matTransOffsetP;
+#pragma endregion
+        _float4x4 matEmpty;
+        D3DXMatrixIdentity(&matEmpty);
+        CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::NORMAL_EFFECT, L"Prototype_Component_Boss_Askard_Laser_Alert_End",
+            *pTargetTransform->Get_WorldMatrix(), matTargetWorld, pTargetTransform);
+
         }
     // Laser3. 분신[1] 레이저 발사각 계산 및 발사
     else if (m_iElapsedFrame_Pattern == 234)
@@ -2515,7 +2964,7 @@ void CAskard::Play_Corner_Laser_ADV(_float fTimeDelta)
         D3DXMatrixTranslation(&matTransToOrigin, -vFakeAskardPos.x, -vFakeAskardPos.y, -vFakeAskardPos.z);
 
         // 크기 조절
-        D3DXMatrixScaling(&matScale, -3.f, 12.f, 12.f);
+        D3DXMatrixScaling(&matScale, -0.6f, 3.f, 3.f);
 
         // 눕히기
         matRotateChild = {};
@@ -2543,7 +2992,7 @@ void CAskard::Play_Corner_Laser_ADV(_float fTimeDelta)
         D3DXVec3Normalize(&vDiff, &vDiff);              // 를 단위벡터화, 안되면 vDiff 순서 바꿔보기
         _float fDistanceOffset = 15.f;                   // ** ksta : 중점으로부터 떨어져 있을 거리 **
         vDiff *= fDistanceOffset;
-        D3DXMatrixTranslation(&matTransAddition, vDiff.x, -2.f, vDiff.z);
+        D3DXMatrixTranslation(&matTransAddition, vDiff.x, -3.33f, vDiff.z);
 
         matMonsterWorld = matTransToOrigin * matScale * matRotateChild * matRotateChildtoPlayer * matTransReturn * matTransOffset * matTransAddition;
 
@@ -2582,6 +3031,76 @@ void CAskard::Play_Corner_Laser_ADV(_float fTimeDelta)
 
         matMonsterWorld = matTransToOrigin * matScale * matRotateChild * matRotateChildtoPlayer * matTransReturn * matTransOffset * matTransAddition;
 #pragma endregion
+
+
+
+
+
+
+
+
+        // 레이저 가이드
+
+        _float fGuideOffset = 0.8f; // 4방향 표현을 위해 중점으로부터 얼만큼 이동시킬건지
+        _float fYPosOffset = 0.2f;
+
+        _float fGuideDeg = 0.f;
+        _float3 vGuidePosOffset = {};
+
+#pragma region Effect Setting Change
+        if (m_vecLaserMovePos[1].x < vTerrainPos.x && m_vecLaserMovePos[1].z < vTerrainPos.z) {   // 제4 사분면
+            vGuidePosOffset = { -fGuideOffset, 0, -fGuideOffset };
+            fGuideDeg = 0.f;
+        }
+        else if (m_vecLaserMovePos[1].x > vTerrainPos.x && m_vecLaserMovePos[1].z < vTerrainPos.z) { // 제3 사분면
+            vGuidePosOffset = { fGuideOffset, 0, -fGuideOffset };
+            fGuideDeg = 270.f;
+        }
+        else if (m_vecLaserMovePos[1].x > vTerrainPos.x && m_vecLaserMovePos[1].z > vTerrainPos.z) { // 제2 사분면
+            vGuidePosOffset = { fGuideOffset, 0, fGuideOffset };
+            fGuideDeg = 180.f;
+        }
+        else if (m_vecLaserMovePos[1].x < vTerrainPos.x && m_vecLaserMovePos[1].z > vTerrainPos.z) { // 제1 사분면
+            vGuidePosOffset = { -fGuideOffset, 0, fGuideOffset };
+            fGuideDeg = 90.f;
+        }
+
+        _float4x4 matTargetWorld = *pTargetTransform->Get_WorldMatrix();
+
+        // 1. 원점으로 이동
+        _float4x4 matTransToOriginP = {};
+        D3DXMatrixIdentity(&matTransToOriginP);
+        D3DXMatrixTranslation(&matTransToOriginP, -matTargetWorld._41, -matTargetWorld._42, -matTargetWorld._43);
+
+        // 2. 크기
+        _float4x4 matScaleP = {};
+        D3DXMatrixIdentity(&matScaleP);
+        //D3DXMatrixScaling(&matScaleP, 0.5f, 0.5f, 0.5f);
+
+        // 3. 자전
+        _float4x4 matRotateChildP = {};
+        D3DXMatrixIdentity(&matRotateChildP);
+        D3DXMatrixRotationX(&matRotateChildP, D3DXToRadian(-90)); // 안되면 -90도도 해보기
+        _float4x4 matRotateChildP2 = {};
+        D3DXMatrixIdentity(&matRotateChildP2);
+        D3DXMatrixRotationY(&matRotateChildP2, D3DXToRadian(fGuideDeg)); // 안되면 -90도도 해보기
+
+        // 4. 원래 위치(플레이어)로 재이동
+        _float4x4 matTransReturnP = {};
+        D3DXMatrixIdentity(&matTransReturnP);
+        D3DXMatrixTranslation(&matTransReturnP, matTargetWorld._41, matTargetWorld._42, matTargetWorld._43);
+
+        // 5. 거기에 추가 이동
+        _float4x4 matTransOffsetP = {};
+        D3DXMatrixIdentity(&matTransOffsetP);
+        D3DXMatrixTranslation(&matTransOffsetP, vGuidePosOffset.x, vGuidePosOffset.y + fYPosOffset, vGuidePosOffset.z);
+
+        matTargetWorld = matTransToOriginP * matScaleP * matRotateChildP * matRotateChildP2 * matTransReturnP * matTransOffsetP;
+#pragma endregion
+        _float4x4 matEmpty;
+        D3DXMatrixIdentity(&matEmpty);
+        CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::NORMAL_EFFECT, L"Prototype_Component_Boss_Askard_Laser_Alert_End",
+            *pTargetTransform->Get_WorldMatrix(), matTargetWorld, pTargetTransform);
         }
     // 아스카드 이동
     else if (IS_BETWEEN(m_iElapsedFrame_Pattern, 293, 303))
@@ -2615,4 +3134,40 @@ void CAskard::Play_Corner_Laser_ADV(_float fTimeDelta)
         m_ePattern = PATTERN_ASKARD::PT_IDLE;
         m_pAnimatorCom->Change_State(L"P2_Idle");
     }
+}
+
+HRESULT CAskard::Ready_Chat()
+{
+    CField_Npc_Chat::FIELD_CHAT_DESC desc{};
+
+    desc.pTransform = m_pTransformCom;
+    desc.szChatTag = TEXT("Askard_Chat_Start");
+    desc.m_iLevel = ENUM_CLASS(LEVEL::LEVEL_BOSS2);
+    desc.fY = -100;
+
+    if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_BOSS2), TEXT("Layer_UI_Chat"), ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_Field_Npc_Chat"), &desc)))
+        return E_FAIL;
+
+    m_pChat_Start = static_cast<CField_Npc_Chat*>(m_pGameInstance->Find_UIObj(ENUM_CLASS(LEVEL::LEVEL_BOSS2), TEXT("Askard_Chat_Start")));
+
+    m_pChat_Start->Add_Chat(TEXT("모험가여."));
+    m_pChat_Start->Add_Chat(TEXT("얌전히 멸망을 기다려라"));
+    m_pChat_Start->Add_Chat(TEXT("...죽어라"));
+    m_iChatNextPage = 3;
+    m_iChatCount = 0;
+    m_bIsChat = true;
+
+    desc.fY = 50;
+
+    desc.szChatTag = TEXT("Askard_Chat_End");
+    if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_BOSS2), TEXT("Layer_UI_Chat"), ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_UI_Field_Npc_Chat"), &desc)))
+        return E_FAIL;
+
+    m_pChat_End = static_cast<CField_Npc_Chat*>(m_pGameInstance->Find_UIObj(ENUM_CLASS(LEVEL::LEVEL_BOSS2), TEXT("Askard_Chat_End")));
+
+    m_pChat_End->Add_Chat(TEXT("난..."));
+    m_pChat_End->Add_Chat(TEXT("다시.. 돌아.."));
+    m_pChat_End->Add_Chat(TEXT("올거다.."));
+
+    return S_OK;
 }

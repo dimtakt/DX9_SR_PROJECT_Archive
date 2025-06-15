@@ -23,6 +23,8 @@ CLevel_Stage2::CLevel_Stage2(LPDIRECT3DDEVICE9 pGraphic_Device)
 HRESULT CLevel_Stage2::Initialize()
 {
 	CRoom_Manager::GetInstance()->Clear(ENUM_CLASS(LEVEL::LEVEL_STAGE1));
+	m_pGameInstance->Clear();	//파티클 초기화
+
 	g_hCursor = LoadCursorFromFile(L"Resources/Sephiria/UI/Cursor/Cursor_Combat.cur");
 
 	
@@ -201,6 +203,9 @@ HRESULT CLevel_Stage2::Ready_Layer_Room(const _wstring& strLayerTag)
 			//현재 정해진 ID값의 룸에 지형, 오브젝트 세팅 내부에서 지형 위치 자동 배치
 			pRoom->Load_From_File(ENUM_CLASS(LEVEL::LEVEL_STAGE2), strLayerTag, TEXT("../../data/Stage2_Map%d.txt"), iNumber, RoomX, RoomZ, static_cast<ROOM_INFO>(0));
 			iNumber++;
+			pRoom->Set_ParticleOn();
+			pRoom->Set_ParticleType(PARTICLE_TYPE::RAIN);
+
 			if (iCount == 0)
 			{
 				CPlayer* pPlayer = dynamic_cast<CPlayer*>(m_pGameInstance->Get_GameObject(ENUM_CLASS(LEVEL::LEVEL_STAGE2), TEXT("Layer_Player")));
@@ -209,6 +214,10 @@ HRESULT CLevel_Stage2::Ready_Layer_Room(const _wstring& strLayerTag)
 				ROOMCHANGE EventDesc;
 				EventDesc.vPosition = dynamic_cast<CTransform*>(pRoom->Get_TerrainBox()->Find_Component(TEXT("Com_Transform_TerrainBox")))->Get_State(STATE::POSITION);
 				m_pGameInstance->Broadcast(ENUM_CLASS(EVENT_TYPE::ROOMCHANGE), &EventDesc);
+
+				pRoom->Load_Particle(PARTICLE_TYPE::RAIN, TEXT("Prototype_GameObject_Rain"), ENUM_CLASS(LEVEL::LEVEL_STAGE2), _float3(0.5f, 1.f, 1.f), 1);
+				pRoom->Set_ParticleOn();
+				pRoom->Set_ParticleType(PARTICLE_TYPE::RAIN);
 			}
 
 		}
@@ -218,19 +227,24 @@ HRESULT CLevel_Stage2::Ready_Layer_Room(const _wstring& strLayerTag)
 			{	//3스테이지_3_Event%d 파일명 이렇게 지어줄 예정 , 타입 따로 넘겨줘야해서..
 				pRoom->Load_From_File(ENUM_CLASS(LEVEL::LEVEL_STAGE2), strLayerTag, TEXT("../../data/Stage2_1_Event%d.txt"), iEventCheck, RoomX, RoomZ, ROOM_INFO::EVENT_SHOP);
 				iEventCheck++;
+				pRoom->Set_ParticleOn();
+				pRoom->Set_ParticleType(PARTICLE_TYPE::RAIN);
 	
 			}
 			else if(iEventRoomEventID == 2 && iEventCheck == 0)
 			{
 				pRoom->Load_From_File(ENUM_CLASS(LEVEL::LEVEL_STAGE2), strLayerTag, TEXT("../../data/Stage2_2_Event%d.txt"), iEventCheck, RoomX, RoomZ, ROOM_INFO::EVENT_SHOP);
 				iEventCheck++;
+				pRoom->Set_ParticleOn();
+				pRoom->Set_ParticleType(PARTICLE_TYPE::RAIN);
 		
 			}
 			else if (iEventRoomEventID == 2 && iEventCheck == 1)
 			{
 				pRoom->Load_From_File(ENUM_CLASS(LEVEL::LEVEL_STAGE2), strLayerTag, TEXT("../../data/Stage2_2_Event%d.txt"), iEventCheck, RoomX, RoomZ, ROOM_INFO::EVENT_HP);
 				iEventCheck++;
-			
+				pRoom->Set_ParticleOn();
+				pRoom->Set_ParticleType(PARTICLE_TYPE::RAIN);
 			}
 		}
 
