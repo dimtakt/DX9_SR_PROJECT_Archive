@@ -3,6 +3,7 @@
 #include "Client_Struct.h"
 #include "Effect_Factory.h"
 #include "Room_Manager.h"
+#include "Stat_Manager.h"
 
 CMeteor::CMeteor(LPDIRECT3DDEVICE9 pGraphic_Device)
     : CGameObject{ pGraphic_Device }
@@ -74,8 +75,9 @@ void CMeteor::OnEvent(_uint iTypeindex, const EVENTDATA* pData)
     if (static_cast<EVENT_TYPE>(iTypeindex) == EVENT_TYPE::METEOR)
     {
 
-        if (m_fCurrentCoolTime <= 0.f)
+        if (m_fCurrentCoolTime <= 0.f && CStat_Manager::GetInstance()->Get_CurStats()[ENUM_CLASS(STAT_INFO::CULMP)] >= 20)
         {
+            CStat_Manager::GetInstance()->Cal_Stats(STAT_INFO::CULMP, -20.f);
             CRoom* pRoom = CRoom_Manager::GetInstance()->Get_CurrentRoom();
             CTerrainBox* pTerrain = pRoom->Get_TerrainBox();
             m_pTerrainTransformCom = dynamic_cast<CTransform*>(pTerrain->Find_Component(TEXT("Com_Transform_TerrainBox")));
