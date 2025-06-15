@@ -134,6 +134,7 @@ HRESULT CField_Npc_Chat::Initialize(void* pArg)
 		return E_FAIL;
 
 	m_pTarget_Transform = Desc->pTransform;
+	Safe_AddRef(m_pTarget_Transform);
 	m_pGameInstance->Add_UIObject(Desc->m_iLevel, Desc->szChatTag, this);
 	
 	return S_OK;
@@ -203,6 +204,7 @@ void CField_Npc_Chat::Late_Update(_float fTimeDelta)
 		Target_Pos();
 		m_pGameInstance->Add_RenderGroup(RENDERGROUP::RG_UI_BLEND, this);
 		m_vecChildren[1]->Late_Update(fTimeDelta);
+		Off_Chat();
 	}
 }
 
@@ -223,8 +225,6 @@ HRESULT CField_Npc_Chat::Render()
 	{
 		On_Chat_Font();
 	}
-	
-	
 	return S_OK;
 }
 
@@ -354,6 +354,7 @@ CGameObject* CField_Npc_Chat::Clone(void* pArg)
 
 void CField_Npc_Chat::Free()
 {
+	Safe_Release(m_pTarget_Transform);
 	__super::Free();
 	Safe_Release(m_pVIBufferCom);
 	Safe_Release(m_pTextureCom);
