@@ -171,6 +171,10 @@
     <ClInclude Include="..\public\AttackFx.h" />
     <ClInclude Include="..\public\AttackGauge.h" />
     <ClInclude Include="..\Public\BackGround.h" />
+    <ClInclude Include="..\public\Ending.h" />
+    <ClInclude Include="..\public\Ending_Light.h" />
+    <ClInclude Include="..\public\Ending_List.h" />
+    <ClInclude Include="..\public\Ending_Mole.h" />
     <ClInclude Include="..\Public\IceBolt.h" />
     <ClInclude Include="..\public\BossHp_Askard.h" />
     <ClInclude Include="..\public\BossHp_Ema.h" />
@@ -401,6 +405,10 @@
     <ClCompile Include="..\private\AttackGauge.cpp" />
     <ClCompile Include="..\Private\BackGround.cpp" />
     <ClCompile Include="..\private\AttackFx.cpp" />
+    <ClCompile Include="..\private\Ending.cpp" />
+    <ClCompile Include="..\private\Ending_Light.cpp" />
+    <ClCompile Include="..\private\Ending_List.cpp" />
+    <ClCompile Include="..\private\Ending_Mole.cpp" />
     <ClCompile Include="..\Private\IceBolt.cpp" />
     <ClCompile Include="..\private\BossHp_Askard.cpp" />
     <ClCompile Include="..\private\BossHp_Ema.cpp" />

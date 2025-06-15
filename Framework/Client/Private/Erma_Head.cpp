@@ -197,7 +197,7 @@ void CErma_Head::Update(_float fTimeDelta)
                         _float fThrownPower = m_pGameInstance->Compute_Random(7.f, 12.f);
                         _float fThrownAtkLifeTime = fLifeTime;
 
-                        matMonsterWorld.m[3][1] -= 1.5f;
+                        matMonsterWorld.m[3][1] -= 1.2f;
 
                         CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::MONSTER_EFFECT, L"Prototype_Component_Boss_Erma_Bullet",
                             *m_pTransformCom->Get_WorldMatrix(), matMonsterWorld, vThrownDir, fThrownPower, fThrownAtkLifeTime, 0.f, true);

@@ -389,7 +389,7 @@ void CRoom_Manager::CurrentRoom_AddObject(CGameObject* pGameObject)
 		tColliderDesc.vScale = _float3(0.5f, 1.f, 0.5f);
 		tColliderDesc.pOwner = pGameObject;
 		tColliderDesc.pTransform = dynamic_cast<CTransform*>(pGameObject->Find_Component(TEXT("Com_Transform")));
-		tColliderDesc.eType = pGameObject->Get_ObjType();;
+		tColliderDesc.eType = pGameObject->Get_ObjType();
 		CCollider_OBB* pCol = dynamic_cast<CCollider_OBB*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::COMPONENT, ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_Component_Collider_OBB"), &tColliderDesc));
 		m_pGameInstance->Add_Collider(pCol);
 	}

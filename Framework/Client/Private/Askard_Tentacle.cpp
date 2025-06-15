@@ -318,6 +318,8 @@ void CAskard_Tentacle::Update(_float fTimeDelta)
 		{
 			// ksta : 공격 이펙트 생성
 			if (m_pAnimatorCom->Change_State(L"Root_Attack"))
+				m_pGameInstance->StopSound(ENUM_CLASS(CHANNELID::SOUND_MONSTER_EFFECT));
+				m_pGameInstance->PlaySoundW(L"hitBash03.wav", ENUM_CLASS(CHANNELID::SOUND_MONSTER_EFFECT), g_fEFFECTVolume - 0.6f);
 				CEffect_Factory::GetInstance()->Create_Effect(GAMEOBJ_TYPE::MONSTER_EFFECT, L"Prototype_Component_Boss_Askard_BigRoot_Root_FX_Swing",
 					vPos + _float3(0, 0.5f, 0) + _float3{0.f, 0.f, -0.01f}, qRot, vScale * 1.8f);
 		}

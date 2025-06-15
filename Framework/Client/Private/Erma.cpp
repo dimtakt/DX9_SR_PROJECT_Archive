@@ -51,8 +51,8 @@ HRESULT CErma::Initialize(void* pArg)
     m_isSummoned = true;
     Ready_Object();
 
-    m_iMaxHp = 800;
-    m_iCulHp = 800;
+    m_iMaxHp = 2500;
+    m_iCulHp = 2500;
 
     m_eMonsterType = MONSTER_TYPE::ERMA;
 
@@ -116,8 +116,8 @@ void CErma::Priority_Update(_float fTimeDelta)
         CGameObject* pGameObject = nullptr;
         MAP_OBJECT_DESC tSrc{};
         tSrc.eType = GAMEOBJ_TYPE::ATIFACT;
-        tSrc.vPos = _float3(vPos.x - 0.9f, 3.f, vPos.z - 2.f);
-        tSrc.vScale = _float3(1.f, 1.f, 1.f);
+        tSrc.vPos = _float3(vPos.x - 0.9f, 3.f, vPos.z - 3.f);
+        tSrc.vScale = _float3(1.5f, 1.5f, 1.5f);
         tSrc.vRotate = _float3(0.f, 0.f, 0.f);
 
         pGameObject = dynamic_cast<CGameObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_Interaction_Normal"), &tSrc));
@@ -125,8 +125,8 @@ void CErma::Priority_Update(_float fTimeDelta)
 
         MAP_OBJECT_DESC tSrc2{};
         tSrc2.eType = GAMEOBJ_TYPE::STONE_TABLET;
-        tSrc2.vPos = _float3(vPos.x + 0.4f, 3.f, vPos.z - 2.f);
-        tSrc2.vScale = _float3(1.5f, 1.5f, 1.5f);
+        tSrc2.vPos = _float3(vPos.x + 0.4f, 3.f, vPos.z - 3.f);
+        tSrc2.vScale = _float3(2.f, 2.f, 2.f);
         tSrc2.vRotate = _float3(0.f, 0.f, 0.f);
 
         pGameObject = dynamic_cast<CGameObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, ENUM_CLASS(LEVEL::LEVEL_STATIC), TEXT("Prototype_GameObject_Interaction_Normal"), &tSrc2));
@@ -237,6 +237,8 @@ void CErma::Update(_float fTimeDelta)
                 if (vToPos.y <= fY)
                     vToPos.y = fY + 0.5f;
 
+
+                vToPos.y += 0.1f;
                 m_pTransformCom->Set_State(STATE::POSITION, vToPos);
             }
         }
@@ -762,6 +764,7 @@ void CErma::Free()
 
     Safe_Release(m_pAnimatorCom);
     Safe_Release(m_pBossHp);
-    Safe_Release(m_pChat);
+    //Safe_Release(m_pChat);
+    m_pChat = nullptr;
     //Safe_Release(m_pAnimatorCom);
 }
