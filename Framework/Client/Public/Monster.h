@@ -62,7 +62,7 @@ public:
 	_int Get_MaxHP() { return m_iMaxHp; }
 	void Set_HP(_int iHp) { m_iCulHp = iHp; }
 	void Fill_HP() { m_iCulHp = m_iMaxHp; }
-
+	_bool Get_Dying() { return m_bDying; }
 	_bool Get_Summoned() { return m_isSummoned; }
 
 protected:
@@ -75,6 +75,7 @@ protected:
 	_bool					m_isSummoned = false;
 	MONSTER_TYPE			m_eMonsterType = {};
 	DWORD					m_dwHitTime = {};
+	_bool					m_bDying = {false};
 
 	_bool					m_bIsGodMode = false;
 

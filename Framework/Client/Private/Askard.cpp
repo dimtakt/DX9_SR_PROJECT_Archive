@@ -707,7 +707,7 @@ CGameObject* CAskard::Clone(void* pArg)
 
 void CAskard::Free()
 {
-
+    m_pGameInstance->Remove_Collider_ByOwner(this);
     Safe_Release(m_pTextureCom_P1_Attack);
     Safe_Release(m_pTextureCom_P1_Attack_End);
     Safe_Release(m_pTextureCom_P1_Attack_Ready);

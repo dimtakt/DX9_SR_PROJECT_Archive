@@ -8,6 +8,7 @@
 #include "Interaction_Normal.h"
 #include "Room_Manager.h"
 #include "GameInstance.h"
+#include "Client_Struct.h"
 
 CErma::CErma(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CMonster{ pGraphic_Device }
@@ -745,6 +746,7 @@ CGameObject* CErma::Clone(void* pArg)
 
 void CErma::Free()
 {
+    m_pGameInstance->Remove_Collider_ByOwner(this);
     __super::Free();
 
     Safe_Release(m_pTextureCom_Idle);

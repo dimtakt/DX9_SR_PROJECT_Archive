@@ -579,6 +579,7 @@ CGameObject* CAskard_Tentacle::Clone(void* pArg)
 
 void CAskard_Tentacle::Free()
 {
+	m_pGameInstance->Remove_Collider_ByOwner(this);
 	__super::Free();
 
 	Safe_Release(m_pTextureCom_Root_Standby);
