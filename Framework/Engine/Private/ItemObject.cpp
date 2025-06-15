@@ -69,11 +69,13 @@ CItemObject::tagItemObjectDesc*  CItemObject::Item_Info()
 
 void CItemObject::Free()
 {
+	delete m_pDesc;
+	m_pDesc = nullptr;
+
 	__super::Free();
 
 	Safe_Release(m_pTransformCom);
 	Safe_Release(m_pTextureCom);
 	Safe_Release(m_pVIBufferCom);
-	delete m_pDesc;
-	m_pDesc = nullptr;
+
 }

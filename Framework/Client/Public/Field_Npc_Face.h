@@ -36,8 +36,11 @@ private:
 
 	_bool							m_bCinematicFace = { false };
 	_bool							m_bIsSmallRender = { false };
+	_bool							m_bIsSmallRenderSwitch = { false };
 	_bool							m_bIsRender = {false};
 	_int							m_iTexIndex = {};
+
+	_float							fAcctime = {};
 private:
 	HRESULT							Ready_Components();
 
