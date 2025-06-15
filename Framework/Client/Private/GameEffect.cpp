@@ -339,11 +339,11 @@ void CGameEffect::Ready_Collision()
 			// ¿¡¸£¸¶
 			else if (m_strEffectTag == TEXT("Prototype_Component_Boss_Erma_BigGolem_LaserStart"))
 			{
-				tColliderDesc.vScale = _float3(1.f, 1.f, 1.f);
+				tColliderDesc.vScale = _float3(0.5f, 1.f, 0.5f);
 			}
 			else if (m_strEffectTag == TEXT("Prototype_Component_Boss_Erma_BigGolem_LaserProgress"))
 			{
-				tColliderDesc.vScale = _float3(1.f, 1.f, 1.f);
+				tColliderDesc.vScale = _float3(0.5f, 1.f, 0.5f);
 			}
 			else if (m_strEffectTag == TEXT("Prototype_Component_Boss_Erma_BigGolem_Stmap_FX"))
 			{
