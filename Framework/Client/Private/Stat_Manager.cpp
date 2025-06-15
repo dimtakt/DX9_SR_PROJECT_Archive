@@ -25,7 +25,7 @@ HRESULT CStat_Manager::Initialize()
     m_fOriginStats[static_cast<int>(STAT_INFO::CRITICALDAMAGE)] = 10.f; // 현재 치명타 피해
     m_fOriginStats[static_cast<int>(STAT_INFO::MAXDASH)] = 3.f; // 최대 대시 횟수
     m_fOriginStats[static_cast<int>(STAT_INFO::CULDASH)] = 3.f; // 현재 대시 횟수
-    m_fOriginStats[static_cast<int>(STAT_INFO::REGENDASH)] = 1.2f; // 대시 회복 속도
+    m_fOriginStats[static_cast<int>(STAT_INFO::REGENDASH)] = 100.f; // 대시 회복 속도
     m_fOriginStats[static_cast<int>(STAT_INFO::EXP)] = 0.f; // 현재 경험치6
     m_fOriginStats[static_cast<int>(STAT_INFO::MAXSTATPOINT)] = 0.f; // 획득한 재능 포인트
     m_fOriginStats[static_cast<int>(STAT_INFO::CULSTATPOINT)] = 0.f; // 현재 재능 포인트
@@ -44,7 +44,7 @@ HRESULT CStat_Manager::Initialize()
     m_fCurStats[static_cast<int>(STAT_INFO::CRITICALDAMAGE)] = 10.f; // 현재 치명타 피해
     m_fCurStats[static_cast<int>(STAT_INFO::MAXDASH)] = 3.f; // 최대 대시 횟수
     m_fCurStats[static_cast<int>(STAT_INFO::CULDASH)] = 3.f; // 현재 대시 횟수
-    m_fCurStats[static_cast<int>(STAT_INFO::REGENDASH)] = 1.2f; // 대시 회복 속도
+    m_fCurStats[static_cast<int>(STAT_INFO::REGENDASH)] = 100.f; // 대시 회복 속도
     m_fCurStats[static_cast<int>(STAT_INFO::EXP)] = 0.f; // 현재 경험치
     m_fCurStats[static_cast<int>(STAT_INFO::MAXSTATPOINT)] = 20.f; // 획득한 재능 포인트
     m_fCurStats[static_cast<int>(STAT_INFO::CULSTATPOINT)] = 20.f; // 현재 재능 포인트
@@ -86,7 +86,7 @@ void CStat_Manager::Update(_float fTimeDelta)
 
     if (m_fCurStats[static_cast<int>(STAT_INFO::CULDASH)] < m_fCurStats[static_cast<int>(STAT_INFO::MAXDASH)])
     {
-        m_fCurStats[static_cast<int>(STAT_INFO::CULDASH)] += fTimeDelta * m_fCurStats[static_cast<int>(STAT_INFO::REGENDASH)];
+        m_fCurStats[static_cast<int>(STAT_INFO::CULDASH)] += fTimeDelta * (m_fCurStats[static_cast<int>(STAT_INFO::REGENDASH)] / 100.f);
         if (m_fCurStats[static_cast<int>(STAT_INFO::CULDASH)] >= m_fCurStats[static_cast<int>(STAT_INFO::MAXDASH)])
             m_fCurStats[static_cast<int>(STAT_INFO::CULDASH)] == m_fCurStats[static_cast<int>(STAT_INFO::MAXDASH)];
     }

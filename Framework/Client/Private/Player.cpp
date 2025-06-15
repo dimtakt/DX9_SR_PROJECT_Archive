@@ -1042,7 +1042,7 @@ void CPlayer::Ready_Parry()
     if (!m_isReadyFury) {
         if (m_pAnimatorTransCom->Get_CurStateTag() == L"Parry")
         {
-            
+            m_bIsHit = true;
             if (m_pAnimatorCom->Get_CurStackedFrame() >= 8)
             {
                 m_pGameInstance->StopSound(ENUM_CLASS(CHANNELID::SOUND_PLAYER_EFFECT));
@@ -1054,7 +1054,7 @@ void CPlayer::Ready_Parry()
                 m_pTransformCom->Set_State(STATE::POSITION, playerPos);
                 // 무적 설정...
                 // 무적 바꿔야함 패리 순간만 무적임
-                m_bIsHit = true;
+                
                 // 공격 막는 데에 성공 시 Fury_Ready로 넘어갈 준비
                 if (!CStat_Manager::GetInstance()->Get_UIOpen()) {
                     m_isReadyFury = true;
