@@ -1,7 +1,5 @@
 #include "Level_Logo.h"
-
 #include "GameInstance.h"
-
 #include "Level_Loading.h"
 
 CLevel_Logo::CLevel_Logo(LPDIRECT3DDEVICE9 pGraphic_Device)
@@ -11,17 +9,46 @@ CLevel_Logo::CLevel_Logo(LPDIRECT3DDEVICE9 pGraphic_Device)
 
 HRESULT CLevel_Logo::Initialize()
 {
-	if (FAILED(Ready_Layer_BackGround(TEXT("Layer_BackGround"))))
+	g_hCursor = LoadCursorFromFile(L"Resources/Sephiria/UI/Cursor/Cursor_Combat.cur");
+
+	if (FAILED(Ready_Layer_BackGround(TEXT("Layer_Title_BackGround"))))
 		return E_FAIL;
+	m_pGameInstance->StopAll();
+	m_pGameInstance->PlayBGM(L"mainTheme01.wav", g_fBGMVolume - 0.6f);
 
 	return S_OK;
 }
 
 void CLevel_Logo::Update(_float fTimeDelta)
 {
-	if (GetKeyState(VK_RETURN) & 0x8000)
+	if (m_pGameInstance->IsKeyDown(VK_RETURN))
 	{
-		if(FAILED(m_pGameInstance->Open_Level(ENUM_CLASS(LEVEL::LEVEL_LOADING), CLevel_Loading::Create(m_pGraphic_Device, LEVEL::LEVEL_GAMEPLAY))))
+		if(FAILED(m_pGameInstance->Open_Level(ENUM_CLASS(LEVEL::LEVEL_LOADING), CLevel_Loading::Create(m_pGraphic_Device, LEVEL::LEVEL_STATIC))))
+			return;
+	}	
+	// MAP Editor
+	if (GetKeyState('L') & 0x8000)
+	{
+		if (FAILED(m_pGameInstance->Open_Level(static_cast<_uint>(LEVEL::LEVEL_LOADING), CLevel_Loading::Create(m_pGraphic_Device, LEVEL::LEVEL_MAPEDIT))))
+			return;
+	}
+
+	if (GetKeyState('P') & 0x8000)
+	{
+		if (FAILED(m_pGameInstance->Open_Level(static_cast<_uint>(LEVEL::LEVEL_LOADING), CLevel_Loading::Create(m_pGraphic_Device, LEVEL::LEVEL_BOSS1))))
+			return;
+	}
+
+	if (GetKeyState(VK_F6) & 0x8000)
+	{
+		if (FAILED(m_pGameInstance->Open_Level(static_cast<_uint>(LEVEL::LEVEL_LOADING), CLevel_Loading::Create(m_pGraphic_Device, LEVEL::LEVEL_SHELTER))))
+			return;
+	}
+
+
+	if (GetKeyState('O') & 0x8000)
+	{
+		if (FAILED(m_pGameInstance->Open_Level(static_cast<_uint>(LEVEL::LEVEL_LOADING), CLevel_Loading::Create(m_pGraphic_Device, LEVEL::LEVEL_BOSS2))))
 			return;
 	}
 
@@ -40,9 +67,14 @@ HRESULT CLevel_Logo::Render()
 HRESULT CLevel_Logo::Ready_Layer_BackGround(const _wstring& strLayerTag)
 {
 	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(ENUM_CLASS(LEVEL::LEVEL_LOGO), strLayerTag,
-		ENUM_CLASS(LEVEL::LEVEL_LOGO), TEXT("Prototype_GameObject_BackGround"))))
+		ENUM_CLASS(LEVEL::LEVEL_LOGO), TEXT("Prototype_GameObject_Title_BackGround"))))
 		return E_FAIL;
 
+	return S_OK;
+}
+
+HRESULT CLevel_Logo::Ready_Layer_UI(const _wstring& strLayerTag)
+{
 	return S_OK;
 }
 
@@ -62,5 +94,4 @@ CLevel_Logo* CLevel_Logo::Create(LPDIRECT3DDEVICE9 pGraphic_Device)
 void CLevel_Logo::Free()
 {
 	__super::Free();
-
 }

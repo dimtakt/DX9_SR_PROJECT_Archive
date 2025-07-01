@@ -1,7 +1,5 @@
 #include "Prototype_Manager.h"
-#include "GameObject.h"
 #include "Component.h"
-
 #include "GameInstance.h"
 
 CPrototype_Manager::CPrototype_Manager()
@@ -31,7 +29,7 @@ HRESULT CPrototype_Manager::Add_Prototype(_uint iPrototypeLevelIndex, const _wst
 
 CBase* CPrototype_Manager::Clone_Prototype(PROTOTYPE ePrototype, _uint iPrototypeLevelIndex, const _wstring& strPrototypeTag, void* pArg)
 {
-	CBase* pPrototype = Find_Prototype(iPrototypeLevelIndex, strPrototypeTag);
+  	CBase* pPrototype = Find_Prototype(iPrototypeLevelIndex, strPrototypeTag);
 
 	if (nullptr == pPrototype)
 		return nullptr;

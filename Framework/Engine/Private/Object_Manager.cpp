@@ -10,6 +10,37 @@ CObject_Manager::CObject_Manager()
     Safe_AddRef(m_pGameInstance);
 }
 
+CComponent* CObject_Manager::Get_Component(_uint iLayerLevelIndex, const _wstring& strLayerTag, const _wstring& strComponentTag, _uint iIndex)
+{
+    CLayer* pLayer = Find_Layer(iLayerLevelIndex, strLayerTag);
+
+    if (nullptr == pLayer)
+        return nullptr;
+
+    return pLayer->Find_Component(strComponentTag, iIndex);
+}
+
+CGameObject* CObject_Manager::Get_GameObject(_uint iLayerLevelIndex, const _wstring& strLayerTag, _uint iIndex)
+{
+    CLayer* pLayer = Find_Layer(iLayerLevelIndex, strLayerTag);
+
+    if (nullptr == pLayer)
+        return nullptr;
+
+    return pLayer->Find_GameObject(iIndex);
+}
+
+CGameObject* CObject_Manager::Get_LastGameObject(_uint iLayerLevelIndex, const _wstring& strLayerTag)
+{
+    CLayer* pLayer = Find_Layer(iLayerLevelIndex, strLayerTag);
+
+    if (nullptr == pLayer)
+        return nullptr;
+
+    return pLayer->Get_LastGameObject();
+} 
+
+
 HRESULT CObject_Manager::Initialize(_uint iNumLevels)
 {
     m_pLayers = new map<const _wstring, CLayer*>[iNumLevels];
@@ -21,10 +52,53 @@ HRESULT CObject_Manager::Initialize(_uint iNumLevels)
 
 HRESULT CObject_Manager::Add_GameObject_ToLayer(_uint iLayerLevelIndex, const _wstring& strLayerTag, _uint iPrototypeLevelIndex, const _wstring& strPrototypeTag, void* pArg)
 {
-    CGameObject* pGameObject = dynamic_cast<CGameObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, iPrototypeLevelIndex, strPrototypeTag, pArg));
+     CGameObject* pGameObject = dynamic_cast<CGameObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::GAMEOBJECT, iPrototypeLevelIndex, strPrototypeTag, pArg));
     if (nullptr == pGameObject)
         return E_FAIL;
 
+    CLayer* pLayer = Find_Layer(iLayerLevelIndex, strLayerTag);
+    if (nullptr == pLayer)
+    {
+        pLayer = CLayer::Create();
+        pLayer->Add_GameObject(pGameObject);
+        m_pLayers[iLayerLevelIndex].emplace(strLayerTag, pLayer);
+    }
+    else
+        pLayer->Add_GameObject(pGameObject);
+
+    return S_OK;
+}
+
+
+HRESULT CObject_Manager::Remove_GameObject_ToLayer(_uint iLayerLevelIndex, const _wstring & strLayerTag, CGameObject * pGameObject)
+{
+    CLayer* pLayer = Find_Layer(iLayerLevelIndex, strLayerTag);
+    if (nullptr != pLayer)
+    {
+        pLayer->Remove_GameObject(pGameObject);
+        return S_OK;
+    }
+    return S_OK;
+}
+
+HRESULT CObject_Manager::Add_ItemObject_ToLayer(_uint iLayerLevelIndex, const _wstring& strLayerTag, _uint iItemIndex, void* pArg)
+{
+    CGameObject* pGameObject = static_cast<CGameObject*>(m_pGameInstance->find_ItemObject(iItemIndex));
+
+    CLayer* pLayer = Find_Layer(iLayerLevelIndex, strLayerTag);
+    if (nullptr == pLayer)
+    {
+        pLayer = CLayer::Create();
+        pLayer->Add_GameObject(pGameObject);
+        m_pLayers[iLayerLevelIndex].emplace(strLayerTag, pLayer);
+    }
+    else
+        pLayer->Add_GameObject(pGameObject);
+    return S_OK;
+}
+
+HRESULT CObject_Manager::Add_Direct_GameObject_ToLayer(_uint iLayerLevelIndex, const _wstring& strLayerTag, CGameObject* pGameObject)
+{
     CLayer* pLayer = Find_Layer(iLayerLevelIndex, strLayerTag);
     if (nullptr == pLayer)
     {
@@ -45,7 +119,7 @@ void CObject_Manager::Priority_Update(_float fTimeDelta)
         for (auto& Pair : m_pLayers[i])
         {
             if (nullptr != Pair.second)
-                Pair.second->Priority_Update(fTimeDelta);
+                Pair.second->Priority_Update(fTimeDelta);            
         }
     }
 }
@@ -72,6 +146,7 @@ void CObject_Manager::Late_Update(_float fTimeDelta)
                 Pair.second->Late_Update(fTimeDelta);
         }
     }
+    m_pGameInstance->Clear_Colliders();
 }
 
 void CObject_Manager::Clear(_uint iLevelIndex)
@@ -111,8 +186,6 @@ CObject_Manager* CObject_Manager::Create(_uint iNumLevels)
 
 void CObject_Manager::Free()
 {
-    __super::Free();
-
     for (size_t i = 0; i < m_iNumLevels; i++)
     {
         for (auto& Pair : m_pLayers[i])
@@ -120,6 +193,8 @@ void CObject_Manager::Free()
 
         m_pLayers[i].clear();
     }
+
+    __super::Free();
 
     Safe_Release(m_pGameInstance);
 

@@ -65,7 +65,7 @@ HRESULT CBackGround::Render()
     m_pTransformCom->Bind_Matrix();
 
     _float4x4			ViewMatrix, ProjMatrix;
-    _float3				vEye{ 0.f, 0.f, -5.f }, vAt{ 0.f, 0.f, 0.f }, vUpDir{ 0.f, 1.f, 0.f };
+    _float3				vEye{ 0.f, 0.f, -1.f }, vAt{ 0.f, 0.f, 0.f }, vUpDir{ 0.f, 1.f, 0.f };
 
     m_pGraphic_Device->SetTransform(D3DTS_VIEW, D3DXMatrixLookAtLH(&ViewMatrix, &vEye, &vAt, &vUpDir));
     m_pGraphic_Device->SetTransform(D3DTS_PROJECTION, D3DXMatrixPerspectiveFovLH(&ProjMatrix, D3DXToRadian(60.0f), static_cast<_float>(g_iWinSizeX) / g_iWinSizeY, 0.1f, 1000.f));
@@ -140,9 +140,10 @@ CGameObject* CBackGround::Clone(void* pArg)
 
 void CBackGround::Free()
 {
-    __super::Free();
-
     Safe_Release(m_pVIBufferCom);
     Safe_Release(m_pTransformCom);
     Safe_Release(m_pTextureCom);
+
+    __super::Free();
+
 }

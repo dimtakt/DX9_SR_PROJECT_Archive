@@ -17,6 +17,15 @@ public:
 	virtual HRESULT Bind_Buffers();
 	virtual HRESULT Render();
 
+public:
+	_float3 Compute_PickedPosition(const _float4x4* pWorldMatrixInverse);
+	_bool Compute_PickedObjectPosition(const _float4x4* pWorldMatrixInverse);
+
+public:
+	virtual _float Compute_Height(const _float3& vLocalPos) { return 0.f; }
+	virtual _float Compute_Right(const _float& vLocalPosX, const _float& fOffsetX) { return 0.f; }
+	virtual _float Compute_Look(const _float& vLocalPosZ, const _float& fOffsetZ) { return 0.f; }
+
 protected:
 	LPDIRECT3DVERTEXBUFFER9			m_pVB = { nullptr };
 	LPDIRECT3DINDEXBUFFER9			m_pIB = { nullptr };
@@ -30,6 +39,9 @@ protected:
 	_uint							m_iIndexStride = { };
 	_uint							m_iNumIndices = {};
 	D3DFORMAT						m_eIndexFormat = {};
+
+	_float3*						m_pVertexPositions = { nullptr };
+	void*							m_pIndices = { nullptr };
 
 public:
 	virtual CComponent* Clone(void* pArg) = 0;

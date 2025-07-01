@@ -4,15 +4,25 @@
 
 BEGIN(Engine)
 
-class CObject_Manager final : public CBase
+class ENGINE_DLL CObject_Manager final : public CBase
 {
 private:
 	CObject_Manager();
 	virtual ~CObject_Manager() = default;
 
 public:
+	class CComponent* Get_Component(_uint iLayerLevelIndex, const _wstring& strLayerTag, const _wstring& strComponentTag, _uint iIndex);
+	class CGameObject* Get_GameObject(_uint iLayerLevelIndex, const _wstring& strLayerTag, _uint iIndex);
+	class CGameObject* Get_LastGameObject(_uint iLayerLevelIndex, const _wstring& strLayerTag);
+	class CLayer* Find_Layer(_uint iLayerLevelIndex, const _wstring& strLayerTag);
+
+public:
 	HRESULT Initialize(_uint iNumLevels);
 	HRESULT Add_GameObject_ToLayer(_uint iLayerLevelIndex, const _wstring& strLayerTag, _uint iPrototypeLevelIndex, const _wstring& strPrototypeTag, void* pArg);
+	HRESULT Remove_GameObject_ToLayer(_uint iLayerLevelIndex, const _wstring& strLayerTag, class CGameObject* pGameObject);
+	HRESULT Add_ItemObject_ToLayer(_uint iLayerLevelIndex, const _wstring& strLayerTag, _uint ItemIndex, void* pArg);
+	HRESULT Add_Direct_GameObject_ToLayer(_uint iLayerLevelIndex, const _wstring& strLayerTag, class CGameObject* pGameObject);
+
 	void Priority_Update(_float fTimeDelta);
 	void Update(_float fTimeDelta);
 	void Late_Update(_float fTimeDelta);
@@ -22,9 +32,6 @@ private:
 	class CGameInstance*					m_pGameInstance = { nullptr };
 	_uint									m_iNumLevels = {};
 	map<const _wstring, class CLayer*>*		m_pLayers = {};
-
-private:
-	class CLayer* Find_Layer(_uint iLayerLevelIndex, const _wstring& strLayerTag);
 
 public:
 	static CObject_Manager* Create(_uint iNumLevels);

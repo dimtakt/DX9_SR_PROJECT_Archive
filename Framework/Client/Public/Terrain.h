@@ -33,7 +33,7 @@ private:
 
 private:
 	HRESULT Ready_Components();
-
+	HRESULT Ready_Material();
 
 public:
 	static CTerrain* Create(LPDIRECT3DDEVICE9 pGraphic_Device);

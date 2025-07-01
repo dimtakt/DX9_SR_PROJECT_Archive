@@ -1,13 +1,14 @@
 #include "Texture.h"
-
+#include "Shader.h"
 CTexture::CTexture(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CComponent{ pGraphic_Device }
 {
 }
 
 CTexture::CTexture(const CTexture& Prototype)
-	: CComponent{ Prototype }
+	: CComponent{  Prototype }
 	, m_iNumTextures{ Prototype.m_iNumTextures }
+	, m_iNumBindTexture { Prototype.m_iNumBindTexture}
 	, m_Textures{ Prototype.m_Textures }
 {
 	for (auto& pTexture : m_Textures)
@@ -53,9 +54,27 @@ HRESULT CTexture::Initialize(void* pArg)
 HRESULT CTexture::Bind_Texture(_uint iTextureIndex)
 {
 	if (iTextureIndex >= m_iNumTextures)
+		 return E_FAIL;
+
+	m_iNumBindTexture = iTextureIndex;
+	return m_pGraphic_Device->SetTexture(0, m_Textures[iTextureIndex]);
+ 
+ }
+
+HRESULT CTexture::Bind_Texture(CShader* pShader, D3DXHANDLE hParameters, _uint iTextureIndex)
+{
+	if (iTextureIndex >= m_iNumTextures)
 		return E_FAIL;
 
-	return m_pGraphic_Device->SetTexture(0, m_Textures[iTextureIndex]);
+	return pShader->Bind_Texture(hParameters, m_Textures[iTextureIndex]);
+}
+
+LPDIRECT3DTEXTURE9 CTexture::Get_Textures(_uint iIndex)
+{
+	if (iIndex >= m_Textures.size())
+		return nullptr;
+
+	return static_cast<LPDIRECT3DTEXTURE9>(m_Textures[iIndex]);
 }
 
 CTexture* CTexture::Create(LPDIRECT3DDEVICE9 pGraphic_Device, TEXTURE eType, const _tchar* pTextureFilePath, _uint iNumTextures)
@@ -86,10 +105,10 @@ CComponent* CTexture::Clone(void* pArg)
 
 void CTexture::Free()
 {
-	__super::Free();
-
 	for (auto& pTexture : m_Textures)
 		Safe_Release(pTexture);
 
 	m_Textures.clear();
+
+	__super::Free();
 }

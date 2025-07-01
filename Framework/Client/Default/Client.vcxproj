@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -114,14 +114,20 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>../../EngineSDK/Inc/;../Public/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../Engine/Public/;../Public/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>../../EngineSDK/Lib/;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>Engine.lib;d3dx9.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>../../EngineSDK/Lib/;../../Lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>Engine.lib;d3dx9.lib;d3d9.lib;imGuiCore.lib;fmod_vc.lib;fmodL_vc.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <FxCompile>
+      <ShaderModel>2.0</ShaderModel>
+      <ShaderType>Effect</ShaderType>
+      <EntryPointName>VS_Main</EntryPointName>
+      <SuppressStartupBanner>false</SuppressStartupBanner>
+    </FxCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -138,34 +144,449 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>Engine.lib;d3dx9.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Engine.lib;d3dx9.lib;fmod_vc.lib;fmodL_vc.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>../../EngineSDK/Lib/;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
+    <FxCompile>
+      <ShaderType>Effect</ShaderType>
+    </FxCompile>
+    <FxCompile>
+      <ShaderModel>2.0</ShaderModel>
+    </FxCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\Public\Animations\Anim_Player_Attack.h" />
+    <ClInclude Include="..\Public\Animations\Anim_Player_Attack2.h" />
+    <ClInclude Include="..\public\Animations\Anim_Player_Fury.h" />
+    <ClInclude Include="..\public\Animations\Anim_Player_Idle.h" />
+    <ClInclude Include="..\Public\Animations\Anim_Player_Parry.h" />
+    <ClInclude Include="..\public\Artefact_Tier_Icon.h" />
+    <ClInclude Include="..\public\Artefact_Tooltip.h" />
+    <ClInclude Include="..\Public\Askard_Dark_Tentacle.h" />
+    <ClInclude Include="..\public\Askard_Eye.h" />
+    <ClInclude Include="..\public\Askard_Frame.h" />
+    <ClInclude Include="..\public\Askard.h" />
+    <ClInclude Include="..\public\Askard_Tentacle.h" />
+    <ClInclude Include="..\public\Askard_Hpbar.h" />
+    <ClInclude Include="..\public\AttackFx.h" />
+    <ClInclude Include="..\public\AttackGauge.h" />
     <ClInclude Include="..\Public\BackGround.h" />
-    <ClInclude Include="..\public\Camera.h" />
+    <ClInclude Include="..\public\Ending.h" />
+    <ClInclude Include="..\public\Ending_Light.h" />
+    <ClInclude Include="..\public\Ending_List.h" />
+    <ClInclude Include="..\public\Ending_Mole.h" />
+    <ClInclude Include="..\Public\IceBolt.h" />
+    <ClInclude Include="..\public\BossHp_Askard.h" />
+    <ClInclude Include="..\public\BossHp_Ema.h" />
+    <ClInclude Include="..\public\BossHp_SubHp.h" />
+    <ClInclude Include="..\Public\Buff_Frame.h" />
+    <ClInclude Include="..\Public\Buff_Icon.h" />
+    <ClInclude Include="..\Public\Buff_Type_Base.h" />
+    <ClInclude Include="..\Public\Camera_Follow.h" />
+    <ClInclude Include="..\public\Camera_Free.h" />
+    <ClInclude Include="..\Public\Camera_Mouse.h" />
+    <ClInclude Include="..\public\ChapMap.h" />
+    <ClInclude Include="..\public\Chapmap_Boss.h" />
+    <ClInclude Include="..\public\ChapMap_Button.h" />
+    <ClInclude Include="..\public\ChapMap_Frame.h" />
+    <ClInclude Include="..\public\ChapMap_Line.h" />
+    <ClInclude Include="..\public\ChapMap_PlayerSymbol.h" />
     <ClInclude Include="..\Public\Client_Defines.h" />
-    <ClInclude Include="..\Public\Level_GamePlay.h" />
+    <ClInclude Include="..\Public\Client_Defines_Event.h" />
+    <ClInclude Include="..\Public\Client_Defines_Item.h" />
+    <ClInclude Include="..\Public\Client_Defines_Map.h" />
+    <ClInclude Include="..\Public\Client_Struct.h" />
+    <ClInclude Include="..\Public\Ema_Frame.h" />
+    <ClInclude Include="..\public\Ema_Hpbar.h" />
+    <ClInclude Include="..\public\Ema_SubHpbar.h" />
+    <ClInclude Include="..\public\Erma.h" />
+    <ClInclude Include="..\public\Erma_Body.h" />
+    <ClInclude Include="..\public\Erma_Hand_L.h" />
+    <ClInclude Include="..\public\Erma_Hand_R.h" />
+    <ClInclude Include="..\public\Erma_Head.h" />
+    <ClInclude Include="..\public\EventKey.h" />
+    <ClInclude Include="..\public\Event_AZPattern.h" />
+    <ClInclude Include="..\public\Event_Circle.h" />
+    <ClInclude Include="..\public\Event_Circle_Guide.h" />
+    <ClInclude Include="..\public\Event_ClashKey.h" />
+    <ClInclude Include="..\public\Event_ClashPattern.h" />
+    <ClInclude Include="..\public\Event_Rect.h" />
+    <ClInclude Include="..\public\Event_Result.h" />
+    <ClInclude Include="..\public\Event_Timer.h" />
+    <ClInclude Include="..\Public\EXP_Ball.h" />
+    <ClInclude Include="..\Public\Face_Rect.h" />
+    <ClInclude Include="..\Public\Face_Rect_Small.h" />
+    <ClInclude Include="..\public\Field_Font.h" />
+    <ClInclude Include="..\Public\Field_Item.h" />
+    <ClInclude Include="..\Public\Field_Item_Guide.h" />
+    <ClInclude Include="..\Public\Field_Npc_Chat.h" />
+    <ClInclude Include="..\Public\Field_Npc_Face.h" />
+    <ClInclude Include="..\Public\Fire.h" />
+    <ClInclude Include="..\Public\FireParticle.h" />
+    <ClInclude Include="..\Public\FogPlane.h" />
+    <ClInclude Include="..\public\Gacha.h" />
+    <ClInclude Include="..\public\Gacha_Button_Icon.h" />
+    <ClInclude Include="..\public\Gacha_FX.h" />
+    <ClInclude Include="..\public\Gacha_Pass.h" />
+    <ClInclude Include="..\public\Gacha_Reroll.h" />
+    <ClInclude Include="..\public\Gacha_Slot.h" />
+    <ClInclude Include="..\public\Gacha_Slot_Selete.h" />
+    <ClInclude Include="..\Public\GoldLeaf.h" />
+    <ClInclude Include="..\public\Hud_LevelUp.h" />
+    <ClInclude Include="..\public\Hud_Quick_Slot.h" />
+    <ClInclude Include="..\public\Hud_Slot.h" />
+    <ClInclude Include="..\public\Hud_Slot_CoolTime.h" />
+    <ClInclude Include="..\public\Hud_Slot_EatPotion.h" />
+    <ClInclude Include="..\public\Hud_Slot_Guide.h" />
+    <ClInclude Include="..\public\Item_Tooltip_Bottom.h" />
+    <ClInclude Include="..\public\Item_Tooltip_Mid.h" />
+    <ClInclude Include="..\public\LaserGhost_D.h" />
+    <ClInclude Include="..\Public\Level_Boss1.h" />
+    <ClInclude Include="..\Public\Level_Boss2.h" />
+    <ClInclude Include="..\Public\Level_Shelter.h" />
+    <ClInclude Include="..\Public\Level_Stage3.h" />
+    <ClInclude Include="..\Public\Level_Stage4.h" />
+    <ClInclude Include="..\Public\Level_Town.h" />
+    <ClInclude Include="..\Public\Meteor.h" />
+    <ClInclude Include="..\public\Minimap.h" />
+    <ClInclude Include="..\public\Minimap_Button.h" />
+    <ClInclude Include="..\public\Minimap_Frame.h" />
+    <ClInclude Include="..\public\Minimap_Icon.h" />
+    <ClInclude Include="..\public\Minimap_Node.h" />
+    <ClInclude Include="..\public\Minimap_Player.h" />
+    <ClInclude Include="..\Public\Npc.h" />
+    <ClInclude Include="..\Public\Planet.h" />
+    <ClInclude Include="..\Public\Point.h" />
+    <ClInclude Include="..\public\Potion_Tooltip.h" />
+    <ClInclude Include="..\Public\ProjSword.h" />
+    <ClInclude Include="..\Public\RainParticle.h" />
+    <ClInclude Include="..\public\Slate_Tooltip.h" />
+    <ClInclude Include="..\public\Slate_Tooltip_Slot.h" />
+    <ClInclude Include="..\Public\FrozenHammer.h" />
+    <ClInclude Include="..\Public\Sun.h" />
+    <ClInclude Include="..\public\Talent.h" />
+    <ClInclude Include="..\Public\Effect_Factory.h" />
+    <ClInclude Include="..\public\ChapMap_MapSymbol.h" />
+    <ClInclude Include="..\Public\Exit_Button.h" />
+    <ClInclude Include="..\Public\Interaction_Normal.h" />
+    <ClInclude Include="..\public\Inven_Slot.h" />
+    <ClInclude Include="..\public\Inven_Slot_Selete.h" />
+    <ClInclude Include="..\public\Item_Base.h" />
+    <ClInclude Include="..\Public\Level_MapEdit.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="..\Public\Level_Stage2.h" />
+    <ClInclude Include="..\public\Loding_Ani.h" />
+    <ClInclude Include="..\public\Loding_UI.h" />
+    <ClInclude Include="..\public\Mole_A.h" />
+    <ClInclude Include="..\Public\Monster.h" />
+    <ClInclude Include="..\Public\Monster_Factory.h" />
+    <ClInclude Include="..\public\Oink_A.h" />
+    <ClInclude Include="..\Public\Option_Button.h" />
+    <ClInclude Include="..\Public\GameEffect.h" />
+    <ClInclude Include="..\Public\Potal.h" />
+    <ClInclude Include="..\Public\Room_Manager.h" />
+    <ClInclude Include="..\public\Sky.h" />
+    <ClInclude Include="..\Public\Start_Button.h" />
+    <ClInclude Include="..\public\Status_Element_Icon.h" />
+    <ClInclude Include="..\public\Status_Item_Icon.h" />
+    <ClInclude Include="..\public\Status_Item_Slot.h" />
+    <ClInclude Include="..\public\Status_Stat_Frame_Name.h" />
+    <ClInclude Include="..\public\Status_Stat_Frame_Type.h" />
+    <ClInclude Include="..\public\Status_Stat_Frame_Value.h" />
+    <ClInclude Include="..\public\Status_Value.h" />
+    <ClInclude Include="..\Public\Stat_Manager.h" />
+    <ClInclude Include="..\public\Status_Frame_Down.h" />
+    <ClInclude Include="..\public\Status_Frame_Mid.h" />
+    <ClInclude Include="..\public\Status_Miracle_Frame.h" />
+    <ClInclude Include="..\public\Status_Stat_Frame.h" />
+    <ClInclude Include="..\public\Status_Window.h" />
+    <ClInclude Include="..\public\Status_Frame_UP.h" />
+    <ClInclude Include="..\public\Talent_Button_Icon.h" />
+    <ClInclude Include="..\public\Talent_Button_Selete.h" />
+    <ClInclude Include="..\public\Talent_Button_Tip.h" />
+    <ClInclude Include="..\public\Talent_Icon_Selete.h" />
+    <ClInclude Include="..\public\Talent_Point.h" />
+    <ClInclude Include="..\public\Talent_Progress.h" />
+    <ClInclude Include="..\public\Talent_Reset.h" />
+    <ClInclude Include="..\public\Talent_Slot.h" />
+    <ClInclude Include="..\public\Talent_Slot_Button.h" />
+    <ClInclude Include="..\public\Talent_Slot_Frame.h" />
+    <ClInclude Include="..\public\Talent_Slot_Icon.h" />
+    <ClInclude Include="..\Public\TerrainBox.h" />
+    <ClInclude Include="..\public\Dagger.h" />
+    <ClInclude Include="..\public\Dash_Gauge.h" />
+    <ClInclude Include="..\public\Dash_Gauge_Frame.h" />
+    <ClInclude Include="..\public\Dice_Player.h" />
+    <ClInclude Include="..\public\Field_Hp.h" />
+    <ClInclude Include="..\public\Field_Hp_Frame.h" />
+    <ClInclude Include="..\Public\Hp_Player.h" />
+    <ClInclude Include="..\Public\Hud_Buff.h" />
+    <ClInclude Include="..\public\Hud_Button.h" />
+    <ClInclude Include="..\public\Hud_Dash.h" />
+    <ClInclude Include="..\public\Hud_Exp.h" />
+    <ClInclude Include="..\public\Hud_Exp_Checkout.h" />
+    <ClInclude Include="..\public\Hud_Exp_Frame.h" />
+    <ClInclude Include="..\Public\Hud_States_Frame.h" />
+    <ClInclude Include="..\public\Hud_Wallet.h" />
+    <ClInclude Include="..\Public\imconfig.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="..\Public\imgui.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="..\Public\ImGuiFileDialog.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="..\Public\ImGuiFileDialogConfig.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="..\Public\imgui_impl_dx9.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="..\Public\imgui_impl_win32.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="..\Public\imgui_internal.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="..\Public\Imgui_Manager.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="..\Public\imstb_rectpack.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="..\Public\imstb_textedit.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="..\Public\imstb_truetype.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="..\public\Inventory.h" />
+    <ClInclude Include="..\public\Inven_Button.h" />
     <ClInclude Include="..\Public\Level_Loading.h" />
     <ClInclude Include="..\Public\Level_Logo.h" />
+    <ClInclude Include="..\Public\Level_Stage1.h" />
     <ClInclude Include="..\Public\Loader.h" />
     <ClInclude Include="..\Public\MainApp.h" />
+    <ClInclude Include="..\public\Mirror_Button.h" />
+    <ClInclude Include="..\public\Money_Player.h" />
+    <ClInclude Include="..\Public\MapEditObject.h" />
+    <ClInclude Include="..\Public\Mp_Player.h" />
+    <ClInclude Include="..\Public\Player.h" />
+    <ClInclude Include="..\Public\Room.h" />
+    <ClInclude Include="..\public\Stats_Button.h" />
     <ClInclude Include="..\public\Terrain.h" />
+    <ClInclude Include="..\public\Title_BackGround.h" />
+    <ClInclude Include="..\Public\Title_Logo.h" />
+    <ClInclude Include="..\Public\Title_Star.h" />
+    <ClInclude Include="..\Public\Title_Logo_Wave.h" />
+    <ClInclude Include="..\Public\Title_Tree.h" />
+    <ClInclude Include="..\public\UI_KeyGuide.h" />
+    <ClInclude Include="..\Public\Tree.h" />
     <ClInclude Include="Client.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\Private\Animations\Anim_Player_Attack.cpp" />
+    <ClCompile Include="..\Private\Animations\Anim_Player_Attack2.cpp" />
+    <ClCompile Include="..\private\Animations\Anim_Player_Idle.cpp" />
+    <ClCompile Include="..\Private\Animations\Anim_Player_Parry.cpp" />
+    <ClCompile Include="..\private\Artefact_Tier_Icon.cpp" />
+    <ClCompile Include="..\private\Artefact_Tooltip.cpp" />
+    <ClCompile Include="..\Private\Askard_Dark_Tentacle.cpp" />
+    <ClCompile Include="..\private\Askard_Eye.cpp" />
+    <ClCompile Include="..\private\Askard_Frame.cpp" />
+    <ClCompile Include="..\private\Askard.cpp" />
+    <ClCompile Include="..\private\Askard_Tentacle.cpp" />
+    <ClCompile Include="..\private\Askard_Hpbar.cpp" />
+    <ClCompile Include="..\private\AttackGauge.cpp" />
     <ClCompile Include="..\Private\BackGround.cpp" />
-    <ClCompile Include="..\private\Camera.cpp" />
-    <ClCompile Include="..\Private\Level_GamePlay.cpp" />
+    <ClCompile Include="..\private\AttackFx.cpp" />
+    <ClCompile Include="..\private\Ending.cpp" />
+    <ClCompile Include="..\private\Ending_Light.cpp" />
+    <ClCompile Include="..\private\Ending_List.cpp" />
+    <ClCompile Include="..\private\Ending_Mole.cpp" />
+    <ClCompile Include="..\Private\IceBolt.cpp" />
+    <ClCompile Include="..\private\BossHp_Askard.cpp" />
+    <ClCompile Include="..\private\BossHp_Ema.cpp" />
+    <ClCompile Include="..\private\BossHp_SubHp.cpp" />
+    <ClCompile Include="..\Private\Buff_Frame.cpp" />
+    <ClCompile Include="..\Private\Buff_Icon.cpp" />
+    <ClCompile Include="..\Private\Buff_Type_Base.cpp" />
+    <ClCompile Include="..\Private\Camera_Follow.cpp" />
+    <ClCompile Include="..\private\Camera_Free.cpp" />
+    <ClCompile Include="..\Private\Camera_Mouse.cpp" />
+    <ClCompile Include="..\private\ChapMap.cpp" />
+    <ClCompile Include="..\private\Chapmap_Boss.cpp" />
+    <ClCompile Include="..\private\ChapMap_Button.cpp" />
+    <ClCompile Include="..\private\ChapMap_Frame.cpp" />
+    <ClCompile Include="..\private\ChapMap_Line.cpp" />
+    <ClCompile Include="..\private\ChapMap_MapSymbol.cpp" />
+    <ClCompile Include="..\private\ChapMap_PlayerSymbol.cpp" />
+    <ClCompile Include="..\Private\Ema_Frame.cpp" />
+    <ClCompile Include="..\private\Ema_Hpbar.cpp" />
+    <ClCompile Include="..\private\Ema_SubHpbar.cpp" />
+    <ClCompile Include="..\private\Erma.cpp" />
+    <ClCompile Include="..\private\Erma_Body.cpp" />
+    <ClCompile Include="..\private\Erma_Hand_L.cpp" />
+    <ClCompile Include="..\private\Erma_Hand_R.cpp" />
+    <ClCompile Include="..\private\Erma_Head.cpp" />
+    <ClCompile Include="..\private\EventKey.cpp" />
+    <ClCompile Include="..\private\Event_AZPattern.cpp" />
+    <ClCompile Include="..\private\Event_Circle.cpp" />
+    <ClCompile Include="..\private\Event_Circle_Guide.cpp" />
+    <ClCompile Include="..\private\Event_ClashKey.cpp" />
+    <ClCompile Include="..\private\Event_ClashPattern.cpp" />
+    <ClCompile Include="..\private\Event_Rect.cpp" />
+    <ClCompile Include="..\private\Event_Result.cpp" />
+    <ClCompile Include="..\private\Event_Timer.cpp" />
+    <ClCompile Include="..\Private\EXP_Ball.cpp" />
+    <ClCompile Include="..\Private\Face_Rect.cpp" />
+    <ClCompile Include="..\Private\Face_Rect_Small.cpp" />
+    <ClCompile Include="..\private\Field_Font.cpp" />
+    <ClCompile Include="..\Private\Field_Item.cpp" />
+    <ClCompile Include="..\Private\Field_Item_Guide.cpp" />
+    <ClCompile Include="..\Private\Field_Npc_Chat.cpp" />
+    <ClCompile Include="..\Private\Field_Npc_Face.cpp" />
+    <ClCompile Include="..\Private\Fire.cpp" />
+    <ClCompile Include="..\Private\FireParticle.cpp" />
+    <ClCompile Include="..\Private\FogPlane.cpp" />
+    <ClCompile Include="..\private\Gacha.cpp" />
+    <ClCompile Include="..\private\Gacha_Button_Icon.cpp" />
+    <ClCompile Include="..\private\Gacha_FX.cpp" />
+    <ClCompile Include="..\private\Gacha_Pass.cpp" />
+    <ClCompile Include="..\private\Gacha_Reroll.cpp" />
+    <ClCompile Include="..\private\Gacha_Slot.cpp" />
+    <ClCompile Include="..\private\Gacha_Slot_Selete.cpp" />
+    <ClCompile Include="..\Private\GoldLeaf.cpp" />
+    <ClCompile Include="..\private\Hud_LevelUp.cpp" />
+    <ClCompile Include="..\private\Hud_Quick_Slot.cpp" />
+    <ClCompile Include="..\private\Hud_Slot.cpp" />
+    <ClCompile Include="..\private\Hud_Slot_CoolTime.cpp" />
+    <ClCompile Include="..\private\Hud_Slot_EatPotion.cpp" />
+    <ClCompile Include="..\private\Hud_Slot_Guide.cpp" />
+    <ClCompile Include="..\private\Item_Tooltip_Bottom.cpp" />
+    <ClCompile Include="..\private\Item_Tooltip_Mid.cpp" />
+    <ClCompile Include="..\Private\LaserGhost_D.cpp" />
+    <ClCompile Include="..\Private\Level_Boss1.cpp" />
+    <ClCompile Include="..\Private\Level_Boss2.cpp" />
+    <ClCompile Include="..\Private\Level_Shelter.cpp" />
+    <ClCompile Include="..\Private\Level_Stage3.cpp" />
+    <ClCompile Include="..\Private\Level_Stage4.cpp" />
+    <ClCompile Include="..\Private\Level_Town.cpp" />
+    <ClCompile Include="..\Private\Meteor.cpp" />
+    <ClCompile Include="..\private\Minimap.cpp" />
+    <ClCompile Include="..\private\Minimap_Button.cpp" />
+    <ClCompile Include="..\private\Minimap_Frame.cpp" />
+    <ClCompile Include="..\private\Minimap_Icon.cpp" />
+    <ClCompile Include="..\private\Minimap_Node.cpp" />
+    <ClCompile Include="..\private\Minimap_Player.cpp" />
+    <ClCompile Include="..\Private\Npc.cpp" />
+    <ClCompile Include="..\Private\Planet.cpp" />
+    <ClCompile Include="..\Private\Point.cpp" />
+    <ClCompile Include="..\private\Potion_Tooltip.cpp" />
+    <ClCompile Include="..\Private\ProjSword.cpp" />
+    <ClCompile Include="..\Private\RainParticle.cpp" />
+    <ClCompile Include="..\private\Slate_Tooltip.cpp" />
+    <ClCompile Include="..\private\Slate_Tooltip_Slot.cpp" />
+    <ClCompile Include="..\Private\FrozenHammer.cpp" />
+    <ClCompile Include="..\Private\Sun.cpp" />
+    <ClCompile Include="..\private\Talent.cpp" />
+    <ClCompile Include="..\Private\Effect_Factory.cpp" />
+    <ClCompile Include="..\Private\Exit_Button.cpp" />
+    <ClCompile Include="..\Private\Interaction_Normal.cpp" />
+    <ClCompile Include="..\private\Inven_Slot.cpp" />
+    <ClCompile Include="..\private\Inven_Slot_Selete.cpp" />
+    <ClCompile Include="..\private\Item_Base.cpp" />
+    <ClCompile Include="..\Private\Level_MapEdit.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\Private\Level_Stage2.cpp" />
+    <ClCompile Include="..\private\Loding_Ani.cpp" />
+    <ClCompile Include="..\private\Loding_UI.cpp" />
+    <ClCompile Include="..\private\Mole_A.cpp" />
+    <ClCompile Include="..\Private\Monster.cpp" />
+    <ClCompile Include="..\Private\Monster_Factory.cpp" />
+    <ClCompile Include="..\private\Oink_A.cpp" />
+    <ClCompile Include="..\Private\Option_Button.cpp" />
+    <ClCompile Include="..\Private\GameEffect.cpp" />
+    <ClCompile Include="..\Private\Potal.cpp" />
+    <ClCompile Include="..\Private\Room_Manager.cpp" />
+    <ClCompile Include="..\private\Sky.cpp" />
+    <ClCompile Include="..\Private\Start_Button.cpp" />
+    <ClCompile Include="..\private\Status_Element_Icon.cpp" />
+    <ClCompile Include="..\private\Status_Item_Icon.cpp" />
+    <ClCompile Include="..\private\Status_Item_Slot.cpp" />
+    <ClCompile Include="..\private\Status_Stat_Frame_Name.cpp" />
+    <ClCompile Include="..\private\Status_Stat_Frame_Type.cpp" />
+    <ClCompile Include="..\private\Status_Stat_Frame_Value.cpp" />
+    <ClCompile Include="..\private\Status_Value.cpp" />
+    <ClCompile Include="..\Private\Stat_Manager.cpp" />
+    <ClCompile Include="..\private\Status_Frame_Down.cpp" />
+    <ClCompile Include="..\private\Status_Frame_Mid.cpp" />
+    <ClCompile Include="..\private\Status_Miracle_Frame.cpp" />
+    <ClCompile Include="..\private\Status_Stat_Frame.cpp" />
+    <ClCompile Include="..\private\Status_Window.cpp" />
+    <ClCompile Include="..\private\Status_Frame_UP.cpp" />
+    <ClCompile Include="..\private\Talent_Button_Icon.cpp" />
+    <ClCompile Include="..\private\Talent_Button_Selete.cpp" />
+    <ClCompile Include="..\private\Talent_Button_Tip.cpp" />
+    <ClCompile Include="..\private\Talent_Icon_Selete.cpp" />
+    <ClCompile Include="..\private\Talent_Point.cpp" />
+    <ClCompile Include="..\private\Talent_Progress.cpp" />
+    <ClCompile Include="..\private\Talent_Reset.cpp" />
+    <ClCompile Include="..\private\Talent_Slot.cpp" />
+    <ClCompile Include="..\private\Talent_Slot_Button.cpp" />
+    <ClCompile Include="..\private\Talent_Slot_Frame.cpp" />
+    <ClCompile Include="..\private\Talent_Slot_Icon.cpp" />
+    <ClCompile Include="..\Private\TerrainBox.cpp" />
+    <ClCompile Include="..\private\Dagger.cpp" />
+    <ClCompile Include="..\private\Dash_Gauge.cpp" />
+    <ClCompile Include="..\private\Dash_Gauge_Frame.cpp" />
+    <ClCompile Include="..\private\Dice_Player.cpp" />
+    <ClCompile Include="..\private\Field_Hp.cpp" />
+    <ClCompile Include="..\Private\Field_Hp_Frame.cpp" />
+    <ClCompile Include="..\Private\Hud_Buff.cpp" />
+    <ClCompile Include="..\private\Hud_Button.cpp" />
+    <ClCompile Include="..\private\Hud_Dash.cpp" />
+    <ClCompile Include="..\private\Hud_Exp.cpp" />
+    <ClCompile Include="..\Private\Hp_Player.cpp" />
+    <ClCompile Include="..\private\Hud_Exp_Checkout.cpp" />
+    <ClCompile Include="..\private\Hud_Exp_Frame.cpp" />
+    <ClCompile Include="..\Private\Hud_States_Frame.cpp" />
+    <ClCompile Include="..\private\Hud_Wallet.cpp" />
+    <ClCompile Include="..\Private\ImGuiFileDialog.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\Private\Imgui_Manager.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\private\Inventory.cpp" />
+    <ClCompile Include="..\private\Inven_Button.cpp" />
     <ClCompile Include="..\Private\Level_Loading.cpp" />
     <ClCompile Include="..\Private\Level_Logo.cpp" />
+    <ClCompile Include="..\Private\Level_Stage1.cpp" />
     <ClCompile Include="..\Private\Loader.cpp" />
     <ClCompile Include="..\Private\MainApp.cpp" />
+    <ClCompile Include="..\private\Mirror_Button.cpp" />
+    <ClCompile Include="..\private\Money_Player.cpp" />
+    <ClCompile Include="..\Private\MapEditObject.cpp" />
+    <ClCompile Include="..\Private\Mp_Player.cpp" />
+    <ClCompile Include="..\Private\Player.cpp" />
+    <ClCompile Include="..\Private\Room.cpp" />
+    <ClCompile Include="..\private\Stats_Button.cpp" />
     <ClCompile Include="..\private\Terrain.cpp" />
+    <ClCompile Include="..\private\Title_BackGround.cpp" />
+    <ClCompile Include="..\Private\Title_Logo.cpp" />
+    <ClCompile Include="..\Private\Title_Star.cpp" />
+    <ClCompile Include="..\Private\Title_Logo_Wave.cpp" />
+    <ClCompile Include="..\Private\Title_Tree.cpp" />
+    <ClCompile Include="..\Private\Tree.cpp" />
+    <ClCompile Include="..\private\UI_KeyGuide.cpp" />
+    <ClCompile Include="..\public\Animations\Anim_Player_Fury.cpp" />
     <ClCompile Include="Client.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -174,6 +595,53 @@
   <ItemGroup>
     <Image Include="Client.ico" />
     <Image Include="small.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="..\Bin\ShaderFiles\FogShader.hlsl">
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">2.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Effect</ShaderType>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">VS_MAIN</EntryPointName>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Effect</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">2.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="..\Bin\ShaderFiles\LightShader.hlsl">
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">2.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Effect</ShaderType>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">VS_Main</EntryPointName>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Effect</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">2.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="..\Bin\ShaderFiles\TreeShader.hlsl">
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">2.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Effect</ShaderType>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">VS_Main</EntryPointName>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Effect</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">2.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="..\Bin\ShaderFiles\LogoRipple.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Effect</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Effect</ShaderType>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">VS_MAIN</EntryPointName>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">2.0</ShaderModel>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">2.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="..\Bin\ShaderFiles\StarColor.hlsl">
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">2.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Effect</ShaderType>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">VS_MAIN</EntryPointName>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Effect</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">2.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="..\Bin\ShaderFiles\TitleFadeIn.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Effect</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">2.0</ShaderModel>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">VS_MAIN</EntryPointName>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Effect</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">2.0</ShaderModel>
+    </FxCompile>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -14,6 +14,7 @@ _float CTimer_Manager::Get_TimeDelta(const _wstring& strTimerTag)
 	return pTimer->Get_TimeDelta();
 }
 
+
 void CTimer_Manager::Compute_TimeDelta(const _wstring& strTimerTag)
 {
 	CTimer* pTimer = Find_Timer(strTimerTag);
@@ -21,6 +22,16 @@ void CTimer_Manager::Compute_TimeDelta(const _wstring& strTimerTag)
 		return;
 
 	pTimer->Update_Timer();
+}
+
+void CTimer_Manager::Remove_Timer(const _wstring& strTimerTag)
+{
+	auto iter = m_Timers.find(strTimerTag);
+	if (iter == m_Timers.end())
+		return;
+
+	Safe_Release(iter->second);
+	m_Timers.erase(iter);
 }
 
 HRESULT CTimer_Manager::Add_Timer(const _wstring& strTimerTag)

@@ -34,6 +34,9 @@ HRESULT CRenderer::Draw()
 	if (FAILED(Render_UI()))
 		return E_FAIL;
 
+	if (FAILED(Render_UI_Blend()))
+		return E_FAIL;
+
 	return S_OK;
 }
 
@@ -69,6 +72,21 @@ HRESULT CRenderer::Render_NonBlend()
 
 HRESULT CRenderer::Render_Blend()
 {
+	// 알파 테스트
+	m_pGraphic_Device->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
+
+	m_pGraphic_Device->SetRenderState(D3DRS_ALPHAREF, 125);
+
+	m_pGraphic_Device->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER);
+
+	// 색을 섞어서 처리(알파블렌딩)
+	/*m_pGraphic_Device->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
+
+	m_pGraphic_Device->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
+
+	m_pGraphic_Device->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
+
+	m_pGraphic_Device->SetRenderState(D3DRS_DESTBLEND, D3DBLENDOP_ADD);*/
 	for (auto& pRenderObject : m_RenderObjects[ENUM_CLASS(RENDERGROUP::RG_BLEND)])
 	{
 		if (nullptr != pRenderObject)
@@ -78,12 +96,25 @@ HRESULT CRenderer::Render_Blend()
 	}
 
 	m_RenderObjects[ENUM_CLASS(RENDERGROUP::RG_BLEND)].clear();
+	// 알파 테스트
+	m_pGraphic_Device->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
+
+	// 색을 섞어서 처리(알파블렌딩)
+	//m_pGraphic_Device->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
 
 	return S_OK;
 }
 
 HRESULT CRenderer::Render_UI()
 {
+	m_pGraphic_Device->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
+	m_pGraphic_Device->SetRenderState(D3DRS_ALPHAREF, 200);
+	m_pGraphic_Device->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER);
+
+	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_POINT);
+	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_POINT);
+	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MIPFILTER, D3DTEXF_NONE);
+
 	for (auto& pRenderObject : m_RenderObjects[ENUM_CLASS(RENDERGROUP::RG_UI)])
 	{
 		if (nullptr != pRenderObject)
@@ -97,6 +128,44 @@ HRESULT CRenderer::Render_UI()
 	return S_OK;
 }
 
+HRESULT CRenderer::Render_UI_Blend()
+{
+	m_pGraphic_Device->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
+	m_pGraphic_Device->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
+	m_pGraphic_Device->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
+	m_pGraphic_Device->SetRenderState(D3DRS_BLENDOP, D3DBLENDOP_ADD);
+
+	for (auto& pRenderObject : m_RenderObjects[ENUM_CLASS(RENDERGROUP::RG_UI_BLEND)])
+	{
+		if (nullptr != pRenderObject)
+			pRenderObject->Render();
+
+		Safe_Release(pRenderObject);
+	}
+
+	m_RenderObjects[ENUM_CLASS(RENDERGROUP::RG_UI_BLEND)].clear();
+	m_pGraphic_Device->SetRenderState(D3DRS_ALPHABLENDENABLE, FALSE);
+	m_pGraphic_Device->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
+
+	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_LINEAR);
+	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);
+	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MIPFILTER, D3DTEXF_LINEAR);
+	return S_OK;
+}
+
+void CRenderer::Clear()
+{
+	for (size_t i = 0; i < ENUM_CLASS(RENDERGROUP::RG_END); i++)
+	{
+		for (auto& pRenderObject : m_RenderObjects[i])
+		{
+			Safe_Release(pRenderObject);
+		}
+		m_RenderObjects[i].clear();
+	}
+	
+}
+
 CRenderer* CRenderer::Create(LPDIRECT3DDEVICE9 pGraphic_Device)
 {
 	return new CRenderer(pGraphic_Device);
@@ -105,4 +174,12 @@ CRenderer* CRenderer::Create(LPDIRECT3DDEVICE9 pGraphic_Device)
 void CRenderer::Free()
 {
 	__super::Free();
+	for (size_t i = 0; i < ENUM_CLASS(RENDERGROUP::RG_END); i++)
+	{
+		for (auto& pRenderObject : m_RenderObjects[i])
+		{
+			Safe_Release(pRenderObject);
+		}
+		m_RenderObjects[i].clear();
+	}
 }

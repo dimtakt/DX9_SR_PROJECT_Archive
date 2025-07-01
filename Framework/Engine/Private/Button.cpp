@@ -1,0 +1,117 @@
+#include "Button.h"
+#include "GameInstance.h"
+#include "ItemObject.h"
+CButton::CButton(LPDIRECT3DDEVICE9 pGraphic_Device) : CUIObject(pGraphic_Device)
+{
+}
+
+CButton::CButton(const CButton& Prototype) : CUIObject(Prototype)
+{
+}
+
+HRESULT CButton::Initialize_Prototype()
+{
+	if (FAILED(__super::Initialize_Prototype()))
+		return E_FAIL;
+	return S_OK;
+}
+
+HRESULT CButton::Initialize(void* pArg)
+{
+	if (FAILED(__super::Initialize(pArg)))
+		return E_FAIL;
+	return S_OK;
+}
+
+void CButton::Priority_Update(_float fTimeDelta)
+{
+	__super::Priority_Update(fTimeDelta);
+}
+
+void CButton::Update(_float fTimeDelta)
+{
+	__super::Update(fTimeDelta);
+}
+
+void CButton::Late_Update(_float fTimeDelta)
+{
+	__super::Late_Update(fTimeDelta);
+}
+
+HRESULT CButton::Render()
+{
+	return S_OK;
+}
+
+void CButton::Push_Item(CItemObject* pItem)
+{
+}
+
+void CButton::Push_Item_Count(_uint iItemCount)
+{
+}
+
+void CButton::IsPick_off()
+{
+}
+
+_bool CButton::Check_Key_Down(HWND hWnd, _int iKey)
+{
+	if (isPick(hWnd))
+	{
+		return m_pGameInstance->IsKeyDown(iKey);
+	}
+	return false;
+}
+
+_bool CButton::Check_Key_UP(HWND hWnd, _int iKey)
+{
+	if (isPick(hWnd))
+	{
+		return m_pGameInstance->IsKeyUp(iKey);
+	}
+	return false;
+}
+
+HRESULT CButton::Bind_ButtonTex_Single(HWND hWnd, _uint iTextureIndex)
+{
+	if (FAILED(Render_Button(iTextureIndex)))
+		return E_FAIL;
+	return S_OK;
+}
+
+HRESULT CButton::Bind_ButtonTex_Double(HWND hWnd, _uint iTextureIndex_Default, _uint iTextureIndex_NotDefault)
+{
+	if (isPick(hWnd))
+	{
+		if (FAILED(Render_Button(iTextureIndex_NotDefault)))
+			return E_FAIL;
+	}
+	else
+	{
+		if (FAILED(Render_Button(iTextureIndex_Default)))
+			return E_FAIL;
+	}
+	return S_OK;
+}
+
+HRESULT CButton::Render_Button(_uint iTextureIndex)
+{
+	if (FAILED(m_pTextureCom->Bind_Texture(iTextureIndex)))
+		return E_FAIL;
+	m_pVIBufferCom->Bind_Buffers();
+
+	__super::Begin();
+	m_pVIBufferCom->Render();
+	__super::End();
+
+	return S_OK;
+}
+
+
+void CButton::Free()
+{
+	__super::Free();
+	Safe_Release(m_pTextureCom);
+	Safe_Release(m_pVIBufferCom);
+}

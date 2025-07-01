@@ -14,7 +14,10 @@ namespace Engine
 #define			BEGIN(NAMESPACE)		namespace NAMESPACE {
 #define			END						}
 
-#define			USING(NAMESPACE)	using namespace NAMESPACE;
+#define			USING(NAMESPACE)		using namespace NAMESPACE;
+
+#define			LAMBDA_FUNC(implement)	[&](){ return implement; }
+#define			IS_BETWEEN(condition, minValue, maxValue)		(((minValue) <= (condition)) && ((condition) < (maxValue)))
 
 #ifdef	ENGINE_EXPORTS
 #define ENGINE_DLL		_declspec(dllexport)
@@ -22,6 +25,7 @@ namespace Engine
 #define ENGINE_DLL		_declspec(dllimport)
 #endif
 
+#define CHECK_VALID(p)  ((p) != nullptr && !IsBadReadPtr((p), sizeof(*(p))))
 
 #define NULL_CHECK( _ptr)	\
 		{if( _ptr == 0){ return;}}

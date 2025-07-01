@@ -2,8 +2,18 @@
 
 #include "VIBuffer_Rect.h"
 #include "VIBuffer_Terrain.h"
+#include "VIBuffer_Cube.h"
 #include "Transform.h"
 #include "Texture.h"
+#include "Shader.h"
+#include "PlayerStats.h"
+#include "Animator.h"
+#include "VIBuffer_TerrainBox.h"
+#include "ItemObject.h"
+#include "GameObject.h"
+#include "Collider_OBB.h"
+#include "UIObject.h"
+#include "Particle.h"
 
 BEGIN(Engine)
 

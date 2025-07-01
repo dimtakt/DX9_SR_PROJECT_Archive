@@ -1,0 +1,47 @@
+#pragma once
+#include "Client_Defines.h"
+#include "Client_Defines_Map.h"
+#include "ChapMap_Line.h"
+#include "Button.h"
+
+BEGIN(Client)
+class CChapMap_Button final : public CButton
+{
+private:
+									CChapMap_Button(LPDIRECT3DDEVICE9 pGraphic_Device);
+									CChapMap_Button(const CChapMap_Button& Prototype);
+	virtual							~CChapMap_Button() = default;
+
+public:
+	virtual HRESULT					Initialize_Prototype(LEVEL eLevel);
+	virtual HRESULT					Initialize(void* pArg) override;
+	virtual void					Priority_Update(_float fTimeDelta) override;
+	virtual void					Update(_float fTimeDelta) override;
+	virtual void					Late_Update(_float fTimeDelta) override;
+	virtual HRESULT					Render() override;
+
+private:
+	LEVEL							m_eLevel = {};
+	_uint							m_iMapID = {};
+	_uint							m_iMapTex = {};
+	_uint							m_iPlayerLine = {};
+
+	vector<CChapMap_Line*>			m_vecLine;
+	_bool							m_lineRender{ true };
+private:
+	void							Click_Event();
+	void							Line_Render_Setting();
+private:
+	HRESULT							Ready_Components();
+
+	HRESULT							Ready_ChildPrototype(LEVEL eLevel);
+	HRESULT							Ready_Children();
+
+	HRESULT							Ready_Line();
+public:
+
+	static CChapMap_Button* Create(LPDIRECT3DDEVICE9 pGraphic_Device, LEVEL eLevel);
+	virtual CGameObject* Clone(void* pArg) override;
+	virtual void					Free() override;
+};
+END

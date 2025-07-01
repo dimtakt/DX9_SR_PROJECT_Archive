@@ -20,7 +20,7 @@ private:
 
 public:
 	_float3 Get_State(STATE eState) const {
-		return *reinterpret_cast<const _float3*>(&m_WorldMatrix.m[ENUM_CLASS(eState)][0]);
+ 		return *reinterpret_cast<const _float3*>(&m_WorldMatrix.m[ENUM_CLASS(eState)][0]);
 	}
 
 	_float3 Get_Scaled() const {
@@ -31,6 +31,10 @@ public:
 		return _float3(D3DXVec3Length(&vRight), D3DXVec3Length(&vUp), D3DXVec3Length(&vLook));
 	}
 
+	const _float4x4* Get_WorldMatrix() {
+		return &m_WorldMatrix;
+	}
+
 	const _float4x4* Get_WorldMatrix_Inverse() {
 		return D3DXMatrixInverse(&m_WorldMatrixInverse, nullptr, &m_WorldMatrix);
 	}
@@ -38,6 +42,16 @@ public:
 	void Set_State(STATE eState, const _float3& vState) {
 		memcpy(&m_WorldMatrix.m[ENUM_CLASS(eState)][0], &vState, sizeof(_float3));
 	}
+
+	void Set_FlipX(_bool isFlip) { m_bFlipX = isFlip; }
+
+	void Set_RotationEuler(_float vRotatesX, _float vRotatesY, _float vRotatesZ) {
+		m_vRotationEuler.x = vRotatesX;
+		m_vRotationEuler.y = vRotatesY;
+		m_vRotationEuler.z = vRotatesZ;
+	}
+
+	_float3 Get_RotationEuler() { return m_vRotationEuler; }
 
 public:
 	virtual HRESULT Initialize_Prototype();
@@ -53,8 +67,16 @@ public:
 	void Move_To(const _float3& vTarget, _float fTimeDelta, _float fLimitRange);
 	
 	void Rotation(const _float3& vAxis, _float fRadian);
+	void RotationAccumulate(const _float3& vAxis, _float fRadian);
 	void Turn(const _float3& vAxis, _float fTimeDelta);
 	void Scaling(_float fScaleX, _float fScaleY, _float fScaleZ);
+	void ApplyEulerRotation(const _float3& vEuler);
+	void RotationByParent(const _float3 axis, CTransform* parent, _float fRadian);
+	void Set_OrbitInfo_AroundY(const CTransform* pTargetTransform, _float fSpeed);
+
+	void Orbit(_float fDeltaTime, _float3 vTargetCenterPos);
+	//void StartShake(_float fDuration, _float fStrength, _float fTime);
+
 
 public:
 	void Bind_Matrix();
@@ -64,6 +86,18 @@ private:
 	_float4x4					m_WorldMatrixInverse = { };
 	_float						m_fSpeedPerSec = { };
 	_float						m_fRotationPerSec = { };
+	_float3						m_vRotationEuler = {};
+	_float3						m_vOrbitOffset;   
+	_float						m_fOrbitAngle = 0.f;
+	_float						m_fOrbitSpeed = 0.f;
+
+	_bool						m_bFlipX = false;		// 플레이어 이미지 출력 좌우 반전용
+
+	// 카메라 쉐이킹용 멤버변수
+	/*_bool						m_bIsShaking = { };
+	_float						m_fShakeDuration = { };
+	_float						m_fShakeTime = { };
+	_float						m_fShakeStrength = { };*/
 
 public:
 	static CTransform* Create(LPDIRECT3DDEVICE9 pGraphic_Device);
