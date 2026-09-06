@@ -1,5 +1,7 @@
 ### DX9 2.5D : 세피리아 + Bleak Sword DX
 
+<img width="700" src="https://img.sdtr.dev/images/2026-09-06_220328/portfolio02.png">
+
 <table>
   <tr>
     <td>인원</td>
