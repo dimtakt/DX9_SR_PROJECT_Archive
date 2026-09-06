@@ -1,4 +1,6 @@
-### DX9 2.5D : 세피리아 + Bleak Sword DX
+<div align=center>
+
+## DX9 2.5D : 세피리아 + Bleak Sword DX
 
 <img width="700" src="https://img.sdtr.dev/images/2026-09-06_220328/portfolio02.png">
 
@@ -33,6 +35,6 @@
   </tr>
 </table>
 
-- 153기 [조정환](https://github.com/lasval), [김범수](https://github.com/kimbumsu0312), [임은비](https://github.com/XDXDX-99), [**김기훈**](https://github.com/dimtakt) SR_PROJECT
-- 리소스 주소 : [원본](https://drive.google.com/drive/folders/1iu8Q3Hp4rjOuYjiewjSlDTbuURtCQSht?usp=sharing) | [백업본](https://drive.google.com/drive/folders/1sAFAEanU6IWE-1BfvKSlI4qXe6z92U2b)
-- 원본 프로젝트 저장소 : https://github.com/lasval/SR_PROJECT
+153기 [조정환](https://github.com/lasval), [김범수](https://github.com/kimbumsu0312), [임은비](https://github.com/XDXDX-99), [**김기훈**](https://github.com/dimtakt) SR_PROJECT<br>
+리소스 주소 : [원본](https://drive.google.com/drive/folders/1iu8Q3Hp4rjOuYjiewjSlDTbuURtCQSht?usp=sharing) | [백업본](https://drive.google.com/drive/folders/1sAFAEanU6IWE-1BfvKSlI4qXe6z92U2b)<br>
+원본 프로젝트 저장소 : https://github.com/lasval/SR_PROJECT
